@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kimchi Jjigae Recipe 🍲</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #faf7f2; color: #2d2d2d; line-height: 1.6; padding: 16px; max-width: 600px; margin: 0 auto; }
+  h1 { font-size: 1.8em; text-align: center; margin: 16px 0 4px; }
+  .subtitle { text-align: center; color: #888; font-size: 0.9em; margin-bottom: 20px; }
+  .tip-box { background: #fff3cd; border-left: 4px solid #e6a800; padding: 12px 14px; border-radius: 8px; margin: 16px 0; font-size: 0.92em; }
+  .tip-box strong { color: #805600; }
+  .section { background: #fff; border-radius: 12px; padding: 18px; margin: 16px 0; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+  .section h2 { font-size: 1.2em; margin-bottom: 12px; color: #c0392b; border-bottom: 2px solid #f0e0dd; padding-bottom: 6px; }
+  .section h3 { font-size: 1em; margin: 12px 0 6px; color: #555; }
+  ul { padding-left: 20px; }
+  li { margin: 6px 0; }
+  ol { padding-left: 20px; }
+  ol li { margin: 10px 0; }
+  .step-num { font-weight: 700; color: #c0392b; }
+  .time-badge { display: inline-block; background: #c0392b; color: #fff; padding: 4px 10px; border-radius: 20px; font-size: 0.8em; margin: 4px; }
+  .meta { text-align: center; margin: 12px 0; }
+  .toggle { background: none; border: 2px solid #c0392b; color: #c0392b; padding: 10px 16px; border-radius: 8px; font-size: 1em; cursor: pointer; width: 100%; margin-top: 8px; font-weight: 600; }
+  .toggle:active { background: #c0392b; color: #fff; }
+  .hidden { display: none; }
+  .emoji { font-size: 1.4em; }
+  .footer { text-align: center; color: #aaa; font-size: 0.8em; margin-top: 24px; padding-top: 12px; border-top: 1px solid #eee; }
+</style>
+</head>
+<body>
+
+<h1>김치찌개 <span class="emoji">🍲</span></h1>
+<p class="subtitle">Kimchi Jjigae — The Ultimate Korean Comfort Stew</p>
+
+<div class="meta">
+  <span class="time-badge">⏱ Prep: 15 min</span>
+  <span class="time-badge">🔥 Cook: 20 min</span>
+  <span class="time-badge">🍽 Serves: 2</span>
+</div>
+
+<div class="tip-box">
+  <strong>⚡ Your Kimchi Fix:</strong> Since your kimchi is store-bought from a Chinese grocery (probably not fermented enough), here's how to save it:
+  <ul style="margin-top:8px;">
+    <li><strong>Leave it out</strong> on the counter for 2–3 days to let it ferment and get sour</li>
+    <li><strong>Stir-fry the kimchi first</strong> in sesame oil for 3–4 min before making the stew — this deepens the flavor dramatically</li>
+    <li><strong>Add 1 tsp rice vinegar or apple cider vinegar</strong> to fake extra fermentation tang</li>
+    <li><strong>Use ALL the kimchi juice</strong> from the jar — it adds critical depth</li>
+  </ul>
+</div>
+
+<div class="section">
+  <h2>🛒 Ingredients</h2>
+  
+  <h3>Protein</h3>
+  <ul>
+    <li>180g (~0.4 lb) <strong>pork belly</strong>, sliced bite-size (skin removed)</li>
+    <li>1 Tbsp rice wine (mirin)</li>
+    <li>Black pepper, a few shakes</li>
+  </ul>
+
+  <h3>Main</h3>
+  <ul>
+    <li>1.5 cups <strong>kimchi</strong>, cut bite-size (use all the juice too!)</li>
+    <li>150g <strong>firm tofu</strong>, sliced ~1cm thick</li>
+    <li>¼ small onion, thinly sliced</li>
+    <li>2 shiitake mushrooms, stems removed, sliced</li>
+    <li>1 green onion, sliced</li>
+    <li>1 cup water (or rice-rinsing water for extra body)</li>
+  </ul>
+
+  <h3>Sauce (mix in a bowl)</h3>
+  <ul>
+    <li>1 Tbsp <strong>gochugaru</strong> (Korean chili flakes)</li>
+    <li>1 Tbsp soy sauce</li>
+    <li>1 tsp <strong>gochujang</strong> (Korean chili paste)</li>
+    <li>¼ tsp minced garlic</li>
+    <li>Black pepper</li>
+  </ul>
+
+  <h3>Optional Boosters</h3>
+  <ul>
+    <li>1 tsp fish sauce or saeujeot (salted shrimp) — umami bomb</li>
+    <li>½ tsp sugar — balances sourness</li>
+    <li>1 tsp sesame oil — add right before serving</li>
+  </ul>
+</div>
+
+<div class="section">
+  <h2>👨‍🍳 Steps</h2>
+  <button class="toggle" onclick="document.getElementById('steps').classList.toggle('hidden'); this.textContent = this.textContent === 'Show Steps' ? 'Hide Steps' : 'Show Steps';">Show Steps</button>
+  <div id="steps" class="hidden">
+    <ol style="margin-top:14px;">
+      <li><span class="step-num">Marinate:</span> Toss pork belly with rice wine and black pepper. Let sit 15 min.</li>
+      <li><span class="step-num">Fry the kimchi:</span> Heat a splash of sesame oil in your pot. Add kimchi and stir-fry on medium heat for <strong>3–4 minutes</strong> until it softens and smells amazing. This is the secret step — don't skip it!</li>
+      <li><span class="step-num">Layer up:</span> Push kimchi aside, lay marinated pork on the bottom. Add onion, mushrooms, tofu, the sauce mix, and water.</li>
+      <li><span class="step-num">Boil:</span> Bring to a boil on medium-high heat. Then lower to medium and simmer <strong>15 minutes</strong> until pork is cooked through. Stir occasionally, spoon broth over tofu.</li>
+      <li><span class="step-num">Finish:</span> Taste — add fish sauce/salt if needed. Scatter green onions on top. Drizzle sesame oil. Kill the heat.</li>
+      <li><span class="step-num">Serve:</span> Bring the whole pot to the table while it's still bubbling. Eat with a big bowl of steamed rice. That's it. That's the move.</li>
+    </ol>
+  </div>
+</div>
+
+<div class="section">
+  <h2>💡 Pro Tips</h2>
+  <ul>
+    <li><strong>Older kimchi = better jjigae.</strong> If yours is fresh, ferment it on the counter 2–3 days first.</li>
+    <li><strong>Don't rush it.</strong> Low and slow beats fast and furious here. Let the flavors meld.</li>
+    <li><strong>Rice-rinsing water</strong> (쌀뜨물) instead of plain water gives the broth a subtle starchy body — classic Korean grandma move.</li>
+    <li><strong>Pork belly fat is the secret.</strong> Don't go lean. The fat renders into the broth and makes it silky.</li>
+    <li><strong>Reheat = even better.</strong> This stew is one of those magical dishes that tastes better the next day.</li>
+  </ul>
+</div>
+
+<div class="footer">
+  Rex's Kitchen — compiled from My Korean Kitchen, Maangchi, Korean Bapsang & Reddit wisdom<br>
+  Feb 2, 2026
+</div>
+
+</body>
+</html>
