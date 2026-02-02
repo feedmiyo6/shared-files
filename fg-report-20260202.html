@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fridgenie MVP — Full Report</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#FFF8F0;color:#2d2d2d;line-height:1.7;padding:16px;max-width:650px;margin:0 auto}
+  h1{font-size:1.8em;text-align:center;margin:16px 0 4px;color:#5B8C5A}
+  h2{font-size:1.3em;color:#5B8C5A;margin:24px 0 10px;border-bottom:2px solid #E8D5B7;padding-bottom:6px}
+  h3{font-size:1.05em;color:#7A6B5D;margin:14px 0 6px}
+  .subtitle{text-align:center;color:#888;font-size:.9em;margin-bottom:20px}
+  .lang-toggle{position:fixed;top:12px;right:12px;background:#5B8C5A;color:#fff;border:none;padding:8px 14px;border-radius:20px;font-size:.85em;font-weight:600;cursor:pointer;z-index:999;box-shadow:0 2px 8px rgba(0,0,0,.15)}
+  .lang-toggle:active{background:#4A7A49}
+  .card{background:#fff;border-radius:14px;padding:18px;margin:14px 0;box-shadow:0 2px 8px rgba(184,164,128,.15)}
+  .badge{display:inline-block;padding:4px 12px;border-radius:20px;font-size:.8em;font-weight:600;margin:3px 4px 3px 0}
+  .badge-green{background:#E8F5E9;color:#5B8C5A}
+  .badge-coral{background:#FDEAE4;color:#C77560}
+  .badge-blue{background:#E3F2FD;color:#5B89A0}
+  .badge-gold{background:#FFF3D6;color:#A08040}
+  ul{padding-left:20px;margin:6px 0}
+  li{margin:5px 0}
+  .stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0}
+  .stat{background:#fff;border-radius:12px;padding:14px;text-align:center;box-shadow:0 1px 4px rgba(184,164,128,.12)}
+  .stat-num{font-size:1.6em;font-weight:700;color:#5B8C5A}
+  .stat-label{font-size:.8em;color:#999;margin-top:2px}
+  .tech-row{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
+  table{width:100%;border-collapse:collapse;margin:10px 0;font-size:.9em}
+  th{background:#5B8C5A;color:#fff;padding:8px 10px;text-align:left;font-size:.85em}
+  td{padding:8px 10px;border-bottom:1px solid #f0e8dc}
+  tr:nth-child(even){background:#FAF5ED}
+  .footer{text-align:center;color:#aaa;font-size:.8em;margin-top:24px;padding-top:12px;border-top:1px solid #eee}
+  code{background:#F5F0E8;padding:2px 6px;border-radius:4px;font-size:.88em;color:#7A6B5D}
+  [data-ko]{display:none}
+  body.ko [data-en]{display:none}
+  body.ko [data-ko]{display:block}
+  body.ko li[data-ko]{display:list-item}
+  body.ko span[data-ko],body.ko td[data-ko],body.ko th[data-ko]{display:table-cell}
+  body.ko div[data-ko]{display:block}
+  body.ko p[data-ko]{display:block}
+</style>
+</head>
+<body>
+
+<button class="lang-toggle" onclick="document.body.classList.toggle('ko');this.textContent=document.body.classList.contains('ko')?'EN':'한국어'">한국어</button>
+
+<h1>Fridgenie MVP</h1>
+<p class="subtitle" data-en>Full Build Report — February 2, 2026</p>
+<p class="subtitle" data-ko>전체 빌드 리포트 — 2026년 2월 2일</p>
+
+<div class="stat-grid">
+  <div class="stat"><div class="stat-num">34</div><div class="stat-label" data-en>Dart Files</div><div class="stat-label" data-ko>Dart 파일</div></div>
+  <div class="stat"><div class="stat-num">3,606</div><div class="stat-label" data-en>Lines of Code</div><div class="stat-label" data-ko>코드 라인</div></div>
+  <div class="stat"><div class="stat-num">0</div><div class="stat-label" data-en>Analyze Issues</div><div class="stat-label" data-ko>분석 이슈</div></div>
+  <div class="stat"><div class="stat-num">52</div><div class="stat-label" data-en>Seeded Recipes</div><div class="stat-label" data-ko>시드 레시피</div></div>
+</div>
+
+<!-- OVERVIEW -->
+<div class="card">
+  <h2 data-en>🍳 What is Fridgenie?</h2>
+  <h2 data-ko>🍳 Fridgenie란?</h2>
+  <p data-en>A smart kitchen companion app that tracks what's in your fridge/pantry, matches recipes to your available ingredients, generates shopping lists, and offers AI-powered cooking suggestions. Built for Asian home cooking with 52 real recipes spanning Korean, Japanese, Chinese, Thai, and Vietnamese cuisines.</p>
+  <p data-ko>냉장고/식료품 저장실에 있는 재료를 추적하고, 보유 재료에 맞는 레시피를 매칭하고, 장보기 목록을 생성하고, AI 기반 요리 제안을 제공하는 스마트 주방 앱입니다. 한국, 일본, 중국, 태국, 베트남 요리 52개의 실제 레시피가 포함된 아시안 가정 요리 전용 앱입니다.</p>
+</div>
+
+<!-- TECH STACK -->
+<div class="card">
+  <h2 data-en>🛠 Tech Stack</h2>
+  <h2 data-ko>🛠 기술 스택</h2>
+  
+  <h3 data-en>Frontend</h3><h3 data-ko>프론트엔드</h3>
+  <div class="tech-row">
+    <span class="badge badge-blue">Flutter 3.38.9</span>
+    <span class="badge badge-blue">Dart 3.10</span>
+    <span class="badge badge-green">iOS First</span>
+  </div>
+  <ul>
+    <li data-en><strong>State Management:</strong> flutter_riverpod — reactive providers for auth, pantry, recipes, shopping, household</li>
+    <li data-ko><strong>상태 관리:</strong> flutter_riverpod — 인증, 식료품, 레시피, 장보기, 가구 단위 반응형 프로바이더</li>
+    <li data-en><strong>Navigation:</strong> go_router — declarative routing with auth guards</li>
+    <li data-ko><strong>내비게이션:</strong> go_router — 인증 가드 포함 선언적 라우팅</li>
+    <li data-en><strong>Typography:</strong> google_fonts — Fredoka (headings) + Nunito (body)</li>
+    <li data-ko><strong>타이포그래피:</strong> google_fonts — Fredoka (제목) + Nunito (본문)</li>
+    <li data-en><strong>Design:</strong> Studio Ghibli-inspired — warm earth tones, rounded UI, cozy storybook feel</li>
+    <li data-ko><strong>디자인:</strong> 지브리 감성 — 따뜻한 어스 톤, 둥근 UI, 아늑한 동화책 느낌</li>
+  </ul>
+
+  <h3 data-en>Backend</h3><h3 data-ko>백엔드</h3>
+  <div class="tech-row">
+    <span class="badge badge-coral">Supabase</span>
+    <span class="badge badge-coral">PostgreSQL</span>
+    <span class="badge badge-gold">Row Level Security</span>
+  </div>
+  <ul>
+    <li data-en><strong>Auth:</strong> Supabase Auth (email/password)</li>
+    <li data-ko><strong>인증:</strong> Supabase Auth (이메일/비밀번호)</li>
+    <li data-en><strong>Database:</strong> PostgreSQL with 6 tables + RLS policies</li>
+    <li data-ko><strong>데이터베이스:</strong> PostgreSQL 6개 테이블 + RLS 정책</li>
+    <li data-en><strong>Realtime:</strong> Supabase Realtime for household sync (shopping list)</li>
+    <li data-ko><strong>실시간:</strong> Supabase 실시간으로 가구 동기화 (장보기 목록)</li>
+    <li data-en><strong>Region:</strong> AWS us-west-2</li>
+    <li data-ko><strong>리전:</strong> AWS us-west-2</li>
+  </ul>
+
+  <h3 data-en>AI</h3><h3 data-ko>AI</h3>
+  <div class="tech-row">
+    <span class="badge badge-blue">OpenAI GPT-4o-mini</span>
+  </div>
+  <ul>
+    <li data-en>Cooking assistant — suggests meals based on available + expiring ingredients</li>
+    <li data-ko>요리 어시스턴트 — 보유 재료 + 유통기한 임박 재료 기반 식사 추천</li>
+  </ul>
+</div>
+
+<!-- DATABASE -->
+<div class="card">
+  <h2 data-en>🗄 Database Schema (6 Tables)</h2>
+  <h2 data-ko>🗄 데이터베이스 스키마 (6개 테이블)</h2>
+  <table>
+    <tr><th data-en>Table</th><th data-ko>테이블</th><th data-en>Purpose</th><th data-ko>용도</th></tr>
+    <tr><td>profiles</td><td data-en>User profiles linked to Supabase Auth</td><td data-ko>Supabase Auth 연동 사용자 프로필</td></tr>
+    <tr><td>households</td><td data-en>Household groups (family/roommates)</td><td data-ko>가구 그룹 (가족/룸메이트)</td></tr>
+    <tr><td>pantry_items</td><td data-en>Fridge/freezer/pantry inventory with expiry tracking</td><td data-ko>냉장고/냉동실/식료품 재고 + 유통기한 추적</td></tr>
+    <tr><td>recipes</td><td data-en>52 Asian recipes (Korean, Japanese, Chinese, Thai, Vietnamese)</td><td data-ko>52개 아시안 레시피 (한/일/중/태/베)</td></tr>
+    <tr><td>recipe_ingredients</td><td data-en>Ingredient lists with staple detection & canonical names</td><td data-ko>재료 목록 + 기본양념 감지 & 표준 이름</td></tr>
+    <tr><td>shopping_items</td><td data-en>Shared shopping list with realtime sync</td><td data-ko>실시간 동기화 공유 장보기 목록</td></tr>
+  </table>
+  <p data-en style="margin-top:8px;font-size:.9em;color:#888">All tables protected with Row Level Security — users can only access data within their own household.</p>
+  <p data-ko style="margin-top:8px;font-size:.9em;color:#888">모든 테이블에 Row Level Security 적용 — 같은 가구 데이터만 접근 가능.</p>
+</div>
+
+<!-- FEATURES -->
+<div class="card">
+  <h2 data-en>✨ Features</h2>
+  <h2 data-ko>✨ 기능</h2>
+
+  <h3 data-en>🔐 Authentication & Households</h3><h3 data-ko>🔐 인증 & 가구 관리</h3>
+  <ul>
+    <li data-en>Email/password signup & login via Supabase Auth</li>
+    <li data-ko>이메일/비밀번호 회원가입 & 로그인 (Supabase Auth)</li>
+    <li data-en>Create a new household or join existing one with invite code</li>
+    <li data-ko>새 가구 생성 또는 초대 코드로 기존 가구 합류</li>
+    <li data-en>Multi-user support — family members share the same pantry & lists</li>
+    <li data-ko>다중 사용자 지원 — 가족 구성원이 같은 식료품 & 목록 공유</li>
+  </ul>
+
+  <h3 data-en>🥬 Pantry Management</h3><h3 data-ko>🥬 식료품 관리</h3>
+  <ul>
+    <li data-en>Add items to Fridge, Freezer, or Pantry with quantity and expiry dates</li>
+    <li data-ko>냉장고, 냉동실, 식료품 저장실에 수량과 유통기한 포함 항목 추가</li>
+    <li data-en>Traffic light system: 🟢 In Stock → 🟡 Low → 🔴 Out of Stock</li>
+    <li data-ko>신호등 시스템: 🟢 보유 → 🟡 부족 → 🔴 없음</li>
+    <li data-en>Expiry tracking: Fresh → Use Soon → Expiring → Expired</li>
+    <li data-ko>유통기한 추적: 신선 → 곧 사용 → 임박 → 만료</li>
+    <li data-en>Tab-based filtering (All / Fridge / Freezer / Pantry)</li>
+    <li data-ko>탭 기반 필터링 (전체 / 냉장 / 냉동 / 식료품)</li>
+    <li data-en>Search functionality across all items</li>
+    <li data-ko>전체 항목 검색 기능</li>
+    <li data-en>Edit and delete items with detail view</li>
+    <li data-ko>상세 보기에서 항목 수정 및 삭제</li>
+  </ul>
+
+  <h3 data-en>📖 Smart Recipe Matching</h3><h3 data-ko>📖 스마트 레시피 매칭</h3>
+  <ul>
+    <li data-en><strong>Tier 1 — "Cook Now":</strong> All non-staple ingredients available in pantry</li>
+    <li data-ko><strong>Tier 1 — "지금 요리":</strong> 기본양념 제외 모든 재료 보유</li>
+    <li data-en><strong>Tier 2 — "Almost There":</strong> Missing ≤ 2 non-staple ingredients</li>
+    <li data-ko><strong>Tier 2 — "거의 다 있어":</strong> 기본양념 제외 2개 이하 부족</li>
+    <li data-en><strong>Tier 3 — "Browse All":</strong> Full recipe catalog</li>
+    <li data-ko><strong>Tier 3 — "전체 보기":</strong> 전체 레시피 카탈로그</li>
+    <li data-en>Prioritizes recipes using expiring ingredients</li>
+    <li data-ko>유통기한 임박 재료 사용 레시피 우선 표시</li>
+    <li data-en>Staple detection (salt, oil, soy sauce, etc. assumed available)</li>
+    <li data-ko>기본양념 자동 감지 (소금, 기름, 간장 등 보유 가정)</li>
+  </ul>
+
+  <h3 data-en>🍳 Cooking Mode</h3><h3 data-ko>🍳 요리 모드</h3>
+  <ul>
+    <li data-en>Step-by-step guided cooking with large, readable text</li>
+    <li data-ko>큰 글씨로 단계별 요리 가이드</li>
+    <li data-en>Screen stays awake (wakelock) during cooking</li>
+    <li data-ko>요리 중 화면 꺼짐 방지 (wakelock)</li>
+    <li data-en>Swipe/tap to navigate between steps</li>
+    <li data-ko>스와이프/탭으로 단계 이동</li>
+    <li data-en>Post-cook ingredient depletion — automatically updates pantry quantities</li>
+    <li data-ko>요리 후 자동 재료 차감 — 식료품 수량 자동 업데이트</li>
+  </ul>
+
+  <h3 data-en>🛒 Shopping List</h3><h3 data-ko>🛒 장보기 목록</h3>
+  <ul>
+    <li data-en>Add items manually or auto-add from missing recipe ingredients</li>
+    <li data-ko>수동 추가 또는 레시피 부족 재료 자동 추가</li>
+    <li data-en>Realtime sync across household members</li>
+    <li data-ko>가구 구성원 간 실시간 동기화</li>
+    <li data-en>Check off items as you shop</li>
+    <li data-ko>장보면서 체크 가능</li>
+    <li data-en>Clear completed items</li>
+    <li data-ko>완료 항목 일괄 삭제</li>
+  </ul>
+
+  <h3 data-en>🤖 AI Cooking Assistant</h3><h3 data-ko>🤖 AI 요리 어시스턴트</h3>
+  <ul>
+    <li data-en>Powered by OpenAI GPT-4o-mini</li>
+    <li data-ko>OpenAI GPT-4o-mini 기반</li>
+    <li data-en>Suggests 3 practical meals based on available + expiring ingredients</li>
+    <li data-ko>보유 + 유통기한 임박 재료 기반 실용적 식사 3가지 추천</li>
+    <li data-en>Accessible from profile screen (optional — requires API key)</li>
+    <li data-ko>프로필 화면에서 접근 (선택사항 — API 키 필요)</li>
+  </ul>
+
+  <h3 data-en>👤 Profile</h3><h3 data-ko>👤 프로필</h3>
+  <ul>
+    <li data-en>View display name and household info</li>
+    <li data-ko>표시 이름 및 가구 정보 확인</li>
+    <li data-en>Household invite code sharing</li>
+    <li data-ko>가구 초대 코드 공유</li>
+    <li data-en>Sign out</li>
+    <li data-ko>로그아웃</li>
+  </ul>
+</div>
+
+<!-- DESIGN -->
+<div class="card">
+  <h2 data-en>🎨 Design — Ghibli-Inspired</h2>
+  <h2 data-ko>🎨 디자인 — 지브리 감성</h2>
+  <ul>
+    <li data-en><strong>Color Palette:</strong> Forest green (#5B8C5A), sunset coral (#E8967D), warm cream (#FFF8F0), sky blue, dusty rose, golden wheat</li>
+    <li data-ko><strong>컬러 팔레트:</strong> 포레스트 그린 (#5B8C5A), 선셋 코럴 (#E8967D), 웜 크림 (#FFF8F0), 스카이 블루, 더스티 로즈, 골든 위트</li>
+    <li data-en><strong>Typography:</strong> Fredoka (playful headings) + Nunito (warm body text)</li>
+    <li data-ko><strong>타이포그래피:</strong> Fredoka (재미있는 제목) + Nunito (따뜻한 본문)</li>
+    <li data-en><strong>UI Elements:</strong> 16-20px rounded corners, pill-shaped buttons, warm golden shadows</li>
+    <li data-ko><strong>UI 요소:</strong> 16-20px 둥근 모서리, 알약형 버튼, 따뜻한 골드 그림자</li>
+    <li data-en><strong>AppBar:</strong> Transparent, blends with warm cream background</li>
+    <li data-ko><strong>앱바:</strong> 투명, 웜 크림 배경과 자연스럽게 어울림</li>
+    <li data-en><strong>Bottom Nav:</strong> Floating rounded bar with nature-themed icons (eco, menu_book, shopping_bag, person)</li>
+    <li data-ko><strong>하단 내비:</strong> 플로팅 둥근 바 + 자연 테마 아이콘</li>
+    <li data-en><strong>Traffic Lights:</strong> Softened warm tones — #6DAF6D / #E8B44C / #D27B7B</li>
+    <li data-ko><strong>신호등:</strong> 부드러운 웜 톤 — #6DAF6D / #E8B44C / #D27B7B</li>
+    <li data-en><strong>No copyrighted Ghibli assets</strong> — purely inspired by the aesthetic</li>
+    <li data-ko><strong>지브리 저작권 자산 없음</strong> — 순수 감성 영감만</li>
+  </ul>
+</div>
+
+<!-- FILE STRUCTURE -->
+<div class="card">
+  <h2 data-en>📁 Project Structure</h2>
+  <h2 data-ko>📁 프로젝트 구조</h2>
+  <pre style="background:#FAF5ED;padding:14px;border-radius:10px;font-size:.82em;overflow-x:auto;line-height:1.5">
+lib/
+├── main.dart                          # Entry point
+├── app.dart                           # MaterialApp + theme
+├── config/
+│   ├── theme.dart                     # Ghibli theme (280 lines)
+│   ├── router.dart                    # GoRouter config + auth guards
+│   └── supabase_config.dart           # Supabase keys
+├── models/
+│   ├── pantry_item.dart               # PantryItem + enums
+│   ├── recipe.dart                    # Recipe + RecipeIngredient
+│   ├── household.dart                 # Household model
+│   ├── profile.dart                   # Profile model
+│   └── shopping_item.dart             # ShoppingItem model
+├── providers/
+│   ├── auth_provider.dart             # Auth state
+│   ├── pantry_provider.dart           # Pantry CRUD
+│   ├── recipe_provider.dart           # Recipe fetching + matching
+│   ├── household_provider.dart        # Household management
+│   └── shopping_provider.dart         # Shopping list CRUD
+├── services/
+│   ├── supabase_service.dart          # Supabase client accessor
+│   ├── recipe_matching_service.dart   # Tier 1/2/3 matching engine
+│   └── ai_service.dart               # OpenAI GPT-4o-mini integration
+├── screens/
+│   ├── auth/
+│   │   ├── login_screen.dart          # Login UI
+│   │   ├── signup_screen.dart         # Signup UI
+│   │   └── household_setup_screen.dart # Create/join household
+│   ├── home/
+│   │   ├── home_screen.dart           # Bottom nav shell
+│   │   └── profile_screen.dart        # Profile + AI assistant
+│   ├── pantry/
+│   │   ├── pantry_screen.dart         # Pantry list + tabs + search
+│   │   ├── add_item_screen.dart       # Add new item form
+│   │   └── item_detail_screen.dart    # View/edit/delete item
+│   ├── recipes/
+│   │   ├── recipes_screen.dart        # Recipe list with tier chips
+│   │   ├── recipe_detail_screen.dart  # Full recipe + ingredients
+│   │   └── cooking_mode_screen.dart   # Step-by-step cooking
+│   └── shopping/
+│       └── shopping_list_screen.dart  # Shopping list
+└── widgets/
+    ├── pantry_item_tile.dart          # Pantry list tile
+    ├── traffic_light_indicator.dart   # Status indicator widget
+    ├── recipe_card.dart               # Recipe card with match info
+    └── shopping_item_tile.dart        # Shopping list tile
+  </pre>
+</div>
+
+<!-- RECIPES -->
+<div class="card">
+  <h2 data-en>🍜 52 Seeded Recipes</h2>
+  <h2 data-ko>🍜 52개 시드 레시피</h2>
+  <div class="tech-row">
+    <span class="badge badge-coral">Korean 🇰🇷</span>
+    <span class="badge badge-blue">Japanese 🇯🇵</span>
+    <span class="badge badge-gold">Chinese 🇨🇳</span>
+    <span class="badge badge-green">Thai 🇹🇭</span>
+    <span class="badge badge-coral">Vietnamese 🇻🇳</span>
+  </div>
+  <p data-en style="margin-top:8px">Includes classics like: Kimchi Jjigae, Bibimbap, Japchae, Tonkatsu, Ramen, Mapo Tofu, Kung Pao Chicken, Pad Thai, Tom Yum, Pho, Banh Mi, and many more. Each recipe has full ingredient lists with canonical names for accurate pantry matching.</p>
+  <p data-ko style="margin-top:8px">포함 레시피: 김치찌개, 비빔밥, 잡채, 돈까스, 라멘, 마파두부, 궁보계정, 팟타이, 톰얌, 포, 반미 등. 각 레시피에 정확한 식료품 매칭을 위한 표준 이름이 포함된 전체 재료 목록이 있습니다.</p>
+</div>
+
+<!-- DEPENDENCIES -->
+<div class="card">
+  <h2 data-en>📦 Dependencies</h2>
+  <h2 data-ko>📦 의존성</h2>
+  <table>
+    <tr><th data-en>Package</th><th data-ko>패키지</th><th data-en>Purpose</th><th data-ko>용도</th></tr>
+    <tr><td><code>supabase_flutter</code></td><td data-en>Auth + DB + Realtime</td><td data-ko>인증 + DB + 실시간</td></tr>
+    <tr><td><code>flutter_riverpod</code></td><td data-en>State management</td><td data-ko>상태 관리</td></tr>
+    <tr><td><code>go_router</code></td><td data-en>Declarative routing</td><td data-ko>선언적 라우팅</td></tr>
+    <tr><td><code>google_fonts</code></td><td data-en>Fredoka + Nunito fonts</td><td data-ko>Fredoka + Nunito 폰트</td></tr>
+    <tr><td><code>wakelock_plus</code></td><td data-en>Keep screen on during cooking</td><td data-ko>요리 중 화면 켜짐 유지</td></tr>
+    <tr><td><code>uuid</code></td><td data-en>Unique ID generation</td><td data-ko>고유 ID 생성</td></tr>
+    <tr><td><code>http</code></td><td data-en>OpenAI API calls</td><td data-ko>OpenAI API 호출</td></tr>
+    <tr><td><code>intl</code></td><td data-en>Date formatting</td><td data-ko>날짜 포맷</td></tr>
+  </table>
+</div>
+
+<!-- NEXT STEPS -->
+<div class="card">
+  <h2 data-en>🚀 Next Steps (Deferred from MVP)</h2>
+  <h2 data-ko>🚀 다음 단계 (MVP에서 보류)</h2>
+  <ul>
+    <li data-en>Receipt OCR — scan grocery receipts to auto-add pantry items</li>
+    <li data-ko>영수증 OCR — 식료품 영수증 스캔으로 자동 항목 추가</li>
+    <li data-en>DALL-E recipe cover images</li>
+    <li data-ko>DALL-E 레시피 커버 이미지</li>
+    <li data-en>Hugging Face recipe dataset expansion</li>
+    <li data-ko>Hugging Face 레시피 데이터셋 확장</li>
+    <li data-en>Habit prediction — learn what you cook and suggest proactively</li>
+    <li data-ko>습관 예측 — 요리 패턴 학습 후 선제적 추천</li>
+    <li data-en>Android build</li>
+    <li data-ko>Android 빌드</li>
+    <li data-en>Push notifications for expiring items</li>
+    <li data-ko>유통기한 임박 항목 푸시 알림</li>
+  </ul>
+</div>
+
+<div class="footer">
+  Built by Rex — Fridgenie v1.0.0 — Feb 2, 2026
+</div>
+
+</body>
+</html>
