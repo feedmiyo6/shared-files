@@ -3,118 +3,176 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Kimchi Jjigae Recipe 🍲</title>
+<title>Kimchi Jjigae Recipe</title>
 <style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #faf7f2; color: #2d2d2d; line-height: 1.6; padding: 16px; max-width: 600px; margin: 0 auto; }
-  h1 { font-size: 1.8em; text-align: center; margin: 16px 0 4px; }
-  .subtitle { text-align: center; color: #888; font-size: 0.9em; margin-bottom: 20px; }
-  .tip-box { background: #fff3cd; border-left: 4px solid #e6a800; padding: 12px 14px; border-radius: 8px; margin: 16px 0; font-size: 0.92em; }
-  .tip-box strong { color: #805600; }
-  .section { background: #fff; border-radius: 12px; padding: 18px; margin: 16px 0; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
-  .section h2 { font-size: 1.2em; margin-bottom: 12px; color: #c0392b; border-bottom: 2px solid #f0e0dd; padding-bottom: 6px; }
-  .section h3 { font-size: 1em; margin: 12px 0 6px; color: #555; }
-  ul { padding-left: 20px; }
-  li { margin: 6px 0; }
-  ol { padding-left: 20px; }
-  ol li { margin: 10px 0; }
-  .step-num { font-weight: 700; color: #c0392b; }
-  .time-badge { display: inline-block; background: #c0392b; color: #fff; padding: 4px 10px; border-radius: 20px; font-size: 0.8em; margin: 4px; }
-  .meta { text-align: center; margin: 12px 0; }
-  .toggle { background: none; border: 2px solid #c0392b; color: #c0392b; padding: 10px 16px; border-radius: 8px; font-size: 1em; cursor: pointer; width: 100%; margin-top: 8px; font-weight: 600; }
-  .toggle:active { background: #c0392b; color: #fff; }
-  .hidden { display: none; }
-  .emoji { font-size: 1.4em; }
-  .footer { text-align: center; color: #aaa; font-size: 0.8em; margin-top: 24px; padding-top: 12px; border-top: 1px solid #eee; }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#faf7f2;color:#2d2d2d;line-height:1.6;padding:16px;max-width:600px;margin:0 auto}
+  h1{font-size:1.8em;text-align:center;margin:16px 0 4px}
+  .subtitle{text-align:center;color:#888;font-size:.9em;margin-bottom:20px}
+  .lang-toggle{position:fixed;top:12px;right:12px;background:#c0392b;color:#fff;border:none;padding:8px 14px;border-radius:20px;font-size:.85em;font-weight:600;cursor:pointer;z-index:999;box-shadow:0 2px 8px rgba(0,0,0,.2)}
+  .lang-toggle:active{background:#a93226}
+  .tip-box{background:#fff3cd;border-left:4px solid #e6a800;padding:12px 14px;border-radius:8px;margin:16px 0;font-size:.92em}
+  .tip-box strong{color:#805600}
+  .section{background:#fff;border-radius:12px;padding:18px;margin:16px 0;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+  .section h2{font-size:1.2em;margin-bottom:12px;color:#c0392b;border-bottom:2px solid #f0e0dd;padding-bottom:6px}
+  .section h3{font-size:1em;margin:12px 0 6px;color:#555}
+  ul{padding-left:20px}li{margin:6px 0}ol{padding-left:20px}ol li{margin:10px 0}
+  .step-num{font-weight:700;color:#c0392b}
+  .time-badge{display:inline-block;background:#c0392b;color:#fff;padding:4px 10px;border-radius:20px;font-size:.8em;margin:4px}
+  .meta{text-align:center;margin:12px 0}
+  .toggle{background:none;border:2px solid #c0392b;color:#c0392b;padding:10px 16px;border-radius:8px;font-size:1em;cursor:pointer;width:100%;margin-top:8px;font-weight:600}
+  .toggle:active{background:#c0392b;color:#fff}
+  .hidden{display:none}
+  .footer{text-align:center;color:#aaa;font-size:.8em;margin-top:24px;padding-top:12px;border-top:1px solid #eee}
+  [data-ko]{display:none}
+  body.ko [data-en]{display:none}
+  body.ko [data-ko]{display:block}
+  body.ko li[data-ko],body.ko span[data-ko]{display:list-item}
+  body.ko span[data-ko]{display:inline}
 </style>
 </head>
 <body>
 
-<h1>김치찌개 <span class="emoji">🍲</span></h1>
-<p class="subtitle">Kimchi Jjigae — The Ultimate Korean Comfort Stew</p>
+<button class="lang-toggle" onclick="document.body.classList.toggle('ko');this.textContent=document.body.classList.contains('ko')?'EN':'한국어'">한국어</button>
+
+<h1>김치찌개 🍲</h1>
+<p class="subtitle" data-en>Kimchi Jjigae — The Ultimate Korean Comfort Stew</p>
+<p class="subtitle" data-ko>김치찌개 — 최고의 한국 comfort 음식</p>
 
 <div class="meta">
-  <span class="time-badge">⏱ Prep: 15 min</span>
-  <span class="time-badge">🔥 Cook: 20 min</span>
-  <span class="time-badge">🍽 Serves: 2</span>
+  <span class="time-badge" data-en>⏱ Prep: 15 min</span><span class="time-badge" data-ko>⏱ 준비: 15분</span>
+  <span class="time-badge" data-en>🔥 Cook: 20 min</span><span class="time-badge" data-ko>🔥 조리: 20분</span>
+  <span class="time-badge" data-en>🍽 Serves: 2</span><span class="time-badge" data-ko>🍽 2인분</span>
 </div>
 
 <div class="tip-box">
-  <strong>⚡ Your Kimchi Fix:</strong> Since your kimchi is store-bought from a Chinese grocery (probably not fermented enough), here's how to save it:
-  <ul style="margin-top:8px;">
-    <li><strong>Leave it out</strong> on the counter for 2–3 days to let it ferment and get sour</li>
-    <li><strong>Stir-fry the kimchi first</strong> in sesame oil for 3–4 min before making the stew — this deepens the flavor dramatically</li>
-    <li><strong>Add 1 tsp rice vinegar or apple cider vinegar</strong> to fake extra fermentation tang</li>
-    <li><strong>Use ALL the kimchi juice</strong> from the jar — it adds critical depth</li>
+  <div data-en>
+    <strong>⚡ Your Kimchi Fix:</strong> Since your kimchi is store-bought from a Chinese grocery (probably not fermented enough), here's how to save it:
+    <ul style="margin-top:8px">
+      <li><strong>Leave it out</strong> on the counter for 2–3 days to let it ferment and get sour</li>
+      <li><strong>Stir-fry the kimchi first</strong> in sesame oil for 3–4 min before making the stew — this deepens the flavor dramatically</li>
+      <li><strong>Add 1 tsp rice vinegar or apple cider vinegar</strong> to fake extra fermentation tang</li>
+      <li><strong>Use ALL the kimchi juice</strong> from the jar — it adds critical depth</li>
+    </ul>
+  </div>
+  <div data-ko>
+    <strong>⚡ 김치 꿀팁:</strong> 중국 마트에서 산 김치는 발효가 덜 됐을 수 있어요. 이렇게 해보세요:
+    <ul style="margin-top:8px">
+      <li><strong>상온에 2~3일</strong> 두고 신맛이 나게 발효시키기</li>
+      <li><strong>볶기!</strong> 참기름에 3~4분 볶아서 찌개에 넣으면 맛이 확 살아남</li>
+      <li><strong>식초 1작은술</strong> (쌀식초 or 사과식초) 추가하면 발효된 맛이 남</li>
+      <li><strong>김치 국물 다 쓰기</strong> — 버리지 마세요, 감칠맛의 핵심!</li>
+    </ul>
+  </div>
+</div>
+
+<div class="section">
+  <h2 data-en>🛒 Ingredients</h2>
+  <h2 data-ko>🛒 재료</h2>
+
+  <h3 data-en>Protein</h3><h3 data-ko>고기</h3>
+  <ul>
+    <li data-en>180g (~0.4 lb) <strong>pork belly</strong>, sliced bite-size (skin removed)</li>
+    <li data-ko>삼겹살 180g, 한입 크기로 썰기 (껍질 제거)</li>
+    <li data-en>1 Tbsp rice wine (mirin)</li>
+    <li data-ko>미림 1큰술</li>
+    <li data-en>Black pepper, a few shakes</li>
+    <li data-ko>후추 약간</li>
+  </ul>
+
+  <h3 data-en>Main</h3><h3 data-ko>주재료</h3>
+  <ul>
+    <li data-en>1.5 cups <strong>kimchi</strong>, cut bite-size + all the juice</li>
+    <li data-ko>김치 1.5컵, 한입 크기 + 김치 국물 전부</li>
+    <li data-en>150g <strong>firm tofu</strong>, sliced ~1cm thick</li>
+    <li data-ko>단단한 두부 150g, 약 1cm 두께로 썰기</li>
+    <li data-en>¼ small onion, thinly sliced</li>
+    <li data-ko>양파 ¼개, 얇게 썰기</li>
+    <li data-en>2 shiitake mushrooms, stems removed, sliced</li>
+    <li data-ko>표고버섯 2개, 기둥 제거 후 썰기</li>
+    <li data-en>1 green onion, sliced</li>
+    <li data-ko>대파 1줄기, 썰기</li>
+    <li data-en>1 cup water (or rice-rinsing water for extra body)</li>
+    <li data-ko>물 1컵 (쌀뜨물 쓰면 더 좋음!)</li>
+  </ul>
+
+  <h3 data-en>Sauce (mix in a bowl)</h3><h3 data-ko>양념 (볼에 섞기)</h3>
+  <ul>
+    <li data-en>1 Tbsp <strong>gochugaru</strong> (Korean chili flakes)</li>
+    <li data-ko>고춧가루 1큰술</li>
+    <li data-en>1 Tbsp soy sauce</li>
+    <li data-ko>간장 1큰술</li>
+    <li data-en>1 tsp <strong>gochujang</strong> (Korean chili paste)</li>
+    <li data-ko>고추장 1작은술</li>
+    <li data-en>¼ tsp minced garlic</li>
+    <li data-ko>다진 마늘 ¼작은술</li>
+    <li data-en>Black pepper</li>
+    <li data-ko>후추</li>
+  </ul>
+
+  <h3 data-en>Optional Boosters</h3><h3 data-ko>선택 재료</h3>
+  <ul>
+    <li data-en>1 tsp fish sauce — umami bomb</li>
+    <li data-ko>액젓 1작은술 — 감칠맛 폭발</li>
+    <li data-en>½ tsp sugar — balances sourness</li>
+    <li data-ko>설탕 ½작은술 — 신맛 밸런스</li>
+    <li data-en>1 tsp sesame oil — add right before serving</li>
+    <li data-ko>참기름 1작은술 — 불 끄기 직전에 추가</li>
   </ul>
 </div>
 
 <div class="section">
-  <h2>🛒 Ingredients</h2>
-  
-  <h3>Protein</h3>
-  <ul>
-    <li>180g (~0.4 lb) <strong>pork belly</strong>, sliced bite-size (skin removed)</li>
-    <li>1 Tbsp rice wine (mirin)</li>
-    <li>Black pepper, a few shakes</li>
-  </ul>
-
-  <h3>Main</h3>
-  <ul>
-    <li>1.5 cups <strong>kimchi</strong>, cut bite-size (use all the juice too!)</li>
-    <li>150g <strong>firm tofu</strong>, sliced ~1cm thick</li>
-    <li>¼ small onion, thinly sliced</li>
-    <li>2 shiitake mushrooms, stems removed, sliced</li>
-    <li>1 green onion, sliced</li>
-    <li>1 cup water (or rice-rinsing water for extra body)</li>
-  </ul>
-
-  <h3>Sauce (mix in a bowl)</h3>
-  <ul>
-    <li>1 Tbsp <strong>gochugaru</strong> (Korean chili flakes)</li>
-    <li>1 Tbsp soy sauce</li>
-    <li>1 tsp <strong>gochujang</strong> (Korean chili paste)</li>
-    <li>¼ tsp minced garlic</li>
-    <li>Black pepper</li>
-  </ul>
-
-  <h3>Optional Boosters</h3>
-  <ul>
-    <li>1 tsp fish sauce or saeujeot (salted shrimp) — umami bomb</li>
-    <li>½ tsp sugar — balances sourness</li>
-    <li>1 tsp sesame oil — add right before serving</li>
-  </ul>
-</div>
-
-<div class="section">
-  <h2>👨‍🍳 Steps</h2>
-  <button class="toggle" onclick="document.getElementById('steps').classList.toggle('hidden'); this.textContent = this.textContent === 'Show Steps' ? 'Hide Steps' : 'Show Steps';">Show Steps</button>
+  <h2 data-en>👨‍🍳 Steps</h2>
+  <h2 data-ko>👨‍🍳 만드는 법</h2>
+  <button class="toggle" onclick="document.getElementById('steps').classList.toggle('hidden');this.textContent=this.textContent==='Show Steps'||this.textContent==='보기'?document.body.classList.contains('ko')?'숨기기':'Hide Steps':document.body.classList.contains('ko')?'보기':'Show Steps'">
+    Show Steps
+  </button>
   <div id="steps" class="hidden">
-    <ol style="margin-top:14px;">
-      <li><span class="step-num">Marinate:</span> Toss pork belly with rice wine and black pepper. Let sit 15 min.</li>
-      <li><span class="step-num">Fry the kimchi:</span> Heat a splash of sesame oil in your pot. Add kimchi and stir-fry on medium heat for <strong>3–4 minutes</strong> until it softens and smells amazing. This is the secret step — don't skip it!</li>
-      <li><span class="step-num">Layer up:</span> Push kimchi aside, lay marinated pork on the bottom. Add onion, mushrooms, tofu, the sauce mix, and water.</li>
-      <li><span class="step-num">Boil:</span> Bring to a boil on medium-high heat. Then lower to medium and simmer <strong>15 minutes</strong> until pork is cooked through. Stir occasionally, spoon broth over tofu.</li>
-      <li><span class="step-num">Finish:</span> Taste — add fish sauce/salt if needed. Scatter green onions on top. Drizzle sesame oil. Kill the heat.</li>
-      <li><span class="step-num">Serve:</span> Bring the whole pot to the table while it's still bubbling. Eat with a big bowl of steamed rice. That's it. That's the move.</li>
+    <ol style="margin-top:14px">
+      <li data-en><span class="step-num">Marinate:</span> Toss pork belly with rice wine and black pepper. Let sit 15 min.</li>
+      <li data-ko><span class="step-num">재우기:</span> 삼겹살에 미림, 후추 넣고 15분 재우기.</li>
+
+      <li data-en><span class="step-num">Fry the kimchi:</span> Heat a splash of sesame oil in your pot. Add kimchi and stir-fry on medium heat for <strong>3–4 minutes</strong> until it softens and smells amazing. This is the secret step — don't skip it!</li>
+      <li data-ko><span class="step-num">김치 볶기:</span> 냄비에 참기름 두르고 김치를 중불에서 <strong>3~4분</strong> 볶기. 부드러워지고 향이 올라올 때까지. 이게 핵심이니 절대 스킵하지 마세요!</li>
+
+      <li data-en><span class="step-num">Layer up:</span> Push kimchi aside, lay marinated pork on the bottom. Add onion, mushrooms, tofu, the sauce mix, and water.</li>
+      <li data-ko><span class="step-num">재료 넣기:</span> 김치를 한쪽으로 밀고 재운 고기를 바닥에 깔기. 양파, 버섯, 두부, 양념, 물 넣기.</li>
+
+      <li data-en><span class="step-num">Boil:</span> Bring to a boil on medium-high heat. Then lower to medium and simmer <strong>15 minutes</strong> until pork is cooked through. Stir occasionally, spoon broth over tofu.</li>
+      <li data-ko><span class="step-num">끓이기:</span> 중강불에서 끓이다가 중불로 낮춰서 <strong>15분</strong> 끓이기. 가끔 저어주고 두부 위에 국물 끼얹어 주기.</li>
+
+      <li data-en><span class="step-num">Finish:</span> Taste — add fish sauce/salt if needed. Scatter green onions on top. Drizzle sesame oil. Kill the heat.</li>
+      <li data-ko><span class="step-num">마무리:</span> 간 보고 액젓/소금으로 조절. 대파 올리고 참기름 한 바퀴. 불 끄기.</li>
+
+      <li data-en><span class="step-num">Serve:</span> Bring the whole pot to the table while it's still bubbling. Eat with a big bowl of steamed rice. That's it. That's the move.</li>
+      <li data-ko><span class="step-num">상차림:</span> 보글보글 끓는 채로 식탁에 올리기. 흰쌀밥 크게 한 공기. 끝. 이게 정답.</li>
     </ol>
   </div>
 </div>
 
 <div class="section">
-  <h2>💡 Pro Tips</h2>
+  <h2 data-en>💡 Pro Tips</h2>
+  <h2 data-ko>💡 꿀팁</h2>
   <ul>
-    <li><strong>Older kimchi = better jjigae.</strong> If yours is fresh, ferment it on the counter 2–3 days first.</li>
-    <li><strong>Don't rush it.</strong> Low and slow beats fast and furious here. Let the flavors meld.</li>
-    <li><strong>Rice-rinsing water</strong> (쌀뜨물) instead of plain water gives the broth a subtle starchy body — classic Korean grandma move.</li>
-    <li><strong>Pork belly fat is the secret.</strong> Don't go lean. The fat renders into the broth and makes it silky.</li>
-    <li><strong>Reheat = even better.</strong> This stew is one of those magical dishes that tastes better the next day.</li>
+    <li data-en><strong>Older kimchi = better jjigae.</strong> If yours is fresh, ferment it on the counter 2–3 days first.</li>
+    <li data-ko><strong>묵은 김치 = 맛있는 찌개.</strong> 김치가 싱싱하면 상온에서 2~3일 발효시키세요.</li>
+
+    <li data-en><strong>Don't rush it.</strong> Low and slow beats fast and furious here. Let the flavors meld.</li>
+    <li data-ko><strong>서두르지 마세요.</strong> 천천히 끓여야 맛이 우러납니다.</li>
+
+    <li data-en><strong>Rice-rinsing water</strong> (쌀뜨물) instead of plain water gives the broth a subtle starchy body — classic Korean grandma move.</li>
+    <li data-ko><strong>쌀뜨물</strong>로 끓이면 국물이 구수해짐 — 할머니 비법.</li>
+
+    <li data-en><strong>Pork belly fat is the secret.</strong> Don't go lean. The fat renders into the broth and makes it silky.</li>
+    <li data-ko><strong>삼겹살 기름이 핵심.</strong> 살코기 쓰지 마세요. 기름이 국물에 녹아야 깊은 맛이 남.</li>
+
+    <li data-en><strong>Reheat = even better.</strong> This stew is one of those magical dishes that tastes better the next day.</li>
+    <li data-ko><strong>다음날 데워 먹으면 더 맛있음.</strong> 마법 같은 음식.</li>
   </ul>
 </div>
 
 <div class="footer">
-  Rex's Kitchen — compiled from My Korean Kitchen, Maangchi, Korean Bapsang & Reddit wisdom<br>
-  Feb 2, 2026
+  Rex's Kitchen — Feb 2, 2026
 </div>
 
 </body>
