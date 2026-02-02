@@ -5,6 +5,17 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Fridgenie MVP — Full Report</title>
 <style>
+  .pin-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:#FFF8F0;display:flex;align-items:center;justify-content:center;z-index:9999;flex-direction:column;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}
+  .pin-box{background:#fff;padding:32px;border-radius:16px;box-shadow:0 4px 20px rgba(184,164,128,.2);text-align:center;max-width:300px;width:90%}
+  .pin-box h2{color:#5B8C5A;margin-bottom:16px;font-size:1.3em}
+  .pin-input{width:100%;padding:14px;font-size:1.4em;text-align:center;border:2px solid #E8D5B7;border-radius:12px;outline:none;letter-spacing:8px;-webkit-text-security:disc}
+  .pin-input:focus{border-color:#5B8C5A}
+  .pin-btn{margin-top:14px;width:100%;padding:12px;background:#5B8C5A;color:#fff;border:none;border-radius:24px;font-size:1em;font-weight:600;cursor:pointer}
+  .pin-btn:active{background:#4A7A49}
+  .pin-err{color:#D27B7B;font-size:.85em;margin-top:10px;display:none}
+  .content-locked{display:none}
+</style>
+<style>
   *{margin:0;padding:0;box-sizing:border-box}
   body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#FFF8F0;color:#2d2d2d;line-height:1.7;padding:16px;max-width:650px;margin:0 auto}
   h1{font-size:1.8em;text-align:center;margin:16px 0 4px;color:#5B8C5A}
@@ -43,6 +54,15 @@
 </head>
 <body>
 
+<div class="pin-overlay" id="pinOverlay">
+<div class="pin-box">
+<h2>🔒 Enter PIN</h2>
+<input type="tel" class="pin-input" id="pinInput" maxlength="4" placeholder="····" autofocus>
+<button class="pin-btn" onclick="checkPin()">Unlock</button>
+<p class="pin-err" id="pinErr">Incorrect PIN. Try again.</p>
+</div>
+</div>
+<div class="content-locked" id="mainContent">
 <button class="lang-toggle" onclick="document.body.classList.toggle('ko');this.textContent=document.body.classList.contains('ko')?'EN':'한국어'">한국어</button>
 
 <h1>Fridgenie MVP</h1>
@@ -352,6 +372,11 @@ lib/
   Built by Rex — Fridgenie v1.0.0 — Feb 2, 2026
 </div>
 
+</div>
+<script>
+function checkPin(){var p=document.getElementById('pinInput').value;if(btoa(p)==='MDQxMQ=='){document.getElementById('pinOverlay').style.display='none';document.getElementById('mainContent').style.display='block';document.getElementById('mainContent').classList.remove('content-locked');}else{document.getElementById('pinErr').style.display='block';document.getElementById('pinInput').value='';}}
+document.getElementById('pinInput').addEventListener('keyup',function(e){if(e.key==='Enter')checkPin();});
+</script>
 </body>
 </html>
 <!-- Mon Feb  2 12:17:36 MST 2026 -->
