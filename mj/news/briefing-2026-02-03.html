@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Tech & Market Briefing | Feb 3, 2026</title>
+    <style>
+        :root {
+            --bg: #0d1117;
+            --card: #161b22;
+            --border: #30363d;
+            --text: #e6edf3;
+            --text-muted: #8b949e;
+            --accent: #58a6ff;
+            --accent-green: #3fb950;
+            --accent-orange: #d29922;
+            --accent-purple: #a371f7;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            padding: 16px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        header {
+            text-align: center;
+            margin-bottom: 32px;
+            position: relative;
+        }
+        .lang-toggle {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: var(--card);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+        .lang-toggle:hover { border-color: var(--accent); }
+        h1 { font-size: 1.8rem; margin-bottom: 8px; }
+        .date { color: var(--accent); font-size: 1.1rem; font-weight: 500; }
+        .subtitle { color: var(--text-muted); margin-top: 4px; }
+        section { margin-bottom: 32px; }
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.3rem;
+            margin-bottom: 16px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--border);
+        }
+        .section-title.ai { border-color: var(--accent); }
+        .section-title.markets { border-color: var(--accent-green); }
+        .section-title.semi { border-color: var(--accent-orange); }
+        .section-title.wild { border-color: var(--accent-purple); }
+        .card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
+            transition: border-color 0.2s;
+        }
+        .card:hover { border-color: var(--accent); }
+        .card h3 {
+            font-size: 1rem;
+            margin-bottom: 8px;
+            color: var(--text);
+        }
+        .card h3 a {
+            color: inherit;
+            text-decoration: none;
+        }
+        .card h3 a:hover { color: var(--accent); }
+        .source {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+        .summary {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+        footer {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border);
+        }
+        .ko { display: none; }
+        body.korean .en { display: none; }
+        body.korean .ko { display: block; }
+        @media (max-width: 500px) {
+            h1 { font-size: 1.5rem; }
+            .lang-toggle { padding: 6px 12px; font-size: 12px; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <button class="lang-toggle" onclick="toggleLang()">
+            <span class="en">한국어</span>
+            <span class="ko">English</span>
+        </button>
+        <h1>
+            <span class="en">📰 Daily Tech & Market Briefing</span>
+            <span class="ko">📰 일일 기술 & 시장 브리핑</span>
+        </h1>
+        <div class="date">February 3, 2026 (Tuesday)</div>
+        <div class="subtitle">
+            <span class="en">Your morning rundown of what matters</span>
+            <span class="ko">오늘 아침 주요 뉴스 요약</span>
+        </div>
+    </header>
+
+    <section>
+        <div class="section-title ai">
+            <span>🤖</span>
+            <span class="en">AI & Tech</span>
+            <span class="ko">AI & 기술</span>
+        </div>
+        
+        <div class="card">
+            <h3><a href="https://techstartups.com/2026/02/03/top-tech-news-today-february-3-2026/" target="_blank">
+                <span class="en">SpaceX Acquires xAI — Musk Merges Space and AI Empires</span>
+                <span class="ko">SpaceX, xAI 인수 — 머스크, 우주와 AI 제국 통합</span>
+            </a></h3>
+            <div class="source">TechStartups</div>
+            <p class="summary">
+                <span class="en">Elon Musk's SpaceX has acquired xAI, binding his fast-growing AI lab to the world's most strategically important space-and-connectivity company. The merger precedes a massive planned IPO later this year, potentially creating one of the largest tech conglomerates in history.</span>
+                <span class="ko">일론 머스크의 SpaceX가 xAI를 인수하여 급성장 중인 AI 연구소를 세계에서 가장 전략적으로 중요한 우주-연결 기업과 결합했습니다. 이 합병은 올해 말 예정된 대규모 IPO에 앞서 진행되었으며, 역사상 가장 큰 기술 대기업 중 하나가 될 가능성이 있습니다.</span>
+            </p>
+        </div>
+
+        <div class="card">
+            <h3><a href="https://www.prnewswire.com/news-releases/2026-international-ai-safety-report-charts-rapid-changes-and-emerging-risks-302677298.html" target="_blank">
+                <span class="en">2026 International AI Safety Report Released</span>
+                <span class="ko">2026 국제 AI 안전 보고서 발표</span>
+            </a></h3>
+            <div class="source">PRNewswire</div>
+            <p class="summary">
+                <span class="en">A major international report on AI safety was released today, providing a science-based assessment of general-purpose AI capabilities, emerging risks, and risk management strategies. The report reflects growing global coordination on AI governance.</span>
+                <span class="ko">오늘 AI 안전에 관한 주요 국제 보고서가 발표되었습니다. 범용 AI 역량, 신흥 위험, 위험 관리 전략에 대한 과학 기반 평가를 제공합니다. 이 보고서는 AI 거버넌스에 대한 글로벌 협력 확대를 반영합니다.</span>
+            </p>
+        </div>
+
+        <div class="card">
+            <h3><a href="https://asiatimes.com/2026/02/ais-next-race-is-energy-efficient-architectures-top-scientist-says/" target="_blank">
+                <span class="en">AI's Next Race: Energy-Efficient Architectures</span>
+                <span class="ko">AI의 다음 경쟁: 에너지 효율적 아키텍처</span>
+            </a></h3>
+            <div class="source">Asia Times</div>
+            <p class="summary">
+                <span class="en">Top scientists praise China's DeepSeek for pioneering "knowledge distillation" methods that consume far less energy than traditional AI training. The technique signals a new competitive frontier focused on sustainable AI development.</span>
+                <span class="ko">최고 과학자들이 중국의 DeepSeek이 개척한 "지식 증류" 방법을 칭찬했습니다. 이 방법은 전통적인 AI 훈련보다 훨씬 적은 에너지를 소비합니다. 이 기술은 지속 가능한 AI 개발에 초점을 맞춘 새로운 경쟁 영역을 의미합니다.</span>
+            </p>
+        </div>
+    </section>
+
+    <section>
+        <div class="section-title markets">
+            <span>📈</span>
+            <span class="en">Markets & Stocks</span>
+            <span class="ko">시장 & 주식</span>
+        </div>
+
+        <div class="card">
+            <h3><a href="https://www.cnbc.com/2026/02/02/stock-market-today-live-updates.html" target="_blank">
+                <span class="en">Palantir Surges 11% on Stellar Q4 Earnings Beat</span>
+                <span class="ko">팔란티어, Q4 실적 호조로 11% 급등</span>
+            </a></h3>
+            <div class="source">CNBC</div>
+            <p class="summary">
+                <span class="en">Palantir stock jumped 11% following a strong fourth-quarter earnings beat. The AI-powered software provider reported adjusted EPS of 25 cents vs. 23 cents expected, continuing its impressive growth trajectory in enterprise AI solutions.</span>
+                <span class="ko">팔란티어 주가가 4분기 실적 호조로 11% 급등했습니다. AI 기반 소프트웨어 기업은 예상치 23센트 대비 조정 EPS 25센트를 기록하며 기업용 AI 솔루션 부문에서 인상적인 성장세를 이어갔습니다.</span>
+            </p>
+        </div>
+
+        <div class="card">
+            <h3><a href="https://www.investopedia.com/dow-jones-today-02022026-11897235" target="_blank">
+                <span class="en">Dow Jumps 515 Points, S&P 500 Flirts with Record High</span>
+                <span class="ko">다우 515포인트 상승, S&P 500 사상 최고치 근접</span>
+            </a></h3>
+            <div class="source">Investopedia</div>
+            <p class="summary">
+                <span class="en">Major indexes finished sharply higher Monday, with the Dow adding 515 points (+1.05%) and the S&P 500 just missing a new closing record at 6,976. Strong manufacturing data and AI-related stocks drove the rally.</span>
+                <span class="ko">월요일 주요 지수가 큰 폭으로 상승 마감했습니다. 다우는 515포인트(+1.05%) 상승했고 S&P 500은 6,976으로 사상 최고 종가에 근접했습니다. 강한 제조업 데이터와 AI 관련 주식이 상승을 주도했습니다.</span>
+            </p>
+        </div>
+
+        <div class="card">
+            <h3><a href="https://www.investopedia.com/5-things-to-know-before-the-stock-market-opens-february-2-2026-11897236" target="_blank">
+                <span class="en">Disney CEO Iger Planning Exit — Josh D'Amaro Likely Successor</span>
+                <span class="ko">디즈니 CEO 아이거 퇴임 예정 — 조쉬 다마로 후임 유력</span>
+            </a></h3>
+            <div class="source">WSJ via Investopedia</div>
+            <p class="summary">
+                <span class="en">Bob Iger has told people close to him that he plans to step down before his contract ends in late 2026. Parks chief Josh D'Amaro is the likely choice to succeed him, with a board vote expected in the coming weeks.</span>
+                <span class="ko">밥 아이거가 2026년 말 계약 만료 전 퇴임할 계획이라고 측근들에게 밝혔습니다. 파크 총괄 조쉬 다마로가 후임자로 유력하며, 향후 몇 주 내 이사회 투표가 예상됩니다.</span>
+            </p>
+        </div>
+    </section>
+
+    <section>
+        <div class="section-title semi">
+            <span>🔬</span>
+            <span class="en">Semiconductors</span>
+            <span class="ko">반도체</span>
+        </div>
+
+        <div class="card">
+            <h3><a href="https://www.fool.com/investing/2026/02/03/prediction-asml-could-be-one-of-the-best-semicondu/" target="_blank">
+                <span class="en">ASML Could Be the Best Semiconductor Stock of 2026</span>
+                <span class="ko">ASML, 2026년 최고의 반도체 주식 될 수 있어</span>
+            </a></h3>
+            <div class="source">Motley Fool</div>
+            <p class="summary">
+                <span class="en">ASML delivered stellar Q4 2025 earnings, reinforcing its position as the closest thing to a monopoly in the chip industry. The Dutch lithography giant's EUV machines remain indispensable for cutting-edge chip production.</span>
+                <span class="ko">ASML이 2025년 4분기 실적 호조를 기록하며 칩 업계 독점에 가까운 위치를 강화했습니다. 네덜란드 리소그래피 거인의 EUV 장비는 최첨단 칩 생산에 필수적입니다.</span>
+            </p>
+        </div>
+
+        <div class="card">
+            <h3><a href="https://markets.financialcontent.com/stocks/article/marketminute-2026-2-2-on-semiconductor-shares-plunge-8-as-automotive-and-industrial-headwinds-trigger-guidance-shock" target="_blank">
+                <span class="en">ON Semiconductor Plunges 8% on Weak Guidance</span>
+                <span class="ko">ON 세미컨덕터, 부진한 가이던스로 8% 급락</span>
+            </a></h3>
+            <div class="source">Market Minute</div>
+            <p class="summary">
+                <span class="en">ON Semiconductor shares dropped 8% after automotive and industrial headwinds triggered a guidance shock. The company also faces potential tariff impacts from the new Washington administration's trade policies.</span>
+                <span class="ko">ON 세미컨덕터 주가가 자동차 및 산업 부문 역풍으로 인한 가이던스 충격으로 8% 하락했습니다. 새 워싱턴 행정부의 무역 정책에 따른 관세 영향 가능성도 직면하고 있습니다.</span>
+            </p>
+        </div>
+
+        <div class="card">
+            <h3><a href="https://www.digitimes.com/news/a20260202PD232/alchip-faraday-guc-2026-revenue.html" target="_blank">
+                <span class="en">Taiwan ASIC Houses Eye Growth on US Cloud Orders</span>
+                <span class="ko">대만 ASIC 업체들, 미국 클라우드 주문으로 성장 전망</span>
+            </a></h3>
+            <div class="source">DigiTimes</div>
+            <p class="summary">
+                <span class="en">Alchip, Global Unichip (GUC), and Faraday — Taiwan's leading ASIC design service providers — are projecting strong 2026 growth driven by chip orders from US cloud service providers building custom AI accelerators.</span>
+                <span class="ko">대만의 선두 ASIC 설계 서비스 업체인 Alchip, GUC, Faraday가 미국 클라우드 서비스 업체들의 맞춤형 AI 가속기 칩 주문에 힘입어 2026년 강한 성장을 전망하고 있습니다.</span>
+            </p>
+        </div>
+    </section>
+
+    <section>
+        <div class="section-title wild">
+            <span>🃏</span>
+            <span class="en">Wild Card</span>
+            <span class="ko">와일드 카드</span>
+        </div>
+
+        <div class="card">
+            <h3><a href="https://techweez.com/2026/02/03/a-look-at-first-kenyan-semiconductor-plant/" target="_blank">
+                <span class="en">Kenya's First Chip Plant Shows Why Making Semiconductors Is Hard</span>
+                <span class="ko">케냐 최초 칩 공장, 반도체 제조가 어려운 이유 보여줘</span>
+            </a></h3>
+            <div class="source">TechWeez</div>
+            <p class="summary">
+                <span class="en">Kenya's first semiconductor plant offers a case study in the challenges of chip manufacturing beyond traditional powerhouses. While positioned as strategic for African resilience, it highlights the massive technical and capital barriers to entry in this industry.</span>
+                <span class="ko">케냐의 첫 번째 반도체 공장이 전통적 강국 이외 지역에서의 칩 제조 도전을 보여주는 사례가 되고 있습니다. 아프리카 회복력을 위한 전략적 시설로 자리매김했지만, 이 산업 진입의 엄청난 기술적, 자본적 장벽을 드러내고 있습니다.</span>
+            </p>
+        </div>
+    </section>
+
+    <footer>
+        <span class="en">Curated by Totoro 🌳 | Sources verified as of Feb 3, 2026</span>
+        <span class="ko">토토로 🌳 큐레이션 | 2026년 2월 3일 기준 출처 확인</span>
+    </footer>
+
+    <script>
+        function toggleLang() {
+            document.body.classList.toggle('korean');
+            localStorage.setItem('lang', document.body.classList.contains('korean') ? 'ko' : 'en');
+        }
+        // Restore preference
+        if (localStorage.getItem('lang') === 'ko') {
+            document.body.classList.add('korean');
+        }
+    </script>
+</body>
+</html>
