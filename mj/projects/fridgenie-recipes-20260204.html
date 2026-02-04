@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fridgenie Recipe Database Report</title>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --card: #161b22;
+      --border: #30363d;
+      --text: #c9d1d9;
+      --heading: #f0f6fc;
+      --accent: #58a6ff;
+      --success: #3fb950;
+      --warning: #d29922;
+    }
+    
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      padding: 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    header {
+      text-align: center;
+      padding: 40px 20px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 30px;
+    }
+    
+    h1 {
+      color: var(--heading);
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+    }
+    
+    .subtitle {
+      color: var(--text);
+      font-size: 1.1rem;
+      opacity: 0.8;
+    }
+    
+    .lang-toggle {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 1000;
+    }
+    
+    .lang-toggle button {
+      background: var(--card);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 8px 16px;
+      cursor: pointer;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+    
+    .lang-toggle button:hover {
+      background: var(--border);
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      margin-bottom: 40px;
+    }
+    
+    .stat-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 3rem;
+      font-weight: bold;
+      color: var(--accent);
+    }
+    
+    .stat-label {
+      color: var(--text);
+      font-size: 0.9rem;
+      margin-top: 8px;
+    }
+    
+    .section {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+    
+    h2 {
+      color: var(--heading);
+      font-size: 1.5rem;
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+    }
+    
+    .cuisine-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 16px;
+    }
+    
+    .cuisine-item {
+      background: var(--bg);
+      border-radius: 8px;
+      padding: 16px;
+      text-align: center;
+    }
+    
+    .cuisine-emoji {
+      font-size: 2rem;
+      margin-bottom: 8px;
+    }
+    
+    .cuisine-name {
+      font-weight: 600;
+      color: var(--heading);
+    }
+    
+    .cuisine-count {
+      color: var(--accent);
+      font-size: 0.9rem;
+    }
+    
+    .recipe-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+    
+    .recipe-card {
+      background: var(--bg);
+      border-radius: 8px;
+      padding: 16px;
+      border-left: 3px solid var(--accent);
+    }
+    
+    .recipe-title {
+      font-weight: 600;
+      color: var(--heading);
+      margin-bottom: 8px;
+    }
+    
+    .recipe-meta {
+      display: flex;
+      gap: 12px;
+      font-size: 0.85rem;
+      color: var(--text);
+      opacity: 0.8;
+    }
+    
+    .rating {
+      color: var(--warning);
+    }
+    
+    .source-link {
+      color: var(--accent);
+      text-decoration: none;
+      font-size: 0.85rem;
+    }
+    
+    .source-link:hover {
+      text-decoration: underline;
+    }
+    
+    footer {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--text);
+      opacity: 0.6;
+      font-size: 0.9rem;
+    }
+    
+    /* Korean translations - hidden by default */
+    .kr { display: none; }
+    body.korean .en { display: none; }
+    body.korean .kr { display: inline; }
+    
+    @media (max-width: 600px) {
+      h1 { font-size: 1.8rem; }
+      .stat-number { font-size: 2rem; }
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+  <div class="lang-toggle">
+    <button onclick="toggleLang()">
+      <span class="en">한국어</span>
+      <span class="kr">English</span>
+    </button>
+  </div>
+
+  <header>
+    <h1>
+      <span class="en">🍳 Fridgenie Recipe Database</span>
+      <span class="kr">🍳 Fridgenie 레시피 데이터베이스</span>
+    </h1>
+    <p class="subtitle">
+      <span class="en">Validated recipes from trusted sources</span>
+      <span class="kr">신뢰할 수 있는 소스에서 검증된 레시피</span>
+    </p>
+    <p class="subtitle" style="margin-top: 8px;">
+      <span class="en">Generated: February 4, 2026 at 01:18 PM</span>
+      <span class="kr">생성일: February 4, 2026 at 01:18 PM</span>
+    </p>
+  </header>
+
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-number">20</div>
+      <div class="stat-label">
+        <span class="en">Total Recipes</span>
+        <span class="kr">총 레시피</span>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number">10</div>
+      <div class="stat-label">
+        <span class="en">Cuisines</span>
+        <span class="kr">요리 종류</span>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number">4</div>
+      <div class="stat-label">
+        <span class="en">Trusted Sources</span>
+        <span class="kr">신뢰 소스</span>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number">4.8</div>
+      <div class="stat-label">
+        <span class="en">Avg Rating</span>
+        <span class="kr">평균 평점</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>
+      <span class="en">📊 Recipes by Cuisine</span>
+      <span class="kr">📊 요리 종류별 레시피</span>
+    </h2>
+    <div class="cuisine-grid" id="cuisine-grid">
+      <!-- Filled dynamically -->
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>
+      <span class="en">⭐ Top Rated Recipes</span>
+      <span class="kr">⭐ 최고 평점 레시피</span>
+    </h2>
+    <div class="recipe-list" id="top-recipes">
+      <!-- Filled dynamically -->
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>
+      <span class="en">⚡ Quick Recipes (&lt;30 min)</span>
+      <span class="kr">⚡ 빠른 레시피 (&lt;30분)</span>
+    </h2>
+    <div class="recipe-list" id="quick-recipes">
+      <!-- Filled dynamically -->
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>
+      <span class="en">📚 All Recipes</span>
+      <span class="kr">📚 모든 레시피</span>
+    </h2>
+    <div class="recipe-list" id="all-recipes">
+      <!-- Filled dynamically -->
+    </div>
+  </div>
+
+  <footer>
+    <p>
+      <span class="en">Data collected from Serious Eats, Budget Bytes, RecipeTin Eats, Just One Cookbook, and other trusted sources.</span>
+      <span class="kr">Serious Eats, Budget Bytes, RecipeTin Eats, Just One Cookbook 등 신뢰할 수 있는 소스에서 수집된 데이터입니다.</span>
+    </p>
+    <p style="margin-top: 8px;">
+      <span class="en">All recipes include source attribution and are verified for accuracy.</span>
+      <span class="kr">모든 레시피에는 출처가 명시되어 있으며 정확성이 검증되었습니다.</span>
+    </p>
+  </footer>
+
+  <script>
+    function toggleLang() {
+      document.body.classList.toggle('korean');
+      localStorage.setItem('lang', document.body.classList.contains('korean') ? 'kr' : 'en');
+    }
+    
+    // Load saved language preference
+    if (localStorage.getItem('lang') === 'kr') {
+      document.body.classList.add('korean');
+    }
+    
+    // Recipe data - will be injected
+    const recipes = [{"title":"Soondubu Jjigae (Korean Soft Tofu Stew)","description":"A spicy, comforting Korean soft tofu stew loaded with kimchi, pork belly, and silken tofu. The perfect warming meal.","source_url":"https://www.seriouseats.com/soondubu-jjigae-korean-soft-tofu-stew-recipe","source_name":"Serious Eats","cuisine_type":"Korean","meal_type":"Dinner","prep_time_min":15,"cook_time_min":20,"total_time_min":35,"servings":4,"difficulty":"Medium","rating":4.8,"review_count":520,"tags":["spicy","stew","tofu","kimchi","comfort food"],"ingredients":[{"name":"kombu","amount":"1","unit":"piece (4-inch)","canonical_name":"kombu"},{"name":"dried anchovies","amount":"0.5","unit":"cup","canonical_name":"dried anchovies"},{"name":"fermented kimchi","amount":"2","unit":"cups","canonical_name":"kimchi"},{"name":"vegetable oil","amount":"1","unit":"tablespoon","canonical_name":"vegetable oil"},{"name":"pork belly","amount":"0.5","unit":"pound","canonical_name":"pork belly"},{"name":"scallions","amount":"6","unit":"stalks","canonical_name":"green onion"},{"name":"garlic","amount":"4","unit":"cloves","canonical_name":"garlic"},{"name":"gochujang","amount":"2","unit":"tablespoons","canonical_name":"gochujang"},{"name":"soy sauce","amount":"1","unit":"tablespoon","canonical_name":"soy sauce"},{"name":"gochugaru","amount":"2-4","unit":"tablespoons","canonical_name":"gochugaru"},{"name":"soft silken tofu","amount":"24","unit":"ounces","canonical_name":"silken tofu"},{"name":"eggs","amount":"4","unit":"whole","canonical_name":"egg"}],"instructions":["Combine kombu and anchovies with 1 quart water. Bring to a simmer and remove from heat. Let stand 5 minutes, then strain and reserve broth.","Drain kimchi in a fine mesh strainer, squeezing to remove liquid. Reserve kimchi and juice separately.","Heat oil in a 2-3 quart saucepan over medium-high heat. Add pork belly and cook until just cooked through, about 1 minute.","Add scallion whites, garlic, and chopped kimchi. Cook until fragrant, about 1 minute.","Add kimchi juice, gochujang, and soy sauce. Cook until vegetables are well-coated.","Add strained broth, gochugaru, and tofu. Stir gently and heat until boiling.","Season to taste. Remove from heat, add eggs, and sprinkle with scallion greens. Serve immediately."]},{"title":"One Pot Creamy Cajun Chicken Pasta","description":"A creamy, smoky, spicy one-pot pasta dish perfect for busy weeknights. Everything cooks in one pan!","source_url":"https://www.budgetbytes.com/one-pot-creamy-cajun-chicken-pasta/","source_name":"Budget Bytes","cuisine_type":"American","meal_type":"Dinner","prep_time_min":10,"cook_time_min":25,"total_time_min":35,"servings":4,"difficulty":"Easy","rating":4.7,"review_count":466,"tags":["one-pot","pasta","chicken","cajun","creamy","quick"],"ingredients":[{"name":"smoked paprika","amount":"2","unit":"teaspoons","canonical_name":"smoked paprika"},{"name":"oregano","amount":"1","unit":"teaspoon","canonical_name":"oregano"},{"name":"thyme","amount":"1","unit":"teaspoon","canonical_name":"thyme"},{"name":"garlic powder","amount":"0.5","unit":"teaspoon","canonical_name":"garlic powder"},{"name":"onion powder","amount":"0.5","unit":"teaspoon","canonical_name":"onion powder"},{"name":"cayenne pepper","amount":"0.25","unit":"teaspoon","canonical_name":"cayenne pepper"},{"name":"olive oil","amount":"1","unit":"tablespoon","canonical_name":"olive oil"},{"name":"butter","amount":"1","unit":"tablespoon","canonical_name":"butter"},{"name":"chicken breast","amount":"1","unit":"pound","canonical_name":"chicken breast"},{"name":"yellow onion","amount":"1","unit":"whole","canonical_name":"yellow onion"},{"name":"penne pasta","amount":"0.5","unit":"pound","canonical_name":"penne pasta"},{"name":"fire roasted diced tomatoes","amount":"15","unit":"ounces","canonical_name":"diced tomatoes"},{"name":"chicken broth","amount":"2","unit":"cups","canonical_name":"chicken broth"},{"name":"cream cheese","amount":"2","unit":"ounces","canonical_name":"cream cheese"},{"name":"green onions","amount":"3","unit":"stalks","canonical_name":"green onion"}],"instructions":["Combine all Cajun seasoning ingredients in a small bowl. Cut chicken into 1/2 to 3/4-inch cubes and coat with seasoning.","Heat olive oil and butter in a large deep skillet over medium-high heat. Add seasoned chicken and cook for 2-3 minutes on each side until golden.","Add diced yellow onion and sauté for 2 minutes until softened.","Add pasta, fire roasted tomatoes with juices, and chicken broth. Stir to combine.","Cover and bring to a boil, then reduce to medium-low. Simmer for 10 minutes, stirring occasionally, until pasta is tender and liquid has thickened.","Add cream cheese in chunks and stir until melted into sauce.","Top with sliced green onions and serve."]},{"title":"Honey Garlic Chicken","description":"An epic 12-minute chicken breast recipe with a magic 5-ingredient Honey Garlic Sauce. Perfect for busy weeknights!","source_url":"https://www.recipetineats.com/honey-garlic-chicken/","source_name":"RecipeTin Eats","cuisine_type":"Asian Fusion","meal_type":"Dinner","prep_time_min":5,"cook_time_min":7,"total_time_min":12,"servings":4,"difficulty":"Easy","rating":4.9,"review_count":1250,"tags":["quick","chicken","honey","garlic","pan-fried","weeknight"],"ingredients":[{"name":"chicken breast","amount":"1","unit":"pound","canonical_name":"chicken breast"},{"name":"salt and pepper","amount":"to taste","unit":"","canonical_name":"salt"},{"name":"flour","amount":"0.25","unit":"cup","canonical_name":"all-purpose flour"},{"name":"butter","amount":"3.5","unit":"tablespoons","canonical_name":"butter"},{"name":"garlic","amount":"2","unit":"cloves","canonical_name":"garlic"},{"name":"apple cider vinegar","amount":"1.5","unit":"tablespoons","canonical_name":"apple cider vinegar"},{"name":"soy sauce","amount":"1","unit":"tablespoon","canonical_name":"soy sauce"},{"name":"honey","amount":"0.33","unit":"cup","canonical_name":"honey"}],"instructions":["Cut chicken breasts in half horizontally to create 4 thin steaks. Season with salt and pepper.","Coat chicken in flour and shake off excess.","Melt most of the butter in a large skillet over high heat. Add chicken and cook 2-3 minutes until golden, then flip and cook 1 minute more.","Reduce heat to medium-high. Make room in pan, add garlic and remaining butter. Stir briefly once butter melts.","Add vinegar, soy sauce, and honey. Stir to combine and bring to simmer.","Simmer for 1 minute until slightly thickened. Turn chicken to coat in sauce.","Remove from heat immediately. Serve chicken with remaining sauce drizzled over top."]},{"title":"Caprese Chicken Pasta","description":"The classic Italian Caprese salad transformed into a satisfying main course with poached chicken and pasta.","source_url":"https://www.seriouseats.com/caprese-chicken-pasta-recipe","source_name":"Serious Eats","cuisine_type":"Italian","meal_type":"Dinner","prep_time_min":15,"cook_time_min":25,"total_time_min":40,"servings":4,"difficulty":"Easy","rating":4.6,"review_count":340,"tags":["pasta","chicken","caprese","fresh mozzarella","tomato","basil"],"ingredients":[{"name":"chicken breast","amount":"20","unit":"ounces","canonical_name":"chicken breast"},{"name":"chicken broth","amount":"1","unit":"quart","canonical_name":"chicken broth"},{"name":"fresh basil leaves","amount":"1.25","unit":"cups","canonical_name":"basil"},{"name":"black peppercorns","amount":"1","unit":"teaspoon","canonical_name":"black pepper"},{"name":"lemon zest","amount":"1","unit":"teaspoon","canonical_name":"lemon"},{"name":"extra virgin olive oil","amount":"6","unit":"tablespoons","canonical_name":"olive oil"},{"name":"balsamic vinegar","amount":"3","unit":"tablespoons","canonical_name":"balsamic vinegar"},{"name":"red pepper flakes","amount":"0.25","unit":"teaspoon","canonical_name":"red pepper flakes"},{"name":"rigatoni","amount":"1","unit":"pound","canonical_name":"rigatoni pasta"},{"name":"cherry tomatoes","amount":"1","unit":"quart","canonical_name":"cherry tomatoes"},{"name":"fresh mozzarella","amount":"12","unit":"ounces","canonical_name":"fresh mozzarella"}],"instructions":["Place chicken in saucepan with broth, 1/4 cup basil, salt, peppercorns, and lemon zest. Add water if needed to cover chicken.","Heat over medium until broth simmers. Reduce heat and gently simmer until chicken reaches 155°F, about 10 minutes.","Remove chicken to cutting board. When cool enough to handle, shred into bite-size pieces. Return to broth off heat.","Whisk olive oil into balsamic vinegar. Add red pepper flakes, season with salt and pepper.","Cook pasta according to package directions. Drain.","Remove chicken from broth with slotted spoon. Toss pasta with chicken, halved tomatoes, cubed mozzarella, remaining basil, and balsamic dressing.","Season to taste and serve warm or at room temperature."]},{"title":"Gyudon (Japanese Beef Rice Bowl)","description":"A classic Japanese comfort food featuring thinly sliced beef and onions simmered in a savory-sweet sauce, served over steamed rice.","source_url":"https://www.justonecookbook.com/gyudon/","source_name":"Just One Cookbook","cuisine_type":"Japanese","meal_type":"Dinner","prep_time_min":10,"cook_time_min":10,"total_time_min":20,"servings":2,"difficulty":"Easy","rating":4.9,"review_count":519,"tags":["japanese","beef","rice bowl","donburi","quick","comfort food"],"ingredients":[{"name":"onion","amount":"0.5","unit":"medium","canonical_name":"yellow onion"},{"name":"green onion","amount":"1","unit":"stalk","canonical_name":"green onion"},{"name":"thinly sliced beef (ribeye)","amount":"0.5","unit":"pound","canonical_name":"beef ribeye"},{"name":"dashi","amount":"0.5","unit":"cup","canonical_name":"dashi"},{"name":"sake","amount":"2","unit":"tablespoons","canonical_name":"sake"},{"name":"mirin","amount":"2","unit":"tablespoons","canonical_name":"mirin"},{"name":"soy sauce","amount":"2","unit":"tablespoons","canonical_name":"soy sauce"},{"name":"sugar","amount":"1","unit":"tablespoon","canonical_name":"sugar"},{"name":"cooked Japanese rice","amount":"3","unit":"cups","canonical_name":"white rice"},{"name":"pickled red ginger","amount":"for garnish","unit":"","canonical_name":"pickled ginger"}],"instructions":["Thinly slice the onion and green onion. Cut the thinly sliced beef into 3-inch wide pieces.","In a large frying pan (do not turn on heat yet), add dashi, sake, mirin, soy sauce, and sugar. Stir to combine.","Scatter onion slices in the sauce. Place beef on top, separating the slices.","Cover with a lid and turn on heat to medium. Once simmering, reduce heat and cook covered for 3-4 minutes.","Occasionally skim off scum and fat from the broth.","Add green onions and cook covered for another minute.","Serve over steamed rice in donburi bowls. Drizzle with broth and top with pickled ginger."]},{"title":"No-Waste Carnitas Tacos","description":"Moist, juicy, ultra-porky carnitas with crispy edges. The undisputed king of the taco cart, made easier for home cooks.","source_url":"https://www.seriouseats.com/no-waste-tacos-de-carnitas-with-salsa-verde-recipe","source_name":"Serious Eats","cuisine_type":"Mexican","meal_type":"Dinner","prep_time_min":30,"cook_time_min":180,"total_time_min":210,"servings":8,"difficulty":"Medium","rating":4.8,"review_count":650,"tags":["mexican","pork","tacos","carnitas","slow-cooked","crispy"],"ingredients":[{"name":"pork shoulder","amount":"4","unit":"pounds","canonical_name":"pork shoulder"},{"name":"vegetable oil","amount":"0.25","unit":"cup","canonical_name":"vegetable oil"},{"name":"orange","amount":"1","unit":"whole","canonical_name":"orange"},{"name":"onion","amount":"1","unit":"medium","canonical_name":"yellow onion"},{"name":"garlic","amount":"6","unit":"cloves","canonical_name":"garlic"},{"name":"cumin","amount":"1","unit":"teaspoon","canonical_name":"cumin"},{"name":"oregano","amount":"1","unit":"teaspoon","canonical_name":"oregano"},{"name":"salt","amount":"2","unit":"teaspoons","canonical_name":"salt"},{"name":"corn tortillas","amount":"16","unit":"small","canonical_name":"corn tortillas"},{"name":"cilantro","amount":"0.5","unit":"cup","canonical_name":"cilantro"},{"name":"white onion","amount":"0.5","unit":"cup diced","canonical_name":"white onion"},{"name":"lime","amount":"2","unit":"whole","canonical_name":"lime"}],"instructions":["Cut pork shoulder into 2-inch chunks. Season with salt, cumin, and oregano.","Pack pork tightly into a baking dish. Add quartered orange, onion, and garlic cloves.","Pour oil over the top to prevent drying. Cover tightly with foil.","Bake at 275°F for 3 hours until pork is very tender and reaches 208°F internally.","Remove pork and shred into bite-size pieces. Reserve the cooking liquid.","Spread shredded pork on a baking sheet. Broil for 5-10 minutes until edges are crispy.","Serve in warm corn tortillas with cilantro, diced onion, lime wedges, and salsa verde."]},{"title":"Chicken Teriyaki","description":"Juicy pan-fried chicken thighs glazed with a homemade teriyaki sauce. A Japanese restaurant classic made easy at home.","source_url":"https://www.justonecookbook.com/teriyaki-chicken/","source_name":"Just One Cookbook","cuisine_type":"Japanese","meal_type":"Dinner","prep_time_min":10,"cook_time_min":15,"total_time_min":25,"servings":4,"difficulty":"Easy","rating":4.8,"review_count":890,"tags":["japanese","chicken","teriyaki","quick","weeknight"],"ingredients":[{"name":"chicken thighs","amount":"2","unit":"pounds","canonical_name":"chicken thighs"},{"name":"salt","amount":"0.5","unit":"teaspoon","canonical_name":"salt"},{"name":"vegetable oil","amount":"1","unit":"tablespoon","canonical_name":"vegetable oil"},{"name":"soy sauce","amount":"3","unit":"tablespoons","canonical_name":"soy sauce"},{"name":"sake","amount":"3","unit":"tablespoons","canonical_name":"sake"},{"name":"mirin","amount":"3","unit":"tablespoons","canonical_name":"mirin"},{"name":"sugar","amount":"1.5","unit":"tablespoons","canonical_name":"sugar"},{"name":"green onion","amount":"2","unit":"stalks","canonical_name":"green onion"}],"instructions":["Remove excess fat from chicken thighs. Poke holes with a fork and season with salt.","Mix soy sauce, sake, mirin, and sugar in a bowl to make teriyaki sauce.","Heat oil in a skillet over medium-high heat. Place chicken skin-side down.","Cook for 5-7 minutes until skin is golden and crispy. Flip and cook 3-4 minutes more.","Remove excess oil from pan. Add teriyaki sauce and bring to simmer.","Cook, flipping chicken occasionally, until sauce is thick and glossy, about 3-4 minutes.","Slice chicken and serve with sauce drizzled over. Garnish with sliced green onions."]},{"title":"Kimchi Fried Rice (Kimchi Bokkeumbap)","description":"A quick Korean comfort food that transforms day-old rice and kimchi into a flavorful, satisfying meal topped with a fried egg.","source_url":"https://www.seriouseats.com/kimchi-fried-rice-kimchi-bokkeumbap-recipe","source_name":"Serious Eats","cuisine_type":"Korean","meal_type":"Dinner","prep_time_min":5,"cook_time_min":15,"total_time_min":20,"servings":2,"difficulty":"Easy","rating":4.7,"review_count":420,"tags":["korean","fried rice","kimchi","quick","comfort food","weeknight"],"ingredients":[{"name":"vegetable oil","amount":"2","unit":"tablespoons","canonical_name":"vegetable oil"},{"name":"bacon or pork belly","amount":"4","unit":"ounces","canonical_name":"bacon"},{"name":"kimchi","amount":"1","unit":"cup","canonical_name":"kimchi"},{"name":"cooked rice (day-old)","amount":"3","unit":"cups","canonical_name":"white rice"},{"name":"soy sauce","amount":"1","unit":"tablespoon","canonical_name":"soy sauce"},{"name":"sesame oil","amount":"1","unit":"teaspoon","canonical_name":"sesame oil"},{"name":"eggs","amount":"2","unit":"whole","canonical_name":"egg"},{"name":"green onion","amount":"2","unit":"stalks","canonical_name":"green onion"},{"name":"sesame seeds","amount":"for garnish","unit":"","canonical_name":"sesame seeds"}],"instructions":["Heat oil in a large skillet or wok over high heat. Add bacon and cook until crispy.","Add chopped kimchi (reserve some juice) and stir-fry for 2-3 minutes.","Add day-old rice, breaking up clumps. Stir-fry for 3-4 minutes until rice is heated through.","Add soy sauce, kimchi juice, and sesame oil. Toss to combine.","Make a well in the center, crack eggs, and scramble. Mix into rice or leave on top.","Garnish with sliced green onions and sesame seeds. Serve immediately."]},{"title":"Classic Spaghetti and Meatballs","description":"Tender, juicy Italian meatballs in a rich marinara sauce served over spaghetti. A family favorite that never disappoints.","source_url":"https://www.seriouseats.com/the-best-italian-american-meatballs-in-red-sauce-recipe","source_name":"Serious Eats","cuisine_type":"Italian","meal_type":"Dinner","prep_time_min":30,"cook_time_min":45,"total_time_min":75,"servings":6,"difficulty":"Medium","rating":4.9,"review_count":1100,"tags":["italian","pasta","meatballs","marinara","comfort food","family dinner"],"ingredients":[{"name":"ground beef","amount":"1","unit":"pound","canonical_name":"ground beef"},{"name":"ground pork","amount":"0.5","unit":"pound","canonical_name":"ground pork"},{"name":"breadcrumbs","amount":"0.75","unit":"cup","canonical_name":"breadcrumbs"},{"name":"parmesan cheese","amount":"0.5","unit":"cup grated","canonical_name":"parmesan"},{"name":"egg","amount":"1","unit":"large","canonical_name":"egg"},{"name":"garlic","amount":"3","unit":"cloves minced","canonical_name":"garlic"},{"name":"fresh parsley","amount":"0.25","unit":"cup chopped","canonical_name":"parsley"},{"name":"crushed tomatoes","amount":"28","unit":"ounces","canonical_name":"crushed tomatoes"},{"name":"olive oil","amount":"3","unit":"tablespoons","canonical_name":"olive oil"},{"name":"spaghetti","amount":"1","unit":"pound","canonical_name":"spaghetti"},{"name":"fresh basil","amount":"0.25","unit":"cup","canonical_name":"basil"}],"instructions":["Combine ground beef, pork, breadcrumbs, parmesan, egg, garlic, and parsley. Season with salt and pepper.","Form mixture into 2-inch meatballs (about 18-20).","Heat olive oil in a large Dutch oven over medium-high heat. Brown meatballs in batches, about 2 minutes per side.","Remove meatballs. Add more garlic to pan, cook 30 seconds. Add crushed tomatoes and bring to simmer.","Return meatballs to sauce. Simmer covered for 30 minutes, stirring occasionally.","Cook spaghetti according to package directions. Drain and toss with some sauce.","Serve pasta topped with meatballs, more sauce, parmesan, and fresh basil."]},{"title":"Chicken Enchiladas with Salsa Verde","description":"Tender shredded chicken wrapped in corn tortillas, smothered in tangy green salsa and melted cheese.","source_url":"https://www.seriouseats.com/chicken-enchiladas-with-salsa-verde","source_name":"Serious Eats","cuisine_type":"Mexican","meal_type":"Dinner","prep_time_min":30,"cook_time_min":25,"total_time_min":55,"servings":6,"difficulty":"Medium","rating":4.7,"review_count":380,"tags":["mexican","enchiladas","chicken","salsa verde","cheese"],"ingredients":[{"name":"chicken breast","amount":"1.5","unit":"pounds","canonical_name":"chicken breast"},{"name":"salsa verde","amount":"3","unit":"cups","canonical_name":"salsa verde"},{"name":"sour cream","amount":"0.5","unit":"cup","canonical_name":"sour cream"},{"name":"corn tortillas","amount":"12","unit":"6-inch","canonical_name":"corn tortillas"},{"name":"monterey jack cheese","amount":"2","unit":"cups shredded","canonical_name":"monterey jack"},{"name":"onion","amount":"1","unit":"small diced","canonical_name":"yellow onion"},{"name":"garlic","amount":"2","unit":"cloves","canonical_name":"garlic"},{"name":"cumin","amount":"1","unit":"teaspoon","canonical_name":"cumin"},{"name":"cilantro","amount":"0.25","unit":"cup","canonical_name":"cilantro"},{"name":"lime","amount":"1","unit":"whole","canonical_name":"lime"}],"instructions":["Poach or bake chicken until cooked through. Shred and season with cumin, salt, and pepper.","Mix 1 cup salsa verde with sour cream to make creamy sauce.","Spread 0.5 cup salsa verde on bottom of 9x13 baking dish.","Warm tortillas briefly. Fill each with chicken and some cheese, roll up, and place seam-side down.","Pour remaining salsa verde over enchiladas. Top with remaining cheese.","Bake at 375°F for 20-25 minutes until cheese is melted and bubbly.","Garnish with cilantro, diced onion, and lime wedges."]},{"title":"Garlic Butter Shrimp Pasta","description":"A quick and elegant pasta featuring succulent shrimp in a garlicky butter sauce with a splash of white wine.","source_url":"https://www.budgetbytes.com/garlic-butter-shrimp-pasta/","source_name":"Budget Bytes","cuisine_type":"Italian","meal_type":"Dinner","prep_time_min":10,"cook_time_min":15,"total_time_min":25,"servings":4,"difficulty":"Easy","rating":4.8,"review_count":560,"tags":["pasta","shrimp","garlic","butter","quick","seafood"],"ingredients":[{"name":"linguine","amount":"12","unit":"ounces","canonical_name":"linguine pasta"},{"name":"large shrimp","amount":"1","unit":"pound","canonical_name":"shrimp"},{"name":"butter","amount":"4","unit":"tablespoons","canonical_name":"butter"},{"name":"garlic","amount":"4","unit":"cloves minced","canonical_name":"garlic"},{"name":"white wine","amount":"0.5","unit":"cup","canonical_name":"white wine"},{"name":"lemon juice","amount":"2","unit":"tablespoons","canonical_name":"lemon"},{"name":"red pepper flakes","amount":"0.25","unit":"teaspoon","canonical_name":"red pepper flakes"},{"name":"fresh parsley","amount":"0.25","unit":"cup chopped","canonical_name":"parsley"},{"name":"parmesan cheese","amount":"0.5","unit":"cup grated","canonical_name":"parmesan"}],"instructions":["Cook linguine according to package directions. Reserve 1 cup pasta water before draining.","Season shrimp with salt and pepper. Melt 2 tablespoons butter in a large skillet over medium-high heat.","Cook shrimp 1-2 minutes per side until pink. Remove and set aside.","Add remaining butter and garlic to pan. Cook until fragrant, about 30 seconds.","Add white wine and lemon juice. Simmer for 2 minutes.","Add pasta, shrimp, and red pepper flakes. Toss with pasta water as needed.","Garnish with parsley and parmesan cheese. Serve immediately."]},{"title":"Chicken Tikka Masala","description":"Tender pieces of marinated chicken in a rich, creamy tomato-based curry sauce. A British-Indian classic.","source_url":"https://www.seriouseats.com/chicken-tikka-masala-for-the-grill","source_name":"Serious Eats","cuisine_type":"Indian","meal_type":"Dinner","prep_time_min":30,"cook_time_min":30,"total_time_min":60,"servings":4,"difficulty":"Medium","rating":4.8,"review_count":720,"tags":["indian","curry","chicken","creamy","spiced"],"ingredients":[{"name":"chicken thighs","amount":"1.5","unit":"pounds","canonical_name":"chicken thighs"},{"name":"yogurt","amount":"1","unit":"cup","canonical_name":"yogurt"},{"name":"garam masala","amount":"2","unit":"tablespoons","canonical_name":"garam masala"},{"name":"cumin","amount":"1","unit":"teaspoon","canonical_name":"cumin"},{"name":"paprika","amount":"1","unit":"teaspoon","canonical_name":"paprika"},{"name":"onion","amount":"1","unit":"large diced","canonical_name":"yellow onion"},{"name":"garlic","amount":"4","unit":"cloves","canonical_name":"garlic"},{"name":"ginger","amount":"1","unit":"tablespoon minced","canonical_name":"ginger"},{"name":"crushed tomatoes","amount":"14","unit":"ounces","canonical_name":"crushed tomatoes"},{"name":"heavy cream","amount":"1","unit":"cup","canonical_name":"heavy cream"},{"name":"cilantro","amount":"0.25","unit":"cup","canonical_name":"cilantro"},{"name":"basmati rice","amount":"2","unit":"cups cooked","canonical_name":"basmati rice"}],"instructions":["Marinate chicken in yogurt, half the garam masala, cumin, and paprika for at least 1 hour.","Grill or broil chicken until charred and cooked through. Cut into bite-size pieces.","Sauté onion in butter until softened. Add garlic and ginger, cook 1 minute.","Add remaining garam masala, paprika, and tomatoes. Simmer for 15 minutes.","Stir in heavy cream and simmer for 5 more minutes.","Add chicken pieces to sauce and heat through.","Serve over basmati rice, garnished with fresh cilantro."]},{"title":"Beef Bulgogi","description":"Korean BBQ classic featuring thin slices of marinated beef, sweet and savory with a hint of pear and sesame.","source_url":"https://www.seriouseats.com/korean-bbq-beef-bulgogi-recipe","source_name":"Serious Eats","cuisine_type":"Korean","meal_type":"Dinner","prep_time_min":20,"cook_time_min":10,"total_time_min":30,"servings":4,"difficulty":"Easy","rating":4.9,"review_count":890,"tags":["korean","beef","bbq","marinated","grilled"],"ingredients":[{"name":"ribeye or sirloin","amount":"1.5","unit":"pounds","canonical_name":"beef ribeye"},{"name":"soy sauce","amount":"0.5","unit":"cup","canonical_name":"soy sauce"},{"name":"asian pear","amount":"0.5","unit":"whole grated","canonical_name":"asian pear"},{"name":"sesame oil","amount":"2","unit":"tablespoons","canonical_name":"sesame oil"},{"name":"garlic","amount":"4","unit":"cloves minced","canonical_name":"garlic"},{"name":"brown sugar","amount":"2","unit":"tablespoons","canonical_name":"brown sugar"},{"name":"ginger","amount":"1","unit":"tablespoon minced","canonical_name":"ginger"},{"name":"onion","amount":"1","unit":"medium sliced","canonical_name":"yellow onion"},{"name":"green onion","amount":"3","unit":"stalks","canonical_name":"green onion"},{"name":"sesame seeds","amount":"for garnish","unit":"","canonical_name":"sesame seeds"}],"instructions":["Slice beef very thin against the grain (freeze slightly for easier slicing).","Combine soy sauce, grated pear, sesame oil, garlic, brown sugar, and ginger for marinade.","Marinate beef for at least 30 minutes, or up to overnight in refrigerator.","Heat a grill or cast iron pan over high heat until smoking.","Cook beef and onions in batches, 1-2 minutes per side, until caramelized.","Garnish with sliced green onions and sesame seeds.","Serve with steamed rice and lettuce for wraps."]},{"title":"Pad Thai","description":"The iconic Thai street food featuring stir-fried rice noodles with shrimp, eggs, and a perfect balance of sweet, sour, and savory.","source_url":"https://www.seriouseats.com/pad-thai-for-one-recipe","source_name":"Serious Eats","cuisine_type":"Thai","meal_type":"Dinner","prep_time_min":20,"cook_time_min":10,"total_time_min":30,"servings":2,"difficulty":"Medium","rating":4.7,"review_count":620,"tags":["thai","noodles","stir-fry","shrimp","street food"],"ingredients":[{"name":"rice noodles","amount":"8","unit":"ounces","canonical_name":"rice noodles"},{"name":"shrimp","amount":"0.5","unit":"pound","canonical_name":"shrimp"},{"name":"eggs","amount":"2","unit":"whole","canonical_name":"egg"},{"name":"fish sauce","amount":"3","unit":"tablespoons","canonical_name":"fish sauce"},{"name":"tamarind paste","amount":"2","unit":"tablespoons","canonical_name":"tamarind paste"},{"name":"palm sugar","amount":"2","unit":"tablespoons","canonical_name":"palm sugar"},{"name":"garlic","amount":"2","unit":"cloves","canonical_name":"garlic"},{"name":"bean sprouts","amount":"1","unit":"cup","canonical_name":"bean sprouts"},{"name":"roasted peanuts","amount":"0.25","unit":"cup crushed","canonical_name":"peanuts"},{"name":"lime","amount":"1","unit":"whole","canonical_name":"lime"},{"name":"green onion","amount":"2","unit":"stalks","canonical_name":"green onion"}],"instructions":["Soak rice noodles in warm water for 30 minutes until pliable. Drain.","Mix fish sauce, tamarind paste, and palm sugar to make pad thai sauce.","Heat oil in a wok over high heat. Cook shrimp until pink, remove.","Add beaten eggs, scramble quickly, then push to side.","Add garlic, stir-fry 30 seconds. Add noodles and sauce.","Toss until noodles are coated and slightly charred. Add shrimp back.","Add bean sprouts and green onions. Serve with peanuts, lime wedges, and more bean sprouts."]},{"title":"Creamy Tomato Basil Soup","description":"A velvety smooth tomato soup enriched with cream and fresh basil. Perfect with a grilled cheese sandwich.","source_url":"https://www.budgetbytes.com/creamy-tomato-basil-soup/","source_name":"Budget Bytes","cuisine_type":"American","meal_type":"Lunch","prep_time_min":10,"cook_time_min":25,"total_time_min":35,"servings":6,"difficulty":"Easy","rating":4.7,"review_count":440,"tags":["soup","tomato","basil","creamy","comfort food","vegetarian"],"ingredients":[{"name":"butter","amount":"2","unit":"tablespoons","canonical_name":"butter"},{"name":"onion","amount":"1","unit":"medium diced","canonical_name":"yellow onion"},{"name":"garlic","amount":"3","unit":"cloves","canonical_name":"garlic"},{"name":"crushed tomatoes","amount":"28","unit":"ounces","canonical_name":"crushed tomatoes"},{"name":"vegetable broth","amount":"2","unit":"cups","canonical_name":"vegetable broth"},{"name":"heavy cream","amount":"0.5","unit":"cup","canonical_name":"heavy cream"},{"name":"fresh basil","amount":"0.5","unit":"cup packed","canonical_name":"basil"},{"name":"sugar","amount":"1","unit":"teaspoon","canonical_name":"sugar"}],"instructions":["Melt butter in a large pot over medium heat. Add onion and cook until softened.","Add garlic and cook for 1 minute until fragrant.","Add crushed tomatoes, vegetable broth, and sugar. Bring to a simmer.","Cook for 15 minutes, then add fresh basil.","Use an immersion blender to puree until smooth (or use a regular blender in batches).","Stir in heavy cream and heat through. Season with salt and pepper.","Serve hot, garnished with extra basil and a drizzle of cream."]},{"title":"Easy Shakshuka","description":"Eggs poached in a spiced tomato and pepper sauce. A Middle Eastern and North African classic perfect for any meal.","source_url":"https://www.seriouseats.com/shakshuka-recipe","source_name":"Serious Eats","cuisine_type":"Mediterranean","meal_type":"Breakfast","prep_time_min":10,"cook_time_min":20,"total_time_min":30,"servings":4,"difficulty":"Easy","rating":4.8,"review_count":580,"tags":["mediterranean","eggs","tomato","breakfast","brunch","vegetarian"],"ingredients":[{"name":"olive oil","amount":"3","unit":"tablespoons","canonical_name":"olive oil"},{"name":"onion","amount":"1","unit":"medium diced","canonical_name":"yellow onion"},{"name":"red bell pepper","amount":"1","unit":"diced","canonical_name":"red bell pepper"},{"name":"garlic","amount":"4","unit":"cloves","canonical_name":"garlic"},{"name":"cumin","amount":"1","unit":"teaspoon","canonical_name":"cumin"},{"name":"paprika","amount":"1","unit":"teaspoon","canonical_name":"paprika"},{"name":"crushed tomatoes","amount":"28","unit":"ounces","canonical_name":"crushed tomatoes"},{"name":"eggs","amount":"6","unit":"large","canonical_name":"egg"},{"name":"feta cheese","amount":"0.5","unit":"cup crumbled","canonical_name":"feta cheese"},{"name":"fresh cilantro or parsley","amount":"0.25","unit":"cup","canonical_name":"cilantro"},{"name":"crusty bread","amount":"for serving","unit":"","canonical_name":"bread"}],"instructions":["Heat olive oil in a large skillet over medium heat. Add onion and bell pepper, cook until softened.","Add garlic, cumin, and paprika. Cook for 1 minute until fragrant.","Add crushed tomatoes, season with salt and pepper. Simmer for 10 minutes.","Make 6 wells in the sauce. Crack an egg into each well.","Cover and cook for 5-8 minutes until egg whites are set but yolks are still runny.","Sprinkle with feta cheese and fresh herbs.","Serve immediately with crusty bread for dipping."]},{"title":"Classic Mac and Cheese","description":"Ultra-creamy, ultra-cheesy homemade mac and cheese that's miles better than the boxed version.","source_url":"https://www.seriouseats.com/the-food-labs-ultra-gooey-stovetop-mac-cheese","source_name":"Serious Eats","cuisine_type":"American","meal_type":"Dinner","prep_time_min":10,"cook_time_min":20,"total_time_min":30,"servings":6,"difficulty":"Easy","rating":4.9,"review_count":1450,"tags":["american","pasta","cheese","comfort food","kid-friendly"],"ingredients":[{"name":"elbow macaroni","amount":"1","unit":"pound","canonical_name":"elbow pasta"},{"name":"evaporated milk","amount":"12","unit":"ounces","canonical_name":"evaporated milk"},{"name":"sharp cheddar cheese","amount":"1","unit":"pound shredded","canonical_name":"cheddar cheese"},{"name":"american cheese","amount":"0.5","unit":"pound","canonical_name":"american cheese"},{"name":"mustard powder","amount":"1","unit":"teaspoon","canonical_name":"mustard powder"},{"name":"hot sauce","amount":"1","unit":"teaspoon","canonical_name":"hot sauce"},{"name":"butter","amount":"2","unit":"tablespoons","canonical_name":"butter"}],"instructions":["Cook macaroni according to package directions until just al dente. Drain, reserving 1 cup pasta water.","Return pot to medium heat. Add evaporated milk and bring to simmer.","Add both cheeses gradually, stirring constantly until melted and smooth.","Add mustard powder, hot sauce, salt, and pepper to taste.","Add cooked pasta and stir to coat. Add reserved pasta water as needed for consistency.","Stir in butter for extra richness.","Serve immediately while hot and gooey."]},{"title":"Chinese Beef and Broccoli","description":"A takeout favorite made at home - tender sliced beef and crisp broccoli in a savory brown sauce.","source_url":"https://www.seriouseats.com/chinese-american-beef-broccoli-recipe","source_name":"Serious Eats","cuisine_type":"Chinese","meal_type":"Dinner","prep_time_min":15,"cook_time_min":15,"total_time_min":30,"servings":4,"difficulty":"Medium","rating":4.8,"review_count":720,"tags":["chinese","beef","broccoli","stir-fry","takeout"],"ingredients":[{"name":"flank steak","amount":"1","unit":"pound","canonical_name":"flank steak"},{"name":"broccoli florets","amount":"1","unit":"pound","canonical_name":"broccoli"},{"name":"soy sauce","amount":"0.25","unit":"cup","canonical_name":"soy sauce"},{"name":"oyster sauce","amount":"2","unit":"tablespoons","canonical_name":"oyster sauce"},{"name":"rice wine","amount":"2","unit":"tablespoons","canonical_name":"rice wine"},{"name":"cornstarch","amount":"1","unit":"tablespoon","canonical_name":"cornstarch"},{"name":"garlic","amount":"3","unit":"cloves","canonical_name":"garlic"},{"name":"ginger","amount":"1","unit":"tablespoon minced","canonical_name":"ginger"},{"name":"vegetable oil","amount":"3","unit":"tablespoons","canonical_name":"vegetable oil"},{"name":"beef broth","amount":"0.5","unit":"cup","canonical_name":"beef broth"}],"instructions":["Slice flank steak against the grain into thin strips. Toss with 1 tablespoon soy sauce and cornstarch.","Blanch broccoli in boiling water for 2 minutes. Drain and set aside.","Mix remaining soy sauce, oyster sauce, rice wine, and beef broth for sauce.","Heat wok over high heat. Add oil, then beef in batches. Sear until browned, remove.","Add garlic and ginger, stir-fry 30 seconds.","Add sauce and broccoli. Cook until sauce thickens, about 2 minutes.","Return beef to wok, toss to combine. Serve over steamed rice."]},{"title":"Huevos Rancheros","description":"A classic Mexican breakfast of fried eggs on corn tortillas smothered in spicy tomato-chile salsa.","source_url":"https://www.seriouseats.com/quick-and-easy-huevos-rancheros-with-tomato-chile-salsa","source_name":"Serious Eats","cuisine_type":"Mexican","meal_type":"Breakfast","prep_time_min":10,"cook_time_min":15,"total_time_min":25,"servings":2,"difficulty":"Easy","rating":4.7,"review_count":380,"tags":["mexican","breakfast","eggs","salsa","quick"],"ingredients":[{"name":"corn tortillas","amount":"4","unit":"small","canonical_name":"corn tortillas"},{"name":"eggs","amount":"4","unit":"large","canonical_name":"egg"},{"name":"diced tomatoes","amount":"14","unit":"ounces","canonical_name":"diced tomatoes"},{"name":"jalapeño","amount":"1","unit":"seeded and diced","canonical_name":"jalapeño"},{"name":"onion","amount":"0.5","unit":"small diced","canonical_name":"yellow onion"},{"name":"garlic","amount":"2","unit":"cloves","canonical_name":"garlic"},{"name":"cumin","amount":"0.5","unit":"teaspoon","canonical_name":"cumin"},{"name":"refried beans","amount":"1","unit":"cup","canonical_name":"refried beans"},{"name":"cotija cheese","amount":"0.25","unit":"cup crumbled","canonical_name":"cotija cheese"},{"name":"cilantro","amount":"for garnish","unit":"","canonical_name":"cilantro"},{"name":"vegetable oil","amount":"3","unit":"tablespoons","canonical_name":"vegetable oil"}],"instructions":["Make salsa: Sauté onion until softened. Add garlic, jalapeño, cumin. Add tomatoes and simmer 10 minutes.","Heat oil in a skillet. Fry tortillas until slightly crispy, about 30 seconds per side. Drain.","Warm refried beans in microwave or small pot.","Fry eggs sunny-side up or over-easy.","Assemble: Place tortillas on plates, spread with beans.","Top with fried eggs, spoon salsa around and over.","Garnish with cotija cheese and cilantro. Serve immediately."]},{"title":"Kung Pao Chicken","description":"A Sichuan classic featuring tender chicken, roasted peanuts, and dried chilies in a sweet and spicy sauce.","source_url":"https://www.seriouseats.com/takeout-style-kung-pao-chicken-diced-chicken-peanuts-sichuan-recipe","source_name":"Serious Eats","cuisine_type":"Chinese","meal_type":"Dinner","prep_time_min":20,"cook_time_min":15,"total_time_min":35,"servings":4,"difficulty":"Medium","rating":4.8,"review_count":650,"tags":["chinese","sichuan","chicken","spicy","peanuts"],"ingredients":[{"name":"chicken thighs","amount":"1.5","unit":"pounds","canonical_name":"chicken thighs"},{"name":"soy sauce","amount":"3","unit":"tablespoons","canonical_name":"soy sauce"},{"name":"rice vinegar","amount":"2","unit":"tablespoons","canonical_name":"rice vinegar"},{"name":"hoisin sauce","amount":"1","unit":"tablespoon","canonical_name":"hoisin sauce"},{"name":"sesame oil","amount":"1","unit":"tablespoon","canonical_name":"sesame oil"},{"name":"cornstarch","amount":"1","unit":"tablespoon","canonical_name":"cornstarch"},{"name":"dried red chilies","amount":"10-12","unit":"whole","canonical_name":"dried chilies"},{"name":"Sichuan peppercorns","amount":"1","unit":"teaspoon","canonical_name":"sichuan peppercorn"},{"name":"garlic","amount":"3","unit":"cloves","canonical_name":"garlic"},{"name":"ginger","amount":"1","unit":"tablespoon minced","canonical_name":"ginger"},{"name":"roasted peanuts","amount":"0.5","unit":"cup","canonical_name":"peanuts"},{"name":"green onion","amount":"4","unit":"stalks","canonical_name":"green onion"}],"instructions":["Cut chicken into 1-inch cubes. Toss with 1 tablespoon soy sauce and cornstarch.","Mix remaining soy sauce, rice vinegar, hoisin sauce, sesame oil, and sugar for sauce.","Heat wok over high heat. Add oil, then chicken. Stir-fry until golden, about 4 minutes. Remove.","Add dried chilies and Sichuan peppercorns, stir-fry 30 seconds until fragrant.","Add garlic and ginger, cook 30 seconds.","Return chicken, add sauce. Toss until sauce thickens and coats chicken.","Add peanuts and green onions. Serve immediately over rice."]}];
+    
+    // Cuisine emoji map
+    const cuisineEmoji = {
+      'Korean': '🇰🇷',
+      'Japanese': '🇯🇵',
+      'Chinese': '🇨🇳',
+      'Thai': '🇹🇭',
+      'Vietnamese': '🇻🇳',
+      'Mexican': '🇲🇽',
+      'Italian': '🇮🇹',
+      'American': '🇺🇸',
+      'Indian': '🇮🇳',
+      'Mediterranean': '🫒',
+      'Asian Fusion': '🍜',
+      'French': '🇫🇷',
+      'default': '🍽️'
+    };
+    
+    function renderCuisines() {
+      const counts = {};
+      recipes.forEach(r => {
+        counts[r.cuisine_type] = (counts[r.cuisine_type] || 0) + 1;
+      });
+      
+      const grid = document.getElementById('cuisine-grid');
+      grid.innerHTML = Object.entries(counts)
+        .sort((a, b) => b[1] - a[1])
+        .map(([cuisine, count]) => `
+          <div class="cuisine-item">
+            <div class="cuisine-emoji">${cuisineEmoji[cuisine] || cuisineEmoji.default}</div>
+            <div class="cuisine-name">${cuisine}</div>
+            <div class="cuisine-count">${count} recipes</div>
+          </div>
+        `).join('');
+    }
+    
+    function renderRecipeCard(r) {
+      const time = r.total_time_min || (r.prep_time_min + (r.cook_time_min || 0));
+      return `
+        <div class="recipe-card">
+          <div class="recipe-title">${r.title}</div>
+          <div class="recipe-meta">
+            <span>⏱️ ${time} min</span>
+            <span class="rating">⭐ ${r.rating || 'N/A'}</span>
+            <span>${r.difficulty}</span>
+          </div>
+          ${r.source_url ? `<a href="${r.source_url}" target="_blank" class="source-link">📖 ${r.source_name}</a>` : ''}
+        </div>
+      `;
+    }
+    
+    function renderTopRecipes() {
+      const sorted = [...recipes].filter(r => r.rating).sort((a, b) => (b.rating || 0) - (a.rating || 0)).slice(0, 10);
+      document.getElementById('top-recipes').innerHTML = sorted.map(renderRecipeCard).join('');
+    }
+    
+    function renderQuickRecipes() {
+      const quick = recipes.filter(r => {
+        const time = r.total_time_min || (r.prep_time_min + (r.cook_time_min || 0));
+        return time <= 30;
+      }).slice(0, 10);
+      document.getElementById('quick-recipes').innerHTML = quick.map(renderRecipeCard).join('');
+    }
+    
+    function renderAllRecipes() {
+      document.getElementById('all-recipes').innerHTML = recipes.map(renderRecipeCard).join('');
+    }
+    
+    renderCuisines();
+    renderTopRecipes();
+    renderQuickRecipes();
+    renderAllRecipes();
+  </script>
+</body>
+</html>
