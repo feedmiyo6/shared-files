@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Tech & Market Briefing — Feb 4, 2026</title>
+    <style>
+        :root {
+            --bg: #0d1117;
+            --card-bg: #161b22;
+            --border: #30363d;
+            --text: #e6edf3;
+            --text-muted: #8b949e;
+            --accent: #58a6ff;
+            --accent-hover: #79b8ff;
+            --green: #3fb950;
+            --red: #f85149;
+            --orange: #d29922;
+            --purple: #a371f7;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            padding: 16px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        header {
+            text-align: center;
+            padding: 24px 0 32px;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 32px;
+            position: relative;
+        }
+        .lang-toggle {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 6px 12px;
+            color: var(--text);
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+        .lang-toggle:hover { border-color: var(--accent); color: var(--accent); }
+        h1 { font-size: 1.75rem; margin-bottom: 8px; }
+        .date { color: var(--text-muted); font-size: 1.1rem; }
+        .section { margin-bottom: 36px; }
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 16px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--border);
+        }
+        .section-icon { font-size: 1.4rem; }
+        .section-title { font-size: 1.25rem; font-weight: 600; }
+        .section-ai .section-header { border-color: var(--purple); }
+        .section-markets .section-header { border-color: var(--green); }
+        .section-semi .section-header { border-color: var(--orange); }
+        .section-wild .section-header { border-color: var(--accent); }
+        .story {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 12px;
+            transition: border-color 0.2s;
+        }
+        .story:hover { border-color: var(--accent); }
+        .story-headline {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: var(--text);
+        }
+        .story-source {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-bottom: 10px;
+        }
+        .story-summary {
+            font-size: 0.95rem;
+            color: var(--text);
+            margin-bottom: 12px;
+        }
+        .story-link {
+            display: inline-block;
+            font-size: 0.85rem;
+            color: var(--accent);
+            text-decoration: none;
+        }
+        .story-link:hover { color: var(--accent-hover); text-decoration: underline; }
+        .highlight-red { color: var(--red); font-weight: 600; }
+        .highlight-green { color: var(--green); font-weight: 600; }
+        footer {
+            text-align: center;
+            padding-top: 24px;
+            border-top: 1px solid var(--border);
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+        .ko { display: none; }
+        body.korean .en { display: none; }
+        body.korean .ko { display: block; }
+        body.korean .story-summary.ko,
+        body.korean .story-headline.ko { display: block; }
+        body.korean .story-summary.en,
+        body.korean .story-headline.en { display: none; }
+        @media (max-width: 600px) {
+            h1 { font-size: 1.5rem; }
+            .section-title { font-size: 1.1rem; }
+            .story { padding: 14px; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <button class="lang-toggle" onclick="toggleLang()">
+            <span class="en">한국어</span>
+            <span class="ko">English</span>
+        </button>
+        <h1>
+            <span class="en">Daily Tech & Market Briefing</span>
+            <span class="ko">일일 기술 & 시장 브리핑</span>
+        </h1>
+        <p class="date">
+            <span class="en">Wednesday, February 4, 2026</span>
+            <span class="ko">2026년 2월 4일 수요일</span>
+        </p>
+    </header>
+
+    <main>
+        <!-- AI & Tech Section -->
+        <section class="section section-ai">
+            <div class="section-header">
+                <span class="section-icon">🤖</span>
+                <span class="section-title">
+                    <span class="en">AI & Tech</span>
+                    <span class="ko">AI & 테크</span>
+                </span>
+            </div>
+
+            <article class="story">
+                <h3 class="story-headline en">Anthropic AI Tool Triggers $285B "SaaSpocalypse"</h3>
+                <h3 class="story-headline ko">Anthropic AI 도구, $2850억 'SaaS 대폭락' 촉발</h3>
+                <p class="story-source">Bloomberg / Reuters</p>
+                <p class="story-summary en">Anthropic's new automation plugins sparked a brutal selloff across software, financial services, and asset management stocks. ServiceNow tumbled <span class="highlight-red">7%</span>, Salesforce dropped <span class="highlight-red">7%</span>, and Intuit fell nearly <span class="highlight-red">11%</span> as investors raced to dump shares exposed to AI disruption. Analysts are calling it a watershed moment for SaaS valuations.</p>
+                <p class="story-summary ko">Anthropic의 새로운 자동화 플러그인이 소프트웨어, 금융 서비스, 자산 관리 주식 전반에 대폭락을 촉발했습니다. ServiceNow는 <span class="highlight-red">7%</span>, Salesforce는 <span class="highlight-red">7%</span>, Intuit은 거의 <span class="highlight-red">11%</span> 하락했으며, 투자자들은 AI 혁신에 노출된 주식을 급매했습니다. 애널리스트들은 이를 SaaS 가치 평가의 전환점이라고 부르고 있습니다.</p>
+                <a class="story-link" href="https://www.bloomberg.com/news/articles/2026-02-03/legal-software-stocks-plunge-as-anthropic-releases-new-ai-tool" target="_blank">Read more →</a>
+            </article>
+
+            <article class="story">
+                <h3 class="story-headline en">Palantir Soars 11% on Blowout Q4 Earnings</h3>
+                <h3 class="story-headline ko">Palantir, Q4 실적 대박으로 11% 급등</h3>
+                <p class="story-source">CNBC</p>
+                <p class="story-summary en">Palantir reported <span class="highlight-green">70% year-over-year revenue growth</span> in Q4 2025, crushing estimates. The AI-powered software provider guided Q1 revenue of $1.53-1.54B, well above the $1.32B analysts expected. The stock jumped 11% as the company demonstrates it's on the winning side of the AI disruption wave.</p>
+                <p class="story-summary ko">Palantir는 2025년 4분기에 전년 대비 <span class="highlight-green">70% 매출 성장</span>을 기록하며 예상치를 크게 상회했습니다. AI 기반 소프트웨어 회사는 1분기 매출을 $15.3-15.4억으로 전망했으며, 이는 애널리스트 예상치 $13.2억을 크게 웃도는 수치입니다. AI 혁신의 승자임을 증명하며 주가가 11% 급등했습니다.</p>
+                <a class="story-link" href="https://www.cnbc.com/2026/02/02/palantir-pltr-q4-2025-earnings.html" target="_blank">Read more →</a>
+            </article>
+
+            <article class="story">
+                <h3 class="story-headline en">More Companies Citing AI in Layoff Announcements</h3>
+                <h3 class="story-headline ko">AI를 해고 사유로 언급하는 기업들 증가</h3>
+                <p class="story-source">CBS News</p>
+                <p class="story-summary en">HP announced plans to cut 4,000-6,000 employees as part of an AI-driven productivity initiative, expecting $1B in savings by 2028. Workday previously eliminated 1,750 jobs. The trend of citing AI as justification for workforce reductions is accelerating across the tech industry.</p>
+                <p class="story-summary ko">HP는 AI 기반 생산성 향상 계획의 일환으로 4,000-6,000명 감원을 발표했으며, 2028년까지 $10억 절감을 예상합니다. Workday도 이전에 1,750명을 해고했습니다. AI를 인력 감축의 근거로 언급하는 추세가 기술 업계 전반에서 가속화되고 있습니다.</p>
+                <a class="story-link" href="https://www.cbsnews.com/news/ai-layoffs-2026-artificial-intelligence-amazon-pinterest/" target="_blank">Read more →</a>
+            </article>
+        </section>
+
+        <!-- Markets Section -->
+        <section class="section section-markets">
+            <div class="section-header">
+                <span class="section-icon">📈</span>
+                <span class="section-title">
+                    <span class="en">Markets</span>
+                    <span class="ko">시장</span>
+                </span>
+            </div>
+
+            <article class="story">
+                <h3 class="story-headline en">Gold Breaks Past $5,000 — Historic Milestone</h3>
+                <h3 class="story-headline ko">금값 $5,000 돌파 — 역사적 이정표</h3>
+                <p class="story-source">CNBC / Fortune</p>
+                <p class="story-summary en">Gold extended its rally past the psychological $5,000/oz barrier as investors sought safe havens amid tech volatility. Goldman Sachs has a <span class="highlight-green">$5,400 price target</span> by year-end, while J.P. Morgan sees potential for $8,000+ if household allocations increase. Silver also rebounded sharply.</p>
+                <p class="story-summary ko">기술주 변동성 속에서 투자자들이 안전자산을 찾으며 금값이 심리적 장벽인 온스당 $5,000를 돌파했습니다. Goldman Sachs는 연말까지 <span class="highlight-green">$5,400 목표가</span>를, J.P. Morgan은 가계 배분 증가 시 $8,000 이상 가능성을 전망합니다. 은값도 크게 반등했습니다.</p>
+                <a class="story-link" href="https://www.cnbc.com/2026/02/04/gold-and-silver-extend-rebound-but-concerns-over-volatility-linger.html" target="_blank">Read more →</a>
+            </article>
+
+            <article class="story">
+                <h3 class="story-headline en">Tech Selloff Drags Markets — S&P 500 Down 0.8%</h3>
+                <h3 class="story-headline ko">기술주 매도세로 시장 하락 — S&P 500 0.8% 하락</h3>
+                <p class="story-source">Bloomberg</p>
+                <p class="story-summary en">The S&P 500 fell <span class="highlight-red">0.8%</span> and Nasdaq 100 dropped <span class="highlight-red">1.6%</span> as investors rotated out of technology into economically-sensitive sectors. Software stocks were particularly hard hit following Anthropic's AI tool announcement. The Dow briefly touched an all-time high before pulling back.</p>
+                <p class="story-summary ko">투자자들이 기술주에서 경기 민감주로 순환 매매하며 S&P 500은 <span class="highlight-red">0.8%</span>, 나스닥 100은 <span class="highlight-red">1.6%</span> 하락했습니다. Anthropic의 AI 도구 발표 이후 소프트웨어 주식이 특히 큰 타격을 받았습니다. 다우지수는 잠시 사상 최고치를 기록한 후 하락했습니다.</p>
+                <a class="story-link" href="https://www.bloomberg.com/news/articles/2026-02-02/asian-stocks-set-to-climb-after-us-data-lifts-mood-markets-wrap" target="_blank">Read more →</a>
+            </article>
+
+            <article class="story">
+                <h3 class="story-headline en">Novo Nordisk Plunges 13% on Weak 2026 Guidance</h3>
+                <h3 class="story-headline ko">Novo Nordisk, 부진한 2026 가이던스로 13% 급락</h3>
+                <p class="story-source">Investopedia</p>
+                <p class="story-summary en">The Danish pharmaceutical giant saw its U.S.-listed shares tumble <span class="highlight-red">13%</span> after projecting 2026 adjusted profit and sales growth down 5-13%. The GLP-1 market leader faces increasing competition in the weight-loss drug space, pressuring its premium valuation.</p>
+                <p class="story-summary ko">덴마크 제약 대기업의 미국 상장 주식이 2026년 조정 이익과 매출 성장이 5-13% 감소할 것으로 전망하며 <span class="highlight-red">13%</span> 급락했습니다. GLP-1 시장 리더인 이 회사는 체중 감량 약물 분야에서 경쟁이 심화되며 프리미엄 밸류에이션에 압박을 받고 있습니다.</p>
+                <a class="story-link" href="https://www.investopedia.com/stock-market-today-dow-jones-s-and-p-500-02032026-11898157" target="_blank">Read more →</a>
+            </article>
+        </section>
+
+        <!-- Semiconductors Section -->
+        <section class="section section-semi">
+            <div class="section-header">
+                <span class="section-icon">💾</span>
+                <span class="section-title">
+                    <span class="en">Semiconductors</span>
+                    <span class="ko">반도체</span>
+                </span>
+            </div>
+
+            <article class="story">
+                <h3 class="story-headline en">Texas Instruments to Acquire Silicon Labs for $7.5B</h3>
+                <h3 class="story-headline ko">Texas Instruments, Silicon Labs $75억에 인수</h3>
+                <p class="story-source">CNBC</p>
+                <p class="story-summary en">TI announced its largest acquisition since the 2011 National Semiconductor deal, agreeing to buy chip designer Silicon Laboratories for <span class="highlight-green">$7.5 billion</span>. The deal strengthens TI's position in IoT and wireless connectivity semiconductors, complementing its analog chip dominance.</p>
+                <p class="story-summary ko">TI는 2011년 National Semiconductor 인수 이후 최대 규모의 인수를 발표하며 칩 설계 회사 Silicon Laboratories를 <span class="highlight-green">$75억</span>에 인수하기로 했습니다. 이번 거래로 TI는 아날로그 칩 지배력을 보완하며 IoT 및 무선 연결 반도체 분야에서 입지를 강화합니다.</p>
+                <a class="story-link" href="https://www.cnbc.com/2026/02/04/texas-instruments-to-buy-chip-designer-silicon-laboratories.html" target="_blank">Read more →</a>
+            </article>
+
+            <article class="story">
+                <h3 class="story-headline en">AMD Drops 7% Despite Q4 Beat — Soft Q1 Outlook Disappoints</h3>
+                <h3 class="story-headline ko">AMD, Q4 호실적에도 7% 하락 — Q1 전망 부진에 실망</h3>
+                <p class="story-source">CNBC</p>
+                <p class="story-summary en">AMD guided Q1 revenue of $9.8B (±$300M), above the $9.38B consensus, but the stock fell <span class="highlight-red">7%</span> anyway. Investors appear concerned about gross margin pressure (55% guidance) and increasing competition in the AI accelerator market from Nvidia and emerging players.</p>
+                <p class="story-summary ko">AMD는 1분기 매출을 $98억(±$3억)으로 전망해 컨센서스 $93.8억을 상회했으나 주가는 <span class="highlight-red">7%</span> 하락했습니다. 투자자들은 마진 압박(55% 전망)과 Nvidia 및 신생 업체들과의 AI 가속기 시장 경쟁 심화를 우려하는 것으로 보입니다.</p>
+                <a class="story-link" href="https://www.cnbc.com/2026/02/03/stock-market-today-live-updates.html" target="_blank">Read more →</a>
+            </article>
+
+            <article class="story">
+                <h3 class="story-headline en">India Approves $19B in Semiconductor Projects</h3>
+                <h3 class="story-headline ko">인도, $190억 규모 반도체 프로젝트 승인</h3>
+                <p class="story-source">APAC News Network</p>
+                <p class="story-summary en">Under the Rs 76,000 crore Semicon India Programme, the government approved 10 semiconductor projects worth Rs 1.6 lakh crore (~$19B) spanning fabs and packaging units. India is aggressively positioning itself as an alternative to Taiwan and China in the global chip supply chain.</p>
+                <p class="story-summary ko">인도 정부는 76,000 크로르 루피 규모의 Semicon India 프로그램 하에 팹 및 패키징 시설을 포함한 1.6 라크 크로르(약 $190억) 규모의 반도체 프로젝트 10개를 승인했습니다. 인도는 글로벌 칩 공급망에서 대만과 중국의 대안으로 적극적으로 자리매김하고 있습니다.</p>
+                <a class="story-link" href="https://apacnewsnetwork.com/2026/02/semicon-india-programme-approves-10-projects-worth-rs-1-6-lakh-cr-to-build-end-to-end-chip-ecosystem/" target="_blank">Read more →</a>
+            </article>
+        </section>
+
+        <!-- Wild Card Section -->
+        <section class="section section-wild">
+            <div class="section-header">
+                <span class="section-icon">🃏</span>
+                <span class="section-title">
+                    <span class="en">Wild Card</span>
+                    <span class="ko">와일드 카드</span>
+                </span>
+            </div>
+
+            <article class="story">
+                <h3 class="story-headline en">iPhone Fold Specs Leak — Design & Cameras Revealed</h3>
+                <h3 class="story-headline ko">iPhone Fold 스펙 유출 — 디자인 & 카메라 공개</h3>
+                <p class="story-source">9to5Mac</p>
+                <p class="story-summary en">New leaks reveal detailed specs for Apple's long-rumored foldable iPhone, including its display technology, camera system, and industrial design. The device is expected to compete directly with Samsung's Galaxy Fold lineup, potentially launching later this year.</p>
+                <p class="story-summary ko">새로운 유출로 오랫동안 루머였던 Apple의 폴더블 iPhone에 대한 디스플레이 기술, 카메라 시스템, 산업 디자인 등 상세 스펙이 공개되었습니다. 이 기기는 삼성 Galaxy Fold 라인업과 직접 경쟁할 것으로 예상되며, 올해 후반 출시될 가능성이 있습니다.</p>
+                <a class="story-link" href="https://9to5mac.com/2026/02/02/new-iphone-fold-specs-revealed-including-design-cameras-more/" target="_blank">Read more →</a>
+            </article>
+        </section>
+    </main>
+
+    <footer>
+        <p class="en">Generated by Totoro 🌳 • Your daily briefing companion</p>
+        <p class="ko">Totoro 🌳 제작 • 당신의 일일 브리핑 친구</p>
+    </footer>
+
+    <script>
+        function toggleLang() {
+            document.body.classList.toggle('korean');
+            localStorage.setItem('lang', document.body.classList.contains('korean') ? 'ko' : 'en');
+        }
+        // Restore language preference
+        if (localStorage.getItem('lang') === 'ko') {
+            document.body.classList.add('korean');
+        }
+    </script>
+</body>
+</html>
