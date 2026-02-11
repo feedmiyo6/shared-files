@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SnapDigest - Status Report | Feb 11, 2026</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --primary: #2d5a3d;
+  --bg: #faf8f5;
+  --card: #ffffff;
+  --text: #2c2c2c;
+  --muted: #6b6b6b;
+  --success: #22c55e;
+  --warning: #f59e0b;
+  --accent: #e8f0e8;
+}
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+.container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+header { text-align: center; margin-bottom: 40px; padding: 30px; background: var(--primary); color: white; border-radius: 16px; position: relative; }
+header h1 { font-size: 32px; margin-bottom: 8px; }
+header p { opacity: 0.9; }
+.lang-toggle { position: absolute; top: 15px; right: 15px; }
+.lang-toggle button { background: rgba(255,255,255,0.2); color: white; border: none; padding: 8px 16px; border-radius: 20px; cursor: pointer; }
+.section { margin-bottom: 40px; }
+.section h2 { color: var(--primary); margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid var(--accent); }
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-bottom: 30px; }
+.stat { background: var(--card); padding: 20px; border-radius: 12px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+.stat .number { font-size: 36px; font-weight: 700; color: var(--primary); }
+.stat .label { font-size: 14px; color: var(--muted); }
+.screenshots { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+.screenshot { background: var(--card); border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+.screenshot img { width: 100%; height: auto; display: block; }
+.screenshot .caption { padding: 15px; }
+.screenshot .caption h3 { font-size: 16px; margin-bottom: 4px; }
+.screenshot .caption p { font-size: 13px; color: var(--muted); }
+.progress-list { list-style: none; }
+.progress-list li { padding: 12px 0; border-bottom: 1px solid var(--accent); display: flex; align-items: center; gap: 12px; }
+.progress-list li:last-child { border-bottom: none; }
+.check { width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; }
+.check.done { background: var(--success); color: white; }
+.check.pending { background: var(--warning); color: white; }
+.check.blocked { background: #ef4444; color: white; }
+.roadmap { display: grid; gap: 20px; }
+.phase { background: var(--card); padding: 20px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+.phase h3 { color: var(--primary); margin-bottom: 10px; }
+.phase .status { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+.phase .status.complete { background: #dcfce7; color: #166534; }
+.phase .status.current { background: #fef3c7; color: #92400e; }
+.phase .status.upcoming { background: #e0e7ff; color: #3730a3; }
+.links { background: var(--card); padding: 20px; border-radius: 12px; }
+.links a { color: var(--primary); display: block; padding: 8px 0; }
+footer { text-align: center; padding: 30px; color: var(--muted); font-size: 13px; }
+.ko { display: none; }
+body.korean .ko { display: block; }
+body.korean .en { display: none; }
+@media (max-width: 600px) {
+  .stats { grid-template-columns: repeat(2, 1fr); }
+  .screenshots { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+<header>
+  <div class="lang-toggle">
+    <button onclick="document.body.classList.toggle('korean')">
+      <span class="en">한국어</span><span class="ko">EN</span>
+    </button>
+  </div>
+  <h1>🌿 SnapDigest</h1>
+  <p class="en">Development Status Report — February 11, 2026</p>
+  <p class="ko">개발 현황 보고서 — 2026년 2월 11일</p>
+</header>
+
+<section class="section">
+  <h2>📊 <span class="en">Project Stats</span><span class="ko">프로젝트 현황</span></h2>
+  <div class="stats">
+    <div class="stat">
+      <div class="number">85%</div>
+      <div class="label"><span class="en">MVP Complete</span><span class="ko">MVP 완성도</span></div>
+    </div>
+    <div class="stat">
+      <div class="number">12</div>
+      <div class="label"><span class="en">Screens Built</span><span class="ko">화면 구축</span></div>
+    </div>
+    <div class="stat">
+      <div class="number">6</div>
+      <div class="label"><span class="en">DB Tables</span><span class="ko">DB 테이블</span></div>
+    </div>
+    <div class="stat">
+      <div class="number">102</div>
+      <div class="label"><span class="en">Files Created</span><span class="ko">파일 생성</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <h2>📱 <span class="en">App Screenshots</span><span class="ko">앱 스크린샷</span></h2>
+  <div class="screenshots">
+    <div class="screenshot">
+      <img src="https://raw.githubusercontent.com/feedmiyo6/shared-files/main/mj/projects/snapdigest/welcome_screen.png" alt="Welcome">
+      <div class="caption">
+        <h3>1. Welcome Screen</h3>
+        <p class="en">Ghibli-inspired onboarding with key features</p>
+        <p class="ko">지브리 스타일 온보딩 화면</p>
+      </div>
+    </div>
+    <div class="screenshot">
+      <img src="https://raw.githubusercontent.com/feedmiyo6/shared-files/main/mj/projects/snapdigest/story_mode_screen.png" alt="Story Mode">
+      <div class="caption">
+        <h3>2. Story Mode (Main)</h3>
+        <p class="en">Instagram-style swipe cards with Like/Skip</p>
+        <p class="ko">인스타그램 스타일 스와이프 카드</p>
+      </div>
+    </div>
+  </div>
+  <p style="text-align:center; margin-top:20px; color:var(--muted); font-size:14px;">
+    <span class="en">Additional screens: Login, Signup, Forgot Password, Onboarding (3 steps), Browse, Saved, Settings</span>
+    <span class="ko">추가 화면: 로그인, 회원가입, 비밀번호 찾기, 온보딩(3단계), 탐색, 저장됨, 설정</span>
+  </p>
+</section>
+
+<section class="section">
+  <h2>✅ <span class="en">Completed Features</span><span class="ko">완료된 기능</span></h2>
+  <ul class="progress-list">
+    <li><span class="check done">✓</span><span class="en">Supabase project + database schema + RLS policies</span><span class="ko">Supabase 프로젝트 + DB 스키마 + RLS 정책</span></li>
+    <li><span class="check done">✓</span><span class="en">Authentication (Email, Apple Sign-In ready)</span><span class="ko">인증 (이메일, Apple 로그인 준비)</span></li>
+    <li><span class="check done">✓</span><span class="en">Onboarding flow (Category selection + Notification time)</span><span class="ko">온보딩 플로우 (카테고리 선택 + 알림 시간)</span></li>
+    <li><span class="check done">✓</span><span class="en">Story Mode - Swipe through articles, Like/Save</span><span class="ko">스토리 모드 - 기사 스와이프, 좋아요/저장</span></li>
+    <li><span class="check done">✓</span><span class="en">Browse Screen - Category filtering</span><span class="ko">탐색 화면 - 카테고리 필터링</span></li>
+    <li><span class="check done">✓</span><span class="en">Saved Articles - Swipe to delete, undo</span><span class="ko">저장된 기사 - 스와이프 삭제, 실행취소</span></li>
+    <li><span class="check done">✓</span><span class="en">Settings - All preferences, synced to cloud</span><span class="ko">설정 - 모든 환경설정, 클라우드 동기화</span></li>
+    <li><span class="check done">✓</span><span class="en">Audio Player Widget (play/pause, speed, seek)</span><span class="ko">오디오 플레이어 위젯 (재생/일시정지, 속도, 탐색)</span></li>
+    <li><span class="check done">✓</span><span class="en">Route Guards (Auth + Onboarding redirects)</span><span class="ko">라우트 가드 (인증 + 온보딩 리다이렉트)</span></li>
+    <li><span class="check done">✓</span><span class="en">Shimmer loading states</span><span class="ko">시머 로딩 상태</span></li>
+    <li><span class="check done">✓</span><span class="en">TTS Edge Function (ready to deploy)</span><span class="ko">TTS 엣지 펑션 (배포 준비)</span></li>
+  </ul>
+</section>
+
+<section class="section">
+  <h2>⏳ <span class="en">Waiting On</span><span class="ko">대기 중</span></h2>
+  <ul class="progress-list">
+    <li><span class="check pending">!</span><span class="en">News API key (GNews.io - $9/mo recommended)</span><span class="ko">뉴스 API 키 (GNews.io - $9/월 추천)</span></li>
+    <li><span class="check pending">!</span><span class="en">OpenAI API key for TTS (add to Supabase secrets)</span><span class="ko">TTS용 OpenAI API 키 (Supabase 시크릿에 추가)</span></li>
+    <li><span class="check pending">!</span><span class="en">Firebase project for push notifications</span><span class="ko">푸시 알림용 Firebase 프로젝트</span></li>
+    <li><span class="check pending">!</span><span class="en">App icon image (1024x1024 PNG)</span><span class="ko">앱 아이콘 이미지 (1024x1024 PNG)</span></li>
+    <li><span class="check blocked">✗</span><span class="en">RevenueCat project for subscriptions</span><span class="ko">구독용 RevenueCat 프로젝트</span></li>
+  </ul>
+</section>
+
+<section class="section">
+  <h2>🗺️ <span class="en">Roadmap</span><span class="ko">로드맵</span></h2>
+  <div class="roadmap">
+    <div class="phase">
+      <span class="status complete"><span class="en">Complete</span><span class="ko">완료</span></span>
+      <h3><span class="en">Phase 1: Core App</span><span class="ko">1단계: 핵심 앱</span></h3>
+      <p class="en">Auth, Onboarding, Story Mode, Browse, Saved, Settings</p>
+      <p class="ko">인증, 온보딩, 스토리 모드, 탐색, 저장, 설정</p>
+    </div>
+    <div class="phase">
+      <span class="status current"><span class="en">Current</span><span class="ko">진행중</span></span>
+      <h3><span class="en">Phase 2: Content & Audio</span><span class="ko">2단계: 콘텐츠 & 오디오</span></h3>
+      <p class="en">News API integration, TTS audio generation, real article content</p>
+      <p class="ko">뉴스 API 연동, TTS 오디오 생성, 실제 기사 콘텐츠</p>
+    </div>
+    <div class="phase">
+      <span class="status upcoming"><span class="en">Upcoming</span><span class="ko">예정</span></span>
+      <h3><span class="en">Phase 3: Engagement</span><span class="ko">3단계: 참여</span></h3>
+      <p class="en">Push notifications, daily digest delivery, reading streaks</p>
+      <p class="ko">푸시 알림, 일일 다이제스트 전송, 읽기 연속기록</p>
+    </div>
+    <div class="phase">
+      <span class="status upcoming"><span class="en">Upcoming</span><span class="ko">예정</span></span>
+      <h3><span class="en">Phase 4: Monetization</span><span class="ko">4단계: 수익화</span></h3>
+      <p class="en">RevenueCat subscriptions, premium features, App Store launch</p>
+      <p class="ko">RevenueCat 구독, 프리미엄 기능, 앱스토어 출시</p>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <h2>🔗 <span class="en">Quick Links</span><span class="ko">빠른 링크</span></h2>
+  <div class="links">
+    <a href="https://supabase.com/dashboard/project/fjucduvwktorshyfjgdb" target="_blank">📊 Supabase Dashboard</a>
+    <a href="https://feedmiyo6.github.io/shared-files/mj/projects/snapdigest/screenshots.html" target="_blank">📸 All Screenshots</a>
+  </div>
+</section>
+
+<footer>
+  <p>🌿 <span class="en">Generated by Totoro | SnapDigest v1.0.0</span><span class="ko">토토로가 생성 | SnapDigest v1.0.0</span></p>
+  <p>~/Projects/snap_digest</p>
+</footer>
+
+</div>
+</body>
+</html>
