@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SnapDigest Progress Report</title>
+  <style>
+    :root {
+      --bg: #faf7f5;
+      --card: #ffffff;
+      --primary: #4a7c59;
+      --primary-light: #6b9f7d;
+      --accent: #e8a87c;
+      --text: #2d3436;
+      --text-muted: #636e72;
+      --surface: #f0ede8;
+      --success: #00b894;
+      --warning: #fdcb6e;
+      --error: #d63031;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      padding: 20px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .header {
+      text-align: center;
+      margin-bottom: 32px;
+      padding-bottom: 24px;
+      border-bottom: 2px solid var(--surface);
+    }
+    .header h1 {
+      font-size: 28px;
+      color: var(--primary);
+      margin-bottom: 8px;
+    }
+    .header .subtitle {
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+    .summary-card {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+      color: white;
+      padding: 24px;
+      border-radius: 16px;
+      margin-bottom: 24px;
+    }
+    .summary-card h2 { font-size: 18px; margin-bottom: 16px; }
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      text-align: center;
+    }
+    .stat-value { font-size: 32px; font-weight: 700; }
+    .stat-label { font-size: 12px; opacity: 0.9; }
+    .section {
+      background: var(--card);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 16px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    }
+    .section h3 {
+      font-size: 16px;
+      color: var(--primary);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .progress-bar {
+      background: var(--surface);
+      border-radius: 8px;
+      height: 8px;
+      overflow: hidden;
+      margin: 8px 0 16px;
+    }
+    .progress-fill {
+      height: 100%;
+      border-radius: 8px;
+      transition: width 0.3s;
+    }
+    .feature-list { list-style: none; }
+    .feature-list li {
+      padding: 8px 0;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      border-bottom: 1px solid var(--surface);
+    }
+    .feature-list li:last-child { border-bottom: none; }
+    .status-icon {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      flex-shrink: 0;
+    }
+    .done { background: var(--success); color: white; }
+    .partial { background: var(--warning); color: var(--text); }
+    .todo { background: var(--surface); color: var(--text-muted); }
+    .feature-name { font-weight: 500; }
+    .feature-detail { font-size: 13px; color: var(--text-muted); }
+    .tech-stack {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .tech-tag {
+      background: var(--surface);
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 500;
+    }
+    .next-steps {
+      background: linear-gradient(135deg, var(--accent) 0%, #f8b500 100%);
+      color: var(--text);
+    }
+    .next-steps h3 { color: var(--text); }
+    .next-list { list-style: decimal; padding-left: 20px; }
+    .next-list li { padding: 4px 0; }
+    .lang-toggle {
+      position: fixed;
+      top: 16px;
+      right: 16px;
+      background: var(--card);
+      border: 1px solid var(--surface);
+      padding: 8px 16px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 14px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .ko { display: none; }
+    body.korean .en { display: none; }
+    body.korean .ko { display: block; }
+    @media (max-width: 480px) {
+      .stats { grid-template-columns: 1fr; gap: 12px; }
+      .stat-value { font-size: 24px; }
+    }
+  </style>
+</head>
+<body>
+  <button class="lang-toggle" onclick="document.body.classList.toggle('korean'); this.textContent = document.body.classList.contains('korean') ? 'EN' : '한국어';">한국어</button>
+
+  <div class="header">
+    <h1>📰 SnapDigest</h1>
+    <p class="subtitle en">AI-Powered Daily News Digest • Flutter iOS App</p>
+    <p class="subtitle ko">AI 기반 데일리 뉴스 다이제스트 • Flutter iOS 앱</p>
+    <p class="subtitle" style="margin-top: 8px; font-size: 12px;">Report Date: Feb 11, 2026</p>
+  </div>
+
+  <div class="summary-card">
+    <h2 class="en">📊 Project Status</h2>
+    <h2 class="ko">📊 프로젝트 현황</h2>
+    <div class="stats">
+      <div>
+        <div class="stat-value">5,313</div>
+        <div class="stat-label en">Lines of Code</div>
+        <div class="stat-label ko">코드 라인</div>
+      </div>
+      <div>
+        <div class="stat-value">~40%</div>
+        <div class="stat-label en">Complete</div>
+        <div class="stat-label ko">완료율</div>
+      </div>
+      <div>
+        <div class="stat-value">23</div>
+        <div class="stat-label en">Dart Files</div>
+        <div class="stat-label ko">Dart 파일</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h3>🎨 <span class="en">UI/UX Implementation</span><span class="ko">UI/UX 구현</span></h3>
+    <div class="progress-bar"><div class="progress-fill" style="width: 75%; background: var(--success);"></div></div>
+    <ul class="feature-list">
+      <li>
+        <span class="status-icon done">✓</span>
+        <div>
+          <div class="feature-name en">Story Mode Screen</div>
+          <div class="feature-name ko">스토리 모드 화면</div>
+          <div class="feature-detail en">Instagram-like swipeable cards with progress bar, like/skip gestures</div>
+          <div class="feature-detail ko">인스타그램 스타일 스와이프 카드, 진행바, 좋아요/스킵 제스처</div>
+        </div>
+      </li>
+      <li>
+        <span class="status-icon done">✓</span>
+        <div>
+          <div class="feature-name en">Browse Screen</div>
+          <div class="feature-name ko">브라우즈 화면</div>
+          <div class="feature-detail en">List view with category filtering, article cards</div>
+          <div class="feature-detail ko">카테고리 필터링, 아티클 카드 리스트 뷰</div>
+        </div>
+      </li>
+      <li>
+        <span class="status-icon done">✓</span>
+        <div>
+          <div class="feature-name en">Saved / History Screen</div>
+          <div class="feature-name ko">저장/히스토리 화면</div>
+          <div class="feature-detail en">Tab layout with empty states, digest history cards</div>
+          <div class="feature-detail ko">탭 레이아웃, 빈 상태, 다이제스트 히스토리 카드</div>
+        </div>
+      </li>
+      <li>
+        <span class="status-icon done">✓</span>
+        <div>
+          <div class="feature-name en">Settings Screen</div>
+          <div class="feature-name ko">설정 화면</div>
+          <div class="feature-detail en">Profile, categories, notification time, subscription, account settings</div>
+          <div class="feature-detail ko">프로필, 카테고리, 알림 시간, 구독, 계정 설정</div>
+        </div>
+      </li>
+      <li>
+        <span class="status-icon done">✓</span>
+        <div>
+          <div class="feature-name en">Onboarding Flow</div>
+          <div class="feature-name ko">온보딩 플로우</div>
+          <div class="feature-detail en">3-step wizard: category selection, notification time, completion</div>
+          <div class="feature-detail ko">3단계 마법사: 카테고리 선택, 알림 시간, 완료</div>
+        </div>
+      </li>
+      <li>
+        <span class="status-icon done">✓</span>
+        <div>
+          <div class="feature-name en">Auth Screens</div>
+          <div class="feature-name ko">인증 화면</div>
+          <div class="feature-detail en">Welcome, login, signup UI with social sign-in buttons</div>
+          <div class="feature-detail ko">웰컴, 로그인, 회원가입 UI + 소셜 로그인 버튼</div>
+        </div>
+      </li>
+      <li>
+        <span class="status-icon done">✓</span>
+        <div>
+          <div class="feature-name en">Bottom Navigation Shell</div>
+          <div class="feature-name ko">하단 네비게이션 쉘</div>
+          <div class="feature-detail en">Ghibli-styled glass-blur nav bar with 4 tabs</div>
+          <div class="feature-detail ko">지브리 스타일 글래스 블러 네비게이션 바 (4탭)</div>
+        </div>
+      </li>
+      <li>
+        <span class="status-icon done">✓</span>
+        <div>
+          <div class="feature-name en">Theme System</div>
+          <div class="feature-name ko">테마 시스템</div>
+          <div class="feature-detail en">Light/dark themes with Ghibli-inspired color palette, SF Pro typography</div>
+          <div class="feature-detail ko">지브리 컬러 팔레트, SF Pro 타이포그래피 라이트/다크 테마</div>
+        </div>
+      </li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h3>🔧 <span class="en">Core Architecture</span><span class="ko">코어 아키텍처</span></h3>
+    <div class="progress-bar"><div class="progress-fill" style="width: 60%; background: var(--warning);"></div></div>
+    <ul class="feature-list">
+      <li>
+        <span class="status-icon done">✓</span>
+        <div>
+          <div class="feature-name en">GoRouter Navigation</div>
+          <div class="feature-name ko">GoRouter 네비게이션</div>
+          <div class="feature-detail en">Declarative routing with ShellRoute for main app</div>
+          <div class="feature-detail ko">ShellRoute를 사용한 선언적 라우팅</div>
+        </div>
+      </li>
+      <li>
+        <span class="status-icon done">✓</span>
+        <div>
+          <div class="feature-name en">Data Models</div>
+          <div class="feature-name ko">데이터 모델</div>
+          <div class="feature-detail en">Article, Category, UserPreferences, Subscription, DigestSession, etc.</div>
+          <div class="feature-detail ko">Article, Category, UserPreferences, Subscription, DigestSession 등</div>
+        </div>
+      </li>
+      <li>
+        <span class="status-icon done">✓</span>
+        <div>
+          <div class="feature-name en">Freezed Code Generation</div>
+          <div class="feature-name ko">Freezed 코드 생성</div>
+          <div class="feature-detail en">Immutable models with JSON serialization (fixed today!)</div>
+          <div class="feature-detail ko">JSON 직렬화가 있는 불변 모델 (오늘 수정됨!)</div>
+        </div>
+      </li>
+      <li>
+        <span class="status-icon partial">◐</span>
+        <div>
+          <div class="feature-name en">Riverpod State Management</div>
+          <div class="feature-name ko">Riverpod 상태 관리</div>
+          <div class="feature-detail en">Provider setup done, needs actual providers for features</div>
+          <div class="feature-detail ko">Provider 셋업 완료, 기능별 프로바이더 필요</div>
+        </div>
+      </li>
+      <li>
+        <span class="status-icon todo">○</span>
+        <div>
+          <div class="feature-name en">Supabase Integration</div>
+          <div class="feature-name ko">Supabase 통합</div>
+          <div class="feature-detail en">Package installed, needs auth/database service implementation</div>
+          <div class="feature-detail ko">패키지 설치됨, 인증/데이터베이스 서비스 구현 필요</div>
+        </div>
+      </li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h3>⚡ <span class="en">Features Not Yet Started</span><span class="ko">미시작 기능</span></h3>
+    <div class="progress-bar"><div class="progress-fill" style="width: 0%; background: var(--error);"></div></div>
+    <ul class="feature-list">
+      <li>
+        <span class="status-icon todo">○</span>
+        <div>
+          <div class="feature-name en">Supabase Auth</div>
+          <div class="feature-name ko">Supabase 인증</div>
+          <div class="feature-detail en">Email/password + Apple/Google sign-in</div>
+          <div class="feature-detail ko">이메일/비밀번호 + Apple/Google 로그인</div>
+        </div>
+      </li>
+      <li>
+        <span class="status-icon todo">○</span>
+        <div>
+          <div class="feature-name en">News API Integration</div>
+          <div class="feature-name ko">뉴스 API 통합</div>
+          <div class="feature-detail en">Fetch daily articles from backend/Supabase</div>
+          <div class="feature-detail ko">백엔드/Supabase에서 데일리 아티클 가져오기</div>
+        </div>
+      </li>
+      <li>
+        <span class="status-icon todo">○</span>
+        <div>
+          <div class="feature-name en">Audio Playback</div>
+          <div class="feature-name ko">오디오 재생</div>
+          <div class="feature-detail en">TTS audio summaries with just_audio</div>
+          <div class="feature-detail ko">just_audio로 TTS 오디오 요약</div>
+        </div>
+      </li>
+      <li>
+        <span class="status-icon todo">○</span>
+        <div>
+          <div class="feature-name en">Push Notifications</div>
+          <div class="feature-name ko">푸시 알림</div>
+          <div class="feature-detail en">Firebase messaging for daily digest alerts</div>
+          <div class="feature-detail ko">Firebase 메시징으로 데일리 다이제스트 알림</div>
+        </div>
+      </li>
+      <li>
+        <span class="status-icon todo">○</span>
+        <div>
+          <div class="feature-name en">RevenueCat Payments</div>
+          <div class="feature-name ko">RevenueCat 결제</div>
+          <div class="feature-detail en">Freemium subscription model</div>
+          <div class="feature-detail ko">프리미엄 구독 모델</div>
+        </div>
+      </li>
+      <li>
+        <span class="status-icon todo">○</span>
+        <div>
+          <div class="feature-name en">Offline Support</div>
+          <div class="feature-name ko">오프라인 지원</div>
+          <div class="feature-detail en">Local caching with shared_preferences</div>
+          <div class="feature-detail ko">shared_preferences로 로컬 캐싱</div>
+        </div>
+      </li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h3>🛠️ <span class="en">Tech Stack</span><span class="ko">기술 스택</span></h3>
+    <div class="tech-stack">
+      <span class="tech-tag">Flutter 3.38+</span>
+      <span class="tech-tag">Dart 3.10</span>
+      <span class="tech-tag">Riverpod</span>
+      <span class="tech-tag">GoRouter</span>
+      <span class="tech-tag">Freezed</span>
+      <span class="tech-tag">Supabase</span>
+      <span class="tech-tag">Firebase</span>
+      <span class="tech-tag">RevenueCat</span>
+      <span class="tech-tag">just_audio</span>
+      <span class="tech-tag">Dio</span>
+    </div>
+  </div>
+
+  <div class="section next-steps">
+    <h3>🚀 <span class="en">Next Steps</span><span class="ko">다음 단계</span></h3>
+    <ol class="next-list">
+      <li class="en">Set up Supabase auth service (email + social)</li>
+      <li class="ko">Supabase 인증 서비스 설정 (이메일 + 소셜)</li>
+      <li class="en">Create Riverpod providers for auth state</li>
+      <li class="ko">인증 상태용 Riverpod 프로바이더 생성</li>
+      <li class="en">Implement article fetching from Supabase</li>
+      <li class="ko">Supabase에서 아티클 가져오기 구현</li>
+      <li class="en">Wire up Story Mode with real data</li>
+      <li class="ko">실제 데이터로 스토리 모드 연결</li>
+      <li class="en">Add audio playback for article summaries</li>
+      <li class="ko">아티클 요약 오디오 재생 추가</li>
+      <li class="en">Set up Firebase push notifications</li>
+      <li class="ko">Firebase 푸시 알림 설정</li>
+    </ol>
+  </div>
+
+  <div class="section" style="background: var(--surface); text-align: center; font-size: 13px; color: var(--text-muted);">
+    <p class="en">🌳 Built by Totoro for Minjun</p>
+    <p class="ko">🌳 토토로가 민준을 위해 제작</p>
+    <p style="margin-top: 4px;">Build Status: ✅ Compiling successfully (iOS)</p>
+  </div>
+
+</body>
+</html>
