@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Daily Tech Briefing - Feb 12, 2026</title>
+  <style>
+    :root {
+      --bg: #1a1a2e;
+      --card: #16213e;
+      --accent: #0f3460;
+      --text: #eaeaea;
+      --muted: #a0a0a0;
+      --highlight: #e94560;
+      --green: #4ecca3;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      padding: 20px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    header {
+      text-align: center;
+      margin-bottom: 30px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid var(--accent);
+    }
+    h1 { font-size: 1.8rem; margin-bottom: 5px; }
+    .date { color: var(--highlight); font-size: 1.1rem; font-weight: 600; }
+    .lang-toggle {
+      position: fixed;
+      top: 15px;
+      right: 15px;
+      background: var(--highlight);
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-weight: 600;
+      z-index: 1000;
+      font-size: 0.9rem;
+    }
+    .lang-toggle:hover { opacity: 0.9; }
+    .section { margin-bottom: 35px; }
+    .section-title {
+      color: var(--green);
+      font-size: 1.2rem;
+      margin-bottom: 15px;
+      padding-left: 10px;
+      border-left: 4px solid var(--green);
+    }
+    .story {
+      background: var(--card);
+      border-radius: 12px;
+      padding: 18px;
+      margin-bottom: 15px;
+    }
+    .story-title {
+      font-size: 1.05rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: var(--text);
+    }
+    .story-meta {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+    .story-summary { font-size: 0.95rem; color: #ccc; }
+    .story-link {
+      display: inline-block;
+      margin-top: 10px;
+      color: var(--highlight);
+      text-decoration: none;
+      font-size: 0.85rem;
+    }
+    .story-link:hover { text-decoration: underline; }
+    .hot { 
+      display: inline-block;
+      background: var(--highlight);
+      color: white;
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-size: 0.7rem;
+      margin-left: 8px;
+      vertical-align: middle;
+    }
+    footer {
+      text-align: center;
+      padding-top: 20px;
+      border-top: 1px solid var(--accent);
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+    .ko { display: none; }
+    body.korean .en { display: none; }
+    body.korean .ko { display: block; }
+    @media (max-width: 600px) {
+      body { padding: 15px; }
+      h1 { font-size: 1.5rem; }
+      .story { padding: 15px; }
+    }
+  </style>
+</head>
+<body>
+  <button class="lang-toggle" onclick="toggleLang()">
+    <span class="en">한국어</span>
+    <span class="ko">English</span>
+  </button>
+
+  <header>
+    <h1>
+      <span class="en">🗞️ Daily Tech Briefing</span>
+      <span class="ko">🗞️ 오늘의 테크 브리핑</span>
+    </h1>
+    <div class="date">
+      <span class="en">Wednesday, February 12, 2026</span>
+      <span class="ko">2026년 2월 12일 수요일</span>
+    </div>
+  </header>
+
+  <div class="section">
+    <h2 class="section-title">
+      <span class="en">🤖 AI & Big Tech</span>
+      <span class="ko">🤖 AI & 빅테크</span>
+    </h2>
+
+    <div class="story">
+      <div class="story-title">
+        <span class="en">Microsoft AI CEO: AI Will Replace Most White-Collar Jobs in 12-18 Months<span class="hot">HOT</span></span>
+        <span class="ko">마이크로소프트 AI CEO: 12-18개월 내 대부분의 사무직 대체될 것<span class="hot">HOT</span></span>
+      </div>
+      <div class="story-meta">Financial Times • Feb 11</div>
+      <div class="story-summary">
+        <span class="en">Mustafa Suleyman claims lawyers, accountants, project managers, and marketing professionals will see their tasks "fully automated" soon. He also announced more Microsoft AI models are coming this year.</span>
+        <span class="ko">무스타파 술레이만은 변호사, 회계사, 프로젝트 매니저, 마케터들의 업무가 곧 "완전 자동화"될 것이라고 주장했습니다. 올해 더 많은 마이크로소프트 AI 모델이 출시될 예정입니다.</span>
+      </div>
+      <a class="story-link" href="https://www.ft.com/content/f1ec830c-2f08-4b1a-b70f-7330f260753c" target="_blank">Read more →</a>
+    </div>
+
+    <div class="story">
+      <div class="story-title">
+        <span class="en">OpenAI Disbands Mission Alignment Team, Fires Exec Who Opposed Adult Mode</span>
+        <span class="ko">OpenAI, 미션 얼라인먼트 팀 해체 및 성인 모드 반대 임원 해고</span>
+      </div>
+      <div class="story-meta">Platformer / The Verge • Feb 10-11</div>
+      <div class="story-summary">
+        <span class="en">The team tasked with ensuring AGI benefits humanity has been dissolved. Former lead Joshua Achiam becomes "chief futurist." Separately, VP Ryan Beiermeister was fired after opposing the adult content feature.</span>
+        <span class="ko">AGI가 인류에게 도움이 되도록 하는 팀이 해체되었습니다. 전 팀장 조슈아 아키암은 "수석 미래학자"가 됩니다. 별도로, 성인 콘텐츠 기능에 반대한 부사장이 해고되었습니다.</span>
+      </div>
+    </div>
+
+    <div class="story">
+      <div class="story-title">
+        <span class="en">Apple's New Siri Hits More Snags — Still "Slow and Inaccurate"</span>
+        <span class="ko">애플 새 시리, 또 지연 — 여전히 "느리고 부정확"</span>
+      </div>
+      <div class="story-meta">Bloomberg • Feb 11</div>
+      <div class="story-summary">
+        <span class="en">The long-delayed Siri overhaul continues to face problems. Internal reports cite performance issues, pushing the "Siri 2.0" launch further back despite Apple Intelligence's rollout.</span>
+        <span class="ko">오랫동안 지연된 시리 개편이 계속 문제에 직면하고 있습니다. 내부 보고서에 따르면 성능 문제로 "시리 2.0" 출시가 더 미뤄지고 있습니다.</span>
+      </div>
+      <a class="story-link" href="https://www.bloomberg.com/news/articles/2026-02-11/apple-s-latest-attempt-to-launch-the-new-siri-runs-into-snags" target="_blank">Read more →</a>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2 class="section-title">
+      <span class="en">📱 Mobile & Devices</span>
+      <span class="ko">📱 모바일 & 기기</span>
+    </h2>
+
+    <div class="story">
+      <div class="story-title">
+        <span class="en">Samsung Confirms Galaxy S26 Launch: February 25 Unpacked Event<span class="hot">HOT</span></span>
+        <span class="ko">삼성, 갤럭시 S26 출시 확정: 2월 25일 언팩 이벤트<span class="hot">HOT</span></span>
+      </div>
+      <div class="story-meta">Samsung / Bloomberg • Feb 10</div>
+      <div class="story-summary">
+        <span class="en">The "AI-charged" Galaxy S26 series will debut at Galaxy Unpacked on Feb 25. Samsung is offering up to $900 trade-in credit. Theme: "The Next AI Phone Makes Your Life Easier."</span>
+        <span class="ko">"AI 탑재" 갤럭시 S26 시리즈가 2월 25일 갤럭시 언팩에서 공개됩니다. 삼성은 최대 $900 보상 판매 크레딧을 제공합니다. 테마: "다음 AI 폰이 당신의 삶을 더 쉽게 만듭니다."</span>
+      </div>
+      <a class="story-link" href="https://news.samsung.com/global/invitation-galaxy-unpacked-february-2026" target="_blank">Read more →</a>
+    </div>
+
+    <div class="story">
+      <div class="story-title">
+        <span class="en">iOS 26.3 Released — Makes Switching to Android Easier</span>
+        <span class="ko">iOS 26.3 출시 — 안드로이드 전환 더 쉬워져</span>
+      </div>
+      <div class="story-meta">Ars Technica / The Verge • Feb 11</div>
+      <div class="story-summary">
+        <span class="en">Apple's latest iOS update ironically benefits non-Apple devices most, with improved data export tools that make Android migration simpler. Also includes 5 new features and macOS Tahoe 26.3 companion release.</span>
+        <span class="ko">애플의 최신 iOS 업데이트는 아이러니하게도 비 애플 기기에 가장 도움이 됩니다. 개선된 데이터 내보내기 도구로 안드로이드 이전이 더 쉬워졌습니다.</span>
+      </div>
+    </div>
+
+    <div class="story">
+      <div class="story-title">
+        <span class="en">Android 17 Beta 1 Delayed — Google Cancels Today's Release</span>
+        <span class="ko">Android 17 베타 1 연기 — 구글, 오늘 출시 취소</span>
+      </div>
+      <div class="story-meta">9to5Google / Android Police • Feb 11</div>
+      <div class="story-summary">
+        <span class="en">Google unexpectedly cancelled the Android 17 Beta 1 release that was scheduled for today. The update promises major improvements for adaptive apps, foldables, tablets, and media. Developer Previews are officially dead.</span>
+        <span class="ko">구글이 오늘 예정되었던 Android 17 베타 1 출시를 갑자기 취소했습니다. 업데이트는 적응형 앱, 폴더블, 태블릿, 미디어에 대한 주요 개선을 약속합니다.</span>
+      </div>
+    </div>
+
+    <div class="story">
+      <div class="story-title">
+        <span class="en">Samsung Galaxy Z TriFold Restocking in US This Month</span>
+        <span class="ko">삼성 갤럭시 Z 트리폴드, 이번 달 미국 재입고</span>
+      </div>
+      <div class="story-meta">GSMArena • Feb 11</div>
+      <div class="story-summary">
+        <span class="en">The $2,899 tri-fold phone that sold out quickly will be back in stock later this month. The innovative three-panel foldable continues to generate strong demand.</span>
+        <span class="ko">빠르게 품절되었던 $2,899 트리폴드 폰이 이번 달 말 재입고됩니다. 혁신적인 3단 폴더블이 계속해서 높은 수요를 보이고 있습니다.</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2 class="section-title">
+      <span class="en">🎮 Gaming & Entertainment</span>
+      <span class="ko">🎮 게임 & 엔터테인먼트</span>
+    </h2>
+
+    <div class="story">
+      <div class="story-title">
+        <span class="en">Diablo II Gets First New Class in 25 Years — Warlock Arrives</span>
+        <span class="ko">디아블로 II, 25년 만에 첫 신규 클래스 — 워록 등장</span>
+      </div>
+      <div class="story-meta">Blizzard / Variety • Feb 11</div>
+      <div class="story-summary">
+        <span class="en">"Reign of the Warlock" brings the first new playable class to Diablo II: Resurrected since the game's original 2000 release. Voice actor Rahul Kohli stars. Part of Diablo's 30th anniversary celebration.</span>
+        <span class="ko">"워록의 통치"가 디아블로 II: 레저렉티드에 2000년 원작 출시 이후 첫 신규 플레이어블 클래스를 가져옵니다. 성우 라훌 콜리 출연. 디아블로 30주년 기념의 일환입니다.</span>
+      </div>
+      <a class="story-link" href="https://news.blizzard.com/en-us/diablo2/24181939/rain-annihilation-in-reign-of-the-warlock" target="_blank">Read more →</a>
+    </div>
+
+    <div class="story">
+      <div class="story-title">
+        <span class="en">PlayStation State of Play Today — What to Expect</span>
+        <span class="ko">플레이스테이션 스테이트 오브 플레이 오늘 — 기대 포인트</span>
+      </div>
+      <div class="story-meta">PlayStation Blog / IGN • Feb 12</div>
+      <div class="story-summary">
+        <span class="en">Sony's showcase returns today with expected announcements for upcoming PS5 titles. Rumored reveals include new first-party games and third-party partnerships.</span>
+        <span class="ko">소니의 쇼케이스가 오늘 돌아옵니다. PS5 타이틀에 대한 발표가 예상됩니다. 새로운 퍼스트파티 게임과 서드파티 파트너십이 루머로 떠돌고 있습니다.</span>
+      </div>
+    </div>
+
+    <div class="story">
+      <div class="story-title">
+        <span class="en">YouTube Music Gets AI Playlist Maker</span>
+        <span class="ko">유튜브 뮤직, AI 플레이리스트 제작 기능 추가</span>
+      </div>
+      <div class="story-meta">The Verge • Feb 10</div>
+      <div class="story-summary">
+        <span class="en">Similar to Spotify's Prompted Playlists, YouTube Music premium subscribers can now use voice or text descriptions to generate personalized playlists based on vibes, genres, or ideas.</span>
+        <span class="ko">스포티파이의 프롬프트 플레이리스트와 유사하게, 유튜브 뮤직 프리미엄 구독자는 이제 음성이나 텍스트로 분위기, 장르, 아이디어를 기반으로 맞춤 플레이리스트를 생성할 수 있습니다.</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2 class="section-title">
+      <span class="en">⚖️ Policy & Regulation</span>
+      <span class="ko">⚖️ 정책 & 규제</span>
+    </h2>
+
+    <div class="story">
+      <div class="story-title">
+        <span class="en">New Bipartisan Bill: AI Companies Must Disclose Copyrighted Training Data</span>
+        <span class="ko">새 초당적 법안: AI 기업, 저작권 훈련 데이터 공개 의무화</span>
+      </div>
+      <div class="story-meta">Deadline / US Senate • Feb 10</div>
+      <div class="story-summary">
+        <span class="en">The "CLEAR Act" introduced by Senators Schiff (D-CA) and Curtis (R-UT) would require AI companies to report copyrighted works used in training. Follows numerous lawsuits against AI firms.</span>
+        <span class="ko">"CLEAR 법안"은 AI 기업들이 훈련에 사용된 저작권 작품을 보고하도록 요구합니다. AI 기업에 대한 수많은 소송에 이어 발의되었습니다.</span>
+      </div>
+    </div>
+
+    <div class="story">
+      <div class="story-title">
+        <span class="en">India Orders Platforms to Remove Deepfakes Within 3 Hours</span>
+        <span class="ko">인도, 플랫폼에 딥페이크 3시간 내 삭제 명령</span>
+      </div>
+      <div class="story-meta">TechCrunch • Feb 10</div>
+      <div class="story-summary">
+        <span class="en">New Indian IT rules mandate rapid deepfake removal, AI content labeling and traceability, plus bans on deceptive impersonations and non-consensual intimate imagery.</span>
+        <span class="ko">새로운 인도 IT 규정은 신속한 딥페이크 삭제, AI 콘텐츠 라벨링 및 추적 가능성, 그리고 사칭과 비동의 친밀 이미지 금지를 의무화합니다.</span>
+      </div>
+    </div>
+
+    <div class="story">
+      <div class="story-title">
+        <span class="en">Senator Markey Calls on Amazon to "Discontinue" Ring Surveillance</span>
+        <span class="ko">마키 상원의원, 아마존에 링 감시 기능 "중단" 촉구</span>
+      </div>
+      <div class="story-meta">The Verge • Feb 11</div>
+      <div class="story-summary">
+        <span class="en">Following Ring's Super Bowl ad showing networked cameras finding a missing dog, Sen. Ed Markey (D-Mass.) sent a letter saying "Get this creepy technology away from our homes."</span>
+        <span class="ko">링의 슈퍼볼 광고가 네트워크 카메라로 잃어버린 개를 찾는 모습을 보여준 후, 에드 마키 상원의원이 "이 소름 끼치는 기술을 우리 집에서 치우라"는 서한을 보냈습니다.</span>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <span class="en">Generated by Totoro 🌳 • Sources: Google News, The Verge, Bloomberg, TechCrunch</span>
+    <span class="ko">토토로가 생성함 🌳 • 출처: Google News, The Verge, Bloomberg, TechCrunch</span>
+  </footer>
+
+  <script>
+    function toggleLang() {
+      document.body.classList.toggle('korean');
+      localStorage.setItem('lang', document.body.classList.contains('korean') ? 'ko' : 'en');
+    }
+    if (localStorage.getItem('lang') === 'ko') {
+      document.body.classList.add('korean');
+    }
+  </script>
+</body>
+</html>
