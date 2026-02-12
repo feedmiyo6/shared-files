@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SnapDigest Phase 2 - Feature Preview</title>
+  <style>
+    :root {
+      --bg: #faf8f5;
+      --card: #ffffff;
+      --primary: #4a9f7e;
+      --text: #2d3436;
+      --muted: #636e72;
+      --surface: #f0ede8;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #1a1a2e;
+      color: #eee;
+      padding: 20px;
+      line-height: 1.6;
+    }
+    .container { max-width: 1200px; margin: 0 auto; }
+    h1 { text-align: center; margin-bottom: 10px; font-size: 2rem; }
+    .subtitle { text-align: center; color: #888; margin-bottom: 40px; }
+    
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 30px;
+    }
+    
+    .feature-card {
+      background: #16213e;
+      border-radius: 16px;
+      overflow: hidden;
+    }
+    
+    .feature-header {
+      background: linear-gradient(135deg, #4a9f7e, #2d6a5d);
+      padding: 20px;
+      color: white;
+    }
+    .feature-header h2 { font-size: 1.3rem; margin-bottom: 5px; }
+    .feature-header p { font-size: 0.9rem; opacity: 0.9; }
+    
+    .mockup {
+      background: var(--bg);
+      margin: 20px;
+      border-radius: 12px;
+      overflow: hidden;
+      color: var(--text);
+    }
+    
+    /* Breaking News Mockup */
+    .breaking-news-mock {
+      padding: 20px;
+    }
+    .bn-header {
+      margin-bottom: 20px;
+    }
+    .bn-header h3 {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--text);
+    }
+    .bn-header .date {
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+    .bn-hero {
+      background: var(--card);
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 15px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+    .bn-hero-img {
+      height: 140px;
+      background: linear-gradient(45deg, #667eea, #764ba2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 2rem;
+    }
+    .bn-hero-content {
+      padding: 15px;
+    }
+    .bn-hero-content h4 {
+      font-size: 1.1rem;
+      margin-bottom: 8px;
+      color: var(--text);
+    }
+    .bn-hero-content p {
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+    .bn-compact {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 10px;
+      background: var(--card);
+      border-radius: 10px;
+      padding: 12px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+    }
+    .bn-compact-num {
+      width: 24px;
+      height: 24px;
+      background: var(--primary);
+      color: white;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.8rem;
+      flex-shrink: 0;
+    }
+    .bn-compact-text {
+      flex: 1;
+    }
+    .bn-compact-text h5 {
+      font-size: 0.9rem;
+      margin-bottom: 3px;
+    }
+    .bn-compact-text span {
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+    
+    /* Mini Player Mockup */
+    .mini-player-mock {
+      background: var(--surface);
+      padding: 15px;
+    }
+    .mini-player {
+      background: var(--card);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    .mp-progress {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: var(--surface);
+    }
+    .mp-progress-fill {
+      width: 35%;
+      height: 100%;
+      background: var(--primary);
+    }
+    .mp-thumb {
+      width: 60px;
+      height: 60px;
+      background: linear-gradient(45deg, #4a9f7e, #2d6a5d);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+    }
+    .mp-info {
+      flex: 1;
+      padding: 0 12px;
+    }
+    .mp-info h5 {
+      font-size: 0.9rem;
+      margin-bottom: 2px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .mp-info span {
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+    .mp-controls {
+      display: flex;
+      gap: 8px;
+      padding-right: 12px;
+    }
+    .mp-btn {
+      width: 36px;
+      height: 36px;
+      background: var(--surface);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+    .mp-btn.primary {
+      background: var(--primary);
+      color: white;
+    }
+    
+    /* Ad Card Mockup */
+    .ad-mock {
+      padding: 15px;
+    }
+    .ad-card {
+      background: var(--card);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+    .ad-img {
+      height: 100px;
+      background: linear-gradient(135deg, #f093fb, #f5576c);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 600;
+    }
+    .ad-content {
+      padding: 12px;
+    }
+    .ad-badge {
+      display: inline-block;
+      background: var(--surface);
+      color: var(--muted);
+      font-size: 0.65rem;
+      padding: 2px 6px;
+      border-radius: 4px;
+      margin-bottom: 8px;
+    }
+    .ad-content h5 {
+      font-size: 0.95rem;
+      margin-bottom: 5px;
+    }
+    .ad-content p {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+    .ad-cta {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.85rem;
+    }
+    
+    /* Full Player Mockup */
+    .full-player-mock {
+      background: var(--bg);
+      padding: 20px;
+      border-radius: 20px 20px 0 0;
+    }
+    .fp-handle {
+      width: 40px;
+      height: 4px;
+      background: var(--surface);
+      border-radius: 2px;
+      margin: 0 auto 20px;
+    }
+    .fp-artwork {
+      width: 200px;
+      height: 200px;
+      margin: 0 auto 20px;
+      background: linear-gradient(45deg, #4a9f7e, #2d6a5d);
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 3rem;
+      box-shadow: 0 8px 24px rgba(74, 159, 126, 0.3);
+    }
+    .fp-title {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .fp-title h4 {
+      font-size: 1.1rem;
+      margin-bottom: 4px;
+    }
+    .fp-title span {
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+    .fp-scrubber {
+      margin-bottom: 15px;
+    }
+    .fp-scrubber-bar {
+      height: 4px;
+      background: var(--surface);
+      border-radius: 2px;
+      position: relative;
+    }
+    .fp-scrubber-fill {
+      width: 35%;
+      height: 100%;
+      background: var(--primary);
+      border-radius: 2px;
+    }
+    .fp-scrubber-knob {
+      position: absolute;
+      top: 50%;
+      left: 35%;
+      transform: translate(-50%, -50%);
+      width: 14px;
+      height: 14px;
+      background: var(--primary);
+      border-radius: 50%;
+    }
+    .fp-times {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-top: 5px;
+    }
+    .fp-controls {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 20px;
+    }
+    .fp-ctrl {
+      width: 44px;
+      height: 44px;
+      background: var(--surface);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .fp-ctrl.big {
+      width: 64px;
+      height: 64px;
+      background: var(--primary);
+      color: white;
+    }
+    
+    /* Play All Button Mockup */
+    .play-all-mock {
+      padding: 15px;
+    }
+    .play-all-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--primary);
+      color: white;
+      padding: 12px 20px;
+      border-radius: 12px;
+      font-weight: 600;
+      justify-content: center;
+    }
+    
+    .feature-desc {
+      padding: 20px;
+      font-size: 0.9rem;
+      color: #aaa;
+    }
+    .feature-desc ul {
+      margin-left: 20px;
+      margin-top: 10px;
+    }
+    .feature-desc li {
+      margin-bottom: 5px;
+    }
+    
+    .note {
+      text-align: center;
+      margin-top: 40px;
+      padding: 20px;
+      background: #16213e;
+      border-radius: 12px;
+      color: #888;
+    }
+    .note strong {
+      color: #4a9f7e;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🎬 SnapDigest Phase 2 Preview</h1>
+    <p class="subtitle">Feature mockups based on implemented code • Feb 12, 2026</p>
+    
+    <div class="feature-grid">
+      
+      <!-- Breaking News -->
+      <div class="feature-card">
+        <div class="feature-header">
+          <h2>⚡ Today's Breaking News</h2>
+          <p>Magazine-style daily briefing for quick overview</p>
+        </div>
+        <div class="mockup breaking-news-mock">
+          <div class="bn-header">
+            <h3>Today's Briefing</h3>
+            <span class="date">Wednesday, February 12, 2026</span>
+          </div>
+          
+          <div class="bn-hero">
+            <div class="bn-hero-img">📰</div>
+            <div class="bn-hero-content">
+              <h4>Microsoft AI CEO: White-Collar Jobs Will Be Automated in 12-18 Months</h4>
+              <p>Financial Times • 3 min read • 🔊</p>
+            </div>
+          </div>
+          
+          <div class="bn-compact">
+            <div class="bn-compact-num">2</div>
+            <div class="bn-compact-text">
+              <h5>Samsung Confirms Galaxy S26 Launch Date</h5>
+              <span>Samsung • 2 min</span>
+            </div>
+          </div>
+          
+          <div class="bn-compact">
+            <div class="bn-compact-num">3</div>
+            <div class="bn-compact-text">
+              <h5>Apple's New Siri Hits More Snags</h5>
+              <span>Bloomberg • 2 min</span>
+            </div>
+          </div>
+        </div>
+        <div class="feature-desc">
+          <strong>Features:</strong>
+          <ul>
+            <li>Top 5 stories ranked by relevance</li>
+            <li>Hero card for #1 story</li>
+            <li>Play All audio summaries</li>
+            <li>Today's Takeaways section</li>
+            <li>Banner ad at bottom</li>
+          </ul>
+        </div>
+      </div>
+      
+      <!-- Mini Player -->
+      <div class="feature-card">
+        <div class="feature-header">
+          <h2>🎵 Mini Player</h2>
+          <p>Compact audio player in navigation area</p>
+        </div>
+        <div class="mockup mini-player-mock">
+          <div class="mini-player" style="position: relative;">
+            <div class="mp-progress">
+              <div class="mp-progress-fill"></div>
+            </div>
+            <div class="mp-thumb">🎧</div>
+            <div class="mp-info">
+              <h5>Microsoft AI CEO Says...</h5>
+              <span>Financial Times • 1:23 / 3:45</span>
+            </div>
+            <div class="mp-controls">
+              <div class="mp-btn">⏮</div>
+              <div class="mp-btn primary">⏸</div>
+              <div class="mp-btn">⏭</div>
+            </div>
+          </div>
+        </div>
+        <div class="feature-desc">
+          <strong>Features:</strong>
+          <ul>
+            <li>Shows when audio is playing</li>
+            <li>Progress bar at top</li>
+            <li>Tap to expand to full player</li>
+            <li>Skip/previous controls</li>
+            <li>Appears above nav bar</li>
+          </ul>
+        </div>
+      </div>
+      
+      <!-- Full Player -->
+      <div class="feature-card">
+        <div class="feature-header">
+          <h2>🎧 Full Player Sheet</h2>
+          <p>Expanded view with queue and controls</p>
+        </div>
+        <div class="mockup full-player-mock">
+          <div class="fp-handle"></div>
+          <div class="fp-artwork">🎵</div>
+          <div class="fp-title">
+            <h4>Microsoft AI CEO Interview</h4>
+            <span>Financial Times</span>
+          </div>
+          <div class="fp-scrubber">
+            <div class="fp-scrubber-bar">
+              <div class="fp-scrubber-fill"></div>
+              <div class="fp-scrubber-knob"></div>
+            </div>
+            <div class="fp-times">
+              <span>1:23</span>
+              <span>3:45</span>
+            </div>
+          </div>
+          <div class="fp-controls">
+            <div class="fp-ctrl">⏮</div>
+            <div class="fp-ctrl big">⏸</div>
+            <div class="fp-ctrl">⏭</div>
+          </div>
+        </div>
+        <div class="feature-desc">
+          <strong>Features:</strong>
+          <ul>
+            <li>Draggable scrubber</li>
+            <li>Speed control (1x-2x)</li>
+            <li>Queue view with reorder</li>
+            <li>Article artwork display</li>
+          </ul>
+        </div>
+      </div>
+      
+      <!-- Ad Cards -->
+      <div class="feature-card">
+        <div class="feature-header">
+          <h2>📢 Native Ad Cards</h2>
+          <p>Ads styled to match article cards</p>
+        </div>
+        <div class="mockup ad-mock">
+          <div class="ad-card">
+            <div class="ad-img">Sponsored Content</div>
+            <div class="ad-content">
+              <span class="ad-badge">Ad</span>
+              <h5>Discover Premium News</h5>
+              <p>Get unlimited access to top journalism from around the world.</p>
+              <button class="ad-cta">Learn More</button>
+            </div>
+          </div>
+        </div>
+        <div class="feature-desc">
+          <strong>Features:</strong>
+          <ul>
+            <li>Appears every 5-7 articles in Story Mode</li>
+            <li>Native styling matches app design</li>
+            <li>Google AdMob integration</li>
+            <li>Test ads shown in development</li>
+          </ul>
+        </div>
+      </div>
+      
+      <!-- Play All -->
+      <div class="feature-card">
+        <div class="feature-header">
+          <h2>▶️ Play All Button</h2>
+          <p>Queue all articles with audio</p>
+        </div>
+        <div class="mockup play-all-mock">
+          <div class="play-all-btn">
+            ▶️ Play All (5 articles)
+          </div>
+          <div style="margin-top: 15px; background: var(--card); border-radius: 10px; padding: 12px;">
+            <div style="font-size: 0.85rem; font-weight: 600; margin-bottom: 8px; color: var(--text);">Queue:</div>
+            <div style="font-size: 0.8rem; color: var(--muted);">
+              1. Microsoft AI CEO... <span style="color: var(--primary);">▶ Now Playing</span><br>
+              2. Samsung Galaxy S26...<br>
+              3. Apple Siri Snags...<br>
+              4. Android 17 Beta...<br>
+              5. Diablo II Warlock...
+            </div>
+          </div>
+        </div>
+        <div class="feature-desc">
+          <strong>Features:</strong>
+          <ul>
+            <li>Available in Browse & Saved screens</li>
+            <li>Queues articles with audio</li>
+            <li>Background playback</li>
+            <li>Continues between screens</li>
+          </ul>
+        </div>
+      </div>
+      
+      <!-- Translation & TTS -->
+      <div class="feature-card">
+        <div class="feature-header">
+          <h2>🌐 Translation + TTS</h2>
+          <p>OpenAI-powered multi-language support</p>
+        </div>
+        <div class="mockup" style="padding: 20px;">
+          <div style="background: var(--card); border-radius: 12px; padding: 15px; margin-bottom: 10px;">
+            <div style="display: flex; gap: 8px; margin-bottom: 10px;">
+              <span style="background: var(--primary); color: white; padding: 4px 10px; border-radius: 6px; font-size: 0.8rem;">EN</span>
+              <span style="background: var(--surface); padding: 4px 10px; border-radius: 6px; font-size: 0.8rem; color: var(--text);">한국어</span>
+              <span style="background: var(--surface); padding: 4px 10px; border-radius: 6px; font-size: 0.8rem; color: var(--text);">Español</span>
+            </div>
+            <h5 style="color: var(--text); margin-bottom: 5px;">Microsoft AI CEO Interview</h5>
+            <p style="font-size: 0.85rem; color: var(--muted);">Mustafa Suleyman claims most white-collar jobs will be automated...</p>
+          </div>
+          <div style="background: var(--card); border-radius: 12px; padding: 15px;">
+            <div style="display: flex; gap: 8px; margin-bottom: 10px;">
+              <span style="background: var(--surface); padding: 4px 10px; border-radius: 6px; font-size: 0.8rem; color: var(--text);">EN</span>
+              <span style="background: var(--primary); color: white; padding: 4px 10px; border-radius: 6px; font-size: 0.8rem;">한국어</span>
+              <span style="background: var(--surface); padding: 4px 10px; border-radius: 6px; font-size: 0.8rem; color: var(--text);">Español</span>
+            </div>
+            <h5 style="color: var(--text); margin-bottom: 5px;">마이크로소프트 AI CEO 인터뷰</h5>
+            <p style="font-size: 0.85rem; color: var(--muted);">무스타파 술레이만은 대부분의 사무직이 자동화될 것이라고 주장...</p>
+          </div>
+        </div>
+        <div class="feature-desc">
+          <strong>Features:</strong>
+          <ul>
+            <li>GPT-4o-mini for translations</li>
+            <li>OpenAI TTS for audio generation</li>
+            <li>Language-specific voices</li>
+            <li>Local audio caching</li>
+          </ul>
+        </div>
+      </div>
+      
+    </div>
+    
+    <div class="note">
+      <strong>Note:</strong> These are CSS mockups based on the implemented Flutter code. 
+      The app currently crashes on simulator launch (likely due to Firebase/Supabase initialization). 
+      You'll see the real UI when testing on a physical device with proper environment setup.
+    </div>
+    
+  </div>
+</body>
+</html>
