@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SnapDigest - Actual Screenshots (Feb 12, 2026)</title>
+  <style>
+    :root {
+      --bg: #1a1a2e;
+      --card: #16213e;
+      --accent: #4a9f7e;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: #eee;
+      padding: 20px;
+      line-height: 1.6;
+    }
+    .container { max-width: 1400px; margin: 0 auto; }
+    h1 { text-align: center; margin-bottom: 10px; }
+    .subtitle { text-align: center; color: #888; margin-bottom: 40px; }
+    
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 30px;
+    }
+    
+    .card {
+      background: var(--card);
+      border-radius: 16px;
+      overflow: hidden;
+    }
+    
+    .card-header {
+      background: linear-gradient(135deg, var(--accent), #2d6a5d);
+      padding: 15px 20px;
+      color: white;
+    }
+    .card-header h2 { font-size: 1.1rem; margin-bottom: 3px; }
+    .card-header p { font-size: 0.85rem; opacity: 0.9; }
+    
+    .screenshot {
+      padding: 15px;
+      text-align: center;
+    }
+    .screenshot img {
+      max-width: 100%;
+      max-height: 600px;
+      border-radius: 20px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+    }
+    
+    .features {
+      padding: 15px 20px;
+      font-size: 0.9rem;
+      color: #aaa;
+      border-top: 1px solid rgba(255,255,255,0.1);
+    }
+    .features ul { margin-left: 20px; }
+    .features li { margin-bottom: 5px; }
+    
+    .badge {
+      display: inline-block;
+      background: var(--accent);
+      color: white;
+      padding: 3px 10px;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      margin-right: 8px;
+    }
+    
+    .note {
+      text-align: center;
+      margin-top: 40px;
+      padding: 20px;
+      background: var(--card);
+      border-radius: 12px;
+      color: #888;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>📱 SnapDigest - Actual Screenshots</h1>
+    <p class="subtitle">Captured from iOS Simulator • Feb 12, 2026</p>
+    
+    <div class="grid">
+      
+      <!-- Welcome -->
+      <div class="card">
+        <div class="card-header">
+          <h2>🏠 Welcome Screen</h2>
+          <p>First screen new users see</p>
+        </div>
+        <div class="screenshot">
+          <img src="actual-1-welcome.png" alt="Welcome Screen">
+        </div>
+        <div class="features">
+          <span class="badge">Phase 1</span>
+          <ul>
+            <li>Ghibli-inspired soft design</li>
+            <li>Leaf logo with warm cream background</li>
+            <li>Feature highlights</li>
+            <li>Get Started + Sign In options</li>
+          </ul>
+        </div>
+      </div>
+      
+      <!-- Browse -->
+      <div class="card">
+        <div class="card-header">
+          <h2>📰 Browse Screen</h2>
+          <p>Real articles from GNews API</p>
+        </div>
+        <div class="screenshot">
+          <img src="actual-browse2.png" alt="Browse Screen">
+        </div>
+        <div class="features">
+          <span class="badge">Phase 1</span>
+          <span class="badge">GNews API</span>
+          <ul>
+            <li>Today's Digest header with date</li>
+            <li>Category filter chips</li>
+            <li>Article cards with images</li>
+            <li>Heart icon to save</li>
+            <li>⚡ Breaking News shortcut</li>
+          </ul>
+        </div>
+      </div>
+      
+      <!-- Story Mode -->
+      <div class="card">
+        <div class="card-header">
+          <h2>📖 Story Mode</h2>
+          <p>Swipe through articles</p>
+        </div>
+        <div class="screenshot">
+          <img src="actual-storymode.png" alt="Story Mode">
+        </div>
+        <div class="features">
+          <span class="badge">Phase 1</span>
+          <ul>
+            <li>Progress bar (1/10)</li>
+            <li>Large article card</li>
+            <li>Category tag</li>
+            <li>Like & Skip buttons</li>
+            <li>Ad cards appear every 5-7 articles</li>
+          </ul>
+        </div>
+      </div>
+      
+      <!-- Settings -->
+      <div class="card">
+        <div class="card-header">
+          <h2>⚙️ Settings</h2>
+          <p>App-wide language setting</p>
+        </div>
+        <div class="screenshot">
+          <img src="actual-settings.png" alt="Settings Screen">
+        </div>
+        <div class="features">
+          <span class="badge">Phase 2</span>
+          <span class="badge">Fixed</span>
+          <ul>
+            <li>User profile section</li>
+            <li><strong>Unified Language setting</strong> (EN/KO/ES)</li>
+            <li>Categories preference</li>
+            <li>Notification time & toggle</li>
+            <li>Audio settings</li>
+          </ul>
+        </div>
+      </div>
+      
+      <!-- Breaking News -->
+      <div class="card">
+        <div class="card-header">
+          <h2>⚡ Breaking News</h2>
+          <p>Magazine-style daily briefing</p>
+        </div>
+        <div class="screenshot">
+          <img src="actual-breakingnews.png" alt="Breaking News">
+        </div>
+        <div class="features">
+          <span class="badge">Phase 2</span>
+          <span class="badge">New</span>
+          <ul>
+            <li>Today's Briefing header</li>
+            <li>Top 5 stories by relevance</li>
+            <li>Empty state shown (needs articles)</li>
+            <li>Play All audio option</li>
+            <li>Close (X) button</li>
+          </ul>
+        </div>
+      </div>
+      
+    </div>
+    
+    <div class="note">
+      <strong>Note:</strong> Mini Player appears when audio is playing (not visible in static screenshots).<br>
+      Test on physical device for full experience including push notifications and ads.
+    </div>
+    
+  </div>
+</body>
+</html>
