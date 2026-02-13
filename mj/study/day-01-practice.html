@@ -806,14 +806,38 @@
     </div>
 
     <script>
+    <script>
         let isKorean = false;
         function toggleLang() {
             isKorean = !isKorean;
-            document.querySelectorAll('.en').forEach(el => el.style.display = isKorean ? 'none' : '');
-            document.querySelectorAll('.ko').forEach(el => el.style.display = isKorean ? '' : 'none');
+            document.querySelectorAll('.en').forEach(el => {
+                if (isKorean) {
+                    el.style.setProperty('display', 'none', 'important');
+                } else {
+                    el.style.removeProperty('display');
+                }
+            });
+            document.querySelectorAll('.ko').forEach(el => {
+                if (isKorean) {
+                    el.style.setProperty('display', 'initial', 'important');
+                } else {
+                    el.style.setProperty('display', 'none', 'important');
+                }
+            });
             document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
         }
-        document.querySelectorAll('.ko').forEach(el => el.style.display = 'none');
+        // Initialize
+        document.querySelectorAll('.ko').forEach(el => {
+            el.style.setProperty('display', 'none', 'important');
+        });
+        
+        // Solution toggle functionality
+        function toggleSolution(id) {
+            const el = document.getElementById(id);
+            if (el) {
+                el.style.display = el.style.display === 'none' ? 'block' : 'none';
+            }
+        }
     </script>
 </body>
 </html>
