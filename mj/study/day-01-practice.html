@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Day 1: Practice Exercises | 실습 연습</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #1a1a2e;
+            color: #eee;
+            line-height: 1.7;
+            padding: 20px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        .lang-toggle {
+            position: fixed;
+            top: 15px;
+            right: 15px;
+            background: #16213e;
+            border: 1px solid #0f3460;
+            border-radius: 20px;
+            padding: 8px 16px;
+            cursor: pointer;
+            color: #eee;
+            font-size: 14px;
+            z-index: 1000;
+            transition: background 0.3s;
+        }
+        .lang-toggle:hover { background: #0f3460; }
+        h1 { color: #e94560; margin: 20px 0 10px; font-size: 2em; }
+        h2 { color: #0f9b8e; margin: 35px 0 15px; padding-bottom: 8px; border-bottom: 2px solid #0f3460; }
+        h3 { color: #f39c12; margin: 25px 0 12px; }
+        h4 { color: #9b59b6; margin: 20px 0 10px; }
+        p, li { margin-bottom: 12px; }
+        ul, ol { padding-left: 25px; }
+        .intro { background: #16213e; padding: 20px; border-radius: 10px; margin: 20px 0; border-left: 4px solid #e94560; }
+        .exercise { background: #16213e; padding: 20px; border-radius: 10px; margin: 25px 0; border-left: 4px solid #f39c12; }
+        .debug-challenge { background: #2d1f3d; padding: 20px; border-radius: 10px; margin: 25px 0; border-left: 4px solid #9b59b6; }
+        .tool-section { background: #1a3a2e; padding: 20px; border-radius: 10px; margin: 20px 0; border-left: 4px solid #0f9b8e; }
+        .warning { background: #4a1942; padding: 15px; border-radius: 8px; margin: 15px 0; border-left: 4px solid #e94560; }
+        .tip { background: #1a4a3a; padding: 15px; border-radius: 8px; margin: 15px 0; border-left: 4px solid #0f9b8e; }
+        .code-block {
+            background: #0d1117;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            overflow-x: auto;
+            font-family: 'Monaco', 'Consolas', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            border: 1px solid #30363d;
+        }
+        .code-block code { color: #c9d1d9; }
+        .keyword { color: #ff7b72; }
+        .type { color: #79c0ff; }
+        .string { color: #a5d6ff; }
+        .comment { color: #8b949e; font-style: italic; }
+        .number { color: #ffa657; }
+        .module-name { color: #d2a8ff; }
+        .signal { color: #7ee787; }
+        .cmd { color: #58a6ff; }
+        .solution {
+            background: #0f3460;
+            border-radius: 8px;
+            margin: 15px 0;
+            overflow: hidden;
+        }
+        .solution-header {
+            background: #16213e;
+            padding: 12px 15px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #30363d;
+        }
+        .solution-header:hover { background: #1a4a5e; }
+        .solution-content {
+            display: none;
+            padding: 15px;
+        }
+        .solution.open .solution-content { display: block; }
+        .solution-header::after { content: '▶'; transition: transform 0.3s; }
+        .solution.open .solution-header::after { transform: rotate(90deg); }
+        .nav-links { display: flex; justify-content: space-between; margin-top: 40px; padding-top: 20px; border-top: 1px solid #30363d; flex-wrap: wrap; gap: 10px; }
+        .nav-links a { color: #0f9b8e; text-decoration: none; padding: 10px 20px; background: #16213e; border-radius: 8px; }
+        .nav-links a:hover { background: #0f3460; }
+        .progress-bar { background: #0f3460; height: 6px; border-radius: 3px; margin: 20px 0; }
+        .progress-fill { background: linear-gradient(90deg, #e94560, #0f9b8e); height: 100%; border-radius: 3px; width: 2.5%; }
+        .step { background: #0f3460; padding: 15px; border-radius: 8px; margin: 10px 0; border-left: 3px solid #0f9b8e; }
+        .step-num { color: #e94560; font-weight: bold; }
+        table { width: 100%; border-collapse: collapse; margin: 15px 0; }
+        th, td { padding: 10px; text-align: left; border: 1px solid #30363d; }
+        th { background: #0f3460; color: #0f9b8e; }
+        td { background: #16213e; }
+        .checklist { list-style: none; padding-left: 0; }
+        .checklist li { padding: 8px 0 8px 30px; position: relative; }
+        .checklist li::before { content: '☐'; position: absolute; left: 0; color: #0f9b8e; }
+        @media (max-width: 600px) {
+            body { padding: 15px; }
+            h1 { font-size: 1.5em; }
+            .code-block { font-size: 12px; padding: 10px; }
+            .lang-toggle { top: 10px; right: 10px; padding: 6px 12px; font-size: 12px; }
+        }
+        .ko { display: none; }
+        a { color: #58a6ff; }
+        .output-block {
+            background: #161b22;
+            border: 1px solid #238636;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+    <button class="lang-toggle" onclick="toggleLang()">한국어</button>
+    
+    <div class="progress-bar"><div class="progress-fill"></div></div>
+    
+    <h1>
+        <span class="en">Day 1: Practice Exercises 💻</span>
+        <span class="ko">1일차: 실습 연습 💻</span>
+    </h1>
+    
+    <div class="intro">
+        <p class="en">⏱️ <strong>Time:</strong> 40-60 minutes | <strong>Goal:</strong> Apply what you learned by building real modules</p>
+        <p class="ko">⏱️ <strong>시간:</strong> 40-60분 | <strong>목표:</strong> 배운 것을 실제 모듈 구현에 적용</p>
+    </div>
+
+    <!-- Tool Setup Section -->
+    <h2 id="setup">
+        <span class="en">🛠️ Tool Setup</span>
+        <span class="ko">🛠️ 도구 설정</span>
+    </h2>
+
+    <p class="en">Before starting the exercises, you need a way to compile and simulate SystemVerilog code. Choose one of these options:</p>
+    <p class="ko">연습을 시작하기 전에 SystemVerilog 코드를 컴파일하고 시뮬레이션할 방법이 필요합니다. 다음 옵션 중 하나를 선택하세요:</p>
+
+    <!-- EDA Playground -->
+    <div class="tool-section">
+        <h3 class="en">Option 1: EDA Playground (Recommended for Quick Start)</h3>
+        <h3 class="ko">옵션 1: EDA Playground (빠른 시작에 권장)</h3>
+        
+        <p class="en">EDA Playground is a free, browser-based tool. No installation required!</p>
+        <p class="ko">EDA Playground는 무료 브라우저 기반 도구입니다. 설치가 필요 없습니다!</p>
+
+        <div class="step">
+            <p><span class="step-num">Step 1:</span> 
+                <span class="en">Go to <a href="https://www.edaplayground.com/" target="_blank">edaplayground.com</a></span>
+                <span class="ko"><a href="https://www.edaplayground.com/" target="_blank">edaplayground.com</a>으로 이동</span>
+            </p>
+        </div>
+        <div class="step">
+            <p><span class="step-num">Step 2:</span>
+                <span class="en">Create a free account (required for running simulations)</span>
+                <span class="ko">무료 계정 생성 (시뮬레이션 실행에 필요)</span>
+            </p>
+        </div>
+        <div class="step">
+            <p><span class="step-num">Step 3:</span>
+                <span class="en">In "Tools & Simulators" dropdown, select:</span>
+                <span class="ko">"Tools & Simulators" 드롭다운에서 선택:</span>
+            </p>
+            <ul>
+                <li class="en"><strong>Synopsys VCS</strong> or <strong>Cadence Xcelium</strong> (best SystemVerilog support)</li>
+                <li class="ko"><strong>Synopsys VCS</strong> 또는 <strong>Cadence Xcelium</strong> (최고의 SystemVerilog 지원)</li>
+                <li class="en">Check ✅ "Open EPWave after run" to view waveforms</li>
+                <li class="ko">"Open EPWave after run" 체크 ✅로 파형 보기</li>
+            </ul>
+        </div>
+        <div class="step">
+            <p><span class="step-num">Step 4:</span>
+                <span class="en">Left panel = testbench.sv, Right panel = design.sv</span>
+                <span class="ko">왼쪽 패널 = testbench.sv, 오른쪽 패널 = design.sv</span>
+            </p>
+        </div>
+        <div class="step">
+            <p><span class="step-num">Step 5:</span>
+                <span class="en">Click <strong>Run</strong> to simulate!</span>
+                <span class="ko"><strong>Run</strong> 클릭하여 시뮬레이션!</span>
+            </p>
+        </div>
+
+        <div class="tip">
+            <p class="en">💡 <strong>Pro tip:</strong> Add <code>$dumpfile("dump.vcd"); $dumpvars;</code> in your testbench to generate waveforms viewable in EPWave.</p>
+            <p class="ko">💡 <strong>프로 팁:</strong> 테스트벤치에 <code>$dumpfile("dump.vcd"); $dumpvars;</code>를 추가하면 EPWave에서 볼 수 있는 파형이 생성됩니다.</p>
+        </div>
+    </div>
+
+    <!-- Icarus Verilog -->
+    <div class="tool-section">
+        <h3 class="en">Option 2: Icarus Verilog + GTKWave (Local Setup)</h3>
+        <h3 class="ko">옵션 2: Icarus Verilog + GTKWave (로컬 설정)</h3>
+
+        <p class="en">Free, open-source tools for your local machine. Great for offline work.</p>
+        <p class="ko">로컬 머신용 무료 오픈소스 도구. 오프라인 작업에 좋습니다.</p>
+
+        <h4 class="en">Installation</h4>
+        <h4 class="ko">설치</h4>
+
+        <p><strong>macOS (Homebrew):</strong></p>
+        <div class="code-block"><code><span class="cmd">brew install icarus-verilog</span>
+<span class="cmd">brew install --cask gtkwave</span></code></div>
+
+        <p><strong>Linux (Ubuntu/Debian):</strong></p>
+        <div class="code-block"><code><span class="cmd">sudo apt update</span>
+<span class="cmd">sudo apt install iverilog gtkwave</span></code></div>
+
+        <p><strong>Linux (Fedora):</strong></p>
+        <div class="code-block"><code><span class="cmd">sudo dnf install iverilog gtkwave</span></code></div>
+
+        <h4 class="en">Basic Workflow</h4>
+        <h4 class="ko">기본 워크플로우</h4>
+
+        <div class="step">
+            <p><span class="step-num">Step 1:</span>
+                <span class="en">Create your design file (e.g., <code>adder.sv</code>)</span>
+                <span class="ko">디자인 파일 생성 (예: <code>adder.sv</code>)</span>
+            </p>
+        </div>
+        <div class="step">
+            <p><span class="step-num">Step 2:</span>
+                <span class="en">Create your testbench file (e.g., <code>adder_tb.sv</code>)</span>
+                <span class="ko">테스트벤치 파일 생성 (예: <code>adder_tb.sv</code>)</span>
+            </p>
+        </div>
+        <div class="step">
+            <p><span class="step-num">Step 3:</span>
+                <span class="en">Compile with iverilog:</span>
+                <span class="ko">iverilog로 컴파일:</span>
+            </p>
+            <div class="code-block"><code><span class="cmd">iverilog -g2012 -o sim.vvp adder.sv adder_tb.sv</span></code></div>
+            <p class="en"><code>-g2012</code> enables SystemVerilog features</p>
+            <p class="ko"><code>-g2012</code>는 SystemVerilog 기능을 활성화</p>
+        </div>
+        <div class="step">
+            <p><span class="step-num">Step 4:</span>
+                <span class="en">Run the simulation:</span>
+                <span class="ko">시뮬레이션 실행:</span>
+            </p>
+            <div class="code-block"><code><span class="cmd">vvp sim.vvp</span></code></div>
+        </div>
+        <div class="step">
+            <p><span class="step-num">Step 5:</span>
+                <span class="en">View waveforms (if you generated VCD file):</span>
+                <span class="ko">파형 보기 (VCD 파일 생성 시):</span>
+            </p>
+            <div class="code-block"><code><span class="cmd">gtkwave dump.vcd</span></code></div>
+        </div>
+
+        <div class="warning">
+            <p class="en">⚠️ <strong>Note:</strong> Icarus Verilog has limited SystemVerilog support. Some advanced features like <code>always_comb</code> work, but others may not. For full SystemVerilog, use EDA Playground or commercial tools.</p>
+            <p class="ko">⚠️ <strong>참고:</strong> Icarus Verilog는 제한적인 SystemVerilog 지원을 합니다. <code>always_comb</code> 같은 일부 고급 기능은 작동하지만, 다른 것은 안 될 수 있습니다. 완전한 SystemVerilog를 위해서는 EDA Playground나 상용 도구를 사용하세요.</p>
+        </div>
+    </div>
+
+    <!-- Testbench Template -->
+    <div class="tool-section">
+        <h3 class="en">📝 Basic Testbench Template</h3>
+        <h3 class="ko">📝 기본 테스트벤치 템플릿</h3>
+
+        <p class="en">Use this template for your exercises:</p>
+        <p class="ko">연습을 위해 이 템플릿을 사용하세요:</p>
+
+        <div class="code-block"><code><span class="keyword">module</span> <span class="module-name">testbench</span>;
+    <span class="comment">// Testbench signals (no ports!)</span>
+    <span class="type">logic</span> <span class="signal">clk</span>;
+    <span class="type">logic</span> <span class="signal">rst_n</span>;
+    <span class="type">logic</span> [<span class="number">7</span>:<span class="number">0</span>] <span class="signal">test_input</span>;
+    <span class="type">logic</span> [<span class="number">7</span>:<span class="number">0</span>] <span class="signal">test_output</span>;
+
+    <span class="comment">// Instantiate the design under test (DUT)</span>
+    <span class="module-name">my_module</span> <span class="signal">dut</span> (
+        .<span class="signal">clk</span>     (<span class="signal">clk</span>),
+        .<span class="signal">rst_n</span>   (<span class="signal">rst_n</span>),
+        .<span class="signal">data_in</span> (<span class="signal">test_input</span>),
+        .<span class="signal">data_out</span>(<span class="signal">test_output</span>)
+    );
+
+    <span class="comment">// Clock generation: 10ns period (100MHz)</span>
+    <span class="keyword">initial</span> <span class="signal">clk</span> = <span class="number">0</span>;
+    <span class="keyword">always</span> #<span class="number">5</span> <span class="signal">clk</span> = ~<span class="signal">clk</span>;
+
+    <span class="comment">// Waveform dump (for GTKWave or EPWave)</span>
+    <span class="keyword">initial</span> <span class="keyword">begin</span>
+        <span class="keyword">$dumpfile</span>(<span class="string">"dump.vcd"</span>);
+        <span class="keyword">$dumpvars</span>(<span class="number">0</span>, <span class="signal">testbench</span>);
+    <span class="keyword">end</span>
+
+    <span class="comment">// Test stimulus</span>
+    <span class="keyword">initial</span> <span class="keyword">begin</span>
+        <span class="comment">// Initialize</span>
+        <span class="signal">rst_n</span> = <span class="number">0</span>;
+        <span class="signal">test_input</span> = <span class="number">0</span>;
+        
+        <span class="comment">// Wait and release reset</span>
+        #<span class="number">20</span>;
+        <span class="signal">rst_n</span> = <span class="number">1</span>;
+        
+        <span class="comment">// Apply test vectors</span>
+        #<span class="number">10</span>; <span class="signal">test_input</span> = <span class="number">8'hAA</span>;
+        #<span class="number">10</span>; <span class="signal">test_input</span> = <span class="number">8'h55</span>;
+        #<span class="number">10</span>; <span class="signal">test_input</span> = <span class="number">8'hFF</span>;
+        
+        <span class="comment">// Check results</span>
+        #<span class="number">10</span>;
+        <span class="keyword">$display</span>(<span class="string">"Output = %h"</span>, <span class="signal">test_output</span>);
+        
+        <span class="comment">// End simulation</span>
+        #<span class="number">50</span>;
+        <span class="keyword">$display</span>(<span class="string">"Test completed!"</span>);
+        <span class="keyword">$finish</span>;
+    <span class="keyword">end</span>
+<span class="keyword">endmodule</span></code></div>
+    </div>
+
+    <!-- Exercise 1 -->
+    <h2>
+        <span class="en">Exercise 1: Parameterized N-bit Adder</span>
+        <span class="ko">연습 1: 파라미터화된 N비트 가산기</span>
+    </h2>
+
+    <div class="exercise">
+        <h3 class="en">📋 Requirements</h3>
+        <h3 class="ko">📋 요구사항</h3>
+        
+        <ul class="checklist">
+            <li class="en">Create a module named <code>adder</code></li>
+            <li class="ko"><code>adder</code>라는 모듈 생성</li>
+            <li class="en">Parameter <code>WIDTH</code> with default value 8</li>
+            <li class="ko">기본값 8의 파라미터 <code>WIDTH</code></li>
+            <li class="en">Two input ports: <code>a</code> and <code>b</code> (both WIDTH bits)</li>
+            <li class="ko">두 개의 입력 포트: <code>a</code>와 <code>b</code> (둘 다 WIDTH 비트)</li>
+            <li class="en">One input port: <code>cin</code> (carry in, 1 bit)</li>
+            <li class="ko">하나의 입력 포트: <code>cin</code> (캐리 인, 1비트)</li>
+            <li class="en">One output port: <code>sum</code> (WIDTH bits)</li>
+            <li class="ko">하나의 출력 포트: <code>sum</code> (WIDTH 비트)</li>
+            <li class="en">One output port: <code>cout</code> (carry out, 1 bit)</li>
+            <li class="ko">하나의 출력 포트: <code>cout</code> (캐리 아웃, 1비트)</li>
+            <li class="en">Use continuous assignment (<code>assign</code>)</li>
+            <li class="ko">연속 할당 사용 (<code>assign</code>)</li>
+        </ul>
+
+        <h3 class="en">🎯 Starter Template</h3>
+        <h3 class="ko">🎯 시작 템플릿</h3>
+
+        <div class="code-block"><code><span class="keyword">module</span> <span class="module-name">adder</span> #(
+    <span class="comment">// TODO: Add parameter</span>
+)(
+    <span class="comment">// TODO: Add ports</span>
+);
+    <span class="comment">// TODO: Add logic</span>
+    <span class="comment">// Hint: {cout, sum} = a + b + cin;</span>
+    
+<span class="keyword">endmodule</span></code></div>
+
+        <h3 class="en">💡 Step-by-Step Guidance</h3>
+        <h3 class="ko">💡 단계별 안내</h3>
+
+        <div class="step">
+            <p><span class="step-num en">Step 1:</span><span class="step-num ko">1단계:</span>
+                <span class="en">Define the parameter with type and default value</span>
+                <span class="ko">타입과 기본값으로 파라미터 정의</span>
+            </p>
+        </div>
+        <div class="step">
+            <p><span class="step-num en">Step 2:</span><span class="step-num ko">2단계:</span>
+                <span class="en">Declare all ports using <code>logic</code> type with proper widths</span>
+                <span class="ko">적절한 폭으로 <code>logic</code> 타입을 사용하여 모든 포트 선언</span>
+            </p>
+        </div>
+        <div class="step">
+            <p><span class="step-num en">Step 3:</span><span class="step-num ko">3단계:</span>
+                <span class="en">Use concatenation <code>{cout, sum}</code> to capture the full result</span>
+                <span class="ko">전체 결과를 캡처하기 위해 연결 <code>{cout, sum}</code> 사용</span>
+            </p>
+        </div>
+        <div class="step">
+            <p><span class="step-num en">Step 4:</span><span class="step-num ko">4단계:</span>
+                <span class="en">The sum of two N-bit numbers + carry can be N+1 bits</span>
+                <span class="ko">두 N비트 숫자 + 캐리의 합은 N+1 비트가 될 수 있음</span>
+            </p>
+        </div>
+
+        <h3 class="en">✅ Expected Behavior</h3>
+        <h3 class="ko">✅ 예상 동작</h3>
+
+        <table>
+            <tr>
+                <th>a</th><th>b</th><th>cin</th><th>sum</th><th>cout</th>
+            </tr>
+            <tr>
+                <td>8'h00</td><td>8'h00</td><td>0</td><td>8'h00</td><td>0</td>
+            </tr>
+            <tr>
+                <td>8'h0F</td><td>8'h01</td><td>0</td><td>8'h10</td><td>0</td>
+            </tr>
+            <tr>
+                <td>8'hFF</td><td>8'h01</td><td>0</td><td>8'h00</td><td>1</td>
+            </tr>
+            <tr>
+                <td>8'hFF</td><td>8'hFF</td><td>1</td><td>8'hFF</td><td>1</td>
+            </tr>
+        </table>
+
+        <div class="solution" onclick="this.classList.toggle('open')">
+            <div class="solution-header">
+                <span class="en">🔍 Click to reveal solution</span>
+                <span class="ko">🔍 클릭하여 정답 보기</span>
+            </div>
+            <div class="solution-content">
+                <div class="code-block"><code><span class="keyword">module</span> <span class="module-name">adder</span> #(
+    <span class="keyword">parameter</span> <span class="type">int</span> <span class="signal">WIDTH</span> = <span class="number">8</span>
+)(
+    <span class="keyword">input</span>  <span class="type">logic</span> [<span class="signal">WIDTH</span>-<span class="number">1</span>:<span class="number">0</span>] <span class="signal">a</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span> [<span class="signal">WIDTH</span>-<span class="number">1</span>:<span class="number">0</span>] <span class="signal">b</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span>              <span class="signal">cin</span>,
+    <span class="keyword">output</span> <span class="type">logic</span> [<span class="signal">WIDTH</span>-<span class="number">1</span>:<span class="number">0</span>] <span class="signal">sum</span>,
+    <span class="keyword">output</span> <span class="type">logic</span>              <span class="signal">cout</span>
+);
+    <span class="comment">// Concatenate cout and sum to capture full result</span>
+    <span class="keyword">assign</span> {<span class="signal">cout</span>, <span class="signal">sum</span>} = <span class="signal">a</span> + <span class="signal">b</span> + <span class="signal">cin</span>;
+    
+<span class="keyword">endmodule</span></code></div>
+
+                <h4 class="en">Testbench for Exercise 1:</h4>
+                <h4 class="ko">연습 1을 위한 테스트벤치:</h4>
+                <div class="code-block"><code><span class="keyword">module</span> <span class="module-name">adder_tb</span>;
+    <span class="type">logic</span> [<span class="number">7</span>:<span class="number">0</span>] <span class="signal">a</span>, <span class="signal">b</span>;
+    <span class="type">logic</span> <span class="signal">cin</span>;
+    <span class="type">logic</span> [<span class="number">7</span>:<span class="number">0</span>] <span class="signal">sum</span>;
+    <span class="type">logic</span> <span class="signal">cout</span>;
+
+    <span class="module-name">adder</span> #(.<span class="signal">WIDTH</span>(<span class="number">8</span>)) <span class="signal">dut</span> (.*);
+
+    <span class="keyword">initial</span> <span class="keyword">begin</span>
+        <span class="keyword">$dumpfile</span>(<span class="string">"dump.vcd"</span>); <span class="keyword">$dumpvars</span>;
+        
+        <span class="comment">// Test case 1</span>
+        <span class="signal">a</span> = <span class="number">8'h00</span>; <span class="signal">b</span> = <span class="number">8'h00</span>; <span class="signal">cin</span> = <span class="number">0</span>; #<span class="number">10</span>;
+        <span class="keyword">$display</span>(<span class="string">"%h + %h + %b = %h (cout=%b)"</span>, <span class="signal">a</span>, <span class="signal">b</span>, <span class="signal">cin</span>, <span class="signal">sum</span>, <span class="signal">cout</span>);
+        
+        <span class="comment">// Test case 2</span>
+        <span class="signal">a</span> = <span class="number">8'h0F</span>; <span class="signal">b</span> = <span class="number">8'h01</span>; <span class="signal">cin</span> = <span class="number">0</span>; #<span class="number">10</span>;
+        <span class="keyword">$display</span>(<span class="string">"%h + %h + %b = %h (cout=%b)"</span>, <span class="signal">a</span>, <span class="signal">b</span>, <span class="signal">cin</span>, <span class="signal">sum</span>, <span class="signal">cout</span>);
+        
+        <span class="comment">// Test case 3: overflow</span>
+        <span class="signal">a</span> = <span class="number">8'hFF</span>; <span class="signal">b</span> = <span class="number">8'h01</span>; <span class="signal">cin</span> = <span class="number">0</span>; #<span class="number">10</span>;
+        <span class="keyword">$display</span>(<span class="string">"%h + %h + %b = %h (cout=%b)"</span>, <span class="signal">a</span>, <span class="signal">b</span>, <span class="signal">cin</span>, <span class="signal">sum</span>, <span class="signal">cout</span>);
+        
+        <span class="comment">// Test case 4</span>
+        <span class="signal">a</span> = <span class="number">8'hFF</span>; <span class="signal">b</span> = <span class="number">8'hFF</span>; <span class="signal">cin</span> = <span class="number">1</span>; #<span class="number">10</span>;
+        <span class="keyword">$display</span>(<span class="string">"%h + %h + %b = %h (cout=%b)"</span>, <span class="signal">a</span>, <span class="signal">b</span>, <span class="signal">cin</span>, <span class="signal">sum</span>, <span class="signal">cout</span>);
+        
+        <span class="keyword">$finish</span>;
+    <span class="keyword">end</span>
+<span class="keyword">endmodule</span></code></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Exercise 2 -->
+    <h2>
+        <span class="en">Exercise 2: 4:1 MUX (Two Styles)</span>
+        <span class="ko">연습 2: 4대1 MUX (두 가지 스타일)</span>
+    </h2>
+
+    <div class="exercise">
+        <h3 class="en">📋 Requirements</h3>
+        <h3 class="ko">📋 요구사항</h3>
+
+        <p class="en">Build a 4-to-1 multiplexer using TWO different coding styles:</p>
+        <p class="ko">두 가지 다른 코딩 스타일을 사용하여 4대1 멀티플렉서를 구현하세요:</p>
+
+        <ul class="checklist">
+            <li class="en">Four 8-bit inputs: <code>in0</code>, <code>in1</code>, <code>in2</code>, <code>in3</code></li>
+            <li class="ko">4개의 8비트 입력: <code>in0</code>, <code>in1</code>, <code>in2</code>, <code>in3</code></li>
+            <li class="en">2-bit select input: <code>sel</code></li>
+            <li class="ko">2비트 선택 입력: <code>sel</code></li>
+            <li class="en">8-bit output: <code>out</code></li>
+            <li class="ko">8비트 출력: <code>out</code></li>
+        </ul>
+
+        <h3 class="en">Style A: Using assign with ternary operator</h3>
+        <h3 class="ko">스타일 A: 삼항 연산자와 assign 사용</h3>
+
+        <div class="code-block"><code><span class="keyword">module</span> <span class="module-name">mux4_assign</span> (
+    <span class="comment">// TODO: ports</span>
+);
+    <span class="comment">// Hint: Nested ternary</span>
+    <span class="comment">// assign out = (sel == 2'b00) ? in0 :</span>
+    <span class="comment">//              (sel == 2'b01) ? in1 : ...</span>
+<span class="keyword">endmodule</span></code></div>
+
+        <h3 class="en">Style B: Using always_comb with case</h3>
+        <h3 class="ko">스타일 B: case와 always_comb 사용</h3>
+
+        <div class="code-block"><code><span class="keyword">module</span> <span class="module-name">mux4_case</span> (
+    <span class="comment">// TODO: ports</span>
+);
+    <span class="keyword">always_comb</span> <span class="keyword">begin</span>
+        <span class="keyword">case</span> (<span class="signal">sel</span>)
+            <span class="comment">// TODO: Complete the case statement</span>
+        <span class="keyword">endcase</span>
+    <span class="keyword">end</span>
+<span class="keyword">endmodule</span></code></div>
+
+        <h3 class="en">🤔 Comparison Questions</h3>
+        <h3 class="ko">🤔 비교 질문</h3>
+
+        <ul>
+            <li class="en">Which style is more readable for a 4:1 MUX?</li>
+            <li class="ko">4:1 MUX에서 어떤 스타일이 더 읽기 쉬운가요?</li>
+            <li class="en">What about an 8:1 MUX? 16:1?</li>
+            <li class="ko">8:1 MUX는 어떨까요? 16:1은?</li>
+            <li class="en">Which synthesizes more efficiently?</li>
+            <li class="ko">어떤 것이 더 효율적으로 합성되나요?</li>
+        </ul>
+
+        <div class="solution" onclick="this.classList.toggle('open')">
+            <div class="solution-header">
+                <span class="en">🔍 Click to reveal solutions</span>
+                <span class="ko">🔍 클릭하여 정답 보기</span>
+            </div>
+            <div class="solution-content">
+                <h4>Style A: assign</h4>
+                <div class="code-block"><code><span class="keyword">module</span> <span class="module-name">mux4_assign</span> (
+    <span class="keyword">input</span>  <span class="type">logic</span> [<span class="number">7</span>:<span class="number">0</span>] <span class="signal">in0</span>, <span class="signal">in1</span>, <span class="signal">in2</span>, <span class="signal">in3</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span> [<span class="number">1</span>:<span class="number">0</span>] <span class="signal">sel</span>,
+    <span class="keyword">output</span> <span class="type">logic</span> [<span class="number">7</span>:<span class="number">0</span>] <span class="signal">out</span>
+);
+    <span class="keyword">assign</span> <span class="signal">out</span> = (<span class="signal">sel</span> == <span class="number">2'b00</span>) ? <span class="signal">in0</span> :
+                 (<span class="signal">sel</span> == <span class="number">2'b01</span>) ? <span class="signal">in1</span> :
+                 (<span class="signal">sel</span> == <span class="number">2'b10</span>) ? <span class="signal">in2</span> :
+                                   <span class="signal">in3</span>;
+<span class="keyword">endmodule</span></code></div>
+
+                <h4>Style B: always_comb + case</h4>
+                <div class="code-block"><code><span class="keyword">module</span> <span class="module-name">mux4_case</span> (
+    <span class="keyword">input</span>  <span class="type">logic</span> [<span class="number">7</span>:<span class="number">0</span>] <span class="signal">in0</span>, <span class="signal">in1</span>, <span class="signal">in2</span>, <span class="signal">in3</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span> [<span class="number">1</span>:<span class="number">0</span>] <span class="signal">sel</span>,
+    <span class="keyword">output</span> <span class="type">logic</span> [<span class="number">7</span>:<span class="number">0</span>] <span class="signal">out</span>
+);
+    <span class="keyword">always_comb</span> <span class="keyword">begin</span>
+        <span class="keyword">case</span> (<span class="signal">sel</span>)
+            <span class="number">2'b00</span>:   <span class="signal">out</span> = <span class="signal">in0</span>;
+            <span class="number">2'b01</span>:   <span class="signal">out</span> = <span class="signal">in1</span>;
+            <span class="number">2'b10</span>:   <span class="signal">out</span> = <span class="signal">in2</span>;
+            <span class="number">2'b11</span>:   <span class="signal">out</span> = <span class="signal">in3</span>;
+            <span class="keyword">default</span>: <span class="signal">out</span> = <span class="string">'x</span>;
+        <span class="keyword">endcase</span>
+    <span class="keyword">end</span>
+<span class="keyword">endmodule</span></code></div>
+
+                <h4 class="en">Comparison Answer:</h4>
+                <h4 class="ko">비교 답변:</h4>
+                <ul>
+                    <li class="en"><strong>Readability:</strong> <code>case</code> is more readable, especially for larger MUX</li>
+                    <li class="ko"><strong>가독성:</strong> <code>case</code>가 더 읽기 쉬움, 특히 큰 MUX에서</li>
+                    <li class="en"><strong>Synthesis:</strong> Both synthesize to identical hardware (same MUX)</li>
+                    <li class="ko"><strong>합성:</strong> 둘 다 동일한 하드웨어로 합성됨 (같은 MUX)</li>
+                    <li class="en"><strong>Recommendation:</strong> Use <code>always_comb</code> + <code>case</code> for MUX > 2:1</li>
+                    <li class="ko"><strong>권장:</strong> 2:1보다 큰 MUX에는 <code>always_comb</code> + <code>case</code> 사용</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Exercise 3 -->
+    <h2>
+        <span class="en">Exercise 3: Module Instantiation Practice</span>
+        <span class="ko">연습 3: 모듈 인스턴스화 연습</span>
+    </h2>
+
+    <div class="exercise">
+        <h3 class="en">📋 Requirements</h3>
+        <h3 class="ko">📋 요구사항</h3>
+
+        <p class="en">Create a <code>top</code> module that instantiates your adder from Exercise 1:</p>
+        <p class="ko">연습 1의 가산기를 인스턴스화하는 <code>top</code> 모듈을 만드세요:</p>
+
+        <ul class="checklist">
+            <li class="en">Instantiate two adders: one 8-bit, one 16-bit</li>
+            <li class="ko">두 개의 가산기 인스턴스화: 하나는 8비트, 하나는 16비트</li>
+            <li class="en">For the 8-bit adder, use <strong>positional</strong> port connections</li>
+            <li class="ko">8비트 가산기에는 <strong>위치 기반</strong> 포트 연결 사용</li>
+            <li class="en">For the 16-bit adder, use <strong>named</strong> port connections</li>
+            <li class="ko">16비트 가산기에는 <strong>이름 기반</strong> 포트 연결 사용</li>
+            <li class="en">Chain them: 8-bit adder's cout → 16-bit adder's cin</li>
+            <li class="ko">연결: 8비트 가산기의 cout → 16비트 가산기의 cin</li>
+        </ul>
+
+        <div class="code-block"><code><span class="keyword">module</span> <span class="module-name">top</span> (
+    <span class="keyword">input</span>  <span class="type">logic</span> [<span class="number">7</span>:<span class="number">0</span>]  <span class="signal">a8</span>, <span class="signal">b8</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span> [<span class="number">15</span>:<span class="number">0</span>] <span class="signal">a16</span>, <span class="signal">b16</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span>         <span class="signal">cin</span>,
+    <span class="keyword">output</span> <span class="type">logic</span> [<span class="number">7</span>:<span class="number">0</span>]  <span class="signal">sum8</span>,
+    <span class="keyword">output</span> <span class="type">logic</span> [<span class="number">15</span>:<span class="number">0</span>] <span class="signal">sum16</span>,
+    <span class="keyword">output</span> <span class="type">logic</span>         <span class="signal">cout_final</span>
+);
+    <span class="comment">// Internal signal for chaining</span>
+    <span class="type">logic</span> <span class="signal">carry_chain</span>;
+
+    <span class="comment">// TODO: Instantiate 8-bit adder with POSITIONAL connections</span>
+    <span class="comment">// adder u_add8 (a8, b8, cin, sum8, carry_chain);</span>
+
+    <span class="comment">// TODO: Instantiate 16-bit adder with NAMED connections</span>
+    <span class="comment">// adder #(.WIDTH(16)) u_add16 (.a(...), .b(...), ...);</span>
+
+<span class="keyword">endmodule</span></code></div>
+
+        <div class="solution" onclick="this.classList.toggle('open')">
+            <div class="solution-header">
+                <span class="en">🔍 Click to reveal solution</span>
+                <span class="ko">🔍 클릭하여 정답 보기</span>
+            </div>
+            <div class="solution-content">
+                <div class="code-block"><code><span class="keyword">module</span> <span class="module-name">top</span> (
+    <span class="keyword">input</span>  <span class="type">logic</span> [<span class="number">7</span>:<span class="number">0</span>]  <span class="signal">a8</span>, <span class="signal">b8</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span> [<span class="number">15</span>:<span class="number">0</span>] <span class="signal">a16</span>, <span class="signal">b16</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span>         <span class="signal">cin</span>,
+    <span class="keyword">output</span> <span class="type">logic</span> [<span class="number">7</span>:<span class="number">0</span>]  <span class="signal">sum8</span>,
+    <span class="keyword">output</span> <span class="type">logic</span> [<span class="number">15</span>:<span class="number">0</span>] <span class="signal">sum16</span>,
+    <span class="keyword">output</span> <span class="type">logic</span>         <span class="signal">cout_final</span>
+);
+    <span class="type">logic</span> <span class="signal">carry_chain</span>;
+
+    <span class="comment">// ❌ Positional (not recommended, but for practice)</span>
+    <span class="module-name">adder</span> <span class="signal">u_add8</span> (<span class="signal">a8</span>, <span class="signal">b8</span>, <span class="signal">cin</span>, <span class="signal">sum8</span>, <span class="signal">carry_chain</span>);
+
+    <span class="comment">// ✅ Named (recommended style)</span>
+    <span class="module-name">adder</span> #(
+        .<span class="signal">WIDTH</span>(<span class="number">16</span>)
+    ) <span class="signal">u_add16</span> (
+        .<span class="signal">a</span>    (<span class="signal">a16</span>),
+        .<span class="signal">b</span>    (<span class="signal">b16</span>),
+        .<span class="signal">cin</span>  (<span class="signal">carry_chain</span>),  <span class="comment">// Chained from 8-bit adder!</span>
+        .<span class="signal">sum</span>  (<span class="signal">sum16</span>),
+        .<span class="signal">cout</span> (<span class="signal">cout_final</span>)
+    );
+<span class="keyword">endmodule</span></code></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Debug Challenge -->
+    <h2>
+        <span class="en">🐛 Debug Challenge: Fix These Bugs!</span>
+        <span class="ko">🐛 디버그 챌린지: 버그를 고치세요!</span>
+    </h2>
+
+    <p class="en">Find and fix the errors in these code snippets. Each has 1-2 bugs.</p>
+    <p class="ko">다음 코드 스니펫에서 오류를 찾아 수정하세요. 각각 1-2개의 버그가 있습니다.</p>
+
+    <!-- Bug 1 -->
+    <div class="debug-challenge">
+        <h3 class="en">Bug #1: Module with syntax errors</h3>
+        <h3 class="ko">버그 #1: 문법 오류가 있는 모듈</h3>
+
+        <div class="code-block"><code><span class="keyword">module</span> <span class="module-name">buggy1</span> (
+    <span class="keyword">input</span>  <span class="type">logic</span> [<span class="number">7</span>:<span class="number">0</span>] <span class="signal">data_in</span>
+    <span class="keyword">output</span> <span class="type">logic</span> [<span class="number">7</span>:<span class="number">0</span>] <span class="signal">data_out</span>
+)
+    <span class="keyword">assign</span> <span class="signal">data_out</span> = <span class="signal">data_in</span>;
+<span class="keyword">endmodule</span></code></div>
+
+        <div class="solution" onclick="this.classList.toggle('open')">
+            <div class="solution-header">
+                <span class="en">🔍 Click to reveal fix</span>
+                <span class="ko">🔍 클릭하여 수정 보기</span>
+            </div>
+            <div class="solution-content">
+                <p class="en"><strong>Bugs:</strong></p>
+                <p class="ko"><strong>버그:</strong></p>
+                <ol>
+                    <li class="en">Missing comma after <code>data_in</code></li>
+                    <li class="ko"><code>data_in</code> 뒤에 쉼표 누락</li>
+                    <li class="en">Missing semicolon after port list <code>)</code></li>
+                    <li class="ko">포트 리스트 <code>)</code> 뒤에 세미콜론 누락</li>
+                </ol>
+                <div class="code-block"><code><span class="keyword">module</span> <span class="module-name">buggy1</span> (
+    <span class="keyword">input</span>  <span class="type">logic</span> [<span class="number">7</span>:<span class="number">0</span>] <span class="signal">data_in</span><span class="keyword">,</span>  <span class="comment">// Added comma</span>
+    <span class="keyword">output</span> <span class="type">logic</span> [<span class="number">7</span>:<span class="number">0</span>] <span class="signal">data_out</span>
+)<span class="keyword">;</span>  <span class="comment">// Added semicolon</span>
+    <span class="keyword">assign</span> <span class="signal">data_out</span> = <span class="signal">data_in</span>;
+<span class="keyword">endmodule</span></code></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bug 2 -->
+    <div class="debug-challenge">
+        <h3 class="en">Bug #2: Port width mismatch</h3>
+        <h3 class="ko">버그 #2: 포트 폭 불일치</h3>
+
+        <div class="code-block"><code><span class="keyword">module</span> <span class="module-name">buggy2</span>;
+    <span class="type">logic</span> [<span class="number">15</span>:<span class="number">0</span>] <span class="signal">wide_a</span>, <span class="signal">wide_b</span>;
+    <span class="type">logic</span> [<span class="number">15</span>:<span class="number">0</span>] <span class="signal">result</span>;
+    <span class="type">logic</span> <span class="signal">carry</span>;
+
+    <span class="comment">// adder expects 8-bit inputs!</span>
+    <span class="module-name">adder</span> <span class="signal">u_add</span> (
+        .<span class="signal">a</span>    (<span class="signal">wide_a</span>),
+        .<span class="signal">b</span>    (<span class="signal">wide_b</span>),
+        .<span class="signal">cin</span>  (<span class="number">1'b0</span>),
+        .<span class="signal">sum</span>  (<span class="signal">result</span>),
+        .<span class="signal">cout</span> (<span class="signal">carry</span>)
+    );
+<span class="keyword">endmodule</span></code></div>
+
+        <div class="solution" onclick="this.classList.toggle('open')">
+            <div class="solution-header">
+                <span class="en">🔍 Click to reveal fix</span>
+                <span class="ko">🔍 클릭하여 수정 보기</span>
+            </div>
+            <div class="solution-content">
+                <p class="en"><strong>Bug:</strong> Adder has WIDTH=8 by default, but we're connecting 16-bit signals</p>
+                <p class="ko"><strong>버그:</strong> 가산기는 기본적으로 WIDTH=8이지만, 16비트 신호를 연결하고 있음</p>
+                <p class="en"><strong>Fix:</strong> Override the WIDTH parameter</p>
+                <p class="ko"><strong>수정:</strong> WIDTH 파라미터를 오버라이드</p>
+                <div class="code-block"><code><span class="module-name">adder</span> <span class="keyword">#(.<span class="signal">WIDTH</span>(<span class="number">16</span>))</span> <span class="signal">u_add</span> (
+    .<span class="signal">a</span>    (<span class="signal">wide_a</span>),
+    .<span class="signal">b</span>    (<span class="signal">wide_b</span>),
+    .<span class="signal">cin</span>  (<span class="number">1'b0</span>),
+    .<span class="signal">sum</span>  (<span class="signal">result</span>),
+    .<span class="signal">cout</span> (<span class="signal">carry</span>)
+);</code></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bug 3 -->
+    <div class="debug-challenge">
+        <h3 class="en">Bug #3: Incomplete always_comb</h3>
+        <h3 class="ko">버그 #3: 불완전한 always_comb</h3>
+
+        <div class="code-block"><code><span class="keyword">module</span> <span class="module-name">buggy3</span> (
+    <span class="keyword">input</span>  <span class="type">logic</span> [<span class="number">1</span>:<span class="number">0</span>] <span class="signal">sel</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span> [<span class="number">7</span>:<span class="number">0</span>] <span class="signal">a</span>, <span class="signal">b</span>, <span class="signal">c</span>, <span class="signal">d</span>,
+    <span class="keyword">output</span> <span class="type">logic</span> [<span class="number">7</span>:<span class="number">0</span>] <span class="signal">out</span>
+);
+    <span class="keyword">always_comb</span> <span class="keyword">begin</span>
+        <span class="keyword">case</span> (<span class="signal">sel</span>)
+            <span class="number">2'b00</span>: <span class="signal">out</span> = <span class="signal">a</span>;
+            <span class="number">2'b01</span>: <span class="signal">out</span> = <span class="signal">b</span>;
+            <span class="number">2'b10</span>: <span class="signal">out</span> = <span class="signal">c</span>;
+            <span class="comment">// What about 2'b11?</span>
+        <span class="keyword">endcase</span>
+    <span class="keyword">end</span>
+<span class="keyword">endmodule</span></code></div>
+
+        <div class="solution" onclick="this.classList.toggle('open')">
+            <div class="solution-header">
+                <span class="en">🔍 Click to reveal fix</span>
+                <span class="ko">🔍 클릭하여 수정 보기</span>
+            </div>
+            <div class="solution-content">
+                <p class="en"><strong>Bug:</strong> Missing case for <code>2'b11</code> - this creates a latch (bad for synthesis!)</p>
+                <p class="ko"><strong>버그:</strong> <code>2'b11</code> 케이스 누락 - 이것은 래치를 생성합니다 (합성에 나쁨!)</p>
+                <p class="en"><strong>Fix:</strong> Add the missing case or a default</p>
+                <p class="ko"><strong>수정:</strong> 누락된 케이스 또는 default 추가</p>
+                <div class="code-block"><code><span class="keyword">always_comb</span> <span class="keyword">begin</span>
+    <span class="keyword">case</span> (<span class="signal">sel</span>)
+        <span class="number">2'b00</span>:   <span class="signal">out</span> = <span class="signal">a</span>;
+        <span class="number">2'b01</span>:   <span class="signal">out</span> = <span class="signal">b</span>;
+        <span class="number">2'b10</span>:   <span class="signal">out</span> = <span class="signal">c</span>;
+        <span class="number">2'b11</span>:   <span class="signal">out</span> = <span class="signal">d</span>;   <span class="comment">// Added!</span>
+        <span class="keyword">default</span>: <span class="signal">out</span> = <span class="string">'x</span>; <span class="comment">// Good practice</span>
+    <span class="keyword">endcase</span>
+<span class="keyword">end</span></code></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="intro" style="margin-top: 40px;">
+        <h3 class="en">✅ Practice Checklist</h3>
+        <h3 class="ko">✅ 실습 체크리스트</h3>
+        <ul class="checklist">
+            <li class="en">Set up EDA Playground or local tools</li>
+            <li class="ko">EDA Playground 또는 로컬 도구 설정 완료</li>
+            <li class="en">Built and tested parameterized adder</li>
+            <li class="ko">파라미터화된 가산기 구현 및 테스트 완료</li>
+            <li class="en">Implemented 4:1 MUX in two styles</li>
+            <li class="ko">두 가지 스타일로 4:1 MUX 구현 완료</li>
+            <li class="en">Practiced module instantiation with both connection styles</li>
+            <li class="ko">두 가지 연결 스타일로 모듈 인스턴스화 연습 완료</li>
+            <li class="en">Fixed all debug challenges</li>
+            <li class="ko">모든 디버그 챌린지 수정 완료</li>
+        </ul>
+    </div>
+
+    <div class="nav-links">
+        <a href="day-01-lesson.html">
+            <span class="en">← Back to Lesson</span>
+            <span class="ko">← 레슨으로 돌아가기</span>
+        </a>
+        <a href="day-01-quiz.html">
+            <span class="en">Take Quiz →</span>
+            <span class="ko">퀴즈 풀기 →</span>
+        </a>
+    </div>
+
+    <script>
+        let isKorean = false;
+        function toggleLang() {
+            isKorean = !isKorean;
+            document.querySelectorAll('.en').forEach(el => el.style.display = isKorean ? 'none' : '');
+            document.querySelectorAll('.ko').forEach(el => el.style.display = isKorean ? '' : 'none');
+            document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+        }
+        document.querySelectorAll('.ko').forEach(el => el.style.display = 'none');
+    </script>
+</body>
+</html>

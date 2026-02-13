@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Day 1: Quiz | 퀴즈</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #1a1a2e;
+            color: #eee;
+            line-height: 1.7;
+            padding: 20px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        .lang-toggle {
+            position: fixed;
+            top: 15px;
+            right: 15px;
+            background: #16213e;
+            border: 1px solid #0f3460;
+            border-radius: 20px;
+            padding: 8px 16px;
+            cursor: pointer;
+            color: #eee;
+            font-size: 14px;
+            z-index: 1000;
+            transition: background 0.3s;
+        }
+        .lang-toggle:hover { background: #0f3460; }
+        h1 { color: #e94560; margin: 20px 0 10px; font-size: 2em; }
+        h2 { color: #0f9b8e; margin: 30px 0 15px; }
+        h3 { color: #f39c12; margin: 20px 0 10px; }
+        p, li { margin-bottom: 10px; }
+        .intro { background: #16213e; padding: 20px; border-radius: 10px; margin: 20px 0; border-left: 4px solid #e94560; }
+        .question {
+            background: #16213e;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 4px solid #0f3460;
+        }
+        .question-num {
+            color: #e94560;
+            font-weight: bold;
+            font-size: 1.1em;
+            margin-bottom: 10px;
+        }
+        .question-type {
+            display: inline-block;
+            background: #0f3460;
+            color: #0f9b8e;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            margin-left: 10px;
+        }
+        .options { margin: 15px 0; padding-left: 20px; }
+        .options li { margin: 8px 0; list-style-type: upper-alpha; }
+        .code-block {
+            background: #0d1117;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            overflow-x: auto;
+            font-family: 'Monaco', 'Consolas', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            border: 1px solid #30363d;
+        }
+        .code-block code { color: #c9d1d9; }
+        .keyword { color: #ff7b72; }
+        .type { color: #79c0ff; }
+        .string { color: #a5d6ff; }
+        .comment { color: #8b949e; font-style: italic; }
+        .number { color: #ffa657; }
+        .module-name { color: #d2a8ff; }
+        .signal { color: #7ee787; }
+        .answer {
+            background: #0f3460;
+            border-radius: 8px;
+            margin: 15px 0;
+            overflow: hidden;
+        }
+        .answer-header {
+            background: #1a4a3a;
+            padding: 12px 15px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .answer-header:hover { background: #1a5a4a; }
+        .answer-content {
+            display: none;
+            padding: 15px;
+            background: #16213e;
+            border-top: 1px solid #30363d;
+        }
+        .answer.open .answer-content { display: block; }
+        .answer-header::after { content: '🔍 Reveal'; font-size: 0.9em; }
+        .answer.open .answer-header::after { content: '✓ Answer'; }
+        .correct { color: #7ee787; font-weight: bold; }
+        .nav-links { display: flex; justify-content: space-between; margin-top: 40px; padding-top: 20px; border-top: 1px solid #30363d; flex-wrap: wrap; gap: 10px; }
+        .nav-links a { color: #0f9b8e; text-decoration: none; padding: 10px 20px; background: #16213e; border-radius: 8px; }
+        .nav-links a:hover { background: #0f3460; }
+        .progress-bar { background: #0f3460; height: 6px; border-radius: 3px; margin: 20px 0; }
+        .progress-fill { background: linear-gradient(90deg, #e94560, #0f9b8e); height: 100%; border-radius: 3px; width: 2.5%; }
+        .score-tracker {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #16213e;
+            padding: 15px 20px;
+            border-radius: 10px;
+            border: 1px solid #0f3460;
+            z-index: 100;
+        }
+        .blank { border-bottom: 2px solid #0f9b8e; padding: 0 20px; color: #0f9b8e; }
+        @media (max-width: 600px) {
+            body { padding: 15px; }
+            h1 { font-size: 1.5em; }
+            .code-block { font-size: 12px; padding: 10px; }
+            .lang-toggle { top: 10px; right: 10px; padding: 6px 12px; font-size: 12px; }
+            .score-tracker { bottom: 10px; right: 10px; padding: 10px 15px; font-size: 0.9em; }
+        }
+        .ko { display: none; }
+        .fill-blank input {
+            background: #0d1117;
+            border: 1px solid #0f9b8e;
+            border-radius: 4px;
+            padding: 5px 10px;
+            color: #eee;
+            font-family: monospace;
+            width: 150px;
+        }
+        textarea.code-input {
+            width: 100%;
+            min-height: 150px;
+            background: #0d1117;
+            border: 1px solid #30363d;
+            border-radius: 8px;
+            padding: 15px;
+            color: #c9d1d9;
+            font-family: 'Monaco', 'Consolas', monospace;
+            font-size: 14px;
+            resize: vertical;
+        }
+    </style>
+</head>
+<body>
+    <button class="lang-toggle" onclick="toggleLang()">한국어</button>
+    
+    <div class="progress-bar"><div class="progress-fill"></div></div>
+    
+    <h1>
+        <span class="en">Day 1: Quiz 📝</span>
+        <span class="ko">1일차: 퀴즈 📝</span>
+    </h1>
+    
+    <div class="intro">
+        <p class="en">📋 <strong>18 Questions</strong> | Test your understanding of SystemVerilog module structure</p>
+        <p class="ko">📋 <strong>18문제</strong> | SystemVerilog 모듈 구조 이해도 테스트</p>
+        <p class="en">Click "Reveal" to check your answer after attempting each question.</p>
+        <p class="ko">각 문제를 풀어본 후 "Reveal"을 클릭하여 정답을 확인하세요.</p>
+    </div>
+
+    <!-- Question 1 -->
+    <div class="question">
+        <div class="question-num">
+            <span class="en">Question 1</span><span class="ko">문제 1</span>
+            <span class="question-type">Multiple Choice</span>
+        </div>
+        <p class="en">What is the fundamental building block in SystemVerilog that encapsulates hardware functionality?</p>
+        <p class="ko">하드웨어 기능을 캡슐화하는 SystemVerilog의 기본 구성 요소는 무엇입니까?</p>
+        <ol class="options">
+            <li class="en">function</li><li class="ko">function</li>
+            <li class="en">class</li><li class="ko">class</li>
+            <li class="en">module</li><li class="ko">module</li>
+            <li class="en">interface</li><li class="ko">interface</li>
+        </ol>
+        <div class="answer" onclick="this.classList.toggle('open')">
+            <div class="answer-header"></div>
+            <div class="answer-content">
+                <p class="correct">C. module</p>
+                <p class="en">A module is the fundamental building block that defines inputs, outputs, and hardware behavior.</p>
+                <p class="ko">모듈은 입력, 출력 및 하드웨어 동작을 정의하는 기본 구성 요소입니다.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Question 2 -->
+    <div class="question">
+        <div class="question-num">
+            <span class="en">Question 2</span><span class="ko">문제 2</span>
+            <span class="question-type">Multiple Choice</span>
+        </div>
+        <p class="en">Which port direction allows bidirectional data flow?</p>
+        <p class="ko">양방향 데이터 흐름을 허용하는 포트 방향은 무엇입니까?</p>
+        <ol class="options">
+            <li class="en">input</li><li class="ko">input</li>
+            <li class="en">output</li><li class="ko">output</li>
+            <li class="en">inout</li><li class="ko">inout</li>
+            <li class="en">bidir</li><li class="ko">bidir</li>
+        </ol>
+        <div class="answer" onclick="this.classList.toggle('open')">
+            <div class="answer-header"></div>
+            <div class="answer-content">
+                <p class="correct">C. inout</p>
+                <p class="en"><code>inout</code> is used for bidirectional signals like I2C data lines or shared buses.</p>
+                <p class="ko"><code>inout</code>은 I2C 데이터 라인이나 공유 버스와 같은 양방향 신호에 사용됩니다.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Question 3 -->
+    <div class="question">
+        <div class="question-num">
+            <span class="en">Question 3</span><span class="ko">문제 3</span>
+            <span class="question-type">Multiple Choice</span>
+        </div>
+        <p class="en">What is the recommended data type for most signals in SystemVerilog?</p>
+        <p class="ko">SystemVerilog에서 대부분의 신호에 권장되는 데이터 타입은 무엇입니까?</p>
+        <ol class="options">
+            <li class="en">wire</li><li class="ko">wire</li>
+            <li class="en">reg</li><li class="ko">reg</li>
+            <li class="en">logic</li><li class="ko">logic</li>
+            <li class="en">integer</li><li class="ko">integer</li>
+        </ol>
+        <div class="answer" onclick="this.classList.toggle('open')">
+            <div class="answer-header"></div>
+            <div class="answer-content">
+                <p class="correct">C. logic</p>
+                <p class="en"><code>logic</code> can be used with both continuous assignments and procedural blocks, making it the universal choice.</p>
+                <p class="ko"><code>logic</code>은 연속 할당과 절차적 블록 모두에서 사용할 수 있어 범용 선택입니다.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Question 4 -->
+    <div class="question">
+        <div class="question-num">
+            <span class="en">Question 4</span><span class="ko">문제 4</span>
+            <span class="question-type">Code Output</span>
+        </div>
+        <p class="en">What is the value of <code>sum</code> after this code executes?</p>
+        <p class="ko">이 코드가 실행된 후 <code>sum</code>의 값은 무엇입니까?</p>
+        <div class="code-block"><code><span class="type">logic</span> [<span class="number">3</span>:<span class="number">0</span>] <span class="signal">a</span> = <span class="number">4'b1010</span>;
+<span class="type">logic</span> [<span class="number">3</span>:<span class="number">0</span>] <span class="signal">b</span> = <span class="number">4'b0111</span>;
+<span class="type">logic</span> [<span class="number">4</span>:<span class="number">0</span>] <span class="signal">sum</span>;
+<span class="keyword">assign</span> <span class="signal">sum</span> = <span class="signal">a</span> + <span class="signal">b</span>;</code></div>
+        <ol class="options">
+            <li>5'b10001</li>
+            <li>5'b01111</li>
+            <li>5'b00001</li>
+            <li>4'b0001</li>
+        </ol>
+        <div class="answer" onclick="this.classList.toggle('open')">
+            <div class="answer-header"></div>
+            <div class="answer-content">
+                <p class="correct">A. 5'b10001</p>
+                <p class="en">1010 (10) + 0111 (7) = 10001 (17). The 5-bit sum captures the carry.</p>
+                <p class="ko">1010 (10) + 0111 (7) = 10001 (17). 5비트 sum이 캐리를 캡처합니다.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Question 5 -->
+    <div class="question">
+        <div class="question-num">
+            <span class="en">Question 5</span><span class="ko">문제 5</span>
+            <span class="question-type">Find the Bug</span>
+        </div>
+        <p class="en">What is wrong with this module declaration?</p>
+        <p class="ko">이 모듈 선언에서 무엇이 잘못되었습니까?</p>
+        <div class="code-block"><code><span class="keyword">module</span> <span class="module-name">adder</span> (
+    <span class="keyword">input</span>  <span class="type">logic</span> [<span class="number">7</span>:<span class="number">0</span>] <span class="signal">a</span>
+    <span class="keyword">input</span>  <span class="type">logic</span> [<span class="number">7</span>:<span class="number">0</span>] <span class="signal">b</span>,
+    <span class="keyword">output</span> <span class="type">logic</span> [<span class="number">8</span>:<span class="number">0</span>] <span class="signal">sum</span>
+);</code></div>
+        <div class="answer" onclick="this.classList.toggle('open')">
+            <div class="answer-header"></div>
+            <div class="answer-content">
+                <p class="correct en">Missing comma after the first port <code>a</code></p>
+                <p class="correct ko">첫 번째 포트 <code>a</code> 뒤에 쉼표 누락</p>
+                <p class="en">Each port declaration (except the last) must end with a comma.</p>
+                <p class="ko">각 포트 선언(마지막 제외)은 쉼표로 끝나야 합니다.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Question 6 -->
+    <div class="question">
+        <div class="question-num">
+            <span class="en">Question 6</span><span class="ko">문제 6</span>
+            <span class="question-type">Multiple Choice</span>
+        </div>
+        <p class="en">What is the difference between <code>parameter</code> and <code>localparam</code>?</p>
+        <p class="ko"><code>parameter</code>와 <code>localparam</code>의 차이점은 무엇입니까?</p>
+        <ol class="options">
+            <li class="en">parameter is for integers, localparam is for strings</li>
+            <li class="ko">parameter는 정수용, localparam은 문자열용</li>
+            <li class="en">parameter can be overridden during instantiation, localparam cannot</li>
+            <li class="ko">parameter는 인스턴스화 중 오버라이드 가능, localparam은 불가능</li>
+            <li class="en">localparam is synthesizable, parameter is not</li>
+            <li class="ko">localparam은 합성 가능, parameter는 불가능</li>
+            <li class="en">There is no difference</li>
+            <li class="ko">차이가 없음</li>
+        </ol>
+        <div class="answer" onclick="this.classList.toggle('open')">
+            <div class="answer-header"></div>
+            <div class="answer-content">
+                <p class="correct">B. parameter can be overridden during instantiation, localparam cannot</p>
+                <p class="en">Use <code>localparam</code> for derived constants that should not be changed externally.</p>
+                <p class="ko">외부에서 변경하면 안 되는 파생 상수에 <code>localparam</code>을 사용하세요.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Question 7 -->
+    <div class="question">
+        <div class="question-num">
+            <span class="en">Question 7</span><span class="ko">문제 7</span>
+            <span class="question-type">Fill in the Blank</span>
+        </div>
+        <p class="en">Complete the parameter override syntax:</p>
+        <p class="ko">파라미터 오버라이드 구문을 완성하세요:</p>
+        <div class="code-block"><code><span class="module-name">counter</span> <span class="blank">____</span>(.<span class="signal">WIDTH</span>(<span class="number">16</span>)) <span class="signal">u_cnt</span> (
+    .<span class="signal">clk</span>(<span class="signal">clk</span>),
+    .<span class="signal">rst_n</span>(<span class="signal">rst_n</span>)
+);</code></div>
+        <div class="answer" onclick="this.classList.toggle('open')">
+            <div class="answer-header"></div>
+            <div class="answer-content">
+                <p class="correct">#</p>
+                <p class="en">The <code>#</code> symbol precedes parameter overrides: <code>counter #(.WIDTH(16)) u_cnt (...)</code></p>
+                <p class="ko"><code>#</code> 기호는 파라미터 오버라이드 앞에 옵니다: <code>counter #(.WIDTH(16)) u_cnt (...)</code></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Question 8 -->
+    <div class="question">
+        <div class="question-num">
+            <span class="en">Question 8</span><span class="ko">문제 8</span>
+            <span class="question-type">Multiple Choice</span>
+        </div>
+        <p class="en">Which instantiation style is recommended for production code?</p>
+        <p class="ko">프로덕션 코드에 권장되는 인스턴스화 스타일은 무엇입니까?</p>
+        <ol class="options">
+            <li class="en">Positional: <code>adder u1 (a, b, sum);</code></li>
+            <li class="ko">위치 기반: <code>adder u1 (a, b, sum);</code></li>
+            <li class="en">Named: <code>adder u1 (.a(a), .b(b), .sum(sum));</code></li>
+            <li class="ko">이름 기반: <code>adder u1 (.a(a), .b(b), .sum(sum));</code></li>
+            <li class="en">Both are equally good</li>
+            <li class="ko">둘 다 동일하게 좋음</li>
+            <li class="en">Neither, use generate blocks</li>
+            <li class="ko">둘 다 아님, generate 블록 사용</li>
+        </ol>
+        <div class="answer" onclick="this.classList.toggle('open')">
+            <div class="answer-header"></div>
+            <div class="answer-content">
+                <p class="correct">B. Named</p>
+                <p class="en">Named port connections are self-documenting and less error-prone when ports are added or reordered.</p>
+                <p class="ko">이름 기반 포트 연결은 자체 문서화되고 포트가 추가되거나 재정렬될 때 오류가 적습니다.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Question 9 -->
+    <div class="question">
+        <div class="question-num">
+            <span class="en">Question 9</span><span class="ko">문제 9</span>
+            <span class="question-type">Code Output</span>
+        </div>
+        <p class="en">What does this MUX output when <code>sel = 2'b10</code>?</p>
+        <p class="ko"><code>sel = 2'b10</code>일 때 이 MUX의 출력은 무엇입니까?</p>
+        <div class="code-block"><code><span class="type">logic</span> [<span class="number">7</span>:<span class="number">0</span>] <span class="signal">in0</span> = <span class="number">8'hAA</span>;
+<span class="type">logic</span> [<span class="number">7</span>:<span class="number">0</span>] <span class="signal">in1</span> = <span class="number">8'hBB</span>;
+<span class="type">logic</span> [<span class="number">7</span>:<span class="number">0</span>] <span class="signal">in2</span> = <span class="number">8'hCC</span>;
+<span class="type">logic</span> [<span class="number">7</span>:<span class="number">0</span>] <span class="signal">in3</span> = <span class="number">8'hDD</span>;
+<span class="type">logic</span> [<span class="number">1</span>:<span class="number">0</span>] <span class="signal">sel</span> = <span class="number">2'b10</span>;
+
+<span class="keyword">assign</span> <span class="signal">out</span> = (<span class="signal">sel</span> == <span class="number">2'b00</span>) ? <span class="signal">in0</span> :
+              (<span class="signal">sel</span> == <span class="number">2'b01</span>) ? <span class="signal">in1</span> :
+              (<span class="signal">sel</span> == <span class="number">2'b10</span>) ? <span class="signal">in2</span> : <span class="signal">in3</span>;</code></div>
+        <ol class="options">
+            <li>8'hAA</li>
+            <li>8'hBB</li>
+            <li>8'hCC</li>
+            <li>8'hDD</li>
+        </ol>
+        <div class="answer" onclick="this.classList.toggle('open')">
+            <div class="answer-header"></div>
+            <div class="answer-content">
+                <p class="correct">C. 8'hCC</p>
+                <p class="en">sel = 2'b10 matches the third condition, so out = in2 = 8'hCC</p>
+                <p class="ko">sel = 2'b10은 세 번째 조건과 일치하므로 out = in2 = 8'hCC</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Question 10 -->
+    <div class="question">
+        <div class="question-num">
+            <span class="en">Question 10</span><span class="ko">문제 10</span>
+            <span class="question-type">Find the Bug</span>
+        </div>
+        <p class="en">What problem does this code have?</p>
+        <p class="ko">이 코드의 문제점은 무엇입니까?</p>
+        <div class="code-block"><code><span class="keyword">always_comb</span> <span class="keyword">begin</span>
+    <span class="keyword">case</span> (<span class="signal">sel</span>)
+        <span class="number">2'b00</span>: <span class="signal">out</span> = <span class="signal">a</span>;
+        <span class="number">2'b01</span>: <span class="signal">out</span> = <span class="signal">b</span>;
+        <span class="number">2'b10</span>: <span class="signal">out</span> = <span class="signal">c</span>;
+    <span class="keyword">endcase</span>
+<span class="keyword">end</span></code></div>
+        <ol class="options">
+            <li class="en">Syntax error in case statement</li>
+            <li class="ko">case 문의 문법 오류</li>
+            <li class="en">Missing case for 2'b11 - creates a latch</li>
+            <li class="ko">2'b11 케이스 누락 - 래치 생성</li>
+            <li class="en">Cannot use always_comb with case</li>
+            <li class="ko">always_comb와 case를 함께 사용할 수 없음</li>
+            <li class="en">No problem, this is correct</li>
+            <li class="ko">문제 없음, 정확함</li>
+        </ol>
+        <div class="answer" onclick="this.classList.toggle('open')">
+            <div class="answer-header"></div>
+            <div class="answer-content">
+                <p class="correct">B. Missing case for 2'b11 - creates a latch</p>
+                <p class="en">Incomplete case statements in combinational logic infer latches, which is usually unintended. Add a <code>default</code> case.</p>
+                <p class="ko">조합 로직에서 불완전한 case 문은 래치를 유추하며, 이는 대개 의도하지 않은 것입니다. <code>default</code> 케이스를 추가하세요.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Question 11 -->
+    <div class="question">
+        <div class="question-num">
+            <span class="en">Question 11</span><span class="ko">문제 11</span>
+            <span class="question-type">Multiple Choice</span>
+        </div>
+        <p class="en">What is the purpose of <code>genvar</code> in SystemVerilog?</p>
+        <p class="ko">SystemVerilog에서 <code>genvar</code>의 목적은 무엇입니까?</p>
+        <ol class="options">
+            <li class="en">To declare a general-purpose variable</li>
+            <li class="ko">범용 변수 선언</li>
+            <li class="en">To declare a loop variable for generate blocks</li>
+            <li class="ko">generate 블록의 루프 변수 선언</li>
+            <li class="en">To generate random test values</li>
+            <li class="ko">랜덤 테스트 값 생성</li>
+            <li class="en">To declare generic module parameters</li>
+            <li class="ko">제네릭 모듈 파라미터 선언</li>
+        </ol>
+        <div class="answer" onclick="this.classList.toggle('open')">
+            <div class="answer-header"></div>
+            <div class="answer-content">
+                <p class="correct">B. To declare a loop variable for generate blocks</p>
+                <p class="en"><code>genvar</code> is used as the loop index in <code>generate for</code> loops to create multiple module instances.</p>
+                <p class="ko"><code>genvar</code>는 <code>generate for</code> 루프에서 여러 모듈 인스턴스를 생성하기 위한 루프 인덱스로 사용됩니다.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Question 12 -->
+    <div class="question">
+        <div class="question-num">
+            <span class="en">Question 12</span><span class="ko">문제 12</span>
+            <span class="question-type">Fill in the Blank</span>
+        </div>
+        <p class="en">Complete the code to declare an 8-bit output port:</p>
+        <p class="ko">8비트 출력 포트를 선언하는 코드를 완성하세요:</p>
+        <div class="code-block"><code><span class="keyword">module</span> <span class="module-name">example</span> (
+    <span class="keyword">input</span>  <span class="type">logic</span> [<span class="number">7</span>:<span class="number">0</span>] <span class="signal">data_in</span>,
+    <span class="blank">______</span> <span class="type">logic</span> [<span class="number">7</span>:<span class="number">0</span>] <span class="signal">data_out</span>
+);</code></div>
+        <div class="answer" onclick="this.classList.toggle('open')">
+            <div class="answer-header"></div>
+            <div class="answer-content">
+                <p class="correct">output</p>
+                <p class="en">The <code>output</code> keyword declares a port that sends data out of the module.</p>
+                <p class="ko"><code>output</code> 키워드는 모듈에서 데이터를 내보내는 포트를 선언합니다.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Question 13 -->
+    <div class="question">
+        <div class="question-num">
+            <span class="en">Question 13</span><span class="ko">문제 13</span>
+            <span class="question-type">Code Output</span>
+        </div>
+        <p class="en">What width is the <code>data</code> port in this module?</p>
+        <p class="ko">이 모듈에서 <code>data</code> 포트의 폭은 얼마입니까?</p>
+        <div class="code-block"><code><span class="keyword">module</span> <span class="module-name">test</span> #(
+    <span class="keyword">parameter</span> <span class="signal">WIDTH</span> = <span class="number">16</span>
+)(
+    <span class="keyword">input</span> <span class="type">logic</span> [<span class="signal">WIDTH</span>-<span class="number">1</span>:<span class="number">0</span>] <span class="signal">data</span>
+);</code></div>
+        <ol class="options">
+            <li class="en">15 bits</li><li class="ko">15비트</li>
+            <li class="en">16 bits</li><li class="ko">16비트</li>
+            <li class="en">17 bits</li><li class="ko">17비트</li>
+            <li class="en">Depends on instantiation</li><li class="ko">인스턴스화에 따라 다름</li>
+        </ol>
+        <div class="answer" onclick="this.classList.toggle('open')">
+            <div class="answer-header"></div>
+            <div class="answer-content">
+                <p class="correct">B. 16 bits (with default parameter)</p>
+                <p class="en">[WIDTH-1:0] = [15:0] = 16 bits. Note: D is also partially correct since WIDTH can be overridden.</p>
+                <p class="ko">[WIDTH-1:0] = [15:0] = 16비트. 참고: WIDTH가 오버라이드될 수 있으므로 D도 부분적으로 맞습니다.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Question 14 -->
+    <div class="question">
+        <div class="question-num">
+            <span class="en">Question 14</span><span class="ko">문제 14</span>
+            <span class="question-type">Multiple Choice</span>
+        </div>
+        <p class="en">What does the <code>_n</code> suffix typically indicate in signal names like <code>rst_n</code>?</p>
+        <p class="ko"><code>rst_n</code>과 같은 신호 이름에서 <code>_n</code> 접미사는 일반적으로 무엇을 나타냅니까?</p>
+        <ol class="options">
+            <li class="en">The signal is N bits wide</li>
+            <li class="ko">신호가 N비트 폭</li>
+            <li class="en">The signal is a network type</li>
+            <li class="ko">신호가 네트워크 타입</li>
+            <li class="en">The signal is active-low (negative logic)</li>
+            <li class="ko">신호가 액티브-로우 (네거티브 로직)</li>
+            <li class="en">The signal is the N-th version</li>
+            <li class="ko">신호가 N번째 버전</li>
+        </ol>
+        <div class="answer" onclick="this.classList.toggle('open')">
+            <div class="answer-header"></div>
+            <div class="answer-content">
+                <p class="correct">C. The signal is active-low (negative logic)</p>
+                <p class="en"><code>rst_n</code> means "reset, active-low" - the reset is triggered when the signal is 0, not 1.</p>
+                <p class="ko"><code>rst_n</code>은 "리셋, 액티브-로우"를 의미합니다 - 신호가 1이 아닌 0일 때 리셋이 트리거됩니다.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Question 15 -->
+    <div class="question">
+        <div class="question-num">
+            <span class="en">Question 15</span><span class="ko">문제 15</span>
+            <span class="question-type">Find the Bug</span>
+        </div>
+        <p class="en">What is the problem with this instantiation?</p>
+        <p class="ko">이 인스턴스화의 문제점은 무엇입니까?</p>
+        <div class="code-block"><code><span class="type">logic</span> [<span class="number">15</span>:<span class="number">0</span>] <span class="signal">data_wide</span>;
+<span class="type">logic</span> [<span class="number">7</span>:<span class="number">0</span>] <span class="signal">result</span>;
+
+<span class="comment">// Module 'processor' has: input logic [7:0] data_in</span>
+<span class="module-name">processor</span> <span class="signal">u_proc</span> (
+    .<span class="signal">data_in</span>(<span class="signal">data_wide</span>),
+    .<span class="signal">data_out</span>(<span class="signal">result</span>)
+);</code></div>
+        <div class="answer" onclick="this.classList.toggle('open')">
+            <div class="answer-header"></div>
+            <div class="answer-content">
+                <p class="correct en">Port width mismatch: 16-bit signal connected to 8-bit port</p>
+                <p class="correct ko">포트 폭 불일치: 16비트 신호가 8비트 포트에 연결됨</p>
+                <p class="en">Only the lower 8 bits of <code>data_wide</code> will be used. Fix: <code>.data_in(data_wide[7:0])</code> or use proper width.</p>
+                <p class="ko"><code>data_wide</code>의 하위 8비트만 사용됩니다. 수정: <code>.data_in(data_wide[7:0])</code> 또는 적절한 폭 사용.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Question 16 -->
+    <div class="question">
+        <div class="question-num">
+            <span class="en">Question 16</span><span class="ko">문제 16</span>
+            <span class="question-type">Multiple Choice</span>
+        </div>
+        <p class="en">Which statement about <code>reg</code> in Verilog is TRUE?</p>
+        <p class="ko">Verilog의 <code>reg</code>에 대한 설명 중 참인 것은?</p>
+        <ol class="options">
+            <li class="en">reg always synthesizes to a flip-flop</li>
+            <li class="ko">reg는 항상 플립플롭으로 합성됨</li>
+            <li class="en">reg can only be used in sequential logic</li>
+            <li class="ko">reg는 순차 로직에서만 사용 가능</li>
+            <li class="en">reg can represent both combinational and sequential logic</li>
+            <li class="ko">reg는 조합 로직과 순차 로직 모두를 나타낼 수 있음</li>
+            <li class="en">reg is only for testbenches</li>
+            <li class="ko">reg는 테스트벤치 전용</li>
+        </ol>
+        <div class="answer" onclick="this.classList.toggle('open')">
+            <div class="answer-header"></div>
+            <div class="answer-content">
+                <p class="correct">C. reg can represent both combinational and sequential logic</p>
+                <p class="en">Despite its misleading name, <code>reg</code> does NOT mean register! It's just a variable type that can be used in procedural blocks.</p>
+                <p class="ko">이름과 달리, <code>reg</code>는 레지스터를 의미하지 않습니다! 절차적 블록에서 사용할 수 있는 변수 타입일 뿐입니다.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Question 17 -->
+    <div class="question">
+        <div class="question-num">
+            <span class="en">Question 17</span><span class="ko">문제 17</span>
+            <span class="question-type">Fill in the Blank</span>
+        </div>
+        <p class="en">Complete the generate block to create 8 instances:</p>
+        <p class="ko">8개의 인스턴스를 생성하는 generate 블록을 완성하세요:</p>
+        <div class="code-block"><code><span class="blank">______</span> <span class="signal">i</span>;
+<span class="keyword">generate</span>
+    <span class="keyword">for</span> (<span class="signal">i</span> = <span class="number">0</span>; <span class="signal">i</span> < <span class="number">8</span>; <span class="signal">i</span>++) <span class="keyword">begin</span> : <span class="module-name">gen_inst</span>
+        <span class="module-name">my_module</span> <span class="signal">u_mod</span> (...);
+    <span class="keyword">end</span>
+<span class="keyword">endgenerate</span></code></div>
+        <div class="answer" onclick="this.classList.toggle('open')">
+            <div class="answer-header"></div>
+            <div class="answer-content">
+                <p class="correct">genvar</p>
+                <p class="en"><code>genvar</code> declares a variable used as the loop index in generate for-loops.</p>
+                <p class="ko"><code>genvar</code>는 generate for-루프에서 루프 인덱스로 사용되는 변수를 선언합니다.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Question 18 - Design Question -->
+    <div class="question">
+        <div class="question-num">
+            <span class="en">Question 18</span><span class="ko">문제 18</span>
+            <span class="question-type">Design</span>
+        </div>
+        <p class="en">Write a parameterized 2:1 MUX module with:</p>
+        <p class="ko">다음을 포함하는 파라미터화된 2:1 MUX 모듈을 작성하세요:</p>
+        <ul>
+            <li class="en">Parameter <code>WIDTH</code> (default 8)</li>
+            <li class="ko">파라미터 <code>WIDTH</code> (기본값 8)</li>
+            <li class="en">Two WIDTH-bit inputs: <code>a</code> and <code>b</code></li>
+            <li class="ko">두 개의 WIDTH-bit 입력: <code>a</code>와 <code>b</code></li>
+            <li class="en">One select input: <code>sel</code></li>
+            <li class="ko">하나의 선택 입력: <code>sel</code></li>
+            <li class="en">One WIDTH-bit output: <code>y</code></li>
+            <li class="ko">하나의 WIDTH-bit 출력: <code>y</code></li>
+            <li class="en">When sel=0, y=a; when sel=1, y=b</li>
+            <li class="ko">sel=0일 때 y=a; sel=1일 때 y=b</li>
+        </ul>
+        <textarea class="code-input" placeholder="Write your module here..."></textarea>
+        <div class="answer" onclick="this.classList.toggle('open')">
+            <div class="answer-header"></div>
+            <div class="answer-content">
+                <div class="code-block"><code><span class="keyword">module</span> <span class="module-name">mux2</span> #(
+    <span class="keyword">parameter</span> <span class="type">int</span> <span class="signal">WIDTH</span> = <span class="number">8</span>
+)(
+    <span class="keyword">input</span>  <span class="type">logic</span> [<span class="signal">WIDTH</span>-<span class="number">1</span>:<span class="number">0</span>] <span class="signal">a</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span> [<span class="signal">WIDTH</span>-<span class="number">1</span>:<span class="number">0</span>] <span class="signal">b</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span>              <span class="signal">sel</span>,
+    <span class="keyword">output</span> <span class="type">logic</span> [<span class="signal">WIDTH</span>-<span class="number">1</span>:<span class="number">0</span>] <span class="signal">y</span>
+);
+    <span class="keyword">assign</span> <span class="signal">y</span> = <span class="signal">sel</span> ? <span class="signal">b</span> : <span class="signal">a</span>;
+<span class="keyword">endmodule</span></code></div>
+                <p class="en">Alternative using always_comb:</p>
+                <p class="ko">always_comb 사용 대안:</p>
+                <div class="code-block"><code><span class="keyword">always_comb</span> <span class="keyword">begin</span>
+    <span class="signal">y</span> = <span class="signal">sel</span> ? <span class="signal">b</span> : <span class="signal">a</span>;
+<span class="keyword">end</span></code></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="intro" style="margin-top: 40px;">
+        <h3 class="en">📊 Score Yourself</h3>
+        <h3 class="ko">📊 점수 확인</h3>
+        <ul>
+            <li class="en"><strong>16-18 correct:</strong> Excellent! You've mastered Day 1 concepts 🎉</li>
+            <li class="ko"><strong>16-18개 정답:</strong> 훌륭합니다! 1일차 개념을 마스터했습니다 🎉</li>
+            <li class="en"><strong>12-15 correct:</strong> Good understanding, review the missed topics</li>
+            <li class="ko"><strong>12-15개 정답:</strong> 이해가 좋습니다, 놓친 주제를 복습하세요</li>
+            <li class="en"><strong>8-11 correct:</strong> Review the lesson before moving on</li>
+            <li class="ko"><strong>8-11개 정답:</strong> 진행하기 전에 레슨을 복습하세요</li>
+            <li class="en"><strong>&lt;8 correct:</strong> Re-read the lesson and redo the practice exercises</li>
+            <li class="ko"><strong>8개 미만:</strong> 레슨을 다시 읽고 연습 문제를 다시 풀어보세요</li>
+        </ul>
+    </div>
+
+    <div class="nav-links">
+        <a href="day-01-lesson.html">
+            <span class="en">← Back to Lesson</span>
+            <span class="ko">← 레슨으로 돌아가기</span>
+        </a>
+        <a href="day-01-practice.html">
+            <span class="en">← Practice Exercises</span>
+            <span class="ko">← 연습 문제</span>
+        </a>
+    </div>
+
+    <script>
+        let isKorean = false;
+        function toggleLang() {
+            isKorean = !isKorean;
+            document.querySelectorAll('.en').forEach(el => el.style.display = isKorean ? 'none' : '');
+            document.querySelectorAll('.ko').forEach(el => el.style.display = isKorean ? '' : 'none');
+            document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+        }
+        document.querySelectorAll('.ko').forEach(el => el.style.display = 'none');
+    </script>
+</body>
+</html>
