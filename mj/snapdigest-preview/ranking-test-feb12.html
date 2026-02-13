@@ -285,6 +285,41 @@
             </div>
         </div>
 
+        <!-- Today's Briefing Feature -->
+        <div class="section">
+            <h2>
+                <span class="en">📰 Today's Briefing Page</span>
+                <span class="ko">📰 오늘의 브리핑 페이지</span>
+            </h2>
+            <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 20px; align-items: start;">
+                <div class="screenshot-item">
+                    <img src="actual-breakingnews.png" alt="Today's Briefing" style="max-width: 200px;">
+                    <p class="en">Today's Briefing (Empty State)</p>
+                    <p class="ko">오늘의 브리핑 (빈 상태)</p>
+                </div>
+                <div>
+                    <h3 style="color: #4a6741; margin-bottom: 12px;">
+                        <span class="en">Features:</span>
+                        <span class="ko">기능:</span>
+                    </h3>
+                    <ul style="margin-left: 20px; line-height: 2; color: #6b7c5f;">
+                        <li class="en">🎯 Shows <strong>top 5 ranked articles</strong> from Today's Digest</li>
+                        <li class="ko">🎯 오늘의 다이제스트에서 <strong>상위 5개 기사</strong> 표시</li>
+                        <li class="en">🔊 <strong>Play All</strong> button - listen to all summaries</li>
+                        <li class="ko">🔊 <strong>모두 재생</strong> 버튼 - 모든 요약 듣기</li>
+                        <li class="en">🎧 Each article has <strong>individual audio</strong> playback</li>
+                        <li class="ko">🎧 각 기사에 <strong>개별 오디오</strong> 재생</li>
+                        <li class="en">📅 Magazine-style daily summary layout</li>
+                        <li class="ko">📅 매거진 스타일 일일 요약 레이아웃</li>
+                    </ul>
+                    <p style="margin-top: 16px; padding: 12px; background: #fff3cd; border-radius: 8px; color: #856404;">
+                        <span class="en">⚠️ <strong>Audio Status:</strong> OpenAI TTS is configured. Each article summary will be converted to audio using OpenAI's voice synthesis (English: alloy, Korean: nova, Spanish: shimmer).</span>
+                        <span class="ko">⚠️ <strong>오디오 상태:</strong> OpenAI TTS 설정됨. 각 기사 요약이 OpenAI 음성 합성으로 변환됩니다 (영어: alloy, 한국어: nova, 스페인어: shimmer).</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+
         <!-- Next Steps -->
         <div class="section">
             <h2>
@@ -294,6 +329,8 @@
             <ol style="margin-left: 20px; line-height: 2; color: #4a6741;">
                 <li class="en">✅ Ranking system implemented - filters gaming/product news</li>
                 <li class="ko">✅ 랭킹 시스템 구현 - 게임/제품 뉴스 필터링</li>
+                <li class="en">✅ Audio TTS configured (OpenAI API)</li>
+                <li class="ko">✅ 오디오 TTS 설정됨 (OpenAI API)</li>
                 <li class="en">⏳ Firebase setup - Push notifications</li>
                 <li class="ko">⏳ Firebase 설정 - 푸시 알림</li>
                 <li class="en">⏳ App Store Connect - TestFlight prep</li>
