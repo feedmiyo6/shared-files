@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SnapDigest - Ranking System Test | Feb 12, 2026</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #f5f7e8 0%, #e8efe0 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container { max-width: 1200px; margin: 0 auto; }
+        h1 {
+            color: #4a6741;
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            text-align: center;
+            color: #6b7c5f;
+            margin-bottom: 30px;
+        }
+        .lang-toggle {
+            position: fixed;
+            top: 15px;
+            right: 15px;
+            background: #4a6741;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            z-index: 100;
+        }
+        .section {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 20px rgba(74, 103, 65, 0.1);
+        }
+        .section h2 {
+            color: #4a6741;
+            border-bottom: 2px solid #e8efe0;
+            padding-bottom: 12px;
+            margin-bottom: 16px;
+        }
+        .screenshots {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+        .screenshot-item {
+            text-align: center;
+        }
+        .screenshot-item img {
+            width: 100%;
+            max-width: 300px;
+            border-radius: 24px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+        }
+        .screenshot-item p {
+            margin-top: 12px;
+            color: #6b7c5f;
+            font-weight: 500;
+        }
+        .ranking-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .ranking-table th, .ranking-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #e8efe0;
+        }
+        .ranking-table th {
+            background: #f5f7e8;
+            color: #4a6741;
+        }
+        .score-good { color: #2d6a4f; font-weight: bold; }
+        .score-mid { color: #b08968; }
+        .score-bad { color: #c1121f; }
+        .filtered { background: #ffe8e8; text-decoration: line-through; opacity: 0.7; }
+        .kept { background: #e8ffe8; }
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .badge-trusted { background: #d4edda; color: #155724; }
+        .badge-promo { background: #f8d7da; color: #721c24; }
+        .badge-gaming { background: #fff3cd; color: #856404; }
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        @media (max-width: 768px) {
+            .comparison { grid-template-columns: 1fr; }
+            h1 { font-size: 1.5rem; }
+        }
+        .ko { display: none; }
+        body.korean .en { display: none; }
+        body.korean .ko { display: block; }
+    </style>
+</head>
+<body>
+    <button class="lang-toggle" onclick="toggleLang()">한국어</button>
+    
+    <div class="container">
+        <h1>
+            <span class="en">🌳 SnapDigest - Article Ranking Test</span>
+            <span class="ko">🌳 SnapDigest - 기사 랭킹 테스트</span>
+        </h1>
+        <p class="subtitle">
+            <span class="en">February 12, 2026 - Testing smart news filtering</span>
+            <span class="ko">2026년 2월 12일 - 스마트 뉴스 필터링 테스트</span>
+        </p>
+
+        <!-- Before/After Comparison -->
+        <div class="section">
+            <h2>
+                <span class="en">📊 Before vs After Ranking</span>
+                <span class="ko">📊 랭킹 전/후 비교</span>
+            </h2>
+            <div class="comparison">
+                <div class="screenshot-item">
+                    <img src="actual-storymode.png" alt="Before - Gaming content">
+                    <p class="en">❌ BEFORE: Gaming content (Mario Tennis)</p>
+                    <p class="ko">❌ 이전: 게임 콘텐츠 (마리오 테니스)</p>
+                </div>
+                <div class="screenshot-item">
+                    <img src="final-browse.png" alt="After - Quality news">
+                    <p class="en">✅ AFTER: Quality news (Bloomberg, BBC)</p>
+                    <p class="ko">✅ 이후: 양질의 뉴스 (Bloomberg, BBC)</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ranking Algorithm Results -->
+        <div class="section">
+            <h2>
+                <span class="en">🎯 How the Ranking Works</span>
+                <span class="ko">🎯 랭킹 작동 방식</span>
+            </h2>
+            <table class="ranking-table">
+                <thead>
+                    <tr>
+                        <th class="en">Source</th>
+                        <th class="ko">출처</th>
+                        <th class="en">Article</th>
+                        <th class="ko">기사</th>
+                        <th class="en">Score</th>
+                        <th class="ko">점수</th>
+                        <th class="en">Status</th>
+                        <th class="ko">상태</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="kept">
+                        <td><span class="badge badge-trusted">Bloomberg</span></td>
+                        <td>Bitcoin Crash Hits El Salvador Bonds</td>
+                        <td class="score-good">0.75</td>
+                        <td>✅ <span class="en">Kept</span><span class="ko">유지</span></td>
+                    </tr>
+                    <tr class="kept">
+                        <td><span class="badge badge-trusted">BBC</span></td>
+                        <td>Sephora: Beauty retailer opens first...</td>
+                        <td class="score-good">0.70</td>
+                        <td>✅ <span class="en">Kept</span><span class="ko">유지</span></td>
+                    </tr>
+                    <tr class="kept">
+                        <td>The Hindu</td>
+                        <td>Unlearn, relearn to stay relevant...</td>
+                        <td class="score-mid">0.55</td>
+                        <td>✅ <span class="en">Kept</span><span class="ko">유지</span></td>
+                    </tr>
+                    <tr class="kept">
+                        <td><span class="badge badge-trusted">CNBC</span></td>
+                        <td>Spirit Airlines sells planes, calls back...</td>
+                        <td class="score-good">0.70</td>
+                        <td>✅ <span class="en">Kept</span><span class="ko">유지</span></td>
+                    </tr>
+                    <tr class="filtered">
+                        <td><span class="badge badge-gaming">Games Press</span></td>
+                        <td>RHELL: WARPED WORLDS AND TROUBLE...</td>
+                        <td class="score-bad">0.20</td>
+                        <td>❌ <span class="en">Filtered</span><span class="ko">필터링</span></td>
+                    </tr>
+                    <tr class="filtered">
+                        <td><span class="badge badge-gaming">GamesHub</span></td>
+                        <td>Mario Tennis Fever Review: Switch 2's...</td>
+                        <td class="score-bad">0.15</td>
+                        <td>❌ <span class="en">Filtered</span><span class="ko">필터링</span></td>
+                    </tr>
+                    <tr class="filtered">
+                        <td><span class="badge badge-promo">Android Headlines</span></td>
+                        <td>Samsung's Penta Tandem Boosts OLED...</td>
+                        <td class="score-bad">0.25</td>
+                        <td>❌ <span class="en">Filtered</span><span class="ko">필터링</span></td>
+                    </tr>
+                    <tr class="filtered">
+                        <td><span class="badge badge-promo">9to5Google</span></td>
+                        <td>Pixel 10a leaks with physical SIM...</td>
+                        <td class="score-bad">0.20</td>
+                        <td>❌ <span class="en">Filtered</span><span class="ko">필터링</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Scoring Criteria -->
+        <div class="section">
+            <h2>
+                <span class="en">📋 Scoring Criteria</span>
+                <span class="ko">📋 점수 기준</span>
+            </h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px;">
+                <div style="background: #e8ffe8; padding: 16px; border-radius: 12px;">
+                    <h3 style="color: #155724; margin-bottom: 8px;">
+                        <span class="en">✅ Boosts Score (+)</span>
+                        <span class="ko">✅ 점수 상승 (+)</span>
+                    </h3>
+                    <ul style="color: #155724; margin-left: 20px;">
+                        <li class="en">Trusted source (Reuters, BBC, Bloomberg): +0.2</li>
+                        <li class="ko">신뢰할 수 있는 출처 (Reuters, BBC, Bloomberg): +0.2</li>
+                        <li class="en">Important keywords (president, breaking): +0.25</li>
+                        <li class="ko">중요 키워드 (대통령, 속보): +0.25</li>
+                        <li class="en">Recent (< 6 hours): +0.1</li>
+                        <li class="ko">최신 (6시간 이내): +0.1</li>
+                    </ul>
+                </div>
+                <div style="background: #ffe8e8; padding: 16px; border-radius: 12px;">
+                    <h3 style="color: #721c24; margin-bottom: 8px;">
+                        <span class="en">❌ Reduces Score (-)</span>
+                        <span class="ko">❌ 점수 감소 (-)</span>
+                    </h3>
+                    <ul style="color: #721c24; margin-left: 20px;">
+                        <li class="en">Promotional source (9to5Google, MacRumors): -0.25</li>
+                        <li class="ko">홍보성 출처 (9to5Google, MacRumors): -0.25</li>
+                        <li class="en">Gaming content: -0.3</li>
+                        <li class="ko">게임 콘텐츠: -0.3</li>
+                        <li class="en">Product announcement: -0.2</li>
+                        <li class="ko">제품 발표: -0.2</li>
+                        <li class="en">Promo keywords (review, hands-on): -0.3</li>
+                        <li class="ko">홍보 키워드 (리뷰, 핸즈온): -0.3</li>
+                    </ul>
+                </div>
+            </div>
+            <p style="margin-top: 16px; color: #6b7c5f;">
+                <span class="en">📌 Articles with score < 0.4 are filtered out. Only top 7 shown in Today's Briefing.</span>
+                <span class="ko">📌 0.4점 미만 기사는 필터링. 오늘의 브리핑에는 상위 7개만 표시.</span>
+            </p>
+        </div>
+
+        <!-- App Screenshots -->
+        <div class="section">
+            <h2>
+                <span class="en">📱 App Screenshots</span>
+                <span class="ko">📱 앱 스크린샷</span>
+            </h2>
+            <div class="screenshots">
+                <div class="screenshot-item">
+                    <img src="final-browse.png" alt="Browse Screen">
+                    <p class="en">Browse - Ranked Articles</p>
+                    <p class="ko">탐색 - 랭킹된 기사</p>
+                </div>
+                <div class="screenshot-item">
+                    <img src="actual-settings.png" alt="Settings Screen">
+                    <p class="en">Settings</p>
+                    <p class="ko">설정</p>
+                </div>
+                <div class="screenshot-item">
+                    <img src="actual-storymode.png" alt="Story Mode">
+                    <p class="en">Story Mode (Like/Skip)</p>
+                    <p class="ko">스토리 모드 (좋아요/스킵)</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Next Steps -->
+        <div class="section">
+            <h2>
+                <span class="en">🚀 Next Steps</span>
+                <span class="ko">🚀 다음 단계</span>
+            </h2>
+            <ol style="margin-left: 20px; line-height: 2; color: #4a6741;">
+                <li class="en">✅ Ranking system implemented - filters gaming/product news</li>
+                <li class="ko">✅ 랭킹 시스템 구현 - 게임/제품 뉴스 필터링</li>
+                <li class="en">⏳ Firebase setup - Push notifications</li>
+                <li class="ko">⏳ Firebase 설정 - 푸시 알림</li>
+                <li class="en">⏳ App Store Connect - TestFlight prep</li>
+                <li class="ko">⏳ App Store Connect - TestFlight 준비</li>
+                <li class="en">⏳ AdMob - After initial launch</li>
+                <li class="ko">⏳ AdMob - 초기 출시 후</li>
+            </ol>
+        </div>
+
+        <p style="text-align: center; color: #6b7c5f; margin-top: 20px;">
+            <span class="en">Generated by Totoro 🌳 | Feb 12, 2026 10:05 PM MST</span>
+            <span class="ko">Totoro 생성 🌳 | 2026년 2월 12일 오후 10:05 MST</span>
+        </p>
+    </div>
+
+    <script>
+        function toggleLang() {
+            document.body.classList.toggle('korean');
+            const btn = document.querySelector('.lang-toggle');
+            btn.textContent = document.body.classList.contains('korean') ? 'English' : '한국어';
+        }
+    </script>
+</body>
+</html>
