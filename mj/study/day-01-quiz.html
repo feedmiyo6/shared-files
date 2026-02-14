@@ -693,30 +693,17 @@
     </div>
 
     <script>
-    <script>
         let isKorean = false;
         function toggleLang() {
             isKorean = !isKorean;
             document.querySelectorAll('.en').forEach(el => {
-                if (isKorean) {
-                    el.style.setProperty('display', 'none', 'important');
-                } else {
-                    el.style.removeProperty('display');
-                }
+                el.style.setProperty('display', isKorean ? 'none' : 'revert', 'important');
             });
             document.querySelectorAll('.ko').forEach(el => {
-                if (isKorean) {
-                    el.style.setProperty('display', 'initial', 'important');
-                } else {
-                    el.style.setProperty('display', 'none', 'important');
-                }
+                el.style.setProperty('display', isKorean ? 'revert' : 'none', 'important');
             });
             document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
         }
-        // Initialize
-        document.querySelectorAll('.ko').forEach(el => {
-            el.style.setProperty('display', 'none', 'important');
-        });
     </script>
 </body>
 </html>
