@@ -1,0 +1,982 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>산후조리원 Business Proposal | Postpartum Care Center</title>
+    <style>
+        :root {
+            --bg: #0d1117;
+            --card: #161b22;
+            --border: #30363d;
+            --text: #e6edf3;
+            --text-muted: #8b949e;
+            --accent: #58a6ff;
+            --accent2: #f78166;
+            --success: #3fb950;
+            --warning: #d29922;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        .lang-toggle {
+            position: fixed;
+            top: 15px;
+            right: 15px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 8px 12px;
+            cursor: pointer;
+            color: var(--accent);
+            font-weight: 600;
+            z-index: 1000;
+        }
+        .lang-toggle:hover { background: var(--border); }
+        .ko { display: none; }
+        body.korean .en { display: none; }
+        body.korean .ko { display: block; }
+        body.korean .ko-inline { display: inline; }
+        body.korean .en-inline { display: none; }
+        .en-inline { display: inline; }
+        .ko-inline { display: none; }
+        
+        header {
+            text-align: center;
+            padding: 40px 0;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 30px;
+        }
+        h1 { font-size: 2rem; margin-bottom: 10px; }
+        .subtitle { color: var(--text-muted); font-size: 1.1rem; }
+        .date { color: var(--accent); margin-top: 10px; font-size: 0.9rem; }
+        
+        section {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 20px;
+        }
+        h2 {
+            color: var(--accent);
+            font-size: 1.4rem;
+            margin-bottom: 16px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border);
+        }
+        h3 {
+            color: var(--accent2);
+            font-size: 1.1rem;
+            margin: 20px 0 12px 0;
+        }
+        p { margin-bottom: 12px; }
+        ul, ol { margin-left: 20px; margin-bottom: 12px; }
+        li { margin-bottom: 6px; }
+        
+        .highlight-box {
+            background: rgba(88, 166, 255, 0.1);
+            border-left: 4px solid var(--accent);
+            padding: 16px;
+            margin: 16px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .warning-box {
+            background: rgba(210, 153, 34, 0.1);
+            border-left: 4px solid var(--warning);
+            padding: 16px;
+            margin: 16px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .success-box {
+            background: rgba(63, 185, 80, 0.1);
+            border-left: 4px solid var(--success);
+            padding: 16px;
+            margin: 16px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 16px 0;
+            font-size: 0.95rem;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+        th {
+            background: var(--bg);
+            color: var(--accent);
+            font-weight: 600;
+        }
+        tr:hover { background: rgba(255,255,255,0.02); }
+        
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin: 20px 0;
+        }
+        .stat-card {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 16px;
+            text-align: center;
+        }
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--accent);
+        }
+        .stat-label {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            margin-top: 4px;
+        }
+        
+        .timeline {
+            position: relative;
+            padding-left: 30px;
+        }
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 8px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--border);
+        }
+        .timeline-item {
+            position: relative;
+            margin-bottom: 24px;
+        }
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -26px;
+            top: 6px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--accent);
+            border: 2px solid var(--bg);
+        }
+        .timeline-year {
+            color: var(--accent);
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        
+        .checklist { list-style: none; margin-left: 0; }
+        .checklist li {
+            padding: 8px 0;
+            padding-left: 28px;
+            position: relative;
+        }
+        .checklist li::before {
+            content: '☐';
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+        }
+        
+        .cost-breakdown {
+            background: var(--bg);
+            border-radius: 8px;
+            padding: 16px;
+            margin: 16px 0;
+        }
+        .cost-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px dashed var(--border);
+        }
+        .cost-item:last-child { border-bottom: none; }
+        .cost-total {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            margin-top: 8px;
+            border-top: 2px solid var(--accent);
+            font-weight: 700;
+            color: var(--accent);
+        }
+        
+        footer {
+            text-align: center;
+            padding: 30px;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+        
+        @media (max-width: 600px) {
+            body { padding: 12px; }
+            section { padding: 16px; }
+            h1 { font-size: 1.5rem; }
+            table { font-size: 0.85rem; }
+            th, td { padding: 8px; }
+        }
+    </style>
+</head>
+<body>
+    <button class="lang-toggle" onclick="document.body.classList.toggle('korean'); this.textContent = document.body.classList.contains('korean') ? 'EN' : '한국어';">한국어</button>
+    
+    <header>
+        <h1>
+            <span class="en">🏥 Postpartum Care Center Business Proposal</span>
+            <span class="ko">🏥 산후조리원 사업 제안서</span>
+        </h1>
+        <p class="subtitle">
+            <span class="en">Korean-Style 산후조리원 + Texas Medical Tourism Hybrid Model</span>
+            <span class="ko">한국식 산후조리원 + 텍사스 의료관광 하이브리드 모델</span>
+        </p>
+        <p class="date">
+            <span class="en">Prepared: February 16, 2026 | Target Launch: 2028-2029</span>
+            <span class="ko">작성일: 2026년 2월 16일 | 목표 런칭: 2028-2029년</span>
+        </p>
+    </header>
+
+    <section>
+        <h2>
+            <span class="en">📋 Executive Summary</span>
+            <span class="ko">📋 요약</span>
+        </h2>
+        <p class="en">
+            This proposal outlines a business opportunity to establish a Korean-style postpartum care center (산후조리원) in Colorado, targeting two underserved markets: (1) Texas families seeking maternal care in states with reproductive protections, and (2) affluent local families seeking premium postpartum recovery services.
+        </p>
+        <p class="ko">
+            본 제안서는 콜로라도에 한국식 산후조리원을 설립하는 사업 기회를 설명합니다. 두 가지 시장을 타겟으로 합니다: (1) 생식권이 보호되는 주에서 산모 케어를 원하는 텍사스 가족, (2) 프리미엄 산후 회복 서비스를 원하는 현지 부유층 가족.
+        </p>
+        
+        <div class="stat-grid">
+            <div class="stat-card">
+                <div class="stat-value">$0</div>
+                <div class="stat-label">
+                    <span class="en">Competitors in CO/AZ/NM</span>
+                    <span class="ko">콜로라도/애리조나/뉴멕시코 경쟁사</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">28K+</div>
+                <div class="stat-label">
+                    <span class="en">Texans traveling out-of-state (2024)</span>
+                    <span class="ko">타주로 이동한 텍사스 환자 (2024)</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">$950-2,500</div>
+                <div class="stat-label">
+                    <span class="en">Per night (US market)</span>
+                    <span class="ko">1박 가격 (미국 시장)</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">~$500K</div>
+                <div class="stat-label">
+                    <span class="en">Year 3 revenue potential</span>
+                    <span class="ko">3년차 매출 잠재력</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="highlight-box">
+            <strong class="en">The Opportunity:</strong>
+            <strong class="ko">기회:</strong>
+            <span class="en">ZERO Korean-style postpartum centers exist in Colorado, Arizona, or New Mexico. Texas abortion restrictions are driving 28,000+ patients annually to neighboring states. This creates a unique window for a premium postpartum care center positioned as a "safe haven" for families.</span>
+            <span class="ko">콜로라도, 애리조나, 뉴멕시코에 한국식 산후조리원이 전혀 없습니다. 텍사스 낙태 제한으로 매년 28,000명 이상의 환자가 인접 주로 이동합니다. 가족들을 위한 "안전한 피난처"로 포지셔닝된 프리미엄 산후조리원의 독특한 기회입니다.</span>
+        </div>
+    </section>
+
+    <section>
+        <h2>
+            <span class="en">🇰🇷 What is 산후조리원?</span>
+            <span class="ko">🇰🇷 산후조리원이란?</span>
+        </h2>
+        <p class="en">
+            In Korea, over 80% of new mothers check into a 산후조리원 (sanhujoriwon) — a postpartum care center — for 2-3 weeks after giving birth. It's a cultural institution that's virtually unknown in the US outside of Korean communities.
+        </p>
+        <p class="ko">
+            한국에서는 80% 이상의 산모가 출산 후 2-3주 동안 산후조리원에 입소합니다. 한국에서는 문화적 기관이지만 미국에서는 한인 커뮤니티 외에는 거의 알려지지 않았습니다.
+        </p>
+        
+        <h3>
+            <span class="en">Core Services</span>
+            <span class="ko">핵심 서비스</span>
+        </h3>
+        <ul>
+            <li class="en"><strong>24/7 Nursery Care:</strong> Professional newborn care so mom can rest and recover</li>
+            <li class="ko"><strong>24시간 신생아 케어:</strong> 산모가 쉴 수 있도록 전문 신생아 케어 제공</li>
+            <li class="en"><strong>Postpartum Meals:</strong> Nutritious Korean-style meals (seaweed soup, etc.) designed for recovery</li>
+            <li class="ko"><strong>산후 식사:</strong> 회복을 위한 영양가 있는 한식 (미역국 등)</li>
+            <li class="en"><strong>Lactation Support:</strong> IBCLC-certified lactation consultants</li>
+            <li class="ko"><strong>모유수유 지원:</strong> IBCLC 인증 모유수유 상담사</li>
+            <li class="en"><strong>Newborn Care Education:</strong> Bathing, feeding, sleep training basics</li>
+            <li class="ko"><strong>신생아 케어 교육:</strong> 목욕, 수유, 수면 훈련 기초</li>
+            <li class="en"><strong>Postpartum Recovery:</strong> Massage, sitz baths, C-section care</li>
+            <li class="ko"><strong>산후 회복:</strong> 마사지, 좌욕, 제왕절개 케어</li>
+            <li class="en"><strong>Mental Health:</strong> Postpartum depression screening, counseling referrals</li>
+            <li class="ko"><strong>정신 건강:</strong> 산후우울증 선별검사, 상담 의뢰</li>
+        </ul>
+        
+        <h3>
+            <span class="en">Korean Market Pricing</span>
+            <span class="ko">한국 시장 가격</span>
+        </h3>
+        <table>
+            <tr>
+                <th><span class="en">Tier</span><span class="ko">등급</span></th>
+                <th><span class="en">2-Week Stay</span><span class="ko">2주 숙박</span></th>
+                <th><span class="en">USD Equivalent</span><span class="ko">달러 환산</span></th>
+            </tr>
+            <tr>
+                <td><span class="en">National Average</span><span class="ko">전국 평균</span></td>
+                <td>₩3,470,000</td>
+                <td>$2,400</td>
+            </tr>
+            <tr>
+                <td><span class="en">Seoul Standard</span><span class="ko">서울 일반</span></td>
+                <td>₩4,780,000</td>
+                <td>$3,270</td>
+            </tr>
+            <tr>
+                <td><span class="en">Seoul Deluxe</span><span class="ko">서울 디럭스</span></td>
+                <td>₩7,640,000</td>
+                <td>$5,200</td>
+            </tr>
+            <tr>
+                <td><span class="en">Seoul Luxury</span><span class="ko">서울 럭셔리</span></td>
+                <td>₩20-40M</td>
+                <td>$14,000-27,000</td>
+            </tr>
+        </table>
+        
+        <h3>
+            <span class="en">US Market (Existing Players)</span>
+            <span class="ko">미국 시장 (기존 업체)</span>
+        </h3>
+        <table>
+            <tr>
+                <th><span class="en">Center</span><span class="ko">업체</span></th>
+                <th><span class="en">Location</span><span class="ko">위치</span></th>
+                <th><span class="en">Price/Night</span><span class="ko">1박 가격</span></th>
+                <th><span class="en">Model</span><span class="ko">모델</span></th>
+            </tr>
+            <tr>
+                <td>Boram Postnatal Retreat</td>
+                <td>NYC</td>
+                <td>$950-1,050</td>
+                <td><span class="en">Hotel Partnership</span><span class="ko">호텔 파트너십</span></td>
+            </tr>
+            <tr>
+                <td>Ahma & Co</td>
+                <td>Orange County, CA</td>
+                <td>$1,625</td>
+                <td>Waldorf Astoria</td>
+            </tr>
+            <tr>
+                <td>Sanu House</td>
+                <td>Los Angeles, CA</td>
+                <td>$2,500</td>
+                <td><span class="en">Hotel + In-Home</span><span class="ko">호텔 + 가정방문</span></td>
+            </tr>
+            <tr>
+                <td>Iya Postnatal Retreat</td>
+                <td>Fort Worth, TX</td>
+                <td>$750</td>
+                <td><span class="en">Hotel Partnership</span><span class="ko">호텔 파트너십</span></td>
+            </tr>
+        </table>
+    </section>
+
+    <section>
+        <h2>
+            <span class="en">📍 Why Colorado?</span>
+            <span class="ko">📍 왜 콜로라도인가?</span>
+        </h2>
+        
+        <div class="success-box">
+            <strong class="en">Key Advantage:</strong>
+            <strong class="ko">핵심 장점:</strong>
+            <span class="en">Colorado passed Amendment 79 in November 2024, enshrining abortion rights in the state constitution. It also has "shield laws" protecting out-of-state patients. This makes Colorado THE destination for Texas families seeking reproductive healthcare.</span>
+            <span class="ko">콜로라도는 2024년 11월 Amendment 79를 통과시켜 낙태권을 주 헌법에 명시했습니다. 타주 환자를 보호하는 "실드법"도 있습니다. 이로 인해 콜로라도는 텍사스 가족들이 생식 의료를 찾는 목적지가 되었습니다.</span>
+        </div>
+        
+        <h3>
+            <span class="en">State Comparison</span>
+            <span class="ko">주 비교</span>
+        </h3>
+        <table>
+            <tr>
+                <th><span class="en">Factor</span><span class="ko">요소</span></th>
+                <th>Colorado</th>
+                <th>Arizona</th>
+                <th>New Mexico</th>
+            </tr>
+            <tr>
+                <td><span class="en">OB/GYN Legal Protection</span><span class="ko">산부인과 법적 보호</span></td>
+                <td>✅ <span class="en">Constitutional</span><span class="ko">헌법 보장</span></td>
+                <td>⚠️ 15-week limit</td>
+                <td>✅ <span class="en">Full</span><span class="ko">완전 보장</span></td>
+            </tr>
+            <tr>
+                <td><span class="en">TX Patient Shield Laws</span><span class="ko">텍사스 환자 보호법</span></td>
+                <td>✅ Yes</td>
+                <td>❌ No</td>
+                <td>✅ Yes</td>
+            </tr>
+            <tr>
+                <td><span class="en">Engineering Jobs</span><span class="ko">엔지니어링 일자리</span></td>
+                <td>✅ Good</td>
+                <td>✅ <span class="en">Excellent (TSMC)</span><span class="ko">최고 (TSMC)</span></td>
+                <td>❌ Limited</td>
+            </tr>
+            <tr>
+                <td><span class="en">Metro Population</span><span class="ko">대도시 인구</span></td>
+                <td>~3M (Denver)</td>
+                <td>~5M (Phoenix)</td>
+                <td>~1M (ABQ)</td>
+            </tr>
+            <tr>
+                <td><span class="en">Distance from Dallas</span><span class="ko">달라스에서 거리</span></td>
+                <td>650 mi</td>
+                <td>900 mi</td>
+                <td>600 mi</td>
+            </tr>
+            <tr>
+                <td><span class="en">Existing Competition</span><span class="ko">기존 경쟁사</span></td>
+                <td>❌ None</td>
+                <td>❌ None</td>
+                <td>❌ None</td>
+            </tr>
+            <tr>
+                <td><span class="en">Wealthy Demographics</span><span class="ko">부유층 인구</span></td>
+                <td>✅ Strong</td>
+                <td>✅ Scottsdale</td>
+                <td>❌ Limited</td>
+            </tr>
+        </table>
+        
+        <h3>
+            <span class="en">Denver Metro Demographics</span>
+            <span class="ko">덴버 대도시권 인구통계</span>
+        </h3>
+        <ul>
+            <li class="en"><strong>Population:</strong> ~3 million (metro), growing ~1.5%/year</li>
+            <li class="ko"><strong>인구:</strong> 약 300만 (대도시권), 연간 ~1.5% 성장</li>
+            <li class="en"><strong>Median Household Income:</strong> $87,000 (vs $65K national)</li>
+            <li class="ko"><strong>중위 가구 소득:</strong> $87,000 (전국 $65K 대비)</li>
+            <li class="en"><strong>Education:</strong> 45% have bachelor's degree or higher</li>
+            <li class="ko"><strong>교육:</strong> 45%가 학사 학위 이상</li>
+            <li class="en"><strong>Annual Births:</strong> ~35,000 in Colorado</li>
+            <li class="ko"><strong>연간 출생:</strong> 콜로라도 내 ~35,000명</li>
+            <li class="en"><strong>Asian Population:</strong> ~4% (growing Korean community)</li>
+            <li class="ko"><strong>아시아계 인구:</strong> ~4% (한인 커뮤니티 성장 중)</li>
+        </ul>
+        
+        <div class="highlight-box">
+            <strong class="en">Engineering Jobs in Colorado:</strong>
+            <strong class="ko">콜로라도 엔지니어링 일자리:</strong>
+            <ul>
+                <li>Lockheed Martin (aerospace)</li>
+                <li>Ball Aerospace</li>
+                <li>Microchip Technology (offices in CO)</li>
+                <li>Qualcomm, Broadcom (smaller presence)</li>
+                <li><span class="en">Growing tech sector (software-heavy)</span><span class="ko">성장하는 테크 섹터 (소프트웨어 중심)</span></li>
+            </ul>
+        </div>
+    </section>
+
+    <section>
+        <h2>
+            <span class="en">💼 Business Model Options</span>
+            <span class="ko">💼 비즈니스 모델 옵션</span>
+        </h2>
+        
+        <h3>
+            <span class="en">Option A: Hotel Partnership (Recommended)</span>
+            <span class="ko">옵션 A: 호텔 파트너십 (권장)</span>
+        </h3>
+        <p class="en">Partner with a luxury hotel (Four Seasons Denver, Ritz-Carlton, etc.) to provide dedicated rooms/floor for postpartum guests. This is how most US postpartum retreats operate.</p>
+        <p class="ko">럭셔리 호텔 (Four Seasons Denver, Ritz-Carlton 등)과 파트너십을 맺어 산후 고객을 위한 전용 객실/층을 제공합니다. 대부분의 미국 산후조리원이 이렇게 운영됩니다.</p>
+        
+        <div class="success-box">
+            <strong class="en">Pros:</strong><span class="ko"><strong>장점:</strong></span>
+            <ul>
+                <li class="en">Lower startup capital (~$150K vs $500K+)</li>
+                <li class="ko">낮은 초기 자본 (~$150K vs $500K+)</li>
+                <li class="en">No facility buildout or lease</li>
+                <li class="ko">시설 건축이나 임대 불필요</li>
+                <li class="en">Hotel handles hospitality, cleaning, amenities</li>
+                <li class="ko">호텔이 호스피탈리티, 청소, 편의시설 담당</li>
+                <li class="en">Prestige of luxury hotel brand</li>
+                <li class="ko">럭셔리 호텔 브랜드의 명성</li>
+            </ul>
+        </div>
+        
+        <div class="warning-box">
+            <strong class="en">Cons:</strong><span class="ko"><strong>단점:</strong></span>
+            <ul>
+                <li class="en">Revenue share with hotel (15-25%)</li>
+                <li class="ko">호텔과 매출 공유 (15-25%)</li>
+                <li class="en">Less control over guest experience</li>
+                <li class="ko">고객 경험에 대한 통제력 감소</li>
+                <li class="en">Hotel contract negotiations can be complex</li>
+                <li class="ko">호텔 계약 협상이 복잡할 수 있음</li>
+            </ul>
+        </div>
+        
+        <h3>
+            <span class="en">Option B: Own Facility</span>
+            <span class="ko">옵션 B: 자체 시설</span>
+        </h3>
+        <p class="en">Lease or purchase a property and build out a dedicated postpartum center. More capital intensive but higher margins long-term.</p>
+        <p class="ko">부동산을 임대하거나 구매하여 전용 산후조리원을 건축합니다. 자본 집약적이지만 장기적으로 마진이 높습니다.</p>
+        
+        <h3>
+            <span class="en">Option C: In-Home Care (Starting Point)</span>
+            <span class="ko">옵션 C: 가정 방문 케어 (시작점)</span>
+        </h3>
+        <p class="en">Start with in-home postpartum doula services. Lowest barrier to entry, can test market demand before committing to facility.</p>
+        <p class="ko">가정 방문 산후 도우미 서비스로 시작합니다. 진입 장벽이 가장 낮고, 시설에 투자하기 전에 시장 수요를 테스트할 수 있습니다.</p>
+    </section>
+
+    <section>
+        <h2>
+            <span class="en">💰 Financial Projections</span>
+            <span class="ko">💰 재무 전망</span>
+        </h2>
+        
+        <h3>
+            <span class="en">Startup Costs (Hotel Partnership Model)</span>
+            <span class="ko">초기 비용 (호텔 파트너십 모델)</span>
+        </h3>
+        <div class="cost-breakdown">
+            <div class="cost-item">
+                <span class="en">Legal/Licensing/Insurance</span>
+                <span class="ko">법률/라이선스/보험</span>
+                <span>$25,000 - $40,000</span>
+            </div>
+            <div class="cost-item">
+                <span class="en">Nursery Equipment</span>
+                <span class="ko">신생아실 장비</span>
+                <span>$30,000 - $50,000</span>
+            </div>
+            <div class="cost-item">
+                <span class="en">Initial Inventory (supplies, food)</span>
+                <span class="ko">초기 재고 (용품, 음식)</span>
+                <span>$10,000 - $15,000</span>
+            </div>
+            <div class="cost-item">
+                <span class="en">Website/Branding/Marketing</span>
+                <span class="ko">웹사이트/브랜딩/마케팅</span>
+                <span>$20,000 - $35,000</span>
+            </div>
+            <div class="cost-item">
+                <span class="en">Staff Training/Recruiting</span>
+                <span class="ko">직원 교육/채용</span>
+                <span>$15,000 - $25,000</span>
+            </div>
+            <div class="cost-item">
+                <span class="en">Working Capital (3 months)</span>
+                <span class="ko">운영 자금 (3개월)</span>
+                <span>$50,000 - $80,000</span>
+            </div>
+            <div class="cost-total">
+                <span>TOTAL</span>
+                <span>$150,000 - $245,000</span>
+            </div>
+        </div>
+        
+        <h3>
+            <span class="en">Revenue Projections</span>
+            <span class="ko">매출 전망</span>
+        </h3>
+        <table>
+            <tr>
+                <th></th>
+                <th><span class="en">Year 1</span><span class="ko">1년차</span></th>
+                <th><span class="en">Year 2</span><span class="ko">2년차</span></th>
+                <th><span class="en">Year 3</span><span class="ko">3년차</span></th>
+            </tr>
+            <tr>
+                <td><span class="en">Rooms</span><span class="ko">객실 수</span></td>
+                <td>3</td>
+                <td>4</td>
+                <td>5</td>
+            </tr>
+            <tr>
+                <td><span class="en">Occupancy Rate</span><span class="ko">객실 점유율</span></td>
+                <td>35%</td>
+                <td>50%</td>
+                <td>65%</td>
+            </tr>
+            <tr>
+                <td><span class="en">Average Stay</span><span class="ko">평균 숙박</span></td>
+                <td>5 nights</td>
+                <td>5 nights</td>
+                <td>6 nights</td>
+            </tr>
+            <tr>
+                <td><span class="en">Rate/Night</span><span class="ko">1박 요금</span></td>
+                <td>$900</td>
+                <td>$950</td>
+                <td>$1,000</td>
+            </tr>
+            <tr>
+                <td><strong><span class="en">Gross Revenue</span><span class="ko">총 매출</span></strong></td>
+                <td><strong>$172K</strong></td>
+                <td><strong>$347K</strong></td>
+                <td><strong>$534K</strong></td>
+            </tr>
+        </table>
+        
+        <h3>
+            <span class="en">Expense Structure (at maturity)</span>
+            <span class="ko">비용 구조 (성숙기)</span>
+        </h3>
+        <ul>
+            <li class="en"><strong>Staff (nurses, specialists, cooks):</strong> 50-55% of revenue</li>
+            <li class="ko"><strong>인건비 (간호사, 전문가, 요리사):</strong> 매출의 50-55%</li>
+            <li class="en"><strong>Hotel/Facility costs:</strong> 15-20%</li>
+            <li class="ko"><strong>호텔/시설 비용:</strong> 15-20%</li>
+            <li class="en"><strong>Food/Supplies:</strong> 10-12%</li>
+            <li class="ko"><strong>음식/용품:</strong> 10-12%</li>
+            <li class="en"><strong>Marketing:</strong> 5-8%</li>
+            <li class="ko"><strong>마케팅:</strong> 5-8%</li>
+            <li class="en"><strong>Admin/Insurance:</strong> 5-7%</li>
+            <li class="ko"><strong>관리/보험:</strong> 5-7%</li>
+        </ul>
+        
+        <div class="highlight-box">
+            <strong class="en">Expected Net Margin:</strong> 15-20% when mature (Year 3+)
+            <strong class="ko">예상 순이익률:</strong> 성숙기 (3년차+) 15-20%
+            <br><br>
+            <span class="en">Year 3 projection: ~$80K-$100K net profit on $530K revenue</span>
+            <span class="ko">3년차 전망: $530K 매출에서 ~$80K-$100K 순이익</span>
+        </div>
+    </section>
+
+    <section>
+        <h2>
+            <span class="en">👥 Staffing Requirements</span>
+            <span class="ko">👥 인력 요구사항</span>
+        </h2>
+        
+        <table>
+            <tr>
+                <th><span class="en">Role</span><span class="ko">역할</span></th>
+                <th><span class="en">FT/PT</span><span class="ko">정규/파트</span></th>
+                <th><span class="en">Est. Salary</span><span class="ko">예상 급여</span></th>
+                <th><span class="en">Notes</span><span class="ko">비고</span></th>
+            </tr>
+            <tr>
+                <td><span class="en">Operations Manager</span><span class="ko">운영 매니저</span></td>
+                <td>FT</td>
+                <td>$60-80K</td>
+                <td><span class="en">Critical hire — runs day-to-day</span><span class="ko">핵심 채용 — 일상 운영 담당</span></td>
+            </tr>
+            <tr>
+                <td><span class="en">Registered Nurses</span><span class="ko">등록 간호사</span></td>
+                <td>2-3 PT</td>
+                <td>$40-50/hr</td>
+                <td><span class="en">24/7 coverage for nursery</span><span class="ko">24시간 신생아실 담당</span></td>
+            </tr>
+            <tr>
+                <td><span class="en">Lactation Consultant (IBCLC)</span><span class="ko">모유수유 상담사 (IBCLC)</span></td>
+                <td>PT/Contract</td>
+                <td>$50-75/hr</td>
+                <td><span class="en">On-call or scheduled visits</span><span class="ko">호출 또는 예약 방문</span></td>
+            </tr>
+            <tr>
+                <td><span class="en">Postpartum Doulas</span><span class="ko">산후 도우미</span></td>
+                <td>2-3 PT</td>
+                <td>$25-35/hr</td>
+                <td><span class="en">Newborn care, mom support</span><span class="ko">신생아 케어, 산모 지원</span></td>
+            </tr>
+            <tr>
+                <td><span class="en">Korean Chef</span><span class="ko">한식 요리사</span></td>
+                <td>FT or Contract</td>
+                <td>$45-60K</td>
+                <td><span class="en">산후 meals specialist</span><span class="ko">산후 식단 전문</span></td>
+            </tr>
+        </table>
+        
+        <div class="warning-box">
+            <strong class="en">⚠️ Important:</strong>
+            <strong class="ko">⚠️ 중요:</strong>
+            <span class="en">24/7 nursery care requires around-the-clock staffing. This is NOT something you can run solo. You NEED an operations manager or business partner to handle day-to-day operations if you're working a full-time engineering job.</span>
+            <span class="ko">24시간 신생아 케어는 상시 인력이 필요합니다. 혼자 운영할 수 없습니다. 정규직 엔지니어로 일하면서 이 사업을 하려면 일상 운영을 담당할 운영 매니저나 비즈니스 파트너가 반드시 필요합니다.</span>
+        </div>
+    </section>
+
+    <section>
+        <h2>
+            <span class="en">📋 Licensing & Legal Requirements</span>
+            <span class="ko">📋 라이선스 및 법적 요구사항</span>
+        </h2>
+        
+        <h3>
+            <span class="en">Colorado Requirements</span>
+            <span class="ko">콜로라도 요구사항</span>
+        </h3>
+        <ul>
+            <li class="en"><strong>Business License:</strong> Standard LLC or Corporation registration</li>
+            <li class="ko"><strong>사업자 등록:</strong> 표준 LLC 또는 법인 등록</li>
+            <li class="en"><strong>Childcare License:</strong> May be required if nursery operates >4 hours — check with Colorado Dept. of Human Services</li>
+            <li class="ko"><strong>보육 시설 허가:</strong> 신생아실이 4시간 이상 운영되면 필요할 수 있음 — 콜로라도 인적서비스부 확인</li>
+            <li class="en"><strong>Food Service Permit:</strong> Required if preparing meals on-site</li>
+            <li class="ko"><strong>식품 서비스 허가:</strong> 현장에서 식사 준비 시 필요</li>
+            <li class="en"><strong>Liability Insurance:</strong> $1-2M minimum recommended</li>
+            <li class="ko"><strong>배상 책임 보험:</strong> 최소 $1-2M 권장</li>
+            <li class="en"><strong>Professional Licenses:</strong> Nurses must be Colorado-licensed; IBCLC for lactation consultants</li>
+            <li class="ko"><strong>전문 자격증:</strong> 간호사는 콜로라도 면허 필요; 모유수유 상담사는 IBCLC 필요</li>
+        </ul>
+        
+        <div class="highlight-box">
+            <strong class="en">Key Point:</strong>
+            <strong class="ko">핵심 포인트:</strong>
+            <span class="en">Postpartum retreats are generally NOT classified as healthcare facilities (since they're non-medical), which means lighter regulation than hospitals or skilled nursing facilities. However, the 24/7 nursery component may trigger childcare licensing requirements.</span>
+            <span class="ko">산후조리원은 일반적으로 의료 시설로 분류되지 않아 (비의료이므로) 병원이나 전문요양시설보다 규제가 가볍습니다. 그러나 24시간 신생아실 운영은 보육 시설 허가 요건을 유발할 수 있습니다.</span>
+        </div>
+    </section>
+
+    <section>
+        <h2>
+            <span class="en">📅 Recommended Timeline</span>
+            <span class="ko">📅 권장 타임라인</span>
+        </h2>
+        
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="timeline-year">2026-2027 (Now - Year 1)</div>
+                <p class="en"><strong>PHASE 0: Build Foundation in Arizona</strong><br>
+                Continue engineering career at Microchip. Build savings/capital. Lucy builds OB/GYN experience. Research Colorado market remotely. Network with postpartum industry professionals.</p>
+                <p class="ko"><strong>PHASE 0: 애리조나에서 기반 구축</strong><br>
+                Microchip에서 엔지니어링 경력 계속. 저축/자본 구축. Lucy OB/GYN 경력 쌓기. 콜로라도 시장 원격 조사. 산후 업계 전문가 네트워킹.</p>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-year">2027-2028 (Year 2)</div>
+                <p class="en"><strong>PHASE 1: Test Market with In-Home Services</strong><br>
+                Launch in-home postpartum doula service in Denver (can manage remotely with local staff). Test pricing, demand, marketing channels. Build brand recognition.</p>
+                <p class="ko"><strong>PHASE 1: 가정 방문 서비스로 시장 테스트</strong><br>
+                덴버에서 가정 방문 산후 도우미 서비스 런칭 (로컬 직원으로 원격 관리 가능). 가격, 수요, 마케팅 채널 테스트. 브랜드 인지도 구축.</p>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-year">2028-2029 (Year 3)</div>
+                <p class="en"><strong>PHASE 2: Relocate + Launch Retreat</strong><br>
+                Move to Colorado (engineering job + business). Negotiate hotel partnership. Hire operations manager. Launch retreat with 3-4 rooms. Lucy potentially involved as medical advisor.</p>
+                <p class="ko"><strong>PHASE 2: 이주 + 리트릿 런칭</strong><br>
+                콜로라도로 이주 (엔지니어링 직장 + 사업). 호텔 파트너십 협상. 운영 매니저 채용. 3-4개 객실로 리트릿 런칭. Lucy 의료 고문으로 참여 가능.</p>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-year">2030+ (Year 4+)</div>
+                <p class="en"><strong>PHASE 3: Scale</strong><br>
+                Expand to 5-6 rooms. Consider second location. Add premium services (Asian chef, spa, etc.). Potential franchise model.</p>
+                <p class="ko"><strong>PHASE 3: 확장</strong><br>
+                5-6개 객실로 확장. 두 번째 지점 고려. 프리미엄 서비스 추가 (아시안 셰프, 스파 등). 프랜차이즈 모델 가능성.</p>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <h2>
+            <span class="en">✅ Research & Preparation Checklist</span>
+            <span class="ko">✅ 연구 및 준비 체크리스트</span>
+        </h2>
+        
+        <h3>
+            <span class="en">Immediate (Next 6 months)</span>
+            <span class="ko">즉시 (향후 6개월)</span>
+        </h3>
+        <ul class="checklist">
+            <li class="en">Visit 2-3 existing postpartum retreats (LA, NYC if possible)</li>
+            <li class="ko">기존 산후조리원 2-3곳 방문 (가능하면 LA, NYC)</li>
+            <li class="en">Talk to your friend's parents about their LA operation — get real numbers</li>
+            <li class="ko">친구 부모님 LA 운영에 대해 이야기 — 실제 숫자 확인</li>
+            <li class="en">Research Colorado childcare licensing requirements</li>
+            <li class="ko">콜로라도 보육 시설 허가 요건 조사</li>
+            <li class="en">Connect with Korean community organizations in Denver</li>
+            <li class="ko">덴버 한인 커뮤니티 단체와 연결</li>
+            <li class="en">Follow Boram, Sanu, Ahma on social media — study their marketing</li>
+            <li class="ko">Boram, Sanu, Ahma 소셜 미디어 팔로우 — 마케팅 연구</li>
+        </ul>
+        
+        <h3>
+            <span class="en">Year 1 (2026-2027)</span>
+            <span class="ko">1년차 (2026-2027)</span>
+        </h3>
+        <ul class="checklist">
+            <li class="en">Build savings target: $100K liquid capital minimum</li>
+            <li class="ko">저축 목표: 최소 $100K 유동 자본</li>
+            <li class="en">Lucy: network with Colorado OB/GYNs, hospitals</li>
+            <li class="ko">Lucy: 콜로라도 산부인과 의사, 병원과 네트워킹</li>
+            <li class="en">Research Denver luxury hotels open to partnerships</li>
+            <li class="ko">파트너십에 열린 덴버 럭셔리 호텔 조사</li>
+            <li class="en">Create business plan with detailed financial model</li>
+            <li class="ko">상세 재무 모델이 포함된 사업 계획서 작성</li>
+            <li class="en">Explore SBA loans for women/minority-owned businesses</li>
+            <li class="ko">여성/소수민족 소유 사업을 위한 SBA 대출 탐색</li>
+        </ul>
+        
+        <h3>
+            <span class="en">Year 2 (2027-2028)</span>
+            <span class="ko">2년차 (2027-2028)</span>
+        </h3>
+        <ul class="checklist">
+            <li class="en">Hire 1-2 postpartum doulas in Denver for in-home service pilot</li>
+            <li class="ko">덴버에서 가정 방문 서비스 파일럿을 위한 산후 도우미 1-2명 채용</li>
+            <li class="en">Build website and social media presence</li>
+            <li class="ko">웹사이트 및 소셜 미디어 구축</li>
+            <li class="en">Test Google/Instagram ads targeting Texas + Colorado moms</li>
+            <li class="ko">텍사스 + 콜로라도 엄마 타겟 Google/Instagram 광고 테스트</li>
+            <li class="en">Begin hotel partnership conversations</li>
+            <li class="ko">호텔 파트너십 대화 시작</li>
+            <li class="en">Scout Colorado engineering job market</li>
+            <li class="ko">콜로라도 엔지니어링 취업 시장 정찰</li>
+        </ul>
+        
+        <h3>
+            <span class="en">Year 3 (2028-2029)</span>
+            <span class="ko">3년차 (2028-2029)</span>
+        </h3>
+        <ul class="checklist">
+            <li class="en">Secure engineering job in Colorado (if relocating)</li>
+            <li class="ko">콜로라도에서 엔지니어링 직장 확보 (이주 시)</li>
+            <li class="en">Finalize hotel partnership agreement</li>
+            <li class="ko">호텔 파트너십 계약 최종 확정</li>
+            <li class="en">Hire operations manager</li>
+            <li class="ko">운영 매니저 채용</li>
+            <li class="en">Complete licensing and insurance</li>
+            <li class="ko">라이선스 및 보험 완료</li>
+            <li class="en">Soft launch with 3 rooms</li>
+            <li class="ko">3개 객실로 소프트 런칭</li>
+        </ul>
+    </section>
+
+    <section>
+        <h2>
+            <span class="en">⚠️ Risks & Mitigations</span>
+            <span class="ko">⚠️ 위험 및 완화 방안</span>
+        </h2>
+        
+        <table>
+            <tr>
+                <th><span class="en">Risk</span><span class="ko">위험</span></th>
+                <th><span class="en">Mitigation</span><span class="ko">완화 방안</span></th>
+            </tr>
+            <tr>
+                <td class="en">Low initial occupancy</td>
+                <td class="ko">낮은 초기 점유율</td>
+                <td class="en">Start with 3 rooms, hotel model keeps fixed costs low</td>
+                <td class="ko">3개 객실로 시작, 호텔 모델로 고정비 낮게 유지</td>
+            </tr>
+            <tr>
+                <td class="en">Can't manage while working FT engineering</td>
+                <td class="ko">정규직 엔지니어링 하면서 관리 불가</td>
+                <td class="en">Hire dedicated operations manager from Day 1</td>
+                <td class="ko">1일차부터 전담 운영 매니저 채용</td>
+            </tr>
+            <tr>
+                <td class="en">Competitor enters market</td>
+                <td class="ko">경쟁자 시장 진입</td>
+                <td class="en">First-mover advantage + Korean authenticity differentiation</td>
+                <td class="ko">선점자 우위 + 한국 정통성 차별화</td>
+            </tr>
+            <tr>
+                <td class="en">Colorado political changes</td>
+                <td class="ko">콜로라도 정치 변화</td>
+                <td class="en">Amendment 79 is constitutional — hard to overturn</td>
+                <td class="ko">Amendment 79는 헌법적 — 뒤집기 어려움</td>
+            </tr>
+            <tr>
+                <td class="en">Liability/lawsuit</td>
+                <td class="ko">배상책임/소송</td>
+                <td class="en">Strong insurance, clear waivers, professional staff only</td>
+                <td class="ko">강력한 보험, 명확한 면책동의서, 전문 직원만</td>
+            </tr>
+            <tr>
+                <td class="en">Staffing challenges</td>
+                <td class="ko">인력 확보 어려움</td>
+                <td class="en">Competitive wages, good culture, tap into Korean community</td>
+                <td class="ko">경쟁력 있는 임금, 좋은 문화, 한인 커뮤니티 활용</td>
+            </tr>
+        </table>
+    </section>
+
+    <section>
+        <h2>
+            <span class="en">🎯 Bottom Line</span>
+            <span class="ko">🎯 결론</span>
+        </h2>
+        
+        <div class="success-box">
+            <p class="en">
+                <strong>This is a viable business opportunity with real market gaps.</strong> Zero competition in Colorado for Korean-style postpartum care, combined with Texas medical tourism tailwinds, creates a unique window.
+            </p>
+            <p class="ko">
+                <strong>이것은 실제 시장 갭이 있는 실행 가능한 사업 기회입니다.</strong> 콜로라도에 한국식 산후조리원 경쟁이 없고, 텍사스 의료관광 순풍과 결합하여 독특한 기회를 만듭니다.
+            </p>
+        </div>
+        
+        <p class="en"><strong>However, it's NOT a casual side hustle.</strong> 24/7 operations require dedicated management. The recommended path:</p>
+        <p class="ko"><strong>그러나 캐주얼한 부업은 아닙니다.</strong> 24시간 운영은 전담 관리가 필요합니다. 권장 경로:</p>
+        
+        <ol>
+            <li class="en">Build capital and careers in Arizona (2-3 years)</li>
+            <li class="ko">애리조나에서 자본과 경력 구축 (2-3년)</li>
+            <li class="en">Test market with low-cost in-home service pilot</li>
+            <li class="ko">저비용 가정 방문 서비스 파일럿으로 시장 테스트</li>
+            <li class="en">Relocate to Colorado when ready to commit</li>
+            <li class="ko">투자 준비되면 콜로라도로 이주</li>
+            <li class="en">Launch hotel partnership model with hired operator</li>
+            <li class="ko">채용된 운영자와 호텔 파트너십 모델 런칭</li>
+        </ol>
+        
+        <div class="highlight-box">
+            <strong class="en">Your Unique Advantages:</strong>
+            <strong class="ko">당신의 독특한 장점:</strong>
+            <ul>
+                <li class="en">Lucy's OB/GYN expertise = credibility + medical advisory</li>
+                <li class="ko">Lucy의 산부인과 전문성 = 신뢰성 + 의료 자문</li>
+                <li class="en">Korean heritage = authentic 산후조리원 experience</li>
+                <li class="ko">한국인 배경 = 정통 산후조리원 경험</li>
+                <li class="en">Tech/engineering mindset = operational efficiency, automation</li>
+                <li class="ko">테크/엔지니어링 마인드셋 = 운영 효율성, 자동화</li>
+                <li class="en">Friend's parents' experience = real-world mentorship available</li>
+                <li class="ko">친구 부모님 경험 = 실제 멘토십 가능</li>
+            </ul>
+        </div>
+    </section>
+
+    <footer>
+        <p class="en">Prepared by Totoro 🌳 | February 2026</p>
+        <p class="ko">토토로 🌳 작성 | 2026년 2월</p>
+        <p class="en" style="margin-top: 10px;">This is a preliminary research document. Consult with legal, financial, and healthcare professionals before making business decisions.</p>
+        <p class="ko" style="margin-top: 10px;">이것은 예비 연구 문서입니다. 사업 결정을 내리기 전에 법률, 재무, 의료 전문가와 상담하세요.</p>
+    </footer>
+
+    <script>
+        // Persist language preference
+        if (localStorage.getItem('lang') === 'ko') {
+            document.body.classList.add('korean');
+            document.querySelector('.lang-toggle').textContent = 'EN';
+        }
+        document.querySelector('.lang-toggle').addEventListener('click', function() {
+            localStorage.setItem('lang', document.body.classList.contains('korean') ? 'ko' : 'en');
+        });
+    </script>
+</body>
+</html>
