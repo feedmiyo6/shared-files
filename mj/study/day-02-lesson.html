@@ -24,10 +24,10 @@
             text-align: center;
             margin-bottom: 30px;
             padding-bottom: 20px;
-            border-bottom: 2px solid #4a4a6a;
+            border-bottom: 2px solid #dda15e;
         }
         .day-badge {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #588157 0%, #3a5a40 100%);
             color: white;
             padding: 8px 20px;
             border-radius: 20px;
@@ -92,11 +92,11 @@
         }
         .ko { display: none; }
         code {
-            background: #3d405b;
+            background: #e9f5db; color: #3d405b;
             padding: 2px 8px;
             border-radius: 4px;
             font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
-            color: #fefae0;
+            color: #3d405b;
         }
         pre {
             background: #2d3436;
@@ -128,7 +128,7 @@
             margin-bottom: 8px;
         }
         .concept-box {
-            background: #1e3a5f;
+            background: #588157;
             border-radius: 8px;
             padding: 20px;
             margin: 20px 0;
@@ -149,11 +149,11 @@
         .comparison-table th, .comparison-table td {
             padding: 12px;
             text-align: left;
-            border: 1px solid #4a4a6a;
+            border: 1px solid #dda15e;
         }
         .comparison-table th {
-            background: #333355;
-            color: #a5b4fc;
+            background: #a3b18a;
+            color: #bc6c25;
         }
         .comparison-table td {
             background: #1a1a2e;
@@ -176,7 +176,7 @@
             gap: 10px;
         }
         .nav-btn {
-            background: #333355;
+            background: #a3b18a;
             color: #fff;
             text-decoration: none;
             padding: 12px 24px;
@@ -184,7 +184,7 @@
             transition: background 0.2s;
         }
         .nav-btn:hover {
-            background: #667eea;
+            background: #588157;
         }
         .emoji { font-size: 1.2em; }
         @media (max-width: 600px) {
@@ -437,12 +437,12 @@
         <div class="diagram">
             <svg viewBox="0 0 700 300" xmlns="http://www.w3.org/2000/svg">
                 <!-- Combinational Logic Box -->
-                <rect x="30" y="20" width="280" height="120" rx="10" fill="#2d3748" stroke="#667eea" stroke-width="2"/>
-                <text x="170" y="50" fill="#a5b4fc" text-anchor="middle" font-size="14" font-weight="bold">always_comb</text>
+                <rect x="30" y="20" width="280" height="120" rx="10" fill="#588157" stroke="#588157" stroke-width="2"/>
+                <text x="170" y="50" fill="#bc6c25" text-anchor="middle" font-size="14" font-weight="bold">always_comb</text>
                 <text x="170" y="70" fill="#888" text-anchor="middle" font-size="11">Combinational Logic</text>
                 
                 <!-- Cloud shape for logic -->
-                <ellipse cx="170" cy="105" rx="60" ry="25" fill="#4a5568" stroke="#667eea"/>
+                <ellipse cx="170" cy="105" rx="60" ry="25" fill="#a3b18a" stroke="#588157"/>
                 <text x="170" y="110" fill="#fff" text-anchor="middle" font-size="11">AND/OR/MUX</text>
                 
                 <!-- Inputs -->
@@ -456,12 +456,12 @@
                 <text x="335" y="104" fill="#c3e88d" font-size="10">out</text>
 
                 <!-- Sequential Logic Box -->
-                <rect x="390" y="20" width="280" height="120" rx="10" fill="#2d3748" stroke="#c792ea" stroke-width="2"/>
+                <rect x="390" y="20" width="280" height="120" rx="10" fill="#588157" stroke="#c792ea" stroke-width="2"/>
                 <text x="530" y="50" fill="#c792ea" text-anchor="middle" font-size="14" font-weight="bold">always_ff</text>
                 <text x="530" y="70" fill="#888" text-anchor="middle" font-size="11">Sequential Logic</text>
                 
                 <!-- Flip-flop symbol -->
-                <rect x="480" y="85" width="50" height="40" fill="#4a5568" stroke="#c792ea" stroke-width="2"/>
+                <rect x="480" y="85" width="50" height="40" fill="#a3b18a" stroke="#c792ea" stroke-width="2"/>
                 <text x="505" y="110" fill="#fff" text-anchor="middle" font-size="10">D Q</text>
                 <path d="M 480 115 L 490 120 L 480 125" fill="none" stroke="#f78c6c" stroke-width="1.5"/>
                 <text x="535" y="110" fill="#f78c6c" font-size="8">clk</text>
@@ -481,7 +481,7 @@
                 <text x="505" y="158" fill="#f78c6c" text-anchor="middle" font-size="10">clk</text>
 
                 <!-- Labels below -->
-                <text x="170" y="170" fill="#667eea" text-anchor="middle" font-size="12">No Memory</text>
+                <text x="170" y="170" fill="#588157" text-anchor="middle" font-size="12">No Memory</text>
                 <text x="170" y="188" fill="#888" text-anchor="middle" font-size="11" class="en">Output changes instantly</text>
                 <text x="170" y="188" fill="#888" text-anchor="middle" font-size="11" class="ko">출력이 즉시 변경</text>
                 
@@ -494,7 +494,7 @@
                 <text x="350" y="230" fill="#fff" text-anchor="middle" font-size="13" font-weight="bold" class="ko">타이밍 동작</text>
 
                 <!-- Simple timing hints -->
-                <rect x="80" y="250" width="120" height="30" rx="5" fill="#1e3a5f"/>
+                <rect x="80" y="250" width="120" height="30" rx="5" fill="#588157"/>
                 <text x="140" y="270" fill="#60a5fa" text-anchor="middle" font-size="10" class="en">Transparent</text>
                 <text x="140" y="270" fill="#60a5fa" text-anchor="middle" font-size="10" class="ko">투명</text>
                 
