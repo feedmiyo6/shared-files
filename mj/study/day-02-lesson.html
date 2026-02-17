@@ -12,12 +12,13 @@
         }
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-            background: #1a1a2e;
-            color: #eaeaea;
-            line-height: 1.7;
-            padding: 20px;
-            max-width: 800px;
+            background: linear-gradient(135deg, #fefae0 0%, #faedcd 100%);
+            color: #3d405b;
+            line-height: 1.8;
+            padding: 24px;
+            max-width: 920px;
             margin: 0 auto;
+            min-height: 100vh;
         }
         .header {
             text-align: center;
@@ -35,9 +36,11 @@
             margin-bottom: 15px;
         }
         h1 {
-            font-size: 1.8em;
-            margin-bottom: 10px;
-            color: #fff;
+            font-size: 2.2em;
+            margin-bottom: 16px;
+            color: #bc6c25;
+            border-bottom: 3px solid #dda15e;
+            padding-bottom: 12px;
         }
         .subtitle {
             color: #888;
@@ -45,70 +48,79 @@
         }
         .lang-toggle {
             position: fixed;
-            top: 15px;
-            right: 15px;
-            background: #333355;
+            top: 16px;
+            right: 16px;
+            background: #588157;
             border: none;
-            color: #fff;
-            padding: 10px 15px;
-            border-radius: 8px;
+            border-radius: 24px;
+            padding: 10px 20px;
             cursor: pointer;
-            font-size: 0.9em;
+            color: #fff;
+            font-size: 14px;
+            font-weight: 600;
             z-index: 1000;
+            box-shadow: 0 2px 8px rgba(88,129,87,0.3);
         }
         .lang-toggle:hover {
-            background: #444466;
+            background: #3a5a40;
         }
         section {
-            background: #242444;
-            border-radius: 12px;
-            padding: 25px;
-            margin-bottom: 25px;
+            background: #fff;
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 24px;
+            border: 2px solid #a3b18a;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.06);
         }
         h2 {
-            color: #667eea;
-            font-size: 1.4em;
-            margin-bottom: 15px;
+            color: #588157;
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #a3b18a;
             display: flex;
             align-items: center;
             gap: 10px;
         }
         h3 {
-            color: #a5b4fc;
-            font-size: 1.1em;
-            margin: 20px 0 10px 0;
+            color: #bc6c25;
+            font-size: 1.2em;
+            margin: 24px 0 12px 0;
         }
         p {
             margin-bottom: 15px;
         }
         .ko { display: none; }
         code {
-            background: #1a1a2e;
+            background: #3d405b;
             padding: 2px 8px;
             border-radius: 4px;
-            font-family: 'SF Mono', 'Fira Code', monospace;
-            color: #a5b4fc;
+            font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+            color: #fefae0;
         }
         pre {
-            background: #0d0d1a;
-            padding: 20px;
-            border-radius: 8px;
+            background: #2d3436;
+            padding: 24px;
+            border-radius: 12px;
             overflow-x: auto;
-            margin: 15px 0;
-            border-left: 4px solid #667eea;
+            margin: 24px 0;
+            border: 3px solid #a3b18a;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
         }
         pre code {
             background: none;
             padding: 0;
-            color: #e0e0e0;
-            font-size: 0.9em;
-            line-height: 1.6;
+            color: #dfe6e9;
+            font-size: 16px;
+            line-height: 1.8;
+            white-space: pre;
+            display: block;
         }
-        .keyword { color: #c792ea; }
-        .type { color: #82aaff; }
-        .signal { color: #c3e88d; }
-        .comment { color: #6a6a8a; }
-        .number { color: #f78c6c; }
+        .keyword { color: #fd79a8; font-weight: 600; }
+        .type { color: #74b9ff; }
+        .signal { color: #55efc4; }
+        .comment { color: #b2bec3; font-style: italic; }
+        .number { color: #ffeaa7; }
         ul, ol {
             margin: 15px 0 15px 25px;
         }
@@ -690,12 +702,14 @@
         let isKorean = false;
         function toggleLang() {
             isKorean = !isKorean;
-            document.querySelectorAll('.en').forEach(el => el.style.display = isKorean ? 'none' : '');
-            document.querySelectorAll('.ko').forEach(el => el.style.display = isKorean ? '' : 'none');
-            document.querySelector('.lang-toggle').textContent = isKorean ? '🇺🇸 English' : '🇰🇷 한국어';
+            document.querySelectorAll('.en').forEach(el => {
+                el.style.setProperty('display', isKorean ? 'none' : 'revert', 'important');
+            });
+            document.querySelectorAll('.ko').forEach(el => {
+                el.style.setProperty('display', isKorean ? 'revert' : 'none', 'important');
+            });
+            document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
         }
-        // Initialize: hide Korean
-        document.querySelectorAll('.ko').forEach(el => el.style.display = 'none');
     </script>
 </body>
 </html>
