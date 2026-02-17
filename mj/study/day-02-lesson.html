@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Day 2: always_ff vs always_comb | Digital Design Study</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: #1a1a2e;
+            color: #eaeaea;
+            line-height: 1.7;
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #4a4a6a;
+        }
+        .day-badge {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            display: inline-block;
+            margin-bottom: 15px;
+        }
+        h1 {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #fff;
+        }
+        .subtitle {
+            color: #888;
+            font-size: 1em;
+        }
+        .lang-toggle {
+            position: fixed;
+            top: 15px;
+            right: 15px;
+            background: #333355;
+            border: none;
+            color: #fff;
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9em;
+            z-index: 1000;
+        }
+        .lang-toggle:hover {
+            background: #444466;
+        }
+        section {
+            background: #242444;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 25px;
+        }
+        h2 {
+            color: #667eea;
+            font-size: 1.4em;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        h3 {
+            color: #a5b4fc;
+            font-size: 1.1em;
+            margin: 20px 0 10px 0;
+        }
+        p {
+            margin-bottom: 15px;
+        }
+        .ko { display: none; }
+        code {
+            background: #1a1a2e;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-family: 'SF Mono', 'Fira Code', monospace;
+            color: #a5b4fc;
+        }
+        pre {
+            background: #0d0d1a;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 15px 0;
+            border-left: 4px solid #667eea;
+        }
+        pre code {
+            background: none;
+            padding: 0;
+            color: #e0e0e0;
+            font-size: 0.9em;
+            line-height: 1.6;
+        }
+        .keyword { color: #c792ea; }
+        .type { color: #82aaff; }
+        .signal { color: #c3e88d; }
+        .comment { color: #6a6a8a; }
+        .number { color: #f78c6c; }
+        ul, ol {
+            margin: 15px 0 15px 25px;
+        }
+        li {
+            margin-bottom: 8px;
+        }
+        .concept-box {
+            background: #1e3a5f;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 4px solid #60a5fa;
+        }
+        .warning-box {
+            background: #5f3a1e;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 4px solid #f59e0b;
+        }
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        .comparison-table th, .comparison-table td {
+            padding: 12px;
+            text-align: left;
+            border: 1px solid #4a4a6a;
+        }
+        .comparison-table th {
+            background: #333355;
+            color: #a5b4fc;
+        }
+        .comparison-table td {
+            background: #1a1a2e;
+        }
+        .diagram {
+            background: #0d0d1a;
+            border-radius: 8px;
+            padding: 30px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        .diagram svg {
+            max-width: 100%;
+        }
+        .nav-links {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .nav-btn {
+            background: #333355;
+            color: #fff;
+            text-decoration: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            transition: background 0.2s;
+        }
+        .nav-btn:hover {
+            background: #667eea;
+        }
+        .emoji { font-size: 1.2em; }
+        @media (max-width: 600px) {
+            body { padding: 15px; }
+            h1 { font-size: 1.5em; }
+            section { padding: 18px; }
+            pre { padding: 15px; font-size: 0.85em; }
+            .comparison-table { font-size: 0.85em; }
+            .comparison-table th, .comparison-table td { padding: 8px; }
+        }
+    </style>
+</head>
+<body>
+    <button class="lang-toggle" onclick="toggleLang()">🇰🇷 한국어</button>
+    
+    <div class="header">
+        <div class="day-badge">Day 2 of 40</div>
+        <h1 class="en">always_ff vs always_comb</h1>
+        <h1 class="ko">always_ff vs always_comb</h1>
+        <p class="subtitle en">Sequential vs Combinational Logic in SystemVerilog</p>
+        <p class="subtitle ko">SystemVerilog의 순차 논리 vs 조합 논리</p>
+    </div>
+
+    <section>
+        <h2><span class="emoji">🎯</span> <span class="en">Learning Objectives</span><span class="ko">학습 목표</span></h2>
+        <ul>
+            <li class="en">Understand the difference between sequential and combinational logic</li>
+            <li class="ko">순차 논리와 조합 논리의 차이점 이해하기</li>
+            <li class="en">Know when to use <code>always_ff</code> vs <code>always_comb</code></li>
+            <li class="ko"><code>always_ff</code>와 <code>always_comb</code>를 언제 사용하는지 알기</li>
+            <li class="en">Write synthesizable code that tools can optimize</li>
+            <li class="ko">합성 도구가 최적화할 수 있는 코드 작성하기</li>
+            <li class="en">Avoid common mistakes that cause simulation/synthesis mismatches</li>
+            <li class="ko">시뮬레이션/합성 불일치를 유발하는 일반적인 실수 피하기</li>
+        </ul>
+    </section>
+
+    <section>
+        <h2><span class="emoji">🔌</span> <span class="en">The Two Types of Logic</span><span class="ko">두 가지 논리 유형</span></h2>
+        
+        <p class="en">All digital hardware is built from two fundamental types of logic:</p>
+        <p class="ko">모든 디지털 하드웨어는 두 가지 기본적인 논리 유형으로 구성됩니다:</p>
+
+        <table class="comparison-table">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th class="en">Combinational Logic</th>
+                    <th class="ko">조합 논리</th>
+                    <th class="en">Sequential Logic</th>
+                    <th class="ko">순차 논리</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="en">What it does</td>
+                    <td class="ko">기능</td>
+                    <td class="en" colspan="2">Output depends ONLY on current inputs</td>
+                    <td class="ko" colspan="2">출력은 현재 입력에만 의존</td>
+                </tr>
+                <tr>
+                    <td class="en">Has memory?</td>
+                    <td class="ko">메모리 유무</td>
+                    <td class="en" colspan="2">❌ No</td>
+                    <td class="ko" colspan="2">❌ 없음</td>
+                </tr>
+                <tr>
+                    <td class="en">Clock needed?</td>
+                    <td class="ko">클럭 필요?</td>
+                    <td class="en" colspan="2">❌ No</td>
+                    <td class="ko" colspan="2">❌ 불필요</td>
+                </tr>
+                <tr>
+                    <td class="en">Examples</td>
+                    <td class="ko">예시</td>
+                    <td class="en" colspan="2">AND, OR, MUX, adders, encoders</td>
+                    <td class="ko" colspan="2">AND, OR, MUX, 가산기, 인코더</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <table class="comparison-table">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th class="en">Sequential Logic</th>
+                    <th class="ko">순차 논리</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="en">What it does</td>
+                    <td class="ko">기능</td>
+                    <td class="en">Output depends on current inputs AND past state</td>
+                    <td class="ko">출력은 현재 입력과 과거 상태에 의존</td>
+                </tr>
+                <tr>
+                    <td class="en">Has memory?</td>
+                    <td class="ko">메모리 유무</td>
+                    <td class="en">✅ Yes (flip-flops)</td>
+                    <td class="ko">✅ 있음 (플립플롭)</td>
+                </tr>
+                <tr>
+                    <td class="en">Clock needed?</td>
+                    <td class="ko">클럭 필요?</td>
+                    <td class="en">✅ Yes</td>
+                    <td class="ko">✅ 필요</td>
+                </tr>
+                <tr>
+                    <td class="en">Examples</td>
+                    <td class="ko">예시</td>
+                    <td class="en">Registers, counters, FSMs, FIFOs</td>
+                    <td class="ko">레지스터, 카운터, FSM, FIFO</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <section>
+        <h2><span class="emoji">⚡</span> <span class="en">always_comb — Combinational Logic</span><span class="ko">always_comb — 조합 논리</span></h2>
+        
+        <p class="en">Use <code>always_comb</code> when the output should update immediately whenever any input changes. Think of it like a pure function — same inputs always produce same outputs.</p>
+        <p class="ko"><code>always_comb</code>는 입력이 변경될 때마다 출력이 즉시 업데이트되어야 할 때 사용합니다. 순수 함수처럼 생각하세요 — 같은 입력은 항상 같은 출력을 생성합니다.</p>
+
+        <h3 class="en">Example: 4-to-1 Multiplexer</h3>
+        <h3 class="ko">예제: 4대1 멀티플렉서</h3>
+
+        <pre><code><span class="keyword">module</span> <span class="type">mux4to1</span> (
+    <span class="keyword">input  logic</span> [<span class="number">1</span>:<span class="number">0</span>] <span class="signal">sel</span>,
+    <span class="keyword">input  logic</span> [<span class="number">7</span>:<span class="number">0</span>] <span class="signal">a</span>, <span class="signal">b</span>, <span class="signal">c</span>, <span class="signal">d</span>,
+    <span class="keyword">output logic</span> [<span class="number">7</span>:<span class="number">0</span>] <span class="signal">y</span>
+);
+    <span class="keyword">always_comb</span> <span class="keyword">begin</span>
+        <span class="keyword">case</span> (<span class="signal">sel</span>)
+            <span class="number">2'b00</span>: <span class="signal">y</span> = <span class="signal">a</span>;
+            <span class="number">2'b01</span>: <span class="signal">y</span> = <span class="signal">b</span>;
+            <span class="number">2'b10</span>: <span class="signal">y</span> = <span class="signal">c</span>;
+            <span class="number">2'b11</span>: <span class="signal">y</span> = <span class="signal">d</span>;
+        <span class="keyword">endcase</span>
+    <span class="keyword">end</span>
+<span class="keyword">endmodule</span></code></pre>
+
+        <div class="concept-box">
+            <h3 class="en">💡 Key Properties of always_comb</h3>
+            <h3 class="ko">💡 always_comb의 주요 특성</h3>
+            <ul>
+                <li class="en"><strong>No clock!</strong> — Sensitivity list is automatic (all read signals)</li>
+                <li class="ko"><strong>클럭 없음!</strong> — 감도 목록이 자동 (모든 읽기 신호)</li>
+                <li class="en"><strong>Executes at time 0</strong> — Runs once at simulation start</li>
+                <li class="ko"><strong>시간 0에 실행</strong> — 시뮬레이션 시작 시 한 번 실행</li>
+                <li class="en"><strong>Cannot have feedback</strong> — Output cannot depend on itself</li>
+                <li class="ko"><strong>피드백 불가</strong> — 출력이 자기 자신에 의존할 수 없음</li>
+                <li class="en"><strong>Must assign all outputs in all paths</strong> — Or you get latches!</li>
+                <li class="ko"><strong>모든 경로에서 모든 출력 할당 필수</strong> — 아니면 래치 발생!</li>
+            </ul>
+        </div>
+
+        <h3 class="en">Example: Priority Encoder</h3>
+        <h3 class="ko">예제: 우선순위 인코더</h3>
+
+        <pre><code><span class="keyword">module</span> <span class="type">priority_encoder</span> (
+    <span class="keyword">input  logic</span> [<span class="number">3</span>:<span class="number">0</span>] <span class="signal">req</span>,
+    <span class="keyword">output logic</span> [<span class="number">1</span>:<span class="number">0</span>] <span class="signal">grant</span>,
+    <span class="keyword">output logic</span>        <span class="signal">valid</span>
+);
+    <span class="keyword">always_comb</span> <span class="keyword">begin</span>
+        <span class="signal">valid</span> = <span class="number">1'b1</span>;    <span class="comment">// Default assignment</span>
+        <span class="keyword">if</span> (<span class="signal">req</span>[<span class="number">3</span>])
+            <span class="signal">grant</span> = <span class="number">2'd3</span>;
+        <span class="keyword">else if</span> (<span class="signal">req</span>[<span class="number">2</span>])
+            <span class="signal">grant</span> = <span class="number">2'd2</span>;
+        <span class="keyword">else if</span> (<span class="signal">req</span>[<span class="number">1</span>])
+            <span class="signal">grant</span> = <span class="number">2'd1</span>;
+        <span class="keyword">else if</span> (<span class="signal">req</span>[<span class="number">0</span>])
+            <span class="signal">grant</span> = <span class="number">2'd0</span>;
+        <span class="keyword">else</span> <span class="keyword">begin</span>
+            <span class="signal">grant</span> = <span class="number">2'd0</span>;  <span class="comment">// Must assign even in else!</span>
+            <span class="signal">valid</span> = <span class="number">1'b0</span>;
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+<span class="keyword">endmodule</span></code></pre>
+    </section>
+
+    <section>
+        <h2><span class="emoji">🔄</span> <span class="en">always_ff — Sequential Logic</span><span class="ko">always_ff — 순차 논리</span></h2>
+        
+        <p class="en">Use <code>always_ff</code> when you need to store values and update them on clock edges. This creates flip-flops — the building blocks of memory.</p>
+        <p class="ko"><code>always_ff</code>는 값을 저장하고 클럭 에지에서 업데이트해야 할 때 사용합니다. 이것은 플립플롭을 생성합니다 — 메모리의 기본 구성 요소입니다.</p>
+
+        <h3 class="en">Example: Simple 8-bit Register</h3>
+        <h3 class="ko">예제: 간단한 8비트 레지스터</h3>
+
+        <pre><code><span class="keyword">module</span> <span class="type">register</span> (
+    <span class="keyword">input  logic</span>        <span class="signal">clk</span>,
+    <span class="keyword">input  logic</span>        <span class="signal">rst_n</span>,    <span class="comment">// Active-low reset</span>
+    <span class="keyword">input  logic</span>        <span class="signal">en</span>,
+    <span class="keyword">input  logic</span> [<span class="number">7</span>:<span class="number">0</span>] <span class="signal">d</span>,
+    <span class="keyword">output logic</span> [<span class="number">7</span>:<span class="number">0</span>] <span class="signal">q</span>
+);
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span> <span class="keyword">or negedge</span> <span class="signal">rst_n</span>) <span class="keyword">begin</span>
+        <span class="keyword">if</span> (!<span class="signal">rst_n</span>)
+            <span class="signal">q</span> &lt;= <span class="number">8'h00</span>;    <span class="comment">// Asynchronous reset</span>
+        <span class="keyword">else if</span> (<span class="signal">en</span>)
+            <span class="signal">q</span> &lt;= <span class="signal">d</span>;       <span class="comment">// Capture input on clock edge</span>
+        <span class="comment">// else: q keeps its value (implied)</span>
+    <span class="keyword">end</span>
+<span class="keyword">endmodule</span></code></pre>
+
+        <div class="concept-box">
+            <h3 class="en">💡 Key Properties of always_ff</h3>
+            <h3 class="ko">💡 always_ff의 주요 특성</h3>
+            <ul>
+                <li class="en"><strong>Requires clock edge</strong> — <code>posedge clk</code> or <code>negedge clk</code></li>
+                <li class="ko"><strong>클럭 에지 필요</strong> — <code>posedge clk</code> 또는 <code>negedge clk</code></li>
+                <li class="en"><strong>Use non-blocking assignments</strong> — Always <code>&lt;=</code>, never <code>=</code></li>
+                <li class="ko"><strong>논블로킹 할당 사용</strong> — 항상 <code>&lt;=</code>, 절대 <code>=</code> 아님</li>
+                <li class="en"><strong>Holds value between clocks</strong> — That's the "memory"</li>
+                <li class="ko"><strong>클럭 사이에 값 유지</strong> — 이것이 "메모리"</li>
+                <li class="en"><strong>Reset is optional but recommended</strong> — For known initial state</li>
+                <li class="ko"><strong>리셋은 선택이지만 권장</strong> — 알려진 초기 상태를 위해</li>
+            </ul>
+        </div>
+
+        <h3 class="en">Example: 4-bit Counter with Enable</h3>
+        <h3 class="ko">예제: 인에이블이 있는 4비트 카운터</h3>
+
+        <pre><code><span class="keyword">module</span> <span class="type">counter</span> (
+    <span class="keyword">input  logic</span>       <span class="signal">clk</span>,
+    <span class="keyword">input  logic</span>       <span class="signal">rst_n</span>,
+    <span class="keyword">input  logic</span>       <span class="signal">en</span>,
+    <span class="keyword">input  logic</span>       <span class="signal">load</span>,
+    <span class="keyword">input  logic</span> [<span class="number">3</span>:<span class="number">0</span>] <span class="signal">data</span>,
+    <span class="keyword">output logic</span> [<span class="number">3</span>:<span class="number">0</span>] <span class="signal">count</span>
+);
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span> <span class="keyword">or negedge</span> <span class="signal">rst_n</span>) <span class="keyword">begin</span>
+        <span class="keyword">if</span> (!<span class="signal">rst_n</span>)
+            <span class="signal">count</span> &lt;= <span class="number">4'd0</span>;
+        <span class="keyword">else if</span> (<span class="signal">load</span>)
+            <span class="signal">count</span> &lt;= <span class="signal">data</span>;
+        <span class="keyword">else if</span> (<span class="signal">en</span>)
+            <span class="signal">count</span> &lt;= <span class="signal">count</span> + <span class="number">1</span>;  <span class="comment">// count on left = next value</span>
+                                  <span class="comment">// count on right = current value</span>
+    <span class="keyword">end</span>
+<span class="keyword">endmodule</span></code></pre>
+    </section>
+
+    <section>
+        <h2><span class="emoji">📊</span> <span class="en">Hardware Visualization</span><span class="ko">하드웨어 시각화</span></h2>
+
+        <div class="diagram">
+            <svg viewBox="0 0 700 300" xmlns="http://www.w3.org/2000/svg">
+                <!-- Combinational Logic Box -->
+                <rect x="30" y="20" width="280" height="120" rx="10" fill="#2d3748" stroke="#667eea" stroke-width="2"/>
+                <text x="170" y="50" fill="#a5b4fc" text-anchor="middle" font-size="14" font-weight="bold">always_comb</text>
+                <text x="170" y="70" fill="#888" text-anchor="middle" font-size="11">Combinational Logic</text>
+                
+                <!-- Cloud shape for logic -->
+                <ellipse cx="170" cy="105" rx="60" ry="25" fill="#4a5568" stroke="#667eea"/>
+                <text x="170" y="110" fill="#fff" text-anchor="middle" font-size="11">AND/OR/MUX</text>
+                
+                <!-- Inputs -->
+                <line x1="10" y1="80" x2="30" y2="80" stroke="#60a5fa" stroke-width="2"/>
+                <line x1="10" y1="100" x2="30" y2="100" stroke="#60a5fa" stroke-width="2"/>
+                <line x1="10" y1="120" x2="30" y2="120" stroke="#60a5fa" stroke-width="2"/>
+                <text x="5" y="102" fill="#60a5fa" font-size="10">in</text>
+                
+                <!-- Output -->
+                <line x1="310" y1="100" x2="330" y2="100" stroke="#c3e88d" stroke-width="2"/>
+                <text x="335" y="104" fill="#c3e88d" font-size="10">out</text>
+
+                <!-- Sequential Logic Box -->
+                <rect x="390" y="20" width="280" height="120" rx="10" fill="#2d3748" stroke="#c792ea" stroke-width="2"/>
+                <text x="530" y="50" fill="#c792ea" text-anchor="middle" font-size="14" font-weight="bold">always_ff</text>
+                <text x="530" y="70" fill="#888" text-anchor="middle" font-size="11">Sequential Logic</text>
+                
+                <!-- Flip-flop symbol -->
+                <rect x="480" y="85" width="50" height="40" fill="#4a5568" stroke="#c792ea" stroke-width="2"/>
+                <text x="505" y="110" fill="#fff" text-anchor="middle" font-size="10">D Q</text>
+                <path d="M 480 115 L 490 120 L 480 125" fill="none" stroke="#f78c6c" stroke-width="1.5"/>
+                <text x="535" y="110" fill="#f78c6c" font-size="8">clk</text>
+                
+                <!-- FF Input -->
+                <line x1="370" y1="100" x2="390" y2="100" stroke="#60a5fa" stroke-width="2"/>
+                <line x1="390" y1="100" x2="480" y2="105" stroke="#60a5fa" stroke-width="2"/>
+                <text x="375" y="95" fill="#60a5fa" font-size="10">d</text>
+                
+                <!-- FF Output -->
+                <line x1="530" y1="105" x2="620" y2="100" stroke="#c3e88d" stroke-width="2"/>
+                <line x1="620" y1="100" x2="690" y2="100" stroke="#c3e88d" stroke-width="2"/>
+                <text x="665" y="95" fill="#c3e88d" font-size="10">q</text>
+                
+                <!-- Clock -->
+                <line x1="505" y1="145" x2="505" y2="125" stroke="#f78c6c" stroke-width="2"/>
+                <text x="505" y="158" fill="#f78c6c" text-anchor="middle" font-size="10">clk</text>
+
+                <!-- Labels below -->
+                <text x="170" y="170" fill="#667eea" text-anchor="middle" font-size="12">No Memory</text>
+                <text x="170" y="188" fill="#888" text-anchor="middle" font-size="11" class="en">Output changes instantly</text>
+                <text x="170" y="188" fill="#888" text-anchor="middle" font-size="11" class="ko">출력이 즉시 변경</text>
+                
+                <text x="530" y="170" fill="#c792ea" text-anchor="middle" font-size="12">Has Memory (FF)</text>
+                <text x="530" y="188" fill="#888" text-anchor="middle" font-size="11" class="en">Output changes on clock edge</text>
+                <text x="530" y="188" fill="#888" text-anchor="middle" font-size="11" class="ko">출력이 클럭 에지에서 변경</text>
+
+                <!-- Timing diagram labels -->
+                <text x="350" y="230" fill="#fff" text-anchor="middle" font-size="13" font-weight="bold" class="en">Timing Behavior</text>
+                <text x="350" y="230" fill="#fff" text-anchor="middle" font-size="13" font-weight="bold" class="ko">타이밍 동작</text>
+
+                <!-- Simple timing hints -->
+                <rect x="80" y="250" width="120" height="30" rx="5" fill="#1e3a5f"/>
+                <text x="140" y="270" fill="#60a5fa" text-anchor="middle" font-size="10" class="en">Transparent</text>
+                <text x="140" y="270" fill="#60a5fa" text-anchor="middle" font-size="10" class="ko">투명</text>
+                
+                <rect x="500" y="250" width="120" height="30" rx="5" fill="#3d1e5f"/>
+                <text x="560" y="270" fill="#c792ea" text-anchor="middle" font-size="10" class="en">Edge-triggered</text>
+                <text x="560" y="270" fill="#c792ea" text-anchor="middle" font-size="10" class="ko">에지 트리거</text>
+            </svg>
+        </div>
+    </section>
+
+    <section>
+        <h2><span class="emoji">🆚</span> <span class="en">Side-by-Side Comparison</span><span class="ko">나란히 비교</span></h2>
+
+        <table class="comparison-table">
+            <thead>
+                <tr>
+                    <th class="en">Feature</th>
+                    <th class="ko">특징</th>
+                    <th>always_comb</th>
+                    <th>always_ff</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="en">Sensitivity</td>
+                    <td class="ko">감도</td>
+                    <td class="en">Automatic (all inputs)</td>
+                    <td class="ko">자동 (모든 입력)</td>
+                    <td class="en">Explicit (@posedge clk)</td>
+                    <td class="ko">명시적 (@posedge clk)</td>
+                </tr>
+                <tr>
+                    <td class="en">Assignment</td>
+                    <td class="ko">할당</td>
+                    <td class="en">Blocking (=)</td>
+                    <td class="ko">블로킹 (=)</td>
+                    <td class="en">Non-blocking (<=)</td>
+                    <td class="ko">논블로킹 (<=)</td>
+                </tr>
+                <tr>
+                    <td class="en">Creates</td>
+                    <td class="ko">생성물</td>
+                    <td class="en">Gates/logic</td>
+                    <td class="ko">게이트/논리</td>
+                    <td class="en">Flip-flops</td>
+                    <td class="ko">플립플롭</td>
+                </tr>
+                <tr>
+                    <td class="en">Clock</td>
+                    <td class="ko">클럭</td>
+                    <td class="en">None</td>
+                    <td class="ko">없음</td>
+                    <td class="en">Required</td>
+                    <td class="ko">필수</td>
+                </tr>
+                <tr>
+                    <td class="en">Reset</td>
+                    <td class="ko">리셋</td>
+                    <td class="en">Not applicable</td>
+                    <td class="ko">해당 없음</td>
+                    <td class="en">Usually needed</td>
+                    <td class="ko">보통 필요</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <section>
+        <h2><span class="emoji">⚠️</span> <span class="en">Common Mistakes</span><span class="ko">일반적인 실수</span></h2>
+
+        <div class="warning-box">
+            <h3 class="en">❌ Mistake 1: Missing assignment creates latch</h3>
+            <h3 class="ko">❌ 실수 1: 할당 누락으로 래치 생성</h3>
+            <pre><code><span class="comment">// BAD: 'y' not assigned when sel=2'b11</span>
+<span class="keyword">always_comb</span> <span class="keyword">begin</span>
+    <span class="keyword">case</span> (<span class="signal">sel</span>)
+        <span class="number">2'b00</span>: <span class="signal">y</span> = <span class="signal">a</span>;
+        <span class="number">2'b01</span>: <span class="signal">y</span> = <span class="signal">b</span>;
+        <span class="number">2'b10</span>: <span class="signal">y</span> = <span class="signal">c</span>;
+        <span class="comment">// Missing 2'b11 case! → Latch inferred</span>
+    <span class="keyword">endcase</span>
+<span class="keyword">end</span>
+
+<span class="comment">// GOOD: Use default or cover all cases</span>
+<span class="keyword">always_comb</span> <span class="keyword">begin</span>
+    <span class="keyword">case</span> (<span class="signal">sel</span>)
+        <span class="number">2'b00</span>: <span class="signal">y</span> = <span class="signal">a</span>;
+        <span class="number">2'b01</span>: <span class="signal">y</span> = <span class="signal">b</span>;
+        <span class="number">2'b10</span>: <span class="signal">y</span> = <span class="signal">c</span>;
+        <span class="keyword">default</span>: <span class="signal">y</span> = <span class="signal">d</span>;  <span class="comment">// ✓ All cases covered</span>
+    <span class="keyword">endcase</span>
+<span class="keyword">end</span></code></pre>
+        </div>
+
+        <div class="warning-box">
+            <h3 class="en">❌ Mistake 2: Using blocking in always_ff</h3>
+            <h3 class="ko">❌ 실수 2: always_ff에서 블로킹 사용</h3>
+            <pre><code><span class="comment">// BAD: Blocking assignment in sequential logic</span>
+<span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span>) <span class="keyword">begin</span>
+    <span class="signal">a</span> = <span class="signal">b</span>;    <span class="comment">// ✗ Wrong!</span>
+    <span class="signal">c</span> = <span class="signal">a</span>;    <span class="comment">// Gets new value of 'a' immediately</span>
+<span class="keyword">end</span>
+
+<span class="comment">// GOOD: Non-blocking assignment</span>
+<span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span>) <span class="keyword">begin</span>
+    <span class="signal">a</span> &lt;= <span class="signal">b</span>;   <span class="comment">// ✓ Correct!</span>
+    <span class="signal">c</span> &lt;= <span class="signal">a</span>;   <span class="comment">// Gets OLD value of 'a'</span>
+<span class="keyword">end</span></code></pre>
+        </div>
+
+        <div class="warning-box">
+            <h3 class="en">❌ Mistake 3: Using always_comb for state</h3>
+            <h3 class="ko">❌ 실수 3: 상태에 always_comb 사용</h3>
+            <pre><code><span class="comment">// BAD: Trying to hold state in combinational block</span>
+<span class="keyword">always_comb</span> <span class="keyword">begin</span>
+    <span class="keyword">if</span> (<span class="signal">en</span>)
+        <span class="signal">count</span> = <span class="signal">count</span> + <span class="number">1</span>;  <span class="comment">// ✗ Combinational feedback!</span>
+<span class="keyword">end</span>
+
+<span class="comment">// GOOD: Use always_ff for anything that holds state</span>
+<span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span>) <span class="keyword">begin</span>
+    <span class="keyword">if</span> (<span class="signal">en</span>)
+        <span class="signal">count</span> &lt;= <span class="signal">count</span> + <span class="number">1</span>;  <span class="comment">// ✓ Registered counter</span>
+<span class="keyword">end</span></code></pre>
+        </div>
+    </section>
+
+    <section>
+        <h2><span class="emoji">💼</span> <span class="en">Real Design Pattern: Register + Combinational</span><span class="ko">실제 설계 패턴: 레지스터 + 조합</span></h2>
+        
+        <p class="en">Most real modules combine both types. Here's a typical pattern — registered outputs with combinational next-state logic:</p>
+        <p class="ko">대부분의 실제 모듈은 두 유형을 결합합니다. 여기 일반적인 패턴이 있습니다 — 조합 논리의 다음 상태와 레지스터 출력:</p>
+
+        <pre><code><span class="keyword">module</span> <span class="type">alu_with_register</span> (
+    <span class="keyword">input  logic</span>        <span class="signal">clk</span>,
+    <span class="keyword">input  logic</span>        <span class="signal">rst_n</span>,
+    <span class="keyword">input  logic</span> [<span class="number">7</span>:<span class="number">0</span>] <span class="signal">a</span>, <span class="signal">b</span>,
+    <span class="keyword">input  logic</span> [<span class="number">1</span>:<span class="number">0</span>] <span class="signal">op</span>,
+    <span class="keyword">input  logic</span>        <span class="signal">valid_in</span>,
+    <span class="keyword">output logic</span> [<span class="number">7</span>:<span class="number">0</span>] <span class="signal">result</span>,
+    <span class="keyword">output logic</span>        <span class="signal">valid_out</span>
+);
+    <span class="comment">// Internal wire for combinational result</span>
+    <span class="keyword">logic</span> [<span class="number">7</span>:<span class="number">0</span>] <span class="signal">alu_result</span>;
+
+    <span class="comment">// Combinational: ALU operation</span>
+    <span class="keyword">always_comb</span> <span class="keyword">begin</span>
+        <span class="keyword">case</span> (<span class="signal">op</span>)
+            <span class="number">2'b00</span>: <span class="signal">alu_result</span> = <span class="signal">a</span> + <span class="signal">b</span>;
+            <span class="number">2'b01</span>: <span class="signal">alu_result</span> = <span class="signal">a</span> - <span class="signal">b</span>;
+            <span class="number">2'b10</span>: <span class="signal">alu_result</span> = <span class="signal">a</span> & <span class="signal">b</span>;
+            <span class="number">2'b11</span>: <span class="signal">alu_result</span> = <span class="signal">a</span> | <span class="signal">b</span>;
+        <span class="keyword">endcase</span>
+    <span class="keyword">end</span>
+
+    <span class="comment">// Sequential: Register the output</span>
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span> <span class="keyword">or negedge</span> <span class="signal">rst_n</span>) <span class="keyword">begin</span>
+        <span class="keyword">if</span> (!<span class="signal">rst_n</span>) <span class="keyword">begin</span>
+            <span class="signal">result</span>    &lt;= <span class="number">8'd0</span>;
+            <span class="signal">valid_out</span> &lt;= <span class="number">1'b0</span>;
+        <span class="keyword">end else begin</span>
+            <span class="signal">result</span>    &lt;= <span class="signal">alu_result</span>;  <span class="comment">// Register comb output</span>
+            <span class="signal">valid_out</span> &lt;= <span class="signal">valid_in</span>;    <span class="comment">// Pipeline valid signal</span>
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+<span class="keyword">endmodule</span></code></pre>
+
+        <div class="concept-box">
+            <h3 class="en">🎯 Why This Pattern?</h3>
+            <h3 class="ko">🎯 왜 이 패턴을 사용하나요?</h3>
+            <ul>
+                <li class="en"><strong>Clean separation:</strong> Easy to read, debug, modify</li>
+                <li class="ko"><strong>깔끔한 분리:</strong> 읽기, 디버그, 수정이 쉬움</li>
+                <li class="en"><strong>Timing closure:</strong> Registered outputs are timing-friendly</li>
+                <li class="ko"><strong>타이밍 클로저:</strong> 레지스터 출력은 타이밍에 유리</li>
+                <li class="en"><strong>Pipeline ready:</strong> Easy to add more stages later</li>
+                <li class="ko"><strong>파이프라인 준비:</strong> 나중에 더 많은 단계 추가가 쉬움</li>
+            </ul>
+        </div>
+    </section>
+
+    <section>
+        <h2><span class="emoji">✅</span> <span class="en">Key Takeaways</span><span class="ko">핵심 요약</span></h2>
+        <ul>
+            <li class="en"><code>always_comb</code> = No clock, no memory, output tracks inputs instantly</li>
+            <li class="ko"><code>always_comb</code> = 클럭 없음, 메모리 없음, 출력이 입력을 즉시 추적</li>
+            <li class="en"><code>always_ff</code> = Clock-driven, creates flip-flops, holds state</li>
+            <li class="ko"><code>always_ff</code> = 클럭 기반, 플립플롭 생성, 상태 유지</li>
+            <li class="en">Use <code>=</code> in always_comb, <code>&lt;=</code> in always_ff</li>
+            <li class="ko">always_comb에서 <code>=</code>, always_ff에서 <code>&lt;=</code> 사용</li>
+            <li class="en">Always assign all outputs in all paths of always_comb</li>
+            <li class="ko">always_comb의 모든 경로에서 항상 모든 출력 할당</li>
+            <li class="en">Combine both in real designs: comb for logic, ff for storage</li>
+            <li class="ko">실제 설계에서 둘을 결합: comb는 논리용, ff는 저장용</li>
+        </ul>
+    </section>
+
+    <div class="nav-links">
+        <a href="day-01-lesson.html" class="nav-btn">← Day 1: Module Structure</a>
+        <a href="day-02-quiz.html" class="nav-btn en">Take Quiz →</a>
+        <a href="day-02-quiz.html" class="nav-btn ko">퀴즈 풀기 →</a>
+    </div>
+
+    <script>
+        let isKorean = false;
+        function toggleLang() {
+            isKorean = !isKorean;
+            document.querySelectorAll('.en').forEach(el => el.style.display = isKorean ? 'none' : '');
+            document.querySelectorAll('.ko').forEach(el => el.style.display = isKorean ? '' : 'none');
+            document.querySelector('.lang-toggle').textContent = isKorean ? '🇺🇸 English' : '🇰🇷 한국어';
+        }
+        // Initialize: hide Korean
+        document.querySelectorAll('.ko').forEach(el => el.style.display = 'none');
+    </script>
+</body>
+</html>

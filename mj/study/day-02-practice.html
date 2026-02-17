@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Day 2 Practice: always_ff vs always_comb | Digital Design Study</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: #1a1a2e;
+            color: #eaeaea;
+            line-height: 1.7;
+            padding: 20px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #4a4a6a;
+        }
+        .day-badge {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            display: inline-block;
+            margin-bottom: 15px;
+        }
+        h1 {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #fff;
+        }
+        .subtitle {
+            color: #888;
+            font-size: 1em;
+        }
+        .lang-toggle {
+            position: fixed;
+            top: 15px;
+            right: 15px;
+            background: #333355;
+            border: none;
+            color: #fff;
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9em;
+            z-index: 1000;
+        }
+        .lang-toggle:hover {
+            background: #444466;
+        }
+        .exercise {
+            background: #242444;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+        .exercise-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .exercise-num {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3em;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+        .exercise-title {
+            font-size: 1.3em;
+            color: #fff;
+        }
+        .difficulty {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.75em;
+            margin-left: 10px;
+        }
+        .easy { background: #10b981; color: #fff; }
+        .medium { background: #f59e0b; color: #000; }
+        .hard { background: #ef4444; color: #fff; }
+        h2 {
+            color: #667eea;
+            font-size: 1.2em;
+            margin: 20px 0 10px 0;
+        }
+        h3 {
+            color: #a5b4fc;
+            font-size: 1em;
+            margin: 15px 0 10px 0;
+        }
+        p {
+            margin-bottom: 15px;
+        }
+        code {
+            background: #1a1a2e;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-family: 'SF Mono', 'Fira Code', monospace;
+            color: #a5b4fc;
+        }
+        pre {
+            background: #0d0d1a;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 15px 0;
+            border-left: 4px solid #667eea;
+        }
+        pre code {
+            background: none;
+            padding: 0;
+            color: #e0e0e0;
+            font-size: 0.9em;
+            line-height: 1.6;
+        }
+        .keyword { color: #c792ea; }
+        .type { color: #82aaff; }
+        .signal { color: #c3e88d; }
+        .comment { color: #6a6a8a; }
+        .number { color: #f78c6c; }
+        ul, ol {
+            margin: 15px 0 15px 25px;
+        }
+        li {
+            margin-bottom: 8px;
+        }
+        .task-box {
+            background: #1e3a5f;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 4px solid #60a5fa;
+        }
+        .hint-box {
+            background: #3d1e5f;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            border-left: 4px solid #c792ea;
+        }
+        .hint-toggle {
+            background: #333355;
+            border: none;
+            color: #c792ea;
+            padding: 8px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9em;
+            margin-top: 10px;
+        }
+        .hint-toggle:hover {
+            background: #444466;
+        }
+        .hint-content {
+            display: none;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #5a4a7a;
+        }
+        .hint-content.show {
+            display: block;
+        }
+        .playground-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 500;
+            margin: 15px 0;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .playground-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+        .expected-output {
+            background: #1a2e1a;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            border-left: 4px solid #10b981;
+            font-family: 'SF Mono', 'Fira Code', monospace;
+            font-size: 0.85em;
+        }
+        .ko { display: none; }
+        .nav-links {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .nav-btn {
+            background: #333355;
+            color: #fff;
+            text-decoration: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            transition: background 0.2s;
+        }
+        .nav-btn:hover {
+            background: #667eea;
+        }
+        .copy-btn {
+            background: #333355;
+            border: none;
+            color: #888;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8em;
+            float: right;
+            margin-top: -30px;
+            margin-right: 10px;
+        }
+        .copy-btn:hover {
+            color: #fff;
+            background: #444466;
+        }
+        @media (max-width: 600px) {
+            body { padding: 15px; }
+            h1 { font-size: 1.5em; }
+            .exercise { padding: 18px; }
+            pre { padding: 15px; font-size: 0.8em; }
+            .exercise-header { flex-direction: column; align-items: flex-start; }
+        }
+    </style>
+</head>
+<body>
+    <button class="lang-toggle" onclick="toggleLang()">🇰🇷 한국어</button>
+    
+    <div class="header">
+        <div class="day-badge">Day 2 Practice</div>
+        <h1 class="en">always_ff vs always_comb Exercises</h1>
+        <h1 class="ko">always_ff vs always_comb 실습</h1>
+        <p class="subtitle en">3 Hands-on Exercises • Use EDA Playground</p>
+        <p class="subtitle ko">3개의 실습 문제 • EDA Playground 사용</p>
+    </div>
+
+    <!-- Exercise 1 -->
+    <div class="exercise">
+        <div class="exercise-header">
+            <div class="exercise-num">1</div>
+            <div>
+                <span class="exercise-title en">4-bit Priority Encoder</span>
+                <span class="exercise-title ko">4비트 우선순위 인코더</span>
+                <span class="difficulty easy">Easy</span>
+            </div>
+        </div>
+
+        <div class="task-box">
+            <h3 class="en">📋 Your Task</h3>
+            <h3 class="ko">📋 과제</h3>
+            <p class="en">Implement a 4-bit priority encoder using <code>always_comb</code>. The encoder should output the index of the highest-priority active request bit.</p>
+            <p class="ko"><code>always_comb</code>를 사용하여 4비트 우선순위 인코더를 구현하세요. 인코더는 가장 높은 우선순위의 활성 요청 비트 인덱스를 출력해야 합니다.</p>
+            <ul>
+                <li class="en"><strong>Input:</strong> <code>req[3:0]</code> — 4 request lines (bit 3 = highest priority)</li>
+                <li class="ko"><strong>입력:</strong> <code>req[3:0]</code> — 4개의 요청 라인 (비트 3 = 최고 우선순위)</li>
+                <li class="en"><strong>Output:</strong> <code>grant[1:0]</code> — index of highest active bit</li>
+                <li class="ko"><strong>출력:</strong> <code>grant[1:0]</code> — 최고 활성 비트의 인덱스</li>
+                <li class="en"><strong>Output:</strong> <code>valid</code> — 1 if any request is active, 0 otherwise</li>
+                <li class="ko"><strong>출력:</strong> <code>valid</code> — 요청이 있으면 1, 없으면 0</li>
+            </ul>
+        </div>
+
+        <h3 class="en">📝 Starter Code</h3>
+        <h3 class="ko">📝 시작 코드</h3>
+        <pre><code><span class="comment">// Priority Encoder - Fill in the always_comb block</span>
+<span class="keyword">module</span> <span class="type">priority_encoder</span> (
+    <span class="keyword">input  logic</span> [<span class="number">3</span>:<span class="number">0</span>] <span class="signal">req</span>,
+    <span class="keyword">output logic</span> [<span class="number">1</span>:<span class="number">0</span>] <span class="signal">grant</span>,
+    <span class="keyword">output logic</span>        <span class="signal">valid</span>
+);
+
+    <span class="keyword">always_comb</span> <span class="keyword">begin</span>
+        <span class="comment">// TODO: Implement priority encoding</span>
+        <span class="comment">// Hint: Check from highest priority (req[3]) to lowest (req[0])</span>
+        <span class="comment">// Remember: Assign ALL outputs in ALL paths!</span>
+        
+        <span class="signal">valid</span> = <span class="number">1'b0</span>;    <span class="comment">// Default</span>
+        <span class="signal">grant</span> = <span class="number">2'd0</span>;    <span class="comment">// Default</span>
+        
+        <span class="comment">// Your code here...</span>
+        
+    <span class="keyword">end</span>
+
+<span class="keyword">endmodule</span>
+
+<span class="comment">// ============ TESTBENCH ============</span>
+<span class="keyword">module</span> <span class="type">tb_priority_encoder</span>;
+    <span class="keyword">logic</span> [<span class="number">3</span>:<span class="number">0</span>] <span class="signal">req</span>;
+    <span class="keyword">logic</span> [<span class="number">1</span>:<span class="number">0</span>] <span class="signal">grant</span>;
+    <span class="keyword">logic</span>        <span class="signal">valid</span>;
+    
+    <span class="type">priority_encoder</span> <span class="signal">dut</span> (.*);
+    
+    <span class="keyword">initial</span> <span class="keyword">begin</span>
+        $display(<span class="string">"Testing Priority Encoder"</span>);
+        $display(<span class="string">"========================"</span>);
+        
+        <span class="comment">// Test: No requests</span>
+        <span class="signal">req</span> = <span class="number">4'b0000</span>; #<span class="number">10</span>;
+        $display(<span class="string">"req=%b → grant=%d, valid=%b (expect: grant=0, valid=0)"</span>, <span class="signal">req</span>, <span class="signal">grant</span>, <span class="signal">valid</span>);
+        
+        <span class="comment">// Test: Only req[0]</span>
+        <span class="signal">req</span> = <span class="number">4'b0001</span>; #<span class="number">10</span>;
+        $display(<span class="string">"req=%b → grant=%d, valid=%b (expect: grant=0, valid=1)"</span>, <span class="signal">req</span>, <span class="signal">grant</span>, <span class="signal">valid</span>);
+        
+        <span class="comment">// Test: req[2] highest</span>
+        <span class="signal">req</span> = <span class="number">4'b0101</span>; #<span class="number">10</span>;
+        $display(<span class="string">"req=%b → grant=%d, valid=%b (expect: grant=2, valid=1)"</span>, <span class="signal">req</span>, <span class="signal">grant</span>, <span class="signal">valid</span>);
+        
+        <span class="comment">// Test: req[3] highest (all active)</span>
+        <span class="signal">req</span> = <span class="number">4'b1111</span>; #<span class="number">10</span>;
+        $display(<span class="string">"req=%b → grant=%d, valid=%b (expect: grant=3, valid=1)"</span>, <span class="signal">req</span>, <span class="signal">grant</span>, <span class="signal">valid</span>);
+        
+        <span class="comment">// Test: req[1] only</span>
+        <span class="signal">req</span> = <span class="number">4'b0010</span>; #<span class="number">10</span>;
+        $display(<span class="string">"req=%b → grant=%d, valid=%b (expect: grant=1, valid=1)"</span>, <span class="signal">req</span>, <span class="signal">grant</span>, <span class="signal">valid</span>);
+        
+        $display(<span class="string">"========================"</span>);
+        $display(<span class="string">"Test complete!"</span>);
+        $finish;
+    <span class="keyword">end</span>
+<span class="keyword">endmodule</span></code></pre>
+        <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+
+        <a href="https://www.edaplayground.com/x/KhLR" target="_blank" class="playground-link">
+            🚀 <span class="en">Open in EDA Playground</span><span class="ko">EDA Playground에서 열기</span>
+        </a>
+
+        <div class="hint-box">
+            <button class="hint-toggle" onclick="toggleHint('hint1')">
+                <span class="en">💡 Show Hint</span>
+                <span class="ko">💡 힌트 보기</span>
+            </button>
+            <div class="hint-content" id="hint1">
+                <p class="en">Use a chain of <code>if-else if</code> statements, checking from highest priority to lowest:</p>
+                <p class="ko"><code>if-else if</code> 체인을 사용하여 최고 우선순위에서 최저로 확인하세요:</p>
+                <pre><code><span class="keyword">if</span> (<span class="signal">req</span>[<span class="number">3</span>]) <span class="keyword">begin</span>
+    <span class="signal">grant</span> = <span class="number">2'd3</span>;
+    <span class="signal">valid</span> = <span class="number">1'b1</span>;
+<span class="keyword">end else if</span> (<span class="signal">req</span>[<span class="number">2</span>]) <span class="keyword">begin</span>
+    <span class="comment">// ...</span>
+<span class="keyword">end</span></code></pre>
+            </div>
+        </div>
+
+        <h3 class="en">✅ Expected Output</h3>
+        <h3 class="ko">✅ 예상 출력</h3>
+        <div class="expected-output">
+Testing Priority Encoder
+========================
+req=0000 → grant=0, valid=0 (expect: grant=0, valid=0)
+req=0001 → grant=0, valid=1 (expect: grant=0, valid=1)
+req=0101 → grant=2, valid=1 (expect: grant=2, valid=1)
+req=1111 → grant=3, valid=1 (expect: grant=3, valid=1)
+req=0010 → grant=1, valid=1 (expect: grant=1, valid=1)
+========================
+Test complete!
+        </div>
+    </div>
+
+    <!-- Exercise 2 -->
+    <div class="exercise">
+        <div class="exercise-header">
+            <div class="exercise-num">2</div>
+            <div>
+                <span class="exercise-title en">8-bit Register with Enable</span>
+                <span class="exercise-title ko">인에이블이 있는 8비트 레지스터</span>
+                <span class="difficulty easy">Easy</span>
+            </div>
+        </div>
+
+        <div class="task-box">
+            <h3 class="en">📋 Your Task</h3>
+            <h3 class="ko">📋 과제</h3>
+            <p class="en">Implement an 8-bit register with asynchronous reset and synchronous enable using <code>always_ff</code>.</p>
+            <p class="ko"><code>always_ff</code>를 사용하여 비동기 리셋과 동기 인에이블이 있는 8비트 레지스터를 구현하세요.</p>
+            <ul>
+                <li class="en"><strong>Input:</strong> <code>clk</code>, <code>rst_n</code> (active low), <code>en</code>, <code>d[7:0]</code></li>
+                <li class="ko"><strong>입력:</strong> <code>clk</code>, <code>rst_n</code> (액티브 로우), <code>en</code>, <code>d[7:0]</code></li>
+                <li class="en"><strong>Output:</strong> <code>q[7:0]</code></li>
+                <li class="ko"><strong>출력:</strong> <code>q[7:0]</code></li>
+                <li class="en"><strong>Behavior:</strong> Reset to 0, capture d when en=1 on rising clock edge</li>
+                <li class="ko"><strong>동작:</strong> 0으로 리셋, 상승 클럭 에지에서 en=1일 때 d를 캡처</li>
+            </ul>
+        </div>
+
+        <h3 class="en">📝 Starter Code</h3>
+        <h3 class="ko">📝 시작 코드</h3>
+        <pre><code><span class="comment">// 8-bit Register with Enable - Fill in the always_ff block</span>
+<span class="keyword">module</span> <span class="type">register_en</span> (
+    <span class="keyword">input  logic</span>        <span class="signal">clk</span>,
+    <span class="keyword">input  logic</span>        <span class="signal">rst_n</span>,   <span class="comment">// Active-low async reset</span>
+    <span class="keyword">input  logic</span>        <span class="signal">en</span>,      <span class="comment">// Clock enable</span>
+    <span class="keyword">input  logic</span> [<span class="number">7</span>:<span class="number">0</span>] <span class="signal">d</span>,
+    <span class="keyword">output logic</span> [<span class="number">7</span>:<span class="number">0</span>] <span class="signal">q</span>
+);
+
+    <span class="comment">// TODO: Implement the register</span>
+    <span class="comment">// Requirements:</span>
+    <span class="comment">// 1. Asynchronous reset (rst_n in sensitivity list)</span>
+    <span class="comment">// 2. When rst_n=0, output q should be 0</span>
+    <span class="comment">// 3. When en=1 and rising clock, capture d</span>
+    <span class="comment">// 4. When en=0, hold current value</span>
+    
+    <span class="keyword">always_ff</span> @(<span class="comment">/* sensitivity list here */</span>) <span class="keyword">begin</span>
+        <span class="comment">// Your code here...</span>
+    <span class="keyword">end</span>
+
+<span class="keyword">endmodule</span>
+
+<span class="comment">// ============ TESTBENCH ============</span>
+<span class="keyword">module</span> <span class="type">tb_register_en</span>;
+    <span class="keyword">logic</span>        <span class="signal">clk</span>, <span class="signal">rst_n</span>, <span class="signal">en</span>;
+    <span class="keyword">logic</span> [<span class="number">7</span>:<span class="number">0</span>] <span class="signal">d</span>, <span class="signal">q</span>;
+    
+    <span class="type">register_en</span> <span class="signal">dut</span> (.*);
+    
+    <span class="comment">// Clock generation: 10ns period</span>
+    <span class="keyword">always</span> #<span class="number">5</span> <span class="signal">clk</span> = ~<span class="signal">clk</span>;
+    
+    <span class="keyword">initial</span> <span class="keyword">begin</span>
+        $display(<span class="string">"Testing 8-bit Register with Enable"</span>);
+        $display(<span class="string">"===================================="</span>);
+        
+        <span class="comment">// Initialize</span>
+        <span class="signal">clk</span> = <span class="number">0</span>; <span class="signal">rst_n</span> = <span class="number">0</span>; <span class="signal">en</span> = <span class="number">0</span>; <span class="signal">d</span> = <span class="number">8'hAA</span>;
+        
+        <span class="comment">// Test reset</span>
+        #<span class="number">12</span>;
+        $display(<span class="string">"After reset: q=%h (expect: 00)"</span>, <span class="signal">q</span>);
+        
+        <span class="comment">// Release reset</span>
+        <span class="signal">rst_n</span> = <span class="number">1</span>;
+        
+        <span class="comment">// Test: en=0, data should NOT load</span>
+        <span class="signal">d</span> = <span class="number">8'h55</span>; <span class="signal">en</span> = <span class="number">0</span>;
+        @(<span class="keyword">posedge</span> <span class="signal">clk</span>); #<span class="number">1</span>;
+        $display(<span class="string">"en=0, d=55: q=%h (expect: 00, no load)"</span>, <span class="signal">q</span>);
+        
+        <span class="comment">// Test: en=1, data should load</span>
+        <span class="signal">d</span> = <span class="number">8'hBE</span>; <span class="signal">en</span> = <span class="number">1</span>;
+        @(<span class="keyword">posedge</span> <span class="signal">clk</span>); #<span class="number">1</span>;
+        $display(<span class="string">"en=1, d=BE: q=%h (expect: BE)"</span>, <span class="signal">q</span>);
+        
+        <span class="comment">// Test: en=1, new data</span>
+        <span class="signal">d</span> = <span class="number">8'hEF</span>;
+        @(<span class="keyword">posedge</span> <span class="signal">clk</span>); #<span class="number">1</span>;
+        $display(<span class="string">"en=1, d=EF: q=%h (expect: EF)"</span>, <span class="signal">q</span>);
+        
+        <span class="comment">// Test: en=0, should hold</span>
+        <span class="signal">d</span> = <span class="number">8'h00</span>; <span class="signal">en</span> = <span class="number">0</span>;
+        @(<span class="keyword">posedge</span> <span class="signal">clk</span>); #<span class="number">1</span>;
+        $display(<span class="string">"en=0, d=00: q=%h (expect: EF, hold)"</span>, <span class="signal">q</span>);
+        
+        <span class="comment">// Test: async reset while running</span>
+        <span class="signal">rst_n</span> = <span class="number">0</span>; #<span class="number">2</span>;
+        $display(<span class="string">"Async reset: q=%h (expect: 00)"</span>, <span class="signal">q</span>);
+        
+        $display(<span class="string">"===================================="</span>);
+        $display(<span class="string">"Test complete!"</span>);
+        $finish;
+    <span class="keyword">end</span>
+<span class="keyword">endmodule</span></code></pre>
+        <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+
+        <a href="https://www.edaplayground.com/x/KhLR" target="_blank" class="playground-link">
+            🚀 <span class="en">Open in EDA Playground</span><span class="ko">EDA Playground에서 열기</span>
+        </a>
+
+        <div class="hint-box">
+            <button class="hint-toggle" onclick="toggleHint('hint2')">
+                <span class="en">💡 Show Hint</span>
+                <span class="ko">💡 힌트 보기</span>
+            </button>
+            <div class="hint-content" id="hint2">
+                <p class="en">The sensitivity list for async reset needs both clock and reset:</p>
+                <p class="ko">비동기 리셋의 감도 목록에는 클럭과 리셋이 모두 필요합니다:</p>
+                <pre><code><span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span> <span class="keyword">or negedge</span> <span class="signal">rst_n</span>) <span class="keyword">begin</span>
+    <span class="keyword">if</span> (!<span class="signal">rst_n</span>)
+        <span class="signal">q</span> &lt;= <span class="number">8'h00</span>;
+    <span class="keyword">else if</span> (<span class="signal">en</span>)
+        <span class="comment">// ...</span>
+<span class="keyword">end</span></code></pre>
+            </div>
+        </div>
+
+        <h3 class="en">✅ Expected Output</h3>
+        <h3 class="ko">✅ 예상 출력</h3>
+        <div class="expected-output">
+Testing 8-bit Register with Enable
+====================================
+After reset: q=00 (expect: 00)
+en=0, d=55: q=00 (expect: 00, no load)
+en=1, d=BE: q=be (expect: BE)
+en=1, d=EF: q=ef (expect: EF)
+en=0, d=00: q=ef (expect: EF, hold)
+Async reset: q=00 (expect: 00)
+====================================
+Test complete!
+        </div>
+    </div>
+
+    <!-- Exercise 3 -->
+    <div class="exercise">
+        <div class="exercise-header">
+            <div class="exercise-num">3</div>
+            <div>
+                <span class="exercise-title en">ALU with Registered Output</span>
+                <span class="exercise-title ko">레지스터 출력이 있는 ALU</span>
+                <span class="difficulty medium">Medium</span>
+            </div>
+        </div>
+
+        <div class="task-box">
+            <h3 class="en">📋 Your Task</h3>
+            <h3 class="ko">📋 과제</h3>
+            <p class="en">Build an 8-bit ALU that combines <code>always_comb</code> for the operation logic and <code>always_ff</code> for registering the output. This is a common design pattern!</p>
+            <p class="ko">연산 논리에는 <code>always_comb</code>를, 출력 레지스터에는 <code>always_ff</code>를 결합한 8비트 ALU를 만드세요. 이것은 일반적인 설계 패턴입니다!</p>
+            <ul>
+                <li class="en"><strong>Operations:</strong> ADD (00), SUB (01), AND (10), OR (11)</li>
+                <li class="ko"><strong>연산:</strong> ADD (00), SUB (01), AND (10), OR (11)</li>
+                <li class="en"><strong>Combinational:</strong> Compute result based on opcode</li>
+                <li class="ko"><strong>조합:</strong> opcode에 따라 결과 계산</li>
+                <li class="en"><strong>Sequential:</strong> Register the result on clock edge</li>
+                <li class="ko"><strong>순차:</strong> 클럭 에지에서 결과 레지스터</li>
+            </ul>
+        </div>
+
+        <h3 class="en">📝 Starter Code</h3>
+        <h3 class="ko">📝 시작 코드</h3>
+        <pre><code><span class="comment">// ALU with Registered Output</span>
+<span class="keyword">module</span> <span class="type">alu_registered</span> (
+    <span class="keyword">input  logic</span>        <span class="signal">clk</span>,
+    <span class="keyword">input  logic</span>        <span class="signal">rst_n</span>,
+    <span class="keyword">input  logic</span> [<span class="number">7</span>:<span class="number">0</span>] <span class="signal">a</span>,
+    <span class="keyword">input  logic</span> [<span class="number">7</span>:<span class="number">0</span>] <span class="signal">b</span>,
+    <span class="keyword">input  logic</span> [<span class="number">1</span>:<span class="number">0</span>] <span class="signal">op</span>,       <span class="comment">// 00=ADD, 01=SUB, 10=AND, 11=OR</span>
+    <span class="keyword">input  logic</span>        <span class="signal">valid_in</span>, <span class="comment">// Input valid signal</span>
+    <span class="keyword">output logic</span> [<span class="number">7</span>:<span class="number">0</span>] <span class="signal">result</span>,
+    <span class="keyword">output logic</span>        <span class="signal">valid_out</span> <span class="comment">// Registered valid</span>
+);
+
+    <span class="comment">// Internal signal for combinational result</span>
+    <span class="keyword">logic</span> [<span class="number">7</span>:<span class="number">0</span>] <span class="signal">alu_out</span>;
+
+    <span class="comment">// TODO 1: Combinational ALU logic</span>
+    <span class="keyword">always_comb</span> <span class="keyword">begin</span>
+        <span class="keyword">case</span> (<span class="signal">op</span>)
+            <span class="comment">// Implement all 4 operations</span>
+            <span class="comment">// Don't forget default!</span>
+            <span class="keyword">default</span>: <span class="signal">alu_out</span> = <span class="number">8'h00</span>;
+        <span class="keyword">endcase</span>
+    <span class="keyword">end</span>
+
+    <span class="comment">// TODO 2: Sequential output register</span>
+    <span class="keyword">always_ff</span> @(<span class="comment">/* sensitivity list */</span>) <span class="keyword">begin</span>
+        <span class="comment">// Reset result and valid_out</span>
+        <span class="comment">// On clock: register alu_out → result</span>
+        <span class="comment">// On clock: register valid_in → valid_out</span>
+    <span class="keyword">end</span>
+
+<span class="keyword">endmodule</span>
+
+<span class="comment">// ============ TESTBENCH ============</span>
+<span class="keyword">module</span> <span class="type">tb_alu_registered</span>;
+    <span class="keyword">logic</span>        <span class="signal">clk</span>, <span class="signal">rst_n</span>, <span class="signal">valid_in</span>, <span class="signal">valid_out</span>;
+    <span class="keyword">logic</span> [<span class="number">7</span>:<span class="number">0</span>] <span class="signal">a</span>, <span class="signal">b</span>, <span class="signal">result</span>;
+    <span class="keyword">logic</span> [<span class="number">1</span>:<span class="number">0</span>] <span class="signal">op</span>;
+    
+    <span class="type">alu_registered</span> <span class="signal">dut</span> (.*);
+    
+    <span class="keyword">always</span> #<span class="number">5</span> <span class="signal">clk</span> = ~<span class="signal">clk</span>;
+    
+    <span class="keyword">initial</span> <span class="keyword">begin</span>
+        $display(<span class="string">"Testing ALU with Registered Output"</span>);
+        $display(<span class="string">"===================================="</span>);
+        
+        <span class="signal">clk</span> = <span class="number">0</span>; <span class="signal">rst_n</span> = <span class="number">0</span>; <span class="signal">valid_in</span> = <span class="number">0</span>;
+        <span class="signal">a</span> = <span class="number">0</span>; <span class="signal">b</span> = <span class="number">0</span>; <span class="signal">op</span> = <span class="number">0</span>;
+        
+        #<span class="number">12</span>; <span class="signal">rst_n</span> = <span class="number">1</span>;
+        
+        <span class="comment">// Test ADD: 10 + 5 = 15</span>
+        <span class="signal">a</span> = <span class="number">8'd10</span>; <span class="signal">b</span> = <span class="number">8'd5</span>; <span class="signal">op</span> = <span class="number">2'b00</span>; <span class="signal">valid_in</span> = <span class="number">1</span>;
+        @(<span class="keyword">posedge</span> <span class="signal">clk</span>); #<span class="number">1</span>;
+        $display(<span class="string">"ADD: %d + %d = %d, valid=%b (expect: 15, 1)"</span>, <span class="number">10</span>, <span class="number">5</span>, <span class="signal">result</span>, <span class="signal">valid_out</span>);
+        
+        <span class="comment">// Test SUB: 20 - 8 = 12</span>
+        <span class="signal">a</span> = <span class="number">8'd20</span>; <span class="signal">b</span> = <span class="number">8'd8</span>; <span class="signal">op</span> = <span class="number">2'b01</span>;
+        @(<span class="keyword">posedge</span> <span class="signal">clk</span>); #<span class="number">1</span>;
+        $display(<span class="string">"SUB: %d - %d = %d, valid=%b (expect: 12, 1)"</span>, <span class="number">20</span>, <span class="number">8</span>, <span class="signal">result</span>, <span class="signal">valid_out</span>);
+        
+        <span class="comment">// Test AND: 0xF0 & 0x0F = 0x00</span>
+        <span class="signal">a</span> = <span class="number">8'hF0</span>; <span class="signal">b</span> = <span class="number">8'h0F</span>; <span class="signal">op</span> = <span class="number">2'b10</span>;
+        @(<span class="keyword">posedge</span> <span class="signal">clk</span>); #<span class="number">1</span>;
+        $display(<span class="string">"AND: F0 & 0F = %h, valid=%b (expect: 00, 1)"</span>, <span class="signal">result</span>, <span class="signal">valid_out</span>);
+        
+        <span class="comment">// Test OR: 0xF0 | 0x0F = 0xFF</span>
+        <span class="signal">a</span> = <span class="number">8'hF0</span>; <span class="signal">b</span> = <span class="number">8'h0F</span>; <span class="signal">op</span> = <span class="number">2'b11</span>;
+        @(<span class="keyword">posedge</span> <span class="signal">clk</span>); #<span class="number">1</span>;
+        $display(<span class="string">"OR:  F0 | 0F = %h, valid=%b (expect: FF, 1)"</span>, <span class="signal">result</span>, <span class="signal">valid_out</span>);
+        
+        <span class="comment">// Test valid_out follows valid_in</span>
+        <span class="signal">valid_in</span> = <span class="number">0</span>;
+        @(<span class="keyword">posedge</span> <span class="signal">clk</span>); #<span class="number">1</span>;
+        $display(<span class="string">"Valid pipeline: valid_out=%b (expect: 0)"</span>, <span class="signal">valid_out</span>);
+        
+        $display(<span class="string">"===================================="</span>);
+        $display(<span class="string">"Test complete!"</span>);
+        $finish;
+    <span class="keyword">end</span>
+<span class="keyword">endmodule</span></code></pre>
+        <button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>
+
+        <a href="https://www.edaplayground.com/x/KhLR" target="_blank" class="playground-link">
+            🚀 <span class="en">Open in EDA Playground</span><span class="ko">EDA Playground에서 열기</span>
+        </a>
+
+        <div class="hint-box">
+            <button class="hint-toggle" onclick="toggleHint('hint3')">
+                <span class="en">💡 Show Hint</span>
+                <span class="ko">💡 힌트 보기</span>
+            </button>
+            <div class="hint-content" id="hint3">
+                <p class="en">Structure your code like this:</p>
+                <p class="ko">코드를 다음과 같이 구조화하세요:</p>
+                <pre><code><span class="comment">// Combinational</span>
+<span class="keyword">always_comb</span> <span class="keyword">begin</span>
+    <span class="keyword">case</span> (<span class="signal">op</span>)
+        <span class="number">2'b00</span>: <span class="signal">alu_out</span> = <span class="signal">a</span> + <span class="signal">b</span>;
+        <span class="number">2'b01</span>: <span class="signal">alu_out</span> = <span class="signal">a</span> - <span class="signal">b</span>;
+        <span class="comment">// ...</span>
+    <span class="keyword">endcase</span>
+<span class="keyword">end</span>
+
+<span class="comment">// Sequential</span>
+<span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span> <span class="keyword">or negedge</span> <span class="signal">rst_n</span>) <span class="keyword">begin</span>
+    <span class="keyword">if</span> (!<span class="signal">rst_n</span>) <span class="keyword">begin</span>
+        <span class="signal">result</span>    &lt;= <span class="number">8'd0</span>;
+        <span class="signal">valid_out</span> &lt;= <span class="number">1'b0</span>;
+    <span class="keyword">end else begin</span>
+        <span class="signal">result</span>    &lt;= <span class="signal">alu_out</span>;
+        <span class="signal">valid_out</span> &lt;= <span class="signal">valid_in</span>;
+    <span class="keyword">end</span>
+<span class="keyword">end</span></code></pre>
+            </div>
+        </div>
+
+        <h3 class="en">✅ Expected Output</h3>
+        <h3 class="ko">✅ 예상 출력</h3>
+        <div class="expected-output">
+Testing ALU with Registered Output
+====================================
+ADD: 10 + 5 = 15, valid=1 (expect: 15, 1)
+SUB: 20 - 8 = 12, valid=1 (expect: 12, 1)
+AND: F0 & 0F = 00, valid=1 (expect: 00, 1)
+OR:  F0 | 0F = ff, valid=1 (expect: FF, 1)
+Valid pipeline: valid_out=0 (expect: 0)
+====================================
+Test complete!
+        </div>
+    </div>
+
+    <div class="nav-links">
+        <a href="day-02-quiz.html" class="nav-btn">
+            <span class="en">← Back to Quiz</span>
+            <span class="ko">← 퀴즈로</span>
+        </a>
+        <a href="day-03-lesson.html" class="nav-btn">
+            <span class="en">Day 3: Blocking vs Non-blocking →</span>
+            <span class="ko">Day 3: 블로킹 vs 논블로킹 →</span>
+        </a>
+    </div>
+
+    <script>
+        let isKorean = false;
+        
+        function toggleLang() {
+            isKorean = !isKorean;
+            document.querySelectorAll('.en').forEach(el => el.style.display = isKorean ? 'none' : '');
+            document.querySelectorAll('.ko').forEach(el => el.style.display = isKorean ? '' : 'none');
+            document.querySelector('.lang-toggle').textContent = isKorean ? '🇺🇸 English' : '🇰🇷 한국어';
+        }
+        
+        function toggleHint(id) {
+            const hint = document.getElementById(id);
+            hint.classList.toggle('show');
+        }
+        
+        function copyCode(btn) {
+            const pre = btn.previousElementSibling;
+            const code = pre.textContent;
+            navigator.clipboard.writeText(code).then(() => {
+                btn.textContent = '✓ Copied!';
+                setTimeout(() => btn.textContent = '📋 Copy', 2000);
+            });
+        }
+        
+        // Initialize
+        document.querySelectorAll('.ko').forEach(el => el.style.display = 'none');
+    </script>
+</body>
+</html>
