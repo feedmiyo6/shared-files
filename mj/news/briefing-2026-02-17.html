@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Daily AI & Tech Briefing - Feb 17, 2026</title>
+  <style>
+    :root {
+      --cream: #fefae0;
+      --sage: #588157;
+      --sage-dark: #3a5a40;
+      --brown: #5d4037;
+      --brown-light: #8d6e63;
+      --card-bg: #fff8f0;
+      --text: #3d3d3d;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, var(--cream) 0%, #f5f0e1 100%);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 16px;
+      line-height: 1.6;
+    }
+    .container { max-width: 700px; margin: 0 auto; }
+    header {
+      text-align: center;
+      padding: 24px 0;
+      border-bottom: 3px solid var(--sage);
+      margin-bottom: 24px;
+    }
+    h1 {
+      color: var(--brown);
+      font-size: 1.8rem;
+      margin-bottom: 8px;
+    }
+    .date {
+      color: var(--sage-dark);
+      font-size: 1.1rem;
+      font-weight: 500;
+    }
+    .lang-toggle {
+      position: fixed;
+      top: 12px;
+      right: 12px;
+      background: var(--sage);
+      color: white;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      font-weight: 600;
+      z-index: 100;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    }
+    .lang-toggle:hover { background: var(--sage-dark); }
+    .section {
+      margin-bottom: 28px;
+    }
+    .section-title {
+      color: var(--sage-dark);
+      font-size: 1.3rem;
+      margin-bottom: 14px;
+      padding-bottom: 6px;
+      border-bottom: 2px solid var(--sage);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .story {
+      background: var(--card-bg);
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 14px;
+      border-left: 4px solid var(--sage);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+    }
+    .story h3 {
+      color: var(--brown);
+      font-size: 1.05rem;
+      margin-bottom: 8px;
+    }
+    .story p {
+      color: var(--text);
+      font-size: 0.95rem;
+      margin-bottom: 8px;
+    }
+    .source {
+      font-size: 0.85rem;
+      color: var(--brown-light);
+    }
+    .ko { display: none !important; }
+    footer {
+      text-align: center;
+      padding: 20px;
+      color: var(--brown-light);
+      font-size: 0.85rem;
+    }
+    @media (max-width: 600px) {
+      h1 { font-size: 1.5rem; }
+      .story { padding: 14px; }
+    }
+  </style>
+</head>
+<body>
+  <button class="lang-toggle" onclick="toggleLang()">한국어</button>
+  <div class="container">
+    <header>
+      <h1>
+        <span class="en">🌅 Daily AI & Tech Briefing</span>
+        <span class="ko" style="display:none;">🌅 AI & 테크 데일리 브리핑</span>
+      </h1>
+      <div class="date">Monday, February 17, 2026</div>
+    </header>
+
+    <section class="section">
+      <h2 class="section-title">🤖 <span class="en">AI & Big Tech</span><span class="ko" style="display:none;">AI & 빅테크</span></h2>
+
+      <article class="story">
+        <h3>
+          <span class="en">DoD May Designate Anthropic as "Supply Chain Risk"</span>
+          <span class="ko" style="display:none;">미 국방부, Anthropic을 "공급망 위험"으로 지정 검토</span>
+        </h3>
+        <p class="en">The Department of Defense is reportedly preparing to brand Anthropic (maker of Claude) as a supply chain risk. If designated, anyone wanting to do business with the US military would have to cut ties with the company. The two sides have been negotiating for months over how the military can use Anthropic's AI tools.</p>
+        <p class="ko" style="display:none;">미 국방부가 Claude를 만든 Anthropic을 공급망 위험으로 지정할 준비를 하고 있다고 보도됐습니다. 지정되면 미군과 거래하려는 모든 업체는 Anthropic과의 관계를 끊어야 합니다. 양측은 수개월간 AI 도구 사용에 대해 협상해왔습니다.</p>
+        <div class="source">Source: Axios via The Verge</div>
+      </article>
+
+      <article class="story">
+        <h3>
+          <span class="en">Microsoft AI CEO: White-Collar Work Automated in 12-18 Months</span>
+          <span class="ko" style="display:none;">MS AI CEO: 사무직 업무 12~18개월 내 자동화</span>
+        </h3>
+        <p class="en">Microsoft AI CEO Mustafa Suleyman claims AI will be ready to replace most white-collar work — lawyers, accountants, project managers, marketers — within 12 to 18 months. He also mentioned more Microsoft AI models are coming this year.</p>
+        <p class="ko" style="display:none;">마이크로소프트 AI CEO 무스타파 술레이만은 변호사, 회계사, PM, 마케터 등 대부분의 사무직이 12~18개월 내에 AI로 완전 자동화될 것이라고 주장했습니다.</p>
+        <div class="source">Source: Financial Times via The Verge</div>
+      </article>
+
+      <article class="story">
+        <h3>
+          <span class="en">Spotify's Top Devs Haven't Written Code Since December</span>
+          <span class="ko" style="display:none;">Spotify 최고 개발자들, 12월 이후 코드 안 짰다</span>
+        </h3>
+        <p class="en">Spotify CEO Gustav Söderström revealed the company has fully embraced "vibe coding." Their best developers "haven't written a single line of code since December" — they only generate and supervise AI-written code now.</p>
+        <p class="ko" style="display:none;">Spotify CEO는 최고의 개발자들이 "12월 이후 단 한 줄의 코드도 직접 작성하지 않았다"고 밝혔습니다. 이제 AI가 생성한 코드를 감독만 한다고 합니다.</p>
+        <div class="source">Source: Business Insider via The Verge</div>
+      </article>
+
+      <article class="story">
+        <h3>
+          <span class="en">OpenAI Disbanded Its "Mission Alignment" Team</span>
+          <span class="ko" style="display:none;">OpenAI, "미션 얼라인먼트" 팀 해체</span>
+        </h3>
+        <p class="en">The team tasked with ensuring AGI benefits all of humanity has been dissolved. Members were transferred to other areas, and former team lead Joshua Achiam will become OpenAI's "chief futurist."</p>
+        <p class="ko" style="display:none;">AGI가 인류 전체에 이익이 되도록 하는 임무를 맡은 팀이 해체됐습니다. 팀 리더였던 Joshua Achiam은 "수석 미래학자"가 됩니다.</p>
+        <div class="source">Source: Platformer via The Verge</div>
+      </article>
+
+      <article class="story">
+        <h3>
+          <span class="en">ChatGPT Getting "Lockdown Mode" for Security</span>
+          <span class="ko" style="display:none;">ChatGPT에 "Lockdown Mode" 보안 기능 추가</span>
+        </h3>
+        <p class="en">OpenAI is adding Lockdown Mode that "tightly constrains how ChatGPT can interact with external systems to reduce the risk of prompt injection-based data exfiltration." Not necessary for most users, but available for high-security needs.</p>
+        <p class="ko" style="display:none;">OpenAI가 프롬프트 인젝션 기반 데이터 유출 위험을 줄이기 위해 외부 시스템 상호작용을 제한하는 Lockdown Mode를 추가합니다.</p>
+        <div class="source">Source: OpenAI via The Verge</div>
+      </article>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title">⚖️ <span class="en">AI Legal & Policy</span><span class="ko" style="display:none;">AI 법률 & 정책</span></h2>
+
+      <article class="story">
+        <h3>
+          <span class="en">NPR Host David Greene Sues Google Over AI Voice Clone</span>
+          <span class="ko" style="display:none;">NPR 진행자, Google AI 음성 복제로 소송</span>
+        </h3>
+        <p class="en">Former NPR Morning Edition host David Greene is suing Google, claiming they illegally replicated his voice for NotebookLM's male podcast host. Greene calls the resemblance "uncanny" and says "my voice is the most important part of who I am."</p>
+        <p class="ko" style="display:none;">NPR Morning Edition 전 진행자 David Greene이 NotebookLM 팟캐스트 호스트 음성이 자신의 목소리를 불법 복제했다며 Google을 고소했습니다.</p>
+        <div class="source">Source: Washington Post via The Verge</div>
+      </article>
+
+      <article class="story">
+        <h3>
+          <span class="en">Disney Sends Cease & Desist to ByteDance Over Seedance AI</span>
+          <span class="ko" style="display:none;">디즈니, 바이트댄스 Seedance AI에 중지 요청</span>
+        </h3>
+        <p class="en">Disney has sent a cease and desist letter to ByteDance after its new Seedance 2.0 video AI model was shown generating content featuring Spider-Man and Darth Vader. Disney claims ByteDance is "hijacking" its characters.</p>
+        <p class="ko" style="display:none;">디즈니가 바이트댄스의 새로운 Seedance 2.0 AI가 스파이더맨과 다스베이더 콘텐츠를 생성한 것에 대해 중지 요청서를 보냈습니다.</p>
+        <div class="source">Source: Axios via The Verge</div>
+      </article>
+
+      <article class="story">
+        <h3>
+          <span class="en">Senator Markey Calls on Amazon to Kill Ring "Search Party"</span>
+          <span class="ko" style="display:none;">상원의원, Amazon Ring 감시 기능 중단 요청</span>
+        </h3>
+        <p class="en">After Ring's Super Bowl ad showcased networked cameras finding a missing dog, Senator Ed Markey (D-Mass.) sent a letter to Amazon saying "Get this creepy technology away from our homes." The ad sparked a surveillance backlash.</p>
+        <p class="ko" style="display:none;">Ring의 슈퍼볼 광고가 네트워크 카메라로 실종 강아지를 찾는 것을 보여준 후, Ed Markey 상원의원이 Amazon에 "이 섬뜩한 기술을 없애라"고 요청했습니다.</p>
+        <div class="source">Source: The Verge</div>
+      </article>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title">🎮 <span class="en">Gaming & Creative</span><span class="ko" style="display:none;">게이밍 & 크리에이티브</span></h2>
+
+      <article class="story">
+        <h3>
+          <span class="en">Unity Plans AI Tools to "Prompt Full Games Into Existence"</span>
+          <span class="ko" style="display:none;">Unity, AI로 "게임 통째로 생성" 도구 계획</span>
+        </h3>
+        <p class="en">Despite developers being increasingly skeptical of generative AI, Unity CEO said "AI-driven authoring is our second major area of focus for 2026." The company will reveal tools that can prompt entire casual games into existence at GDC in March.</p>
+        <p class="ko" style="display:none;">개발자들의 회의론에도 불구하고 Unity CEO는 "AI 기반 저작이 2026년 두 번째 핵심 영역"이라며 3월 GDC에서 게임 전체를 프롬프트로 생성하는 도구를 공개할 계획입니다.</p>
+        <div class="source">Source: Game Developer via The Verge</div>
+      </article>
+
+      <article class="story">
+        <h3>
+          <span class="en">Sony Develops AI Music Source Recognition Tech</span>
+          <span class="ko" style="display:none;">Sony, AI 음악 소스 인식 기술 개발</span>
+        </h3>
+        <p class="en">Sony has developed technology that can identify how much influence a given track or artist had on AI-generated content. It works with or without cooperation from AI developers and could create a licensing system for AI music.</p>
+        <p class="ko" style="display:none;">Sony가 AI 생성 콘텐츠에 특정 트랙이나 아티스트가 얼마나 영향을 미쳤는지 식별하는 기술을 개발했습니다. AI 음악 라이선싱 시스템에 활용될 수 있습니다.</p>
+        <div class="source">Source: The Verge</div>
+      </article>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title">💾 <span class="en">Hardware & Infrastructure</span><span class="ko" style="display:none;">하드웨어 & 인프라</span></h2>
+
+      <article class="story">
+        <h3>
+          <span class="en">Western Digital "Sold Out" for 2026 — AI Demand Explodes</span>
+          <span class="ko" style="display:none;">WD, 2026년 완판 — AI 수요 폭발</span>
+        </h3>
+        <p class="en">AI data centers have gobbled up Western Digital's entire capacity for 2026. Consumer sales now account for just 5% of revenue. "We've pretty much sold out for calendar year 26," the CEO told investors. HDD prices have surged 46% since September.</p>
+        <p class="ko" style="display:none;">AI 데이터센터가 WD의 2026년 전체 생산량을 선점했습니다. 소비자 판매는 매출의 5%에 불과합니다. CEO는 "2026년은 거의 완판"이라고 밝혔고, HDD 가격은 9월 이후 46% 급등했습니다.</p>
+        <div class="source">Source: TweakTown via The Verge</div>
+      </article>
+
+      <article class="story">
+        <h3>
+          <span class="en">Meta Sold 7 Million AI Smart Glasses in 2025</span>
+          <span class="ko" style="display:none;">Meta, 2025년 AI 스마트 글래스 700만대 판매</span>
+        </h3>
+        <p class="en">EssilorLuxottica revealed Meta Ray-Ban sales hit 7 million units in 2025 — triple the combined 2023-2024 sales. The 10 million/year target for 2027 now seems "well within reach." Prices may stay high in the short term.</p>
+        <p class="ko" style="display:none;">Meta Ray-Ban이 2025년 700만대 판매를 기록했습니다. 2023-2024년 합계의 3배입니다. 2027년 연간 1천만대 목표가 충분히 달성 가능해 보입니다.</p>
+        <div class="source">Source: EssilorLuxottica Earnings via The Verge</div>
+      </article>
+    </section>
+
+    <footer>
+      <span class="en">Generated by Totoro 🌳 for Minjun</span>
+      <span class="ko" style="display:none;">토토로 🌳가 민준님을 위해 생성</span>
+    </footer>
+  </div>
+
+  <script>
+    let isKorean = false;
+    function toggleLang() {
+      isKorean = !isKorean;
+      document.querySelectorAll('.en').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'none' : '', 'important');
+      });
+      document.querySelectorAll('.ko').forEach(el => {
+        el.style.setProperty('display', isKorean ? '' : 'none', 'important');
+      });
+      document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+    }
+  </script>
+</body>
+</html>
