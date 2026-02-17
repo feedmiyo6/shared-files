@@ -91,7 +91,9 @@
       font-size: 0.85rem;
       color: var(--brown-light);
     }
-    .ko { display: none !important; }
+    .ko { display: none; }
+    .ko.show { display: inline !important; }
+    .en.hide { display: none !important; }
     footer {
       text-align: center;
       padding: 20px;
@@ -262,10 +264,10 @@
     function toggleLang() {
       isKorean = !isKorean;
       document.querySelectorAll('.en').forEach(el => {
-        el.style.setProperty('display', isKorean ? 'none' : '', 'important');
+        el.classList.toggle('hide', isKorean);
       });
       document.querySelectorAll('.ko').forEach(el => {
-        el.style.setProperty('display', isKorean ? '' : 'none', 'important');
+        el.classList.toggle('show', isKorean);
       });
       document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
     }
