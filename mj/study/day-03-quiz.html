@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Day 3 Quiz: Blocking vs Non-blocking</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #fefae0 0%, #faedcd 100%);
+            color: #3d405b;
+            line-height: 1.8;
+            padding: 24px;
+            max-width: 920px;
+            margin: 0 auto;
+        }
+        h1 { 
+            color: #5d4037;
+            border-bottom: 3px solid #c4a77d;
+            padding-bottom: 12px;
+            margin-bottom: 24px;
+            font-size: 2em;
+        }
+        h2 { 
+            color: #588157;
+            border-bottom: 2px solid #a3b18a;
+            padding-bottom: 8px;
+            margin: 32px 0 16px;
+        }
+        
+        .lang-toggle {
+            position: fixed;
+            top: 16px;
+            right: 16px;
+            background: #588157;
+            border: none;
+            border-radius: 24px;
+            padding: 10px 20px;
+            cursor: pointer;
+            color: #fff;
+            font-size: 14px;
+            font-weight: 600;
+            z-index: 1000;
+        }
+        .lang-toggle:hover { background: #3a5a40; }
+        .ko { display: none; }
+        
+        .question {
+            background: #fff8f0;
+            border: 2px solid #c4a77d;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .question h3 {
+            color: #5d4037;
+            margin-bottom: 12px;
+        }
+        
+        .options {
+            list-style: none;
+            padding: 0;
+        }
+        .options li {
+            margin: 10px 0;
+        }
+        .options label {
+            display: block;
+            padding: 12px 16px;
+            background: #fff;
+            border: 2px solid #a3b18a;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .options label:hover {
+            background: #e9f5db;
+        }
+        .options input {
+            margin-right: 10px;
+        }
+        .options input:checked + span {
+            font-weight: 600;
+        }
+        
+        .result {
+            display: none;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+        .result.correct {
+            background: #e9f5db;
+            border: 2px solid #588157;
+            color: #3a5a40;
+        }
+        .result.incorrect {
+            background: #fff8f0;
+            border: 2px solid #ef4444;
+            color: #c53030;
+        }
+        
+        pre {
+            background: #2d3436;
+            padding: 24px;
+            border-radius: 12px;
+            margin: 16px 0;
+            border: 3px solid #a3b18a;
+            overflow-x: auto;
+            font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        
+        .keyword { color: #ff79c6; font-weight: 600; }
+        .type { color: #8be9fd; }
+        .signal { color: #50fa7b; }
+        .number { color: #ffb86c; }
+        .comment { color: #6272a4; font-style: italic; }
+        .operator { color: #ff79c6; }
+        
+        code {
+            background: #e9f5db;
+            color: #3d405b;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+        }
+        
+        .check-btn {
+            background: linear-gradient(135deg, #588157, #3a5a40);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+        .check-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(88, 129, 87, 0.3);
+        }
+        
+        .score-box {
+            background: #fff8f0;
+            border: 3px solid #588157;
+            border-radius: 12px;
+            padding: 24px;
+            text-align: center;
+            margin: 30px 0;
+            display: none;
+        }
+        .score-box h2 {
+            color: #588157;
+            border: none;
+            margin: 0 0 10px;
+        }
+        .score-box .score {
+            font-size: 48px;
+            font-weight: 700;
+            color: #5d4037;
+        }
+        
+        .nav-links {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 2px solid #c4a77d;
+        }
+        .nav-links a {
+            color: #588157;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .nav-links a:hover { color: #3a5a40; }
+        
+        @media (max-width: 768px) {
+            body { padding: 16px; }
+            h1 { font-size: 1.8em; }
+            pre { font-size: 13px; padding: 16px; }
+            .lang-toggle { padding: 8px 16px; font-size: 13px; }
+        }
+    </style>
+</head>
+<body>
+    <button class="lang-toggle" onclick="toggleLang()">한국어</button>
+    
+    <h1>
+        <span class="en">Day 3 Quiz: Blocking vs Non-blocking</span>
+        <span class="ko" style="display:none;">Day 3 퀴즈: Blocking vs Non-blocking</span>
+    </h1>
+    
+    <div class="score-box" id="scoreBox">
+        <h2><span class="en">Your Score</span><span class="ko" style="display:none;">점수</span></h2>
+        <div class="score" id="finalScore">0/10</div>
+        <p id="scoreMessage"></p>
+    </div>
+    
+    <!-- Question 1 -->
+    <div class="question" data-correct="b">
+        <h3>
+            <span class="en">Q1. Which assignment type should be used in <code>always_ff</code>?</span>
+            <span class="ko" style="display:none;">Q1. <code>always_ff</code>에서 어떤 할당 유형을 사용해야 합니까?</span>
+        </h3>
+        <ul class="options">
+            <li><label><input type="radio" name="q1" value="a"><span class="en">Blocking ( = )</span><span class="ko" style="display:none;">Blocking ( = )</span></label></li>
+            <li><label><input type="radio" name="q1" value="b"><span class="en">Non-blocking ( &lt;= )</span><span class="ko" style="display:none;">Non-blocking ( &lt;= )</span></label></li>
+            <li><label><input type="radio" name="q1" value="c"><span class="en">Either works fine</span><span class="ko" style="display:none;">둘 다 괜찮음</span></label></li>
+            <li><label><input type="radio" name="q1" value="d"><span class="en">Neither</span><span class="ko" style="display:none;">둘 다 아님</span></label></li>
+        </ul>
+        <button class="check-btn" onclick="checkAnswer(this)">
+            <span class="en">Check</span><span class="ko" style="display:none;">확인</span>
+        </button>
+        <div class="result"></div>
+    </div>
+    
+    <!-- Question 2 -->
+    <div class="question" data-correct="a">
+        <h3>
+            <span class="en">Q2. Which assignment type should be used in <code>always_comb</code>?</span>
+            <span class="ko" style="display:none;">Q2. <code>always_comb</code>에서 어떤 할당 유형을 사용해야 합니까?</span>
+        </h3>
+        <ul class="options">
+            <li><label><input type="radio" name="q2" value="a"><span class="en">Blocking ( = )</span><span class="ko" style="display:none;">Blocking ( = )</span></label></li>
+            <li><label><input type="radio" name="q2" value="b"><span class="en">Non-blocking ( &lt;= )</span><span class="ko" style="display:none;">Non-blocking ( &lt;= )</span></label></li>
+            <li><label><input type="radio" name="q2" value="c"><span class="en">Either works fine</span><span class="ko" style="display:none;">둘 다 괜찮음</span></label></li>
+            <li><label><input type="radio" name="q2" value="d"><span class="en">Neither</span><span class="ko" style="display:none;">둘 다 아님</span></label></li>
+        </ul>
+        <button class="check-btn" onclick="checkAnswer(this)">
+            <span class="en">Check</span><span class="ko" style="display:none;">확인</span>
+        </button>
+        <div class="result"></div>
+    </div>
+    
+    <!-- Question 3 -->
+    <div class="question" data-correct="c">
+        <h3>
+            <span class="en">Q3. What does "blocking" mean in blocking assignment?</span>
+            <span class="ko" style="display:none;">Q3. Blocking 할당에서 "blocking"은 무엇을 의미합니까?</span>
+        </h3>
+        <ul class="options">
+            <li><label><input type="radio" name="q3" value="a"><span class="en">It blocks the clock</span><span class="ko" style="display:none;">클럭을 차단한다</span></label></li>
+            <li><label><input type="radio" name="q3" value="b"><span class="en">It blocks other modules</span><span class="ko" style="display:none;">다른 모듈을 차단한다</span></label></li>
+            <li><label><input type="radio" name="q3" value="c"><span class="en">The next statement waits until this one completes</span><span class="ko" style="display:none;">다음 문장이 이 문장이 완료될 때까지 기다린다</span></label></li>
+            <li><label><input type="radio" name="q3" value="d"><span class="en">It blocks signal propagation</span><span class="ko" style="display:none;">신호 전파를 차단한다</span></label></li>
+        </ul>
+        <button class="check-btn" onclick="checkAnswer(this)">
+            <span class="en">Check</span><span class="ko" style="display:none;">확인</span>
+        </button>
+        <div class="result"></div>
+    </div>
+    
+    <!-- Question 4 -->
+    <div class="question" data-correct="b">
+        <h3>
+            <span class="en">Q4. In the code below, what is the value of <code>b</code> after one clock cycle (assuming <code>a</code> changes from 0 to 1)?</span>
+            <span class="ko" style="display:none;">Q4. 아래 코드에서 한 클럭 사이클 후 <code>b</code>의 값은? (<code>a</code>가 0에서 1로 변경된다고 가정)</span>
+        </h3>
+        <pre><span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span>) <span class="keyword">begin</span>
+    <span class="signal">b</span> <span class="operator">&lt;=</span> <span class="signal">a</span>;
+    <span class="signal">c</span> <span class="operator">&lt;=</span> <span class="signal">b</span>;
+<span class="keyword">end</span></pre>
+        <ul class="options">
+            <li><label><input type="radio" name="q4" value="a"><span class="en">0</span><span class="ko" style="display:none;">0</span></label></li>
+            <li><label><input type="radio" name="q4" value="b"><span class="en">1</span><span class="ko" style="display:none;">1</span></label></li>
+            <li><label><input type="radio" name="q4" value="c"><span class="en">Unknown (X)</span><span class="ko" style="display:none;">알 수 없음 (X)</span></label></li>
+            <li><label><input type="radio" name="q4" value="d"><span class="en">Depends on order</span><span class="ko" style="display:none;">순서에 따라 다름</span></label></li>
+        </ul>
+        <button class="check-btn" onclick="checkAnswer(this)">
+            <span class="en">Check</span><span class="ko" style="display:none;">확인</span>
+        </button>
+        <div class="result"></div>
+    </div>
+    
+    <!-- Question 5 -->
+    <div class="question" data-correct="a">
+        <h3>
+            <span class="en">Q5. Same code as Q4, what is the value of <code>c</code> after one clock cycle?</span>
+            <span class="ko" style="display:none;">Q5. Q4와 같은 코드에서 한 클럭 사이클 후 <code>c</code>의 값은?</span>
+        </h3>
+        <ul class="options">
+            <li><label><input type="radio" name="q5" value="a"><span class="en">0 (the old value of b)</span><span class="ko" style="display:none;">0 (b의 이전 값)</span></label></li>
+            <li><label><input type="radio" name="q5" value="b"><span class="en">1 (the new value of b)</span><span class="ko" style="display:none;">1 (b의 새로운 값)</span></label></li>
+            <li><label><input type="radio" name="q5" value="c"><span class="en">Unknown (X)</span><span class="ko" style="display:none;">알 수 없음 (X)</span></label></li>
+            <li><label><input type="radio" name="q5" value="d"><span class="en">Depends on simulator</span><span class="ko" style="display:none;">시뮬레이터에 따라 다름</span></label></li>
+        </ul>
+        <button class="check-btn" onclick="checkAnswer(this)">
+            <span class="en">Check</span><span class="ko" style="display:none;">확인</span>
+        </button>
+        <div class="result"></div>
+    </div>
+    
+    <!-- Question 6 -->
+    <div class="question" data-correct="d">
+        <h3>
+            <span class="en">Q6. Why would using blocking assignment in a shift register cause problems?</span>
+            <span class="ko" style="display:none;">Q6. 시프트 레지스터에서 blocking 할당을 사용하면 왜 문제가 발생합니까?</span>
+        </h3>
+        <ul class="options">
+            <li><label><input type="radio" name="q6" value="a"><span class="en">It's slower</span><span class="ko" style="display:none;">더 느리다</span></label></li>
+            <li><label><input type="radio" name="q6" value="b"><span class="en">It uses more area</span><span class="ko" style="display:none;">더 많은 면적을 사용한다</span></label></li>
+            <li><label><input type="radio" name="q6" value="c"><span class="en">It won't synthesize</span><span class="ko" style="display:none;">합성되지 않는다</span></label></li>
+            <li><label><input type="radio" name="q6" value="d"><span class="en">All stages get the same value (no shift)</span><span class="ko" style="display:none;">모든 단계가 같은 값을 받는다 (시프트 없음)</span></label></li>
+        </ul>
+        <button class="check-btn" onclick="checkAnswer(this)">
+            <span class="en">Check</span><span class="ko" style="display:none;">확인</span>
+        </button>
+        <div class="result"></div>
+    </div>
+    
+    <!-- Question 7 -->
+    <div class="question" data-correct="c">
+        <h3>
+            <span class="en">Q7. In which simulation region do non-blocking assignments UPDATE their values?</span>
+            <span class="ko" style="display:none;">Q7. Non-blocking 할당은 어떤 시뮬레이션 영역에서 값을 업데이트합니까?</span>
+        </h3>
+        <ul class="options">
+            <li><label><input type="radio" name="q7" value="a"><span class="en">Active region</span><span class="ko" style="display:none;">Active 영역</span></label></li>
+            <li><label><input type="radio" name="q7" value="b"><span class="en">Inactive region</span><span class="ko" style="display:none;">Inactive 영역</span></label></li>
+            <li><label><input type="radio" name="q7" value="c"><span class="en">NBA region</span><span class="ko" style="display:none;">NBA 영역</span></label></li>
+            <li><label><input type="radio" name="q7" value="d"><span class="en">Postponed region</span><span class="ko" style="display:none;">Postponed 영역</span></label></li>
+        </ul>
+        <button class="check-btn" onclick="checkAnswer(this)">
+            <span class="en">Check</span><span class="ko" style="display:none;">확인</span>
+        </button>
+        <div class="result"></div>
+    </div>
+    
+    <!-- Question 8 -->
+    <div class="question" data-correct="b">
+        <h3>
+            <span class="en">Q8. What hardware does non-blocking assignment model?</span>
+            <span class="ko" style="display:none;">Q8. Non-blocking 할당은 어떤 하드웨어를 모델링합니까?</span>
+        </h3>
+        <ul class="options">
+            <li><label><input type="radio" name="q8" value="a"><span class="en">Wires and combinational logic</span><span class="ko" style="display:none;">와이어와 조합 논리</span></label></li>
+            <li><label><input type="radio" name="q8" value="b"><span class="en">Flip-flops and registers</span><span class="ko" style="display:none;">플립플롭과 레지스터</span></label></li>
+            <li><label><input type="radio" name="q8" value="c"><span class="en">Latches</span><span class="ko" style="display:none;">래치</span></label></li>
+            <li><label><input type="radio" name="q8" value="d"><span class="en">Tri-state buffers</span><span class="ko" style="display:none;">트라이스테이트 버퍼</span></label></li>
+        </ul>
+        <button class="check-btn" onclick="checkAnswer(this)">
+            <span class="en">Check</span><span class="ko" style="display:none;">확인</span>
+        </button>
+        <div class="result"></div>
+    </div>
+    
+    <!-- Question 9 -->
+    <div class="question" data-correct="d">
+        <h3>
+            <span class="en">Q9. What is a "race condition" in the context of blocking assignments?</span>
+            <span class="ko" style="display:none;">Q9. Blocking 할당 맥락에서 "레이스 컨디션"이란 무엇입니까?</span>
+        </h3>
+        <ul class="options">
+            <li><label><input type="radio" name="q9" value="a"><span class="en">When two clocks race each other</span><span class="ko" style="display:none;">두 클럭이 서로 경쟁할 때</span></label></li>
+            <li><label><input type="radio" name="q9" value="b"><span class="en">When simulation runs too fast</span><span class="ko" style="display:none;">시뮬레이션이 너무 빠르게 실행될 때</span></label></li>
+            <li><label><input type="radio" name="q9" value="c"><span class="en">When synthesis takes too long</span><span class="ko" style="display:none;">합성이 너무 오래 걸릴 때</span></label></li>
+            <li><label><input type="radio" name="q9" value="d"><span class="en">When result depends on execution order</span><span class="ko" style="display:none;">결과가 실행 순서에 따라 달라질 때</span></label></li>
+        </ul>
+        <button class="check-btn" onclick="checkAnswer(this)">
+            <span class="en">Check</span><span class="ko" style="display:none;">확인</span>
+        </button>
+        <div class="result"></div>
+    </div>
+    
+    <!-- Question 10 -->
+    <div class="question" data-correct="c">
+        <h3>
+            <span class="en">Q10. Which is the BEST practice?</span>
+            <span class="ko" style="display:none;">Q10. 어느 것이 가장 좋은 관행입니까?</span>
+        </h3>
+        <ul class="options">
+            <li><label><input type="radio" name="q10" value="a"><span class="en">Use blocking everywhere for consistency</span><span class="ko" style="display:none;">일관성을 위해 모든 곳에서 blocking 사용</span></label></li>
+            <li><label><input type="radio" name="q10" value="b"><span class="en">Use non-blocking everywhere for safety</span><span class="ko" style="display:none;">안전을 위해 모든 곳에서 non-blocking 사용</span></label></li>
+            <li><label><input type="radio" name="q10" value="c"><span class="en">Blocking in always_comb, non-blocking in always_ff</span><span class="ko" style="display:none;">always_comb에서 blocking, always_ff에서 non-blocking</span></label></li>
+            <li><label><input type="radio" name="q10" value="d"><span class="en">Mix both freely based on preference</span><span class="ko" style="display:none;">선호도에 따라 자유롭게 섞어서 사용</span></label></li>
+        </ul>
+        <button class="check-btn" onclick="checkAnswer(this)">
+            <span class="en">Check</span><span class="ko" style="display:none;">확인</span>
+        </button>
+        <div class="result"></div>
+    </div>
+    
+    <button class="check-btn" onclick="showScore()" style="width: 100%; margin-top: 20px; font-size: 18px; padding: 16px;">
+        <span class="en">📊 Show Final Score</span>
+        <span class="ko" style="display:none;">📊 최종 점수 보기</span>
+    </button>
+    
+    <div class="nav-links">
+        <a href="day-03-lesson.html">← Day 3 Lesson</a>
+        <a href="day-03-practice.html">Day 3 Practice →</a>
+    </div>
+    
+    <script>
+    let isKorean = false;
+    let score = 0;
+    let answered = new Set();
+    
+    function toggleLang() {
+        isKorean = !isKorean;
+        document.querySelectorAll('.en').forEach(el => {
+            el.style.setProperty('display', isKorean ? 'none' : 'revert', 'important');
+        });
+        document.querySelectorAll('.ko').forEach(el => {
+            el.style.setProperty('display', isKorean ? 'revert' : 'none', 'important');
+        });
+        document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+    }
+    
+    function checkAnswer(btn) {
+        const question = btn.closest('.question');
+        const correct = question.dataset.correct;
+        const selected = question.querySelector('input:checked');
+        const result = question.querySelector('.result');
+        const qNum = Array.from(document.querySelectorAll('.question')).indexOf(question);
+        
+        if (!selected) {
+            result.textContent = isKorean ? '답을 선택하세요!' : 'Please select an answer!';
+            result.className = 'result incorrect';
+            result.style.display = 'block';
+            return;
+        }
+        
+        if (!answered.has(qNum)) {
+            answered.add(qNum);
+            if (selected.value === correct) {
+                score++;
+            }
+        }
+        
+        if (selected.value === correct) {
+            result.innerHTML = isKorean ? '✅ 정답입니다!' : '✅ Correct!';
+            result.className = 'result correct';
+        } else {
+            const correctText = isKorean ? '정답: ' : 'Correct answer: ';
+            result.innerHTML = (isKorean ? '❌ 틀렸습니다. ' : '❌ Incorrect. ') + correctText + correct.toUpperCase();
+            result.className = 'result incorrect';
+        }
+        result.style.display = 'block';
+    }
+    
+    function showScore() {
+        const scoreBox = document.getElementById('scoreBox');
+        const finalScore = document.getElementById('finalScore');
+        const message = document.getElementById('scoreMessage');
+        
+        finalScore.textContent = score + '/10';
+        
+        if (score === 10) {
+            message.textContent = isKorean ? '완벽합니다! 🎉' : 'Perfect! 🎉';
+        } else if (score >= 8) {
+            message.textContent = isKorean ? '잘했습니다! 👏' : 'Great job! 👏';
+        } else if (score >= 6) {
+            message.textContent = isKorean ? '좋습니다! 레슨을 다시 복습하세요.' : 'Good! Review the lesson again.';
+        } else {
+            message.textContent = isKorean ? '레슨을 다시 읽어보세요. 💪' : 'Please re-read the lesson. 💪';
+        }
+        
+        scoreBox.style.display = 'block';
+        scoreBox.scrollIntoView({ behavior: 'smooth' });
+    }
+    </script>
+</body>
+</html>

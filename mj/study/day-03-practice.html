@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Day 3 Practice: Blocking vs Non-blocking</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #fefae0 0%, #faedcd 100%);
+            color: #3d405b;
+            line-height: 1.8;
+            padding: 24px;
+            max-width: 920px;
+            margin: 0 auto;
+        }
+        h1 { 
+            color: #5d4037;
+            border-bottom: 3px solid #c4a77d;
+            padding-bottom: 12px;
+            margin-bottom: 24px;
+            font-size: 2em;
+        }
+        h2 { 
+            color: #588157;
+            border-bottom: 2px solid #a3b18a;
+            padding-bottom: 8px;
+            margin: 32px 0 16px;
+        }
+        h3 { 
+            color: #5d4037;
+            margin: 24px 0 12px;
+        }
+        p { margin: 12px 0; }
+        
+        .lang-toggle {
+            position: fixed;
+            top: 16px;
+            right: 16px;
+            background: #588157;
+            border: none;
+            border-radius: 24px;
+            padding: 10px 20px;
+            cursor: pointer;
+            color: #fff;
+            font-size: 14px;
+            font-weight: 600;
+            z-index: 1000;
+        }
+        .lang-toggle:hover { background: #3a5a40; }
+        .ko { display: none; }
+        
+        .exercise {
+            background: #fff;
+            border: 2px solid #c4a77d;
+            border-radius: 12px;
+            padding: 24px;
+            margin: 24px 0;
+        }
+        .exercise h3 {
+            color: #588157;
+            margin-top: 0;
+        }
+        
+        .hint-box {
+            background: #fff8f0;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            border-left: 4px solid #5d4037;
+            color: #3d405b;
+        }
+        .hint-box h4 {
+            color: #5d4037;
+            margin: 0 0 8px;
+            cursor: pointer;
+        }
+        .hint-content {
+            display: none;
+        }
+        .hint-box.open .hint-content {
+            display: block;
+        }
+        
+        .solution-box {
+            background: #e9f5db;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            border-left: 4px solid #588157;
+        }
+        .solution-box h4 {
+            color: #588157;
+            margin: 0 0 8px;
+            cursor: pointer;
+        }
+        .solution-content {
+            display: none;
+        }
+        .solution-box.open .solution-content {
+            display: block;
+        }
+        
+        pre {
+            background: #2d3436;
+            padding: 24px;
+            border-radius: 12px;
+            margin: 16px 0;
+            border: 3px solid #a3b18a;
+            overflow-x: auto;
+            font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+        
+        .keyword { color: #ff79c6; font-weight: 600; }
+        .type { color: #8be9fd; }
+        .signal { color: #50fa7b; }
+        .number { color: #ffb86c; }
+        .comment { color: #6272a4; font-style: italic; }
+        .operator { color: #ff79c6; }
+        
+        code {
+            background: #e9f5db;
+            color: #3d405b;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+        }
+        
+        .concept-box {
+            background: #fff8f0;
+            border: 2px solid #c4a77d;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            color: #3d405b;
+        }
+        .concept-box h3 {
+            color: #5d4037;
+            margin-bottom: 12px;
+            margin-top: 0;
+        }
+        
+        .tip-box {
+            background: #fff8f0;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 4px solid #588157;
+            color: #3d405b;
+        }
+        .tip-box h3 {
+            color: #588157;
+            margin-bottom: 12px;
+            margin-top: 0;
+        }
+        
+        .eda-link {
+            display: inline-block;
+            background: linear-gradient(135deg, #588157, #3a5a40);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            margin: 10px 0;
+        }
+        .eda-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(88, 129, 87, 0.3);
+        }
+        
+        .nav-links {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 2px solid #c4a77d;
+        }
+        .nav-links a {
+            color: #588157;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .nav-links a:hover { color: #3a5a40; }
+        
+        @media (max-width: 768px) {
+            body { padding: 16px; }
+            h1 { font-size: 1.8em; }
+            pre { font-size: 14px; padding: 16px; }
+            .lang-toggle { padding: 8px 16px; font-size: 13px; }
+        }
+    </style>
+</head>
+<body>
+    <button class="lang-toggle" onclick="toggleLang()">한국어</button>
+    
+    <h1>
+        <span class="en">Day 3 Practice: Blocking vs Non-blocking</span>
+        <span class="ko" style="display:none;">Day 3 실습: Blocking vs Non-blocking</span>
+    </h1>
+    
+    <div class="concept-box">
+        <h3>
+            <span class="en">🛠️ Practice Environment</span>
+            <span class="ko" style="display:none;">🛠️ 실습 환경</span>
+        </h3>
+        <p class="en">Use EDA Playground to run your code. Select "Icarus Verilog" or "Synopsys VCS" as simulator.</p>
+        <p class="ko" style="display:none;">EDA Playground를 사용하여 코드를 실행하세요. 시뮬레이터로 "Icarus Verilog" 또는 "Synopsys VCS"를 선택하세요.</p>
+        <a href="https://www.edaplayground.com/" target="_blank" class="eda-link">
+            <span class="en">🚀 Open EDA Playground</span>
+            <span class="ko" style="display:none;">🚀 EDA Playground 열기</span>
+        </a>
+    </div>
+    
+    <!-- Exercise 1 -->
+    <div class="exercise">
+        <h3>
+            <span class="en">Exercise 1: Fix the Broken Shift Register</span>
+            <span class="ko" style="display:none;">연습 1: 고장난 시프트 레지스터 고치기</span>
+        </h3>
+        <p class="en">The following shift register is broken. Fix it so data properly shifts through q1 → q2 → q3 over 3 clock cycles.</p>
+        <p class="ko" style="display:none;">다음 시프트 레지스터가 고장났습니다. 데이터가 3 클럭 사이클에 걸쳐 q1 → q2 → q3로 제대로 이동하도록 고치세요.</p>
+        
+        <pre><span class="comment">// BROKEN CODE - Fix the assignment type!</span>
+<span class="keyword">module</span> <span class="type">shift_register</span> (
+    <span class="keyword">input</span>  <span class="type">logic</span> <span class="signal">clk</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span> <span class="signal">rst_n</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span> <span class="signal">d</span>,
+    <span class="keyword">output</span> <span class="type">logic</span> <span class="signal">q1</span>, <span class="signal">q2</span>, <span class="signal">q3</span>
+);
+
+<span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span> <span class="keyword">or</span> <span class="keyword">negedge</span> <span class="signal">rst_n</span>) <span class="keyword">begin</span>
+    <span class="keyword">if</span> (!<span class="signal">rst_n</span>) <span class="keyword">begin</span>
+        <span class="signal">q1</span> <span class="operator">=</span> <span class="number">0</span>;  <span class="comment">// BUG: Wrong assignment type</span>
+        <span class="signal">q2</span> <span class="operator">=</span> <span class="number">0</span>;  <span class="comment">// BUG</span>
+        <span class="signal">q3</span> <span class="operator">=</span> <span class="number">0</span>;  <span class="comment">// BUG</span>
+    <span class="keyword">end</span> <span class="keyword">else</span> <span class="keyword">begin</span>
+        <span class="signal">q1</span> <span class="operator">=</span> <span class="signal">d</span>;   <span class="comment">// BUG</span>
+        <span class="signal">q2</span> <span class="operator">=</span> <span class="signal">q1</span>;  <span class="comment">// BUG</span>
+        <span class="signal">q3</span> <span class="operator">=</span> <span class="signal">q2</span>;  <span class="comment">// BUG</span>
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+<span class="keyword">endmodule</span></pre>
+        
+        <div class="hint-box" onclick="this.classList.toggle('open')">
+            <h4>💡 <span class="en">Hint (click to reveal)</span><span class="ko" style="display:none;">힌트 (클릭하여 보기)</span></h4>
+            <div class="hint-content">
+                <p class="en">Change all <code>=</code> to <code>&lt;=</code> inside <code>always_ff</code>. Non-blocking ensures each flip-flop samples the OLD value of the previous stage.</p>
+                <p class="ko" style="display:none;"><code>always_ff</code> 안의 모든 <code>=</code>를 <code>&lt;=</code>로 변경하세요. Non-blocking은 각 플립플롭이 이전 단계의 이전 값을 샘플링하도록 보장합니다.</p>
+            </div>
+        </div>
+        
+        <div class="solution-box" onclick="this.classList.toggle('open')">
+            <h4>✅ <span class="en">Solution (click to reveal)</span><span class="ko" style="display:none;">해답 (클릭하여 보기)</span></h4>
+            <div class="solution-content">
+                <pre><span class="keyword">module</span> <span class="type">shift_register</span> (
+    <span class="keyword">input</span>  <span class="type">logic</span> <span class="signal">clk</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span> <span class="signal">rst_n</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span> <span class="signal">d</span>,
+    <span class="keyword">output</span> <span class="type">logic</span> <span class="signal">q1</span>, <span class="signal">q2</span>, <span class="signal">q3</span>
+);
+
+<span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span> <span class="keyword">or</span> <span class="keyword">negedge</span> <span class="signal">rst_n</span>) <span class="keyword">begin</span>
+    <span class="keyword">if</span> (!<span class="signal">rst_n</span>) <span class="keyword">begin</span>
+        <span class="signal">q1</span> <span class="operator">&lt;=</span> <span class="number">1'b0</span>;
+        <span class="signal">q2</span> <span class="operator">&lt;=</span> <span class="number">1'b0</span>;
+        <span class="signal">q3</span> <span class="operator">&lt;=</span> <span class="number">1'b0</span>;
+    <span class="keyword">end</span> <span class="keyword">else</span> <span class="keyword">begin</span>
+        <span class="signal">q1</span> <span class="operator">&lt;=</span> <span class="signal">d</span>;
+        <span class="signal">q2</span> <span class="operator">&lt;=</span> <span class="signal">q1</span>;
+        <span class="signal">q3</span> <span class="operator">&lt;=</span> <span class="signal">q2</span>;
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+<span class="keyword">endmodule</span></pre>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Exercise 2 -->
+    <div class="exercise">
+        <h3>
+            <span class="en">Exercise 2: Swap Two Registers</span>
+            <span class="ko" style="display:none;">연습 2: 두 레지스터 교환</span>
+        </h3>
+        <p class="en">Design a circuit that swaps the values of two registers on each clock edge. This is impossible with blocking but trivial with non-blocking!</p>
+        <p class="ko" style="display:none;">각 클럭 엣지에서 두 레지스터의 값을 교환하는 회로를 설계하세요. Blocking으로는 불가능하지만 non-blocking으로는 간단합니다!</p>
+        
+        <pre><span class="comment">// Design a module that swaps reg_a and reg_b each cycle</span>
+<span class="comment">// After clock: old_a → reg_b, old_b → reg_a</span>
+
+<span class="keyword">module</span> <span class="type">swapper</span> (
+    <span class="keyword">input</span>  <span class="type">logic</span>       <span class="signal">clk</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span>       <span class="signal">rst_n</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span> [<span class="number">7</span>:<span class="number">0</span>] <span class="signal">init_a</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span> [<span class="number">7</span>:<span class="number">0</span>] <span class="signal">init_b</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span>       <span class="signal">load</span>,
+    <span class="keyword">output</span> <span class="type">logic</span> [<span class="number">7</span>:<span class="number">0</span>] <span class="signal">reg_a</span>,
+    <span class="keyword">output</span> <span class="type">logic</span> [<span class="number">7</span>:<span class="number">0</span>] <span class="signal">reg_b</span>
+);
+
+<span class="comment">// Your code here!</span>
+<span class="comment">// On reset: both = 0</span>
+<span class="comment">// On load: reg_a = init_a, reg_b = init_b</span>
+<span class="comment">// Otherwise: swap values!</span>
+
+<span class="keyword">endmodule</span></pre>
+        
+        <div class="hint-box" onclick="this.classList.toggle('open')">
+            <h4>💡 <span class="en">Hint (click to reveal)</span><span class="ko" style="display:none;">힌트 (클릭하여 보기)</span></h4>
+            <div class="hint-content">
+                <p class="en">With non-blocking, both assignments evaluate their RHS before any update happens:</p>
+                <p class="ko" style="display:none;">Non-blocking을 사용하면 두 할당 모두 업데이트가 발생하기 전에 RHS를 평가합니다:</p>
+                <pre><span class="signal">reg_a</span> <span class="operator">&lt;=</span> <span class="signal">reg_b</span>;  <span class="comment">// Reads old reg_b</span>
+<span class="signal">reg_b</span> <span class="operator">&lt;=</span> <span class="signal">reg_a</span>;  <span class="comment">// Reads old reg_a</span></pre>
+            </div>
+        </div>
+        
+        <div class="solution-box" onclick="this.classList.toggle('open')">
+            <h4>✅ <span class="en">Solution (click to reveal)</span><span class="ko" style="display:none;">해답 (클릭하여 보기)</span></h4>
+            <div class="solution-content">
+                <pre><span class="keyword">module</span> <span class="type">swapper</span> (
+    <span class="keyword">input</span>  <span class="type">logic</span>       <span class="signal">clk</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span>       <span class="signal">rst_n</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span> [<span class="number">7</span>:<span class="number">0</span>] <span class="signal">init_a</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span> [<span class="number">7</span>:<span class="number">0</span>] <span class="signal">init_b</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span>       <span class="signal">load</span>,
+    <span class="keyword">output</span> <span class="type">logic</span> [<span class="number">7</span>:<span class="number">0</span>] <span class="signal">reg_a</span>,
+    <span class="keyword">output</span> <span class="type">logic</span> [<span class="number">7</span>:<span class="number">0</span>] <span class="signal">reg_b</span>
+);
+
+<span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span> <span class="keyword">or</span> <span class="keyword">negedge</span> <span class="signal">rst_n</span>) <span class="keyword">begin</span>
+    <span class="keyword">if</span> (!<span class="signal">rst_n</span>) <span class="keyword">begin</span>
+        <span class="signal">reg_a</span> <span class="operator">&lt;=</span> <span class="number">8'b0</span>;
+        <span class="signal">reg_b</span> <span class="operator">&lt;=</span> <span class="number">8'b0</span>;
+    <span class="keyword">end</span> <span class="keyword">else if</span> (<span class="signal">load</span>) <span class="keyword">begin</span>
+        <span class="signal">reg_a</span> <span class="operator">&lt;=</span> <span class="signal">init_a</span>;
+        <span class="signal">reg_b</span> <span class="operator">&lt;=</span> <span class="signal">init_b</span>;
+    <span class="keyword">end</span> <span class="keyword">else</span> <span class="keyword">begin</span>
+        <span class="comment">// Magic of non-blocking: no temp needed!</span>
+        <span class="signal">reg_a</span> <span class="operator">&lt;=</span> <span class="signal">reg_b</span>;
+        <span class="signal">reg_b</span> <span class="operator">&lt;=</span> <span class="signal">reg_a</span>;
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+<span class="keyword">endmodule</span></pre>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Exercise 3 -->
+    <div class="exercise">
+        <h3>
+            <span class="en">Exercise 3: Mixed Combinational and Sequential</span>
+            <span class="ko" style="display:none;">연습 3: 조합 논리와 순차 논리 혼합</span>
+        </h3>
+        <p class="en">Complete this counter module using BOTH blocking (for comb) and non-blocking (for seq):</p>
+        <p class="ko" style="display:none;">조합 논리에는 blocking, 순차 논리에는 non-blocking을 사용하여 이 카운터 모듈을 완성하세요:</p>
+        
+        <pre><span class="keyword">module</span> <span class="type">smart_counter</span> (
+    <span class="keyword">input</span>  <span class="type">logic</span>       <span class="signal">clk</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span>       <span class="signal">rst_n</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span>       <span class="signal">up_down</span>,   <span class="comment">// 1=up, 0=down</span>
+    <span class="keyword">input</span>  <span class="type">logic</span>       <span class="signal">enable</span>,
+    <span class="keyword">output</span> <span class="type">logic</span> [<span class="number">7</span>:<span class="number">0</span>] <span class="signal">count</span>,
+    <span class="keyword">output</span> <span class="type">logic</span>       <span class="signal">at_max</span>,
+    <span class="keyword">output</span> <span class="type">logic</span>       <span class="signal">at_min</span>
+);
+
+<span class="comment">// TODO 1: Combinational logic to compute next_count</span>
+<span class="comment">// Use BLOCKING (=)</span>
+<span class="type">logic</span> [<span class="number">7</span>:<span class="number">0</span>] <span class="signal">next_count</span>;
+
+<span class="keyword">always_comb</span> <span class="keyword">begin</span>
+    <span class="comment">// Your code here</span>
+<span class="keyword">end</span>
+
+<span class="comment">// TODO 2: Combinational logic for at_max and at_min</span>
+<span class="comment">// Use BLOCKING (=)</span>
+<span class="keyword">always_comb</span> <span class="keyword">begin</span>
+    <span class="comment">// Your code here</span>
+<span class="keyword">end</span>
+
+<span class="comment">// TODO 3: Sequential logic to update count</span>
+<span class="comment">// Use NON-BLOCKING (<=)</span>
+<span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span> <span class="keyword">or</span> <span class="keyword">negedge</span> <span class="signal">rst_n</span>) <span class="keyword">begin</span>
+    <span class="comment">// Your code here</span>
+<span class="keyword">end</span>
+
+<span class="keyword">endmodule</span></pre>
+        
+        <div class="solution-box" onclick="this.classList.toggle('open')">
+            <h4>✅ <span class="en">Solution (click to reveal)</span><span class="ko" style="display:none;">해답 (클릭하여 보기)</span></h4>
+            <div class="solution-content">
+                <pre><span class="keyword">module</span> <span class="type">smart_counter</span> (
+    <span class="keyword">input</span>  <span class="type">logic</span>       <span class="signal">clk</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span>       <span class="signal">rst_n</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span>       <span class="signal">up_down</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span>       <span class="signal">enable</span>,
+    <span class="keyword">output</span> <span class="type">logic</span> [<span class="number">7</span>:<span class="number">0</span>] <span class="signal">count</span>,
+    <span class="keyword">output</span> <span class="type">logic</span>       <span class="signal">at_max</span>,
+    <span class="keyword">output</span> <span class="type">logic</span>       <span class="signal">at_min</span>
+);
+
+<span class="type">logic</span> [<span class="number">7</span>:<span class="number">0</span>] <span class="signal">next_count</span>;
+
+<span class="comment">// Combinational: compute next value (BLOCKING)</span>
+<span class="keyword">always_comb</span> <span class="keyword">begin</span>
+    <span class="keyword">if</span> (<span class="signal">up_down</span>)
+        <span class="signal">next_count</span> <span class="operator">=</span> <span class="signal">count</span> + <span class="number">8'd1</span>;  <span class="comment">// =</span>
+    <span class="keyword">else</span>
+        <span class="signal">next_count</span> <span class="operator">=</span> <span class="signal">count</span> - <span class="number">8'd1</span>;  <span class="comment">// =</span>
+<span class="keyword">end</span>
+
+<span class="comment">// Combinational: flags (BLOCKING)</span>
+<span class="keyword">always_comb</span> <span class="keyword">begin</span>
+    <span class="signal">at_max</span> <span class="operator">=</span> (<span class="signal">count</span> == <span class="number">8'hFF</span>);  <span class="comment">// =</span>
+    <span class="signal">at_min</span> <span class="operator">=</span> (<span class="signal">count</span> == <span class="number">8'h00</span>);  <span class="comment">// =</span>
+<span class="keyword">end</span>
+
+<span class="comment">// Sequential: update register (NON-BLOCKING)</span>
+<span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span> <span class="keyword">or</span> <span class="keyword">negedge</span> <span class="signal">rst_n</span>) <span class="keyword">begin</span>
+    <span class="keyword">if</span> (!<span class="signal">rst_n</span>)
+        <span class="signal">count</span> <span class="operator">&lt;=</span> <span class="number">8'b0</span>;            <span class="comment">// <=</span>
+    <span class="keyword">else if</span> (<span class="signal">enable</span>)
+        <span class="signal">count</span> <span class="operator">&lt;=</span> <span class="signal">next_count</span>;      <span class="comment">// <=</span>
+<span class="keyword">end</span>
+
+<span class="keyword">endmodule</span></pre>
+            </div>
+        </div>
+    </div>
+    
+    <div class="tip-box">
+        <h3>
+            <span class="en">🎯 Key Takeaways</span>
+            <span class="ko" style="display:none;">🎯 핵심 요점</span>
+        </h3>
+        <ul>
+            <li class="en"><code>always_comb</code> → <code>=</code> (blocking) for combinational logic</li>
+            <li class="ko" style="display:none;"><code>always_comb</code> → <code>=</code> (blocking) 조합 논리에 사용</li>
+            <li class="en"><code>always_ff</code> → <code>&lt;=</code> (non-blocking) for sequential logic</li>
+            <li class="ko" style="display:none;"><code>always_ff</code> → <code>&lt;=</code> (non-blocking) 순차 논리에 사용</li>
+            <li class="en">Non-blocking makes parallel updates easy (swap, shift)</li>
+            <li class="ko" style="display:none;">Non-blocking은 병렬 업데이트를 쉽게 만듭니다 (교환, 시프트)</li>
+            <li class="en">This is a COMMON interview question - know it cold!</li>
+            <li class="ko" style="display:none;">이것은 흔한 면접 질문입니다 - 완벽하게 알아두세요!</li>
+        </ul>
+    </div>
+    
+    <div class="nav-links">
+        <a href="day-03-quiz.html">← Day 3 Quiz</a>
+        <a href="day-04-lesson.html">Day 4: Registers vs Wires →</a>
+    </div>
+    
+    <script>
+    let isKorean = false;
+    function toggleLang() {
+        isKorean = !isKorean;
+        document.querySelectorAll('.en').forEach(el => {
+            el.style.setProperty('display', isKorean ? 'none' : 'revert', 'important');
+        });
+        document.querySelectorAll('.ko').forEach(el => {
+            el.style.setProperty('display', isKorean ? 'revert' : 'none', 'important');
+        });
+        document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+    }
+    </script>
+</body>
+</html>
