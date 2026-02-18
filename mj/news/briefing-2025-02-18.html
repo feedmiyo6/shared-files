@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Tech Briefing | Feb 18, 2025</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0d1117;
+            color: #c9d1d9;
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        header {
+            text-align: center;
+            padding: 30px 0;
+            border-bottom: 1px solid #30363d;
+            margin-bottom: 30px;
+            position: relative;
+        }
+        h1 { color: #58a6ff; font-size: 2rem; margin-bottom: 8px; }
+        .date { color: #8b949e; font-size: 1.1rem; }
+        .lang-toggle {
+            position: absolute;
+            top: 10px;
+            right: 0;
+            background: #21262d;
+            border: 1px solid #30363d;
+            color: #c9d1d9;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+        .lang-toggle:hover { background: #30363d; }
+        section { margin-bottom: 40px; }
+        h2 {
+            color: #58a6ff;
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #21262d;
+        }
+        .story {
+            background: #161b22;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 16px;
+            border: 1px solid #30363d;
+        }
+        .story:hover { border-color: #58a6ff; }
+        .story h3 { color: #f0f6fc; font-size: 1.1rem; margin-bottom: 8px; }
+        .story .source { color: #8b949e; font-size: 0.85rem; margin-bottom: 10px; }
+        .story p { color: #c9d1d9; font-size: 0.95rem; margin-bottom: 12px; }
+        .story a {
+            color: #58a6ff;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+        .story a:hover { text-decoration: underline; }
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #8b949e;
+            font-size: 0.85rem;
+            border-top: 1px solid #30363d;
+        }
+        .ko { display: none; }
+        .ko.show { display: inline !important; }
+        .en.hide { display: none !important; }
+        @media (max-width: 600px) {
+            body { padding: 15px; }
+            h1 { font-size: 1.5rem; }
+            .lang-toggle { position: static; margin-bottom: 15px; display: block; }
+            header { text-align: left; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <button class="lang-toggle" onclick="toggleLang()">한국어</button>
+        <h1>
+            <span class="en">📰 Daily Tech Briefing</span>
+            <span class="ko">📰 오늘의 테크 브리핑</span>
+        </h1>
+        <div class="date">
+            <span class="en">Tuesday, February 18, 2025</span>
+            <span class="ko">2025년 2월 18일 화요일</span>
+        </div>
+    </header>
+
+    <section>
+        <h2>
+            <span class="en">🤖 AI & Tech</span>
+            <span class="ko">🤖 AI & 테크</span>
+        </h2>
+
+        <div class="story">
+            <h3>
+                <span class="en">Spotify's Best Developers Haven't Written Code Since December</span>
+                <span class="ko">스포티파이 최고 개발자들, 12월 이후 코드 작성 안 해</span>
+            </h3>
+            <div class="source">The Verge / Business Insider</div>
+            <p>
+                <span class="en">Spotify CEO Gustav Söderström revealed that the company's most senior engineers haven't written a single line of code in 2025 — they now only generate and supervise AI-generated code. This dramatic shift highlights how "vibe coding" with AI is fundamentally changing software development at major tech companies.</span>
+                <span class="ko">스포티파이 CEO 구스타프 쇠데르스트룀은 회사 최고의 시니어 엔지니어들이 2025년에 단 한 줄의 코드도 직접 작성하지 않았다고 밝혔다. 이제 그들은 AI가 생성한 코드를 생성하고 감독하는 역할만 한다. 이러한 극적인 변화는 AI를 활용한 "바이브 코딩"이 주요 테크 기업들의 소프트웨어 개발 방식을 근본적으로 바꾸고 있음을 보여준다.</span>
+            </p>
+            <a href="https://www.businessinsider.com/spotify-developers-not-writing-code-ai-2026-2" target="_blank">
+                <span class="en">Read more →</span>
+                <span class="ko">더 보기 →</span>
+            </a>
+        </div>
+
+        <div class="story">
+            <h3>
+                <span class="en">Netflix Threatens ByteDance With "Immediate Litigation" Over AI Video Generator</span>
+                <span class="ko">넷플릭스, 바이트댄스에 AI 영상 생성기 관련 "즉각적 소송" 경고</span>
+            </h3>
+            <div class="source">The Verge / Variety</div>
+            <p>
+                <span class="en">Netflix has given TikTok's parent company three days to stop its Seedance AI model from generating unauthorized content using Stranger Things, Squid Game, and Bridgerton. Netflix called the AI "a high-speed piracy engine" that treats their IP as "free, public domain clip art."</span>
+                <span class="ko">넷플릭스는 틱톡 모회사에게 기묘한 이야기, 오징어 게임, 브리저튼 등을 무단 사용하는 Seedance AI 모델을 3일 내 중단하라고 요구했다. 넷플릭스는 이 AI를 자사 지적재산권을 "무료 퍼블릭 도메인 클립아트"처럼 취급하는 "고속 불법복제 엔진"이라고 비난했다.</span>
+            </p>
+            <a href="https://variety.com/2026/tv/news/netflix-bytedance-immediate-litigation-seedance-ai-1236666084/" target="_blank">
+                <span class="en">Read more →</span>
+                <span class="ko">더 보기 →</span>
+            </a>
+        </div>
+    </section>
+
+    <section>
+        <h2>
+            <span class="en">📈 Markets & Business</span>
+            <span class="ko">📈 시장 & 비즈니스</span>
+        </h2>
+
+        <div class="story">
+            <h3>
+                <span class="en">GPU Prices Surge 15% Globally — $1,000 Now Only Buys an RTX 5070 Ti</span>
+                <span class="ko">전 세계 GPU 가격 15% 급등 — 100만 원으로 이제 RTX 5070 Ti만 구입 가능</span>
+            </h3>
+            <div class="source">Tom's Hardware</div>
+            <p>
+                <span class="en">What bought an RTX 5080 in November 2025 now only gets you an RTX 5070 Ti. A new report shows a 15% average price increase across Nvidia, AMD, and Intel GPUs globally, driven by continued demand and supply constraints. Consumer graphics card buyers are feeling the squeeze.</span>
+                <span class="ko">2025년 11월에 RTX 5080을 살 수 있었던 금액으로 이제 RTX 5070 Ti만 구매할 수 있다. 새로운 보고서에 따르면 전 세계적으로 엔비디아, AMD, 인텔 GPU 가격이 평균 15% 상승했으며, 이는 지속적인 수요와 공급 제약 때문이다.</span>
+            </p>
+            <a href="https://www.tomshardware.com/pc-components/gpus/usd1-000-bought-an-rtx-5080-in-november-2025-now-it-only-buys-an-rtx-5070-ti-report-shows-15-percent-average-global-price-hike-across-nvidia-amd-and-intel-gpus" target="_blank">
+                <span class="en">Read more →</span>
+                <span class="ko">더 보기 →</span>
+            </a>
+        </div>
+
+        <div class="story">
+            <h3>
+                <span class="en">Western Digital "Pretty Much Sold Out" Through 2026</span>
+                <span class="ko">웨스턴 디지털, 2026년까지 "거의 완판"</span>
+            </h3>
+            <div class="source">The Verge / Tom's Hardware</div>
+            <p>
+                <span class="en">AI data centers have gobbled up Western Digital's entire storage capacity for 2026. Consumer sales now account for just 5% of revenue as enterprise customers have locked in multi-year agreements. HDD prices are surging nearly 50% since September as AI claims another hardware market.</span>
+                <span class="ko">AI 데이터센터들이 웨스턴 디지털의 2026년 전체 저장장치 생산량을 선점했다. 기업 고객들이 다년 계약을 체결하면서 소비자 판매는 매출의 5%에 불과하다. HDD 가격은 9월 이후 거의 50% 급등했으며, AI가 또 하나의 하드웨어 시장을 장악하고 있다.</span>
+            </p>
+            <a href="https://www.tomshardware.com/pc-components/hdds/hard-drive-prices-have-surged-by-an-average-of-46-percent-since-september" target="_blank">
+                <span class="en">Read more →</span>
+                <span class="ko">더 보기 →</span>
+            </a>
+        </div>
+    </section>
+
+    <section>
+        <h2>
+            <span class="en">💾 Semiconductors</span>
+            <span class="ko">💾 반도체</span>
+        </h2>
+
+        <div class="story">
+            <h3>
+                <span class="en">AMD Denies MI455X Delays as Nvidia VR200 Systems Rumored to Ship Early</span>
+                <span class="ko">AMD, MI455X 지연설 부인 — 엔비디아 VR200은 조기 출하 루머</span>
+            </h3>
+            <div class="source">Tom's Hardware</div>
+            <p>
+                <span class="en">AMD has pushed back on reports that its next-gen MI455X AI chips face delays, stating that Helios systems remain "on target for H2 2026." Meanwhile, rumors suggest Nvidia's competing VR200 systems may arrive ahead of schedule, intensifying the AI chip battle.</span>
+                <span class="ko">AMD는 차세대 MI455X AI 칩 지연 보도를 부인하며 Helios 시스템이 "2026년 하반기 목표대로 진행 중"이라고 밝혔다. 한편 엔비디아의 경쟁 제품 VR200 시스템은 예정보다 빨리 출시될 것이라는 루머가 돌면서 AI 칩 경쟁이 가열되고 있다.</span>
+            </p>
+            <a href="https://www.tomshardware.com/tech-industry/artificial-intelligence/amd-denies-report-of-mi455x-delays-as-nvidia-vr200-systems-are-rumored-to-arrive-early" target="_blank">
+                <span class="en">Read more →</span>
+                <span class="ko">더 보기 →</span>
+            </a>
+        </div>
+
+        <div class="story">
+            <h3>
+                <span class="en">Phison CEO Warns NAND Shortages Could Kill Consumer Electronics Companies in 2026</span>
+                <span class="ko">파이슨 CEO, NAND 부족으로 2026년 가전업체 도산 경고</span>
+            </h3>
+            <div class="source">Tom's Hardware</div>
+            <p>
+                <span class="en">Phison's CEO warns that severe NAND flash memory shortages could force some consumer electronics companies out of business in 2026. At least one foundry is now demanding three-year cash payments upfront, signaling just how tight supply has become as AI demand consumes available production.</span>
+                <span class="ko">파이슨 CEO는 심각한 NAND 플래시 메모리 부족으로 2026년 일부 가전업체들이 도산할 수 있다고 경고했다. 최소 한 파운드리는 현재 3년치 현금 선결제를 요구하고 있으며, 이는 AI 수요가 가용 생산량을 흡수하면서 공급이 얼마나 빠듯해졌는지를 보여준다.</span>
+            </p>
+            <a href="https://www.tomshardware.com/pc-components/storage/phison-ceo-thinks-nand-shortages-could-shut-down-entire-consumer-electronics-companies-in-2026" target="_blank">
+                <span class="en">Read more →</span>
+                <span class="ko">더 보기 →</span>
+            </a>
+        </div>
+    </section>
+
+    <section>
+        <h2>
+            <span class="en">🃏 Wild Card</span>
+            <span class="ko">🃏 와일드 카드</span>
+        </h2>
+
+        <div class="story">
+            <h3>
+                <span class="en">Dutch Defense Secretary Threatens to "Jailbreak" F-35 Fighter Jets</span>
+                <span class="ko">네덜란드 국방장관, F-35 전투기 "탈옥" 발언 파문</span>
+            </h3>
+            <div class="source">Tom's Hardware</div>
+            <p>
+                <span class="en">Dutch Secretary of Defense Gijs Tuinman suggested the Netherlands could jailbreak its F-35 jets to gain software independence, comparing it to "cracking open an iPhone." The comments hint at European efforts to maintain military hardware autonomy regardless of U.S. support decisions.</span>
+                <span class="ko">네덜란드 국방장관 게이스 투인만은 네덜란드가 소프트웨어 독립성을 확보하기 위해 F-35 전투기를 탈옥할 수 있다고 시사하며 "아이폰을 크랙하는 것과 같다"고 비유했다. 이 발언은 미국의 지원 결정과 관계없이 군사 장비 자율성을 유지하려는 유럽의 노력을 암시한다.</span>
+            </p>
+            <a href="https://www.tomshardware.com/tech-industry/dutch-secretary-of-defense-threatens-to-jailbreak-nations-f-35-jet-fighters" target="_blank">
+                <span class="en">Read more →</span>
+                <span class="ko">더 보기 →</span>
+            </a>
+        </div>
+    </section>
+
+    <footer>
+        <span class="en">Curated by Rex • Sources: The Verge, Tom's Hardware, Business Insider, Variety</span>
+        <span class="ko">큐레이션: Rex • 출처: The Verge, Tom's Hardware, Business Insider, Variety</span>
+    </footer>
+
+    <script>
+        let isKorean = false;
+        function toggleLang() {
+            isKorean = !isKorean;
+            document.querySelectorAll('.en').forEach(el => el.classList.toggle('hide', isKorean));
+            document.querySelectorAll('.ko').forEach(el => el.classList.toggle('show', isKorean));
+            document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+        }
+    </script>
+</body>
+</html>
