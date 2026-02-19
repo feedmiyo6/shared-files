@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 4 Practice: Registers vs Wires | Digital Design Study</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    background: linear-gradient(135deg, #fefae0 0%, #faedcd 100%);
+    color: #3d405b;
+    line-height: 1.8;
+    padding: 24px;
+    max-width: 920px;
+    margin: 0 auto;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+h1 { color: #5d4037; border-bottom: 3px solid #c4a77d; padding-bottom: 12px; margin-bottom: 24px; font-size: 2em; }
+h2 { color: #588157; border-bottom: 2px solid #a3b18a; padding-bottom: 8px; margin: 32px 0 16px; }
+h3 { color: #5d4037; margin: 20px 0 12px; }
+p { margin: 12px 0; }
+code {
+    background: #e9f5db;
+    color: #3d405b;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+}
+pre {
+    background: #2d3436;
+    padding: 24px;
+    border-radius: 12px;
+    margin: 24px 0;
+    border: 3px solid #a3b18a;
+    overflow-x: auto;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+    font-size: 15px;
+    line-height: 1.6;
+    color: #f8f8f2;
+}
+.keyword { color: #ff79c6; font-weight: 600; }
+.type { color: #8be9fd; }
+.signal { color: #50fa7b; }
+.number { color: #ffb86c; }
+.comment { color: #6272a4; font-style: italic; }
+.string { color: #f1fa8c; }
+.concept-box {
+    background: #fff8f0;
+    border: 2px solid #c4a77d;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    color: #3d405b;
+}
+.concept-box h3 { color: #5d4037; margin-bottom: 12px; }
+.warning-box {
+    background: #fff8f0;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    border-left: 4px solid #ef4444;
+    color: #3d405b;
+}
+.warning-box h3 { color: #c53030; margin-bottom: 12px; }
+.tip-box {
+    background: #fff8f0;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    border-left: 4px solid #588157;
+    color: #3d405b;
+}
+.hint-box {
+    background: #fff8f0;
+    border-radius: 8px;
+    padding: 15px;
+    margin: 15px 0;
+    border-left: 4px solid #5d4037;
+    color: #3d405b;
+}
+.exercise {
+    background: #fff;
+    border: 2px solid #a3b18a;
+    border-radius: 12px;
+    padding: 24px;
+    margin: 24px 0;
+}
+.exercise h3 { color: #588157; }
+textarea {
+    width: 100%;
+    min-height: 200px;
+    background: #2d3436;
+    color: #f8f8f2;
+    border: 3px solid #a3b18a;
+    border-radius: 12px;
+    padding: 16px;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+    font-size: 14px;
+    line-height: 1.6;
+    resize: vertical;
+    margin: 12px 0;
+}
+textarea:focus { outline: none; border-color: #588157; }
+.reveal-btn {
+    background: linear-gradient(135deg, #588157, #3a5a40);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 14px;
+    margin: 8px 4px;
+}
+.reveal-btn:hover { opacity: 0.9; }
+.solution { display: none; margin-top: 16px; }
+.nav-links { display: flex; gap: 12px; margin: 24px 0; flex-wrap: wrap; }
+.nav-links a {
+    background: linear-gradient(135deg, #588157, #3a5a40);
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 24px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14px;
+}
+.lang-toggle {
+    position: fixed; top: 16px; right: 16px;
+    background: #588157; border: none; border-radius: 24px;
+    padding: 10px 20px; cursor: pointer; color: #fff;
+    font-size: 14px; font-weight: 600; z-index: 1000;
+}
+.lang-toggle:hover { background: #3a5a40; }
+.ko { display: none; }
+.day-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, #588157, #3a5a40);
+    color: #fff; padding: 4px 14px; border-radius: 20px;
+    font-size: 14px; font-weight: 600; margin-bottom: 12px;
+}
+@media (max-width: 768px) {
+    body { padding: 16px; }
+    h1 { font-size: 1.8em; }
+    pre { font-size: 14px; padding: 16px; }
+    textarea { font-size: 13px; min-height: 150px; }
+    .lang-toggle { padding: 8px 16px; font-size: 13px; }
+}
+</style>
+</head>
+<body>
+
+<button class="lang-toggle" onclick="toggleLang()">한국어</button>
+
+<span class="day-badge">💻 Day 4 Practice</span>
+<h1>
+    <span class="en">Registers vs Wires — Practice</span>
+    <span class="ko" style="display:none;">레지스터 vs 와이어 — 실습</span>
+</h1>
+
+<div class="nav-links">
+    <a href="day-04-lesson.html">📖 Lesson</a>
+    <a href="day-04-quiz.html">📝 Quiz</a>
+</div>
+
+<div class="tip-box">
+<p class="en">💡 <strong>How to practice:</strong> Try writing your code in the text areas below, then compare with the solution. For simulation, paste your code into <a href="https://www.edaplayground.com/" target="_blank" style="color:#588157;">EDA Playground</a> (select SystemVerilog, Icarus Verilog).</p>
+<p class="ko" style="display:none;">💡 <strong>실습 방법:</strong> 아래 텍스트 영역에 코드를 작성한 후 솔루션과 비교하세요. 시뮬레이션은 <a href="https://www.edaplayground.com/" target="_blank" style="color:#588157;">EDA Playground</a>에 코드를 붙여넣으세요 (SystemVerilog, Icarus Verilog 선택).</p>
+</div>
+
+<!-- Exercise 1 -->
+<div class="exercise">
+<h3>
+    <span class="en">Exercise 1: Convert Verilog to SystemVerilog</span>
+    <span class="ko" style="display:none;">연습 1: Verilog를 SystemVerilog로 변환</span>
+</h3>
+<p class="en">Rewrite this old-style Verilog module using modern SystemVerilog types and blocks. Replace <code>wire</code>/<code>reg</code> with <code>logic</code>, and use <code>always_ff</code>/<code>always_comb</code>.</p>
+<p class="ko" style="display:none;">이 구식 Verilog 모듈을 최신 SystemVerilog 타입과 블록을 사용하여 다시 작성하세요. <code>wire</code>/<code>reg</code>를 <code>logic</code>으로 바꾸고, <code>always_ff</code>/<code>always_comb</code>을 사용하세요.</p>
+
+<pre><span class="comment">// OLD Verilog — Convert this!</span>
+<span class="keyword">module</span> <span class="signal">counter_mux</span> (
+    <span class="keyword">input</span>        <span class="signal">clk</span>,
+    <span class="keyword">input</span>        <span class="signal">rst_n</span>,
+    <span class="keyword">input</span>        <span class="signal">sel</span>,
+    <span class="keyword">input</span>  [<span class="number">7</span>:<span class="number">0</span>] <span class="signal">data_a</span>,
+    <span class="keyword">input</span>  [<span class="number">7</span>:<span class="number">0</span>] <span class="signal">data_b</span>,
+    <span class="keyword">output</span> [<span class="number">7</span>:<span class="number">0</span>] <span class="signal">result</span>
+);
+
+<span class="keyword">reg</span> [<span class="number">7</span>:<span class="number">0</span>] <span class="signal">mux_out</span>;
+<span class="keyword">reg</span> [<span class="number">7</span>:<span class="number">0</span>] <span class="signal">result</span>;
+
+<span class="keyword">always</span> @(*) <span class="keyword">begin</span>
+    <span class="keyword">case</span> (<span class="signal">sel</span>)
+        <span class="number">1'b0</span>: <span class="signal">mux_out</span> = <span class="signal">data_a</span>;
+        <span class="number">1'b1</span>: <span class="signal">mux_out</span> = <span class="signal">data_b</span>;
+    <span class="keyword">endcase</span>
+<span class="keyword">end</span>
+
+<span class="keyword">always</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span> <span class="keyword">or</span> <span class="keyword">negedge</span> <span class="signal">rst_n</span>) <span class="keyword">begin</span>
+    <span class="keyword">if</span> (!<span class="signal">rst_n</span>)
+        <span class="signal">result</span> &lt;= <span class="number">8'd0</span>;
+    <span class="keyword">else</span>
+        <span class="signal">result</span> &lt;= <span class="signal">mux_out</span>;
+<span class="keyword">end</span>
+
+<span class="keyword">endmodule</span></pre>
+
+<p class="en"><strong>Your solution:</strong></p>
+<p class="ko" style="display:none;"><strong>당신의 솔루션:</strong></p>
+<textarea placeholder="// Write your SystemVerilog conversion here..."></textarea>
+
+<button class="reveal-btn" onclick="this.nextElementSibling.style.display='block'">Show Solution</button>
+<div class="solution">
+<pre><span class="keyword">module</span> <span class="signal">counter_mux</span> (
+    <span class="keyword">input</span>  <span class="type">logic</span>       <span class="signal">clk</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span>       <span class="signal">rst_n</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span>       <span class="signal">sel</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span> [<span class="number">7</span>:<span class="number">0</span>] <span class="signal">data_a</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span> [<span class="number">7</span>:<span class="number">0</span>] <span class="signal">data_b</span>,
+    <span class="keyword">output</span> <span class="type">logic</span> [<span class="number">7</span>:<span class="number">0</span>] <span class="signal">result</span>
+);
+
+<span class="type">logic</span> [<span class="number">7</span>:<span class="number">0</span>] <span class="signal">mux_out</span>;
+
+<span class="comment">// Combinational: mux</span>
+<span class="keyword">always_comb</span> <span class="keyword">begin</span>
+    <span class="keyword">case</span> (<span class="signal">sel</span>)
+        <span class="number">1'b0</span>:    <span class="signal">mux_out</span> = <span class="signal">data_a</span>;
+        <span class="number">1'b1</span>:    <span class="signal">mux_out</span> = <span class="signal">data_b</span>;
+        <span class="keyword">default</span>: <span class="signal">mux_out</span> = <span class="signal">data_a</span>;  <span class="comment">// Good practice!</span>
+    <span class="keyword">endcase</span>
+<span class="keyword">end</span>
+
+<span class="comment">// Sequential: registered output</span>
+<span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span> <span class="keyword">or</span> <span class="keyword">negedge</span> <span class="signal">rst_n</span>) <span class="keyword">begin</span>
+    <span class="keyword">if</span> (!<span class="signal">rst_n</span>)
+        <span class="signal">result</span> &lt;= <span class="number">8'd0</span>;
+    <span class="keyword">else</span>
+        <span class="signal">result</span> &lt;= <span class="signal">mux_out</span>;
+<span class="keyword">end</span>
+
+<span class="keyword">endmodule</span></pre>
+<div class="tip-box">
+<p class="en"><strong>Key changes:</strong> (1) All types → <code>logic</code>, (2) <code>always @(*)</code> → <code>always_comb</code>, (3) <code>always @(posedge clk...)</code> → <code>always_ff</code>, (4) Added <code>default</code> case for latch prevention.</p>
+<p class="ko" style="display:none;"><strong>주요 변경:</strong> (1) 모든 타입 → <code>logic</code>, (2) <code>always @(*)</code> → <code>always_comb</code>, (3) <code>always @(posedge clk...)</code> → <code>always_ff</code>, (4) 래치 방지를 위한 <code>default</code> 케이스 추가.</p>
+</div>
+</div>
+</div>
+
+<!-- Exercise 2 -->
+<div class="exercise">
+<h3>
+    <span class="en">Exercise 2: Bug Hunt — Find the Errors</span>
+    <span class="ko" style="display:none;">연습 2: 버그 찾기 — 오류를 찾으세요</span>
+</h3>
+<p class="en">This code has <strong>3 bugs</strong> related to wire/reg/logic usage. Find and fix them all.</p>
+<p class="ko" style="display:none;">이 코드에는 wire/reg/logic 사용과 관련된 <strong>3개의 버그</strong>가 있습니다. 모두 찾아서 고치세요.</p>
+
+<pre><span class="keyword">module</span> <span class="signal">buggy</span> (
+    <span class="keyword">input</span>  <span class="keyword">reg</span>         <span class="signal">clk</span>,        <span class="comment">// Bug 1: ???</span>
+    <span class="keyword">input</span>  <span class="type">logic</span>       <span class="signal">rst_n</span>,
+    <span class="keyword">output</span> <span class="type">logic</span> [<span class="number">3</span>:<span class="number">0</span>] <span class="signal">count</span>
+);
+
+<span class="type">logic</span> <span class="signal">shared_sig</span>;
+<span class="keyword">assign</span> <span class="signal">shared_sig</span> = <span class="signal">count</span>[<span class="number">0</span>];   <span class="comment">// Driver 1</span>
+<span class="keyword">assign</span> <span class="signal">shared_sig</span> = <span class="signal">count</span>[<span class="number">1</span>];   <span class="comment">// Bug 2: Driver 2 on logic???</span>
+
+<span class="keyword">always_comb</span> <span class="keyword">begin</span>
+    <span class="signal">count</span> &lt;= <span class="signal">count</span> + <span class="number">1</span>;           <span class="comment">// Bug 3: ???</span>
+<span class="keyword">end</span>
+
+<span class="keyword">endmodule</span></pre>
+
+<textarea placeholder="// Write your fixed version here..."></textarea>
+
+<button class="reveal-btn" onclick="this.nextElementSibling.style.display='block'">Show Solution</button>
+<div class="solution">
+<div class="concept-box">
+<h3>🐛 Bug Analysis</h3>
+<p><strong>Bug 1:</strong> <code>input reg clk</code> — inputs cannot be <code>reg</code>. Fix: <code>input logic clk</code></p>
+<p><strong>Bug 2:</strong> Two <code>assign</code> statements to a <code>logic</code> signal — <code>logic</code> only supports one driver. Fix: change to <code>wire</code> (if multi-driver intended) or use a mux.</p>
+<p><strong>Bug 3:</strong> Non-blocking assignment (<code>&lt;=</code>) in <code>always_comb</code> — combinational blocks must use blocking (<code>=</code>). Also, this is a counter which needs a clock — it should be in <code>always_ff</code>!</p>
+</div>
+<pre><span class="keyword">module</span> <span class="signal">fixed</span> (
+    <span class="keyword">input</span>  <span class="type">logic</span>       <span class="signal">clk</span>,         <span class="comment">// Fix 1: logic, not reg</span>
+    <span class="keyword">input</span>  <span class="type">logic</span>       <span class="signal">rst_n</span>,
+    <span class="keyword">output</span> <span class="type">logic</span> [<span class="number">3</span>:<span class="number">0</span>] <span class="signal">count</span>
+);
+
+<span class="type">logic</span> <span class="signal">count_bit</span>;
+<span class="keyword">assign</span> <span class="signal">count_bit</span> = <span class="signal">count</span>[<span class="number">0</span>];    <span class="comment">// Fix 2: single driver</span>
+
+<span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span> <span class="keyword">or</span> <span class="keyword">negedge</span> <span class="signal">rst_n</span>) <span class="keyword">begin</span>  <span class="comment">// Fix 3: sequential!</span>
+    <span class="keyword">if</span> (!<span class="signal">rst_n</span>)
+        <span class="signal">count</span> &lt;= <span class="number">4'd0</span>;
+    <span class="keyword">else</span>
+        <span class="signal">count</span> &lt;= <span class="signal">count</span> + <span class="number">1</span>;
+<span class="keyword">end</span>
+
+<span class="keyword">endmodule</span></pre>
+</div>
+</div>
+
+<!-- Exercise 3 -->
+<div class="exercise">
+<h3>
+    <span class="en">Exercise 3: Classify the Hardware</span>
+    <span class="ko" style="display:none;">연습 3: 하드웨어 분류</span>
+</h3>
+<p class="en">For each signal below, determine if it synthesizes to a <strong>flip-flop</strong>, <strong>combinational logic</strong>, or <strong>latch</strong>. Write your answers then check.</p>
+<p class="ko" style="display:none;">아래의 각 신호가 <strong>플립플롭</strong>, <strong>조합 논리</strong>, 또는 <strong>래치</strong>로 합성되는지 판별하세요.</p>
+
+<pre><span class="type">logic</span> [<span class="number">7</span>:<span class="number">0</span>] <span class="signal">sig_a</span>, <span class="signal">sig_b</span>, <span class="signal">sig_c</span>, <span class="signal">sig_d</span>;
+
+<span class="comment">// Signal A</span>
+<span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span>) <span class="keyword">begin</span>
+    <span class="signal">sig_a</span> &lt;= <span class="signal">data_in</span>;
+<span class="keyword">end</span>
+
+<span class="comment">// Signal B</span>
+<span class="keyword">always_comb</span> <span class="keyword">begin</span>
+    <span class="signal">sig_b</span> = <span class="signal">x</span> &amp; <span class="signal">y</span>;
+<span class="keyword">end</span>
+
+<span class="comment">// Signal C</span>
+<span class="keyword">assign</span> <span class="signal">sig_c</span> = <span class="signal">sel</span> ? <span class="signal">a</span> : <span class="signal">b</span>;
+
+<span class="comment">// Signal D</span>
+<span class="keyword">always_comb</span> <span class="keyword">begin</span>
+    <span class="keyword">if</span> (<span class="signal">enable</span>)
+        <span class="signal">sig_d</span> = <span class="signal">data_in</span>;
+    <span class="comment">// No else! What happens?</span>
+<span class="keyword">end</span></pre>
+
+<textarea placeholder="Signal A: ???&#10;Signal B: ???&#10;Signal C: ???&#10;Signal D: ???"></textarea>
+
+<button class="reveal-btn" onclick="this.nextElementSibling.style.display='block'">Show Solution</button>
+<div class="solution">
+<div class="concept-box">
+<h3>📋 Answers</h3>
+<p><strong>Signal A: Flip-flop</strong> — Driven in <code>always_ff</code> with clock edge → D flip-flop</p>
+<p><strong>Signal B: Combinational (AND gate)</strong> — <code>always_comb</code> with complete assignment → pure combinational</p>
+<p><strong>Signal C: Combinational (MUX)</strong> — Continuous <code>assign</code> with ternary → 2:1 multiplexer</p>
+<p><strong>Signal D: ⚠️ Latch!</strong> — <code>always_comb</code> but missing <code>else</code> branch means <code>sig_d</code> must hold its value when <code>enable</code> is low → inferred latch. This is almost always a bug!</p>
+</div>
+<div class="warning-box">
+<h3>⚠️ The Latch Trap</h3>
+<p class="en">Signal D is the classic mistake. When an <code>always_comb</code> block doesn't assign a signal in ALL paths, synthesis infers a latch. Fix it by always including a <code>default</code> or <code>else</code> branch:</p>
+<p class="ko" style="display:none;">Signal D는 전형적인 실수입니다. <code>always_comb</code> 블록이 모든 경로에서 신호를 할당하지 않으면 래치가 추론됩니다. 항상 <code>default</code> 또는 <code>else</code> 분기를 포함하여 수정하세요:</p>
+<pre><span class="keyword">always_comb</span> <span class="keyword">begin</span>
+    <span class="keyword">if</span> (<span class="signal">enable</span>)
+        <span class="signal">sig_d</span> = <span class="signal">data_in</span>;
+    <span class="keyword">else</span>
+        <span class="signal">sig_d</span> = <span class="number">8'd0</span>;   <span class="comment">// ✅ No latch!</span>
+<span class="keyword">end</span></pre>
+</div>
+</div>
+</div>
+
+<!-- Exercise 4 -->
+<div class="exercise">
+<h3>
+    <span class="en">Exercise 4: Build a Configurable Register</span>
+    <span class="ko" style="display:none;">연습 4: 구성 가능한 레지스터 만들기</span>
+</h3>
+<p class="en">Design a parameterized register module with <strong>enable</strong> and <strong>async reset</strong>. Use proper SystemVerilog types throughout.</p>
+<p class="ko" style="display:none;">적절한 SystemVerilog 타입을 사용하여 <strong>인에이블</strong>과 <strong>비동기 리셋</strong>이 있는 매개변수화된 레지스터 모듈을 설계하세요.</p>
+
+<div class="hint-box">
+<p class="en"><strong>Requirements:</strong></p>
+<p class="ko" style="display:none;"><strong>요구사항:</strong></p>
+<ul>
+<li>Parameter <code>WIDTH</code> (default 8)</li>
+<li>Inputs: <code>clk</code>, <code>rst_n</code>, <code>en</code>, <code>d[WIDTH-1:0]</code></li>
+<li>Output: <code>q[WIDTH-1:0]</code></li>
+<li>Active-low async reset → output goes to 0</li>
+<li>Only updates on <code>en</code> = 1</li>
+</ul>
+</div>
+
+<textarea placeholder="// Write your configurable register module here..."></textarea>
+
+<button class="reveal-btn" onclick="this.nextElementSibling.style.display='block'">Show Solution</button>
+<div class="solution">
+<pre><span class="keyword">module</span> <span class="signal">config_reg</span> #(
+    <span class="keyword">parameter</span> <span class="type">int</span> <span class="signal">WIDTH</span> = <span class="number">8</span>
+) (
+    <span class="keyword">input</span>  <span class="type">logic</span>              <span class="signal">clk</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span>              <span class="signal">rst_n</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span>              <span class="signal">en</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span> [<span class="signal">WIDTH</span>-<span class="number">1</span>:<span class="number">0</span>] <span class="signal">d</span>,
+    <span class="keyword">output</span> <span class="type">logic</span> [<span class="signal">WIDTH</span>-<span class="number">1</span>:<span class="number">0</span>] <span class="signal">q</span>
+);
+
+<span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span> <span class="keyword">or</span> <span class="keyword">negedge</span> <span class="signal">rst_n</span>) <span class="keyword">begin</span>
+    <span class="keyword">if</span> (!<span class="signal">rst_n</span>)
+        <span class="signal">q</span> &lt;= <span class="string">'0</span>;          <span class="comment">// '0 fills all bits with 0</span>
+    <span class="keyword">else</span> <span class="keyword">if</span> (<span class="signal">en</span>)
+        <span class="signal">q</span> &lt;= <span class="signal">d</span>;
+    <span class="comment">// When en=0: q holds its value (that's what registers do!)</span>
+<span class="keyword">end</span>
+
+<span class="keyword">endmodule</span></pre>
+<div class="tip-box">
+<p class="en"><strong>Note:</strong> <code>'0</code> is a SystemVerilog shorthand that fills all bits with 0, regardless of width. Very handy for parameterized modules! Similarly, <code>'1</code> fills all bits with 1.</p>
+<p class="ko" style="display:none;"><strong>참고:</strong> <code>'0</code>은 폭에 관계없이 모든 비트를 0으로 채우는 SystemVerilog 축약형입니다. 매개변수화된 모듈에 매우 유용합니다! 마찬가지로 <code>'1</code>은 모든 비트를 1로 채웁니다.</p>
+</div>
+</div>
+</div>
+
+<div class="concept-box" style="margin-top: 32px;">
+<h3>
+    <span class="en">🎯 What You Practiced Today</span>
+    <span class="ko" style="display:none;">🎯 오늘 실습한 내용</span>
+</h3>
+<ul>
+    <li class="en">Converting old Verilog (<code>wire</code>/<code>reg</code>) to SystemVerilog (<code>logic</code>)</li>
+    <li class="ko" style="display:none;">구식 Verilog(<code>wire</code>/<code>reg</code>)를 SystemVerilog(<code>logic</code>)로 변환</li>
+    <li class="en">Identifying common bugs with data types</li>
+    <li class="ko" style="display:none;">데이터 타입 관련 흔한 버그 식별</li>
+    <li class="en">Classifying hardware from code (flip-flop vs combinational vs latch)</li>
+    <li class="ko" style="display:none;">코드에서 하드웨어 분류 (플립플롭 vs 조합 논리 vs 래치)</li>
+    <li class="en">Writing parameterized modules with proper SystemVerilog types</li>
+    <li class="ko" style="display:none;">적절한 SystemVerilog 타입으로 매개변수화된 모듈 작성</li>
+</ul>
+</div>
+
+<div class="nav-links" style="margin-top: 32px;">
+    <a href="day-04-lesson.html">📖 Review Lesson</a>
+    <a href="day-04-quiz.html">📝 Retake Quiz</a>
+    <a href="day-05-lesson.html">Day 5 →</a>
+</div>
+
+<script>
+let isKorean = false;
+function toggleLang() {
+    isKorean = !isKorean;
+    document.querySelectorAll('.en').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'none' : 'revert', 'important');
+    });
+    document.querySelectorAll('.ko').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'revert' : 'none', 'important');
+    });
+    document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+}
+</script>
+
+</body>
+</html>

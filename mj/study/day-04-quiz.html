@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 4 Quiz: Registers vs Wires | Digital Design Study</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    background: linear-gradient(135deg, #fefae0 0%, #faedcd 100%);
+    color: #3d405b;
+    line-height: 1.8;
+    padding: 24px;
+    max-width: 920px;
+    margin: 0 auto;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+h1 { color: #5d4037; border-bottom: 3px solid #c4a77d; padding-bottom: 12px; margin-bottom: 24px; font-size: 2em; }
+h2 { color: #588157; border-bottom: 2px solid #a3b18a; padding-bottom: 8px; margin: 32px 0 16px; }
+code {
+    background: #e9f5db;
+    color: #3d405b;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+}
+pre {
+    background: #2d3436;
+    padding: 24px;
+    border-radius: 12px;
+    margin: 16px 0;
+    border: 3px solid #a3b18a;
+    overflow-x: auto;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+    font-size: 15px;
+    line-height: 1.6;
+    color: #f8f8f2;
+}
+.keyword { color: #ff79c6; font-weight: 600; }
+.type { color: #8be9fd; }
+.signal { color: #50fa7b; }
+.number { color: #ffb86c; }
+.comment { color: #6272a4; font-style: italic; }
+.question {
+    background: #fff8f0;
+    border: 2px solid #c4a77d;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    color: #3d405b;
+}
+.question h3 { color: #5d4037; margin-bottom: 12px; }
+.options { list-style: none; padding: 0; }
+.options li {
+    padding: 10px 16px;
+    margin: 6px 0;
+    border-radius: 8px;
+    cursor: pointer;
+    border: 2px solid #c4a77d;
+    background: #fff;
+    transition: all 0.2s;
+}
+.options li:hover { background: #e9f5db; }
+.options li.correct { background: #d4edda; border-color: #588157; }
+.options li.wrong { background: #fdd; border-color: #ef4444; }
+.explanation {
+    display: none;
+    margin-top: 12px;
+    padding: 12px;
+    background: #fff;
+    border-radius: 8px;
+    border-left: 4px solid #588157;
+}
+.score-box {
+    background: #fff8f0;
+    border: 2px solid #588157;
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+    margin: 24px 0;
+    display: none;
+}
+.score-box h2 { border: none; }
+.nav-links { display: flex; gap: 12px; margin: 24px 0; flex-wrap: wrap; }
+.nav-links a {
+    background: linear-gradient(135deg, #588157, #3a5a40);
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 24px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14px;
+}
+.lang-toggle {
+    position: fixed; top: 16px; right: 16px;
+    background: #588157; border: none; border-radius: 24px;
+    padding: 10px 20px; cursor: pointer; color: #fff;
+    font-size: 14px; font-weight: 600; z-index: 1000;
+}
+.lang-toggle:hover { background: #3a5a40; }
+.ko { display: none; }
+.day-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, #588157, #3a5a40);
+    color: #fff; padding: 4px 14px; border-radius: 20px;
+    font-size: 14px; font-weight: 600; margin-bottom: 12px;
+}
+@media (max-width: 768px) {
+    body { padding: 16px; }
+    h1 { font-size: 1.8em; }
+    pre { font-size: 14px; padding: 16px; }
+    .lang-toggle { padding: 8px 16px; font-size: 13px; }
+}
+</style>
+</head>
+<body>
+
+<button class="lang-toggle" onclick="toggleLang()">한국어</button>
+
+<span class="day-badge">📝 Day 4 Quiz</span>
+<h1>
+    <span class="en">Registers vs Wires — Quiz</span>
+    <span class="ko" style="display:none;">레지스터 vs 와이어 — 퀴즈</span>
+</h1>
+
+<div class="nav-links">
+    <a href="day-04-lesson.html">📖 Lesson</a>
+    <a href="day-04-practice.html">💻 Practice</a>
+</div>
+
+<div id="quiz">
+
+<div class="question" data-correct="c">
+<h3>Q1. What does <code>reg</code> actually mean in Verilog?</h3>
+<ul class="options">
+<li data-val="a">A) It always creates a hardware flip-flop</li>
+<li data-val="b">B) It represents a physical wire connection</li>
+<li data-val="c">C) It's a variable that can hold a value in procedural blocks</li>
+<li data-val="d">D) It can only be used with clock edges</li>
+</ul>
+<div class="explanation">
+<span class="en"><strong>C</strong> — <code>reg</code> simply means a variable usable in procedural blocks (<code>always</code>, <code>initial</code>, etc.). It may synthesize to combinational logic or a flip-flop depending on context.</span>
+<span class="ko" style="display:none;"><strong>C</strong> — <code>reg</code>는 절차적 블록(<code>always</code>, <code>initial</code> 등)에서 사용할 수 있는 변수를 의미합니다. 문맥에 따라 조합 논리 또는 플립플롭으로 합성될 수 있습니다.</span>
+</div>
+</div>
+
+<div class="question" data-correct="b">
+<h3>Q2. Which SystemVerilog type replaces both <code>wire</code> and <code>reg</code>?</h3>
+<ul class="options">
+<li data-val="a">A) <code>bit</code></li>
+<li data-val="b">B) <code>logic</code></li>
+<li data-val="c">C) <code>int</code></li>
+<li data-val="d">D) <code>net</code></li>
+</ul>
+<div class="explanation">
+<span class="en"><strong>B</strong> — <code>logic</code> can be used in both continuous and procedural assignments, replacing both <code>wire</code> and <code>reg</code> in most cases.</span>
+<span class="ko" style="display:none;"><strong>B</strong> — <code>logic</code>은 연속 할당과 절차적 할당 모두에서 사용할 수 있어, 대부분의 경우 <code>wire</code>와 <code>reg</code>를 대체합니다.</span>
+</div>
+</div>
+
+<div class="question" data-correct="d">
+<h3>Q3. When must you still use <code>wire</code> instead of <code>logic</code>?</h3>
+<ul class="options">
+<li data-val="a">A) For module input ports</li>
+<li data-val="b">B) For continuous assignments</li>
+<li data-val="c">C) Inside always_comb blocks</li>
+<li data-val="d">D) For tri-state or multi-driver nets</li>
+</ul>
+<div class="explanation">
+<span class="en"><strong>D</strong> — <code>logic</code> only supports a single driver. Multi-driver nets (like tri-state buses) require <code>wire</code>.</span>
+<span class="ko" style="display:none;"><strong>D</strong> — <code>logic</code>은 단일 드라이버만 지원합니다. 다중 드라이버 넷(트라이스테이트 버스 등)에는 <code>wire</code>가 필요합니다.</span>
+</div>
+</div>
+
+<div class="question" data-correct="a">
+<h3>Q4. What is the default initial value of a <code>logic</code> variable?</h3>
+<ul class="options">
+<li data-val="a">A) X (unknown)</li>
+<li data-val="b">B) 0</li>
+<li data-val="c">C) Z (high-impedance)</li>
+<li data-val="d">D) 1</li>
+</ul>
+<div class="explanation">
+<span class="en"><strong>A</strong> — <code>logic</code> is a 4-state type that defaults to X. This helps catch uninitialized signals during simulation.</span>
+<span class="ko" style="display:none;"><strong>A</strong> — <code>logic</code>은 4상태 타입으로 X가 기본값입니다. 시뮬레이션에서 초기화되지 않은 신호를 잡는 데 도움이 됩니다.</span>
+</div>
+</div>
+
+<div class="question" data-correct="c">
+<h3>Q5. What does this code synthesize to?</h3>
+<pre><span class="keyword">reg</span> <span class="signal">y</span>;
+<span class="keyword">always</span> @(*) <span class="keyword">begin</span>
+    <span class="signal">y</span> = <span class="signal">a</span> | <span class="signal">b</span>;
+<span class="keyword">end</span></pre>
+<ul class="options">
+<li data-val="a">A) A D flip-flop</li>
+<li data-val="b">B) A latch</li>
+<li data-val="c">C) An OR gate (combinational)</li>
+<li data-val="d">D) A tri-state buffer</li>
+</ul>
+<div class="explanation">
+<span class="en"><strong>C</strong> — Despite using <code>reg</code>, the <code>always @(*)</code> block with complete assignment makes this purely combinational — it's just an OR gate.</span>
+<span class="ko" style="display:none;"><strong>C</strong> — <code>reg</code>를 사용했지만, 완전한 할당이 있는 <code>always @(*)</code> 블록은 순수 조합 논리입니다 — OR 게이트일 뿐입니다.</span>
+</div>
+</div>
+
+<div class="question" data-correct="b">
+<h3>Q6. Which is a 2-state type?</h3>
+<ul class="options">
+<li data-val="a">A) <code>logic</code></li>
+<li data-val="b">B) <code>bit</code></li>
+<li data-val="c">C) <code>wire</code></li>
+<li data-val="d">D) <code>reg</code></li>
+</ul>
+<div class="explanation">
+<span class="en"><strong>B</strong> — <code>bit</code> is a 2-state type (0, 1 only). It defaults to 0 and is faster for simulation but won't catch X-propagation bugs.</span>
+<span class="ko" style="display:none;"><strong>B</strong> — <code>bit</code>은 2상태 타입(0, 1만)입니다. 기본값은 0이며 시뮬레이션이 빠르지만 X 전파 버그를 잡지 못합니다.</span>
+</div>
+</div>
+
+<div class="question" data-correct="a">
+<h3>Q7. Which is ILLEGAL in Verilog?</h3>
+<ul class="options">
+<li data-val="a">A) <code>input reg [7:0] data</code></li>
+<li data-val="b">B) <code>output reg [7:0] data</code></li>
+<li data-val="c">C) <code>input wire [7:0] data</code></li>
+<li data-val="d">D) <code>output wire [7:0] data</code></li>
+</ul>
+<div class="explanation">
+<span class="en"><strong>A</strong> — Module inputs cannot be <code>reg</code> because they are driven externally. Inputs are always nets (<code>wire</code>). Outputs can be either.</span>
+<span class="ko" style="display:none;"><strong>A</strong> — 모듈 입력은 외부에서 구동되므로 <code>reg</code>가 될 수 없습니다. 입력은 항상 넷(<code>wire</code>)입니다. 출력은 둘 다 가능합니다.</span>
+</div>
+</div>
+
+<div class="question" data-correct="d">
+<h3>Q8. In SystemVerilog, what determines if hardware is sequential or combinational?</h3>
+<ul class="options">
+<li data-val="a">A) Whether you use <code>wire</code> or <code>reg</code></li>
+<li data-val="b">B) The variable declaration type</li>
+<li data-val="c">C) The port direction (input/output)</li>
+<li data-val="d">D) The block type (<code>always_ff</code> vs <code>always_comb</code>)</li>
+</ul>
+<div class="explanation">
+<span class="en"><strong>D</strong> — In SystemVerilog, the block type makes the intent clear. <code>always_ff</code> = sequential, <code>always_comb</code> = combinational. The variable type (<code>logic</code>) is the same for both.</span>
+<span class="ko" style="display:none;"><strong>D</strong> — SystemVerilog에서는 블록 타입이 의도를 명확히 합니다. <code>always_ff</code> = 순차, <code>always_comb</code> = 조합. 변수 타입(<code>logic</code>)은 둘 다 동일합니다.</span>
+</div>
+</div>
+
+<div class="question" data-correct="c">
+<h3>Q9. What happens if you try two <code>assign</code> statements to a <code>logic</code> signal?</h3>
+<ul class="options">
+<li data-val="a">A) The last assignment wins</li>
+<li data-val="b">B) The signals get OR'd together</li>
+<li data-val="c">C) Compile error</li>
+<li data-val="d">D) Both values resolve to X</li>
+</ul>
+<div class="explanation">
+<span class="en"><strong>C</strong> — <code>logic</code> supports only a single driver. Multiple continuous assignments will cause a compile-time error. Use <code>wire</code> for multi-driver nets.</span>
+<span class="ko" style="display:none;"><strong>C</strong> — <code>logic</code>은 단일 드라이버만 지원합니다. 여러 연속 할당은 컴파일 오류를 발생시킵니다. 다중 드라이버 넷에는 <code>wire</code>를 사용하세요.</span>
+</div>
+</div>
+
+<div class="question" data-correct="b">
+<h3>Q10. Why is <code>bit</code> NOT recommended for RTL design?</h3>
+<ul class="options">
+<li data-val="a">A) It's too slow for simulation</li>
+<li data-val="b">B) It can't represent X/Z, hiding potential bugs</li>
+<li data-val="c">C) It's not supported by synthesis tools</li>
+<li data-val="d">D) It only works in testbenches</li>
+</ul>
+<div class="explanation">
+<span class="en"><strong>B</strong> — <code>bit</code> is 2-state (0 and 1 only). Uninitialized signals default to 0 instead of X, which masks bugs that would otherwise be visible in simulation waveforms.</span>
+<span class="ko" style="display:none;"><strong>B</strong> — <code>bit</code>은 2상태(0과 1만)입니다. 초기화되지 않은 신호가 X 대신 0이 되어, 시뮬레이션 파형에서 보일 버그를 숨깁니다.</span>
+</div>
+</div>
+
+<div class="question" data-correct="a">
+<h3>Q11. Which declaration is best practice in modern SystemVerilog?</h3>
+<pre><span class="comment">// Option A:</span>
+<span class="keyword">module</span> <span class="signal">top</span>(<span class="keyword">input</span> <span class="type">logic</span> <span class="signal">clk</span>, <span class="keyword">output</span> <span class="type">logic</span> [<span class="number">7</span>:<span class="number">0</span>] <span class="signal">data</span>);
+<span class="comment">// Option B:</span>
+<span class="keyword">module</span> <span class="signal">top</span>(<span class="keyword">input</span> <span class="keyword">wire</span> <span class="signal">clk</span>, <span class="keyword">output</span> <span class="keyword">reg</span> [<span class="number">7</span>:<span class="number">0</span>] <span class="signal">data</span>);
+<span class="comment">// Option C:</span>
+<span class="keyword">module</span> <span class="signal">top</span>(<span class="keyword">input</span> <span class="signal">clk</span>, <span class="keyword">output</span> [<span class="number">7</span>:<span class="number">0</span>] <span class="signal">data</span>);
+<span class="comment">// Option D:</span>
+<span class="keyword">module</span> <span class="signal">top</span>(<span class="keyword">input</span> <span class="type">bit</span> <span class="signal">clk</span>, <span class="keyword">output</span> <span class="type">bit</span> [<span class="number">7</span>:<span class="number">0</span>] <span class="signal">data</span>);</pre>
+<ul class="options">
+<li data-val="a">A) Option A</li>
+<li data-val="b">B) Option B</li>
+<li data-val="c">C) Option C</li>
+<li data-val="d">D) Option D</li>
+</ul>
+<div class="explanation">
+<span class="en"><strong>A</strong> — Using <code>logic</code> for all ports is the modern SystemVerilog best practice. It's clean, consistent, and avoids the wire/reg confusion entirely.</span>
+<span class="ko" style="display:none;"><strong>A</strong> — 모든 포트에 <code>logic</code>을 사용하는 것이 최신 SystemVerilog 모범 사례입니다. 깔끔하고 일관적이며 wire/reg 혼란을 완전히 피합니다.</span>
+</div>
+</div>
+
+<div class="question" data-correct="c">
+<h3>Q12. What does Z represent in a 4-state type?</h3>
+<ul class="options">
+<li data-val="a">A) Zero</li>
+<li data-val="b">B) Unknown/uninitialized</li>
+<li data-val="c">C) High-impedance (not driven)</li>
+<li data-val="d">D) Conflict between drivers</li>
+</ul>
+<div class="explanation">
+<span class="en"><strong>C</strong> — Z means high-impedance — the signal is not being actively driven. This is used in tri-state buses where a device can "disconnect" from the bus.</span>
+<span class="ko" style="display:none;"><strong>C</strong> — Z는 하이 임피던스를 의미합니다 — 신호가 능동적으로 구동되지 않는 상태입니다. 장치가 버스에서 "분리"될 수 있는 트라이스테이트 버스에서 사용됩니다.</span>
+</div>
+</div>
+
+</div>
+
+<div class="score-box" id="scoreBox">
+<h2>🎯 Score: <span id="scoreVal">0</span> / 12</h2>
+<p id="scoreMsg"></p>
+</div>
+
+<div class="nav-links" style="margin-top: 32px;">
+    <a href="day-04-lesson.html">📖 Review Lesson</a>
+    <a href="day-04-practice.html">💻 Practice →</a>
+</div>
+
+<script>
+let isKorean = false;
+function toggleLang() {
+    isKorean = !isKorean;
+    document.querySelectorAll('.en').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'none' : 'revert', 'important');
+    });
+    document.querySelectorAll('.ko').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'revert' : 'none', 'important');
+    });
+    document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+}
+
+let answered = 0;
+const total = document.querySelectorAll('.question').length;
+let score = 0;
+
+document.querySelectorAll('.question').forEach(q => {
+    const correct = q.dataset.correct;
+    q.querySelectorAll('.options li').forEach(li => {
+        li.addEventListener('click', () => {
+            if (q.classList.contains('answered')) return;
+            q.classList.add('answered');
+            answered++;
+            if (li.dataset.val === correct) {
+                li.classList.add('correct');
+                score++;
+            } else {
+                li.classList.add('wrong');
+                q.querySelector(`[data-val="${correct}"]`).classList.add('correct');
+            }
+            q.querySelector('.explanation').style.display = 'block';
+            if (answered === total) {
+                const box = document.getElementById('scoreBox');
+                box.style.display = 'block';
+                document.getElementById('scoreVal').textContent = score;
+                const pct = Math.round(score / total * 100);
+                const msg = pct >= 90 ? '🌟 Excellent! You nailed it!' :
+                            pct >= 70 ? '👍 Good job! Review the ones you missed.' :
+                            '📚 Keep studying — review the lesson and try again!';
+                document.getElementById('scoreMsg').textContent = msg;
+            }
+        });
+    });
+});
+</script>
+
+</body>
+</html>

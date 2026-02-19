@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 4: Registers vs Wires | Digital Design Study</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    background: linear-gradient(135deg, #fefae0 0%, #faedcd 100%);
+    color: #3d405b;
+    line-height: 1.8;
+    padding: 24px;
+    max-width: 920px;
+    margin: 0 auto;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+h1 {
+    color: #5d4037;
+    border-bottom: 3px solid #c4a77d;
+    padding-bottom: 12px;
+    margin-bottom: 24px;
+    font-size: 2em;
+}
+h2 {
+    color: #588157;
+    border-bottom: 2px solid #a3b18a;
+    padding-bottom: 8px;
+    margin: 32px 0 16px;
+}
+h3 {
+    color: #5d4037;
+    margin: 20px 0 12px;
+}
+p { margin: 12px 0; }
+code {
+    background: #e9f5db;
+    color: #3d405b;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+}
+pre {
+    background: #2d3436;
+    padding: 24px;
+    border-radius: 12px;
+    margin: 24px 0;
+    border: 3px solid #a3b18a;
+    overflow-x: auto;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+    font-size: 15px;
+    line-height: 1.6;
+    color: #f8f8f2;
+}
+.keyword { color: #ff79c6; font-weight: 600; }
+.type { color: #8be9fd; }
+.signal { color: #50fa7b; }
+.number { color: #ffb86c; }
+.comment { color: #6272a4; font-style: italic; }
+.string { color: #f1fa8c; }
+.concept-box {
+    background: #fff8f0;
+    border: 2px solid #c4a77d;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    color: #3d405b;
+}
+.concept-box h3 { color: #5d4037; margin-bottom: 12px; }
+.warning-box {
+    background: #fff8f0;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    border-left: 4px solid #ef4444;
+    color: #3d405b;
+}
+.warning-box h3 { color: #c53030; margin-bottom: 12px; }
+.tip-box {
+    background: #fff8f0;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    border-left: 4px solid #588157;
+    color: #3d405b;
+}
+.comparison-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+.comparison-table th {
+    background: #588157;
+    color: white;
+    padding: 12px;
+    text-align: left;
+}
+.comparison-table td {
+    background: #fff;
+    border: 1px solid #c4a77d;
+    padding: 12px;
+    color: #3d405b;
+}
+.comparison-table tr:nth-child(even) td {
+    background: #fff8f0;
+}
+.nav-links {
+    display: flex;
+    gap: 12px;
+    margin: 24px 0;
+    flex-wrap: wrap;
+}
+.nav-links a {
+    background: linear-gradient(135deg, #588157, #3a5a40);
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 24px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14px;
+}
+.nav-links a:hover { opacity: 0.9; }
+.lang-toggle {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    background: #588157;
+    border: none;
+    border-radius: 24px;
+    padding: 10px 20px;
+    cursor: pointer;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    z-index: 1000;
+}
+.lang-toggle:hover { background: #3a5a40; }
+.ko { display: none; }
+.day-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, #588157, #3a5a40);
+    color: #fff;
+    padding: 4px 14px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 12px;
+}
+@media (max-width: 768px) {
+    body { padding: 16px; }
+    h1 { font-size: 1.8em; }
+    pre { font-size: 14px; padding: 16px; }
+    .lang-toggle { padding: 8px 16px; font-size: 13px; }
+}
+</style>
+</head>
+<body>
+
+<button class="lang-toggle" onclick="toggleLang()">한국어</button>
+
+<span class="day-badge">📅 Day 4 / 40</span>
+<h1>
+    <span class="en">Registers vs Wires</span>
+    <span class="ko" style="display:none;">레지스터 vs 와이어</span>
+</h1>
+
+<div class="nav-links">
+    <a href="day-04-quiz.html">📝 Quiz</a>
+    <a href="day-04-practice.html">💻 Practice</a>
+    <a href="day-03-lesson.html">← Day 3</a>
+</div>
+
+<h2>
+    <span class="en">1. The Old World: <code>reg</code> and <code>wire</code></span>
+    <span class="ko" style="display:none;">1. 과거의 방식: <code>reg</code>와 <code>wire</code></span>
+</h2>
+
+<p class="en">In original Verilog, you had two main data types: <code>wire</code> and <code>reg</code>. Despite the name, <code>reg</code> does <strong>NOT</strong> always mean a hardware register — it just means "a variable that can hold a value in simulation."</p>
+<p class="ko" style="display:none;">기존 Verilog에서는 두 가지 주요 데이터 타입이 있었습니다: <code>wire</code>와 <code>reg</code>. 이름과 달리 <code>reg</code>는 <strong>항상</strong> 하드웨어 레지스터를 의미하지 않습니다 — 단지 "시뮬레이션에서 값을 저장할 수 있는 변수"를 의미합니다.</p>
+
+<div class="concept-box">
+<h3>
+    <span class="en">🔌 <code>wire</code> — Continuous Connection</span>
+    <span class="ko" style="display:none;">🔌 <code>wire</code> — 연속적 연결</span>
+</h3>
+<p class="en">A <code>wire</code> represents a physical connection. It must be <strong>continuously driven</strong> — you cannot assign it inside an <code>always</code> block. Think of it as an actual copper trace on a PCB.</p>
+<p class="ko" style="display:none;"><code>wire</code>는 물리적 연결을 나타냅니다. <strong>연속적으로 구동</strong>되어야 하며 <code>always</code> 블록 안에서 할당할 수 없습니다. PCB 위의 실제 구리 배선이라고 생각하세요.</p>
+<pre><span class="keyword">wire</span> [<span class="number">7</span>:<span class="number">0</span>] <span class="signal">data_bus</span>;           <span class="comment">// Declaration</span>
+<span class="keyword">assign</span> <span class="signal">data_bus</span> = <span class="signal">a</span> &amp; <span class="signal">b</span>;    <span class="comment">// Continuous assignment</span></pre>
+</div>
+
+<div class="concept-box">
+<h3>
+    <span class="en">📦 <code>reg</code> — Procedural Variable</span>
+    <span class="ko" style="display:none;">📦 <code>reg</code> — 절차적 변수</span>
+</h3>
+<p class="en">A <code>reg</code> can be assigned inside <code>always</code>, <code>initial</code>, <code>task</code>, and <code>function</code> blocks. It holds its value until the next assignment. It may or may not become a hardware register — that depends on the context.</p>
+<p class="ko" style="display:none;"><code>reg</code>는 <code>always</code>, <code>initial</code>, <code>task</code>, <code>function</code> 블록 안에서 할당할 수 있습니다. 다음 할당까지 값을 유지합니다. 하드웨어 레지스터가 될 수도 있고 아닐 수도 있습니다 — 문맥에 따라 다릅니다.</p>
+<pre><span class="keyword">reg</span> [<span class="number">7</span>:<span class="number">0</span>] <span class="signal">counter</span>;
+
+<span class="keyword">always</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span>) <span class="keyword">begin</span>
+    <span class="signal">counter</span> &lt;= <span class="signal">counter</span> + <span class="number">1</span>;  <span class="comment">// This WILL be a register</span>
+<span class="keyword">end</span>
+
+<span class="keyword">reg</span> [<span class="number">7</span>:<span class="number">0</span>] <span class="signal">mux_out</span>;
+
+<span class="keyword">always</span> @(*) <span class="keyword">begin</span>
+    <span class="keyword">case</span> (<span class="signal">sel</span>)
+        <span class="number">2'b00</span>: <span class="signal">mux_out</span> = <span class="signal">a</span>;     <span class="comment">// This is combinational (NOT a register!)</span>
+        <span class="number">2'b01</span>: <span class="signal">mux_out</span> = <span class="signal">b</span>;
+        <span class="keyword">default</span>: <span class="signal">mux_out</span> = <span class="number">0</span>;
+    <span class="keyword">endcase</span>
+<span class="keyword">end</span></pre>
+</div>
+
+<div class="warning-box">
+<h3>⚠️ The Naming Trap</h3>
+<p class="en">The biggest source of confusion in Verilog: <code>reg</code> ≠ register! A <code>reg</code> used in an <code>always @(*)</code> block synthesizes to <strong>combinational logic</strong>, not a flip-flop. Only <code>reg</code> used with a clock edge becomes a real register.</p>
+<p class="ko" style="display:none;">Verilog에서 가장 큰 혼란의 원인: <code>reg</code> ≠ 레지스터! <code>always @(*)</code> 블록에서 사용된 <code>reg</code>는 플립플롭이 아닌 <strong>조합 논리</strong>로 합성됩니다. 클럭 에지와 함께 사용된 <code>reg</code>만 실제 레지스터가 됩니다.</p>
+</div>
+
+<h2>
+    <span class="en">2. The New World: <code>logic</code> (SystemVerilog)</span>
+    <span class="ko" style="display:none;">2. 새로운 방식: <code>logic</code> (SystemVerilog)</span>
+</h2>
+
+<p class="en">SystemVerilog introduced <code>logic</code> to end the confusion. It can be used <strong>everywhere</strong> — in continuous assignments, procedural blocks, module ports. One type to rule them all.</p>
+<p class="ko" style="display:none;">SystemVerilog은 혼란을 해소하기 위해 <code>logic</code>을 도입했습니다. <strong>어디서든</strong> 사용할 수 있습니다 — 연속 할당, 절차적 블록, 모듈 포트. 하나의 타입으로 모든 것을 해결합니다.</p>
+
+<pre><span class="keyword">module</span> <span class="signal">example</span> (
+    <span class="keyword">input</span>  <span class="type">logic</span>       <span class="signal">clk</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span>       <span class="signal">rst_n</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span> [<span class="number">7</span>:<span class="number">0</span>] <span class="signal">data_in</span>,
+    <span class="keyword">output</span> <span class="type">logic</span> [<span class="number">7</span>:<span class="number">0</span>] <span class="signal">data_out</span>   <span class="comment">// No more wire vs reg decision!</span>
+);
+
+<span class="type">logic</span> [<span class="number">7</span>:<span class="number">0</span>] <span class="signal">internal_sig</span>;  <span class="comment">// Works anywhere</span>
+
+<span class="comment">// Combinational — synthesizes to mux</span>
+<span class="keyword">always_comb</span> <span class="keyword">begin</span>
+    <span class="signal">internal_sig</span> = <span class="signal">data_in</span> + <span class="number">8'd1</span>;
+<span class="keyword">end</span>
+
+<span class="comment">// Sequential — synthesizes to flip-flop</span>
+<span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span> <span class="keyword">or</span> <span class="keyword">negedge</span> <span class="signal">rst_n</span>) <span class="keyword">begin</span>
+    <span class="keyword">if</span> (!<span class="signal">rst_n</span>)
+        <span class="signal">data_out</span> &lt;= <span class="number">8'd0</span>;
+    <span class="keyword">else</span>
+        <span class="signal">data_out</span> &lt;= <span class="signal">internal_sig</span>;
+<span class="keyword">end</span>
+
+<span class="keyword">endmodule</span></pre>
+
+<div class="tip-box">
+<h3>
+    <span class="en">💡 Modern Best Practice</span>
+    <span class="ko" style="display:none;">💡 최신 모범 사례</span>
+</h3>
+<p class="en">In SystemVerilog, use <code>logic</code> for almost everything. The <strong>block type</strong> (<code>always_ff</code> vs <code>always_comb</code>) determines whether hardware is sequential or combinational — not the variable type. This is much clearer!</p>
+<p class="ko" style="display:none;">SystemVerilog에서는 거의 모든 곳에 <code>logic</code>을 사용하세요. 하드웨어가 순차적인지 조합적인지는 변수 타입이 아니라 <strong>블록 타입</strong>(<code>always_ff</code> vs <code>always_comb</code>)이 결정합니다. 훨씬 명확합니다!</p>
+</div>
+
+<h2>
+    <span class="en">3. When You Still Need <code>wire</code></span>
+    <span class="ko" style="display:none;">3. <code>wire</code>가 여전히 필요한 경우</span>
+</h2>
+
+<p class="en">There's one case where <code>logic</code> doesn't work: <strong>multiple drivers</strong>. If a signal needs to be driven by more than one source (like a bidirectional bus), you need <code>wire</code>.</p>
+<p class="ko" style="display:none;"><code>logic</code>이 작동하지 않는 경우가 하나 있습니다: <strong>다중 드라이버</strong>. 신호가 둘 이상의 소스에서 구동되어야 하는 경우(양방향 버스 등), <code>wire</code>가 필요합니다.</p>
+
+<pre><span class="comment">// Multiple drivers → must use wire</span>
+<span class="keyword">wire</span> [<span class="number">7</span>:<span class="number">0</span>] <span class="signal">shared_bus</span>;
+
+<span class="keyword">assign</span> <span class="signal">shared_bus</span> = <span class="signal">enable_a</span> ? <span class="signal">data_a</span> : <span class="number">8'bz</span>;  <span class="comment">// Tri-state driver A</span>
+<span class="keyword">assign</span> <span class="signal">shared_bus</span> = <span class="signal">enable_b</span> ? <span class="signal">data_b</span> : <span class="number">8'bz</span>;  <span class="comment">// Tri-state driver B</span>
+
+<span class="comment">// logic would cause a compile error here!</span>
+<span class="comment">// logic can only have ONE driver</span></pre>
+
+<div class="concept-box">
+<h3>
+    <span class="en">📋 Rule of Thumb</span>
+    <span class="ko" style="display:none;">📋 경험 법칙</span>
+</h3>
+<table class="comparison-table">
+<tr><th>Situation</th><th>Use</th><th>Why</th></tr>
+<tr><td>Module ports</td><td><code>logic</code></td><td>Clean, modern</td></tr>
+<tr><td>Internal signals</td><td><code>logic</code></td><td>Works in any block</td></tr>
+<tr><td>Tri-state / multi-driver</td><td><code>wire</code></td><td>Only wire supports multiple drivers</td></tr>
+<tr><td>Connecting module instances</td><td><code>logic</code> or <code>wire</code></td><td>Both work for single-driver nets</td></tr>
+</table>
+</div>
+
+<h2>
+    <span class="en">4. Four-State vs Two-State Types</span>
+    <span class="ko" style="display:none;">4. 4상태 vs 2상태 타입</span>
+</h2>
+
+<p class="en">SystemVerilog also distinguishes between <strong>four-state</strong> types (0, 1, X, Z) and <strong>two-state</strong> types (0, 1 only). This matters for simulation.</p>
+<p class="ko" style="display:none;">SystemVerilog은 <strong>4상태</strong> 타입(0, 1, X, Z)과 <strong>2상태</strong> 타입(0, 1만)도 구분합니다. 이는 시뮬레이션에서 중요합니다.</p>
+
+<table class="comparison-table">
+<tr><th>Type</th><th>States</th><th>Default Value</th><th>Use Case</th></tr>
+<tr><td><code>logic</code> / <code>reg</code> / <code>wire</code></td><td>4-state (0, 1, X, Z)</td><td>X (unknown)</td><td>RTL design, synthesis</td></tr>
+<tr><td><code>bit</code></td><td>2-state (0, 1)</td><td>0</td><td>Testbenches, fast sim</td></tr>
+<tr><td><code>int</code></td><td>2-state</td><td>0</td><td>Testbenches, loops</td></tr>
+<tr><td><code>integer</code></td><td>4-state</td><td>X</td><td>Legacy Verilog</td></tr>
+</table>
+
+<div class="warning-box">
+<h3>⚠️ Why X Matters</h3>
+<p class="en"><code>logic</code> initializes to <strong>X</strong> (unknown). This is a <em>feature</em>, not a bug! It helps you catch uninitialized signals in simulation. If you see X propagating in your waveform, something isn't being driven or reset properly.</p>
+<p class="ko" style="display:none;"><code>logic</code>은 <strong>X</strong>(미지)로 초기화됩니다. 이것은 버그가 아니라 <em>기능</em>입니다! 시뮬레이션에서 초기화되지 않은 신호를 잡는 데 도움이 됩니다. 파형에서 X가 전파되는 것을 보면 무언가가 제대로 구동되거나 리셋되지 않은 것입니다.</p>
+</div>
+
+<h2>
+    <span class="en">5. Complete Comparison</span>
+    <span class="ko" style="display:none;">5. 전체 비교</span>
+</h2>
+
+<table class="comparison-table">
+<tr>
+    <th>Feature</th>
+    <th><code>wire</code></th>
+    <th><code>reg</code></th>
+    <th><code>logic</code></th>
+</tr>
+<tr>
+    <td>Continuous assign</td>
+    <td>✅ Yes</td>
+    <td>❌ No</td>
+    <td>✅ Yes</td>
+</tr>
+<tr>
+    <td>Procedural assign</td>
+    <td>❌ No</td>
+    <td>✅ Yes</td>
+    <td>✅ Yes</td>
+</tr>
+<tr>
+    <td>Module output port</td>
+    <td>✅ Yes</td>
+    <td>✅ Yes</td>
+    <td>✅ Yes</td>
+</tr>
+<tr>
+    <td>Multiple drivers</td>
+    <td>✅ Yes</td>
+    <td>❌ No</td>
+    <td>❌ No</td>
+</tr>
+<tr>
+    <td>States</td>
+    <td>4 (0,1,X,Z)</td>
+    <td>4 (0,1,X,Z)</td>
+    <td>4 (0,1,X,Z)</td>
+</tr>
+<tr>
+    <td>Language</td>
+    <td>Verilog</td>
+    <td>Verilog</td>
+    <td>SystemVerilog</td>
+</tr>
+</table>
+
+<h2>
+    <span class="en">6. Common Mistakes</span>
+    <span class="ko" style="display:none;">6. 흔한 실수</span>
+</h2>
+
+<div class="warning-box">
+<h3>❌ Mistake 1: Using <code>reg</code> for Module Input</h3>
+<pre><span class="comment">// WRONG — inputs cannot be reg</span>
+<span class="keyword">module</span> <span class="signal">bad_example</span> (
+    <span class="keyword">input</span> <span class="keyword">reg</span> [<span class="number">7</span>:<span class="number">0</span>] <span class="signal">data</span>   <span class="comment">// ❌ Error!</span>
+);
+
+<span class="comment">// CORRECT — use wire or logic</span>
+<span class="keyword">module</span> <span class="signal">good_example</span> (
+    <span class="keyword">input</span> <span class="type">logic</span> [<span class="number">7</span>:<span class="number">0</span>] <span class="signal">data</span>   <span class="comment">// ✅</span>
+);</pre>
+</div>
+
+<div class="warning-box">
+<h3>❌ Mistake 2: Thinking <code>reg</code> = Flip-Flop</h3>
+<pre><span class="keyword">reg</span> <span class="signal">y</span>;
+<span class="keyword">always</span> @(*) <span class="keyword">begin</span>
+    <span class="signal">y</span> = <span class="signal">a</span> &amp; <span class="signal">b</span>;  <span class="comment">// This is an AND gate, NOT a flip-flop!</span>
+<span class="keyword">end</span>
+
+<span class="comment">// Only this creates a flip-flop:</span>
+<span class="keyword">reg</span> <span class="signal">q</span>;
+<span class="keyword">always</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span>) <span class="keyword">begin</span>
+    <span class="signal">q</span> &lt;= <span class="signal">d</span>;     <span class="comment">// THIS is a real register</span>
+<span class="keyword">end</span></pre>
+</div>
+
+<div class="warning-box">
+<h3>❌ Mistake 3: Multiple Drivers on <code>logic</code></h3>
+<pre><span class="type">logic</span> <span class="signal">shared</span>;
+<span class="keyword">assign</span> <span class="signal">shared</span> = <span class="signal">a</span>;   <span class="comment">// Driver 1</span>
+<span class="keyword">assign</span> <span class="signal">shared</span> = <span class="signal">b</span>;   <span class="comment">// Driver 2 — ❌ Compile error!</span>
+
+<span class="comment">// Fix: use wire for multi-driver nets</span>
+<span class="keyword">wire</span> <span class="signal">shared</span>;
+<span class="keyword">assign</span> <span class="signal">shared</span> = <span class="signal">enable_a</span> ? <span class="signal">a</span> : <span class="number">1'bz</span>;
+<span class="keyword">assign</span> <span class="signal">shared</span> = <span class="signal">enable_b</span> ? <span class="signal">b</span> : <span class="number">1'bz</span>;</pre>
+</div>
+
+<h2>
+    <span class="en">7. Key Takeaways</span>
+    <span class="ko" style="display:none;">7. 핵심 요약</span>
+</h2>
+
+<div class="concept-box">
+<h3>🎯 Remember These</h3>
+<ol style="margin-left: 20px;">
+    <li class="en"><strong><code>logic</code> replaces both <code>wire</code> and <code>reg</code></strong> in 99% of SystemVerilog code</li>
+    <li class="ko" style="display:none;"><strong><code>logic</code>은 SystemVerilog 코드의 99%에서 <code>wire</code>와 <code>reg</code>를 대체</strong>합니다</li>
+    <li class="en"><strong><code>reg</code> ≠ register</strong> — the block type determines hardware, not the variable type</li>
+    <li class="ko" style="display:none;"><strong><code>reg</code> ≠ 레지스터</strong> — 변수 타입이 아닌 블록 타입이 하드웨어를 결정합니다</li>
+    <li class="en"><strong><code>wire</code> is still needed</strong> for tri-state and multi-driver nets</li>
+    <li class="ko" style="display:none;"><strong><code>wire</code>는 여전히 필요</strong>합니다 — 트라이스테이트와 다중 드라이버 넷에서</li>
+    <li class="en"><strong><code>logic</code> initializes to X</strong> — this helps catch bugs</li>
+    <li class="ko" style="display:none;"><strong><code>logic</code>은 X로 초기화</strong> — 버그를 잡는 데 도움이 됩니다</li>
+    <li class="en"><strong><code>always_ff</code> / <code>always_comb</code></strong> make intent explicit — use them!</li>
+    <li class="ko" style="display:none;"><strong><code>always_ff</code> / <code>always_comb</code></strong>은 의도를 명확히 합니다 — 사용하세요!</li>
+</ol>
+</div>
+
+<div class="nav-links" style="margin-top: 32px;">
+    <a href="day-04-quiz.html">📝 Take the Quiz →</a>
+    <a href="day-04-practice.html">💻 Practice Exercises →</a>
+</div>
+
+<script>
+let isKorean = false;
+function toggleLang() {
+    isKorean = !isKorean;
+    document.querySelectorAll('.en').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'none' : 'revert', 'important');
+    });
+    document.querySelectorAll('.ko').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'revert' : 'none', 'important');
+    });
+    document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+}
+</script>
+
+</body>
+</html>
