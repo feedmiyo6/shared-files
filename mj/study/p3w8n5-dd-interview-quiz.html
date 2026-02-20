@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Digital Design Interview Quiz</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    background: linear-gradient(135deg, #fefae0 0%, #faedcd 100%);
+    color: #3d405b;
+    line-height: 1.8;
+    padding: 24px;
+    max-width: 920px;
+    margin: 0 auto;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+h1 { color: #5d4037; border-bottom: 3px solid #c4a77d; padding-bottom: 12px; margin: 32px 0 16px; font-size: 2em; }
+h2 { color: #588157; border-bottom: 2px solid #a3b18a; padding-bottom: 8px; margin: 28px 0 14px; font-size: 1.5em; }
+h3 { color: #5d4037; margin: 20px 0 10px; font-size: 1.2em; }
+p, li { margin-bottom: 8px; }
+ul, ol { padding-left: 24px; margin: 10px 0; }
+strong { color: #3a5a40; }
+.lang-toggle {
+    position: fixed; top: 16px; right: 16px;
+    background: #588157; border: none; border-radius: 24px;
+    padding: 10px 20px; cursor: pointer; color: #fff;
+    font-size: 14px; font-weight: 600; z-index: 1000;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+.lang-toggle:hover { background: #3a5a40; }
+.ko { display: none; }
+.section { background: #fff; border-radius: 16px; padding: 28px; margin: 24px 0; box-shadow: 0 2px 12px rgba(0,0,0,0.06); border: 1px solid #c4a77d; }
+.q-card { background: #fff8f0; border: 2px solid #c4a77d; border-radius: 12px; padding: 20px; margin: 20px 0; }
+.q-card h3 { margin-top: 0; }
+.q-number { display: inline-block; background: #588157; color: #fff; border-radius: 50%; width: 32px; height: 32px; text-align: center; line-height: 32px; font-weight: 700; font-size: 0.9em; margin-right: 8px; }
+.answer-area { display: none; background: #fff; border: 2px solid #a3b18a; border-radius: 10px; padding: 18px; margin-top: 14px; }
+.answer-area.show { display: block; }
+.show-btn {
+    background: linear-gradient(135deg, #588157, #3a5a40);
+    color: #fff; border: none; border-radius: 8px;
+    padding: 10px 24px; cursor: pointer; font-size: 14px;
+    font-weight: 600; margin-top: 12px; transition: all 0.2s;
+}
+.show-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(88,129,87,0.3); }
+.show-btn:disabled { background: #a3b18a; cursor: default; transform: none; box-shadow: none; }
+.score-btns { margin-top: 12px; display: none; gap: 10px; }
+.score-btns.show { display: flex; }
+.score-btn {
+    padding: 8px 20px; border: none; border-radius: 8px;
+    cursor: pointer; font-weight: 600; font-size: 14px; transition: all 0.2s;
+}
+.score-btn.correct { background: #e9f5db; color: #3a5a40; border: 2px solid #588157; }
+.score-btn.correct:hover { background: #588157; color: #fff; }
+.score-btn.incorrect { background: #fff8f0; color: #c53030; border: 2px solid #ef4444; }
+.score-btn.incorrect:hover { background: #ef4444; color: #fff; }
+.score-btn:disabled { opacity: 0.5; cursor: default; }
+.scored-correct { border-color: #588157 !important; background: #e9f5db !important; }
+.scored-incorrect { border-color: #ef4444 !important; background: #fef2f2 !important; }
+.scoreboard {
+    position: fixed; bottom: 16px; right: 16px;
+    background: #fff; border: 2px solid #c4a77d; border-radius: 16px;
+    padding: 14px 20px; box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+    z-index: 1000; min-width: 180px; text-align: center;
+}
+.scoreboard .score-text { font-size: 1.1em; font-weight: 700; color: #5d4037; }
+.scoreboard .score-detail { font-size: 0.85em; color: #888; margin-top: 4px; }
+.progress-bar { height: 6px; background: #e9f5db; border-radius: 3px; margin-top: 8px; overflow: hidden; }
+.progress-fill { height: 100%; background: #588157; border-radius: 3px; transition: width 0.3s; }
+pre { background: #2d3436; padding: 24px; border-radius: 12px; margin: 16px 0; border: 3px solid #a3b18a; overflow-x: auto; line-height: 1.6; font-size: 15px; }
+pre code { background: none; color: #dfe6e9; padding: 0; }
+code { background: #e9f5db; color: #3d405b; padding: 2px 8px; border-radius: 4px; font-family: 'SF Mono', Monaco, Consolas, monospace; }
+.keyword { color: #ff79c6; font-weight: 600; }
+.type { color: #8be9fd; }
+.signal { color: #50fa7b; }
+.number { color: #ffb86c; }
+.comment { color: #6272a4; font-style: italic; }
+.comparison-table { width: 100%; border-collapse: collapse; margin: 12px 0; }
+.comparison-table th { background: #588157; color: white; padding: 10px; text-align: left; }
+.comparison-table td { background: #fff; border: 1px solid #c4a77d; padding: 10px; color: #3d405b; }
+.comparison-table tr:nth-child(even) td { background: #fff8f0; }
+.buzzword { background: #e9f5db; color: #3a5a40; padding: 3px 10px; border-radius: 20px; font-size: 0.85em; font-weight: 600; border: 1px solid #a3b18a; display: inline-block; margin: 2px; }
+.final-score { display: none; background: #fff; border: 3px solid #588157; border-radius: 16px; padding: 32px; margin: 32px 0; text-align: center; }
+.final-score.show { display: block; }
+.final-score h2 { border: none; }
+.final-score .big-score { font-size: 3em; color: #588157; font-weight: 700; }
+@media (max-width: 768px) {
+    body { padding: 16px; }
+    h1 { font-size: 1.8em; }
+    pre { font-size: 14px; padding: 16px; }
+    .lang-toggle { padding: 8px 16px; font-size: 13px; }
+    .section { padding: 18px; }
+    .scoreboard { bottom: 8px; right: 8px; padding: 10px 14px; min-width: 140px; }
+}
+</style>
+</head>
+<body>
+<button class="lang-toggle" onclick="toggleLang()">한국어</button>
+
+<h1>
+<span class="en">🧪 Digital Design Interview Quiz</span>
+<span class="ko" style="display:none;">🧪 디지털 설계 면접 퀴즈</span>
+</h1>
+<p class="en">Test yourself! Click "Show Answer" to reveal, then mark yourself ✅ or ❌. Be honest — this is for YOUR interview prep.</p>
+<p class="ko" style="display:none;">자가 테스트! "답변 보기"를 클릭하여 확인한 후 ✅ 또는 ❌로 자체 평가하세요.</p>
+
+<div class="scoreboard">
+<div class="score-text" id="score-display">0 / 0</div>
+<div class="score-detail" id="score-pct">Answer questions to track score</div>
+<div class="progress-bar"><div class="progress-fill" id="progress-bar" style="width:0%"></div></div>
+</div>
+
+<!-- ===== SECTION 1 ===== -->
+<div class="section">
+<h2><span class="en">Section 1: ASIC Design Flow</span><span class="ko" style="display:none;">섹션 1: ASIC 설계 흐름</span></h2>
+
+<div class="q-card" id="q1">
+<h3><span class="q-number">1</span> <span class="en">Describe the overall ASIC design flow. Name all major stages.</span><span class="ko" style="display:none;">전체 ASIC 설계 흐름을 설명하세요. 모든 주요 단계를 명명하세요.</span></h3>
+<button class="show-btn" onclick="showAnswer('q1')">Show Answer</button>
+<div class="answer-area">
+<p class="en"><strong>8 stages (mnemonic: "SARVSPST"):</strong></p>
+<p class="ko" style="display:none;"><strong>8단계:</strong></p>
+<ol>
+<li class="en"><strong>Specification</strong> — Define functionality, performance, power, area</li><li class="ko" style="display:none;"><strong>사양</strong> — 기능, 성능, 전력, 면적 정의</li>
+<li class="en"><strong>Architecture</strong> — Block diagram, clock domains, pipeline decisions</li><li class="ko" style="display:none;"><strong>아키텍처</strong> — 블록 다이어그램, 클록 도메인, 파이프라인 결정</li>
+<li class="en"><strong>RTL Design</strong> — Write Verilog/SystemVerilog (source code of the chip)</li><li class="ko" style="display:none;"><strong>RTL 설계</strong> — Verilog/SystemVerilog 작성</li>
+<li class="en"><strong>Functional Verification</strong> — UVM, constrained random, formal (70% of effort!)</li><li class="ko" style="display:none;"><strong>기능 검증</strong> — UVM, 제약 랜덤, 형식 검증 (노력의 70%!)</li>
+<li class="en"><strong>Synthesis</strong> — RTL → gate-level netlist using standard cell library</li><li class="ko" style="display:none;"><strong>합성</strong> — 표준 셀 라이브러리로 RTL → 게이트 수준 넷리스트</li>
+<li class="en"><strong>Physical Design (P&R)</strong> — Floorplan, placement, CTS, routing</li><li class="ko" style="display:none;"><strong>물리적 설계 (P&R)</strong> — 플로어플랜, 배치, CTS, 라우팅</li>
+<li class="en"><strong>Signoff</strong> — STA, DRC/LVS, power analysis, SI</li><li class="ko" style="display:none;"><strong>사인오프</strong> — STA, DRC/LVS, 전력 분석, SI</li>
+<li class="en"><strong>Fabrication & Test</strong> — GDS-II → foundry, ATPG test</li><li class="ko" style="display:none;"><strong>제조 및 테스트</strong> — GDS-II → 파운드리, ATPG 테스트</li>
+</ol>
+<p class="en"><strong>Key insight:</strong> It's iterative, not waterfall. Front-end = logic (1-4), Back-end = physical (5-8).</p>
+<p class="ko" style="display:none;"><strong>핵심:</strong> 워터폴이 아닌 반복적. 프론트엔드 = 논리 (1-4), 백엔드 = 물리적 (5-8).</p>
+<p class="en"><span class="buzzword">RTL</span> <span class="buzzword">Synthesis</span> <span class="buzzword">Place & Route</span> <span class="buzzword">STA</span> <span class="buzzword">DRC/LVS</span> <span class="buzzword">Tapeout</span> <span class="buzzword">GDS-II</span></p>
+</div>
+<div class="score-btns"><button class="score-btn correct" onclick="scoreQ('q1',true)">✅ Got it</button><button class="score-btn incorrect" onclick="scoreQ('q1',false)">❌ Missed it</button></div>
+</div>
+
+<div class="q-card" id="q2">
+<h3><span class="q-number">2</span> <span class="en">Explain each stage of the design flow in detail.</span><span class="ko" style="display:none;">설계 흐름의 각 단계를 자세히 설명하세요.</span></h3>
+<button class="show-btn" onclick="showAnswer('q2')">Show Answer</button>
+<div class="answer-area">
+<p class="en">See Q1 for stages. <strong>Key details interviewers want:</strong></p>
+<p class="ko" style="display:none;">Q1 참조. <strong>면접관이 원하는 핵심 세부사항:</strong></p>
+<ul>
+<li class="en"><strong>Synthesis tools:</strong> Synopsys Design Compiler, Cadence Genus</li><li class="ko" style="display:none;"><strong>합성 도구:</strong> Synopsys Design Compiler, Cadence Genus</li>
+<li class="en"><strong>P&R tools:</strong> Synopsys ICC2, Cadence Innovus</li><li class="ko" style="display:none;"><strong>P&R 도구:</strong> Synopsys ICC2, Cadence Innovus</li>
+<li class="en"><strong>Signoff:</strong> PrimeTime (STA), Calibre (DRC/LVS), PTPX (power)</li><li class="ko" style="display:none;"><strong>사인오프:</strong> PrimeTime (STA), Calibre (DRC/LVS), PTPX (전력)</li>
+<li class="en"><strong>Verification</strong> takes ~70% of project time — mention this!</li><li class="ko" style="display:none;"><strong>검증</strong>은 프로젝트 시간의 ~70% 차지 — 언급하세요!</li>
+<li class="en">The flow is <strong>iterative</strong> — timing violations after P&R → back to synthesis</li><li class="ko" style="display:none;">흐름은 <strong>반복적</strong> — P&R 후 타이밍 위반 → 합성으로 복귀</li>
+</ul>
+</div>
+<div class="score-btns"><button class="score-btn correct" onclick="scoreQ('q2',true)">✅ Got it</button><button class="score-btn incorrect" onclick="scoreQ('q2',false)">❌ Missed it</button></div>
+</div>
+
+<div class="q-card" id="q3">
+<h3><span class="q-number">3</span> <span class="en">Synchronous Design vs. Asynchronous Design — differences and trade-offs?</span><span class="ko" style="display:none;">동기 설계 vs. 비동기 설계 — 차이점과 트레이드오프?</span></h3>
+<button class="show-btn" onclick="showAnswer('q3')">Show Answer</button>
+<div class="answer-area">
+<p class="en"><strong>Synchronous:</strong> Global clock, all state changes on clock edges. Predictable, STA-friendly, testable (scan chains). 99% of industry.</p>
+<p class="ko" style="display:none;"><strong>동기:</strong> 글로벌 클록, 모든 상태 변화가 클록 에지에서. 예측 가능, STA 친화적, 테스트 가능. 업계 99%.</p>
+<p class="en"><strong>Asynchronous:</strong> Handshaking, no global clock. Lower power (no clock tree), but very hard to verify and time. Limited EDA tool support.</p>
+<p class="ko" style="display:none;"><strong>비동기:</strong> 핸드셰이킹, 글로벌 클록 없음. 낮은 전력이지만 검증과 타이밍이 매우 어려움.</p>
+<p class="en"><strong>Follow-up buzzwords:</strong> <span class="buzzword">Clock domain crossing</span> <span class="buzzword">Metastability</span> <span class="buzzword">2-FF synchronizer</span> <span class="buzzword">Clock gating</span></p>
+</div>
+<div class="score-btns"><button class="score-btn correct" onclick="scoreQ('q3',true)">✅ Got it</button><button class="score-btn incorrect" onclick="scoreQ('q3',false)">❌ Missed it</button></div>
+</div>
+</div>
+
+<!-- ===== SECTION 2 ===== -->
+<div class="section">
+<h2><span class="en">Section 2: FSM & Memory</span><span class="ko" style="display:none;">섹션 2: FSM & 메모리</span></h2>
+
+<div class="q-card" id="q4">
+<h3><span class="q-number">4</span> <span class="en">What is an FSM? Explain Moore vs Mealy.</span><span class="ko" style="display:none;">FSM이란? Moore vs Mealy 설명.</span></h3>
+<button class="show-btn" onclick="showAnswer('q4')">Show Answer</button>
+<div class="answer-area">
+<p class="en"><strong>FSM</strong> = Finite State Machine: sequential circuit with finite states, transitions based on inputs, outputs based on state.</p>
+<p class="ko" style="display:none;"><strong>FSM</strong> = 유한 상태 기계: 유한한 상태, 입력 기반 전이, 상태 기반 출력을 가진 순차 회로.</p>
+<p class="en"><strong>Moore:</strong> Output depends ONLY on current state. More states needed, but glitch-free outputs (registered). <strong>Mealy:</strong> Output depends on state AND inputs. Fewer states, responds one cycle faster, but outputs can glitch.</p>
+<p class="ko" style="display:none;"><strong>Moore:</strong> 출력이 현재 상태에만 의존. 더 많은 상태 필요, 글리치 없는 출력. <strong>Mealy:</strong> 출력이 상태와 입력에 의존. 더 적은 상태, 한 사이클 빠른 응답.</p>
+<p class="en"><strong>Components:</strong> State register (FFs), next-state logic (combinational), output logic. <strong>Encoding:</strong> Binary (log₂N FFs), One-hot (N FFs, faster decode).</p>
+<p class="ko" style="display:none;"><strong>구성요소:</strong> 상태 레지스터 (FF), 다음 상태 논리, 출력 논리. <strong>인코딩:</strong> 이진 (log₂N FF), 원-핫 (N FF).</p>
+<p class="en">🧠 <strong>"Moore = More states, Mealy = iMMediate response"</strong></p>
+</div>
+<div class="score-btns"><button class="score-btn correct" onclick="scoreQ('q4',true)">✅ Got it</button><button class="score-btn incorrect" onclick="scoreQ('q4',false)">❌ Missed it</button></div>
+</div>
+
+<div class="q-card" id="q5a">
+<h3><span class="q-number">5a</span> <span class="en">What are the architectural components of a controller?</span><span class="ko" style="display:none;">컨트롤러의 아키텍처 구성 요소는?</span></h3>
+<button class="show-btn" onclick="showAnswer('q5a')">Show Answer</button>
+<div class="answer-area">
+<p class="en">Three parts: <strong>(1) Datapath</strong> — registers, ALU, muxes (does computation). <strong>(2) Control unit</strong> — FSM generating control signals. <strong>(3) Memory</strong> — stores data/instructions.</p>
+<p class="ko" style="display:none;">세 부분: <strong>(1) 데이터패스</strong> — 레지스터, ALU, 먹스 (계산). <strong>(2) 제어 유닛</strong> — 제어 신호 생성 FSM. <strong>(3) 메모리</strong> — 데이터/명령어 저장.</p>
+<p class="en"><span class="buzzword">Datapath</span> <span class="buzzword">Control unit</span> <span class="buzzword">ALU</span> <span class="buzzword">Register file</span></p>
+</div>
+<div class="score-btns"><button class="score-btn correct" onclick="scoreQ('q5a',true)">✅ Got it</button><button class="score-btn incorrect" onclick="scoreQ('q5a',false)">❌ Missed it</button></div>
+</div>
+
+<div class="q-card" id="q5b">
+<h3><span class="q-number">5b</span> <span class="en">What is non-volatile memory?</span><span class="ko" style="display:none;">비휘발성 메모리란?</span></h3>
+<button class="show-btn" onclick="showAnswer('q5b')">Show Answer</button>
+<div class="answer-area">
+<p class="en">Memory that <strong>retains data when power is off</strong>. Examples: Flash (NAND/NOR), ROM, EEPROM, MRAM. Key mechanism: trapped charge on floating gate (Flash) or programmed connections (ROM).</p>
+<p class="ko" style="display:none;"><strong>전원이 꺼져도 데이터를 유지</strong>하는 메모리. 예: Flash, ROM, EEPROM, MRAM.</p>
+</div>
+<div class="score-btns"><button class="score-btn correct" onclick="scoreQ('q5b',true)">✅ Got it</button><button class="score-btn incorrect" onclick="scoreQ('q5b',false)">❌ Missed it</button></div>
+</div>
+
+<div class="q-card" id="q5c">
+<h3><span class="q-number">5c</span> <span class="en">Flash Memory vs RAM vs ROM — key differences?</span><span class="ko" style="display:none;">플래시 메모리 vs RAM vs ROM — 핵심 차이?</span></h3>
+<button class="show-btn" onclick="showAnswer('q5c')">Show Answer</button>
+<div class="answer-area">
+<table class="comparison-table">
+<tr><th>Feature</th><th>Flash</th><th>RAM</th><th>ROM</th></tr>
+<tr><td>Volatile?</td><td>No</td><td>Yes</td><td>No</td></tr>
+<tr><td>Writable?</td><td>Yes (block erase)</td><td>Yes (byte-level)</td><td>No</td></tr>
+<tr><td>Speed</td><td>Slow write/fast read</td><td>Very fast (ns)</td><td>Fast read</td></tr>
+<tr><td>Endurance</td><td>~10K-100K cycles</td><td>Unlimited</td><td>N/A</td></tr>
+</table>
+<p class="en"><strong>SRAM:</strong> 6T, fast, expensive → caches. <strong>DRAM:</strong> 1T1C, dense, needs refresh → main memory.</p>
+<p class="ko" style="display:none;"><strong>SRAM:</strong> 6T, 빠름, 비쌈 → 캐시. <strong>DRAM:</strong> 1T1C, 고밀도, 리프레시 필요 → 메인 메모리.</p>
+</div>
+<div class="score-btns"><button class="score-btn correct" onclick="scoreQ('q5c',true)">✅ Got it</button><button class="score-btn incorrect" onclick="scoreQ('q5c',false)">❌ Missed it</button></div>
+</div>
+
+<div class="q-card" id="q5d">
+<h3><span class="q-number">5d</span> <span class="en">Op-Amp vs Comparator — what's the difference?</span><span class="ko" style="display:none;">오피앰프 vs 비교기 — 차이점?</span></h3>
+<button class="show-btn" onclick="showAnswer('q5d')">Show Answer</button>
+<div class="answer-area">
+<p class="en"><strong>Op-Amp:</strong> Closed-loop (with feedback), analog output, compensated for stability, slower. <strong>Comparator:</strong> Open-loop, digital output (slams to VDD/GND), no compensation, faster.</p>
+<p class="ko" style="display:none;"><strong>오피앰프:</strong> 폐루프, 아날로그 출력, 안정성 보상, 느림. <strong>비교기:</strong> 개방 루프, 디지털 출력, 보상 없음, 빠름.</p>
+<p class="en">⚠️ <strong>Never use op-amp as comparator</strong> (slow slew, may latch up). Never use comparator with feedback (no compensation, will ring).</p>
+</div>
+<div class="score-btns"><button class="score-btn correct" onclick="scoreQ('q5d',true)">✅ Got it</button><button class="score-btn incorrect" onclick="scoreQ('q5d',false)">❌ Missed it</button></div>
+</div>
+</div>
+
+<!-- ===== SECTION 3 ===== -->
+<div class="section">
+<h2><span class="en">Section 3: Digital Building Blocks</span><span class="ko" style="display:none;">섹션 3: 디지털 기본 블록</span></h2>
+
+<div class="q-card" id="q6a">
+<h3><span class="q-number">6a</span> <span class="en">What's the difference between a latch and a flip-flop?</span><span class="ko" style="display:none;">래치와 플립플롭의 차이는?</span></h3>
+<button class="show-btn" onclick="showAnswer('q6a')">Show Answer</button>
+<div class="answer-area">
+<p class="en"><strong>Latch:</strong> Level-sensitive, transparent when enable is active. <strong>Flip-flop:</strong> Edge-triggered, captures only at clock edge. A D-FF = two latches in series (master-slave).</p>
+<p class="ko" style="display:none;"><strong>래치:</strong> 레벨 감지, 인에이블 활성 시 투명. <strong>플립플롭:</strong> 에지 트리거, 클록 에지에서만 캡처.</p>
+<p class="en">🧠 <strong>"Latch = Level, FF = eFfedge"</strong>. FFs preferred in sync design for clean timing analysis. Latches used for time borrowing in high-perf designs.</p>
+</div>
+<div class="score-btns"><button class="score-btn correct" onclick="scoreQ('q6a',true)">✅ Got it</button><button class="score-btn incorrect" onclick="scoreQ('q6a',false)">❌ Missed it</button></div>
+</div>
+
+<div class="q-card" id="q6b">
+<h3><span class="q-number">6b</span> <span class="en">Sequential vs combinational circuits?</span><span class="ko" style="display:none;">순차 vs 조합 회로?</span></h3>
+<button class="show-btn" onclick="showAnswer('q6b')">Show Answer</button>
+<div class="answer-area">
+<p class="en"><strong>Combinational:</strong> Output = f(current inputs only). No memory. Examples: adder, mux, decoder.</p>
+<p class="ko" style="display:none;"><strong>조합:</strong> 출력 = f(현재 입력만). 메모리 없음. 예: 가산기, 먹스, 디코더.</p>
+<p class="en"><strong>Sequential:</strong> Output = f(current inputs + stored state). Has memory elements (FFs/latches). Examples: counter, FSM, shift register.</p>
+<p class="ko" style="display:none;"><strong>순차:</strong> 출력 = f(현재 입력 + 저장 상태). 메모리 요소 있음. 예: 카운터, FSM, 시프트 레지스터.</p>
+</div>
+<div class="score-btns"><button class="score-btn correct" onclick="scoreQ('q6b',true)">✅ Got it</button><button class="score-btn incorrect" onclick="scoreQ('q6b',false)">❌ Missed it</button></div>
+</div>
+
+<div class="q-card" id="q6c">
+<h3><span class="q-number">6c</span> <span class="en">What is a race condition? What is a timing loop?</span><span class="ko" style="display:none;">레이스 컨디션이란? 타이밍 루프란?</span></h3>
+<button class="show-btn" onclick="showAnswer('q6c')">Show Answer</button>
+<div class="answer-area">
+<p class="en"><strong>Race condition:</strong> Two signals compete to arrive at the same point; outcome depends on which arrives first — nondeterministic. Can happen even in well-structured circuits.</p>
+<p class="ko" style="display:none;"><strong>레이스 컨디션:</strong> 두 신호가 경쟁하여 결과가 도착 순서에 따라 달라짐.</p>
+<p class="en"><strong>Timing loop:</strong> Signal feeds back through purely combinational logic with NO register. Structural bug → oscillation. Fix: insert a register to break the loop.</p>
+<p class="ko" style="display:none;"><strong>타이밍 루프:</strong> 레지스터 없이 순수 조합 논리를 통해 신호가 피드백. 구조적 버그.</p>
+<p class="en">⚠️ Race = timing issue. Loop = structural bug. Different problems, different fixes.</p>
+</div>
+<div class="score-btns"><button class="score-btn correct" onclick="scoreQ('q6c',true)">✅ Got it</button><button class="score-btn incorrect" onclick="scoreQ('q6c',false)">❌ Missed it</button></div>
+</div>
+
+<div class="q-card" id="q7">
+<h3><span class="q-number">7</span> <span class="en">Minimum D flip-flops for 7-state FSM? With one-hot encoding?</span><span class="ko" style="display:none;">7상태 FSM의 최소 D 플립플롭 수? 원-핫 인코딩은?</span></h3>
+<button class="show-btn" onclick="showAnswer('q7')">Show Answer</button>
+<div class="answer-area">
+<p class="en"><strong>Binary: ⌈log₂(7)⌉ = 3 FFs</strong> (3 bits → 8 states ≥ 7). <strong>One-hot: 7 FFs</strong> (one per state).</p>
+<p class="ko" style="display:none;"><strong>이진: ⌈log₂(7)⌉ = 3 FF</strong>. <strong>원-핫: 7 FF</strong>.</p>
+<p class="en"><strong>Trade-off:</strong> Binary = fewer FFs, complex decode. One-hot = more FFs, simpler/faster logic. One-hot preferred in FPGAs (abundant FFs), binary in ASICs (area).</p>
+<p class="ko" style="display:none;"><strong>트레이드오프:</strong> 이진 = 적은 FF, 복잡한 디코드. 원-핫 = 많은 FF, 간단/빠른 논리.</p>
+</div>
+<div class="score-btns"><button class="score-btn correct" onclick="scoreQ('q7',true)">✅ Got it</button><button class="score-btn incorrect" onclick="scoreQ('q7',false)">❌ Missed it</button></div>
+</div>
+</div>
+
+<!-- ===== SECTION 4 ===== -->
+<div class="section">
+<h2><span class="en">Section 4: Timing</span><span class="ko" style="display:none;">섹션 4: 타이밍</span></h2>
+
+<div class="q-card" id="q8a">
+<h3><span class="q-number">8a</span> <span class="en">What are setup time and hold time?</span><span class="ko" style="display:none;">셋업 타임과 홀드 타임이란?</span></h3>
+<button class="show-btn" onclick="showAnswer('q8a')">Show Answer</button>
+<div class="answer-area">
+<p class="en"><strong>Setup (Tsu):</strong> Min time data must be stable BEFORE clock edge. <strong>Hold (Th):</strong> Min time data must be stable AFTER clock edge.</p>
+<p class="ko" style="display:none;"><strong>셋업:</strong> 클록 에지 전 데이터 안정 최소 시간. <strong>홀드:</strong> 클록 에지 후 데이터 안정 최소 시간.</p>
+<p class="en"><strong>Equations:</strong> Setup: T<sub>clk</sub> > T<sub>cq</sub> + T<sub>comb</sub> + T<sub>su</sub>. Hold: T<sub>cq</sub> + T<sub>comb</sub> > T<sub>h</sub>.</p>
+<p class="en">🧠 <strong>"Setup = data arrives early enough. Hold = data stays long enough."</strong></p>
+</div>
+<div class="score-btns"><button class="score-btn correct" onclick="scoreQ('q8a',true)">✅ Got it</button><button class="score-btn incorrect" onclick="scoreQ('q8a',false)">❌ Missed it</button></div>
+</div>
+
+<div class="q-card" id="q8b">
+<h3><span class="q-number">8b</span> <span class="en">Three methods to fix a setup violation?</span><span class="ko" style="display:none;">셋업 위반 해결 세 가지 방법?</span></h3>
+<button class="show-btn" onclick="showAnswer('q8b')">Show Answer</button>
+<div class="answer-area">
+<p class="en">Setup = data too LATE. Fixes: <strong>(1)</strong> Reduce combinational delay (faster cells LVT, logic optimization). <strong>(2)</strong> Increase clock period (reduce freq — last resort). <strong>(3)</strong> Pipeline the path (insert registers).</p>
+<p class="ko" style="display:none;"><strong>(1)</strong> 조합 지연 감소 (빠른 셀, 논리 최적화). <strong>(2)</strong> 클록 주기 증가 (최후 수단). <strong>(3)</strong> 파이프라이닝.</p>
+<p class="en">Also: upsize cells, useful skew, buffering.</p>
+</div>
+<div class="score-btns"><button class="score-btn correct" onclick="scoreQ('q8b',true)">✅ Got it</button><button class="score-btn incorrect" onclick="scoreQ('q8b',false)">❌ Missed it</button></div>
+</div>
+
+<div class="q-card" id="q8c">
+<h3><span class="q-number">8c</span> <span class="en">Three methods to fix a hold violation?</span><span class="ko" style="display:none;">홀드 위반 해결 세 가지 방법?</span></h3>
+<button class="show-btn" onclick="showAnswer('q8c')">Show Answer</button>
+<div class="answer-area">
+<p class="en">Hold = data changes too FAST. Fixes: <strong>(1)</strong> Add delay buffers. <strong>(2)</strong> Use slower cells (HVT). <strong>(3)</strong> Adjust clock skew (delay capture clock).</p>
+<p class="ko" style="display:none;"><strong>(1)</strong> 지연 버퍼 추가. <strong>(2)</strong> 더 느린 셀 (HVT). <strong>(3)</strong> 클록 스큐 조정.</p>
+<p class="en">⚠️ <strong>CRITICAL:</strong> Hold violations can't be fixed by slowing the clock! More dangerous than setup violations. Must be fixed structurally.</p>
+</div>
+<div class="score-btns"><button class="score-btn correct" onclick="scoreQ('q8c',true)">✅ Got it</button><button class="score-btn incorrect" onclick="scoreQ('q8c',false)">❌ Missed it</button></div>
+</div>
+
+<div class="q-card" id="q8d">
+<h3><span class="q-number">8d</span> <span class="en">List methods to improve circuit speed.</span><span class="ko" style="display:none;">회로 속도 개선 방법을 나열하세요.</span></h3>
+<button class="show-btn" onclick="showAnswer('q8d')">Show Answer</button>
+<div class="answer-area">
+<p class="en">Group in 3 levels: <strong>Architecture:</strong> Pipeline, parallelism. <strong>Logic:</strong> Faster cells (LVT), upsize, logic restructuring (balanced trees), reduce fan-out. <strong>Physical:</strong> Better placement, shorter wires, wider metal, clock skew optimization, increase VDD.</p>
+<p class="ko" style="display:none;">3단계: <strong>아키텍처:</strong> 파이프라인. <strong>논리:</strong> 빠른 셀, 업사이징, 논리 재구성. <strong>물리적:</strong> 배치 최적화, 짧은 와이어, VDD 증가.</p>
+</div>
+<div class="score-btns"><button class="score-btn correct" onclick="scoreQ('q8d',true)">✅ Got it</button><button class="score-btn incorrect" onclick="scoreQ('q8d',false)">❌ Missed it</button></div>
+</div>
+</div>
+
+<!-- ===== SECTION 5 ===== -->
+<div class="section">
+<h2><span class="en">Section 5: Verilog</span><span class="ko" style="display:none;">섹션 5: Verilog</span></h2>
+
+<div class="q-card" id="q9a">
+<h3><span class="q-number">9a</span> <span class="en">Blocking vs Non-blocking in Verilog?</span><span class="ko" style="display:none;">Verilog에서 블로킹 vs 논블로킹?</span></h3>
+<button class="show-btn" onclick="showAnswer('q9a')">Show Answer</button>
+<div class="answer-area">
+<p class="en"><strong>Blocking (=):</strong> Sequential execution. Each statement finishes before next starts. Use for <strong>combinational</strong> logic (<code>always @(*)</code>).</p>
+<p class="ko" style="display:none;"><strong>블로킹 (=):</strong> 순차 실행. <strong>조합</strong> 논리에 사용.</p>
+<p class="en"><strong>Non-blocking (<=):</strong> Concurrent. All RHS evaluated first, all LHS updated at end of timestep. Use for <strong>sequential</strong> logic (<code>always @(posedge clk)</code>).</p>
+<p class="ko" style="display:none;"><strong>논블로킹 (<=):</strong> 동시. <strong>순차</strong> 논리에 사용.</p>
+<p class="en">⚠️ <strong>Rule is absolute: = for combinational, <= for sequential.</strong> Mixing = #1 Verilog bug.</p>
+</div>
+<div class="score-btns"><button class="score-btn correct" onclick="scoreQ('q9a',true)">✅ Got it</button><button class="score-btn incorrect" onclick="scoreQ('q9a',false)">❌ Missed it</button></div>
+</div>
+
+<div class="q-card" id="q9b">
+<h3><span class="q-number">9b</span> <span class="en">Verilog task vs function?</span><span class="ko" style="display:none;">Verilog 태스크 vs 함수?</span></h3>
+<button class="show-btn" onclick="showAnswer('q9b')">Show Answer</button>
+<div class="answer-area">
+<p class="en"><strong>Function:</strong> No delays, returns one value, input-only, calls only functions, always synthesizable. <strong>Task:</strong> Can have delays (#, @, wait), no return (uses output args), input/output/inout, can call tasks, synthesizable only if no timing.</p>
+<p class="ko" style="display:none;"><strong>함수:</strong> 지연 없음, 하나의 값 반환, 입력만, 항상 합성 가능. <strong>태스크:</strong> 지연 가능, 반환 없음 (출력 인수), I/O 가능.</p>
+<p class="en">Quick: <em>"Function = pure computation. Task = more flexible (delays, multiple outputs)."</em></p>
+</div>
+<div class="score-btns"><button class="score-btn correct" onclick="scoreQ('q9b',true)">✅ Got it</button><button class="score-btn incorrect" onclick="scoreQ('q9b',false)">❌ Missed it</button></div>
+</div>
+
+<div class="q-card" id="q9c">
+<h3><span class="q-number">9c</span> <span class="en">How many patterns for exhaustive testing of a combinational circuit with 7 inputs and 3 outputs?</span><span class="ko" style="display:none;">7입력 3출력 조합 회로의 완전 테스트 패턴 수?</span></h3>
+<button class="show-btn" onclick="showAnswer('q9c')">Show Answer</button>
+<div class="answer-area">
+<p class="en"><strong>2⁷ = 128 patterns.</strong> Outputs don't matter — exhaustive testing covers all INPUT combinations. Each input combo produces a fixed output (combinational = no state). You check 3 output values per pattern.</p>
+<p class="ko" style="display:none;"><strong>2⁷ = 128 패턴.</strong> 출력 수는 관계없음 — 모든 입력 조합을 커버.</p>
+</div>
+<div class="score-btns"><button class="score-btn correct" onclick="scoreQ('q9c',true)">✅ Got it</button><button class="score-btn incorrect" onclick="scoreQ('q9c',false)">❌ Missed it</button></div>
+</div>
+</div>
+
+<!-- ===== SECTION 6 ===== -->
+<div class="section">
+<h2><span class="en">Section 6: Transistor Physics</span><span class="ko" style="display:none;">섹션 6: 트랜지스터 물리학</span></h2>
+
+<div class="q-card" id="q10a">
+<h3><span class="q-number">10a</span> <span class="en">What are the operating regions of a MOSFET?</span><span class="ko" style="display:none;">MOSFET의 동작 영역은?</span></h3>
+<button class="show-btn" onclick="showAnswer('q10a')">Show Answer</button>
+<div class="answer-area">
+<p class="en"><strong>Three regions:</strong> (1) <strong>Cutoff</strong> (V<sub>GS</sub> < V<sub>th</sub>): OFF, I<sub>D</sub>=0. (2) <strong>Linear/Triode</strong> (V<sub>DS</sub> < V<sub>ov</sub>): variable resistor. (3) <strong>Saturation</strong> (V<sub>DS</sub> ≥ V<sub>ov</sub>): current source, I<sub>D</sub> ∝ (V<sub>GS</sub>-V<sub>th</sub>)².</p>
+<p class="ko" style="display:none;"><strong>세 영역:</strong> (1) <strong>차단:</strong> OFF. (2) <strong>선형:</strong> 가변 저항. (3) <strong>포화:</strong> 전류원.</p>
+<p class="en">🧠 <strong>"Cut-Lin-Sat: OFF → Resistor → Current source"</strong></p>
+</div>
+<div class="score-btns"><button class="score-btn correct" onclick="scoreQ('q10a',true)">✅ Got it</button><button class="score-btn incorrect" onclick="scoreQ('q10a',false)">❌ Missed it</button></div>
+</div>
+
+<div class="q-card" id="q10b">
+<h3><span class="q-number">10b</span> <span class="en">Write the I<sub>D</sub> equation for each MOSFET region.</span><span class="ko" style="display:none;">각 MOSFET 영역의 I<sub>D</sub> 방정식을 쓰세요.</span></h3>
+<button class="show-btn" onclick="showAnswer('q10b')">Show Answer</button>
+<div class="answer-area">
+<p class="en"><strong>Cutoff:</strong> I<sub>D</sub> = 0</p>
+<p class="en"><strong>Linear:</strong> I<sub>D</sub> = μ<sub>n</sub>C<sub>ox</sub>(W/L)[(V<sub>GS</sub>-V<sub>th</sub>)V<sub>DS</sub> - V<sub>DS</sub>²/2]</p>
+<p class="en"><strong>Saturation:</strong> I<sub>D</sub> = (μ<sub>n</sub>C<sub>ox</sub>/2)(W/L)(V<sub>GS</sub>-V<sub>th</sub>)²(1+λV<sub>DS</sub>)</p>
+<p class="en">Don't just recite — say: <em>"In saturation, current is proportional to the SQUARE of the overdrive voltage. In linear, it's roughly proportional to V<sub>DS</sub>."</em></p>
+</div>
+<div class="score-btns"><button class="score-btn correct" onclick="scoreQ('q10b',true)">✅ Got it</button><button class="score-btn incorrect" onclick="scoreQ('q10b',false)">❌ Missed it</button></div>
+</div>
+
+<div class="q-card" id="q10c">
+<h3><span class="q-number">10c</span> <span class="en">Why does CMOS use both p & n transistors?</span><span class="ko" style="display:none;">CMOS가 p & n 트랜지스터를 모두 사용하는 이유?</span></h3>
+<button class="show-btn" onclick="showAnswer('q10c')">Show Answer</button>
+<div class="answer-area">
+<p class="en"><strong>Rail-to-rail output + zero static power.</strong> PMOS pulls to VDD (strong 1), NMOS pulls to GND (strong 0). Only one network conducts at a time → no DC path from VDD to GND. NMOS alone: passes weak 1. PMOS alone: passes weak 0. Together: full swing, no static current, high noise margins.</p>
+<p class="ko" style="display:none;"><strong>레일-투-레일 출력 + 제로 정적 전력.</strong> PMOS는 VDD로 풀업 (강한 1), NMOS는 GND로 풀다운 (강한 0).</p>
+</div>
+<div class="score-btns"><button class="score-btn correct" onclick="scoreQ('q10c',true)">✅ Got it</button><button class="score-btn incorrect" onclick="scoreQ('q10c',false)">❌ Missed it</button></div>
+</div>
+
+<div class="q-card" id="q10d">
+<h3><span class="q-number">10d</span> <span class="en">Effect of supply voltage and temperature on performance?</span><span class="ko" style="display:none;">공급 전압과 온도가 성능에 미치는 영향?</span></h3>
+<button class="show-btn" onclick="showAnswer('q10d')">Show Answer</button>
+<div class="answer-area">
+<p class="en"><strong>↑ V<sub>DD</sub>:</strong> ↑ speed, ↑ dynamic power (P∝CV²f), ↑ noise margin. <strong>↓ V<sub>DD</sub>:</strong> opposite + more V<sub>th</sub> sensitivity.</p>
+<p class="en"><strong>↑ Temp:</strong> ↓ mobility → slower. ↓ V<sub>th</sub> (slightly) → ↑ leakage. ↑ wire resistance → more IR drop.</p>
+<p class="ko" style="display:none;"><strong>↑ V<sub>DD</sub>:</strong> ↑ 속도, ↑ 전력. <strong>↑ 온도:</strong> ↓ 이동도 → 느려짐, ↑ 누설.</p>
+<p class="en">🎤 Mention <strong>PVT corners</strong>: worst speed = slow process, low voltage, high temp.</p>
+</div>
+<div class="score-btns"><button class="score-btn correct" onclick="scoreQ('q10d',true)">✅ Got it</button><button class="score-btn incorrect" onclick="scoreQ('q10d',false)">❌ Missed it</button></div>
+</div>
+
+<div class="q-card" id="q10e">
+<h3><span class="q-number">10e</span> <span class="en">What is threshold voltage and the body effect?</span><span class="ko" style="display:none;">문턱 전압과 바디 효과란?</span></h3>
+<button class="show-btn" onclick="showAnswer('q10e')">Show Answer</button>
+<div class="answer-area">
+<p class="en"><strong>V<sub>th</sub>:</strong> Minimum V<sub>GS</sub> to create conducting channel. <strong>Body effect:</strong> V<sub>th</sub> increases when V<sub>SB</sub> ≠ 0 (body acts as second gate). V<sub>th</sub> = V<sub>th0</sub> + γ(√(2φ<sub>f</sub>+V<sub>SB</sub>) - √(2φ<sub>f</sub>)).</p>
+<p class="ko" style="display:none;"><strong>V<sub>th</sub>:</strong> 전도 채널 생성에 필요한 최소 V<sub>GS</sub>. <strong>바디 효과:</strong> V<sub>SB</sub> ≠ 0일 때 V<sub>th</sub> 증가.</p>
+<p class="en"><strong>Practical:</strong> In stacked NMOS (NAND), upper transistor has V<sub>SB</sub> > 0 → higher V<sub>th</sub> → slower. This is why deep stacks are avoided.</p>
+</div>
+<div class="score-btns"><button class="score-btn correct" onclick="scoreQ('q10e',true)">✅ Got it</button><button class="score-btn incorrect" onclick="scoreQ('q10e',false)">❌ Missed it</button></div>
+</div>
+</div>
+
+<!-- ===== SECTION 7 ===== -->
+<div class="section">
+<h2><span class="en">Section 7: Advanced CMOS Effects</span><span class="ko" style="display:none;">섹션 7: 고급 CMOS 효과</span></h2>
+
+<div class="q-card" id="q11a">
+<h3><span class="q-number">11a</span> <span class="en">What is channel length modulation?</span><span class="ko" style="display:none;">채널 길이 변조란?</span></h3>
+<button class="show-btn" onclick="showAnswer('q11a')">Show Answer</button>
+<div class="answer-area">
+<p class="en">In saturation, increasing V<sub>DS</sub> pushes pinch-off point toward source → <strong>effectively shortens channel</strong> → more current. Modeled by <strong>(1+λV<sub>DS</sub>)</strong>. λ ∝ 1/L. Means output resistance is finite: r<sub>o</sub> = 1/(λI<sub>D</sub>). Limits amplifier gain. Use longer channels to reduce.</p>
+<p class="ko" style="display:none;">포화에서 V<sub>DS</sub> 증가 → 핀치오프 포인트가 소스 쪽으로 이동 → 채널 단축 → 전류 증가. (1+λV<sub>DS</sub>)로 모델링.</p>
+</div>
+<div class="score-btns"><button class="score-btn correct" onclick="scoreQ('q11a',true)">✅ Got it</button><button class="score-btn incorrect" onclick="scoreQ('q11a',false)">❌ Missed it</button></div>
+</div>
+
+<div class="q-card" id="q11b">
+<h3><span class="q-number">11b</span> <span class="en">What is charge sharing?</span><span class="ko" style="display:none;">전하 공유란?</span></h3>
+<button class="show-btn" onclick="showAnswer('q11b')">Show Answer</button>
+<div class="answer-area">
+<p class="en">In dynamic logic/DRAM: precharged node connects to uncharged parasitic capacitance → charge redistributes → <strong>voltage drops unexpectedly</strong>. V<sub>final</sub> = (C₁V₁+C₂V₂)/(C₁+C₂). Can cause wrong logic value. Fix: precharge internal nodes or use keeper transistors.</p>
+<p class="ko" style="display:none;">동적 논리/DRAM에서: 프리차지된 노드가 미충전 기생 커패시턴스에 연결 → 전하 재분배 → 전압 하락.</p>
+</div>
+<div class="score-btns"><button class="score-btn correct" onclick="scoreQ('q11b',true)">✅ Got it</button><button class="score-btn incorrect" onclick="scoreQ('q11b',false)">❌ Missed it</button></div>
+</div>
+
+<div class="q-card" id="q11c">
+<h3><span class="q-number">11c</span> <span class="en">What is electromigration and how to prevent it?</span><span class="ko" style="display:none;">일렉트로마이그레이션이란, 예방 방법은?</span></h3>
+<button class="show-btn" onclick="showAnswer('q11c')">Show Answer</button>
+<div class="answer-area">
+<p class="en"><strong>Physical movement of metal atoms</strong> due to high current density. Creates voids (opens) and hillocks (shorts). Reliability failure.</p>
+<p class="ko" style="display:none;">높은 전류 밀도로 인한 <strong>금속 원자의 물리적 이동</strong>. 보이드(개방)와 힐록(단락) 생성.</p>
+<p class="en"><strong>Prevention:</strong> (1) Wider wires. (2) Copper (better than Al). (3) Redundant vias. (4) Limit current density (EDA checks). (5) Lower temperature (Arrhenius).</p>
+<p class="en"><span class="buzzword">Electromigration</span> <span class="buzzword">Current density</span> <span class="buzzword">Black's equation</span> <span class="buzzword">MTTF</span></p>
+</div>
+<div class="score-btns"><button class="score-btn correct" onclick="scoreQ('q11c',true)">✅ Got it</button><button class="score-btn incorrect" onclick="scoreQ('q11c',false)">❌ Missed it</button></div>
+</div>
+</div>
+
+<!-- ===== SECTION 8 ===== -->
+<div class="section">
+<h2><span class="en">Section 8: Capacitors & Latch-up</span><span class="ko" style="display:none;">섹션 8: 커패시터 & 래치업</span></h2>
+
+<div class="q-card" id="q12a">
+<h3><span class="q-number">12a</span> <span class="en">Name three basic types of capacitors in CMOS design.</span><span class="ko" style="display:none;">CMOS 설계의 세 가지 기본 커패시터 유형은?</span></h3>
+<button class="show-btn" onclick="showAnswer('q12a')">Show Answer</button>
+<div class="answer-area">
+<p class="en"><strong>(1) Gate capacitance (C<sub>ox</sub>)</strong> — gate to channel. <strong>(2) Diffusion/Junction (C<sub>j</sub>)</strong> — PN junction at S/D. <strong>(3) Overlap/Fringing (C<sub>ov</sub>)</strong> — gate-to-S/D overlap.</p>
+<p class="ko" style="display:none;"><strong>(1) 게이트 커패시턴스</strong> — 게이트-채널. <strong>(2) 확산/접합</strong> — S/D의 PN 접합. <strong>(3) 오버랩/프린징</strong> — 게이트-S/D 오버랩.</p>
+</div>
+<div class="score-btns"><button class="score-btn correct" onclick="scoreQ('q12a',true)">✅ Got it</button><button class="score-btn incorrect" onclick="scoreQ('q12a',false)">❌ Missed it</button></div>
+</div>
+
+<div class="q-card" id="q12b">
+<h3><span class="q-number">12b</span> <span class="en">List the three capacitors in order of consideration (largest impact first).</span><span class="ko" style="display:none;">세 커패시터를 고려 순서(영향 큰 순)로 나열하세요.</span></h3>
+<button class="show-btn" onclick="showAnswer('q12b')">Show Answer</button>
+<div class="answer-area">
+<p class="en"><strong>1. C<sub>ox</sub> (gate)</strong> — dominates, determines speed/power. <strong>2. C<sub>j</sub> (diffusion)</strong> — significant in submicron. <strong>3. C<sub>ov</sub> (overlap)</strong> — causes Miller effect (C<sub>gd</sub> × gain).</p>
+<p class="ko" style="display:none;"><strong>1. C<sub>ox</sub></strong> → <strong>2. C<sub>j</sub></strong> → <strong>3. C<sub>ov</sub></strong></p>
+<p class="en">Note: In modern nodes, wire capacitance often dominates over device capacitance!</p>
+</div>
+<div class="score-btns"><button class="score-btn correct" onclick="scoreQ('q12b',true)">✅ Got it</button><button class="score-btn incorrect" onclick="scoreQ('q12b',false)">❌ Missed it</button></div>
+</div>
+
+<div class="q-card" id="q12c">
+<h3><span class="q-number">12c</span> <span class="en">What is latch-up and how to prevent it?</span><span class="ko" style="display:none;">래치업이란, 예방 방법은?</span></h3>
+<button class="show-btn" onclick="showAnswer('q12c')">Show Answer</button>
+<div class="answer-area">
+<p class="en"><strong>Parasitic SCR (thyristor) triggering</strong> in CMOS. PNPN structure forms two parasitic BJTs in positive feedback loop. Once triggered → low-impedance VDD-to-GND short → massive current → chip destruction.</p>
+<p class="ko" style="display:none;">CMOS에서 <strong>기생 SCR 트리거링</strong>. PNPN 구조가 양성 피드백 루프 형성.</p>
+<p class="en"><strong>Prevention:</strong> (1) Guard rings (N+ around NMOS, P+ around PMOS). (2) More substrate/well contacts (reduce parasitic R). (3) Increase NMOS-PMOS spacing. (4) EPI substrate. (5) SOI (eliminates PNPN entirely).</p>
+</div>
+<div class="score-btns"><button class="score-btn correct" onclick="scoreQ('q12c',true)">✅ Got it</button><button class="score-btn incorrect" onclick="scoreQ('q12c',false)">❌ Missed it</button></div>
+</div>
+</div>
+
+<!-- ===== SECTION 9 ===== -->
+<div class="section">
+<h2><span class="en">Section 9: Logic Design</span><span class="ko" style="display:none;">섹션 9: 논리 설계</span></h2>
+
+<div class="q-card" id="q13a">
+<h3><span class="q-number">13a</span> <span class="en">Write the truth table for a 3-input XOR.</span><span class="ko" style="display:none;">3입력 XOR 진리표를 작성하세요.</span></h3>
+<button class="show-btn" onclick="showAnswer('q13a')">Show Answer</button>
+<div class="answer-area">
+<p class="en"><strong>Output = 1 when ODD number of inputs are 1</strong> (odd parity detector).</p>
+<table class="comparison-table">
+<tr><th>A</th><th>B</th><th>C</th><th>A⊕B⊕C</th></tr>
+<tr><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>0</td><td>0</td><td>1</td><td>1</td></tr>
+<tr><td>0</td><td>1</td><td>0</td><td>1</td></tr>
+<tr><td>0</td><td>1</td><td>1</td><td>0</td></tr>
+<tr><td>1</td><td>0</td><td>0</td><td>1</td></tr>
+<tr><td>1</td><td>0</td><td>1</td><td>0</td></tr>
+<tr><td>1</td><td>1</td><td>0</td><td>0</td></tr>
+<tr><td>1</td><td>1</td><td>1</td><td>1</td></tr>
+</table>
+</div>
+<div class="score-btns"><button class="score-btn correct" onclick="scoreQ('q13a',true)">✅ Got it</button><button class="score-btn incorrect" onclick="scoreQ('q13a',false)">❌ Missed it</button></div>
+</div>
+
+<div class="q-card" id="q13b">
+<h3><span class="q-number">13b</span> <span class="en">Draw a 2-input XOR using only NAND gates. How many NANDs?</span><span class="ko" style="display:none;">NAND 게이트만 사용한 2입력 XOR을 그리세요. 몇 개의 NAND?</span></h3>
+<button class="show-btn" onclick="showAnswer('q13b')">Show Answer</button>
+<div class="answer-area">
+<p class="en"><strong>4 NAND gates.</strong> Pattern: NAND1 = A NAND B. NAND2 = A NAND (NAND1). NAND3 = B NAND (NAND1). NAND4 = NAND2 NAND NAND3 = output.</p>
+<p class="ko" style="display:none;"><strong>4개 NAND 게이트.</strong></p>
+<p class="en">🎤 <em>"First NAND the two inputs. Then NAND each original input with that result. Finally NAND those two results."</em> NAND is universal — any function from NANDs alone.</p>
+</div>
+<div class="score-btns"><button class="score-btn correct" onclick="scoreQ('q13b',true)">✅ Got it</button><button class="score-btn incorrect" onclick="scoreQ('q13b',false)">❌ Missed it</button></div>
+</div>
+
+<div class="q-card" id="q13c">
+<h3><span class="q-number">13c</span> <span class="en">How to design a divide-by-3 counter with 50% duty cycle?</span><span class="ko" style="display:none;">50% 듀티 사이클의 3분주 카운터 설계 방법?</span></h3>
+<button class="show-btn" onclick="showAnswer('q13c')">Show Answer</button>
+<div class="answer-area">
+<p class="en">Use <strong>two mod-3 counters</strong>: one on posedge, one on negedge. Each generates a 1-cycle pulse every 3 cycles. <strong>OR their outputs</strong> → 50% duty cycle. Key insight: <strong>odd dividers need both clock edges for 50% duty cycle.</strong></p>
+<p class="ko" style="display:none;"><strong>두 개의 mod-3 카운터</strong> 사용: posedge와 negedge. 출력을 <strong>OR</strong>하면 50% 듀티 사이클.</p>
+</div>
+<div class="score-btns"><button class="score-btn correct" onclick="scoreQ('q13c',true)">✅ Got it</button><button class="score-btn incorrect" onclick="scoreQ('q13c',false)">❌ Missed it</button></div>
+</div>
+</div>
+
+<!-- ===== SECTION 10 ===== -->
+<div class="section">
+<h2><span class="en">Section 10: Verilog Design</span><span class="ko" style="display:none;">섹션 10: Verilog 설계</span></h2>
+
+<div class="q-card" id="q14a">
+<h3><span class="q-number">14a</span> <span class="en">Write Verilog for a clock (50ns period) and 5-bit counter.</span><span class="ko" style="display:none;">클록 (50ns 주기)과 5비트 카운터의 Verilog를 작성하세요.</span></h3>
+<button class="show-btn" onclick="showAnswer('q14a')">Show Answer</button>
+<div class="answer-area">
+<pre><code><span class="comment">// Clock: 50ns period = toggle every 25ns</span>
+<span class="keyword">initial</span> <span class="signal">clk</span> = <span class="number">0</span>;
+<span class="keyword">always</span> #<span class="number">25</span> <span class="signal">clk</span> = ~<span class="signal">clk</span>;
+
+<span class="comment">// 5-bit counter (0-31, wraps)</span>
+<span class="keyword">always</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span> <span class="keyword">or posedge</span> <span class="signal">rst</span>)
+  <span class="keyword">if</span> (<span class="signal">rst</span>) <span class="signal">count</span> <= <span class="number">5'b0</span>;
+  <span class="keyword">else</span>     <span class="signal">count</span> <= <span class="signal">count</span> + <span class="number">1</span>;</code></pre>
+<p class="en">Key: Clock gen is <strong>testbench-only</strong> (uses #delay, not synthesizable). Counter uses async reset.</p>
+</div>
+<div class="score-btns"><button class="score-btn correct" onclick="scoreQ('q14a',true)">✅ Got it</button><button class="score-btn incorrect" onclick="scoreQ('q14a',false)">❌ Missed it</button></div>
+</div>
+
+<div class="q-card" id="q14b">
+<h3><span class="q-number">14b</span> <span class="en">Write Verilog for parallel-to-serial conversion of a 5-bit counter.</span><span class="ko" style="display:none;">5비트 카운터의 병렬-직렬 변환 Verilog를 작성하세요.</span></h3>
+<button class="show-btn" onclick="showAnswer('q14b')">Show Answer</button>
+<div class="answer-area">
+<p class="en">Load 5 bits in parallel, shift out MSB-first one bit per clock:</p>
+<pre><code><span class="keyword">assign</span> <span class="signal">ser_out</span> = <span class="signal">shift_reg</span>[<span class="number">4</span>]; <span class="comment">// MSB first</span>
+<span class="keyword">always</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span>)
+  <span class="keyword">if</span> (<span class="signal">load</span>) <span class="signal">shift_reg</span> <= <span class="signal">par_in</span>;
+  <span class="keyword">else</span>     <span class="signal">shift_reg</span> <= {<span class="signal">shift_reg</span>[<span class="number">3</span>:<span class="number">0</span>], <span class="number">1'b0</span>};</code></pre>
+<p class="en">Key concept: <strong>load all bits at once, shift out one per clock.</strong></p>
+</div>
+<div class="score-btns"><button class="score-btn correct" onclick="scoreQ('q14b',true)">✅ Got it</button><button class="score-btn incorrect" onclick="scoreQ('q14b',false)">❌ Missed it</button></div>
+</div>
+
+<div class="q-card" id="q14c">
+<h3><span class="q-number">14c</span> <span class="en">Design a sequence detect circuit that counts to 25.</span><span class="ko" style="display:none;">25까지 카운트하는 시퀀스 검출 회로를 설계하세요.</span></h3>
+<button class="show-btn" onclick="showAnswer('q14c')">Show Answer</button>
+<div class="answer-area">
+<pre><code><span class="keyword">always</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span> <span class="keyword">or posedge</span> <span class="signal">rst</span>)
+  <span class="keyword">if</span> (<span class="signal">rst</span>) {<span class="signal">count</span>,<span class="signal">detect</span>} <= <span class="number">0</span>;
+  <span class="keyword">else if</span> (<span class="signal">count</span> == <span class="number">5'd24</span>)
+    {<span class="signal">count</span>,<span class="signal">detect</span>} <= {<span class="number">5'b0</span>, <span class="number">1'b1</span>};
+  <span class="keyword">else</span>
+    {<span class="signal">count</span>,<span class="signal">detect</span>} <= {<span class="signal">count</span>+<span class="number">1</span>, <span class="number">1'b0</span>};</code></pre>
+<p class="en">Compare against <strong>24</strong> (not 25) because counting starts from 0. 0→24 = 25 counts.</p>
+</div>
+<div class="score-btns"><button class="score-btn correct" onclick="scoreQ('q14c',true)">✅ Got it</button><button class="score-btn incorrect" onclick="scoreQ('q14c',false)">❌ Missed it</button></div>
+</div>
+</div>
+
+<!-- ===== SECTION 11 ===== -->
+<div class="section">
+<h2><span class="en">Section 11: Layout</span><span class="ko" style="display:none;">섹션 11: 레이아웃</span></h2>
+
+<div class="q-card" id="q15a">
+<h3><span class="q-number">15a</span> <span class="en">Draw the transistor schematic of a CMOS NOR gate.</span><span class="ko" style="display:none;">CMOS NOR 게이트의 트랜지스터 회로도를 그리세요.</span></h3>
+<button class="show-btn" onclick="showAnswer('q15a')">Show Answer</button>
+<div class="answer-area">
+<p class="en"><strong>PMOS in SERIES</strong> (pull-up): Both P1(A) and P2(B) must be ON to pull high → both inputs must be 0. <strong>NMOS in PARALLEL</strong> (pull-down): Either N1(A) or N2(B) pulls low → if either input is 1, output is 0.</p>
+<p class="ko" style="display:none;"><strong>PMOS 직렬</strong> (풀업), <strong>NMOS 병렬</strong> (풀다운).</p>
+<p class="en">🧠 <strong>"NOR: NMOS parallel, PMOS series. NAND: opposite."</strong> PMOS is 2-3x wider than NMOS (hole mobility lower).</p>
+</div>
+<div class="score-btns"><button class="score-btn correct" onclick="scoreQ('q15a',true)">✅ Got it</button><button class="score-btn incorrect" onclick="scoreQ('q15a',false)">❌ Missed it</button></div>
+</div>
+
+<div class="q-card" id="q15b">
+<h3><span class="q-number">15b</span> <span class="en">Draw the layout (stick diagram) and cross-section of a NOR gate.</span><span class="ko" style="display:none;">NOR 게이트의 레이아웃(스틱 다이어그램)과 단면도를 그리세요.</span></h3>
+<button class="show-btn" onclick="showAnswer('q15b')">Show Answer</button>
+<div class="answer-area">
+<p class="en"><strong>Layout rules:</strong> VDD on top, GND on bottom. PMOS in n-well (top), NMOS in p-sub (bottom). Poly gates run vertically across both regions. Power rails horizontal metal.</p>
+<p class="ko" style="display:none;"><strong>레이아웃 규칙:</strong> VDD 위, GND 아래. PMOS는 n-웰(위), NMOS는 p-기판(아래).</p>
+<p class="en"><strong>Cross-section shows:</strong> p-substrate base, n-well for PMOS, gate oxide, polysilicon gates, metal contacts, S/D diffusions. PMOS has p+ diffusions in n-well. NMOS has n+ diffusions in p-substrate.</p>
+<p class="en"><strong>Series PMOS share diffusion</strong> (saves area). Parallel NMOS each connect to output and GND independently.</p>
+</div>
+<div class="score-btns"><button class="score-btn correct" onclick="scoreQ('q15b',true)">✅ Got it</button><button class="score-btn incorrect" onclick="scoreQ('q15b',false)">❌ Missed it</button></div>
+</div>
+</div>
+
+<!-- ===== SECTION 12 ===== -->
+<div class="section">
+<h2><span class="en">Section 12: Static Timing Analysis</span><span class="ko" style="display:none;">섹션 12: 정적 타이밍 분석</span></h2>
+
+<div class="q-card" id="q16a">
+<h3><span class="q-number">16a</span> <span class="en">Why specify input and output delays during synthesis?</span><span class="ko" style="display:none;">합성 시 입력/출력 지연을 지정하는 이유?</span></h3>
+<button class="show-btn" onclick="showAnswer('q16a')">Show Answer</button>
+<div class="answer-area">
+<p class="en">Your block connects to others. <strong>Input delay:</strong> How much clock period is "used up" before data reaches your input (by external logic). <strong>Output delay:</strong> How much time the downstream block needs after your output. Without these → tool assumes infinite budget at I/O → timing fails during integration.</p>
+<p class="ko" style="display:none;"><strong>입력 지연:</strong> 외부 논리에 의해 데이터가 입력에 도달하기 전 사용된 시간. <strong>출력 지연:</strong> 다운스트림 블록이 필요한 시간.</p>
+<p class="en">Example: 10ns clock, 3ns input delay, 2ns output delay → internal budget = 5ns.</p>
+<p class="en"><span class="buzzword">set_input_delay</span> <span class="buzzword">set_output_delay</span> <span class="buzzword">SDC</span></p>
+</div>
+<div class="score-btns"><button class="score-btn correct" onclick="scoreQ('q16a',true)">✅ Got it</button><button class="score-btn incorrect" onclick="scoreQ('q16a',false)">❌ Missed it</button></div>
+</div>
+
+<div class="q-card" id="q16b">
+<h3><span class="q-number">16b</span> <span class="en">Propagated clock vs ideal clock in timing reports?</span><span class="ko" style="display:none;">타이밍 보고서에서 전파 클록 vs 이상 클록?</span></h3>
+<button class="show-btn" onclick="showAnswer('q16b')">Show Answer</button>
+<div class="answer-area">
+<p class="en"><strong>Ideal clock:</strong> Zero skew, zero latency. Simplification for synthesis (pre-CTS). <strong>Propagated clock:</strong> Models actual clock tree — real insertion delay, skew, jitter. Used post-CTS for signoff.</p>
+<p class="ko" style="display:none;"><strong>이상 클록:</strong> 제로 스큐/레이턴시 (합성용). <strong>전파 클록:</strong> 실제 클록 트리 모델링 (사인오프용).</p>
+<p class="en">Propagated can reveal new violations AND fix some (useful skew). Used ideal early, switch to propagated after CTS.</p>
+</div>
+<div class="score-btns"><button class="score-btn correct" onclick="scoreQ('q16b',true)">✅ Got it</button><button class="score-btn incorrect" onclick="scoreQ('q16b',false)">❌ Missed it</button></div>
+</div>
+
+<div class="q-card" id="q16c">
+<h3><span class="q-number">16c</span> <span class="en">What is time borrowing in STA (PrimeTime)?</span><span class="ko" style="display:none;">PrimeTime에서 STA의 타임 보로잉이란?</span></h3>
+<button class="show-btn" onclick="showAnswer('q16c')">Show Answer</button>
+<div class="answer-area">
+<p class="en"><strong>Latch-based design technique.</strong> Since latches are transparent when enabled, late-arriving data can still pass through — "borrowing" time from the next stage. One stage can exceed its clock budget if the next stage has slack. FF-based designs can't borrow (data MUST arrive before edge).</p>
+<p class="ko" style="display:none;"><strong>래치 기반 설계 기법.</strong> 래치가 투명할 때 늦게 도착한 데이터도 통과 가능 — 다음 단계에서 시간을 "빌림".</p>
+<p class="en">Limit: borrow up to transparent window minus setup time. PrimeTime auto-calculates. Used in high-perf CPUs (Intel, ARM). Downside: complex STA, can cascade.</p>
+<p class="en"><span class="buzzword">Time borrowing</span> <span class="buzzword">Latch-based</span> <span class="buzzword">Transparent phase</span> <span class="buzzword">Useful skew</span></p>
+</div>
+<div class="score-btns"><button class="score-btn correct" onclick="scoreQ('q16c',true)">✅ Got it</button><button class="score-btn incorrect" onclick="scoreQ('q16c',false)">❌ Missed it</button></div>
+</div>
+</div>
+
+<!-- FINAL SCORE -->
+<div class="final-score" id="final-score">
+<h2 class="en">🎯 Final Score</h2>
+<h2 class="ko" style="display:none;">🎯 최종 점수</h2>
+<div class="big-score" id="final-score-text">0 / 0</div>
+<p id="final-pct" style="font-size:1.2em; color:#588157; margin:12px 0;"></p>
+<p id="final-msg" style="color:#5d4037;"></p>
+<button class="show-btn" onclick="resetQuiz()" style="margin-top:16px;">🔄 Reset Quiz</button>
+</div>
+
+<div style="height:80px;"></div>
+
+<script>
+let isKorean = false;
+function toggleLang() {
+    isKorean = !isKorean;
+    document.querySelectorAll('.en').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'none' : 'revert', 'important');
+    });
+    document.querySelectorAll('.ko').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'revert' : 'none', 'important');
+    });
+    document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+}
+
+const totalQ = 30;
+let correct = 0, answered = 0;
+const scored = {};
+
+function showAnswer(qId) {
+    const card = document.getElementById(qId);
+    card.querySelector('.answer-area').classList.add('show');
+    card.querySelector('.score-btns').classList.add('show');
+    card.querySelector('.show-btn').disabled = true;
+    card.querySelector('.show-btn').textContent = 'Answer Shown';
+}
+
+function scoreQ(qId, isCorrect) {
+    if (scored[qId]) return;
+    scored[qId] = true;
+    const card = document.getElementById(qId);
+    if (isCorrect) { correct++; card.classList.add('scored-correct'); }
+    else { card.classList.add('scored-incorrect'); }
+    answered++;
+    card.querySelectorAll('.score-btn').forEach(b => b.disabled = true);
+    updateScore();
+}
+
+function updateScore() {
+    document.getElementById('score-display').textContent = correct + ' / ' + answered;
+    const pct = answered > 0 ? Math.round(correct/answered*100) : 0;
+    document.getElementById('score-pct').textContent = pct + '% — ' + answered + '/' + totalQ + ' answered';
+    document.getElementById('progress-bar').style.width = (answered/totalQ*100) + '%';
+    if (answered === totalQ) showFinal();
+}
+
+function showFinal() {
+    const fs = document.getElementById('final-score');
+    fs.classList.add('show');
+    const pct = Math.round(correct/totalQ*100);
+    document.getElementById('final-score-text').textContent = correct + ' / ' + totalQ;
+    document.getElementById('final-pct').textContent = pct + '%';
+    let msg = '';
+    if (pct >= 90) msg = '🔥 Interview ready! You\'re going to crush it!';
+    else if (pct >= 70) msg = '💪 Solid foundation. Review the ones you missed and you\'re good!';
+    else if (pct >= 50) msg = '📚 Getting there. Focus on weak areas and retake.';
+    else msg = '🎯 Study the guide again, then retry. You\'ve got this!';
+    document.getElementById('final-msg').textContent = msg;
+}
+
+function resetQuiz() {
+    correct = 0; answered = 0;
+    for (let k in scored) delete scored[k];
+    document.querySelectorAll('.q-card').forEach(card => {
+        card.classList.remove('scored-correct', 'scored-incorrect');
+        card.querySelector('.answer-area').classList.remove('show');
+        card.querySelector('.score-btns').classList.remove('show');
+        const btn = card.querySelector('.show-btn');
+        btn.disabled = false; btn.textContent = 'Show Answer';
+        card.querySelectorAll('.score-btn').forEach(b => b.disabled = false);
+    });
+    document.getElementById('final-score').classList.remove('show');
+    updateScore();
+    window.scrollTo(0, 0);
+}
+</script>
+</body>
+</html>
