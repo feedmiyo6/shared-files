@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 5 Practice: Simulation Basics — Digital Design Study</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    background: linear-gradient(135deg, #fefae0 0%, #faedcd 100%);
+    color: #3d405b;
+    line-height: 1.8;
+    padding: 24px;
+    max-width: 920px;
+    margin: 0 auto;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+h1 { color: #5d4037; border-bottom: 3px solid #c4a77d; padding-bottom: 12px; margin-bottom: 24px; font-size: 2em; }
+h2 { color: #588157; border-bottom: 2px solid #a3b18a; padding-bottom: 8px; margin: 32px 0 16px; }
+h3 { color: #5d4037; margin: 20px 0 12px; }
+p { margin: 12px 0; }
+ul, ol { margin: 12px 0 12px 24px; }
+li { margin: 4px 0; }
+code {
+    background: #e9f5db; color: #3d405b; padding: 2px 8px; border-radius: 4px;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+}
+pre {
+    background: #2d3436; padding: 24px; border-radius: 12px; margin: 24px 0;
+    border: 3px solid #a3b18a; overflow-x: auto;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace; font-size: 15px; line-height: 1.6; color: #f8f8f2;
+}
+.keyword { color: #ff79c6; font-weight: 600; }
+.type { color: #8be9fd; }
+.signal { color: #50fa7b; }
+.number { color: #ffb86c; }
+.comment { color: #6272a4; font-style: italic; }
+.string { color: #f1fa8c; }
+.concept-box {
+    background: #fff8f0; border: 2px solid #c4a77d; border-radius: 12px;
+    padding: 20px; margin: 20px 0; color: #3d405b;
+}
+.concept-box h3 { color: #5d4037; margin-bottom: 12px; }
+.warning-box {
+    background: #fff8f0; border-radius: 12px; padding: 20px; margin: 20px 0;
+    border-left: 4px solid #ef4444; color: #3d405b;
+}
+.warning-box h3 { color: #c53030; margin-bottom: 12px; }
+.tip-box {
+    background: #fff8f0; border-radius: 12px; padding: 20px; margin: 20px 0;
+    border-left: 4px solid #588157; color: #3d405b;
+}
+.hint-box {
+    background: #fff8f0; border-radius: 8px; padding: 15px; margin: 15px 0;
+    border-left: 4px solid #5d4037; color: #3d405b;
+}
+.exercise {
+    background: #fff; border: 2px solid #a3b18a; border-radius: 12px;
+    padding: 24px; margin: 24px 0;
+}
+.exercise h3 { color: #588157; }
+.difficulty {
+    display: inline-block; padding: 3px 12px; border-radius: 12px;
+    font-size: 12px; font-weight: 600; margin-left: 8px;
+}
+.easy { background: #e9f5db; color: #588157; }
+.medium { background: #fff8f0; color: #c4a77d; }
+.hard { background: #fff0f0; color: #c53030; }
+details { margin: 12px 0; }
+summary {
+    cursor: pointer; color: #588157; font-weight: 600; padding: 8px;
+    background: #fff8f0; border-radius: 8px;
+}
+.nav-links { display: flex; gap: 12px; margin: 24px 0; flex-wrap: wrap; }
+.nav-links a {
+    background: linear-gradient(135deg, #588157, #3a5a40); color: #fff;
+    text-decoration: none; padding: 10px 20px; border-radius: 24px; font-weight: 600; font-size: 14px;
+}
+.lang-toggle {
+    position: fixed; top: 16px; right: 16px; background: #588157; border: none;
+    border-radius: 24px; padding: 10px 20px; cursor: pointer; color: #fff;
+    font-size: 14px; font-weight: 600; z-index: 1000;
+}
+.lang-toggle:hover { background: #3a5a40; }
+.ko { display: none; }
+.day-badge {
+    display: inline-block; background: linear-gradient(135deg, #588157, #3a5a40);
+    color: #fff; padding: 4px 14px; border-radius: 20px; font-size: 14px; font-weight: 600; margin-bottom: 12px;
+}
+@media (max-width: 768px) {
+    body { padding: 16px; } h1 { font-size: 1.8em; }
+    pre { font-size: 14px; padding: 16px; }
+    .lang-toggle { padding: 8px 16px; font-size: 13px; }
+}
+</style>
+</head>
+<body>
+
+<button class="lang-toggle" onclick="toggleLang()">한국어</button>
+<span class="day-badge">💻 Day 5 Practice</span>
+
+<h1>
+<span class="en">Simulation Basics — Practice</span>
+<span class="ko" style="display:none;">시뮬레이션 기초 — 실습</span>
+</h1>
+
+<div class="nav-links">
+    <a href="day-05-lesson.html">📖 Lesson</a>
+    <a href="day-05-quiz.html">📝 Quiz</a>
+</div>
+
+<div class="tip-box">
+<p class="en">💡 Use <a href="https://edaplayground.com" style="color:#588157;" target="_blank">EDA Playground</a> (Icarus Verilog) to run these exercises. Put the design in the left panel and testbench in the right panel. Check "Open EPWave after run" for waveforms!</p>
+<p class="ko" style="display:none;">💡 <a href="https://edaplayground.com" style="color:#588157;" target="_blank">EDA Playground</a> (Icarus Verilog)를 사용하여 이 연습을 실행하세요. 왼쪽 패널에 설계를, 오른쪽 패널에 테스트벤치를 넣으세요. 파형을 보려면 "Open EPWave after run"을 체크하세요!</p>
+</div>
+
+<!-- Exercise 1 -->
+<div class="exercise">
+<h3>
+<span class="en">Exercise 1: Basic Testbench</span><span class="difficulty easy">Easy</span>
+<span class="ko" style="display:none;">연습 1: 기본 테스트벤치</span>
+</h3>
+
+<p class="en">Write a testbench for this 4-bit counter. Generate a 100MHz clock, apply reset, enable counting, and use <code>$monitor</code> to observe the output.</p>
+<p class="ko" style="display:none;">이 4비트 카운터에 대한 테스트벤치를 작성하세요. 100MHz 클록을 생성하고, 리셋을 적용하고, 카운팅을 활성화하고, <code>$monitor</code>로 출력을 관찰하세요.</p>
+
+<h3 class="en">Design Code (left panel):</h3>
+<h3 class="ko" style="display:none;">설계 코드 (왼쪽 패널):</h3>
+<pre>
+<span class="keyword">module</span> <span class="type">counter</span> (
+    <span class="keyword">input</span>  <span class="type">logic</span>       <span class="signal">clk</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span>       <span class="signal">rst_n</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span>       <span class="signal">enable</span>,
+    <span class="keyword">output</span> <span class="type">logic</span> [<span class="number">3</span>:<span class="number">0</span>] <span class="signal">count</span>
+);
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span> <span class="keyword">or</span> <span class="keyword">negedge</span> <span class="signal">rst_n</span>) <span class="keyword">begin</span>
+        <span class="keyword">if</span> (!<span class="signal">rst_n</span>)
+            <span class="signal">count</span> &lt;= <span class="number">4'b0</span>;
+        <span class="keyword">else if</span> (<span class="signal">enable</span>)
+            <span class="signal">count</span> &lt;= <span class="signal">count</span> + <span class="number">1</span>;
+    <span class="keyword">end</span>
+<span class="keyword">endmodule</span>
+</pre>
+
+<h3 class="en">Your task — write the testbench (right panel):</h3>
+<h3 class="ko" style="display:none;">과제 — 테스트벤치 작성 (오른쪽 패널):</h3>
+<ol>
+<li class="en">Declare signals: <code>clk</code>, <code>rst_n</code>, <code>enable</code>, <code>count</code></li>
+<li class="ko" style="display:none;">신호 선언: <code>clk</code>, <code>rst_n</code>, <code>enable</code>, <code>count</code></li>
+<li class="en">Instantiate the counter as <code>dut</code></li>
+<li class="ko" style="display:none;">카운터를 <code>dut</code>로 인스턴스화</li>
+<li class="en">Generate a 100MHz clock (10ns period)</li>
+<li class="ko" style="display:none;">100MHz 클록 생성 (10ns 주기)</li>
+<li class="en">Reset for 25ns, then release and enable counting for 160ns</li>
+<li class="ko" style="display:none;">25ns 동안 리셋, 그 후 해제하고 160ns 동안 카운팅 활성화</li>
+<li class="en">Add <code>$monitor</code>, <code>$dumpfile</code>/<code>$dumpvars</code>, and <code>$finish</code></li>
+<li class="ko" style="display:none;"><code>$monitor</code>, <code>$dumpfile</code>/<code>$dumpvars</code>, <code>$finish</code> 추가</li>
+</ol>
+
+<div class="hint-box">
+<p class="en">🔍 <strong>Hint:</strong> The counter should wrap around from 15 (4'hF) back to 0. You should see this in 160ns of counting (16 clock cycles at 100MHz).</p>
+<p class="ko" style="display:none;">🔍 <strong>힌트:</strong> 카운터는 15(4'hF)에서 0으로 롤오버해야 합니다. 160ns 카운팅(100MHz에서 16 클록 사이클)에서 이를 확인할 수 있습니다.</p>
+</div>
+
+<details>
+<summary class="en">👀 Show Solution</summary>
+<summary class="ko" style="display:none;">👀 정답 보기</summary>
+<pre>
+<span class="keyword">`timescale</span> <span class="number">1ns</span> / <span class="number">1ps</span>
+
+<span class="keyword">module</span> <span class="type">tb_counter</span>;
+    <span class="type">logic</span>       <span class="signal">clk</span>, <span class="signal">rst_n</span>, <span class="signal">enable</span>;
+    <span class="type">logic</span> [<span class="number">3</span>:<span class="number">0</span>] <span class="signal">count</span>;
+
+    <span class="type">counter</span> dut (
+        .<span class="signal">clk</span>(<span class="signal">clk</span>), .<span class="signal">rst_n</span>(<span class="signal">rst_n</span>),
+        .<span class="signal">enable</span>(<span class="signal">enable</span>), .<span class="signal">count</span>(<span class="signal">count</span>)
+    );
+
+    <span class="keyword">initial</span> <span class="signal">clk</span> = <span class="number">0</span>;
+    <span class="keyword">always</span> #<span class="number">5</span> <span class="signal">clk</span> = ~<span class="signal">clk</span>;
+
+    <span class="keyword">initial</span>
+        $<span class="signal">monitor</span>(<span class="string">"[%0t] rst_n=%b en=%b count=%4b (%0d)"</span>,
+                 $<span class="signal">time</span>, <span class="signal">rst_n</span>, <span class="signal">enable</span>, <span class="signal">count</span>, <span class="signal">count</span>);
+
+    <span class="keyword">initial</span> <span class="keyword">begin</span>
+        <span class="signal">rst_n</span> = <span class="number">0</span>; <span class="signal">enable</span> = <span class="number">0</span>;
+        #<span class="number">25</span>;
+        <span class="signal">rst_n</span> = <span class="number">1</span>;
+        #<span class="number">10</span>;
+        <span class="signal">enable</span> = <span class="number">1</span>;
+        #<span class="number">160</span>;
+        $<span class="signal">display</span>(<span class="string">"Simulation complete"</span>);
+        $<span class="signal">finish</span>;
+    <span class="keyword">end</span>
+
+    <span class="keyword">initial</span> <span class="keyword">begin</span>
+        $<span class="signal">dumpfile</span>(<span class="string">"counter.vcd"</span>);
+        $<span class="signal">dumpvars</span>(<span class="number">0</span>, <span class="type">tb_counter</span>);
+    <span class="keyword">end</span>
+<span class="keyword">endmodule</span>
+</pre>
+</details>
+</div>
+
+<!-- Exercise 2 -->
+<div class="exercise">
+<h3>
+<span class="en">Exercise 2: Self-Checking Testbench</span><span class="difficulty medium">Medium</span>
+<span class="ko" style="display:none;">연습 2: 자체 검증 테스트벤치</span>
+</h3>
+
+<p class="en">Upgrade your testbench to automatically verify correctness using <code>assert</code>. Test these scenarios:</p>
+<p class="ko" style="display:none;">테스트벤치를 <code>assert</code>를 사용하여 자동으로 정확성을 검증하도록 업그레이드하세요. 다음 시나리오를 테스트하세요:</p>
+
+<ol>
+<li class="en"><strong>Reset check:</strong> After reset, count must be 0</li>
+<li class="ko" style="display:none;"><strong>리셋 확인:</strong> 리셋 후 count는 0이어야 함</li>
+<li class="en"><strong>Count check:</strong> After 5 clocks with enable=1, count must be 5</li>
+<li class="ko" style="display:none;"><strong>카운트 확인:</strong> enable=1로 5클록 후 count는 5여야 함</li>
+<li class="en"><strong>Pause check:</strong> With enable=0, count must not change for 3 clocks</li>
+<li class="ko" style="display:none;"><strong>일시정지 확인:</strong> enable=0일 때 count가 3클록 동안 변하지 않아야 함</li>
+<li class="en"><strong>Wrap check:</strong> Count must wrap from 15 back to 0</li>
+<li class="ko" style="display:none;"><strong>랩 확인:</strong> count가 15에서 0으로 롤오버해야 함</li>
+</ol>
+
+<div class="hint-box">
+<p class="en">🔍 <strong>Hint:</strong> Use <code>repeat(N) @(posedge clk); #1;</code> to wait N cycles then check. The <code>#1</code> delay lets the output settle after the clock edge.</p>
+<p class="ko" style="display:none;">🔍 <strong>힌트:</strong> <code>repeat(N) @(posedge clk); #1;</code>을 사용하여 N사이클 대기 후 확인하세요. <code>#1</code> 지연은 클록 에지 후 출력이 안정되게 합니다.</p>
+</div>
+
+<details>
+<summary class="en">👀 Show Solution</summary>
+<summary class="ko" style="display:none;">👀 정답 보기</summary>
+<pre>
+<span class="keyword">`timescale</span> <span class="number">1ns</span> / <span class="number">1ps</span>
+
+<span class="keyword">module</span> <span class="type">tb_counter_check</span>;
+    <span class="type">logic</span>       <span class="signal">clk</span>, <span class="signal">rst_n</span>, <span class="signal">enable</span>;
+    <span class="type">logic</span> [<span class="number">3</span>:<span class="number">0</span>] <span class="signal">count</span>;
+    <span class="type">integer</span>     <span class="signal">pass_count</span> = <span class="number">0</span>;
+    <span class="type">integer</span>     <span class="signal">fail_count</span> = <span class="number">0</span>;
+
+    <span class="type">counter</span> dut (.*);
+
+    <span class="keyword">initial</span> <span class="signal">clk</span> = <span class="number">0</span>;
+    <span class="keyword">always</span> #<span class="number">5</span> <span class="signal">clk</span> = ~<span class="signal">clk</span>;
+
+    <span class="keyword">initial</span> <span class="keyword">begin</span>
+        <span class="comment">// Test 1: Reset</span>
+        <span class="signal">rst_n</span> = <span class="number">0</span>; <span class="signal">enable</span> = <span class="number">0</span>;
+        #<span class="number">25</span>; <span class="signal">rst_n</span> = <span class="number">1</span>; #<span class="number">1</span>;
+        <span class="keyword">assert</span> (<span class="signal">count</span> == <span class="number">0</span>) <span class="keyword">begin</span>
+            $<span class="signal">display</span>(<span class="string">"PASS: Reset → count=0"</span>);
+            <span class="signal">pass_count</span>++;
+        <span class="keyword">end</span> <span class="keyword">else</span> <span class="keyword">begin</span>
+            $<span class="signal">error</span>(<span class="string">"FAIL: Reset → count=%0d"</span>, <span class="signal">count</span>);
+            <span class="signal">fail_count</span>++;
+        <span class="keyword">end</span>
+
+        <span class="comment">// Test 2: Count to 5</span>
+        <span class="signal">enable</span> = <span class="number">1</span>;
+        <span class="keyword">repeat</span>(<span class="number">5</span>) @(<span class="keyword">posedge</span> <span class="signal">clk</span>); #<span class="number">1</span>;
+        <span class="keyword">assert</span> (<span class="signal">count</span> == <span class="number">5</span>) <span class="keyword">begin</span>
+            $<span class="signal">display</span>(<span class="string">"PASS: Count reached 5"</span>);
+            <span class="signal">pass_count</span>++;
+        <span class="keyword">end</span> <span class="keyword">else</span> <span class="keyword">begin</span>
+            $<span class="signal">error</span>(<span class="string">"FAIL: expected 5, got %0d"</span>, <span class="signal">count</span>);
+            <span class="signal">fail_count</span>++;
+        <span class="keyword">end</span>
+
+        <span class="comment">// Test 3: Pause (enable=0)</span>
+        <span class="signal">enable</span> = <span class="number">0</span>;
+        <span class="keyword">repeat</span>(<span class="number">3</span>) @(<span class="keyword">posedge</span> <span class="signal">clk</span>); #<span class="number">1</span>;
+        <span class="keyword">assert</span> (<span class="signal">count</span> == <span class="number">5</span>) <span class="keyword">begin</span>
+            $<span class="signal">display</span>(<span class="string">"PASS: Paused at 5"</span>);
+            <span class="signal">pass_count</span>++;
+        <span class="keyword">end</span> <span class="keyword">else</span> <span class="keyword">begin</span>
+            $<span class="signal">error</span>(<span class="string">"FAIL: expected 5, got %0d"</span>, <span class="signal">count</span>);
+            <span class="signal">fail_count</span>++;
+        <span class="keyword">end</span>
+
+        <span class="comment">// Test 4: Wrap from 15 → 0</span>
+        <span class="signal">enable</span> = <span class="number">1</span>;
+        <span class="keyword">repeat</span>(<span class="number">11</span>) @(<span class="keyword">posedge</span> <span class="signal">clk</span>); #<span class="number">1</span>;
+        <span class="keyword">assert</span> (<span class="signal">count</span> == <span class="number">0</span>) <span class="keyword">begin</span>
+            $<span class="signal">display</span>(<span class="string">"PASS: Wrapped to 0"</span>);
+            <span class="signal">pass_count</span>++;
+        <span class="keyword">end</span> <span class="keyword">else</span> <span class="keyword">begin</span>
+            $<span class="signal">error</span>(<span class="string">"FAIL: expected 0, got %0d"</span>, <span class="signal">count</span>);
+            <span class="signal">fail_count</span>++;
+        <span class="keyword">end</span>
+
+        $<span class="signal">display</span>(<span class="string">"=== Results: %0d PASS, %0d FAIL ==="</span>,
+                 <span class="signal">pass_count</span>, <span class="signal">fail_count</span>);
+        $<span class="signal">finish</span>;
+    <span class="keyword">end</span>
+
+    <span class="keyword">initial</span> <span class="keyword">begin</span>
+        $<span class="signal">dumpfile</span>(<span class="string">"check.vcd"</span>);
+        $<span class="signal">dumpvars</span>(<span class="number">0</span>, <span class="type">tb_counter_check</span>);
+    <span class="keyword">end</span>
+<span class="keyword">endmodule</span>
+</pre>
+</details>
+</div>
+
+<!-- Exercise 3 -->
+<div class="exercise">
+<h3>
+<span class="en">Exercise 3: D Flip-Flop Testbench</span><span class="difficulty medium">Medium</span>
+<span class="ko" style="display:none;">연습 3: D 플립플롭 테스트벤치</span>
+</h3>
+
+<p class="en">Write both the design AND testbench for a D flip-flop with async reset. Verify that:</p>
+<p class="ko" style="display:none;">비동기 리셋이 있는 D 플립플롭의 설계와 테스트벤치를 모두 작성하세요. 다음을 검증하세요:</p>
+
+<ol>
+<li class="en">Reset forces Q to 0 regardless of clock</li>
+<li class="ko" style="display:none;">리셋은 클록에 관계없이 Q를 0으로 강제</li>
+<li class="en">Q follows D on the rising clock edge</li>
+<li class="ko" style="display:none;">Q는 상승 클록 에지에서 D를 따름</li>
+<li class="en">Q does NOT change between clock edges</li>
+<li class="ko" style="display:none;">Q는 클록 에지 사이에서 변하지 않음</li>
+</ol>
+
+<div class="hint-box">
+<p class="en">🔍 <strong>Hint:</strong> Drive D to different values between clock edges and verify Q only updates at posedge clk. Use <code>$display</code> at strategic points to trace behavior.</p>
+<p class="ko" style="display:none;">🔍 <strong>힌트:</strong> 클록 에지 사이에서 D를 다른 값으로 구동하고 Q가 posedge clk에서만 업데이트되는지 확인하세요. 전략적 위치에서 <code>$display</code>를 사용하여 동작을 추적하세요.</p>
+</div>
+
+<details>
+<summary class="en">👀 Show Solution</summary>
+<summary class="ko" style="display:none;">👀 정답 보기</summary>
+<p class="en"><strong>Design (left panel):</strong></p>
+<p class="ko" style="display:none;"><strong>설계 (왼쪽 패널):</strong></p>
+<pre>
+<span class="keyword">module</span> <span class="type">dff</span> (
+    <span class="keyword">input</span>  <span class="type">logic</span> <span class="signal">clk</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span> <span class="signal">rst_n</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span> <span class="signal">d</span>,
+    <span class="keyword">output</span> <span class="type">logic</span> <span class="signal">q</span>
+);
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span> <span class="keyword">or</span> <span class="keyword">negedge</span> <span class="signal">rst_n</span>)
+        <span class="keyword">if</span> (!<span class="signal">rst_n</span>) <span class="signal">q</span> &lt;= <span class="number">1'b0</span>;
+        <span class="keyword">else</span>         <span class="signal">q</span> &lt;= <span class="signal">d</span>;
+<span class="keyword">endmodule</span>
+</pre>
+<p class="en"><strong>Testbench (right panel):</strong></p>
+<p class="ko" style="display:none;"><strong>테스트벤치 (오른쪽 패널):</strong></p>
+<pre>
+<span class="keyword">`timescale</span> <span class="number">1ns</span> / <span class="number">1ps</span>
+
+<span class="keyword">module</span> <span class="type">tb_dff</span>;
+    <span class="type">logic</span> <span class="signal">clk</span>, <span class="signal">rst_n</span>, <span class="signal">d</span>, <span class="signal">q</span>;
+
+    <span class="type">dff</span> dut (.*);
+
+    <span class="keyword">initial</span> <span class="signal">clk</span> = <span class="number">0</span>;
+    <span class="keyword">always</span> #<span class="number">5</span> <span class="signal">clk</span> = ~<span class="signal">clk</span>;
+
+    <span class="keyword">initial</span> <span class="keyword">begin</span>
+        <span class="comment">// Test 1: Reset</span>
+        <span class="signal">rst_n</span> = <span class="number">0</span>; <span class="signal">d</span> = <span class="number">1</span>;
+        #<span class="number">15</span>;
+        <span class="keyword">assert</span> (<span class="signal">q</span> == <span class="number">0</span>)
+            $<span class="signal">display</span>(<span class="string">"PASS: Reset holds Q=0 even with D=1"</span>);
+        <span class="keyword">else</span>
+            $<span class="signal">error</span>(<span class="string">"FAIL: Q=%b during reset"</span>, <span class="signal">q</span>);
+
+        <span class="comment">// Test 2: Q follows D after reset release</span>
+        <span class="signal">rst_n</span> = <span class="number">1</span>; <span class="signal">d</span> = <span class="number">1</span>;
+        @(<span class="keyword">posedge</span> <span class="signal">clk</span>); #<span class="number">1</span>;
+        <span class="keyword">assert</span> (<span class="signal">q</span> == <span class="number">1</span>)
+            $<span class="signal">display</span>(<span class="string">"PASS: Q captured D=1"</span>);
+        <span class="keyword">else</span>
+            $<span class="signal">error</span>(<span class="string">"FAIL: Q=%b, expected 1"</span>, <span class="signal">q</span>);
+
+        <span class="comment">// Test 3: Q doesn't change mid-cycle</span>
+        <span class="signal">d</span> = <span class="number">0</span>;  <span class="comment">// Change D between edges</span>
+        #<span class="number">2</span>;  <span class="comment">// Still before next posedge</span>
+        <span class="keyword">assert</span> (<span class="signal">q</span> == <span class="number">1</span>)
+            $<span class="signal">display</span>(<span class="string">"PASS: Q stable mid-cycle"</span>);
+        <span class="keyword">else</span>
+            $<span class="signal">error</span>(<span class="string">"FAIL: Q changed mid-cycle!"</span>);
+
+        <span class="comment">// Test 4: Q updates at next posedge</span>
+        @(<span class="keyword">posedge</span> <span class="signal">clk</span>); #<span class="number">1</span>;
+        <span class="keyword">assert</span> (<span class="signal">q</span> == <span class="number">0</span>)
+            $<span class="signal">display</span>(<span class="string">"PASS: Q captured D=0"</span>);
+        <span class="keyword">else</span>
+            $<span class="signal">error</span>(<span class="string">"FAIL: Q=%b, expected 0"</span>, <span class="signal">q</span>);
+
+        $<span class="signal">display</span>(<span class="string">"=== All tests complete ==="</span>);
+        $<span class="signal">finish</span>;
+    <span class="keyword">end</span>
+
+    <span class="keyword">initial</span> <span class="keyword">begin</span>
+        $<span class="signal">dumpfile</span>(<span class="string">"dff.vcd"</span>);
+        $<span class="signal">dumpvars</span>(<span class="number">0</span>, <span class="type">tb_dff</span>);
+    <span class="keyword">end</span>
+<span class="keyword">endmodule</span>
+</pre>
+</details>
+</div>
+
+<!-- Exercise 4 -->
+<div class="exercise">
+<h3>
+<span class="en">Exercise 4: Debug the Testbench 🐛</span><span class="difficulty hard">Hard</span>
+<span class="ko" style="display:none;">연습 4: 테스트벤치 디버깅 🐛</span>
+</h3>
+
+<p class="en">This testbench has <strong>4 bugs</strong>. Find and fix them all!</p>
+<p class="ko" style="display:none;">이 테스트벤치에는 <strong>4개의 버그</strong>가 있습니다. 모두 찾아서 수정하세요!</p>
+
+<pre>
+<span class="keyword">module</span> <span class="type">tb_buggy</span>;
+    <span class="type">logic</span>       <span class="signal">clk</span>, <span class="signal">rst_n</span>, <span class="signal">enable</span>;
+    <span class="type">logic</span> [<span class="number">3</span>:<span class="number">0</span>] <span class="signal">count</span>;
+
+    <span class="type">counter</span> dut (
+        .<span class="signal">clk</span>(<span class="signal">clk</span>), .<span class="signal">rst_n</span>(<span class="signal">rst_n</span>),
+        .<span class="signal">enable</span>(<span class="signal">enable</span>), .<span class="signal">count</span>(<span class="signal">count</span>)
+    );
+
+    <span class="comment">// Bug 1: Clock generation</span>
+    <span class="keyword">always</span> #<span class="number">5</span> <span class="signal">clk</span> = ~<span class="signal">clk</span>;
+
+    <span class="comment">// Bug 2: Multiple monitors</span>
+    <span class="keyword">initial</span> $<span class="signal">monitor</span>(<span class="string">"rst=%b"</span>, <span class="signal">rst_n</span>);
+    <span class="keyword">initial</span> $<span class="signal">monitor</span>(<span class="string">"count=%d"</span>, <span class="signal">count</span>);
+
+    <span class="keyword">initial</span> <span class="keyword">begin</span>
+        <span class="signal">rst_n</span> = <span class="number">0</span>;
+        <span class="signal">enable</span> = <span class="number">0</span>;
+        #<span class="number">20</span>;
+        <span class="signal">rst_n</span> = <span class="number">1</span>;
+        <span class="signal">enable</span> = <span class="number">1</span>;
+        #<span class="number">100</span>;
+
+        <span class="comment">// Bug 3: Check immediately after clock edge</span>
+        @(<span class="keyword">posedge</span> <span class="signal">clk</span>);
+        <span class="keyword">assert</span>(<span class="signal">count</span> == <span class="number">4'd10</span>);
+
+        <span class="comment">// Bug 4: Missing $finish</span>
+    <span class="keyword">end</span>
+<span class="keyword">endmodule</span>
+</pre>
+
+<details>
+<summary class="en">👀 Show Answer</summary>
+<summary class="ko" style="display:none;">👀 정답 보기</summary>
+<div class="concept-box">
+<ol>
+<li class="en"><strong>Bug 1:</strong> <code>clk</code> is never initialized! It starts as <code>X</code>, and <code>~X = X</code>. Fix: add <code>initial clk = 0;</code></li>
+<li class="ko" style="display:none;"><strong>버그 1:</strong> <code>clk</code>이 초기화되지 않음! <code>X</code>로 시작하고 <code>~X = X</code>. 수정: <code>initial clk = 0;</code> 추가</li>
+<li class="en"><strong>Bug 2:</strong> Two <code>$monitor</code> calls — the second replaces the first. Fix: combine into one: <code>$monitor("rst=%b count=%d", rst_n, count);</code></li>
+<li class="ko" style="display:none;"><strong>버그 2:</strong> 두 개의 <code>$monitor</code> 호출 — 두 번째가 첫 번째를 대체. 수정: 하나로 합치기</li>
+<li class="en"><strong>Bug 3:</strong> Assert right at posedge — output hasn't settled yet! Fix: add <code>#1;</code> before the assert</li>
+<li class="ko" style="display:none;"><strong>버그 3:</strong> posedge 직후에 assert — 출력이 아직 안정되지 않음! 수정: assert 전에 <code>#1;</code> 추가</li>
+<li class="en"><strong>Bug 4:</strong> No <code>$finish</code> — simulation runs forever. Fix: add <code>$finish;</code> at the end</li>
+<li class="ko" style="display:none;"><strong>버그 4:</strong> <code>$finish</code> 없음 — 시뮬레이션이 영원히 실행. 수정: 끝에 <code>$finish;</code> 추가</li>
+</ol>
+</div>
+</details>
+</div>
+
+<h2>
+<span class="en">🎯 Week 1 Complete!</span>
+<span class="ko" style="display:none;">🎯 1주차 완료!</span>
+</h2>
+
+<div class="concept-box">
+<p class="en">Congratulations! You've finished Week 1 — SystemVerilog Foundations! 🎉 You now know:</p>
+<p class="ko" style="display:none;">축하합니다! 1주차 — SystemVerilog 기초를 마쳤습니다! 🎉 이제 다음을 알고 있습니다:</p>
+<ul>
+<li class="en">Module structure, ports, parameters (Day 1)</li>
+<li class="ko" style="display:none;">모듈 구조, 포트, 매개변수 (Day 1)</li>
+<li class="en">always_ff vs always_comb (Day 2)</li>
+<li class="ko" style="display:none;">always_ff vs always_comb (Day 2)</li>
+<li class="en">Blocking vs non-blocking assignments (Day 3)</li>
+<li class="ko" style="display:none;">블로킹 vs 논블로킹 할당 (Day 3)</li>
+<li class="en">Registers vs wires (Day 4)</li>
+<li class="ko" style="display:none;">레지스터 vs 와이어 (Day 4)</li>
+<li class="en">Simulation & testbenches (Day 5 — today!)</li>
+<li class="ko" style="display:none;">시뮬레이션 & 테스트벤치 (Day 5 — 오늘!)</li>
+</ul>
+<p class="en"><strong>Next week:</strong> FSM Design — state machines, Moore vs Mealy, encoding strategies! 🚀</p>
+<p class="ko" style="display:none;"><strong>다음 주:</strong> FSM 설계 — 상태 기계, Moore vs Mealy, 인코딩 전략! 🚀</p>
+</div>
+
+<div class="nav-links">
+    <a href="day-05-lesson.html">📖 Review Lesson</a>
+    <a href="day-05-quiz.html">📝 Take Quiz</a>
+</div>
+
+<script>
+let isKorean = false;
+function toggleLang() {
+    isKorean = !isKorean;
+    document.querySelectorAll('.en').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'none' : 'revert', 'important');
+    });
+    document.querySelectorAll('.ko').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'revert' : 'none', 'important');
+    });
+    document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+}
+</script>
+</body>
+</html>

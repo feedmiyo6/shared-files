@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 5: Simulation Basics — Digital Design Study</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    background: linear-gradient(135deg, #fefae0 0%, #faedcd 100%);
+    color: #3d405b;
+    line-height: 1.8;
+    padding: 24px;
+    max-width: 920px;
+    margin: 0 auto;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+h1 {
+    color: #5d4037;
+    border-bottom: 3px solid #c4a77d;
+    padding-bottom: 12px;
+    margin-bottom: 24px;
+    font-size: 2em;
+}
+h2 {
+    color: #588157;
+    border-bottom: 2px solid #a3b18a;
+    padding-bottom: 8px;
+    margin: 32px 0 16px;
+}
+h3 {
+    color: #5d4037;
+    margin: 20px 0 12px;
+}
+p { margin: 12px 0; }
+ul, ol { margin: 12px 0 12px 24px; }
+li { margin: 4px 0; }
+code {
+    background: #e9f5db;
+    color: #3d405b;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+}
+pre {
+    background: #2d3436;
+    padding: 24px;
+    border-radius: 12px;
+    margin: 24px 0;
+    border: 3px solid #a3b18a;
+    overflow-x: auto;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+    font-size: 15px;
+    line-height: 1.6;
+    color: #f8f8f2;
+}
+.keyword { color: #ff79c6; font-weight: 600; }
+.type { color: #8be9fd; }
+.signal { color: #50fa7b; }
+.number { color: #ffb86c; }
+.comment { color: #6272a4; font-style: italic; }
+.string { color: #f1fa8c; }
+.concept-box {
+    background: #fff8f0;
+    border: 2px solid #c4a77d;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    color: #3d405b;
+}
+.concept-box h3 { color: #5d4037; margin-bottom: 12px; }
+.warning-box {
+    background: #fff8f0;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    border-left: 4px solid #ef4444;
+    color: #3d405b;
+}
+.warning-box h3 { color: #c53030; margin-bottom: 12px; }
+.tip-box {
+    background: #fff8f0;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    border-left: 4px solid #588157;
+    color: #3d405b;
+}
+.comparison-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+.comparison-table th {
+    background: #588157;
+    color: white;
+    padding: 12px;
+    text-align: left;
+}
+.comparison-table td {
+    background: #fff;
+    border: 1px solid #c4a77d;
+    padding: 12px;
+    color: #3d405b;
+}
+.comparison-table tr:nth-child(even) td { background: #fff8f0; }
+.nav-links {
+    display: flex;
+    gap: 12px;
+    margin: 24px 0;
+    flex-wrap: wrap;
+}
+.nav-links a {
+    background: linear-gradient(135deg, #588157, #3a5a40);
+    color: #fff;
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 24px;
+    font-weight: 600;
+    font-size: 14px;
+}
+.nav-links a:hover { opacity: 0.9; }
+.lang-toggle {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    background: #588157;
+    border: none;
+    border-radius: 24px;
+    padding: 10px 20px;
+    cursor: pointer;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    z-index: 1000;
+}
+.lang-toggle:hover { background: #3a5a40; }
+.ko { display: none; }
+.day-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, #588157, #3a5a40);
+    color: #fff;
+    padding: 4px 14px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 12px;
+}
+@media (max-width: 768px) {
+    body { padding: 16px; }
+    h1 { font-size: 1.8em; }
+    pre { font-size: 14px; padding: 16px; }
+    .lang-toggle { padding: 8px 16px; font-size: 13px; }
+}
+</style>
+</head>
+<body>
+
+<button class="lang-toggle" onclick="toggleLang()">한국어</button>
+
+<span class="day-badge">📅 Day 5 / 40</span>
+
+<h1>
+<span class="en">Simulation Basics</span>
+<span class="ko" style="display:none;">시뮬레이션 기초</span>
+</h1>
+
+<div class="nav-links">
+    <a href="day-05-quiz.html">📝 Quiz</a>
+    <a href="day-05-practice.html">💻 Practice</a>
+    <a href="day-04-lesson.html">← Day 4</a>
+</div>
+
+<p class="en">Today we learn how to <strong>verify</strong> our designs actually work. Writing RTL code is only half the job — simulation and testbenches are how you prove correctness before anything touches silicon.</p>
+<p class="ko" style="display:none;">오늘은 설계가 실제로 동작하는지 <strong>검증</strong>하는 방법을 배웁니다. RTL 코드를 작성하는 것은 절반일 뿐 — 시뮬레이션과 테스트벤치가 실리콘에 들어가기 전에 정확성을 증명하는 방법입니다.</p>
+
+<h2>
+<span class="en">1. What Is Simulation?</span>
+<span class="ko" style="display:none;">1. 시뮬레이션이란?</span>
+</h2>
+
+<p class="en">Simulation runs your SystemVerilog code on a computer, modeling how the hardware would behave cycle-by-cycle. The simulator evaluates all signal changes, propagates values, and lets you observe outputs over time.</p>
+<p class="ko" style="display:none;">시뮬레이션은 SystemVerilog 코드를 컴퓨터에서 실행하여 하드웨어가 사이클별로 어떻게 동작할지 모델링합니다. 시뮬레이터는 모든 신호 변화를 평가하고 값을 전파하며, 시간에 따른 출력을 관찰할 수 있게 합니다.</p>
+
+<div class="concept-box">
+<h3>
+<span class="en">🔑 Key Simulation Concepts</span>
+<span class="ko" style="display:none;">🔑 핵심 시뮬레이션 개념</span>
+</h3>
+<ul>
+<li class="en"><strong>DUT (Design Under Test)</strong> — the module you're verifying</li>
+<li class="ko" style="display:none;"><strong>DUT (Design Under Test)</strong> — 검증 대상 모듈</li>
+<li class="en"><strong>Testbench</strong> — a wrapper that drives inputs and checks outputs</li>
+<li class="ko" style="display:none;"><strong>테스트벤치</strong> — 입력을 구동하고 출력을 확인하는 래퍼</li>
+<li class="en"><strong>Stimulus</strong> — the input patterns you apply</li>
+<li class="ko" style="display:none;"><strong>스티뮬러스</strong> — 적용하는 입력 패턴</li>
+<li class="en"><strong>Waveform</strong> — visual timeline of signal values</li>
+<li class="ko" style="display:none;"><strong>파형</strong> — 신호 값의 시각적 타임라인</li>
+</ul>
+</div>
+
+<h2>
+<span class="en">2. Testbench Structure</span>
+<span class="ko" style="display:none;">2. 테스트벤치 구조</span>
+</h2>
+
+<p class="en">A testbench is a special module with <strong>no ports</strong>. It instantiates the DUT, generates a clock, drives inputs, and monitors outputs. Here's the basic skeleton:</p>
+<p class="ko" style="display:none;">테스트벤치는 <strong>포트가 없는</strong> 특수 모듈입니다. DUT를 인스턴스화하고, 클록을 생성하고, 입력을 구동하고, 출력을 모니터링합니다. 기본 구조는 다음과 같습니다:</p>
+
+<pre>
+<span class="keyword">module</span> <span class="type">tb_counter</span>;
+
+    <span class="comment">// 1. Declare testbench signals</span>
+    <span class="type">logic</span>       <span class="signal">clk</span>;
+    <span class="type">logic</span>       <span class="signal">rst_n</span>;
+    <span class="type">logic</span>       <span class="signal">enable</span>;
+    <span class="type">logic</span> [<span class="number">3</span>:<span class="number">0</span>] <span class="signal">count</span>;
+
+    <span class="comment">// 2. Instantiate the DUT</span>
+    <span class="type">counter</span> dut (
+        .<span class="signal">clk</span>    (<span class="signal">clk</span>),
+        .<span class="signal">rst_n</span>  (<span class="signal">rst_n</span>),
+        .<span class="signal">enable</span> (<span class="signal">enable</span>),
+        .<span class="signal">count</span>  (<span class="signal">count</span>)
+    );
+
+    <span class="comment">// 3. Generate clock — 10ns period</span>
+    <span class="keyword">initial</span> <span class="signal">clk</span> = <span class="number">0</span>;
+    <span class="keyword">always</span> #<span class="number">5</span> <span class="signal">clk</span> = ~<span class="signal">clk</span>;
+
+    <span class="comment">// 4. Stimulus</span>
+    <span class="keyword">initial</span> <span class="keyword">begin</span>
+        <span class="signal">rst_n</span>  = <span class="number">0</span>;
+        <span class="signal">enable</span> = <span class="number">0</span>;
+        #<span class="number">20</span>;              <span class="comment">// Hold reset for 20ns</span>
+        <span class="signal">rst_n</span>  = <span class="number">1</span>;
+        #<span class="number">10</span>;
+        <span class="signal">enable</span> = <span class="number">1</span>;
+        #<span class="number">100</span>;             <span class="comment">// Let it count for a while</span>
+        <span class="signal">enable</span> = <span class="number">0</span>;
+        #<span class="number">30</span>;
+        $<span class="signal">finish</span>;
+    <span class="keyword">end</span>
+
+<span class="keyword">endmodule</span>
+</pre>
+
+<div class="tip-box">
+<p class="en">💡 <strong>Tip:</strong> The testbench module has no port list — it's the "top" of simulation. Everything connects internally.</p>
+<p class="ko" style="display:none;">💡 <strong>팁:</strong> 테스트벤치 모듈에는 포트 리스트가 없습니다 — 시뮬레이션의 "최상위"입니다. 모든 것이 내부적으로 연결됩니다.</p>
+</div>
+
+<h2>
+<span class="en">3. Clock Generation</span>
+<span class="ko" style="display:none;">3. 클록 생성</span>
+</h2>
+
+<p class="en">Every synchronous design needs a clock. There are two common patterns:</p>
+<p class="ko" style="display:none;">모든 동기 설계에는 클록이 필요합니다. 두 가지 일반적인 패턴이 있습니다:</p>
+
+<pre>
+<span class="comment">// Pattern 1: initial + always (most common)</span>
+<span class="keyword">initial</span> <span class="signal">clk</span> = <span class="number">0</span>;
+<span class="keyword">always</span> #<span class="number">5</span> <span class="signal">clk</span> = ~<span class="signal">clk</span>;  <span class="comment">// 10ns period → 100MHz</span>
+
+<span class="comment">// Pattern 2: forever inside initial</span>
+<span class="keyword">initial</span> <span class="keyword">begin</span>
+    <span class="signal">clk</span> = <span class="number">0</span>;
+    <span class="keyword">forever</span> #<span class="number">5</span> <span class="signal">clk</span> = ~<span class="signal">clk</span>;
+<span class="keyword">end</span>
+</pre>
+
+<div class="concept-box">
+<h3>
+<span class="en">⏱️ Time Units</span>
+<span class="ko" style="display:none;">⏱️ 시간 단위</span>
+</h3>
+<p class="en">The <code>#</code> symbol is a <strong>time delay</strong>. The actual time depends on the <code>`timescale</code> directive:</p>
+<p class="ko" style="display:none;"><code>#</code> 기호는 <strong>시간 지연</strong>입니다. 실제 시간은 <code>`timescale</code> 지시자에 따라 달라집니다:</p>
+<pre>
+<span class="keyword">`timescale</span> <span class="number">1ns</span> / <span class="number">1ps</span>   <span class="comment">// time_unit / time_precision</span>
+<span class="comment">// #5 means 5ns, precision down to 1ps</span>
+</pre>
+</div>
+
+<h2>
+<span class="en">4. System Tasks: $display, $monitor, $finish</span>
+<span class="ko" style="display:none;">4. 시스템 태스크: $display, $monitor, $finish</span>
+</h2>
+
+<p class="en">SystemVerilog provides built-in system tasks (prefixed with <code>$</code>) for simulation control and output:</p>
+<p class="ko" style="display:none;">SystemVerilog는 시뮬레이션 제어와 출력을 위한 내장 시스템 태스크(<code>$</code> 접두사)를 제공합니다:</p>
+
+<table class="comparison-table">
+<tr><th>System Task</th><th>Purpose</th><th>When It Runs</th></tr>
+<tr>
+<td><code>$display</code></td>
+<td class="en">Print once (like printf)</td>
+<td class="ko" style="display:none;">한 번 출력 (printf처럼)</td>
+<td class="en">When the statement is reached</td>
+<td class="ko" style="display:none;">해당 문장에 도달했을 때</td>
+</tr>
+<tr>
+<td><code>$monitor</code></td>
+<td class="en">Print whenever any argument changes</td>
+<td class="ko" style="display:none;">인수가 변경될 때마다 출력</td>
+<td class="en">Continuously (automatic)</td>
+<td class="ko" style="display:none;">계속 (자동)</td>
+</tr>
+<tr>
+<td><code>$write</code></td>
+<td class="en">Print without newline</td>
+<td class="ko" style="display:none;">줄바꿈 없이 출력</td>
+<td class="en">When the statement is reached</td>
+<td class="ko" style="display:none;">해당 문장에 도달했을 때</td>
+</tr>
+<tr>
+<td><code>$finish</code></td>
+<td class="en">End the simulation</td>
+<td class="ko" style="display:none;">시뮬레이션 종료</td>
+<td class="en">When the statement is reached</td>
+<td class="ko" style="display:none;">해당 문장에 도달했을 때</td>
+</tr>
+<tr>
+<td><code>$time</code></td>
+<td class="en">Returns current simulation time</td>
+<td class="ko" style="display:none;">현재 시뮬레이션 시간 반환</td>
+<td class="en">Evaluated inline</td>
+<td class="ko" style="display:none;">인라인 평가</td>
+</tr>
+</table>
+
+<pre>
+<span class="comment">// $display — print once with format string</span>
+$<span class="signal">display</span>(<span class="string">"Time=%0t rst=%b enable=%b count=%d"</span>,
+         $<span class="signal">time</span>, <span class="signal">rst_n</span>, <span class="signal">enable</span>, <span class="signal">count</span>);
+
+<span class="comment">// $monitor — auto-prints when any signal changes</span>
+$<span class="signal">monitor</span>(<span class="string">"[%0t] count=%d enable=%b"</span>,
+         $<span class="signal">time</span>, <span class="signal">count</span>, <span class="signal">enable</span>);
+
+<span class="comment">// Format specifiers</span>
+<span class="comment">// %b = binary, %d = decimal, %h = hex, %0t = time</span>
+<span class="comment">// %s = string, %0d = decimal (no padding)</span>
+</pre>
+
+<div class="warning-box">
+<h3>
+<span class="en">⚠️ Common Mistake: $monitor Overuse</span>
+<span class="ko" style="display:none;">⚠️ 흔한 실수: $monitor 남용</span>
+</h3>
+<p class="en">Only <strong>one</strong> <code>$monitor</code> can be active at a time! Calling it again replaces the previous one. For multiple signal watches, include them all in one <code>$monitor</code> call, or use <code>$display</code> at specific points.</p>
+<p class="ko" style="display:none;">한 번에 <strong>하나의</strong> <code>$monitor</code>만 활성화될 수 있습니다! 다시 호출하면 이전 것을 대체합니다. 여러 신호를 감시하려면 하나의 <code>$monitor</code> 호출에 모두 포함하거나, 특정 시점에서 <code>$display</code>를 사용하세요.</p>
+</div>
+
+<h2>
+<span class="en">5. Complete Testbench Example</span>
+<span class="ko" style="display:none;">5. 완전한 테스트벤치 예제</span>
+</h2>
+
+<p class="en">Let's write a full testbench for a 4-bit counter with enable and reset:</p>
+<p class="ko" style="display:none;">enable과 reset이 있는 4비트 카운터의 전체 테스트벤치를 작성해 봅시다:</p>
+
+<pre>
+<span class="keyword">`timescale</span> <span class="number">1ns</span> / <span class="number">1ps</span>
+
+<span class="keyword">module</span> <span class="type">tb_counter</span>;
+
+    <span class="comment">// Signals</span>
+    <span class="type">logic</span>       <span class="signal">clk</span>, <span class="signal">rst_n</span>, <span class="signal">enable</span>;
+    <span class="type">logic</span> [<span class="number">3</span>:<span class="number">0</span>] <span class="signal">count</span>;
+
+    <span class="comment">// DUT instantiation</span>
+    <span class="type">counter</span> #(.<span class="signal">WIDTH</span>(<span class="number">4</span>)) dut (.*);  <span class="comment">// .* auto-connects matching names</span>
+
+    <span class="comment">// Clock: 100MHz (10ns period)</span>
+    <span class="keyword">initial</span> <span class="signal">clk</span> = <span class="number">0</span>;
+    <span class="keyword">always</span> #<span class="number">5</span> <span class="signal">clk</span> = ~<span class="signal">clk</span>;
+
+    <span class="comment">// Monitor output continuously</span>
+    <span class="keyword">initial</span>
+        $<span class="signal">monitor</span>(<span class="string">"[%0t] rst_n=%b en=%b count=%4b (%0d)"</span>,
+                 $<span class="signal">time</span>, <span class="signal">rst_n</span>, <span class="signal">enable</span>, <span class="signal">count</span>, <span class="signal">count</span>);
+
+    <span class="comment">// Stimulus</span>
+    <span class="keyword">initial</span> <span class="keyword">begin</span>
+        <span class="comment">// Phase 1: Reset</span>
+        <span class="signal">rst_n</span>  = <span class="number">0</span>;
+        <span class="signal">enable</span> = <span class="number">0</span>;
+        #<span class="number">25</span>;  <span class="comment">// Hold reset for 2.5 clock cycles</span>
+
+        <span class="comment">// Phase 2: Release reset, start counting</span>
+        <span class="signal">rst_n</span> = <span class="number">1</span>;
+        #<span class="number">10</span>;
+        <span class="signal">enable</span> = <span class="number">1</span>;
+        $<span class="signal">display</span>(<span class="string">"--- Counting started ---"</span>);
+        #<span class="number">100</span>;  <span class="comment">// Count for 10 clocks</span>
+
+        <span class="comment">// Phase 3: Pause counting</span>
+        <span class="signal">enable</span> = <span class="number">0</span>;
+        $<span class="signal">display</span>(<span class="string">"--- Counting paused ---"</span>);
+        #<span class="number">30</span>;
+
+        <span class="comment">// Phase 4: Resume</span>
+        <span class="signal">enable</span> = <span class="number">1</span>;
+        #<span class="number">50</span>;
+
+        <span class="comment">// Phase 5: Test reset during count</span>
+        <span class="signal">rst_n</span> = <span class="number">0</span>;
+        #<span class="number">20</span>;
+        <span class="signal">rst_n</span> = <span class="number">1</span>;
+        #<span class="number">40</span>;
+
+        $<span class="signal">display</span>(<span class="string">"--- Simulation complete ---"</span>);
+        $<span class="signal">finish</span>;
+    <span class="keyword">end</span>
+
+    <span class="comment">// Optional: dump waveforms for viewer</span>
+    <span class="keyword">initial</span> <span class="keyword">begin</span>
+        $<span class="signal">dumpfile</span>(<span class="string">"counter.vcd"</span>);
+        $<span class="signal">dumpvars</span>(<span class="number">0</span>, <span class="type">tb_counter</span>);
+    <span class="keyword">end</span>
+
+<span class="keyword">endmodule</span>
+</pre>
+
+<h2>
+<span class="en">6. Waveform Viewing</span>
+<span class="ko" style="display:none;">6. 파형 보기</span>
+</h2>
+
+<p class="en">Waveforms show signal values over time. They are the most powerful debugging tool in digital design.</p>
+<p class="ko" style="display:none;">파형은 시간에 따른 신호 값을 보여줍니다. 디지털 설계에서 가장 강력한 디버깅 도구입니다.</p>
+
+<div class="concept-box">
+<h3>
+<span class="en">📊 How to Generate Waveforms</span>
+<span class="ko" style="display:none;">📊 파형 생성 방법</span>
+</h3>
+<pre>
+<span class="comment">// Add these lines to your testbench:</span>
+<span class="keyword">initial</span> <span class="keyword">begin</span>
+    $<span class="signal">dumpfile</span>(<span class="string">"output.vcd"</span>);    <span class="comment">// VCD = Value Change Dump</span>
+    $<span class="signal">dumpvars</span>(<span class="number">0</span>, <span class="type">tb_name</span>);    <span class="comment">// 0 = dump ALL signals in hierarchy</span>
+<span class="keyword">end</span>
+</pre>
+<ul>
+<li class="en"><code>$dumpfile</code> — sets the output filename (.vcd format)</li>
+<li class="ko" style="display:none;"><code>$dumpfile</code> — 출력 파일명 설정 (.vcd 형식)</li>
+<li class="en"><code>$dumpvars(0, module)</code> — level 0 means dump everything below that module</li>
+<li class="ko" style="display:none;"><code>$dumpvars(0, module)</code> — 레벨 0은 해당 모듈 아래 모든 것을 덤프</li>
+<li class="en">View with: <strong>GTKWave</strong> (free), <strong>Surfer</strong>, or EDA Playground's built-in viewer</li>
+<li class="ko" style="display:none;">뷰어: <strong>GTKWave</strong> (무료), <strong>Surfer</strong>, 또는 EDA Playground 내장 뷰어</li>
+</ul>
+</div>
+
+<h2>
+<span class="en">7. Simulation Flow</span>
+<span class="ko" style="display:none;">7. 시뮬레이션 흐름</span>
+</h2>
+
+<div class="concept-box">
+<h3>
+<span class="en">🔄 Typical Simulation Workflow</span>
+<span class="ko" style="display:none;">🔄 일반적인 시뮬레이션 워크플로우</span>
+</h3>
+<ol>
+<li class="en"><strong>Write RTL</strong> — your design module(s)</li>
+<li class="ko" style="display:none;"><strong>RTL 작성</strong> — 설계 모듈</li>
+<li class="en"><strong>Write testbench</strong> — instantiate DUT, generate clock, create stimulus</li>
+<li class="ko" style="display:none;"><strong>테스트벤치 작성</strong> — DUT 인스턴스화, 클록 생성, 스티뮬러스 작성</li>
+<li class="en"><strong>Compile</strong> — <code>vlog *.sv</code> (ModelSim) or just click Run (EDA Playground)</li>
+<li class="ko" style="display:none;"><strong>컴파일</strong> — <code>vlog *.sv</code> (ModelSim) 또는 Run 클릭 (EDA Playground)</li>
+<li class="en"><strong>Simulate</strong> — <code>vsim tb_name</code> then <code>run -all</code></li>
+<li class="ko" style="display:none;"><strong>시뮬레이션</strong> — <code>vsim tb_name</code> 후 <code>run -all</code></li>
+<li class="en"><strong>Analyze</strong> — check console output + waveforms</li>
+<li class="ko" style="display:none;"><strong>분석</strong> — 콘솔 출력 + 파형 확인</li>
+<li class="en"><strong>Debug & iterate</strong> — fix issues, re-run</li>
+<li class="ko" style="display:none;"><strong>디버그 & 반복</strong> — 문제 수정, 재실행</li>
+</ol>
+</div>
+
+<h2>
+<span class="en">8. Self-Checking Testbenches</span>
+<span class="ko" style="display:none;">8. 자체 검증 테스트벤치</span>
+</h2>
+
+<p class="en">Professional testbenches don't rely on eyeballing waveforms — they <strong>automatically check</strong> expected values:</p>
+<p class="ko" style="display:none;">전문적인 테스트벤치는 파형을 눈으로 확인하는 것에 의존하지 않고 — 기대값을 <strong>자동으로 확인</strong>합니다:</p>
+
+<pre>
+<span class="keyword">initial</span> <span class="keyword">begin</span>
+    <span class="comment">// After reset, count should be 0</span>
+    <span class="signal">rst_n</span> = <span class="number">0</span>; #<span class="number">20</span>;
+    <span class="signal">rst_n</span> = <span class="number">1</span>; #<span class="number">5</span>;
+
+    <span class="keyword">assert</span> (<span class="signal">count</span> == <span class="number">4'b0000</span>)
+        $<span class="signal">display</span>(<span class="string">"PASS: Reset works"</span>);
+    <span class="keyword">else</span>
+        $<span class="signal">error</span>(<span class="string">"FAIL: count=%b after reset"</span>, <span class="signal">count</span>);
+
+    <span class="comment">// Enable counting, check after 3 clocks</span>
+    <span class="signal">enable</span> = <span class="number">1</span>;
+    <span class="keyword">repeat</span>(<span class="number">3</span>) @(<span class="keyword">posedge</span> <span class="signal">clk</span>);
+    #<span class="number">1</span>;  <span class="comment">// Small delay to let output settle</span>
+
+    <span class="keyword">assert</span> (<span class="signal">count</span> == <span class="number">4'd3</span>)
+        $<span class="signal">display</span>(<span class="string">"PASS: Count reached 3"</span>);
+    <span class="keyword">else</span>
+        $<span class="signal">error</span>(<span class="string">"FAIL: expected 3, got %0d"</span>, <span class="signal">count</span>);
+<span class="keyword">end</span>
+</pre>
+
+<div class="tip-box">
+<p class="en">💡 <strong>assert</strong> is SystemVerilog's built-in check. <code>$error</code> prints but doesn't stop — use <code>$fatal</code> if you want to halt on failure.</p>
+<p class="ko" style="display:none;">💡 <strong>assert</strong>는 SystemVerilog의 내장 검사입니다. <code>$error</code>는 출력만 하고 멈추지 않습니다 — 실패 시 중단하려면 <code>$fatal</code>을 사용하세요.</p>
+</div>
+
+<h2>
+<span class="en">9. Timing in Testbenches</span>
+<span class="ko" style="display:none;">9. 테스트벤치에서의 타이밍</span>
+</h2>
+
+<table class="comparison-table">
+<tr><th>Construct</th><th>Meaning</th><th>Example</th></tr>
+<tr>
+<td><code>#N</code></td>
+<td class="en">Wait N time units</td>
+<td class="ko" style="display:none;">N 시간 단위 대기</td>
+<td><code>#10;</code></td>
+</tr>
+<tr>
+<td><code>@(posedge clk)</code></td>
+<td class="en">Wait for rising clock edge</td>
+<td class="ko" style="display:none;">클록 상승 에지 대기</td>
+<td><code>@(posedge clk);</code></td>
+</tr>
+<tr>
+<td><code>@(negedge clk)</code></td>
+<td class="en">Wait for falling clock edge</td>
+<td class="ko" style="display:none;">클록 하강 에지 대기</td>
+<td><code>@(negedge clk);</code></td>
+</tr>
+<tr>
+<td><code>repeat(N)</code></td>
+<td class="en">Do N times</td>
+<td class="ko" style="display:none;">N번 반복</td>
+<td><code>repeat(5) @(posedge clk);</code></td>
+</tr>
+<tr>
+<td><code>wait(expr)</code></td>
+<td class="en">Wait until expression is true</td>
+<td class="ko" style="display:none;">표현식이 참이 될 때까지 대기</td>
+<td><code>wait(count == 4'hF);</code></td>
+</tr>
+</table>
+
+<div class="warning-box">
+<h3>
+<span class="en">⚠️ Don't Forget $finish!</span>
+<span class="ko" style="display:none;">⚠️ $finish을 잊지 마세요!</span>
+</h3>
+<p class="en">Without <code>$finish</code>, your simulation runs forever (the clock never stops). Always end your stimulus block with <code>$finish;</code></p>
+<p class="ko" style="display:none;"><code>$finish</code> 없이는 시뮬레이션이 영원히 실행됩니다 (클록이 멈추지 않음). 항상 스티뮬러스 블록을 <code>$finish;</code>로 끝내세요.</p>
+</div>
+
+<h2>
+<span class="en">10. Using EDA Playground</span>
+<span class="ko" style="display:none;">10. EDA Playground 사용하기</span>
+</h2>
+
+<p class="en">EDA Playground (<a href="https://edaplayground.com" style="color:#588157;">edaplayground.com</a>) is a free online simulator — no installation needed!</p>
+<p class="ko" style="display:none;">EDA Playground (<a href="https://edaplayground.com" style="color:#588157;">edaplayground.com</a>)는 무료 온라인 시뮬레이터입니다 — 설치 불필요!</p>
+
+<div class="concept-box">
+<h3>
+<span class="en">🚀 Quick Start on EDA Playground</span>
+<span class="ko" style="display:none;">🚀 EDA Playground 빠른 시작</span>
+</h3>
+<ol>
+<li class="en">Go to edaplayground.com (sign in with Google)</li>
+<li class="ko" style="display:none;">edaplayground.com 접속 (Google로 로그인)</li>
+<li class="en">Left panel = design code (your module)</li>
+<li class="ko" style="display:none;">왼쪽 패널 = 설계 코드 (모듈)</li>
+<li class="en">Right panel = testbench code</li>
+<li class="ko" style="display:none;">오른쪽 패널 = 테스트벤치 코드</li>
+<li class="en">Select simulator: <strong>Icarus Verilog</strong> (free) or <strong>Synopsys VCS</strong></li>
+<li class="ko" style="display:none;">시뮬레이터 선택: <strong>Icarus Verilog</strong> (무료) 또는 <strong>Synopsys VCS</strong></li>
+<li class="en">Check ✅ "Open EPWave after run" for waveforms</li>
+<li class="ko" style="display:none;">파형을 위해 ✅ "Open EPWave after run" 체크</li>
+<li class="en">Click <strong>Run</strong>!</li>
+<li class="ko" style="display:none;"><strong>Run</strong> 클릭!</li>
+</ol>
+</div>
+
+<h2>
+<span class="en">📋 Today's Summary</span>
+<span class="ko" style="display:none;">📋 오늘의 요약</span>
+</h2>
+
+<div class="concept-box">
+<ul>
+<li class="en"><strong>Testbenches</strong> are port-less modules that wrap and verify your DUT</li>
+<li class="ko" style="display:none;"><strong>테스트벤치</strong>는 DUT를 래핑하고 검증하는 포트 없는 모듈</li>
+<li class="en"><strong>Clock generation:</strong> <code>initial clk=0; always #5 clk=~clk;</code></li>
+<li class="ko" style="display:none;"><strong>클록 생성:</strong> <code>initial clk=0; always #5 clk=~clk;</code></li>
+<li class="en"><strong>$display</strong> = print once, <strong>$monitor</strong> = print on change, <strong>$finish</strong> = stop sim</li>
+<li class="ko" style="display:none;"><strong>$display</strong> = 한 번 출력, <strong>$monitor</strong> = 변경 시 출력, <strong>$finish</strong> = 시뮬레이션 중단</li>
+<li class="en"><strong>$dumpfile/$dumpvars</strong> generate VCD waveforms for visual debugging</li>
+<li class="ko" style="display:none;"><strong>$dumpfile/$dumpvars</strong>는 시각적 디버깅을 위한 VCD 파형 생성</li>
+<li class="en"><strong>assert</strong> makes testbenches self-checking — no manual inspection needed</li>
+<li class="ko" style="display:none;"><strong>assert</strong>는 테스트벤치를 자체 검증하게 만듦 — 수동 검사 불필요</li>
+<li class="en"><strong>EDA Playground</strong> is free and great for practice</li>
+<li class="ko" style="display:none;"><strong>EDA Playground</strong>는 무료이며 연습에 훌륭</li>
+</ul>
+</div>
+
+<div class="nav-links">
+    <a href="day-05-quiz.html">📝 Take the Quiz →</a>
+    <a href="day-05-practice.html">💻 Practice Exercises →</a>
+</div>
+
+<script>
+let isKorean = false;
+function toggleLang() {
+    isKorean = !isKorean;
+    document.querySelectorAll('.en').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'none' : 'revert', 'important');
+    });
+    document.querySelectorAll('.ko').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'revert' : 'none', 'important');
+    });
+    document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+}
+</script>
+
+</body>
+</html>

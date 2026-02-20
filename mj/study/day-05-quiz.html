@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 5 Quiz: Simulation Basics — Digital Design Study</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    background: linear-gradient(135deg, #fefae0 0%, #faedcd 100%);
+    color: #3d405b;
+    line-height: 1.8;
+    padding: 24px;
+    max-width: 920px;
+    margin: 0 auto;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+h1 { color: #5d4037; border-bottom: 3px solid #c4a77d; padding-bottom: 12px; margin-bottom: 24px; font-size: 2em; }
+h2 { color: #588157; border-bottom: 2px solid #a3b18a; padding-bottom: 8px; margin: 32px 0 16px; }
+h3 { color: #5d4037; margin: 20px 0 12px; }
+p { margin: 12px 0; }
+code {
+    background: #e9f5db; color: #3d405b; padding: 2px 8px; border-radius: 4px;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+}
+pre {
+    background: #2d3436; padding: 24px; border-radius: 12px; margin: 24px 0;
+    border: 3px solid #a3b18a; overflow-x: auto;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace; font-size: 15px; line-height: 1.6; color: #f8f8f2;
+}
+.keyword { color: #ff79c6; font-weight: 600; }
+.type { color: #8be9fd; }
+.signal { color: #50fa7b; }
+.number { color: #ffb86c; }
+.comment { color: #6272a4; font-style: italic; }
+.string { color: #f1fa8c; }
+.question {
+    background: #fff8f0; border: 2px solid #c4a77d; border-radius: 12px;
+    padding: 20px; margin: 20px 0; color: #3d405b;
+}
+.question h3 { color: #5d4037; margin-bottom: 12px; }
+.options label {
+    display: block; padding: 10px 16px; margin: 6px 0; border-radius: 8px;
+    cursor: pointer; border: 2px solid transparent; transition: all 0.2s;
+    background: #fff;
+}
+.options label:hover { border-color: #a3b18a; }
+.options input[type="radio"] { margin-right: 10px; }
+.result {
+    padding: 12px 16px; border-radius: 8px; margin-top: 12px; display: none;
+    font-weight: 600;
+}
+.result.correct { background: #e9f5db; color: #588157; border: 2px solid #a3b18a; }
+.result.incorrect { background: #fff0f0; color: #c53030; border: 2px solid #ef4444; }
+.check-btn {
+    background: linear-gradient(135deg, #588157, #3a5a40); color: #fff;
+    border: none; border-radius: 24px; padding: 10px 24px; cursor: pointer;
+    font-weight: 600; font-size: 14px; margin-top: 12px;
+}
+.check-btn:hover { opacity: 0.9; }
+.score-box {
+    background: #fff8f0; border: 3px solid #588157; border-radius: 12px;
+    padding: 24px; margin: 24px 0; text-align: center; display: none;
+}
+.score-box h2 { border: none; margin: 0 0 8px; }
+.nav-links { display: flex; gap: 12px; margin: 24px 0; flex-wrap: wrap; }
+.nav-links a {
+    background: linear-gradient(135deg, #588157, #3a5a40); color: #fff;
+    text-decoration: none; padding: 10px 20px; border-radius: 24px; font-weight: 600; font-size: 14px;
+}
+.lang-toggle {
+    position: fixed; top: 16px; right: 16px; background: #588157; border: none;
+    border-radius: 24px; padding: 10px 20px; cursor: pointer; color: #fff;
+    font-size: 14px; font-weight: 600; z-index: 1000;
+}
+.lang-toggle:hover { background: #3a5a40; }
+.ko { display: none; }
+.day-badge {
+    display: inline-block; background: linear-gradient(135deg, #588157, #3a5a40);
+    color: #fff; padding: 4px 14px; border-radius: 20px; font-size: 14px; font-weight: 600; margin-bottom: 12px;
+}
+@media (max-width: 768px) {
+    body { padding: 16px; } h1 { font-size: 1.8em; }
+    pre { font-size: 14px; padding: 16px; }
+    .lang-toggle { padding: 8px 16px; font-size: 13px; }
+}
+</style>
+</head>
+<body>
+
+<button class="lang-toggle" onclick="toggleLang()">한국어</button>
+<span class="day-badge">📝 Day 5 Quiz</span>
+
+<h1>
+<span class="en">Simulation Basics — Quiz</span>
+<span class="ko" style="display:none;">시뮬레이션 기초 — 퀴즈</span>
+</h1>
+
+<div class="nav-links">
+    <a href="day-05-lesson.html">📖 Lesson</a>
+    <a href="day-05-practice.html">💻 Practice</a>
+</div>
+
+<!-- Q1 -->
+<div class="question" id="q1">
+<h3>Q1. <span class="en">What makes a testbench module different from a regular design module?</span><span class="ko" style="display:none;">테스트벤치 모듈이 일반 설계 모듈과 다른 점은?</span></h3>
+<div class="options">
+<label><input type="radio" name="q1" value="a"> <span class="en">It must use <code>always_comb</code></span><span class="ko" style="display:none;"><code>always_comb</code>을 사용해야 함</span></label>
+<label><input type="radio" name="q1" value="b"> <span class="en">It has no port list</span><span class="ko" style="display:none;">포트 리스트가 없음</span></label>
+<label><input type="radio" name="q1" value="c"> <span class="en">It cannot instantiate other modules</span><span class="ko" style="display:none;">다른 모듈을 인스턴스화할 수 없음</span></label>
+<label><input type="radio" name="q1" value="d"> <span class="en">It must be synthesizable</span><span class="ko" style="display:none;">합성 가능해야 함</span></label>
+</div>
+<button class="check-btn" onclick="check('q1','b')">Check Answer</button>
+<div class="result" id="q1-result"></div>
+</div>
+
+<!-- Q2 -->
+<div class="question" id="q2">
+<h3>Q2. <span class="en">What clock frequency does this generate?</span><span class="ko" style="display:none;">이 코드는 어떤 클록 주파수를 생성하나요?</span></h3>
+<pre><span class="keyword">initial</span> <span class="signal">clk</span> = <span class="number">0</span>;
+<span class="keyword">always</span> #<span class="number">5</span> <span class="signal">clk</span> = ~<span class="signal">clk</span>; <span class="comment">// `timescale 1ns/1ps</span></pre>
+<div class="options">
+<label><input type="radio" name="q2" value="a"> 50 MHz</label>
+<label><input type="radio" name="q2" value="b"> 100 MHz</label>
+<label><input type="radio" name="q2" value="c"> 200 MHz</label>
+<label><input type="radio" name="q2" value="d"> 500 MHz</label>
+</div>
+<button class="check-btn" onclick="check('q2','b')">Check Answer</button>
+<div class="result" id="q2-result"></div>
+</div>
+
+<!-- Q3 -->
+<div class="question" id="q3">
+<h3>Q3. <span class="en">What is the difference between <code>$display</code> and <code>$monitor</code>?</span><span class="ko" style="display:none;"><code>$display</code>와 <code>$monitor</code>의 차이점은?</span></h3>
+<div class="options">
+<label><input type="radio" name="q3" value="a"> <span class="en"><code>$display</code> prints continuously, <code>$monitor</code> prints once</span><span class="ko" style="display:none;"><code>$display</code>는 계속 출력, <code>$monitor</code>는 한 번 출력</span></label>
+<label><input type="radio" name="q3" value="b"> <span class="en"><code>$display</code> prints once when reached, <code>$monitor</code> auto-prints on signal changes</span><span class="ko" style="display:none;"><code>$display</code>는 도달 시 한 번 출력, <code>$monitor</code>는 신호 변경 시 자동 출력</span></label>
+<label><input type="radio" name="q3" value="c"> <span class="en">They are identical</span><span class="ko" style="display:none;">동일함</span></label>
+<label><input type="radio" name="q3" value="d"> <span class="en"><code>$monitor</code> only works with clocked signals</span><span class="ko" style="display:none;"><code>$monitor</code>는 클록 신호에만 작동</span></label>
+</div>
+<button class="check-btn" onclick="check('q3','b')">Check Answer</button>
+<div class="result" id="q3-result"></div>
+</div>
+
+<!-- Q4 -->
+<div class="question" id="q4">
+<h3>Q4. <span class="en">How many <code>$monitor</code> calls can be active simultaneously?</span><span class="ko" style="display:none;">동시에 활성화할 수 있는 <code>$monitor</code> 호출 수는?</span></h3>
+<div class="options">
+<label><input type="radio" name="q4" value="a"> <span class="en">Unlimited</span><span class="ko" style="display:none;">무제한</span></label>
+<label><input type="radio" name="q4" value="b"> <span class="en">One — each new call replaces the previous</span><span class="ko" style="display:none;">하나 — 새 호출이 이전 것을 대체</span></label>
+<label><input type="radio" name="q4" value="c"> <span class="en">One per module</span><span class="ko" style="display:none;">모듈당 하나</span></label>
+<label><input type="radio" name="q4" value="d"> <span class="en">Two maximum</span><span class="ko" style="display:none;">최대 두 개</span></label>
+</div>
+<button class="check-btn" onclick="check('q4','b')">Check Answer</button>
+<div class="result" id="q4-result"></div>
+</div>
+
+<!-- Q5 -->
+<div class="question" id="q5">
+<h3>Q5. <span class="en">What does <code>$dumpvars(0, tb_counter)</code> do?</span><span class="ko" style="display:none;"><code>$dumpvars(0, tb_counter)</code>는 무엇을 하나요?</span></h3>
+<div class="options">
+<label><input type="radio" name="q5" value="a"> <span class="en">Dumps only the top-level signals</span><span class="ko" style="display:none;">최상위 신호만 덤프</span></label>
+<label><input type="radio" name="q5" value="b"> <span class="en">Dumps zero signals</span><span class="ko" style="display:none;">신호를 덤프하지 않음</span></label>
+<label><input type="radio" name="q5" value="c"> <span class="en">Dumps all signals in tb_counter and all sub-modules</span><span class="ko" style="display:none;">tb_counter와 모든 하위 모듈의 모든 신호를 덤프</span></label>
+<label><input type="radio" name="q5" value="d"> <span class="en">Dumps only variables of type logic</span><span class="ko" style="display:none;">logic 타입 변수만 덤프</span></label>
+</div>
+<button class="check-btn" onclick="check('q5','c')">Check Answer</button>
+<div class="result" id="q5-result"></div>
+</div>
+
+<!-- Q6 -->
+<div class="question" id="q6">
+<h3>Q6. <span class="en">What happens if you forget <code>$finish</code> in your testbench?</span><span class="ko" style="display:none;">테스트벤치에서 <code>$finish</code>를 잊으면 어떻게 되나요?</span></h3>
+<div class="options">
+<label><input type="radio" name="q6" value="a"> <span class="en">Compilation error</span><span class="ko" style="display:none;">컴파일 에러</span></label>
+<label><input type="radio" name="q6" value="b"> <span class="en">Simulation runs forever (clock keeps toggling)</span><span class="ko" style="display:none;">시뮬레이션이 영원히 실행됨 (클록이 계속 토글)</span></label>
+<label><input type="radio" name="q6" value="c"> <span class="en">All signals go to X</span><span class="ko" style="display:none;">모든 신호가 X로 전환</span></label>
+<label><input type="radio" name="q6" value="d"> <span class="en">Simulation stops automatically after 1ms</span><span class="ko" style="display:none;">1ms 후 자동 중단</span></label>
+</div>
+<button class="check-btn" onclick="check('q6','b')">Check Answer</button>
+<div class="result" id="q6-result"></div>
+</div>
+
+<!-- Q7 -->
+<div class="question" id="q7">
+<h3>Q7. <span class="en">What does <code>@(posedge clk)</code> mean in a testbench?</span><span class="ko" style="display:none;">테스트벤치에서 <code>@(posedge clk)</code>는 무엇을 의미하나요?</span></h3>
+<div class="options">
+<label><input type="radio" name="q7" value="a"> <span class="en">Set clk to positive</span><span class="ko" style="display:none;">clk을 양수로 설정</span></label>
+<label><input type="radio" name="q7" value="b"> <span class="en">Wait for the rising edge of clk</span><span class="ko" style="display:none;">clk의 상승 에지를 기다림</span></label>
+<label><input type="radio" name="q7" value="c"> <span class="en">Generate a clock pulse</span><span class="ko" style="display:none;">클록 펄스 생성</span></label>
+<label><input type="radio" name="q7" value="d"> <span class="en">Check if clk is high</span><span class="ko" style="display:none;">clk이 높은지 확인</span></label>
+</div>
+<button class="check-btn" onclick="check('q7','b')">Check Answer</button>
+<div class="result" id="q7-result"></div>
+</div>
+
+<!-- Q8 -->
+<div class="question" id="q8">
+<h3>Q8. <span class="en">What does <code>repeat(3) @(posedge clk);</code> do?</span><span class="ko" style="display:none;"><code>repeat(3) @(posedge clk);</code>는 무엇을 하나요?</span></h3>
+<div class="options">
+<label><input type="radio" name="q8" value="a"> <span class="en">Creates 3 clocks</span><span class="ko" style="display:none;">3개의 클록 생성</span></label>
+<label><input type="radio" name="q8" value="b"> <span class="en">Waits for 3 rising clock edges</span><span class="ko" style="display:none;">3번의 클록 상승 에지를 기다림</span></label>
+<label><input type="radio" name="q8" value="c"> <span class="en">Repeats the testbench 3 times</span><span class="ko" style="display:none;">테스트벤치를 3번 반복</span></label>
+<label><input type="radio" name="q8" value="d"> <span class="en">Multiplies the clock period by 3</span><span class="ko" style="display:none;">클록 주기를 3배로 곱함</span></label>
+</div>
+<button class="check-btn" onclick="check('q8','b')">Check Answer</button>
+<div class="result" id="q8-result"></div>
+</div>
+
+<!-- Q9 -->
+<div class="question" id="q9">
+<h3>Q9. <span class="en">In <code>`timescale 1ns / 1ps</code>, what does the second value (1ps) represent?</span><span class="ko" style="display:none;"><code>`timescale 1ns / 1ps</code>에서 두 번째 값(1ps)은 무엇을 나타내나요?</span></h3>
+<div class="options">
+<label><input type="radio" name="q9" value="a"> <span class="en">The clock period</span><span class="ko" style="display:none;">클록 주기</span></label>
+<label><input type="radio" name="q9" value="b"> <span class="en">The minimum delay allowed</span><span class="ko" style="display:none;">허용되는 최소 지연</span></label>
+<label><input type="radio" name="q9" value="c"> <span class="en">The simulation time precision</span><span class="ko" style="display:none;">시뮬레이션 시간 정밀도</span></label>
+<label><input type="radio" name="q9" value="d"> <span class="en">The maximum simulation time</span><span class="ko" style="display:none;">최대 시뮬레이션 시간</span></label>
+</div>
+<button class="check-btn" onclick="check('q9','c')">Check Answer</button>
+<div class="result" id="q9-result"></div>
+</div>
+
+<!-- Q10 -->
+<div class="question" id="q10">
+<h3>Q10. <span class="en">What does the <code>.*</code> syntax do in module instantiation?</span><span class="ko" style="display:none;">모듈 인스턴스화에서 <code>.*</code> 구문은 무엇을 하나요?</span></h3>
+<pre><span class="type">counter</span> dut (<span class="signal">.*</span>);</pre>
+<div class="options">
+<label><input type="radio" name="q10" value="a"> <span class="en">Connects all ports to ground</span><span class="ko" style="display:none;">모든 포트를 그라운드에 연결</span></label>
+<label><input type="radio" name="q10" value="b"> <span class="en">Auto-connects ports to signals with matching names</span><span class="ko" style="display:none;">이름이 일치하는 신호에 포트를 자동 연결</span></label>
+<label><input type="radio" name="q10" value="c"> <span class="en">Creates a wildcard module</span><span class="ko" style="display:none;">와일드카드 모듈 생성</span></label>
+<label><input type="radio" name="q10" value="d"> <span class="en">Leaves all ports unconnected</span><span class="ko" style="display:none;">모든 포트를 연결하지 않음</span></label>
+</div>
+<button class="check-btn" onclick="check('q10','b')">Check Answer</button>
+<div class="result" id="q10-result"></div>
+</div>
+
+<!-- Q11 -->
+<div class="question" id="q11">
+<h3>Q11. <span class="en">What does <code>assert</code> do in a testbench?</span><span class="ko" style="display:none;">테스트벤치에서 <code>assert</code>는 무엇을 하나요?</span></h3>
+<div class="options">
+<label><input type="radio" name="q11" value="a"> <span class="en">Drives a signal high</span><span class="ko" style="display:none;">신호를 높게 구동</span></label>
+<label><input type="radio" name="q11" value="b"> <span class="en">Checks a condition and reports pass/fail</span><span class="ko" style="display:none;">조건을 검사하고 통과/실패를 보고</span></label>
+<label><input type="radio" name="q11" value="c"> <span class="en">Creates a new module</span><span class="ko" style="display:none;">새 모듈 생성</span></label>
+<label><input type="radio" name="q11" value="d"> <span class="en">Stops the clock</span><span class="ko" style="display:none;">클록 중단</span></label>
+</div>
+<button class="check-btn" onclick="check('q11','b')">Check Answer</button>
+<div class="result" id="q11-result"></div>
+</div>
+
+<!-- Q12 -->
+<div class="question" id="q12">
+<h3>Q12. <span class="en">What's the difference between <code>$error</code> and <code>$fatal</code>?</span><span class="ko" style="display:none;"><code>$error</code>와 <code>$fatal</code>의 차이점은?</span></h3>
+<div class="options">
+<label><input type="radio" name="q12" value="a"> <span class="en"><code>$error</code> prints and continues, <code>$fatal</code> prints and stops</span><span class="ko" style="display:none;"><code>$error</code>는 출력 후 계속, <code>$fatal</code>은 출력 후 중단</span></label>
+<label><input type="radio" name="q12" value="b"> <span class="en">They are the same</span><span class="ko" style="display:none;">동일함</span></label>
+<label><input type="radio" name="q12" value="c"> <span class="en"><code>$fatal</code> is for synthesis, <code>$error</code> for simulation</span><span class="ko" style="display:none;"><code>$fatal</code>은 합성용, <code>$error</code>는 시뮬레이션용</span></label>
+<label><input type="radio" name="q12" value="d"> <span class="en"><code>$error</code> only works inside <code>always</code> blocks</span><span class="ko" style="display:none;"><code>$error</code>는 <code>always</code> 블록 안에서만 작동</span></label>
+</div>
+<button class="check-btn" onclick="check('q12','a')">Check Answer</button>
+<div class="result" id="q12-result"></div>
+</div>
+
+<div class="score-box" id="scoreBox">
+<h2 id="scoreText"></h2>
+<p id="scoreMsg"></p>
+</div>
+
+<div class="nav-links">
+    <a href="day-05-lesson.html">📖 Review Lesson</a>
+    <a href="day-05-practice.html">💻 Practice →</a>
+</div>
+
+<script>
+let isKorean = false;
+function toggleLang() {
+    isKorean = !isKorean;
+    document.querySelectorAll('.en').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'none' : 'revert', 'important');
+    });
+    document.querySelectorAll('.ko').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'revert' : 'none', 'important');
+    });
+    document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+}
+
+let answered = 0;
+const total = 12;
+let correct = 0;
+
+function check(qId, correctAns) {
+    const selected = document.querySelector(`input[name="${qId}"]:checked`);
+    if (!selected) return;
+    const result = document.getElementById(qId + '-result');
+    const opts = document.querySelectorAll(`input[name="${qId}"]`);
+    opts.forEach(o => o.disabled = true);
+    if (selected.value === correctAns) {
+        result.className = 'result correct';
+        result.textContent = '✅ Correct!';
+        correct++;
+    } else {
+        result.className = 'result incorrect';
+        result.textContent = '❌ Incorrect — correct answer: ' + correctAns.toUpperCase();
+    }
+    result.style.display = 'block';
+    answered++;
+    if (answered === total) {
+        const box = document.getElementById('scoreBox');
+        box.style.display = 'block';
+        const pct = Math.round(correct / total * 100);
+        document.getElementById('scoreText').textContent = `Score: ${correct}/${total} (${pct}%)`;
+        document.getElementById('scoreMsg').textContent = pct >= 80 ? '🎉 Great job!' : pct >= 60 ? '👍 Good effort — review the missed topics!' : '📖 Review the lesson and try again!';
+    }
+}
+</script>
+</body>
+</html>
