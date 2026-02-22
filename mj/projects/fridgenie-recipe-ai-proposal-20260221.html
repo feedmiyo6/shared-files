@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FridGenie — AI Recipe Discovery System Proposal</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #faf8f5; color: #2d2a26; line-height: 1.6; }
+  
+  .lang-toggle { position: fixed; top: 12px; right: 12px; z-index: 100; background: #5b8c5a; color: #fff; border: none; padding: 6px 14px; border-radius: 20px; font-size: 13px; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,.15); }
+  .ko { display: none; }
+  .ko.show { display: inline !important; }
+  .en.hide { display: none !important; }
+  
+  .container { max-width: 800px; margin: 0 auto; padding: 20px 16px 60px; }
+  
+  h1 { font-size: 28px; color: #5b8c5a; margin: 20px 0 4px; }
+  h2 { font-size: 22px; color: #5b8c5a; margin: 32px 0 12px; border-bottom: 2px solid #e8e4de; padding-bottom: 6px; }
+  h3 { font-size: 18px; color: #7a6f5d; margin: 20px 0 8px; }
+  p { margin: 8px 0; }
+  
+  .subtitle { color: #7a6f5d; font-size: 15px; margin-bottom: 24px; }
+  
+  .card { background: #fff; border-radius: 16px; padding: 20px; margin: 16px 0; box-shadow: 0 2px 12px rgba(0,0,0,.06); }
+  .card.highlight { border-left: 4px solid #5b8c5a; }
+  .card.warn { border-left: 4px solid #e8a838; }
+  .card.purple { border-left: 4px solid #8b6cc1; }
+  
+  .badge { display: inline-block; background: #5b8c5a; color: #fff; font-size: 11px; padding: 2px 10px; border-radius: 12px; margin: 2px; }
+  .badge.free { background: #5b8c5a; }
+  .badge.premium { background: #8b6cc1; }
+  .badge.cost { background: #e8a838; color: #2d2a26; }
+  
+  .flow-step { display: flex; align-items: flex-start; gap: 12px; margin: 12px 0; }
+  .flow-num { min-width: 32px; height: 32px; background: #5b8c5a; color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px; flex-shrink: 0; }
+  .flow-content { flex: 1; }
+  .flow-content strong { color: #5b8c5a; }
+  
+  table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 14px; }
+  th { background: #5b8c5a; color: #fff; padding: 8px 12px; text-align: left; }
+  td { padding: 8px 12px; border-bottom: 1px solid #e8e4de; }
+  tr:nth-child(even) { background: #f5f2ed; }
+  
+  .phone-frame { background: #1a1a1a; border-radius: 32px; padding: 12px; max-width: 375px; margin: 20px auto; box-shadow: 0 8px 32px rgba(0,0,0,.2); }
+  .phone-screen { background: #faf8f5; border-radius: 24px; overflow: hidden; min-height: 600px; }
+  .phone-status { background: #faf8f5; padding: 8px 20px 4px; display: flex; justify-content: space-between; font-size: 12px; color: #666; }
+  .phone-content { padding: 16px; }
+  
+  .mock-nav { display: flex; justify-content: space-around; background: #fff; padding: 8px 0 12px; border-top: 1px solid #eee; }
+  .mock-nav-item { text-align: center; font-size: 10px; color: #999; }
+  .mock-nav-item.active { color: #5b8c5a; }
+  .mock-nav-item .icon { font-size: 20px; display: block; }
+  
+  .mock-chip { display: inline-block; padding: 6px 14px; border-radius: 20px; font-size: 13px; margin: 3px; cursor: default; }
+  .mock-chip.selected { background: #5b8c5a; color: #fff; }
+  .mock-chip.unselected { background: #e8e4de; color: #7a6f5d; }
+  
+  .mock-dish { display: flex; gap: 12px; background: #fff; border-radius: 12px; padding: 10px; margin: 8px 0; box-shadow: 0 1px 6px rgba(0,0,0,.06); align-items: center; }
+  .mock-dish-img { width: 72px; height: 72px; border-radius: 10px; background: #e8e4de; display: flex; align-items: center; justify-content: center; font-size: 32px; flex-shrink: 0; }
+  .mock-dish-info { flex: 1; }
+  .mock-dish-info .name { font-weight: 600; font-size: 15px; }
+  .mock-dish-info .desc { font-size: 12px; color: #7a6f5d; margin-top: 2px; }
+  .mock-dish-info .tags { margin-top: 4px; }
+  .mock-dish-info .tag { font-size: 10px; background: #f0ece6; padding: 2px 8px; border-radius: 8px; display: inline-block; margin-right: 4px; }
+  .mock-heart { font-size: 20px; color: #ddd; flex-shrink: 0; }
+  .mock-heart.liked { color: #e55; }
+  
+  .mock-recipe-link { display: flex; align-items: center; gap: 10px; background: #fff; border-radius: 10px; padding: 12px; margin: 6px 0; border: 1px solid #e8e4de; }
+  .mock-recipe-link .source { font-weight: 600; font-size: 14px; }
+  .mock-recipe-link .rating { font-size: 12px; color: #e8a838; }
+  .mock-recipe-link .meta { font-size: 11px; color: #999; }
+  .mock-recipe-link .arrow { color: #5b8c5a; font-size: 18px; margin-left: auto; }
+  
+  .mock-section-header { display: flex; justify-content: space-between; align-items: center; margin: 16px 0 8px; }
+  .mock-section-header h4 { font-size: 16px; color: #2d2a26; }
+  .mock-section-header .see-all { font-size: 13px; color: #5b8c5a; }
+  
+  .mock-fav-scroll { display: flex; gap: 10px; overflow-x: auto; padding: 4px 0 8px; }
+  .mock-fav-card { min-width: 110px; text-align: center; }
+  .mock-fav-card .img { width: 110px; height: 80px; border-radius: 10px; background: #e8e4de; display: flex; align-items: center; justify-content: center; font-size: 28px; }
+  .mock-fav-card .label { font-size: 12px; margin-top: 4px; font-weight: 500; }
+  
+  .mock-btn { background: #5b8c5a; color: #fff; border: none; padding: 12px 24px; border-radius: 24px; font-size: 15px; font-weight: 600; width: 100%; text-align: center; margin: 12px 0; }
+  
+  .cost-bar { height: 8px; border-radius: 4px; margin: 4px 0 8px; }
+  .cost-bar-fill { height: 100%; border-radius: 4px; background: #5b8c5a; }
+  
+  .comparison { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 12px 0; }
+  .comparison .col { background: #fff; border-radius: 12px; padding: 16px; text-align: center; }
+  .comparison .col h4 { margin-bottom: 8px; }
+  
+  ul { padding-left: 20px; margin: 8px 0; }
+  li { margin: 4px 0; }
+  
+  .verdict { background: linear-gradient(135deg, #5b8c5a 0%, #4a7a49 100%); color: #fff; border-radius: 16px; padding: 24px; margin: 20px 0; }
+  .verdict h3 { color: #fff; margin-bottom: 8px; }
+  
+  .toc { background: #fff; border-radius: 12px; padding: 16px 20px; margin: 16px 0; }
+  .toc a { color: #5b8c5a; text-decoration: none; display: block; padding: 4px 0; font-size: 14px; }
+  .toc a:hover { text-decoration: underline; }
+
+  @media (max-width: 500px) {
+    .comparison { grid-template-columns: 1fr; }
+    h1 { font-size: 24px; }
+    table { font-size: 12px; }
+    th, td { padding: 6px 8px; }
+  }
+</style>
+</head>
+<body>
+
+<button class="lang-toggle" onclick="toggleLang()">한국어</button>
+
+<div class="container">
+
+<h1>🧞 FridGenie <span class="en">AI Recipe Discovery</span><span class="ko">AI 레시피 추천 시스템</span></h1>
+<p class="subtitle"><span class="en">Product Proposal — Feb 21, 2026</span><span class="ko">제품 제안서 — 2026년 2월 21일</span></p>
+
+<div class="toc">
+  <strong><span class="en">Contents</span><span class="ko">목차</span></strong>
+  <a href="#overview"><span class="en">1. Overview & Philosophy</span><span class="ko">1. 개요 & 철학</span></a>
+  <a href="#ux"><span class="en">2. UX Flow & Screen Mockups</span><span class="ko">2. UX 흐름 & 화면 목업</span></a>
+  <a href="#dishes"><span class="en">3. How Many Dishes? Why 8.</span><span class="ko">3. 몇 개 추천? 왜 8개인가</span></a>
+  <a href="#images"><span class="en">4. Image Strategy</span><span class="ko">4. 이미지 전략</span></a>
+  <a href="#costs"><span class="en">5. AI Cost Breakdown</span><span class="ko">5. AI 비용 분석</span></a>
+  <a href="#monetize"><span class="en">6. Monetization (Free → Revenue in 6 Months)</span><span class="ko">6. 수익화 (6개월 후 무료 → 수익)</span></a>
+  <a href="#tech"><span class="en">7. Technical Architecture</span><span class="ko">7. 기술 아키텍처</span></a>
+  <a href="#timeline"><span class="en">8. Build Timeline</span><span class="ko">8. 개발 일정</span></a>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<h2 id="overview"><span class="en">1. Overview & Philosophy</span><span class="ko">1. 개요 & 철학</span></h2>
+
+<div class="card highlight">
+<p><strong><span class="en">Core Idea:</span><span class="ko">핵심 아이디어:</span></strong> <span class="en">AI doesn't generate recipes — it's a smart matchmaker. It looks at what's in your fridge, understands your taste, and finds you real recipes from real people on the internet.</span><span class="ko">AI는 레시피를 생성하지 않습니다 — 똑똑한 매칭 시스템입니다. 냉장고에 뭐가 있는지 보고, 취향을 파악해서, 인터넷의 실제 레시피를 찾아줍니다.</span></p>
+</div>
+
+<div class="card">
+<h3><span class="en">Why This Approach Wins</span><span class="ko">이 접근 방식이 좋은 이유</span></h3>
+<ul>
+  <li><span class="en"><strong>Real recipes</strong> with real reviews, real photos, real cooking times — not AI hallucinations</span><span class="ko"><strong>진짜 레시피</strong> — 실제 리뷰, 실제 사진, 실제 조리시간 (AI 환각 아님)</span></li>
+  <li><span class="en"><strong>Nearly free to run</strong> — AI only generates dish names, not full recipes</span><span class="ko"><strong>거의 무료 운영</strong> — AI는 요리 이름만 생성, 전체 레시피 아님</span></li>
+  <li><span class="en"><strong>Users trust it more</strong> — "4.8★ on AllRecipes with 2,000 reviews" beats "AI thinks this should taste good"</span><span class="ko"><strong>사용자가 더 신뢰</strong> — "AllRecipes에서 4.8★, 리뷰 2천개"가 "AI가 맛있을 거라고 생각함"보다 나음</span></li>
+  <li><span class="en"><strong>Links open in browser</strong> → user comes back to app naturally. No lock-in anxiety.</span><span class="ko"><strong>링크는 브라우저에서 열림</strong> → 사용자가 자연스럽게 앱으로 돌아옴. 종속 불안 없음.</span></li>
+</ul>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<h2 id="ux"><span class="en">2. UX Flow & Screen Mockups</span><span class="ko">2. UX 흐름 & 화면 목업</span></h2>
+
+<h3><span class="en">Screen 1 — Recipe Tab (Landing)</span><span class="ko">화면 1 — 레시피 탭 (메인)</span></h3>
+<p><span class="en">What users see when they tap the Recipes tab:</span><span class="ko">레시피 탭을 누르면 보이는 화면:</span></p>
+
+<div class="phone-frame">
+<div class="phone-screen">
+<div class="phone-status"><span>5:30 PM</span><span>📶 🔋</span></div>
+<div class="phone-content">
+
+<div class="mock-section-header">
+  <h4>⭐ <span class="en">Favorites</span><span class="ko">즐겨찾기</span></h4>
+  <span class="see-all"><span class="en">See all →</span><span class="ko">전체 보기 →</span></span>
+</div>
+<div class="mock-fav-scroll">
+  <div class="mock-fav-card"><div class="img">🍜</div><div class="label">Bibimbap</div></div>
+  <div class="mock-fav-card"><div class="img">🍝</div><div class="label">Carbonara</div></div>
+  <div class="mock-fav-card"><div class="img">🍛</div><div class="label">Curry</div></div>
+</div>
+
+<div class="mock-section-header">
+  <h4>🔍 <span class="en">Find Recipes</span><span class="ko">레시피 찾기</span></h4>
+</div>
+<p style="font-size:12px;color:#7a6f5d;margin-bottom:8px;"><span class="en">Based on 23 items in your fridge & pantry</span><span class="ko">냉장고 & 팬트리의 23개 재료 기반</span></p>
+
+<div style="margin:8px 0;">
+  <span class="mock-chip selected">🇰🇷 Korean</span>
+  <span class="mock-chip selected">🇮🇹 Italian</span>
+  <span class="mock-chip unselected">🇲🇽 Mexican</span>
+  <span class="mock-chip unselected">🇯🇵 Japanese</span>
+  <span class="mock-chip unselected">🇹🇭 Thai</span>
+  <span class="mock-chip unselected">🇮🇳 Indian</span>
+</div>
+<div style="margin:8px 0;">
+  <span class="mock-chip unselected">🥣 Soup</span>
+  <span class="mock-chip selected">🌶️ Spicy</span>
+  <span class="mock-chip unselected">🥗 Healthy</span>
+  <span class="mock-chip unselected">⏱️ Quick</span>
+  <span class="mock-chip unselected">🍲 Stew</span>
+</div>
+
+<div class="mock-btn">✨ <span class="en">Suggest Recipes</span><span class="ko">레시피 추천받기</span></div>
+
+<div class="mock-section-header">
+  <h4>🕐 <span class="en">Recent</span><span class="ko">최근 본 레시피</span></h4>
+  <span class="see-all"><span class="en">Clear</span><span class="ko">지우기</span></span>
+</div>
+<div style="font-size:13px;color:#7a6f5d;">
+  <div style="padding:6px 0;border-bottom:1px solid #eee;">Kimchi Jjigae · <span style="color:#999;">2 days ago</span></div>
+  <div style="padding:6px 0;border-bottom:1px solid #eee;">Pasta Aglio e Olio · <span style="color:#999;">3 days ago</span></div>
+  <div style="padding:6px 0;">Tteokbokki · <span style="color:#999;">5 days ago</span></div>
+</div>
+
+</div>
+<div class="mock-nav">
+  <div class="mock-nav-item"><span class="icon">🏠</span>Home</div>
+  <div class="mock-nav-item"><span class="icon">🧊</span>Fridge</div>
+  <div class="mock-nav-item"><span class="icon">📦</span>Pantry</div>
+  <div class="mock-nav-item"><span class="icon">🛒</span>Shop</div>
+  <div class="mock-nav-item active"><span class="icon">🍽️</span><strong>Recipes</strong></div>
+</div>
+</div>
+</div>
+
+<h3 style="margin-top:24px;"><span class="en">Screen 2 — AI Results (After "Suggest Recipes")</span><span class="ko">화면 2 — AI 추천 결과</span></h3>
+<p><span class="en">Multi-cuisine results are grouped by cuisine with clear headers:</span><span class="ko">여러 요리 선택시 요리별로 그룹화:</span></p>
+
+<div class="phone-frame">
+<div class="phone-screen">
+<div class="phone-status"><span>5:31 PM</span><span>📶 🔋</span></div>
+<div class="phone-content">
+
+<p style="font-size:13px;color:#7a6f5d;margin-bottom:4px;"><span class="en">← Back</span><span class="ko">← 뒤로</span></p>
+<h4 style="margin-bottom:4px;"><span class="en">Recipes For You</span><span class="ko">맞춤 레시피 추천</span></h4>
+<p style="font-size:11px;color:#999;margin-bottom:12px;"><span class="en">Using: chicken, kimchi, garlic, pasta, onion +18 more</span><span class="ko">사용 재료: 닭고기, 김치, 마늘, 파스타, 양파 +18개</span></p>
+
+<p style="font-size:13px;font-weight:700;color:#5b8c5a;margin:12px 0 6px;">🇰🇷 Korean · <span class="en">Spicy</span><span class="ko">매운맛</span></p>
+
+<div class="mock-dish">
+  <div class="mock-dish-img">🍲</div>
+  <div class="mock-dish-info">
+    <div class="name">Kimchi Jjigae</div>
+    <div class="desc"><span class="en">Rich kimchi stew with pork belly</span><span class="ko">돼지고기 김치찌개</span></div>
+    <div class="tags"><span class="tag">🧅 95% match</span><span class="tag">⏱ 30min</span></div>
+  </div>
+  <span class="mock-heart">♡</span>
+</div>
+
+<div class="mock-dish">
+  <div class="mock-dish-img">🌶️</div>
+  <div class="mock-dish-info">
+    <div class="name">Dakgalbi</div>
+    <div class="desc"><span class="en">Spicy stir-fried chicken</span><span class="ko">닭갈비</span></div>
+    <div class="tags"><span class="tag">🧅 88% match</span><span class="tag">⏱ 25min</span></div>
+  </div>
+  <span class="mock-heart">♡</span>
+</div>
+
+<div class="mock-dish">
+  <div class="mock-dish-img">🥘</div>
+  <div class="mock-dish-info">
+    <div class="name">Budae Jjigae</div>
+    <div class="desc"><span class="en">Army stew with kimchi & noodles</span><span class="ko">부대찌개</span></div>
+    <div class="tags"><span class="tag">🧅 82% match</span><span class="tag">⏱ 35min</span></div>
+  </div>
+  <span class="mock-heart">♡</span>
+</div>
+
+<div class="mock-dish">
+  <div class="mock-dish-img">🍜</div>
+  <div class="mock-dish-info">
+    <div class="name">Jjamppong</div>
+    <div class="desc"><span class="en">Spicy seafood noodle soup</span><span class="ko">짬뽕</span></div>
+    <div class="tags"><span class="tag">🧅 75% match</span><span class="tag">⏱ 40min</span></div>
+  </div>
+  <span class="mock-heart">♡</span>
+</div>
+
+<p style="font-size:13px;font-weight:700;color:#5b8c5a;margin:16px 0 6px;">🇮🇹 Italian · <span class="en">Spicy</span><span class="ko">매운맛</span></p>
+
+<div class="mock-dish">
+  <div class="mock-dish-img">🍝</div>
+  <div class="mock-dish-info">
+    <div class="name">Arrabbiata</div>
+    <div class="desc"><span class="en">Spicy tomato pasta with garlic</span><span class="ko">매운 토마토 파스타</span></div>
+    <div class="tags"><span class="tag">🧅 90% match</span><span class="tag">⏱ 20min</span></div>
+  </div>
+  <span class="mock-heart">♡</span>
+</div>
+
+<div class="mock-dish">
+  <div class="mock-dish-img">🫑</div>
+  <div class="mock-dish-info">
+    <div class="name">Fra Diavolo</div>
+    <div class="desc"><span class="en">Spicy garlic shrimp pasta</span><span class="ko">매운 새우 파스타</span></div>
+    <div class="tags"><span class="tag">🧅 78% match</span><span class="tag">⏱ 25min</span></div>
+  </div>
+  <span class="mock-heart">♡</span>
+</div>
+
+<div class="mock-dish">
+  <div class="mock-dish-img">🧄</div>
+  <div class="mock-dish-info">
+    <div class="name">Aglio e Olio Peperoncino</div>
+    <div class="desc"><span class="en">Chili garlic olive oil pasta</span><span class="ko">고추 마늘 올리브유 파스타</span></div>
+    <div class="tags"><span class="tag">🧅 85% match</span><span class="tag">⏱ 15min</span></div>
+  </div>
+  <span class="mock-heart">♡</span>
+</div>
+
+<div class="mock-dish">
+  <div class="mock-dish-img">🍕</div>
+  <div class="mock-dish-info">
+    <div class="name">Diavola Pizza</div>
+    <div class="desc"><span class="en">Spicy salami & chili flatbread</span><span class="ko">매운 살라미 피자</span></div>
+    <div class="tags"><span class="tag">🧅 70% match</span><span class="tag">⏱ 45min</span></div>
+  </div>
+  <span class="mock-heart">♡</span>
+</div>
+
+<p style="text-align:center;font-size:13px;color:#5b8c5a;margin:16px 0;">🔄 <span class="en">Refresh suggestions</span><span class="ko">다시 추천받기</span></p>
+
+</div>
+</div>
+</div>
+
+<h3 style="margin-top:24px;"><span class="en">Screen 3 — Recipe Sources (After Tapping a Dish)</span><span class="ko">화면 3 — 레시피 출처 (요리 선택 후)</span></h3>
+<p><span class="en">User taps a dish → sees 3-5 recipe links from real sources. Tapping opens the browser. Come back, try another.</span><span class="ko">요리 선택 → 실제 출처의 3~5개 레시피 링크. 탭하면 브라우저에서 열림. 돌아와서 다른거 시도.</span></p>
+
+<div class="phone-frame">
+<div class="phone-screen">
+<div class="phone-status"><span>5:32 PM</span><span>📶 🔋</span></div>
+<div class="phone-content">
+
+<p style="font-size:13px;color:#7a6f5d;margin-bottom:4px;"><span class="en">← Back to results</span><span class="ko">← 결과로 돌아가기</span></p>
+
+<div style="text-align:center;margin:12px 0;">
+  <div style="width:120px;height:120px;border-radius:16px;background:#e8e4de;display:inline-flex;align-items:center;justify-content:center;font-size:56px;">🍲</div>
+  <h4 style="margin-top:8px;">Kimchi Jjigae</h4>
+  <p style="font-size:12px;color:#7a6f5d;"><span class="en">Spicy kimchi stew with pork belly & tofu</span><span class="ko">돼지고기 & 두부 김치찌개</span></p>
+  <div style="margin:6px 0;">
+    <span class="mock-chip selected" style="font-size:11px;">🧅 95% match</span>
+    <span class="mock-chip unselected" style="font-size:11px;">⏱ 30 min</span>
+    <span class="mock-chip unselected" style="font-size:11px;">🌶️ Spicy</span>
+  </div>
+  <p style="font-size:11px;color:#5b8c5a;"><span class="en">✓ You have: kimchi, pork, tofu, garlic, onion</span><span class="ko">✓ 보유 재료: 김치, 돼지고기, 두부, 마늘, 양파</span></p>
+  <p style="font-size:11px;color:#e8a838;"><span class="en">✗ Missing: gochugaru (optional)</span><span class="ko">✗ 부족: 고춧가루 (선택)</span></p>
+</div>
+
+<div style="display:flex;gap:8px;margin:12px 0;">
+  <div class="mock-btn" style="flex:1;font-size:13px;padding:10px;">♡ <span class="en">Favorite</span><span class="ko">즐겨찾기</span></div>
+  <div class="mock-btn" style="flex:1;font-size:13px;padding:10px;background:#e8a838;">🛒 <span class="en">Add Missing</span><span class="ko">부족 재료 추가</span></div>
+</div>
+
+<div class="mock-section-header">
+  <h4><span class="en">📖 Recipe Sources</span><span class="ko">📖 레시피 출처</span></h4>
+</div>
+<p style="font-size:11px;color:#999;margin-bottom:8px;"><span class="en">Tap to open in browser. Come back to try another!</span><span class="ko">탭하면 브라우저에서 열림. 돌아와서 다른거 시도!</span></p>
+
+<div class="mock-recipe-link">
+  <div>
+    <div class="source">Maangchi</div>
+    <div class="rating">⭐⭐⭐⭐⭐ 4.9 · 1,247 reviews</div>
+    <div class="meta"><span class="en">Video + written recipe</span><span class="ko">영상 + 텍스트 레시피</span></div>
+  </div>
+  <span class="arrow">→</span>
+</div>
+
+<div class="mock-recipe-link">
+  <div>
+    <div class="source">Korean Bapsang</div>
+    <div class="rating">⭐⭐⭐⭐⭐ 4.8 · 892 reviews</div>
+    <div class="meta"><span class="en">Detailed with tips</span><span class="ko">상세 팁 포함</span></div>
+  </div>
+  <span class="arrow">→</span>
+</div>
+
+<div class="mock-recipe-link">
+  <div>
+    <div class="source">Serious Eats</div>
+    <div class="rating">⭐⭐⭐⭐½ 4.6 · 324 reviews</div>
+    <div class="meta"><span class="en">Science-based approach</span><span class="ko">과학적 접근</span></div>
+  </div>
+  <span class="arrow">→</span>
+</div>
+
+<div class="mock-recipe-link">
+  <div>
+    <div class="source">AllRecipes</div>
+    <div class="rating">⭐⭐⭐⭐ 4.3 · 2,100 reviews</div>
+    <div class="meta"><span class="en">Most popular version</span><span class="ko">가장 인기 버전</span></div>
+  </div>
+  <span class="arrow">→</span>
+</div>
+
+</div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<h2 id="dishes"><span class="en">3. How Many Dishes? Why 8.</span><span class="ko">3. 몇 개 추천? 왜 8개인가</span></h2>
+
+<div class="card highlight">
+<p><span class="en"><strong>Answer: 4 per cuisine, up to 2-3 cuisines at a time = 8-12 total.</strong></span><span class="ko"><strong>답: 요리별 4개, 한번에 2~3개 요리 = 총 8~12개.</strong></span></p>
+</div>
+
+<div class="card">
+<h3><span class="en">Why Not 20?</span><span class="ko">왜 20개가 아닌가?</span></h3>
+<ul>
+  <li><span class="en"><strong>Choice paralysis</strong> — Studies show 5-9 options is the sweet spot. 20 makes people scroll forever and pick nothing.</span><span class="ko"><strong>선택 마비</strong> — 연구에 따르면 5~9개가 적정. 20개는 끝없이 스크롤하고 아무것도 안 고름.</span></li>
+  <li><span class="en"><strong>Mobile scrolling</strong> — 20 dishes = ~15 screen scrolls. Users give up after 3.</span><span class="ko"><strong>모바일 스크롤</strong> — 20개 = ~15번 스크롤. 유저는 3번 후 포기.</span></li>
+  <li><span class="en"><strong>Quality > Quantity</strong> — 4 great matches per cuisine beats 10 mediocre ones.</span><span class="ko"><strong>질 > 양</strong> — 요리별 좋은 매칭 4개가 보통 10개보다 나음.</span></li>
+  <li><span class="en"><strong>"Refresh" button</strong> — If none appeal, one tap gets 8 more. Feels like discovery, not homework.</span><span class="ko"><strong>"새로고침" 버튼</strong> — 마음에 안 들면 탭 한번으로 8개 더. 탐험 느낌, 숙제 아님.</span></li>
+</ul>
+</div>
+
+<div class="card">
+<h3><span class="en">Multi-Cuisine Logic</span><span class="ko">다중 요리 선택 로직</span></h3>
+<table>
+  <tr><th><span class="en">Cuisines Selected</span><span class="ko">선택한 요리 수</span></th><th><span class="en">Dishes Per Cuisine</span><span class="ko">요리당 추천 수</span></th><th><span class="en">Total</span><span class="ko">총</span></th></tr>
+  <tr><td>1</td><td>6</td><td>6</td></tr>
+  <tr><td>2</td><td>4</td><td>8</td></tr>
+  <tr><td>3</td><td>4</td><td>12</td></tr>
+  <tr><td>4+</td><td colspan="2"><span class="en">Show "Pick up to 3" warning</span><span class="ko">"최대 3개 선택" 안내</span></td></tr>
+</table>
+<p style="font-size:13px;color:#7a6f5d;margin-top:8px;"><span class="en">Sorted by <strong>ingredient match %</strong> within each cuisine. Best matches first.</span><span class="ko">각 요리 내에서 <strong>재료 매칭 %</strong> 순으로 정렬. 가장 잘 맞는 것부터.</span></p>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<h2 id="images"><span class="en">4. Image Strategy</span><span class="ko">4. 이미지 전략</span></h2>
+
+<div class="card highlight">
+<h3><span class="en">Recommended: Pre-cached Emoji + Lazy Web Thumbnails</span><span class="ko">추천: 미리 캐시된 이모지 + 지연 로딩 웹 썸네일</span></h3>
+</div>
+
+<div class="card">
+<h3><span class="en">The Hybrid Approach</span><span class="ko">하이브리드 접근</span></h3>
+<div class="flow-step">
+  <div class="flow-num">1</div>
+  <div class="flow-content"><strong><span class="en">Instant:</span><span class="ko">즉시:</span></strong> <span class="en">Show food emoji as placeholder (🍲🍝🍛). Already in the AI response. Zero latency.</span><span class="ko">음식 이모지를 플레이스홀더로 표시 (🍲🍝🍛). AI 응답에 이미 포함. 지연 없음.</span></div>
+</div>
+<div class="flow-step">
+  <div class="flow-num">2</div>
+  <div class="flow-content"><strong><span class="en">Background:</span><span class="ko">백그라운드:</span></strong> <span class="en">While user reads results, fetch thumbnail from recipe source links. Takes 0.5-2 seconds per image.</span><span class="ko">유저가 결과를 읽는 동안, 레시피 출처에서 썸네일 가져오기. 이미지당 0.5~2초.</span></div>
+</div>
+<div class="flow-step">
+  <div class="flow-num">3</div>
+  <div class="flow-content"><strong><span class="en">Fade in:</span><span class="ko">페이드인:</span></strong> <span class="en">Replace emoji with real photo as it loads. Smooth transition. User barely notices the swap.</span><span class="ko">로드되면 이모지를 실제 사진으로 교체. 부드러운 전환. 유저는 교체를 거의 못 느낌.</span></div>
+</div>
+<div class="flow-step">
+  <div class="flow-num">4</div>
+  <div class="flow-content"><strong><span class="en">Cache:</span><span class="ko">캐시:</span></strong> <span class="en">Store thumbnail URLs in Supabase. Next time someone searches "Kimchi Jjigae" → instant real image. Cache grows organically.</span><span class="ko">썸네일 URL을 Supabase에 저장. 다음에 "김치찌개" 검색 → 즉시 실제 이미지. 캐시가 자연스럽게 증가.</span></div>
+</div>
+</div>
+
+<div class="card">
+<h3><span class="en">Web Scraping Speed — Honest Numbers</span><span class="ko">웹 스크래핑 속도 — 솔직한 수치</span></h3>
+<table>
+  <tr><th><span class="en">Method</span><span class="ko">방법</span></th><th><span class="en">Speed</span><span class="ko">속도</span></th><th><span class="en">Quality</span><span class="ko">품질</span></th><th><span class="en">Cost</span><span class="ko">비용</span></th></tr>
+  <tr><td><span class="en">Recipe site meta tags (og:image)</span><span class="ko">레시피 사이트 메타태그</span></td><td>0.3-1s</td><td>⭐⭐⭐⭐⭐</td><td><span class="en">Free</span><span class="ko">무료</span></td></tr>
+  <tr><td>Google Custom Search API</td><td>0.2s</td><td>⭐⭐⭐⭐</td><td>$5/1K</td></tr>
+  <tr><td><span class="en">Unsplash API (fallback)</span><span class="ko">Unsplash API (대안)</span></td><td>0.3s</td><td>⭐⭐⭐</td><td><span class="en">Free</span><span class="ko">무료</span></td></tr>
+</table>
+<p style="font-size:13px;color:#7a6f5d;margin-top:8px;">
+  <span class="en"><strong>Bottom line:</strong> Scraping og:image from recipe pages takes <strong>~1 second</strong>. Since we fetch all 8 in parallel while user reads, they'll see real images within 1-2 seconds of results loading. After first fetch, it's cached forever → instant.</span>
+  <span class="ko"><strong>결론:</strong> 레시피 페이지에서 og:image 스크래핑은 <strong>~1초</strong>. 유저가 읽는 동안 8개를 동시에 가져오므로, 결과 로딩 1~2초 내에 실제 이미지 표시. 첫 가져오기 후 영구 캐시 → 즉시.</span>
+</p>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<h2 id="costs"><span class="en">5. AI Cost Breakdown</span><span class="ko">5. AI 비용 분석</span></h2>
+
+<div class="card highlight">
+<h3><span class="en">Per-Request Cost</span><span class="ko">요청당 비용</span></h3>
+<table>
+  <tr><th><span class="en">Step</span><span class="ko">단계</span></th><th><span class="en">What Happens</span><span class="ko">내용</span></th><th><span class="en">Tokens</span><span class="ko">토큰</span></th><th><span class="en">Cost (4o-mini)</span><span class="ko">비용 (4o-mini)</span></th></tr>
+  <tr><td><span class="en">Suggest dishes</span><span class="ko">요리 추천</span></td><td><span class="en">Inventory + filters → 8 dish names</span><span class="ko">재고 + 필터 → 요리 8개</span></td><td>~600 in / ~800 out</td><td>$0.0002</td></tr>
+  <tr><td><span class="en">Find sources</span><span class="ko">출처 찾기</span></td><td><span class="en">Dish name → Google/Brave search</span><span class="ko">요리명 → 구글/Brave 검색</span></td><td>N/A</td><td><span class="en">Free (Brave)</span><span class="ko">무료 (Brave)</span></td></tr>
+  <tr><td><span class="en">Parse sources</span><span class="ko">출처 파싱</span></td><td><span class="en">Extract title, rating, og:image from top results</span><span class="ko">상위 결과에서 제목, 평점, 이미지 추출</span></td><td>N/A</td><td><span class="en">Free (scrape)</span><span class="ko">무료 (스크래핑)</span></td></tr>
+  <tr style="font-weight:700;"><td colspan="3"><span class="en">Total per interaction</span><span class="ko">인터랙션당 총계</span></td><td style="color:#5b8c5a;">~$0.0002</td></tr>
+</table>
+<p style="font-size:14px;margin-top:12px;text-align:center;"><strong><span class="en">That's $0.02 per 100 searches. Two cents.</span><span class="ko">검색 100번에 $0.02. 2센트.</span></strong></p>
+</div>
+
+<div class="card">
+<h3><span class="en">Monthly Projections</span><span class="ko">월간 예상</span></h3>
+<table>
+  <tr><th><span class="en">Users</span><span class="ko">유저</span></th><th><span class="en">Searches/mo</span><span class="ko">검색/월</span></th><th><span class="en">AI Cost</span><span class="ko">AI 비용</span></th><th><span class="en">Supabase</span><span class="ko">Supabase</span></th><th><span class="en">Total</span><span class="ko">총</span></th></tr>
+  <tr><td>100</td><td>1,200</td><td>$0.24</td><td><span class="en">Free tier</span><span class="ko">무료 티어</span></td><td><strong>$0.24</strong></td></tr>
+  <tr><td>1,000</td><td>12,000</td><td>$2.40</td><td><span class="en">Free tier</span><span class="ko">무료 티어</span></td><td><strong>$2.40</strong></td></tr>
+  <tr><td>5,000</td><td>60,000</td><td>$12</td><td>$25</td><td><strong>$37</strong></td></tr>
+  <tr><td>10,000</td><td>120,000</td><td>$24</td><td>$25</td><td><strong>$49</strong></td></tr>
+  <tr><td>50,000</td><td>600,000</td><td>$120</td><td>$75</td><td><strong>$195</strong></td></tr>
+</table>
+
+<div style="margin-top:12px;">
+  <p style="font-size:13px;"><span class="en">At 50,000 users:</span><span class="ko">50,000명 유저 시:</span></p>
+  <div class="cost-bar" style="background:#e8e4de;"><div class="cost-bar-fill" style="width:4%;"></div></div>
+  <p style="font-size:12px;color:#7a6f5d;"><span class="en">$195/month — less than a single developer's lunch budget</span><span class="ko">$195/월 — 개발자 한 명 점심값보다 적음</span></p>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<h2 id="monetize"><span class="en">6. Monetization (Free → Revenue in 6 Months)</span><span class="ko">6. 수익화 (6개월 후 무료 → 수익)</span></h2>
+
+<div class="card">
+<h3><span class="en">Month 1-6: Fully Free</span><span class="ko">1~6개월: 완전 무료</span></h3>
+<ul>
+  <li><span class="en">All features free, no limits</span><span class="ko">모든 기능 무료, 제한 없음</span></li>
+  <li><span class="en">Focus on user growth and retention</span><span class="ko">유저 성장 및 유지에 집중</span></li>
+  <li><span class="en">Cost is negligible (under $5/month even at 1,000 users)</span><span class="ko">비용 무시 가능 (1,000명이어도 월 $5 미만)</span></li>
+</ul>
+</div>
+
+<div class="card purple">
+<h3><span class="en">Month 6+: Introduce Premium ($2.99/month)</span><span class="ko">6개월+: 프리미엄 도입 ($2.99/월)</span></h3>
+
+<div class="comparison">
+<div class="col">
+  <h4><span class="en">Free</span><span class="ko">무료</span></h4>
+  <ul style="text-align:left;font-size:13px;">
+    <li><span class="en">5 AI recipe searches/week</span><span class="ko">주 5회 AI 레시피 검색</span></li>
+    <li><span class="en">Favorites (up to 20)</span><span class="ko">즐겨찾기 (20개까지)</span></li>
+    <li><span class="en">History (last 10)</span><span class="ko">히스토리 (최근 10개)</span></li>
+    <li><span class="en">All filters</span><span class="ko">모든 필터</span></li>
+  </ul>
+</div>
+<div class="col" style="border:2px solid #8b6cc1;">
+  <h4 style="color:#8b6cc1;">✨ Premium</h4>
+  <ul style="text-align:left;font-size:13px;">
+    <li><span class="en"><strong>Unlimited</strong> AI searches</span><span class="ko"><strong>무제한</strong> AI 검색</span></li>
+    <li><span class="en"><strong>Unlimited</strong> favorites</span><span class="ko"><strong>무제한</strong> 즐겨찾기</span></li>
+    <li><span class="en"><strong>Full</strong> history</span><span class="ko"><strong>전체</strong> 히스토리</span></li>
+    <li><span class="en">🗓️ <strong>Meal Planning</strong> (weekly)</span><span class="ko">🗓️ <strong>식단 계획</strong> (주간)</span></li>
+    <li><span class="en">🧠 <strong>Taste Profile</strong> (AI learns your preferences)</span><span class="ko">🧠 <strong>취향 프로필</strong> (AI가 취향 학습)</span></li>
+    <li><span class="en">⏰ <strong>"Use Before Expiry"</strong> mode</span><span class="ko">⏰ <strong>"유통기한 전 사용"</strong> 모드</span></li>
+    <li><span class="en">🛒 <strong>Smart Shopping List</strong> from recipes</span><span class="ko">🛒 <strong>스마트 장보기 목록</strong></span></li>
+    <li><span class="en">🚫 No ads</span><span class="ko">🚫 광고 없음</span></li>
+  </ul>
+</div>
+</div>
+</div>
+
+<div class="card">
+<h3><span class="en">Revenue Projection</span><span class="ko">수익 예상</span></h3>
+<table>
+  <tr><th><span class="en">Total Users</span><span class="ko">전체 유저</span></th><th><span class="en">Premium (5%)</span><span class="ko">프리미엄 (5%)</span></th><th><span class="en">Revenue/mo</span><span class="ko">수익/월</span></th><th><span class="en">AI Cost/mo</span><span class="ko">AI 비용/월</span></th><th><span class="en">Profit/mo</span><span class="ko">이익/월</span></th></tr>
+  <tr><td>1,000</td><td>50</td><td>$150</td><td>$2</td><td style="color:#5b8c5a;"><strong>$148</strong></td></tr>
+  <tr><td>5,000</td><td>250</td><td>$750</td><td>$37</td><td style="color:#5b8c5a;"><strong>$713</strong></td></tr>
+  <tr><td>10,000</td><td>500</td><td>$1,500</td><td>$49</td><td style="color:#5b8c5a;"><strong>$1,451</strong></td></tr>
+  <tr><td>50,000</td><td>2,500</td><td>$7,500</td><td>$195</td><td style="color:#5b8c5a;"><strong>$7,305</strong></td></tr>
+</table>
+<p style="font-size:13px;color:#7a6f5d;margin-top:8px;"><span class="en">* 5% premium conversion is conservative. Recipe/cooking apps average 7-10%.</span><span class="ko">* 5% 프리미엄 전환은 보수적. 레시피/요리 앱 평균 7~10%.</span></p>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<h2 id="tech"><span class="en">7. Technical Architecture</span><span class="ko">7. 기술 아키텍처</span></h2>
+
+<div class="card">
+<h3><span class="en">System Flow</span><span class="ko">시스템 흐름</span></h3>
+<pre style="background:#2d2a26;color:#e8e4de;padding:16px;border-radius:12px;overflow-x:auto;font-size:12px;line-height:1.8;">
+<span style="color:#5b8c5a;">User taps "Suggest Recipes"</span>
+         │
+         ▼
+<span style="color:#e8a838;">┌─────────────────────────┐</span>
+<span style="color:#e8a838;">│  Supabase Edge Function  │</span>
+<span style="color:#e8a838;">│  (recipe-suggest)        │</span>
+<span style="color:#e8a838;">└────────┬────────────────┘</span>
+         │
+    <span style="color:#8b6cc1;">1. Check cache</span> (dish name + filters → cached results?)
+    │   └── Yes → Return cached dishes (0ms AI cost)
+    │   └── No ↓
+    │
+    <span style="color:#8b6cc1;">2. Call GPT-4o-mini</span>
+    │   Input: inventory list + cuisine + filters
+    │   Output: 8 dish objects {name, emoji, description, cook_time}
+    │   Cost: ~$0.0002
+    │
+    <span style="color:#8b6cc1;">3. For each dish (parallel):</span>
+    │   └── Brave Search API: "{dish name} recipe"
+    │   └── Fetch top 4 results → extract og:image, title, rating
+    │   └── Cache results in Supabase
+    │
+         ▼
+<span style="color:#5b8c5a;">Return to app: dishes + images + source links</span>
+</pre>
+</div>
+
+<div class="card">
+<h3><span class="en">Database Schema (New Tables)</span><span class="ko">데이터베이스 스키마 (새 테이블)</span></h3>
+<pre style="background:#2d2a26;color:#e8e4de;padding:16px;border-radius:12px;overflow-x:auto;font-size:12px;line-height:1.6;">
+<span style="color:#5b8c5a;">-- Cached dish suggestions</span>
+dish_cache (
+  id, dish_name, emoji, description, 
+  cuisine, cook_time_min, thumbnail_url,
+  created_at, search_count
+)
+
+<span style="color:#5b8c5a;">-- Recipe source links per dish</span>
+recipe_sources (
+  id, dish_cache_id, source_name, url,
+  rating, review_count, thumbnail_url,
+  created_at
+)
+
+<span style="color:#5b8c5a;">-- User favorites</span>
+user_favorites (
+  user_id, dish_cache_id, created_at
+)
+
+<span style="color:#5b8c5a;">-- User search history (auto, last 30)</span>
+user_recipe_history (
+  user_id, dish_cache_id, clicked_source_url,
+  created_at
+)
+</pre>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<h2 id="timeline"><span class="en">8. Build Timeline</span><span class="ko">8. 개발 일정</span></h2>
+
+<div class="card">
+<table>
+  <tr><th><span class="en">Phase</span><span class="ko">단계</span></th><th><span class="en">What</span><span class="ko">내용</span></th><th><span class="en">Time</span><span class="ko">기간</span></th></tr>
+  <tr><td>1</td><td><span class="en">Supabase Edge Function (AI suggest + search)</span><span class="ko">Supabase Edge Function (AI 추천 + 검색)</span></td><td><span class="en">1-2 days</span><span class="ko">1~2일</span></td></tr>
+  <tr><td>2</td><td><span class="en">Recipe tab UI (filters, results, dish detail)</span><span class="ko">레시피 탭 UI (필터, 결과, 요리 상세)</span></td><td><span class="en">2-3 days</span><span class="ko">2~3일</span></td></tr>
+  <tr><td>3</td><td><span class="en">Favorites + History system</span><span class="ko">즐겨찾기 + 히스토리 시스템</span></td><td><span class="en">1 day</span><span class="ko">1일</span></td></tr>
+  <tr><td>4</td><td><span class="en">Image caching + lazy loading</span><span class="ko">이미지 캐싱 + 지연 로딩</span></td><td><span class="en">1 day</span><span class="ko">1일</span></td></tr>
+  <tr><td>5</td><td><span class="en">Testing + polish</span><span class="ko">테스팅 + 마무리</span></td><td><span class="en">1 day</span><span class="ko">1일</span></td></tr>
+  <tr style="font-weight:700;"><td colspan="2"><span class="en">Total</span><span class="ko">총</span></td><td><span class="en">~1 week</span><span class="ko">~1주일</span></td></tr>
+</table>
+</div>
+
+<div class="verdict">
+<h3>🧞 <span class="en">The Verdict</span><span class="ko">결론</span></h3>
+<p><span class="en">This system costs almost nothing to run ($2/month at 1,000 users), gives users real recipes from trusted sources with real photos, and has a clear path to $1,500+/month revenue at 10K users. The AI is just the smart matchmaker — the internet does the heavy lifting.</span><span class="ko">이 시스템은 운영 비용이 거의 없고 (1,000명에 월 $2), 실제 사진이 있는 신뢰할 수 있는 출처의 실제 레시피를 제공하며, 10K 유저에서 월 $1,500+ 수익 경로가 명확합니다. AI는 똑똑한 매칭만 — 인터넷이 무거운 작업을 담당.</span></p>
+</div>
+
+</div>
+
+<script>
+let isKorean = false;
+function toggleLang() {
+  isKorean = !isKorean;
+  document.querySelectorAll('.en').forEach(el => el.classList.toggle('hide', isKorean));
+  document.querySelectorAll('.ko').forEach(el => el.classList.toggle('show', isKorean));
+  document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+}
+</script>
+</body>
+</html>
