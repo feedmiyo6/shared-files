@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fridgenie → TestFlight Guide</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.7; color: #3E3232; max-width: 720px; margin: 0 auto; padding: 20px 16px 80px; background: #FFF8F0; }
+  h1 { font-size: 26px; color: #5B8C5A; margin-bottom: 4px; }
+  .subtitle { font-size: 14px; color: #999; margin-bottom: 28px; }
+  h2 { font-size: 20px; color: #5B8C5A; margin-top: 36px; margin-bottom: 14px; padding-bottom: 6px; border-bottom: 2px solid #E8DFD0; }
+  h3 { font-size: 16px; color: #3E3232; margin-top: 18px; margin-bottom: 8px; }
+  p, li { font-size: 15px; margin-bottom: 8px; }
+  ul, ol { padding-left: 22px; margin-bottom: 14px; }
+  ol > li { margin-bottom: 10px; }
+  code { background: #F5EDE0; padding: 2px 7px; border-radius: 5px; font-size: 13px; font-family: 'SF Mono', Menlo, monospace; }
+  pre { background: #3E3232; color: #F5EDE0; padding: 14px 16px; border-radius: 12px; overflow-x: auto; margin: 12px 0; font-size: 13px; line-height: 1.5; }
+  pre code { background: none; padding: 0; color: inherit; }
+  .step-badge { display: inline-block; background: #5B8C5A; color: #fff; width: 28px; height: 28px; border-radius: 50%; text-align: center; line-height: 28px; font-weight: 700; font-size: 14px; margin-right: 8px; vertical-align: middle; }
+  .card { background: #FFFDF8; border: 1px solid #F5EDE0; border-radius: 14px; padding: 16px; margin: 12px 0; }
+  .card-warn { background: #FFF3E0; border-color: #DEB887; }
+  .card-success { background: #F0F7F0; border-color: #7FB07E; }
+  .check-table { width: 100%; border-collapse: collapse; margin: 12px 0; }
+  .check-table th { text-align: left; padding: 8px 10px; background: #F5EDE0; font-size: 13px; font-weight: 700; }
+  .check-table td { padding: 8px 10px; border-bottom: 1px solid #F5EDE0; font-size: 14px; }
+  .check-table td:first-child { width: 30px; text-align: center; }
+  .timeline { display: flex; gap: 8px; flex-wrap: wrap; margin: 12px 0; }
+  .timeline-item { background: #FFFDF8; border: 1px solid #F5EDE0; border-radius: 10px; padding: 10px 14px; flex: 1; min-width: 120px; text-align: center; }
+  .timeline-item .time { font-size: 20px; font-weight: 700; color: #5B8C5A; }
+  .timeline-item .label { font-size: 12px; color: #999; }
+  .emoji { font-size: 18px; }
+  strong { color: #3E3232; }
+  a { color: #5B8C5A; }
+  .lang-toggle { position: fixed; top: 12px; right: 12px; background: #5B8C5A; color: #fff; border: none; padding: 6px 14px; border-radius: 20px; font-size: 13px; cursor: pointer; z-index: 100; font-weight: 600; }
+  .ko { display: none; }
+  .ko.show { display: inline !important; }
+  .en.hide { display: none !important; }
+  .block-ko { display: none; }
+  .block-ko.show { display: block !important; }
+  .block-en.hide { display: none !important; }
+</style>
+</head>
+<body>
+
+<button class="lang-toggle" onclick="toggleLang()">한국어</button>
+
+<h1>🧊 Fridgenie → TestFlight <span class="en">Guide</span><span class="ko">가이드</span></h1>
+<p class="subtitle"><span class="en">Everything you need to deploy to TestFlight</span><span class="ko">TestFlight 배포를 위한 모든 단계</span> · Feb 23, 2026</p>
+
+<div class="timeline">
+  <div class="timeline-item"><div class="time">5m</div><div class="label"><span class="en">Signing</span><span class="ko">서명</span></div></div>
+  <div class="timeline-item"><div class="time">10m</div><div class="label"><span class="en">App Store Connect</span><span class="ko">앱스토어 커넥트</span></div></div>
+  <div class="timeline-item"><div class="time">15m</div><div class="label"><span class="en">Build + Upload</span><span class="ko">빌드 + 업로드</span></div></div>
+  <div class="timeline-item"><div class="time">5m</div><div class="label"><span class="en">TestFlight</span><span class="ko">테스트플라이트</span></div></div>
+  <div class="timeline-item"><div class="time">15m</div><div class="label"><span class="en">Device Test</span><span class="ko">실기기 테스트</span></div></div>
+</div>
+
+<!-- STEP 1 -->
+<h2><span class="step-badge">1</span> <span class="en">Bundle ID + Signing (Xcode)</span><span class="ko">번들 ID + 서명 (Xcode)</span></h2>
+
+<div class="block-en">
+<ol>
+  <li>Open Terminal and run:
+    <pre><code>cd ~/Projects/fridgenie/ios
+open Runner.xcworkspace</code></pre>
+  </li>
+  <li>In Xcode, click <strong>Runner</strong> in the left sidebar (blue project icon at the top)</li>
+  <li>Click the <strong>Runner</strong> target → <strong>Signing & Capabilities</strong> tab</li>
+  <li>Check ✅ <strong>"Automatically manage signing"</strong></li>
+  <li><strong>Team</strong> → Select your Apple Developer account from dropdown</li>
+  <li><strong>Bundle Identifier</strong> → Should be <code>com.fridgenie.fridgenie</code>
+    <br><em>If taken, use something like <code>com.yourname.fridgenie</code></em>
+  </li>
+  <li>Green checkmark ✅ next to "Signing Certificate" = you're good!</li>
+</ol>
+</div>
+<div class="block-ko">
+<ol>
+  <li>터미널 열고 실행:
+    <pre><code>cd ~/Projects/fridgenie/ios
+open Runner.xcworkspace</code></pre>
+  </li>
+  <li>Xcode에서 왼쪽 사이드바의 <strong>Runner</strong> 클릭 (파란색 프로젝트 아이콘)</li>
+  <li><strong>Runner</strong> 타겟 → <strong>Signing & Capabilities</strong> 탭 클릭</li>
+  <li>✅ <strong>"Automatically manage signing"</strong> 체크</li>
+  <li><strong>Team</strong> → Apple Developer 계정 선택</li>
+  <li><strong>Bundle Identifier</strong> → <code>com.fridgenie.fridgenie</code>
+    <br><em>이미 사용 중이면 <code>com.yourname.fridgenie</code>로 변경</em>
+  </li>
+  <li>"Signing Certificate" 옆에 초록 체크 ✅ 나오면 완료!</li>
+</ol>
+</div>
+
+<!-- STEP 2 -->
+<h2><span class="step-badge">2</span> <span class="en">App Store Connect Listing</span><span class="ko">App Store Connect 등록</span></h2>
+
+<div class="block-en">
+<ol>
+  <li>Go to <a href="https://appstoreconnect.apple.com" target="_blank">appstoreconnect.apple.com</a></li>
+  <li>Click <strong>My Apps</strong> → the <strong>+</strong> button → <strong>New App</strong></li>
+  <li>Fill in:
+    <ul>
+      <li><strong>Platform:</strong> iOS</li>
+      <li><strong>Name:</strong> Fridgenie</li>
+      <li><strong>Primary Language:</strong> English (U.S.)</li>
+      <li><strong>Bundle ID:</strong> Select the one from Step 1</li>
+      <li><strong>SKU:</strong> <code>fridgenie-001</code></li>
+      <li><strong>User Access:</strong> Full Access</li>
+    </ul>
+  </li>
+  <li>Click <strong>Create</strong></li>
+  <li>On the app page, fill in:
+    <ul>
+      <li><strong>Privacy Policy URL:</strong><br><code>https://feedmiyo6.github.io/shared-files/mj/fridgenie/privacy-policy.html</code></li>
+      <li><strong>Category:</strong> Food & Drink</li>
+    </ul>
+  </li>
+</ol>
+</div>
+<div class="block-ko">
+<ol>
+  <li><a href="https://appstoreconnect.apple.com" target="_blank">appstoreconnect.apple.com</a> 접속</li>
+  <li><strong>My Apps</strong> → <strong>+</strong> 버튼 → <strong>New App</strong></li>
+  <li>입력:
+    <ul>
+      <li><strong>Platform:</strong> iOS</li>
+      <li><strong>Name:</strong> Fridgenie</li>
+      <li><strong>Primary Language:</strong> English (U.S.)</li>
+      <li><strong>Bundle ID:</strong> Step 1에서 설정한 것 선택</li>
+      <li><strong>SKU:</strong> <code>fridgenie-001</code></li>
+      <li><strong>User Access:</strong> Full Access</li>
+    </ul>
+  </li>
+  <li><strong>Create</strong> 클릭</li>
+  <li>앱 페이지에서:
+    <ul>
+      <li><strong>Privacy Policy URL:</strong><br><code>https://feedmiyo6.github.io/shared-files/mj/fridgenie/privacy-policy.html</code></li>
+      <li><strong>Category:</strong> Food & Drink</li>
+    </ul>
+  </li>
+</ol>
+</div>
+
+<div class="card card-success">
+  <span class="emoji">💡</span> <span class="en"><strong>Tip:</strong> Description and screenshots are NOT needed for TestFlight — only for public App Store release.</span><span class="ko"><strong>팁:</strong> 설명과 스크린샷은 TestFlight에는 필요 없음. 앱스토어 정식 출시할 때만 필요.</span>
+</div>
+
+<!-- STEP 3 -->
+<h2><span class="step-badge">3</span> <span class="en">Build & Upload</span><span class="ko">빌드 & 업로드</span></h2>
+
+<div class="block-en">
+<h3>Terminal — Build the release</h3>
+</div>
+<div class="block-ko">
+<h3>터미널 — 릴리즈 빌드</h3>
+</div>
+
+<pre><code>cd ~/Projects/fridgenie
+
+# Clean build
+flutter clean
+flutter pub get
+
+# Build iOS release with obfuscation
+flutter build ios --release --obfuscate --split-debug-info=./debug-info/ios</code></pre>
+
+<div class="block-en">
+<h3>Xcode — Archive & Upload</h3>
+<ol>
+  <li>Open <code>ios/Runner.xcworkspace</code> if not already open</li>
+  <li>At the top bar, select: <strong>Runner</strong> → <strong>Any iOS Device (arm64)</strong>
+    <br><em>(NOT a simulator — must say "Any iOS Device")</em>
+  </li>
+  <li>Menu → <strong>Product</strong> → <strong>Archive</strong>
+    <br><em>☕ This takes 3-5 minutes</em>
+  </li>
+  <li>When done, the <strong>Organizer</strong> window opens automatically</li>
+  <li>Click <strong>Distribute App</strong></li>
+  <li>Select <strong>App Store Connect</strong> → <strong>Upload</strong></li>
+  <li>Click through the options (defaults are fine)</li>
+  <li>Click <strong>Upload</strong></li>
+  <li>Wait 5-10 min for Apple to process ⏳</li>
+</ol>
+</div>
+<div class="block-ko">
+<h3>Xcode — Archive & 업로드</h3>
+<ol>
+  <li><code>ios/Runner.xcworkspace</code> 열기</li>
+  <li>상단 바에서: <strong>Runner</strong> → <strong>Any iOS Device (arm64)</strong> 선택
+    <br><em>(시뮬레이터 아님 — "Any iOS Device"여야 함)</em>
+  </li>
+  <li>메뉴 → <strong>Product</strong> → <strong>Archive</strong>
+    <br><em>☕ 3-5분 소요</em>
+  </li>
+  <li>완료되면 <strong>Organizer</strong> 창이 자동으로 열림</li>
+  <li><strong>Distribute App</strong> 클릭</li>
+  <li><strong>App Store Connect</strong> → <strong>Upload</strong> 선택</li>
+  <li>옵션들은 기본값 그대로 → 다음 클릭</li>
+  <li><strong>Upload</strong> 클릭</li>
+  <li>Apple 처리 대기 5-10분 ⏳</li>
+</ol>
+</div>
+
+<div class="card card-warn">
+  <span class="emoji">⚠️</span> <span class="en"><strong>Important:</strong> Keep the <code>debug-info/</code> folder! You need it to symbolicate crash reports later.</span><span class="ko"><strong>중요:</strong> <code>debug-info/</code> 폴더 보관! 나중에 크래시 리포트 분석에 필요함.</span>
+</div>
+
+<!-- STEP 4 -->
+<h2><span class="step-badge">4</span> <span class="en">TestFlight Setup</span><span class="ko">TestFlight 설정</span></h2>
+
+<div class="block-en">
+<ol>
+  <li>Go to <a href="https://appstoreconnect.apple.com" target="_blank">App Store Connect</a> → Your App → <strong>TestFlight</strong> tab</li>
+  <li>After processing, your build appears under <strong>iOS Builds</strong></li>
+  <li>If it says <strong>"Missing Compliance"</strong> — click it:
+    <ul>
+      <li>"Does this app use encryption?" → <strong>No</strong></li>
+    </ul>
+  </li>
+  <li><strong>Internal Testing:</strong>
+    <ul>
+      <li>Click <strong>Internal Testing</strong> → <strong>+</strong> → Create group (e.g. "Team")</li>
+      <li>Add yourself (and Lucy if she wants to test!)</li>
+      <li>They get an email invite</li>
+    </ul>
+  </li>
+  <li><strong>Install on your iPhone:</strong>
+    <ul>
+      <li>Download <strong>TestFlight</strong> app from App Store</li>
+      <li>Open the invite email on your phone</li>
+      <li>Tap <strong>Accept</strong> → <strong>Install</strong></li>
+    </ul>
+  </li>
+</ol>
+</div>
+<div class="block-ko">
+<ol>
+  <li><a href="https://appstoreconnect.apple.com" target="_blank">App Store Connect</a> → 앱 → <strong>TestFlight</strong> 탭</li>
+  <li>처리 완료 후 <strong>iOS Builds</strong>에 빌드 표시됨</li>
+  <li><strong>"Missing Compliance"</strong> 표시되면 클릭:
+    <ul>
+      <li>"Does this app use encryption?" → <strong>No</strong></li>
+    </ul>
+  </li>
+  <li><strong>Internal Testing:</strong>
+    <ul>
+      <li><strong>Internal Testing</strong> → <strong>+</strong> → 그룹 생성 (예: "Team")</li>
+      <li>본인 추가 (Lucy도 테스트하고 싶으면 추가!)</li>
+      <li>이메일 초대 발송됨</li>
+    </ul>
+  </li>
+  <li><strong>아이폰에 설치:</strong>
+    <ul>
+      <li>App Store에서 <strong>TestFlight</strong> 앱 다운로드</li>
+      <li>폰에서 초대 이메일 열기</li>
+      <li><strong>Accept</strong> → <strong>Install</strong> 탭</li>
+    </ul>
+  </li>
+</ol>
+</div>
+
+<!-- STEP 5 -->
+<h2><span class="step-badge">5</span> <span class="en">Real Device Testing Checklist</span><span class="ko">실기기 테스트 체크리스트</span></h2>
+
+<div class="en">
+<table class="check-table">
+  <tr><th>☐</th><th>Feature</th><th>What to test</th></tr>
+  <tr><td>☐</td><td>📷 Receipt scan</td><td>Take photo of real receipt → items parsed correctly?</td></tr>
+  <tr><td>☐</td><td>🎤 Voice add</td><td>Say "I have chicken thighs, rice, and soy sauce" → parsed?</td></tr>
+  <tr><td>☐</td><td>🎤 Voice remove</td><td>Say "I used the chicken" → item removed?</td></tr>
+  <tr><td>☐</td><td>🔔 Permissions</td><td>Camera prompt appears? Mic prompt appears?</td></tr>
+  <tr><td>☐</td><td>📂 Categories</td><td>All collapsed by default? Tap to expand works?</td></tr>
+  <tr><td>☐</td><td>✨ Recipes</td><td>Select cuisines → suggest → results with match %?</td></tr>
+  <tr><td>☐</td><td>🛒 Shopping</td><td>Add items, check off, magic shop works?</td></tr>
+  <tr><td>☐</td><td>🗑️ Account delete</td><td>Profile → Delete Account (test with dummy account)</td></tr>
+  <tr><td>☐</td><td>🫨 Haptics</td><td>Feel tactile feedback when toggling items?</td></tr>
+  <tr><td>☐</td><td>🔄 Pull refresh</td><td>Pull down on home/pantry/fridge/shopping?</td></tr>
+  <tr><td>☐</td><td>📱 Overall</td><td>No crashes? Smooth scrolling? Text readable?</td></tr>
+</table>
+</div>
+<div class="ko">
+<table class="check-table">
+  <tr><th>☐</th><th>기능</th><th>테스트 항목</th></tr>
+  <tr><td>☐</td><td>📷 영수증 스캔</td><td>실제 영수증 촬영 → 품목 파싱 정확한지?</td></tr>
+  <tr><td>☐</td><td>🎤 음성 추가</td><td>"닭다리, 쌀, 간장 있어" → 인식 되는지?</td></tr>
+  <tr><td>☐</td><td>🎤 음성 제거</td><td>"닭 다 썼어" → 재고에서 제거 되는지?</td></tr>
+  <tr><td>☐</td><td>🔔 권한</td><td>카메라/마이크 권한 팝업 나오는지?</td></tr>
+  <tr><td>☐</td><td>📂 카테고리</td><td>기본 접힘 상태? 탭하면 펼쳐지는지?</td></tr>
+  <tr><td>☐</td><td>✨ 레시피</td><td>요리 종류 선택 → 추천 → 매치 % 표시?</td></tr>
+  <tr><td>☐</td><td>🛒 장보기</td><td>항목 추가, 체크, 매직샵 작동?</td></tr>
+  <tr><td>☐</td><td>🗑️ 계정 삭제</td><td>프로필 → 계정 삭제 (더미 계정으로 테스트)</td></tr>
+  <tr><td>☐</td><td>🫨 햅틱</td><td>아이템 토글 시 진동 피드백 느껴지는지?</td></tr>
+  <tr><td>☐</td><td>🔄 당겨서 새로고침</td><td>홈/냉장고/식료품/장보기 화면에서 작동?</td></tr>
+  <tr><td>☐</td><td>📱 전반적</td><td>크래시 없음? 스크롤 부드러움? 텍스트 가독성?</td></tr>
+</table>
+</div>
+
+<!-- TROUBLESHOOTING -->
+<h2><span class="emoji">🔧</span> <span class="en">Troubleshooting</span><span class="ko">문제 해결</span></h2>
+
+<div class="card">
+<div class="block-en">
+<p><strong>"No signing certificate" in Xcode</strong><br>
+→ Go to Xcode → Settings → Accounts → your Apple ID → Download Manual Profiles</p>
+
+<p><strong>Archive is grayed out</strong><br>
+→ Make sure you selected "Any iOS Device (arm64)" at the top, NOT a simulator</p>
+
+<p><strong>Upload fails with "Invalid binary"</strong><br>
+→ Run <code>flutter clean</code> and rebuild. Make sure Bundle ID matches App Store Connect.</p>
+
+<p><strong>"Missing Compliance" won't go away</strong><br>
+→ In App Store Connect → TestFlight → click the build number → Export Compliance → answer No</p>
+
+<p><strong>Build not appearing in TestFlight</strong><br>
+→ Wait 10-15 min after upload. Check your email — Apple sends a notification when processing completes (or if there's an error).</p>
+</div>
+<div class="block-ko">
+<p><strong>Xcode에서 "No signing certificate"</strong><br>
+→ Xcode → Settings → Accounts → Apple ID → Download Manual Profiles</p>
+
+<p><strong>Archive 메뉴 비활성화</strong><br>
+→ 상단에서 "Any iOS Device (arm64)" 선택했는지 확인 (시뮬레이터 아님)</p>
+
+<p><strong>"Invalid binary" 업로드 실패</strong><br>
+→ <code>flutter clean</code> 후 재빌드. Bundle ID가 App Store Connect와 일치하는지 확인.</p>
+
+<p><strong>"Missing Compliance" 해결 안 됨</strong><br>
+→ App Store Connect → TestFlight → 빌드 번호 클릭 → Export Compliance → No 선택</p>
+
+<p><strong>TestFlight에 빌드 안 보임</strong><br>
+→ 업로드 후 10-15분 대기. 이메일 확인 — Apple이 처리 완료/오류 알림 보냄.</p>
+</div>
+</div>
+
+<div class="card card-success" style="margin-top: 32px; text-align: center;">
+  <span style="font-size: 32px;">🧊✨📱</span><br>
+  <strong style="font-size: 16px;"><span class="en">You've got this, Minjun! Fridgenie to the world! 🚀</span><span class="ko">화이팅 민준! Fridgenie 출시하자! 🚀</span></strong>
+</div>
+
+<script>
+let isKorean = false;
+function toggleLang() {
+  isKorean = !isKorean;
+  document.querySelectorAll('.en').forEach(el => el.classList.toggle('hide', isKorean));
+  document.querySelectorAll('.ko').forEach(el => el.classList.toggle('show', isKorean));
+  document.querySelectorAll('.block-en').forEach(el => el.classList.toggle('hide', isKorean));
+  document.querySelectorAll('.block-ko').forEach(el => el.classList.toggle('show', isKorean));
+  document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+}
+</script>
+</body>
+</html>
