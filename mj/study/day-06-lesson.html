@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 6: FSM Fundamentals | Digital Design Study</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    background: linear-gradient(135deg, #fefae0 0%, #faedcd 100%);
+    color: #3d405b;
+    line-height: 1.8;
+    padding: 24px;
+    max-width: 920px;
+    margin: 0 auto;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+h1 {
+    color: #5d4037;
+    border-bottom: 3px solid #c4a77d;
+    padding-bottom: 12px;
+    margin-bottom: 24px;
+    font-size: 2em;
+}
+h2 {
+    color: #588157;
+    border-bottom: 2px solid #a3b18a;
+    padding-bottom: 8px;
+    margin: 32px 0 16px;
+}
+h3 {
+    color: #5d4037;
+    margin: 20px 0 12px;
+}
+p { margin: 12px 0; }
+code {
+    background: #e9f5db;
+    color: #3d405b;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+}
+pre {
+    background: #2d3436;
+    padding: 24px;
+    border-radius: 12px;
+    margin: 24px 0;
+    border: 3px solid #a3b18a;
+    overflow-x: auto;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+    font-size: 15px;
+    line-height: 1.6;
+    color: #f8f8f2;
+}
+.keyword { color: #ff79c6; font-weight: 600; }
+.type { color: #8be9fd; }
+.signal { color: #50fa7b; }
+.number { color: #ffb86c; }
+.comment { color: #6272a4; font-style: italic; }
+.string { color: #f1fa8c; }
+.concept-box {
+    background: #fff8f0;
+    border: 2px solid #c4a77d;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    color: #3d405b;
+}
+.concept-box h3 { color: #5d4037; margin-bottom: 12px; }
+.warning-box {
+    background: #fff8f0;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    border-left: 4px solid #ef4444;
+    color: #3d405b;
+}
+.warning-box h3 { color: #c53030; margin-bottom: 12px; }
+.tip-box {
+    background: #fff8f0;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    border-left: 4px solid #588157;
+    color: #3d405b;
+}
+.comparison-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+.comparison-table th {
+    background: #588157;
+    color: white;
+    padding: 12px;
+    text-align: left;
+}
+.comparison-table td {
+    background: #fff;
+    border: 1px solid #c4a77d;
+    padding: 12px;
+    color: #3d405b;
+}
+.comparison-table tr:nth-child(even) td { background: #fff8f0; }
+.nav-links {
+    display: flex;
+    gap: 12px;
+    margin: 24px 0;
+    flex-wrap: wrap;
+}
+.nav-links a {
+    background: linear-gradient(135deg, #588157, #3a5a40);
+    color: #fff;
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 24px;
+    font-weight: 600;
+    font-size: 14px;
+}
+.nav-links a:hover { opacity: 0.9; }
+.lang-toggle {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    background: #588157;
+    border: none;
+    border-radius: 24px;
+    padding: 10px 20px;
+    cursor: pointer;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    z-index: 1000;
+}
+.lang-toggle:hover { background: #3a5a40; }
+.ko { display: none; }
+.state-diagram {
+    background: #fff;
+    border: 2px solid #c4a77d;
+    border-radius: 12px;
+    padding: 24px;
+    margin: 20px 0;
+    text-align: center;
+    font-family: 'SF Mono', monospace;
+    line-height: 1.4;
+    white-space: pre;
+    overflow-x: auto;
+}
+@media (max-width: 768px) {
+    body { padding: 16px; }
+    h1 { font-size: 1.8em; }
+    pre { font-size: 14px; padding: 16px; }
+    .lang-toggle { padding: 8px 16px; font-size: 13px; }
+}
+</style>
+</head>
+<body>
+
+<button class="lang-toggle" onclick="toggleLang()">한국어</button>
+
+<h1>📅 Day 6: FSM Fundamentals</h1>
+<p style="color:#888;">Week 2 — FSM Design | Monday, Feb 23, 2026</p>
+
+<div class="nav-links">
+    <a href="day-06-quiz.html">📝 Quiz</a>
+    <a href="day-06-practice.html">💻 Practice</a>
+</div>
+
+<!-- ==================== SECTION 1 ==================== -->
+<h2>1. What is a Finite State Machine?</h2>
+
+<p class="en">A <strong>Finite State Machine (FSM)</strong> is a circuit that moves through a fixed set of states based on inputs and clock edges. At any given moment, the FSM is in exactly one state. On each clock edge, it transitions to the next state based on the current state and inputs.</p>
+<p class="ko" style="display:none;"><strong>유한 상태 기계(FSM)</strong>는 입력과 클럭 엣지에 따라 정해진 상태들 사이를 이동하는 회로입니다. 어느 순간이든 FSM은 정확히 하나의 상태에 있으며, 각 클럭 엣지에서 현재 상태와 입력에 따라 다음 상태로 전이합니다.</p>
+
+<p class="en">FSMs are <em>everywhere</em> in digital design — traffic lights, protocol handlers, CPU controllers, USB interfaces, memory controllers. If your hardware needs to "remember where it is" and "decide what to do next," you need an FSM.</p>
+<p class="ko" style="display:none;">FSM은 디지털 설계 <em>어디에나</em> 있습니다 — 신호등, 프로토콜 핸들러, CPU 컨트롤러, USB 인터페이스, 메모리 컨트롤러. 하드웨어가 "현재 위치를 기억"하고 "다음 동작을 결정"해야 한다면 FSM이 필요합니다.</p>
+
+<div class="concept-box">
+    <h3>🔑 Three Core Components of an FSM</h3>
+    <p class="en"><strong>1. States</strong> — the possible conditions the machine can be in (e.g., IDLE, RUNNING, DONE)<br>
+    <strong>2. Transitions</strong> — rules for moving from one state to another based on inputs<br>
+    <strong>3. Outputs</strong> — signals produced based on the current state (and possibly inputs)</p>
+    <p class="ko" style="display:none;"><strong>1. 상태(States)</strong> — 기계가 취할 수 있는 가능한 조건 (예: IDLE, RUNNING, DONE)<br>
+    <strong>2. 전이(Transitions)</strong> — 입력에 따라 한 상태에서 다른 상태로 이동하는 규칙<br>
+    <strong>3. 출력(Outputs)</strong> — 현재 상태(및 가능하면 입력)에 따라 생성되는 신호</p>
+</div>
+
+<!-- ==================== SECTION 2 ==================== -->
+<h2>2. State Diagrams</h2>
+
+<p class="en">Before writing any code, always draw a <strong>state diagram</strong>. It's a visual map of your FSM — circles for states, arrows for transitions, and labels for conditions.</p>
+<p class="ko" style="display:none;">코드를 작성하기 전에 항상 <strong>상태 다이어그램</strong>을 먼저 그리세요. FSM의 시각적 지도입니다 — 원은 상태, 화살표는 전이, 라벨은 조건을 나타냅니다.</p>
+
+<p class="en">Here's a simple example — a door lock controller:</p>
+<p class="ko" style="display:none;">간단한 예시 — 도어 잠금 컨트롤러:</p>
+
+<div class="state-diagram">
+         ┌──────────┐
+         │          │
+    ──►  │  LOCKED  │ ◄──── wrong_code
+         │          │ ────┐
+         └────┬─────┘     │
+              │            │
+         correct_code      │
+              │            │
+              ▼            │
+         ┌──────────┐     │
+         │          │     │
+         │ UNLOCKED │─────┘
+         │          │  timeout
+         └──────────┘
+</div>
+
+<p class="en">Two states (<code>LOCKED</code>, <code>UNLOCKED</code>), two inputs (<code>correct_code</code>, <code>timeout</code>). Simple, clear, unambiguous. This is what you should have before touching SystemVerilog.</p>
+<p class="ko" style="display:none;">두 개의 상태(<code>LOCKED</code>, <code>UNLOCKED</code>), 두 개의 입력(<code>correct_code</code>, <code>timeout</code>). 심플하고 명확합니다. SystemVerilog를 작성하기 전에 이것을 먼저 준비해야 합니다.</p>
+
+<!-- ==================== SECTION 3 ==================== -->
+<h2>3. FSM in SystemVerilog — The Standard Pattern</h2>
+
+<p class="en">There's a clean, industry-standard way to code FSMs in SystemVerilog. It uses <strong>three blocks</strong>:</p>
+<p class="ko" style="display:none;">SystemVerilog에서 FSM을 코딩하는 깔끔한 산업 표준 방식이 있습니다. <strong>세 개의 블록</strong>을 사용합니다:</p>
+
+<table class="comparison-table">
+    <tr>
+        <th>Block</th>
+        <th class="en">Purpose</th>
+        <th class="ko" style="display:none;">목적</th>
+        <th class="en">Type</th>
+        <th class="ko" style="display:none;">유형</th>
+    </tr>
+    <tr>
+        <td>1. State Register</td>
+        <td class="en">Stores current state, updates on clock edge</td>
+        <td class="ko" style="display:none;">현재 상태 저장, 클럭 엣지에서 업데이트</td>
+        <td><code>always_ff</code></td>
+    </tr>
+    <tr>
+        <td>2. Next-State Logic</td>
+        <td class="en">Determines next state from current state + inputs</td>
+        <td class="ko" style="display:none;">현재 상태 + 입력으로 다음 상태 결정</td>
+        <td><code>always_comb</code></td>
+    </tr>
+    <tr>
+        <td>3. Output Logic</td>
+        <td class="en">Generates outputs from current state</td>
+        <td class="ko" style="display:none;">현재 상태에서 출력 생성</td>
+        <td><code>always_comb</code></td>
+    </tr>
+</table>
+
+<p class="en">Let's implement our door lock:</p>
+<p class="ko" style="display:none;">도어 잠금장치를 구현해봅시다:</p>
+
+<pre>
+<span class="keyword">typedef</span> <span class="keyword">enum</span> <span class="type">logic</span> [<span class="number">1</span>:<span class="number">0</span>] {
+    <span class="signal">LOCKED</span>   = <span class="number">2'b00</span>,
+    <span class="signal">UNLOCKED</span> = <span class="number">2'b01</span>
+} <span class="type">state_t</span>;
+
+<span class="keyword">module</span> <span class="signal">door_lock</span> (
+    <span class="keyword">input</span>  <span class="type">logic</span> <span class="signal">clk</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span> <span class="signal">rst_n</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span> <span class="signal">correct_code</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span> <span class="signal">timeout</span>,
+    <span class="keyword">output</span> <span class="type">logic</span> <span class="signal">door_open</span>
+);
+
+    <span class="type">state_t</span> <span class="signal">state</span>, <span class="signal">next_state</span>;
+
+    <span class="comment">// Block 1: State Register (sequential)</span>
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span> <span class="keyword">or</span> <span class="keyword">negedge</span> <span class="signal">rst_n</span>) <span class="keyword">begin</span>
+        <span class="keyword">if</span> (!<span class="signal">rst_n</span>)
+            <span class="signal">state</span> &lt;= <span class="signal">LOCKED</span>;
+        <span class="keyword">else</span>
+            <span class="signal">state</span> &lt;= <span class="signal">next_state</span>;
+    <span class="keyword">end</span>
+
+    <span class="comment">// Block 2: Next-State Logic (combinational)</span>
+    <span class="keyword">always_comb</span> <span class="keyword">begin</span>
+        <span class="signal">next_state</span> = <span class="signal">state</span>;  <span class="comment">// Default: stay in current state</span>
+        <span class="keyword">case</span> (<span class="signal">state</span>)
+            <span class="signal">LOCKED</span>: <span class="keyword">begin</span>
+                <span class="keyword">if</span> (<span class="signal">correct_code</span>)
+                    <span class="signal">next_state</span> = <span class="signal">UNLOCKED</span>;
+            <span class="keyword">end</span>
+            <span class="signal">UNLOCKED</span>: <span class="keyword">begin</span>
+                <span class="keyword">if</span> (<span class="signal">timeout</span>)
+                    <span class="signal">next_state</span> = <span class="signal">LOCKED</span>;
+            <span class="keyword">end</span>
+            <span class="keyword">default</span>: <span class="signal">next_state</span> = <span class="signal">LOCKED</span>;
+        <span class="keyword">endcase</span>
+    <span class="keyword">end</span>
+
+    <span class="comment">// Block 3: Output Logic</span>
+    <span class="keyword">always_comb</span> <span class="keyword">begin</span>
+        <span class="signal">door_open</span> = (<span class="signal">state</span> == <span class="signal">UNLOCKED</span>);
+    <span class="keyword">end</span>
+
+<span class="keyword">endmodule</span>
+</pre>
+
+<div class="tip-box">
+    <h3 class="en">💡 Why <code>next_state = state</code> as the default?</h3>
+    <h3 class="ko" style="display:none;">💡 왜 <code>next_state = state</code>를 기본값으로?</h3>
+    <p class="en">This prevents <strong>latches</strong>. If you forget to assign <code>next_state</code> in some branch of your case statement, the default ensures it stays in the current state rather than synthesis inferring a latch. Always do this!</p>
+    <p class="ko" style="display:none;">이것은 <strong>래치</strong>를 방지합니다. case 문의 일부 분기에서 <code>next_state</code>를 할당하는 것을 잊으면, 기본값이 합성이 래치를 추론하는 대신 현재 상태를 유지하도록 보장합니다. 항상 이렇게 하세요!</p>
+</div>
+
+<!-- ==================== SECTION 4 ==================== -->
+<h2>4. The <code>typedef enum</code> — Named States</h2>
+
+<p class="en">Using <code>typedef enum</code> for states is critical. It makes your code readable and gives you:</p>
+<p class="ko" style="display:none;"><code>typedef enum</code>을 상태에 사용하는 것은 매우 중요합니다. 코드를 읽기 쉽게 만들고 다음을 제공합니다:</p>
+
+<ul class="en">
+    <li><strong>Named states</strong> — <code>LOCKED</code> is clearer than <code>2'b00</code></li>
+    <li><strong>Waveform labels</strong> — simulators show state names instead of numbers</li>
+    <li><strong>Type checking</strong> — compiler catches mismatched state types</li>
+    <li><strong>Easy expansion</strong> — adding states is clean</li>
+</ul>
+<ul class="ko" style="display:none;">
+    <li><strong>이름이 있는 상태</strong> — <code>LOCKED</code>가 <code>2'b00</code>보다 명확</li>
+    <li><strong>파형 라벨</strong> — 시뮬레이터가 숫자 대신 상태 이름 표시</li>
+    <li><strong>타입 검사</strong> — 컴파일러가 불일치하는 상태 타입 감지</li>
+    <li><strong>쉬운 확장</strong> — 상태 추가가 깔끔</li>
+</ul>
+
+<pre>
+<span class="comment">// Good — named states with explicit encoding</span>
+<span class="keyword">typedef</span> <span class="keyword">enum</span> <span class="type">logic</span> [<span class="number">2</span>:<span class="number">0</span>] {
+    <span class="signal">IDLE</span>    = <span class="number">3'b000</span>,
+    <span class="signal">START</span>   = <span class="number">3'b001</span>,
+    <span class="signal">RUNNING</span> = <span class="number">3'b010</span>,
+    <span class="signal">DONE</span>    = <span class="number">3'b100</span>
+} <span class="type">state_t</span>;
+
+<span class="comment">// Bad — magic numbers everywhere</span>
+<span class="keyword">if</span> (<span class="signal">state</span> == <span class="number">3'b010</span>)  <span class="comment">// What state is this??</span>
+</pre>
+
+<!-- ==================== SECTION 5 ==================== -->
+<h2>5. A Bigger Example: Packet Receiver</h2>
+
+<p class="en">Let's look at a more realistic FSM — a simple packet receiver that waits for a start-of-frame, receives data bytes, then signals done:</p>
+<p class="ko" style="display:none;">더 실제적인 FSM을 봅시다 — 프레임 시작을 기다리고, 데이터 바이트를 수신한 다음 완료를 알리는 간단한 패킷 수신기:</p>
+
+<div class="state-diagram">
+              ┌──────┐
+         ──►  │ IDLE │ ◄─────────────────┐
+              └──┬───┘                    │
+                 │ sof (start of frame)   │
+                 ▼                        │
+              ┌──────┐                    │
+              │ RECV │──► count == MAX ───┘
+              │      │                  (via DONE)
+              └──┬───┘
+                 │ count == MAX
+                 ▼
+              ┌──────┐
+              │ DONE │ ──► (1 cycle) ──► IDLE
+              └──────┘
+</div>
+
+<pre>
+<span class="keyword">typedef</span> <span class="keyword">enum</span> <span class="type">logic</span> [<span class="number">1</span>:<span class="number">0</span>] {
+    <span class="signal">IDLE</span> = <span class="number">2'b00</span>,
+    <span class="signal">RECV</span> = <span class="number">2'b01</span>,
+    <span class="signal">DONE</span> = <span class="number">2'b10</span>
+} <span class="type">pkt_state_t</span>;
+
+<span class="keyword">module</span> <span class="signal">packet_receiver</span> #(
+    <span class="keyword">parameter</span> <span class="type">int</span> <span class="signal">MAX_BYTES</span> = <span class="number">8</span>
+)(
+    <span class="keyword">input</span>  <span class="type">logic</span>       <span class="signal">clk</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span>       <span class="signal">rst_n</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span>       <span class="signal">sof</span>,        <span class="comment">// start of frame</span>
+    <span class="keyword">input</span>  <span class="type">logic</span>       <span class="signal">data_valid</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span> [<span class="number">7</span>:<span class="number">0</span>] <span class="signal">data_in</span>,
+    <span class="keyword">output</span> <span class="type">logic</span>       <span class="signal">pkt_done</span>,
+    <span class="keyword">output</span> <span class="type">logic</span>       <span class="signal">receiving</span>
+);
+
+    <span class="type">pkt_state_t</span> <span class="signal">state</span>, <span class="signal">next_state</span>;
+    <span class="type">logic</span> [<span class="number">3</span>:<span class="number">0</span>] <span class="signal">byte_count</span>;
+
+    <span class="comment">// State register</span>
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span> <span class="keyword">or</span> <span class="keyword">negedge</span> <span class="signal">rst_n</span>) <span class="keyword">begin</span>
+        <span class="keyword">if</span> (!<span class="signal">rst_n</span>)
+            <span class="signal">state</span> &lt;= <span class="signal">IDLE</span>;
+        <span class="keyword">else</span>
+            <span class="signal">state</span> &lt;= <span class="signal">next_state</span>;
+    <span class="keyword">end</span>
+
+    <span class="comment">// Byte counter</span>
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span> <span class="keyword">or</span> <span class="keyword">negedge</span> <span class="signal">rst_n</span>) <span class="keyword">begin</span>
+        <span class="keyword">if</span> (!<span class="signal">rst_n</span>)
+            <span class="signal">byte_count</span> &lt;= <span class="number">'0</span>;
+        <span class="keyword">else if</span> (<span class="signal">state</span> == <span class="signal">IDLE</span>)
+            <span class="signal">byte_count</span> &lt;= <span class="number">'0</span>;
+        <span class="keyword">else if</span> (<span class="signal">state</span> == <span class="signal">RECV</span> && <span class="signal">data_valid</span>)
+            <span class="signal">byte_count</span> &lt;= <span class="signal">byte_count</span> + <span class="number">1</span>;
+    <span class="keyword">end</span>
+
+    <span class="comment">// Next-state logic</span>
+    <span class="keyword">always_comb</span> <span class="keyword">begin</span>
+        <span class="signal">next_state</span> = <span class="signal">state</span>;
+        <span class="keyword">case</span> (<span class="signal">state</span>)
+            <span class="signal">IDLE</span>: <span class="keyword">if</span> (<span class="signal">sof</span>) <span class="signal">next_state</span> = <span class="signal">RECV</span>;
+            <span class="signal">RECV</span>: <span class="keyword">if</span> (<span class="signal">byte_count</span> == <span class="signal">MAX_BYTES</span> - <span class="number">1</span> && <span class="signal">data_valid</span>)
+                      <span class="signal">next_state</span> = <span class="signal">DONE</span>;
+            <span class="signal">DONE</span>: <span class="signal">next_state</span> = <span class="signal">IDLE</span>;
+            <span class="keyword">default</span>: <span class="signal">next_state</span> = <span class="signal">IDLE</span>;
+        <span class="keyword">endcase</span>
+    <span class="keyword">end</span>
+
+    <span class="comment">// Output logic</span>
+    <span class="keyword">always_comb</span> <span class="keyword">begin</span>
+        <span class="signal">pkt_done</span>  = (<span class="signal">state</span> == <span class="signal">DONE</span>);
+        <span class="signal">receiving</span> = (<span class="signal">state</span> == <span class="signal">RECV</span>);
+    <span class="keyword">end</span>
+
+<span class="keyword">endmodule</span>
+</pre>
+
+<div class="concept-box">
+    <h3 class="en">🔑 Key Pattern: Counters with FSMs</h3>
+    <h3 class="ko" style="display:none;">🔑 핵심 패턴: FSM과 카운터</h3>
+    <p class="en">Notice how <code>byte_count</code> lives in its own <code>always_ff</code> block, separate from the state register. This is clean practice — the FSM controls <em>when</em> counting happens, the counter block handles <em>how</em>.</p>
+    <p class="ko" style="display:none;"><code>byte_count</code>가 상태 레지스터와 별도의 <code>always_ff</code> 블록에 있는 것에 주목하세요. 이것이 깔끔한 관행입니다 — FSM은 카운팅이 <em>언제</em> 발생하는지 제어하고, 카운터 블록은 <em>어떻게</em> 카운트하는지를 처리합니다.</p>
+</div>
+
+<!-- ==================== SECTION 6 ==================== -->
+<h2>6. Testbench for an FSM</h2>
+
+<p class="en">Testing an FSM means walking through each transition. Here's how to verify our door lock:</p>
+<p class="ko" style="display:none;">FSM 테스트는 각 전이를 하나씩 확인하는 것입니다. 도어 잠금장치를 검증하는 방법:</p>
+
+<pre>
+<span class="keyword">module</span> <span class="signal">tb_door_lock</span>;
+    <span class="type">logic</span> <span class="signal">clk</span>, <span class="signal">rst_n</span>, <span class="signal">correct_code</span>, <span class="signal">timeout</span>, <span class="signal">door_open</span>;
+
+    <span class="signal">door_lock</span> <span class="signal">dut</span> (.*);
+
+    <span class="comment">// Clock generation</span>
+    <span class="keyword">initial</span> <span class="signal">clk</span> = <span class="number">0</span>;
+    <span class="keyword">always</span> #<span class="number">5</span> <span class="signal">clk</span> = ~<span class="signal">clk</span>;
+
+    <span class="keyword">initial</span> <span class="keyword">begin</span>
+        <span class="comment">// Reset</span>
+        <span class="signal">rst_n</span> = <span class="number">0</span>; <span class="signal">correct_code</span> = <span class="number">0</span>; <span class="signal">timeout</span> = <span class="number">0</span>;
+        #<span class="number">20</span> <span class="signal">rst_n</span> = <span class="number">1</span>;
+
+        <span class="comment">// Verify starts LOCKED</span>
+        <span class="keyword">assert</span>(<span class="signal">door_open</span> == <span class="number">0</span>) <span class="keyword">else</span> <span class="string">$error("Should start locked!")</span>;
+
+        <span class="comment">// Enter correct code → should UNLOCK</span>
+        @(<span class="keyword">posedge</span> <span class="signal">clk</span>) <span class="signal">correct_code</span> = <span class="number">1</span>;
+        @(<span class="keyword">posedge</span> <span class="signal">clk</span>) <span class="signal">correct_code</span> = <span class="number">0</span>;
+        @(<span class="keyword">posedge</span> <span class="signal">clk</span>);
+        <span class="keyword">assert</span>(<span class="signal">door_open</span> == <span class="number">1</span>) <span class="keyword">else</span> <span class="string">$error("Should be unlocked!")</span>;
+
+        <span class="comment">// Timeout → should LOCK again</span>
+        @(<span class="keyword">posedge</span> <span class="signal">clk</span>) <span class="signal">timeout</span> = <span class="number">1</span>;
+        @(<span class="keyword">posedge</span> <span class="signal">clk</span>) <span class="signal">timeout</span> = <span class="number">0</span>;
+        @(<span class="keyword">posedge</span> <span class="signal">clk</span>);
+        <span class="keyword">assert</span>(<span class="signal">door_open</span> == <span class="number">0</span>) <span class="keyword">else</span> <span class="string">$error("Should be locked!")</span>;
+
+        <span class="string">$display("All tests passed!")</span>;
+        <span class="string">$finish</span>;
+    <span class="keyword">end</span>
+<span class="keyword">endmodule</span>
+</pre>
+
+<!-- ==================== SECTION 7 ==================== -->
+<h2>7. Common FSM Mistakes</h2>
+
+<div class="warning-box">
+    <h3>⚠️ Mistake #1: Forgetting the Default in case</h3>
+    <p class="en">Without a <code>default</code> case, if your FSM somehow enters an undefined state (cosmic ray, power glitch), it gets <strong>stuck forever</strong>. Always include <code>default: next_state = IDLE;</code></p>
+    <p class="ko" style="display:none;"><code>default</code> 케이스 없이, FSM이 어떻게든 정의되지 않은 상태에 진입하면(우주선, 전원 글리치) <strong>영원히 멈춥니다</strong>. 항상 <code>default: next_state = IDLE;</code>를 포함하세요.</p>
+</div>
+
+<div class="warning-box">
+    <h3>⚠️ Mistake #2: Using <code>always_ff</code> for Next-State Logic</h3>
+    <p class="en">Next-state logic is <strong>combinational</strong> — it must use <code>always_comb</code>, not <code>always_ff</code>. Only the state register itself is sequential.</p>
+    <p class="ko" style="display:none;">다음 상태 로직은 <strong>조합 논리</strong>입니다 — <code>always_ff</code>가 아닌 <code>always_comb</code>을 사용해야 합니다. 상태 레지스터 자체만 순차 논리입니다.</p>
+</div>
+
+<div class="warning-box">
+    <h3>⚠️ Mistake #3: Not Setting Default <code>next_state</code></h3>
+    <p class="en">If you don't set <code>next_state = state;</code> at the top of your <code>always_comb</code> block, any missing assignment path will infer a <strong>latch</strong>. Synthesis tools will warn you, but it's a real bug.</p>
+    <p class="ko" style="display:none;"><code>always_comb</code> 블록 상단에서 <code>next_state = state;</code>를 설정하지 않으면, 누락된 할당 경로가 <strong>래치</strong>를 추론합니다. 합성 도구가 경고하지만 실제 버그입니다.</p>
+</div>
+
+<!-- ==================== SECTION 8 ==================== -->
+<h2>8. Summary</h2>
+
+<div class="concept-box">
+    <h3 class="en">📋 Today's Key Takeaways</h3>
+    <h3 class="ko" style="display:none;">📋 오늘의 핵심 요약</h3>
+    <ol class="en">
+        <li>FSMs have <strong>states, transitions, and outputs</strong></li>
+        <li>Always draw a <strong>state diagram first</strong></li>
+        <li>Use the <strong>3-block pattern</strong>: state register (<code>always_ff</code>), next-state logic (<code>always_comb</code>), output logic (<code>always_comb</code>)</li>
+        <li>Use <code>typedef enum</code> for readable state names</li>
+        <li>Always set <code>next_state = state</code> as default to prevent latches</li>
+        <li>Always include a <code>default</code> case for safety</li>
+        <li>Test every transition in your testbench</li>
+    </ol>
+    <ol class="ko" style="display:none;">
+        <li>FSM은 <strong>상태, 전이, 출력</strong>을 가짐</li>
+        <li>항상 <strong>상태 다이어그램을 먼저</strong> 그리기</li>
+        <li><strong>3블록 패턴</strong> 사용: 상태 레지스터(<code>always_ff</code>), 다음 상태 로직(<code>always_comb</code>), 출력 로직(<code>always_comb</code>)</li>
+        <li>읽기 쉬운 상태 이름을 위해 <code>typedef enum</code> 사용</li>
+        <li>래치 방지를 위해 항상 <code>next_state = state</code>를 기본값으로 설정</li>
+        <li>안전을 위해 항상 <code>default</code> 케이스 포함</li>
+        <li>테스트벤치에서 모든 전이를 테스트</li>
+    </ol>
+</div>
+
+<p class="en"><strong>Tomorrow:</strong> Moore vs Mealy machines — same FSM, different output timing. This distinction matters in real hardware!</p>
+<p class="ko" style="display:none;"><strong>내일:</strong> Moore vs Mealy 머신 — 같은 FSM, 다른 출력 타이밍. 이 구별은 실제 하드웨어에서 중요합니다!</p>
+
+<div class="nav-links">
+    <a href="day-06-quiz.html">📝 Take the Quiz</a>
+    <a href="day-06-practice.html">💻 Practice Exercise</a>
+    <a href="day-05-lesson.html">← Day 5</a>
+</div>
+
+<script>
+let isKorean = false;
+function toggleLang() {
+    isKorean = !isKorean;
+    document.querySelectorAll('.en').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'none' : 'revert', 'important');
+    });
+    document.querySelectorAll('.ko').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'revert' : 'none', 'important');
+    });
+    document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+}
+</script>
+</body>
+</html>

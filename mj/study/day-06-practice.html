@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 6 Practice: FSM Fundamentals | Digital Design Study</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    background: linear-gradient(135deg, #fefae0 0%, #faedcd 100%);
+    color: #3d405b;
+    line-height: 1.8;
+    padding: 24px;
+    max-width: 920px;
+    margin: 0 auto;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+h1 { color: #5d4037; border-bottom: 3px solid #c4a77d; padding-bottom: 12px; margin-bottom: 24px; font-size: 2em; }
+h2 { color: #588157; border-bottom: 2px solid #a3b18a; padding-bottom: 8px; margin: 32px 0 16px; }
+h3 { color: #5d4037; margin: 20px 0 12px; }
+p { margin: 12px 0; }
+code {
+    background: #e9f5db; color: #3d405b; padding: 2px 8px; border-radius: 4px;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+}
+pre {
+    background: #2d3436; padding: 24px; border-radius: 12px; margin: 24px 0;
+    border: 3px solid #a3b18a; overflow-x: auto;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace; font-size: 15px; line-height: 1.6; color: #f8f8f2;
+}
+.keyword { color: #ff79c6; font-weight: 600; }
+.type { color: #8be9fd; }
+.signal { color: #50fa7b; }
+.number { color: #ffb86c; }
+.comment { color: #6272a4; font-style: italic; }
+.string { color: #f1fa8c; }
+.concept-box {
+    background: #fff8f0; border: 2px solid #c4a77d; border-radius: 12px;
+    padding: 20px; margin: 20px 0; color: #3d405b;
+}
+.concept-box h3 { color: #5d4037; margin-bottom: 12px; }
+.warning-box {
+    background: #fff8f0; border-radius: 12px; padding: 20px; margin: 20px 0;
+    border-left: 4px solid #ef4444; color: #3d405b;
+}
+.warning-box h3 { color: #c53030; margin-bottom: 12px; }
+.tip-box {
+    background: #fff8f0; border-radius: 12px; padding: 20px; margin: 20px 0;
+    border-left: 4px solid #588157; color: #3d405b;
+}
+.hint-box {
+    background: #fff8f0; border-radius: 8px; padding: 15px; margin: 15px 0;
+    border-left: 4px solid #5d4037; color: #3d405b;
+}
+.exercise {
+    background: #fff; border: 2px solid #a3b18a; border-radius: 12px;
+    padding: 24px; margin: 24px 0;
+}
+.exercise h3 { color: #588157; }
+.solution-toggle {
+    background: linear-gradient(135deg, #588157, #3a5a40); color: #fff;
+    border: none; border-radius: 24px; padding: 10px 20px; cursor: pointer;
+    font-weight: 600; font-size: 14px; margin: 12px 0;
+}
+.solution-toggle:hover { opacity: 0.9; }
+.solution { display: none; margin-top: 16px; }
+.nav-links { display: flex; gap: 12px; margin: 24px 0; flex-wrap: wrap; }
+.nav-links a {
+    background: linear-gradient(135deg, #588157, #3a5a40); color: #fff;
+    text-decoration: none; padding: 10px 20px; border-radius: 24px; font-weight: 600; font-size: 14px;
+}
+.lang-toggle {
+    position: fixed; top: 16px; right: 16px; background: #588157; border: none;
+    border-radius: 24px; padding: 10px 20px; cursor: pointer; color: #fff;
+    font-size: 14px; font-weight: 600; z-index: 1000;
+}
+.lang-toggle:hover { background: #3a5a40; }
+.ko { display: none; }
+.state-diagram {
+    background: #fff; border: 2px solid #c4a77d; border-radius: 12px;
+    padding: 24px; margin: 20px 0; text-align: center;
+    font-family: 'SF Mono', monospace; line-height: 1.4; white-space: pre; overflow-x: auto;
+}
+@media (max-width: 768px) {
+    body { padding: 16px; } h1 { font-size: 1.8em; }
+    pre { font-size: 14px; padding: 16px; }
+    .lang-toggle { padding: 8px 16px; font-size: 13px; }
+}
+</style>
+</head>
+<body>
+
+<button class="lang-toggle" onclick="toggleLang()">한국어</button>
+
+<h1>💻 Day 6 Practice: FSM Fundamentals</h1>
+<p style="color:#888;">Week 2 — FSM Design | 3 Exercises</p>
+
+<div class="nav-links">
+    <a href="day-06-lesson.html">📖 Lesson</a>
+    <a href="day-06-quiz.html">📝 Quiz</a>
+    <a href="https://www.edaplayground.com/x/VdwP" target="_blank">🔧 EDA Playground</a>
+</div>
+
+<!-- ==================== EXERCISE 1 ==================== -->
+<div class="exercise">
+    <h3>Exercise 1: Turnstile FSM 🚪</h3>
+
+    <p class="en">Design a turnstile controller with two states: <code>LOCKED</code> and <code>UNLOCKED</code>.</p>
+    <p class="ko" style="display:none;">두 개의 상태를 가진 회전문 컨트롤러를 설계하세요: <code>LOCKED</code>와 <code>UNLOCKED</code>.</p>
+
+    <div class="concept-box">
+        <h3 class="en">📋 Requirements</h3>
+        <h3 class="ko" style="display:none;">📋 요구사항</h3>
+        <ul class="en">
+            <li><strong>Inputs:</strong> <code>clk</code>, <code>rst_n</code>, <code>coin</code>, <code>push</code></li>
+            <li><strong>Output:</strong> <code>unlocked</code> (1 when gate is open)</li>
+            <li><strong>LOCKED state:</strong> Inserting a <code>coin</code> → transitions to UNLOCKED. Pushing has no effect.</li>
+            <li><strong>UNLOCKED state:</strong> A <code>push</code> → transitions back to LOCKED. Inserting another coin has no effect.</li>
+            <li><strong>Reset:</strong> Goes to LOCKED</li>
+        </ul>
+        <ul class="ko" style="display:none;">
+            <li><strong>입력:</strong> <code>clk</code>, <code>rst_n</code>, <code>coin</code>, <code>push</code></li>
+            <li><strong>출력:</strong> <code>unlocked</code> (게이트 열려있을 때 1)</li>
+            <li><strong>LOCKED 상태:</strong> <code>coin</code> 투입 → UNLOCKED로 전이. push는 효과 없음.</li>
+            <li><strong>UNLOCKED 상태:</strong> <code>push</code> → LOCKED로 전이. 추가 coin은 효과 없음.</li>
+            <li><strong>리셋:</strong> LOCKED로 이동</li>
+        </ul>
+    </div>
+
+    <div class="state-diagram">
+         ┌────────┐           ┌──────────┐
+    ──►  │ LOCKED │ ──coin──► │ UNLOCKED │
+         │        │ ◄──push── │          │
+         └────────┘           └──────────┘
+    </div>
+
+    <div class="hint-box">
+        <p class="en"><strong>💡 Hint:</strong> Use the 3-block pattern from the lesson. Don't forget <code>next_state = state;</code> as default and a <code>default</code> case!</p>
+        <p class="ko" style="display:none;"><strong>💡 힌트:</strong> 레슨의 3블록 패턴을 사용하세요. <code>next_state = state;</code> 기본값과 <code>default</code> 케이스를 잊지 마세요!</p>
+    </div>
+
+    <button class="solution-toggle" onclick="toggleSolution(this)">Show Solution</button>
+    <div class="solution">
+<pre>
+<span class="keyword">typedef</span> <span class="keyword">enum</span> <span class="type">logic</span> {
+    <span class="signal">LOCKED</span>   = <span class="number">1'b0</span>,
+    <span class="signal">UNLOCKED</span> = <span class="number">1'b1</span>
+} <span class="type">turnstile_state_t</span>;
+
+<span class="keyword">module</span> <span class="signal">turnstile</span> (
+    <span class="keyword">input</span>  <span class="type">logic</span> <span class="signal">clk</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span> <span class="signal">rst_n</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span> <span class="signal">coin</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span> <span class="signal">push</span>,
+    <span class="keyword">output</span> <span class="type">logic</span> <span class="signal">unlocked</span>
+);
+
+    <span class="type">turnstile_state_t</span> <span class="signal">state</span>, <span class="signal">next_state</span>;
+
+    <span class="comment">// Block 1: State Register</span>
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span> <span class="keyword">or</span> <span class="keyword">negedge</span> <span class="signal">rst_n</span>) <span class="keyword">begin</span>
+        <span class="keyword">if</span> (!<span class="signal">rst_n</span>)
+            <span class="signal">state</span> &lt;= <span class="signal">LOCKED</span>;
+        <span class="keyword">else</span>
+            <span class="signal">state</span> &lt;= <span class="signal">next_state</span>;
+    <span class="keyword">end</span>
+
+    <span class="comment">// Block 2: Next-State Logic</span>
+    <span class="keyword">always_comb</span> <span class="keyword">begin</span>
+        <span class="signal">next_state</span> = <span class="signal">state</span>;  <span class="comment">// Default: stay</span>
+        <span class="keyword">case</span> (<span class="signal">state</span>)
+            <span class="signal">LOCKED</span>:   <span class="keyword">if</span> (<span class="signal">coin</span>) <span class="signal">next_state</span> = <span class="signal">UNLOCKED</span>;
+            <span class="signal">UNLOCKED</span>: <span class="keyword">if</span> (<span class="signal">push</span>) <span class="signal">next_state</span> = <span class="signal">LOCKED</span>;
+            <span class="keyword">default</span>:  <span class="signal">next_state</span> = <span class="signal">LOCKED</span>;
+        <span class="keyword">endcase</span>
+    <span class="keyword">end</span>
+
+    <span class="comment">// Block 3: Output Logic</span>
+    <span class="keyword">always_comb</span> <span class="keyword">begin</span>
+        <span class="signal">unlocked</span> = (<span class="signal">state</span> == <span class="signal">UNLOCKED</span>);
+    <span class="keyword">end</span>
+
+<span class="keyword">endmodule</span>
+</pre>
+    </div>
+</div>
+
+<!-- ==================== EXERCISE 2 ==================== -->
+<div class="exercise">
+    <h3>Exercise 2: LED Blink Pattern FSM 💡</h3>
+
+    <p class="en">Design an FSM that produces a blinking pattern: ON for 2 cycles, OFF for 1 cycle, repeat.</p>
+    <p class="ko" style="display:none;">깜박임 패턴을 생성하는 FSM을 설계하세요: 2 사이클 ON, 1 사이클 OFF, 반복.</p>
+
+    <div class="concept-box">
+        <h3 class="en">📋 Requirements</h3>
+        <h3 class="ko" style="display:none;">📋 요구사항</h3>
+        <ul class="en">
+            <li><strong>Inputs:</strong> <code>clk</code>, <code>rst_n</code>, <code>enable</code></li>
+            <li><strong>Output:</strong> <code>led</code></li>
+            <li><strong>States:</strong> ON1, ON2, OFF1</li>
+            <li>When <code>enable</code> is 0, stay in current state (pause)</li>
+            <li>Pattern when enabled: ON1 → ON2 → OFF1 → ON1 → ...</li>
+            <li>LED is on during ON1 and ON2, off during OFF1</li>
+        </ul>
+        <ul class="ko" style="display:none;">
+            <li><strong>입력:</strong> <code>clk</code>, <code>rst_n</code>, <code>enable</code></li>
+            <li><strong>출력:</strong> <code>led</code></li>
+            <li><strong>상태:</strong> ON1, ON2, OFF1</li>
+            <li><code>enable</code>이 0이면 현재 상태 유지 (일시정지)</li>
+            <li>활성화 시 패턴: ON1 → ON2 → OFF1 → ON1 → ...</li>
+            <li>ON1, ON2에서 LED 켜짐, OFF1에서 꺼짐</li>
+        </ul>
+    </div>
+
+    <div class="hint-box">
+        <p class="en"><strong>💡 Hint:</strong> The <code>enable</code> check goes in the next-state logic. If <code>!enable</code>, the default <code>next_state = state</code> keeps you in place.</p>
+        <p class="ko" style="display:none;"><strong>💡 힌트:</strong> <code>enable</code> 검사는 다음 상태 로직에 들어갑니다. <code>!enable</code>이면 기본값 <code>next_state = state</code>가 현재 위치를 유지합니다.</p>
+    </div>
+
+    <button class="solution-toggle" onclick="toggleSolution(this)">Show Solution</button>
+    <div class="solution">
+<pre>
+<span class="keyword">typedef</span> <span class="keyword">enum</span> <span class="type">logic</span> [<span class="number">1</span>:<span class="number">0</span>] {
+    <span class="signal">ON1</span>  = <span class="number">2'b00</span>,
+    <span class="signal">ON2</span>  = <span class="number">2'b01</span>,
+    <span class="signal">OFF1</span> = <span class="number">2'b10</span>
+} <span class="type">blink_state_t</span>;
+
+<span class="keyword">module</span> <span class="signal">led_blinker</span> (
+    <span class="keyword">input</span>  <span class="type">logic</span> <span class="signal">clk</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span> <span class="signal">rst_n</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span> <span class="signal">enable</span>,
+    <span class="keyword">output</span> <span class="type">logic</span> <span class="signal">led</span>
+);
+
+    <span class="type">blink_state_t</span> <span class="signal">state</span>, <span class="signal">next_state</span>;
+
+    <span class="comment">// State register</span>
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span> <span class="keyword">or</span> <span class="keyword">negedge</span> <span class="signal">rst_n</span>) <span class="keyword">begin</span>
+        <span class="keyword">if</span> (!<span class="signal">rst_n</span>)
+            <span class="signal">state</span> &lt;= <span class="signal">ON1</span>;
+        <span class="keyword">else</span>
+            <span class="signal">state</span> &lt;= <span class="signal">next_state</span>;
+    <span class="keyword">end</span>
+
+    <span class="comment">// Next-state logic</span>
+    <span class="keyword">always_comb</span> <span class="keyword">begin</span>
+        <span class="signal">next_state</span> = <span class="signal">state</span>;  <span class="comment">// Default: stay (handles !enable)</span>
+        <span class="keyword">if</span> (<span class="signal">enable</span>) <span class="keyword">begin</span>
+            <span class="keyword">case</span> (<span class="signal">state</span>)
+                <span class="signal">ON1</span>:  <span class="signal">next_state</span> = <span class="signal">ON2</span>;
+                <span class="signal">ON2</span>:  <span class="signal">next_state</span> = <span class="signal">OFF1</span>;
+                <span class="signal">OFF1</span>: <span class="signal">next_state</span> = <span class="signal">ON1</span>;
+                <span class="keyword">default</span>: <span class="signal">next_state</span> = <span class="signal">ON1</span>;
+            <span class="keyword">endcase</span>
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+
+    <span class="comment">// Output logic</span>
+    <span class="keyword">always_comb</span> <span class="keyword">begin</span>
+        <span class="signal">led</span> = (<span class="signal">state</span> == <span class="signal">ON1</span>) || (<span class="signal">state</span> == <span class="signal">ON2</span>);
+    <span class="keyword">end</span>
+
+<span class="keyword">endmodule</span>
+</pre>
+    </div>
+</div>
+
+<!-- ==================== EXERCISE 3 ==================== -->
+<div class="exercise">
+    <h3>Exercise 3: Bug Hunt 🐛</h3>
+
+    <p class="en">Find and fix ALL the bugs in this FSM. There are <strong>4 bugs</strong>.</p>
+    <p class="ko" style="display:none;">이 FSM의 모든 버그를 찾아 수정하세요. <strong>4개의 버그</strong>가 있습니다.</p>
+
+<pre>
+<span class="keyword">typedef</span> <span class="keyword">enum</span> <span class="type">logic</span> [<span class="number">1</span>:<span class="number">0</span>] {
+    <span class="signal">IDLE</span> = <span class="number">2'b00</span>,
+    <span class="signal">LOAD</span> = <span class="number">2'b01</span>,
+    <span class="signal">PROC</span> = <span class="number">2'b10</span>,
+    <span class="signal">DONE</span> = <span class="number">2'b11</span>
+} <span class="type">state_t</span>;
+
+<span class="keyword">module</span> <span class="signal">buggy_fsm</span> (
+    <span class="keyword">input</span>  <span class="type">logic</span> <span class="signal">clk</span>, <span class="signal">rst_n</span>, <span class="signal">start</span>, <span class="signal">loaded</span>, <span class="signal">finished</span>,
+    <span class="keyword">output</span> <span class="type">logic</span> <span class="signal">busy</span>, <span class="signal">done_out</span>
+);
+    <span class="type">state_t</span> <span class="signal">state</span>, <span class="signal">next_state</span>;
+
+    <span class="comment">// BUG 1 is here</span>
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span>) <span class="keyword">begin</span>
+        <span class="keyword">if</span> (!<span class="signal">rst_n</span>)
+            <span class="signal">state</span> &lt;= <span class="signal">IDLE</span>;
+        <span class="keyword">else</span>
+            <span class="signal">state</span> &lt;= <span class="signal">next_state</span>;
+    <span class="keyword">end</span>
+
+    <span class="comment">// BUG 2 is here</span>
+    <span class="keyword">always_comb</span> <span class="keyword">begin</span>
+        <span class="keyword">case</span> (<span class="signal">state</span>)
+            <span class="signal">IDLE</span>: <span class="keyword">if</span> (<span class="signal">start</span>) <span class="signal">next_state</span> = <span class="signal">LOAD</span>;
+            <span class="signal">LOAD</span>: <span class="keyword">if</span> (<span class="signal">loaded</span>) <span class="signal">next_state</span> = <span class="signal">PROC</span>;
+            <span class="signal">PROC</span>: <span class="keyword">if</span> (<span class="signal">finished</span>) <span class="signal">next_state</span> = <span class="signal">DONE</span>;
+            <span class="signal">DONE</span>: <span class="signal">next_state</span> = <span class="signal">IDLE</span>;
+        <span class="keyword">endcase</span>
+    <span class="keyword">end</span>
+
+    <span class="comment">// BUG 3 is here</span>
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span>) <span class="keyword">begin</span>
+        <span class="signal">busy</span>     = (<span class="signal">state</span> == <span class="signal">LOAD</span>) || (<span class="signal">state</span> == <span class="signal">PROC</span>);
+        <span class="signal">done_out</span> = (<span class="signal">state</span> == <span class="signal">DONE</span>);
+    <span class="keyword">end</span>
+<span class="keyword">endmodule</span>
+</pre>
+
+    <div class="hint-box">
+        <p class="en"><strong>💡 Hints:</strong> Think about: async reset sensitivity, default assignments, missing case handling, and output block type.</p>
+        <p class="ko" style="display:none;"><strong>💡 힌트:</strong> 비동기 리셋 감도, 기본 할당, 누락된 케이스 처리, 출력 블록 유형을 생각해보세요.</p>
+    </div>
+
+    <button class="solution-toggle" onclick="toggleSolution(this)">Show Solution</button>
+    <div class="solution">
+        <div class="concept-box">
+            <h3>🐛 The 4 Bugs</h3>
+            <p class="en"><strong>Bug 1:</strong> Async reset missing from sensitivity list. Should be <code>always_ff @(posedge clk or negedge rst_n)</code></p>
+            <p class="ko" style="display:none;"><strong>버그 1:</strong> 감도 리스트에 비동기 리셋 누락. <code>always_ff @(posedge clk or negedge rst_n)</code>이어야 함</p>
+
+            <p class="en"><strong>Bug 2:</strong> Missing <code>next_state = state;</code> default assignment at top of <code>always_comb</code>. Also missing <code>default</code> case. Both cause latches.</p>
+            <p class="ko" style="display:none;"><strong>버그 2:</strong> <code>always_comb</code> 상단에 <code>next_state = state;</code> 기본 할당 누락. <code>default</code> 케이스도 누락. 둘 다 래치를 유발.</p>
+
+            <p class="en"><strong>Bug 3:</strong> Output logic should be <code>always_comb</code>, not <code>always_ff</code>. Outputs are combinational — they depend only on current state.</p>
+            <p class="ko" style="display:none;"><strong>버그 3:</strong> 출력 로직은 <code>always_ff</code>가 아닌 <code>always_comb</code>이어야 함. 출력은 조합 논리.</p>
+
+            <p class="en"><strong>Bug 4 (within Bug 2):</strong> No <code>default</code> case in the case statement — illegal states trap the FSM.</p>
+            <p class="ko" style="display:none;"><strong>버그 4 (버그 2 내):</strong> case 문에 <code>default</code> 케이스 없음 — 불법 상태가 FSM을 가둠.</p>
+        </div>
+    </div>
+</div>
+
+<div class="tip-box">
+    <h3 class="en">🚀 Extra Challenge</h3>
+    <h3 class="ko" style="display:none;">🚀 추가 도전</h3>
+    <p class="en">Write a testbench for the turnstile FSM (Exercise 1). Test these scenarios: reset → locked, coin → unlocked, push → locked again, push while locked (nothing happens), coin while unlocked (nothing happens).</p>
+    <p class="ko" style="display:none;">회전문 FSM(연습 1)의 테스트벤치를 작성하세요. 다음 시나리오를 테스트: 리셋 → locked, coin → unlocked, push → 다시 locked, locked 상태에서 push(아무 일 없음), unlocked 상태에서 coin(아무 일 없음).</p>
+</div>
+
+<div class="nav-links">
+    <a href="day-06-lesson.html">📖 Review Lesson</a>
+    <a href="day-06-quiz.html">📝 Take Quiz</a>
+</div>
+
+<script>
+let isKorean = false;
+function toggleLang() {
+    isKorean = !isKorean;
+    document.querySelectorAll('.en').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'none' : 'revert', 'important');
+    });
+    document.querySelectorAll('.ko').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'revert' : 'none', 'important');
+    });
+    document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+}
+function toggleSolution(btn) {
+    const sol = btn.nextElementSibling;
+    if (sol.style.display === 'block') {
+        sol.style.display = 'none';
+        btn.textContent = 'Show Solution';
+    } else {
+        sol.style.display = 'block';
+        btn.textContent = 'Hide Solution';
+    }
+}
+</script>
+</body>
+</html>

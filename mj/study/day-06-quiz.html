@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 6 Quiz: FSM Fundamentals | Digital Design Study</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    background: linear-gradient(135deg, #fefae0 0%, #faedcd 100%);
+    color: #3d405b;
+    line-height: 1.8;
+    padding: 24px;
+    max-width: 920px;
+    margin: 0 auto;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+h1 { color: #5d4037; border-bottom: 3px solid #c4a77d; padding-bottom: 12px; margin-bottom: 24px; font-size: 2em; }
+h2 { color: #588157; border-bottom: 2px solid #a3b18a; padding-bottom: 8px; margin: 32px 0 16px; }
+h3 { color: #5d4037; margin: 20px 0 12px; }
+p { margin: 12px 0; }
+code {
+    background: #e9f5db; color: #3d405b; padding: 2px 8px; border-radius: 4px;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+}
+pre {
+    background: #2d3436; padding: 24px; border-radius: 12px; margin: 24px 0;
+    border: 3px solid #a3b18a; overflow-x: auto;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace; font-size: 15px; line-height: 1.6; color: #f8f8f2;
+}
+.keyword { color: #ff79c6; font-weight: 600; }
+.type { color: #8be9fd; }
+.signal { color: #50fa7b; }
+.number { color: #ffb86c; }
+.comment { color: #6272a4; font-style: italic; }
+.question {
+    background: #fff8f0; border: 2px solid #c4a77d; border-radius: 12px;
+    padding: 20px; margin: 20px 0; color: #3d405b;
+}
+.question h3 { color: #5d4037; margin-bottom: 12px; }
+.options { list-style: none; padding: 0; }
+.options li {
+    padding: 10px 16px; margin: 8px 0; border-radius: 8px; cursor: pointer;
+    border: 2px solid #c4a77d; background: #fff; transition: all 0.2s;
+}
+.options li:hover { border-color: #588157; background: #f0f7f0; }
+.options li.correct { background: #d4edda; border-color: #10b981; }
+.options li.wrong { background: #fde8e8; border-color: #ef4444; }
+.options li.disabled { pointer-events: none; opacity: 0.7; }
+.explanation {
+    display: none; background: #fff8f0; border-left: 4px solid #588157;
+    border-radius: 8px; padding: 15px; margin: 10px 0; color: #3d405b;
+}
+.score-box {
+    background: #fff8f0; border: 2px solid #588157; border-radius: 12px;
+    padding: 24px; margin: 24px 0; text-align: center; display: none;
+}
+.score-box h2 { border: none; }
+.nav-links { display: flex; gap: 12px; margin: 24px 0; flex-wrap: wrap; }
+.nav-links a {
+    background: linear-gradient(135deg, #588157, #3a5a40); color: #fff;
+    text-decoration: none; padding: 10px 20px; border-radius: 24px; font-weight: 600; font-size: 14px;
+}
+.lang-toggle {
+    position: fixed; top: 16px; right: 16px; background: #588157; border: none;
+    border-radius: 24px; padding: 10px 20px; cursor: pointer; color: #fff;
+    font-size: 14px; font-weight: 600; z-index: 1000;
+}
+.lang-toggle:hover { background: #3a5a40; }
+.ko { display: none; }
+@media (max-width: 768px) {
+    body { padding: 16px; } h1 { font-size: 1.8em; }
+    pre { font-size: 14px; padding: 16px; }
+    .lang-toggle { padding: 8px 16px; font-size: 13px; }
+}
+</style>
+</head>
+<body>
+
+<button class="lang-toggle" onclick="toggleLang()">한국어</button>
+
+<h1>📝 Day 6 Quiz: FSM Fundamentals</h1>
+<p style="color:#888;">Week 2 — FSM Design | 10 Questions</p>
+
+<div class="nav-links">
+    <a href="day-06-lesson.html">📖 Lesson</a>
+    <a href="day-06-practice.html">💻 Practice</a>
+</div>
+
+<div id="quiz">
+
+<!-- Q1 -->
+<div class="question" data-answer="2">
+    <h3>Q1. What are the three core components of an FSM?</h3>
+    <p class="ko" style="display:none;">FSM의 세 가지 핵심 구성 요소는?</p>
+    <ul class="options">
+        <li onclick="check(this,1)">A) Inputs, outputs, clock</li>
+        <li onclick="check(this,2)">B) States, transitions, outputs</li>
+        <li onclick="check(this,3)">C) Registers, wires, modules</li>
+        <li onclick="check(this,4)">D) Clock, reset, enable</li>
+    </ul>
+    <div class="explanation">
+        <p class="en">✅ <strong>States, transitions, and outputs</strong> are the three fundamental components. States define possible conditions, transitions define how to move between them, and outputs define what the FSM produces.</p>
+        <p class="ko" style="display:none;">✅ <strong>상태, 전이, 출력</strong>이 세 가지 기본 구성 요소입니다.</p>
+    </div>
+</div>
+
+<!-- Q2 -->
+<div class="question" data-answer="3">
+    <h3>Q2. In the standard 3-block FSM pattern, what type of block is used for next-state logic?</h3>
+    <p class="ko" style="display:none;">표준 3블록 FSM 패턴에서 다음 상태 로직에 어떤 블록 유형을 사용하나요?</p>
+    <ul class="options">
+        <li onclick="check(this,1)">A) <code>always_ff</code></li>
+        <li onclick="check(this,2)">B) <code>always_latch</code></li>
+        <li onclick="check(this,3)">C) <code>always_comb</code></li>
+        <li onclick="check(this,4)">D) <code>assign</code></li>
+    </ul>
+    <div class="explanation">
+        <p class="en">✅ Next-state logic is <strong>combinational</strong> — it calculates the next state from current state + inputs without any clock dependency. Use <code>always_comb</code>.</p>
+        <p class="ko" style="display:none;">✅ 다음 상태 로직은 <strong>조합 논리</strong>입니다 — <code>always_comb</code>을 사용합니다.</p>
+    </div>
+</div>
+
+<!-- Q3 -->
+<div class="question" data-answer="1">
+    <h3>Q3. Why do we set <code>next_state = state;</code> at the top of the next-state logic block?</h3>
+    <p class="ko" style="display:none;">다음 상태 로직 블록 상단에서 왜 <code>next_state = state;</code>를 설정하나요?</p>
+    <ul class="options">
+        <li onclick="check(this,1)">A) To prevent latch inference from missing assignments</li>
+        <li onclick="check(this,2)">B) To make the FSM run faster</li>
+        <li onclick="check(this,3)">C) It's just a coding convention with no functional purpose</li>
+        <li onclick="check(this,4)">D) To reset the state machine</li>
+    </ul>
+    <div class="explanation">
+        <p class="en">✅ If any branch of the <code>case</code> statement doesn't assign <code>next_state</code>, synthesis will infer a <strong>latch</strong> to hold the previous value. The default assignment ensures every path has a value.</p>
+        <p class="ko" style="display:none;">✅ <code>case</code> 문의 어떤 분기가 <code>next_state</code>를 할당하지 않으면, 합성이 이전 값을 유지하기 위해 <strong>래치</strong>를 추론합니다.</p>
+    </div>
+</div>
+
+<!-- Q4 -->
+<div class="question" data-answer="4">
+    <h3>Q4. What happens if you omit the <code>default</code> case in your FSM?</h3>
+    <p class="ko" style="display:none;">FSM에서 <code>default</code> 케이스를 생략하면 어떻게 되나요?</p>
+    <ul class="options">
+        <li onclick="check(this,1)">A) The FSM will always reset to IDLE</li>
+        <li onclick="check(this,2)">B) Synthesis will fail with an error</li>
+        <li onclick="check(this,3)">C) The FSM runs normally — default isn't needed</li>
+        <li onclick="check(this,4)">D) An illegal state could trap the FSM forever</li>
+    </ul>
+    <div class="explanation">
+        <p class="en">✅ Without a <code>default</code> case, if the FSM enters an undefined state (due to SEU, power glitch, etc.), there's no transition defined — it gets <strong>stuck</strong>. Always include <code>default: next_state = IDLE;</code></p>
+        <p class="ko" style="display:none;">✅ <code>default</code> 케이스 없이 FSM이 정의되지 않은 상태에 진입하면 전이가 정의되지 않아 <strong>멈춥니다</strong>.</p>
+    </div>
+</div>
+
+<!-- Q5 -->
+<div class="question" data-answer="2">
+    <h3>Q5. Which block should contain the state register?</h3>
+    <p class="ko" style="display:none;">상태 레지스터는 어떤 블록에 포함되어야 하나요?</p>
+    <ul class="options">
+        <li onclick="check(this,1)">A) <code>always_comb</code></li>
+        <li onclick="check(this,2)">B) <code>always_ff @(posedge clk)</code></li>
+        <li onclick="check(this,3)">C) <code>assign</code></li>
+        <li onclick="check(this,4)">D) <code>initial</code></li>
+    </ul>
+    <div class="explanation">
+        <p class="en">✅ The state register is <strong>sequential</strong> — it updates on the clock edge and must use <code>always_ff</code> with non-blocking assignments (<code>&lt;=</code>).</p>
+        <p class="ko" style="display:none;">✅ 상태 레지스터는 <strong>순차 논리</strong>입니다 — 클럭 엣지에서 업데이트되며 <code>always_ff</code>를 사용해야 합니다.</p>
+    </div>
+</div>
+
+<!-- Q6 -->
+<div class="question" data-answer="3">
+    <h3>Q6. What is the benefit of <code>typedef enum</code> for FSM states?</h3>
+    <p class="ko" style="display:none;">FSM 상태에 <code>typedef enum</code>을 사용하는 이점은?</p>
+    <ul class="options">
+        <li onclick="check(this,1)">A) It makes the FSM run faster in hardware</li>
+        <li onclick="check(this,2)">B) It reduces the number of flip-flops needed</li>
+        <li onclick="check(this,3)">C) Readable names, waveform labels, and type checking</li>
+        <li onclick="check(this,4)">D) It automatically prevents illegal states</li>
+    </ul>
+    <div class="explanation">
+        <p class="en">✅ <code>typedef enum</code> gives you human-readable state names in code and waveforms, plus compile-time type checking. It doesn't affect the actual hardware.</p>
+        <p class="ko" style="display:none;">✅ <code>typedef enum</code>은 코드와 파형에서 읽기 쉬운 상태 이름과 컴파일 타임 타입 검사를 제공합니다.</p>
+    </div>
+</div>
+
+<!-- Q7 -->
+<div class="question" data-answer="1">
+    <h3>Q7. What's wrong with this code?</h3>
+<pre>
+<span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span>) <span class="keyword">begin</span>
+    <span class="keyword">case</span> (<span class="signal">state</span>)
+        <span class="signal">IDLE</span>: <span class="keyword">if</span> (<span class="signal">start</span>) <span class="signal">next_state</span> = <span class="signal">RUN</span>;
+        <span class="signal">RUN</span>:  <span class="keyword">if</span> (<span class="signal">done</span>)  <span class="signal">next_state</span> = <span class="signal">IDLE</span>;
+    <span class="keyword">endcase</span>
+<span class="keyword">end</span>
+</pre>
+    <ul class="options">
+        <li onclick="check(this,1)">A) Next-state logic should use <code>always_comb</code>, not <code>always_ff</code></li>
+        <li onclick="check(this,2)">B) Missing reset logic</li>
+        <li onclick="check(this,3)">C) Should use <code>&lt;=</code> instead of <code>=</code></li>
+        <li onclick="check(this,4)">D) Missing <code>default</code> case only</li>
+    </ul>
+    <div class="explanation">
+        <p class="en">✅ The biggest issue is using <code>always_ff</code> for combinational next-state logic. This should be <code>always_comb</code>. (It's also missing a default and default assignment, but the block type is the primary error.)</p>
+        <p class="ko" style="display:none;">✅ 가장 큰 문제는 조합 논리인 다음 상태 로직에 <code>always_ff</code>를 사용한 것입니다. <code>always_comb</code>이어야 합니다.</p>
+    </div>
+</div>
+
+<!-- Q8 -->
+<div class="question" data-answer="2">
+    <h3>Q8. In the 3-block pattern, output logic for a basic FSM should be:</h3>
+    <p class="ko" style="display:none;">3블록 패턴에서 기본 FSM의 출력 로직은:</p>
+    <ul class="options">
+        <li onclick="check(this,1)">A) Sequential — clocked with <code>always_ff</code></li>
+        <li onclick="check(this,2)">B) Combinational — based on current state with <code>always_comb</code></li>
+        <li onclick="check(this,3)">C) Either one works exactly the same</li>
+        <li onclick="check(this,4)">D) Must use continuous <code>assign</code> statements</li>
+    </ul>
+    <div class="explanation">
+        <p class="en">✅ In a standard (Moore) FSM, output logic is <strong>combinational</strong> — outputs depend only on the current state. Use <code>always_comb</code> or <code>assign</code>.</p>
+        <p class="ko" style="display:none;">✅ 표준 (Moore) FSM에서 출력 로직은 <strong>조합 논리</strong>입니다 — 출력은 현재 상태에만 의존합니다.</p>
+    </div>
+</div>
+
+<!-- Q9 -->
+<div class="question" data-answer="3">
+    <h3>Q9. What should you do BEFORE writing any FSM SystemVerilog code?</h3>
+    <p class="ko" style="display:none;">FSM SystemVerilog 코드를 작성하기 전에 무엇을 해야 하나요?</p>
+    <ul class="options">
+        <li onclick="check(this,1)">A) Write the testbench first</li>
+        <li onclick="check(this,2)">B) Choose the encoding (binary, one-hot, etc.)</li>
+        <li onclick="check(this,3)">C) Draw a state diagram</li>
+        <li onclick="check(this,4)">D) Set up the synthesis constraints</li>
+    </ul>
+    <div class="explanation">
+        <p class="en">✅ Always <strong>draw a state diagram first</strong>. It forces you to think through all states, transitions, and edge cases before writing code. Coding without a diagram leads to bugs.</p>
+        <p class="ko" style="display:none;">✅ 항상 <strong>상태 다이어그램을 먼저 그리세요</strong>. 코드 작성 전에 모든 상태, 전이, 엣지 케이스를 생각하게 합니다.</p>
+    </div>
+</div>
+
+<!-- Q10 -->
+<div class="question" data-answer="4">
+    <h3>Q10. In the packet receiver example, why is <code>byte_count</code> in a separate <code>always_ff</code> block from the state register?</h3>
+    <p class="ko" style="display:none;">패킷 수신기 예시에서 왜 <code>byte_count</code>가 상태 레지스터와 별도의 <code>always_ff</code> 블록에 있나요?</p>
+    <ul class="options">
+        <li onclick="check(this,1)">A) SystemVerilog doesn't allow two registers in one block</li>
+        <li onclick="check(this,2)">B) It runs on a different clock</li>
+        <li onclick="check(this,3)">C) It needs to count faster than the state changes</li>
+        <li onclick="check(this,4)">D) Clean separation of concerns — FSM controls when, counter controls how</li>
+    </ul>
+    <div class="explanation">
+        <p class="en">✅ It's a <strong>design pattern</strong> — separating the counter from the state register keeps each block focused on one job. The FSM decides when counting happens; the counter block handles the counting logic.</p>
+        <p class="ko" style="display:none;">✅ <strong>디자인 패턴</strong>입니다 — 카운터를 상태 레지스터와 분리하면 각 블록이 하나의 역할에 집중합니다.</p>
+    </div>
+</div>
+
+</div>
+
+<div class="score-box" id="scoreBox">
+    <h2 id="scoreText"></h2>
+    <p id="scoreMsg"></p>
+</div>
+
+<div class="nav-links">
+    <a href="day-06-lesson.html">📖 Review Lesson</a>
+    <a href="day-06-practice.html">💻 Practice</a>
+</div>
+
+<script>
+let isKorean = false;
+function toggleLang() {
+    isKorean = !isKorean;
+    document.querySelectorAll('.en').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'none' : 'revert', 'important');
+    });
+    document.querySelectorAll('.ko').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'revert' : 'none', 'important');
+    });
+    document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+}
+
+let answered = 0, correct = 0, total = document.querySelectorAll('.question').length;
+
+function check(li, choice) {
+    const q = li.closest('.question');
+    if (q.classList.contains('answered')) return;
+    q.classList.add('answered');
+    answered++;
+    const ans = parseInt(q.dataset.answer);
+    const options = q.querySelectorAll('.options li');
+    if (choice === ans) {
+        li.classList.add('correct');
+        correct++;
+    } else {
+        li.classList.add('wrong');
+        options[ans - 1].classList.add('correct');
+    }
+    options.forEach(o => o.classList.add('disabled'));
+    q.querySelector('.explanation').style.display = 'block';
+    if (answered === total) {
+        const box = document.getElementById('scoreBox');
+        box.style.display = 'block';
+        const pct = Math.round(correct / total * 100);
+        document.getElementById('scoreText').textContent = `Score: ${correct}/${total} (${pct}%)`;
+        document.getElementById('scoreMsg').textContent =
+            pct >= 80 ? '🎉 Excellent! You understand FSM fundamentals well!' :
+            pct >= 60 ? '👍 Good effort! Review the lesson for topics you missed.' :
+            '📖 Review the lesson and try again — you\'ll get it!';
+    }
+}
+</script>
+</body>
+</html>
