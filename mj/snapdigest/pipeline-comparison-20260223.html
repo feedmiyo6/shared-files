@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SnapDigest Pipeline Comparison</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #1a1a2e; color: #e0e0e0; min-height: 100vh; }
+  
+  .header { text-align: center; padding: 32px 16px 20px; }
+  .header h1 { font-size: 22px; color: #7FB07E; margin-bottom: 6px; }
+  .header p { font-size: 13px; color: #888; }
+  
+  /* Tab switcher */
+  .tabs { display: flex; gap: 8px; justify-content: center; padding: 0 16px 20px; position: sticky; top: 0; background: #1a1a2e; z-index: 10; padding-top: 12px; }
+  .tab { padding: 10px 20px; border-radius: 20px; border: 1px solid #333; font-size: 13px; cursor: pointer; font-weight: 600; transition: all 0.2s; background: transparent; color: #888; }
+  .tab.active { background: #7FB07E; border-color: #7FB07E; color: #1a1a2e; }
+  .tab:hover:not(.active) { border-color: #7FB07E; color: #7FB07E; }
+  
+  /* iPhone frame */
+  .phone-container { display: flex; justify-content: center; padding: 0 16px 40px; }
+  .phone { width: 375px; min-height: 700px; background: #FFF8F0; border-radius: 40px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.5); border: 3px solid #333; position: relative; }
+  .phone .notch { width: 150px; height: 28px; background: #333; border-radius: 0 0 18px 18px; margin: 0 auto; position: relative; z-index: 5; }
+  .phone .status-bar { display: flex; justify-content: space-between; align-items: center; padding: 4px 24px 8px; font-size: 12px; font-weight: 600; color: #3E3232; }
+  .phone .screen { padding: 0 0 30px; }
+  
+  /* App styles */
+  .app-header { padding: 8px 20px 12px; display: flex; align-items: center; justify-content: space-between; }
+  .app-title { font-size: 22px; font-weight: 700; color: #3E3232; font-family: system-ui; }
+  .app-subtitle { font-size: 12px; color: #999; padding: 0 20px 16px; }
+  
+  .category-chips { display: flex; gap: 8px; padding: 0 20px 16px; overflow-x: auto; }
+  .chip { padding: 6px 14px; border-radius: 16px; font-size: 12px; font-weight: 600; white-space: nowrap; }
+  .chip-active { background: #5B8C5A; color: white; }
+  .chip-inactive { background: #F5EDE0; color: #999; }
+  
+  /* Article cards */
+  .article-card { margin: 0 16px 12px; background: #FFFDF8; border-radius: 14px; border: 1px solid #F5EDE0; overflow: hidden; }
+  .article-img { width: 100%; height: 140px; object-fit: cover; background: linear-gradient(135deg, #E8DFD0, #F5EDE0); display: flex; align-items: center; justify-content: center; font-size: 40px; }
+  .article-body { padding: 14px 16px; }
+  .article-source { font-size: 11px; font-weight: 700; color: #5B8C5A; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+  .article-title { font-size: 16px; font-weight: 700; color: #3E3232; line-height: 1.35; margin-bottom: 6px; }
+  .article-summary { font-size: 13px; color: #666; line-height: 1.5; margin-bottom: 8px; }
+  .article-meta { display: flex; align-items: center; gap: 12px; font-size: 11px; color: #999; }
+  .article-tag { padding: 2px 8px; border-radius: 8px; background: #F5EDE0; font-size: 10px; font-weight: 600; color: #888; }
+  
+  /* Before-specific (raw RSS) */
+  .raw-summary { font-size: 13px; color: #999; line-height: 1.4; font-style: italic; }
+  .raw-tag { background: #fee; color: #c66; }
+  
+  /* After-specific (AI enhanced) */
+  .enhanced-summary { font-size: 13px; color: #555; line-height: 1.55; }
+  .enhanced-tag { background: #e8f5e9; color: #5B8C5A; }
+  .key-takeaways { padding: 10px 14px; background: #f8f6f0; border-radius: 10px; margin-top: 8px; }
+  .key-takeaways .label { font-size: 10px; font-weight: 700; color: #5B8C5A; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+  .key-takeaways li { font-size: 12px; color: #555; margin-left: 14px; margin-bottom: 3px; line-height: 1.4; }
+  
+  .briefing-card { margin: 0 16px 16px; padding: 16px; background: linear-gradient(135deg, #5B8C5A15, #7FB07E10); border-radius: 14px; border: 1px solid #5B8C5A30; }
+  .briefing-text { font-size: 14px; color: #3E3232; line-height: 1.5; font-style: italic; }
+  .briefing-label { font-size: 11px; font-weight: 700; color: #5B8C5A; margin-bottom: 6px; }
+  
+  /* Quality badge */
+  .quality-badge { display: inline-flex; align-items: center; gap: 4px; padding: 3px 10px; border-radius: 10px; font-size: 10px; font-weight: 700; }
+  .q-low { background: #fee; color: #c66; }
+  .q-high { background: #e8f5e9; color: #2e7d32; }
+  
+  /* Cost card */
+  .cost-section { padding: 24px 16px; }
+  .cost-card { background: #252540; border-radius: 16px; padding: 20px; border: 1px solid #333; }
+  .cost-card h3 { color: #7FB07E; font-size: 16px; margin-bottom: 16px; }
+  .cost-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #333; font-size: 14px; }
+  .cost-row:last-child { border: none; }
+  .cost-label { color: #aaa; }
+  .cost-value { color: #7FB07E; font-weight: 700; }
+  .cost-note { font-size: 12px; color: #666; margin-top: 12px; line-height: 1.5; }
+  
+  /* Model recommendation */
+  .model-card { background: #252540; border-radius: 16px; padding: 20px; margin: 0 16px 16px; border: 1px solid #7FB07E40; }
+  .model-card h3 { color: #7FB07E; font-size: 15px; margin-bottom: 12px; }
+  .model-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #333; }
+  .model-row:last-child { border: none; }
+  .model-name { font-weight: 700; color: #e0e0e0; font-size: 14px; }
+  .model-detail { font-size: 12px; color: #888; }
+  .model-pick { font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 8px; }
+  .pick-best { background: #7FB07E30; color: #7FB07E; }
+  .pick-current { background: #DEB88730; color: #DEB887; }
+  .pick-legacy { background: #D27B7B30; color: #D27B7B; }
+  
+  .hidden { display: none; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>📰 SnapDigest Pipeline Upgrade</h1>
+  <p>Before vs After — AI-Enhanced News Curation</p>
+</div>
+
+<div class="tabs">
+  <div class="tab active" onclick="showTab('before')">🔴 Before (RSS Raw)</div>
+  <div class="tab" onclick="showTab('after')">🟢 After (AI Enhanced)</div>
+  <div class="tab" onclick="showTab('cost')">💰 Cost & Model</div>
+</div>
+
+<!-- ==================== BEFORE ==================== -->
+<div id="tab-before" class="phone-container">
+<div class="phone">
+  <div class="notch"></div>
+  <div class="status-bar"><span>9:41 AM</span><span>📶 🔋</span></div>
+  <div class="screen">
+    <div class="app-header">
+      <div class="app-title">SnapDigest</div>
+      <span class="quality-badge q-low">RSS RAW</span>
+    </div>
+    <div class="app-subtitle">Current pipeline — RSS feeds + basic keyword scoring</div>
+    
+    <div class="category-chips">
+      <div class="chip chip-active">🔥 Top Stories</div>
+      <div class="chip chip-inactive">💻 Tech</div>
+      <div class="chip chip-inactive">🌍 World</div>
+      <div class="chip chip-inactive">💰 Finance</div>
+    </div>
+    
+    <!-- Article 1 - raw -->
+    <div class="article-card">
+      <div class="article-img">🏛️</div>
+      <div class="article-body">
+        <div class="article-source">Reuters</div>
+        <div class="article-title">Fed signals potential rate adjustment amid inflation concerns, officials say</div>
+        <div class="raw-summary">The Federal Reserve signaled on Wednesday that it may adjust interest rates as inflation data continues to come in mixed, according to minutes from the latest Federal Open Market Committee meeting released...</div>
+        <div class="article-meta">
+          <span>2h ago</span>
+          <span>3 min read</span>
+          <span class="article-tag raw-tag">No AI summary</span>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Article 2 - raw -->
+    <div class="article-card">
+      <div class="article-img">🤖</div>
+      <div class="article-body">
+        <div class="article-source">TechCrunch</div>
+        <div class="article-title">OpenAI launches new enterprise features for ChatGPT with enhanced security</div>
+        <div class="raw-summary">OpenAI announced a suite of new enterprise features for ChatGPT today, including advanced admin controls, SCIM provisioning, and a new data residency option for European customers. The company said the features are designed to address...</div>
+        <div class="article-meta">
+          <span>4h ago</span>
+          <span>5 min read</span>
+          <span class="article-tag raw-tag">Truncated RSS</span>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Article 3 - noise that slipped through -->
+    <div class="article-card">
+      <div class="article-img">🎮</div>
+      <div class="article-body">
+        <div class="article-source">CNBC</div>
+        <div class="article-title">Best gaming monitors for 2026: Our top picks reviewed</div>
+        <div class="raw-summary">Looking for a new gaming monitor? We've tested dozens of the latest models to find the best options for every budget and setup. From 4K OLED panels to fast 1440p screens...</div>
+        <div class="article-meta">
+          <span>6h ago</span>
+          <span>8 min read</span>
+          <span class="article-tag raw-tag">⚠️ Noise</span>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Article 4 - raw -->
+    <div class="article-card">
+      <div class="article-img">🧬</div>
+      <div class="article-body">
+        <div class="article-source">BBC</div>
+        <div class="article-title">Scientists discover high-temperature superconductor breakthrough at MIT</div>
+        <div class="raw-summary">Scientists at MIT have made a significant breakthrough in superconductor research, achieving stable superconductivity at temperatures far higher than previously possible. The research, published in Nature, could have major implications for...</div>
+        <div class="article-meta">
+          <span>5h ago</span>
+          <span>4 min read</span>
+          <span class="article-tag raw-tag">Cut off...</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ==================== AFTER ==================== -->
+<div id="tab-after" class="phone-container hidden">
+<div class="phone">
+  <div class="notch"></div>
+  <div class="status-bar"><span>9:41 AM</span><span>📶 🔋</span></div>
+  <div class="screen">
+    <div class="app-header">
+      <div class="app-title">SnapDigest</div>
+      <span class="quality-badge q-high">✨ AI ENHANCED</span>
+    </div>
+    <div class="app-subtitle">Upgraded pipeline — briefing-quality summaries</div>
+    
+    <div class="category-chips">
+      <div class="chip chip-active">🔥 Top Stories</div>
+      <div class="chip chip-inactive">💻 Tech</div>
+      <div class="chip chip-inactive">🌍 World</div>
+      <div class="chip chip-inactive">💰 Finance</div>
+    </div>
+    
+    <!-- AI Briefing intro -->
+    <div class="briefing-card">
+      <div class="briefing-label">☀️ Your Morning Briefing</div>
+      <div class="briefing-text">"Markets are watching the Fed closely today after mixed signals on rate policy, while a stunning MIT breakthrough could reshape the energy sector. Here's what matters."</div>
+    </div>
+    
+    <!-- Article 1 - enhanced -->
+    <div class="article-card">
+      <div class="article-img">🏛️</div>
+      <div class="article-body">
+        <div class="article-source">Reuters · <span style="color:#E8967D">🔴 Breaking</span></div>
+        <div class="article-title">Fed signals potential rate adjustment amid inflation concerns</div>
+        <div class="enhanced-summary">The Federal Reserve hinted at possible rate changes as inflation data remains mixed. FOMC minutes reveal a split committee — some members favor holding rates steady while others push for a modest cut to support slowing job growth.</div>
+        <div class="key-takeaways">
+          <div class="label">⚡ Key Takeaways</div>
+          <ul>
+            <li>FOMC divided on next rate move — decision expected March meeting</li>
+            <li>Core inflation at 2.8%, above Fed's 2% target</li>
+            <li>Markets rallied on hopes of a rate cut</li>
+          </ul>
+        </div>
+        <div class="article-meta" style="margin-top:10px">
+          <span>2h ago</span>
+          <span>🎧 2:15</span>
+          <span class="article-tag enhanced-tag">98% match</span>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Article 2 - enhanced -->
+    <div class="article-card">
+      <div class="article-img">🧬</div>
+      <div class="article-body">
+        <div class="article-source">BBC · Nature</div>
+        <div class="article-title">MIT achieves room-temperature superconductor breakthrough</div>
+        <div class="enhanced-summary">MIT researchers have demonstrated stable superconductivity at 21°C using a novel hydrogen-rich compound under moderate pressure. If reproducible, this could revolutionize power grids, MRI machines, and quantum computing — eliminating billions in energy losses.</div>
+        <div class="key-takeaways">
+          <div class="label">⚡ Key Takeaways</div>
+          <ul>
+            <li>First stable superconductor at room temperature (21°C)</li>
+            <li>Uses hydrogen-palladium compound at 10 GPa pressure</li>
+            <li>Independent verification underway at CERN and Stanford</li>
+          </ul>
+        </div>
+        <div class="article-meta" style="margin-top:10px">
+          <span>5h ago</span>
+          <span>🎧 3:40</span>
+          <span class="article-tag enhanced-tag">95% match</span>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Article 3 - enhanced (noise REMOVED, replaced with real story) -->
+    <div class="article-card">
+      <div class="article-img">🤖</div>
+      <div class="article-body">
+        <div class="article-source">TechCrunch</div>
+        <div class="article-title">OpenAI rolls out enterprise ChatGPT with EU data residency</div>
+        <div class="enhanced-summary">OpenAI's new enterprise tier adds SCIM provisioning, advanced admin controls, and — crucially — a European data residency option, addressing the biggest complaint from EU enterprise customers worried about GDPR compliance.</div>
+        <div class="key-takeaways">
+          <div class="label">⚡ Key Takeaways</div>
+          <ul>
+            <li>EU data residency = data stays in European servers</li>
+            <li>SCIM support enables automated user provisioning</li>
+            <li>Pricing starts at $60/user/month (up from $30 consumer)</li>
+          </ul>
+        </div>
+        <div class="article-meta" style="margin-top:10px">
+          <span>4h ago</span>
+          <span>🎧 1:50</span>
+          <span class="article-tag enhanced-tag">87% match</span>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Gaming article filtered OUT — notice shown -->
+    <div style="margin: 0 16px 12px; padding: 10px 16px; background: #f8f6f0; border-radius: 10px; border: 1px dashed #ddd;">
+      <div style="font-size: 12px; color: #999; text-align: center;">
+        🚫 <strong>3 low-quality articles filtered</strong> (product reviews, listicles, gaming)
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ==================== COST & MODEL ==================== -->
+<div id="tab-cost" class="hidden">
+  
+  <div class="model-card">
+    <h3>🤖 Model Recommendation</h3>
+    
+    <div class="model-row">
+      <div>
+        <div class="model-name">GPT-4.1 nano</div>
+        <div class="model-detail">$0.10 in / $0.40 out per 1M tokens</div>
+      </div>
+      <div class="model-pick pick-best">⭐ BEST VALUE</div>
+    </div>
+    
+    <div class="model-row">
+      <div>
+        <div class="model-name">GPT-4.1 mini</div>
+        <div class="model-detail">$0.40 in / $1.60 out per 1M tokens</div>
+      </div>
+      <div class="model-pick pick-best">Great quality</div>
+    </div>
+    
+    <div class="model-row">
+      <div>
+        <div class="model-name">GPT-5 nano</div>
+        <div class="model-detail">$0.05 in / $0.40 out per 1M tokens</div>
+      </div>
+      <div class="model-pick pick-best">Cheapest input</div>
+    </div>
+    
+    <div class="model-row">
+      <div>
+        <div class="model-name">GPT-4o mini</div>
+        <div class="model-detail">$0.15 in / $0.60 out per 1M tokens</div>
+      </div>
+      <div class="model-pick pick-current">Current</div>
+    </div>
+    
+    <div class="model-row">
+      <div>
+        <div class="model-name" style="text-decoration: line-through; opacity: 0.6;">GPT-4o</div>
+        <div class="model-detail">$2.50 in / $10.00 out — 25x more expensive</div>
+      </div>
+      <div class="model-pick pick-legacy">⚠️ Overpriced</div>
+    </div>
+    
+    <div class="cost-note">
+      💡 <strong>GPT-4.1 mini is the sweet spot.</strong> It's smarter than GPT-4o-mini, cheaper than GPT-4o, and OpenAI's current recommended workhorse. GPT-5 nano is even cheaper for simple scoring tasks.
+    </div>
+  </div>
+  
+  <div class="cost-section">
+    <div class="cost-card">
+      <h3>📊 Cost Breakdown (GPT-4.1 mini)</h3>
+      
+      <div class="cost-row">
+        <span class="cost-label">Article scoring (20 articles × 6 categories)</span>
+        <span class="cost-value">~$0.02/day</span>
+      </div>
+      <div class="cost-row">
+        <span class="cost-label">AI summarization (top 30 articles)</span>
+        <span class="cost-value">~$0.08/day</span>
+      </div>
+      <div class="cost-row">
+        <span class="cost-label">Key takeaways extraction</span>
+        <span class="cost-value">~$0.04/day</span>
+      </div>
+      <div class="cost-row">
+        <span class="cost-label">Morning briefing text</span>
+        <span class="cost-value">~$0.01/day</span>
+      </div>
+      <div class="cost-row" style="border-top: 2px solid #7FB07E; padding-top: 12px; margin-top: 4px;">
+        <span class="cost-label" style="color: #e0e0e0; font-weight: 700;">Total AI curation/day</span>
+        <span class="cost-value" style="font-size: 18px;">~$0.15</span>
+      </div>
+      <div class="cost-row">
+        <span class="cost-label" style="color: #e0e0e0; font-weight: 700;">Monthly</span>
+        <span class="cost-value" style="font-size: 18px;">~$4.50</span>
+      </div>
+      
+      <div class="cost-note" style="margin-top: 16px; padding-top: 16px; border-top: 1px solid #333;">
+        <strong>+ TTS Audio (OpenAI TTS):</strong><br>
+        ~30 articles/day × $0.015/article = $0.45/day = ~$13.50/mo<br><br>
+        <strong>Total monthly (AI + TTS):</strong> <span style="color: #7FB07E; font-weight: 700; font-size: 16px;">~$18/month</span><br><br>
+        Content is generated ONCE per day, served to ALL users. Per-user marginal cost is essentially $0.
+      </div>
+    </div>
+  </div>
+  
+  <div class="model-card">
+    <h3>🔄 Pipeline Upgrade Summary</h3>
+    <div style="font-size: 13px; line-height: 1.7; color: #ccc;">
+      <p><strong style="color: #D27B7B;">Before:</strong> RSS raw text → GPT-4o-mini keyword scoring → display truncated summaries</p>
+      <br>
+      <p><strong style="color: #7FB07E;">After:</strong> RSS fetch → GPT-4.1 mini scoring + noise filter → GPT-4.1 mini summarization + key takeaways → morning briefing generation → TTS audio</p>
+      <br>
+      <p><strong>What changes:</strong></p>
+      <ul style="padding-left: 16px; margin-top: 6px;">
+        <li>✅ AI-written concise summaries (not truncated RSS)</li>
+        <li>✅ 3 key takeaways per article (bullet points)</li>
+        <li>✅ Morning briefing intro text</li>
+        <li>✅ Better noise filtering (no product reviews, listicles)</li>
+        <li>✅ Breaking news detection + priority badges</li>
+        <li>✅ Multi-language summaries (EN/KO/ES)</li>
+        <li>✅ Model upgrade: GPT-4o-mini → GPT-4.1 mini</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<script>
+function showTab(name) {
+  document.querySelectorAll('.phone-container, #tab-cost').forEach(el => el.classList.add('hidden'));
+  document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
+  
+  const target = document.getElementById('tab-' + name);
+  if (target) target.classList.remove('hidden');
+  
+  event.target.classList.add('active');
+}
+</script>
+</body>
+</html>
