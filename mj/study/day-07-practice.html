@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 7 Practice: Moore vs Mealy Machines</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    background: linear-gradient(135deg, #fefae0 0%, #faedcd 100%);
+    color: #3d405b;
+    line-height: 1.8;
+    padding: 24px;
+    max-width: 920px;
+    margin: 0 auto;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+h1 { color: #5d4037; border-bottom: 3px solid #c4a77d; padding-bottom: 12px; margin-bottom: 24px; font-size: 2em; }
+h2 { color: #588157; border-bottom: 2px solid #a3b18a; padding-bottom: 8px; margin: 32px 0 16px; }
+h3 { color: #5d4037; margin: 20px 0 10px; }
+p { margin: 12px 0; }
+code {
+    background: #e9f5db; color: #3d405b; padding: 2px 8px; border-radius: 4px;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+}
+pre {
+    background: #2d3436; padding: 24px; border-radius: 12px; margin: 24px 0;
+    border: 3px solid #a3b18a; overflow-x: auto;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace; font-size: 15px; line-height: 1.6; color: #f8f8f2;
+}
+.keyword { color: #ff79c6; font-weight: 600; }
+.type { color: #8be9fd; }
+.signal { color: #50fa7b; }
+.number { color: #ffb86c; }
+.comment { color: #6272a4; font-style: italic; }
+.string { color: #f1fa8c; }
+.concept-box {
+    background: #fff8f0; border: 2px solid #c4a77d; border-radius: 12px;
+    padding: 20px; margin: 20px 0; color: #3d405b;
+}
+.concept-box h3 { color: #5d4037; margin-bottom: 12px; }
+.warning-box {
+    background: #fff8f0; border-radius: 12px; padding: 20px; margin: 20px 0;
+    border-left: 4px solid #ef4444; color: #3d405b;
+}
+.warning-box h3 { color: #c53030; margin-bottom: 12px; }
+.tip-box {
+    background: #fff8f0; border-radius: 12px; padding: 20px; margin: 20px 0;
+    border-left: 4px solid #588157; color: #3d405b;
+}
+.hint-box {
+    background: #fff8f0; border-radius: 8px; padding: 15px; margin: 15px 0;
+    border-left: 4px solid #5d4037; color: #3d405b;
+}
+.lang-toggle {
+    position: fixed; top: 16px; right: 16px; background: #588157; border: none;
+    border-radius: 24px; padding: 10px 20px; cursor: pointer; color: #fff;
+    font-size: 14px; font-weight: 600; z-index: 1000;
+}
+.lang-toggle:hover { background: #3a5a40; }
+.ko { display: none; }
+.exercise {
+    background: #fff; border: 2px solid #a3b18a; border-radius: 12px;
+    padding: 24px; margin: 24px 0;
+}
+.exercise h3 { color: #588157; }
+.solution {
+    display: none; margin-top: 16px; padding: 16px; background: #fff8f0;
+    border-radius: 8px; border: 1px solid #c4a77d;
+}
+.reveal-btn {
+    background: linear-gradient(135deg, #588157, #3a5a40); color: #fff;
+    border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer;
+    font-weight: 600; margin-top: 12px;
+}
+.reveal-btn:hover { opacity: 0.9; }
+.nav { display: flex; justify-content: space-between; margin: 24px 0; }
+.nav a {
+    background: linear-gradient(135deg, #588157, #3a5a40); color: #fff;
+    text-decoration: none; padding: 10px 20px; border-radius: 8px; font-weight: 600;
+}
+@media (max-width: 768px) {
+    body { padding: 16px; }
+    h1 { font-size: 1.8em; }
+    pre { font-size: 14px; padding: 16px; }
+    .lang-toggle { padding: 8px 16px; font-size: 13px; }
+}
+</style>
+</head>
+<body>
+
+<button class="lang-toggle" onclick="toggleLang()">한국어</button>
+
+<h1>🛠️ Day 7 Practice: Moore vs Mealy Machines</h1>
+
+<p class="en">Three hands-on exercises to solidify your understanding. Try coding each one before revealing the solution!</p>
+<p class="ko" style="display:none;">이해를 굳히기 위한 세 가지 실습 문제입니다. 솔루션을 보기 전에 직접 코딩해보세요!</p>
+
+<div class="tip-box">
+<h3>💡 Try on EDA Playground</h3>
+<p class="en">Use <a href="https://edaplayground.com" target="_blank" style="color:#588157;">edaplayground.com</a> — select SystemVerilog, Icarus Verilog, and click Run to simulate.</p>
+<p class="ko" style="display:none;"><a href="https://edaplayground.com" target="_blank" style="color:#588157;">edaplayground.com</a>에서 SystemVerilog, Icarus Verilog를 선택하고 Run을 클릭하세요.</p>
+</div>
+
+<!-- Exercise 1 -->
+<div class="exercise">
+<h3>Exercise 1: Moore "110" Detector</h3>
+<p class="en">Design a <strong>Moore FSM</strong> that outputs <code>detected = 1</code> when it sees the sequence "110" on a serial input <code>din</code>. The detector should be <strong>overlapping</strong> (after detecting "110", it can immediately start looking for a new "110" pattern).</p>
+<p class="ko" style="display:none;">직렬 입력 <code>din</code>에서 "110" 시퀀스를 감지하면 <code>detected = 1</code>을 출력하는 <strong>Moore FSM</strong>을 설계하세요. 감지기는 <strong>중첩</strong> 방식이어야 합니다 ("110" 감지 후 즉시 새로운 "110" 패턴을 찾을 수 있음).</p>
+
+<div class="concept-box">
+<h3 class="en">Requirements</h3>
+<h3 class="ko" style="display:none;">요구사항</h3>
+<ul class="en">
+<li>States: IDLE, SAW_1, SAW_11, SAW_110</li>
+<li>Output <code>detected</code> is HIGH only in SAW_110</li>
+<li>Overlapping: from SAW_110, if din=1, go to SAW_1 (not IDLE)</li>
+<li>Active-low async reset <code>rst_n</code></li>
+</ul>
+<ul class="ko" style="display:none;">
+<li>상태: IDLE, SAW_1, SAW_11, SAW_110</li>
+<li>출력 <code>detected</code>는 SAW_110에서만 HIGH</li>
+<li>중첩: SAW_110에서 din=1이면 SAW_1로 이동 (IDLE이 아님)</li>
+<li>액티브-로우 비동기 리셋 <code>rst_n</code></li>
+</ul>
+</div>
+
+<div class="hint-box">
+<strong>💬 Hint:</strong>
+<span class="en">Draw the state diagram first! Think about what happens in each state for din=0 and din=1. Remember: in Moore, the output is tied to the state, not the transition.</span>
+<span class="ko" style="display:none;">먼저 상태 다이어그램을 그려보세요! 각 상태에서 din=0과 din=1일 때 무엇이 일어나는지 생각하세요. Moore에서 출력은 전이가 아닌 상태에 연결됩니다.</span>
+</div>
+
+<button class="reveal-btn" onclick="toggleSolution('sol1')">Show Solution</button>
+<div class="solution" id="sol1">
+<pre>
+<span class="keyword">module</span> <span class="type">moore_110_detector</span> (
+    <span class="keyword">input</span>  <span class="type">logic</span> <span class="signal">clk</span>, <span class="signal">rst_n</span>, <span class="signal">din</span>,
+    <span class="keyword">output</span> <span class="type">logic</span> <span class="signal">detected</span>
+);
+
+    <span class="keyword">typedef enum logic</span> [<span class="number">1</span>:<span class="number">0</span>] {
+        <span class="signal">IDLE</span>    = <span class="number">2'b00</span>,
+        <span class="signal">SAW_1</span>   = <span class="number">2'b01</span>,
+        <span class="signal">SAW_11</span>  = <span class="number">2'b10</span>,
+        <span class="signal">SAW_110</span> = <span class="number">2'b11</span>
+    } <span class="type">state_t</span>;
+
+    <span class="type">state_t</span> <span class="signal">state</span>, <span class="signal">next_state</span>;
+
+    <span class="comment">// State register</span>
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span> <span class="keyword">or negedge</span> <span class="signal">rst_n</span>) <span class="keyword">begin</span>
+        <span class="keyword">if</span> (!<span class="signal">rst_n</span>)
+            <span class="signal">state</span> &lt;= <span class="signal">IDLE</span>;
+        <span class="keyword">else</span>
+            <span class="signal">state</span> &lt;= <span class="signal">next_state</span>;
+    <span class="keyword">end</span>
+
+    <span class="comment">// Next state logic</span>
+    <span class="keyword">always_comb</span> <span class="keyword">begin</span>
+        <span class="keyword">case</span> (<span class="signal">state</span>)
+            <span class="signal">IDLE</span>:    <span class="signal">next_state</span> = <span class="signal">din</span> ? <span class="signal">SAW_1</span>   : <span class="signal">IDLE</span>;
+            <span class="signal">SAW_1</span>:   <span class="signal">next_state</span> = <span class="signal">din</span> ? <span class="signal">SAW_11</span>  : <span class="signal">IDLE</span>;
+            <span class="signal">SAW_11</span>:  <span class="signal">next_state</span> = <span class="signal">din</span> ? <span class="signal">SAW_11</span>  : <span class="signal">SAW_110</span>;
+            <span class="signal">SAW_110</span>: <span class="signal">next_state</span> = <span class="signal">din</span> ? <span class="signal">SAW_1</span>   : <span class="signal">IDLE</span>;
+            <span class="keyword">default</span>: <span class="signal">next_state</span> = <span class="signal">IDLE</span>;
+        <span class="keyword">endcase</span>
+    <span class="keyword">end</span>
+
+    <span class="comment">// Moore output — state only</span>
+    <span class="keyword">assign</span> <span class="signal">detected</span> = (<span class="signal">state</span> == <span class="signal">SAW_110</span>);
+
+<span class="keyword">endmodule</span>
+</pre>
+<p class="en"><strong>Key points:</strong> From SAW_11 with din=1, we stay in SAW_11 (still "11"). From SAW_110 with din=1, we go to SAW_1 (overlapping — the "0" breaks the streak, but the new "1" starts a fresh match).</p>
+<p class="ko" style="display:none;"><strong>핵심 포인트:</strong> SAW_11에서 din=1이면 SAW_11에 머뭅니다 (여전히 "11"). SAW_110에서 din=1이면 SAW_1로 이동합니다 (중첩 — "0"이 연속을 끊지만, 새 "1"이 새로운 매칭을 시작).</p>
+</div>
+</div>
+
+<!-- Exercise 2 -->
+<div class="exercise">
+<h3>Exercise 2: Mealy "110" Detector</h3>
+<p class="en">Now implement the <strong>same "110" detector as a Mealy machine</strong>. You should need fewer states!</p>
+<p class="ko" style="display:none;">이번에는 <strong>같은 "110" 감지기를 Mealy 머신으로</strong> 구현하세요. 더 적은 상태가 필요할 것입니다!</p>
+
+<div class="concept-box">
+<h3 class="en">Requirements</h3>
+<h3 class="ko" style="display:none;">요구사항</h3>
+<ul class="en">
+<li>Should need only 3 states (vs Moore's 4)</li>
+<li>Output goes high in the SAME cycle the '0' arrives (completing "110")</li>
+<li>Still overlapping</li>
+</ul>
+<ul class="ko" style="display:none;">
+<li>3개 상태만 필요 (Moore의 4개 대비)</li>
+<li>'0'이 도착하는 같은 사이클에 출력이 올라감 ("110" 완성)</li>
+<li>여전히 중첩</li>
+</ul>
+</div>
+
+<div class="hint-box">
+<strong>💬 Hint:</strong>
+<span class="en">You don't need a SAW_110 state — the Mealy output can fire from SAW_11 when din=0. The output expression will be: <code>(state == SAW_11) && !din</code>.</span>
+<span class="ko" style="display:none;">SAW_110 상태가 필요 없습니다 — din=0일 때 SAW_11에서 Mealy 출력을 발생시킬 수 있습니다. 출력 표현식: <code>(state == SAW_11) && !din</code>.</span>
+</div>
+
+<button class="reveal-btn" onclick="toggleSolution('sol2')">Show Solution</button>
+<div class="solution" id="sol2">
+<pre>
+<span class="keyword">module</span> <span class="type">mealy_110_detector</span> (
+    <span class="keyword">input</span>  <span class="type">logic</span> <span class="signal">clk</span>, <span class="signal">rst_n</span>, <span class="signal">din</span>,
+    <span class="keyword">output</span> <span class="type">logic</span> <span class="signal">detected</span>
+);
+
+    <span class="keyword">typedef enum logic</span> [<span class="number">1</span>:<span class="number">0</span>] {
+        <span class="signal">IDLE</span>   = <span class="number">2'b00</span>,
+        <span class="signal">SAW_1</span>  = <span class="number">2'b01</span>,
+        <span class="signal">SAW_11</span> = <span class="number">2'b10</span>
+    } <span class="type">state_t</span>;            <span class="comment">// Only 3 states!</span>
+
+    <span class="type">state_t</span> <span class="signal">state</span>, <span class="signal">next_state</span>;
+
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span> <span class="keyword">or negedge</span> <span class="signal">rst_n</span>) <span class="keyword">begin</span>
+        <span class="keyword">if</span> (!<span class="signal">rst_n</span>)
+            <span class="signal">state</span> &lt;= <span class="signal">IDLE</span>;
+        <span class="keyword">else</span>
+            <span class="signal">state</span> &lt;= <span class="signal">next_state</span>;
+    <span class="keyword">end</span>
+
+    <span class="keyword">always_comb</span> <span class="keyword">begin</span>
+        <span class="keyword">case</span> (<span class="signal">state</span>)
+            <span class="signal">IDLE</span>:   <span class="signal">next_state</span> = <span class="signal">din</span> ? <span class="signal">SAW_1</span>  : <span class="signal">IDLE</span>;
+            <span class="signal">SAW_1</span>:  <span class="signal">next_state</span> = <span class="signal">din</span> ? <span class="signal">SAW_11</span> : <span class="signal">IDLE</span>;
+            <span class="signal">SAW_11</span>: <span class="signal">next_state</span> = <span class="signal">din</span> ? <span class="signal">SAW_11</span> : <span class="signal">IDLE</span>;
+            <span class="keyword">default</span>: <span class="signal">next_state</span> = <span class="signal">IDLE</span>;
+        <span class="keyword">endcase</span>
+    <span class="keyword">end</span>
+
+    <span class="comment">// Mealy output — state AND input</span>
+    <span class="keyword">assign</span> <span class="signal">detected</span> = (<span class="signal">state</span> == <span class="signal">SAW_11</span>) &amp;&amp; !<span class="signal">din</span>;
+
+<span class="keyword">endmodule</span>
+</pre>
+<p class="en"><strong>Compare:</strong> Moore needed 4 states, Mealy needs 3. The detection happens one cycle earlier. But note: from SAW_11 with din=0, we go to IDLE (not SAW_1, since '0' doesn't start "110"). For overlapping after detection, the next din=1 from IDLE starts fresh.</p>
+<p class="ko" style="display:none;"><strong>비교:</strong> Moore는 4개 상태, Mealy는 3개만 필요합니다. 감지가 한 사이클 더 일찍 발생합니다. 단, SAW_11에서 din=0이면 IDLE로 갑니다 ('0'은 "110"을 시작하지 않으므로).</p>
+</div>
+</div>
+
+<!-- Exercise 3 -->
+<div class="exercise">
+<h3>Exercise 3: Registered Mealy with Testbench</h3>
+<p class="en">Take your Mealy "110" detector and add a <strong>registered output</strong>. Then write a testbench to verify it detects "110" patterns in the input stream <code>1,1,0,1,1,1,0,0</code>.</p>
+<p class="ko" style="display:none;">Mealy "110" 감지기에 <strong>레지스터된 출력</strong>을 추가하세요. 그런 다음 입력 스트림 <code>1,1,0,1,1,1,0,0</code>에서 "110" 패턴을 감지하는지 확인하는 테스트벤치를 작성하세요.</p>
+
+<div class="concept-box">
+<h3 class="en">Expected Output Timing</h3>
+<h3 class="ko" style="display:none;">예상 출력 타이밍</h3>
+<pre style="background:#fff8f0; color:#3d405b; border-color:#c4a77d;">
+Cycle:  1   2   3   4   5   6   7   8
+din:    1   1   0   1   1   1   0   0
+Mealy:  0   0   1   0   0   0   1   0   (combinational)
+Reg'd:  0   0   0   1   0   0   0   1   (one cycle delayed)
+</pre>
+</div>
+
+<button class="reveal-btn" onclick="toggleSolution('sol3')">Show Solution</button>
+<div class="solution" id="sol3">
+<pre>
+<span class="keyword">module</span> <span class="type">reg_mealy_110_detector</span> (
+    <span class="keyword">input</span>  <span class="type">logic</span> <span class="signal">clk</span>, <span class="signal">rst_n</span>, <span class="signal">din</span>,
+    <span class="keyword">output</span> <span class="type">logic</span> <span class="signal">detected</span>
+);
+
+    <span class="keyword">typedef enum logic</span> [<span class="number">1</span>:<span class="number">0</span>] {
+        <span class="signal">IDLE</span>   = <span class="number">2'b00</span>,
+        <span class="signal">SAW_1</span>  = <span class="number">2'b01</span>,
+        <span class="signal">SAW_11</span> = <span class="number">2'b10</span>
+    } <span class="type">state_t</span>;
+
+    <span class="type">state_t</span> <span class="signal">state</span>, <span class="signal">next_state</span>;
+    <span class="type">logic</span> <span class="signal">mealy_out</span>;
+
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span> <span class="keyword">or negedge</span> <span class="signal">rst_n</span>) <span class="keyword">begin</span>
+        <span class="keyword">if</span> (!<span class="signal">rst_n</span>)
+            <span class="signal">state</span> &lt;= <span class="signal">IDLE</span>;
+        <span class="keyword">else</span>
+            <span class="signal">state</span> &lt;= <span class="signal">next_state</span>;
+    <span class="keyword">end</span>
+
+    <span class="keyword">always_comb</span> <span class="keyword">begin</span>
+        <span class="keyword">case</span> (<span class="signal">state</span>)
+            <span class="signal">IDLE</span>:   <span class="signal">next_state</span> = <span class="signal">din</span> ? <span class="signal">SAW_1</span>  : <span class="signal">IDLE</span>;
+            <span class="signal">SAW_1</span>:  <span class="signal">next_state</span> = <span class="signal">din</span> ? <span class="signal">SAW_11</span> : <span class="signal">IDLE</span>;
+            <span class="signal">SAW_11</span>: <span class="signal">next_state</span> = <span class="signal">din</span> ? <span class="signal">SAW_11</span> : <span class="signal">IDLE</span>;
+            <span class="keyword">default</span>: <span class="signal">next_state</span> = <span class="signal">IDLE</span>;
+        <span class="keyword">endcase</span>
+    <span class="keyword">end</span>
+
+    <span class="comment">// Raw Mealy output</span>
+    <span class="keyword">assign</span> <span class="signal">mealy_out</span> = (<span class="signal">state</span> == <span class="signal">SAW_11</span>) &amp;&amp; !<span class="signal">din</span>;
+
+    <span class="comment">// Registered output — glitch-free!</span>
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span> <span class="keyword">or negedge</span> <span class="signal">rst_n</span>) <span class="keyword">begin</span>
+        <span class="keyword">if</span> (!<span class="signal">rst_n</span>)
+            <span class="signal">detected</span> &lt;= <span class="number">1'b0</span>;
+        <span class="keyword">else</span>
+            <span class="signal">detected</span> &lt;= <span class="signal">mealy_out</span>;
+    <span class="keyword">end</span>
+
+<span class="keyword">endmodule</span>
+</pre>
+
+<h3 class="en" style="margin-top:20px;">Testbench:</h3>
+<h3 class="ko" style="display:none; margin-top:20px;">테스트벤치:</h3>
+<pre>
+<span class="keyword">module</span> <span class="type">tb_reg_mealy_110</span>;
+    <span class="type">logic</span> <span class="signal">clk</span>, <span class="signal">rst_n</span>, <span class="signal">din</span>, <span class="signal">detected</span>;
+
+    <span class="type">reg_mealy_110_detector</span> <span class="signal">dut</span> (.*);
+
+    <span class="comment">// 10ns clock</span>
+    <span class="keyword">always</span> #<span class="number">5</span> <span class="signal">clk</span> = ~<span class="signal">clk</span>;
+
+    <span class="comment">// Input pattern: 1,1,0,1,1,1,0,0</span>
+    <span class="type">logic</span> [<span class="number">7</span>:<span class="number">0</span>] <span class="signal">pattern</span> = <span class="number">8'b11011100</span>;
+
+    <span class="keyword">initial</span> <span class="keyword">begin</span>
+        <span class="signal">clk</span> = <span class="number">0</span>;
+        <span class="signal">rst_n</span> = <span class="number">0</span>;
+        <span class="signal">din</span> = <span class="number">0</span>;
+
+        <span class="comment">// Release reset</span>
+        #<span class="number">12</span> <span class="signal">rst_n</span> = <span class="number">1</span>;
+
+        <span class="comment">// Apply pattern MSB first</span>
+        <span class="keyword">for</span> (<span class="type">int</span> <span class="signal">i</span> = <span class="number">7</span>; <span class="signal">i</span> >= <span class="number">0</span>; <span class="signal">i</span>--) <span class="keyword">begin</span>
+            @(<span class="keyword">posedge</span> <span class="signal">clk</span>);
+            <span class="signal">din</span> = <span class="signal">pattern</span>[<span class="signal">i</span>];
+            $<span class="signal">display</span>(<span class="string">"t=%0t din=%b detected=%b"</span>,
+                     $<span class="signal">time</span>, <span class="signal">din</span>, <span class="signal">detected</span>);
+        <span class="keyword">end</span>
+
+        <span class="comment">// Extra cycles to see delayed output</span>
+        <span class="keyword">repeat</span>(<span class="number">2</span>) @(<span class="keyword">posedge</span> <span class="signal">clk</span>);
+        $<span class="signal">display</span>(<span class="string">"t=%0t detected=%b (should be 1)"</span>,
+                 $<span class="signal">time</span>, <span class="signal">detected</span>);
+
+        #<span class="number">20</span> $<span class="signal">finish</span>;
+    <span class="keyword">end</span>
+
+<span class="keyword">endmodule</span>
+</pre>
+</div>
+</div>
+
+<!-- Bonus Challenge -->
+<div class="exercise">
+<h3>🌟 Bonus Challenge: Convert & Compare</h3>
+<p class="en">Take the Moore "110" detector (Exercise 1) and trace through the input <code>1,1,0,1,1,0</code>. Fill in the table below on paper, then verify with the Mealy version. Note where Mealy detects one cycle earlier.</p>
+<p class="ko" style="display:none;">Moore "110" 감지기(문제 1)로 입력 <code>1,1,0,1,1,0</code>을 추적하세요. 아래 표를 종이에 채운 후 Mealy 버전으로 검증하세요. Mealy가 한 사이클 더 일찍 감지하는 곳을 확인하세요.</p>
+
+<div class="concept-box">
+<pre style="background:#fff8f0; color:#3d405b; border-color:#c4a77d;">
+Cycle:   1    2    3    4    5    6
+din:     1    1    0    1    1    0
+Moore:   __   __   __   __   __   __
+Mealy:   __   __   __   __   __   __
+</pre>
+</div>
+
+<button class="reveal-btn" onclick="toggleSolution('sol4')">Show Answer</button>
+<div class="solution" id="sol4">
+<pre style="background:#fff8f0; color:#3d405b; border-color:#c4a77d;">
+Cycle:   1    2    3    4    5    6
+din:     1    1    0    1    1    0
+Moore:   0    0    0    1    0    0    (detected in cycle 4)
+Mealy:   0    0    1    0    0    1    (detected in cycle 3 and 6)
+</pre>
+<p class="en"><strong>Analysis:</strong> Mealy detects at cycles 3 and 6 (same cycle as completing '0'). Moore detects at cycle 4 (one cycle later for the first pattern). Moore's second detection would appear at cycle 7 (not shown). This perfectly illustrates the 1-cycle latency difference!</p>
+<p class="ko" style="display:none;"><strong>분석:</strong> Mealy는 사이클 3과 6에서 감지 ('0' 완성과 동시). Moore는 사이클 4에서 감지 (첫 패턴보다 한 사이클 늦음). 이것이 1사이클 지연 차이를 완벽히 보여줍니다!</p>
+</div>
+</div>
+
+<div class="nav">
+<a href="day-07-quiz.html">← Day 7 Quiz</a>
+<a href="day-08-lesson.html">Day 8: State Encoding →</a>
+</div>
+
+<script>
+let isKorean = false;
+function toggleLang() {
+    isKorean = !isKorean;
+    document.querySelectorAll('.en').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'none' : 'revert', 'important');
+    });
+    document.querySelectorAll('.ko').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'revert' : 'none', 'important');
+    });
+    document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+}
+
+function toggleSolution(id) {
+    const sol = document.getElementById(id);
+    const btn = sol.previousElementSibling;
+    if (sol.style.display === 'block') {
+        sol.style.display = 'none';
+        btn.textContent = 'Show Solution';
+    } else {
+        sol.style.display = 'block';
+        btn.textContent = 'Hide Solution';
+    }
+}
+</script>
+
+</body>
+</html>

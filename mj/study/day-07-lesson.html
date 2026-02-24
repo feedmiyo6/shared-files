@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 7: Moore vs Mealy Machines</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    background: linear-gradient(135deg, #fefae0 0%, #faedcd 100%);
+    color: #3d405b;
+    line-height: 1.8;
+    padding: 24px;
+    max-width: 920px;
+    margin: 0 auto;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+h1 {
+    color: #5d4037;
+    border-bottom: 3px solid #c4a77d;
+    padding-bottom: 12px;
+    margin-bottom: 24px;
+    font-size: 2em;
+}
+h2 {
+    color: #588157;
+    border-bottom: 2px solid #a3b18a;
+    padding-bottom: 8px;
+    margin: 32px 0 16px;
+}
+h3 {
+    color: #5d4037;
+    margin: 20px 0 10px;
+}
+p { margin: 12px 0; }
+code {
+    background: #e9f5db;
+    color: #3d405b;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+}
+pre {
+    background: #2d3436;
+    padding: 24px;
+    border-radius: 12px;
+    margin: 24px 0;
+    border: 3px solid #a3b18a;
+    overflow-x: auto;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+    font-size: 15px;
+    line-height: 1.6;
+    color: #f8f8f2;
+}
+.keyword { color: #ff79c6; font-weight: 600; }
+.type { color: #8be9fd; }
+.signal { color: #50fa7b; }
+.number { color: #ffb86c; }
+.comment { color: #6272a4; font-style: italic; }
+.string { color: #f1fa8c; }
+.concept-box {
+    background: #fff8f0;
+    border: 2px solid #c4a77d;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    color: #3d405b;
+}
+.concept-box h3 { color: #5d4037; margin-bottom: 12px; }
+.warning-box {
+    background: #fff8f0;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    border-left: 4px solid #ef4444;
+    color: #3d405b;
+}
+.warning-box h3 { color: #c53030; margin-bottom: 12px; }
+.tip-box {
+    background: #fff8f0;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    border-left: 4px solid #588157;
+    color: #3d405b;
+}
+.comparison-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+.comparison-table th {
+    background: #588157;
+    color: white;
+    padding: 12px;
+    text-align: left;
+}
+.comparison-table td {
+    background: #fff;
+    border: 1px solid #c4a77d;
+    padding: 12px;
+    color: #3d405b;
+}
+.comparison-table tr:nth-child(even) td { background: #fff8f0; }
+.lang-toggle {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    background: #588157;
+    border: none;
+    border-radius: 24px;
+    padding: 10px 20px;
+    cursor: pointer;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    z-index: 1000;
+}
+.lang-toggle:hover { background: #3a5a40; }
+.ko { display: none; }
+.nav { display: flex; justify-content: space-between; margin: 24px 0; }
+.nav a {
+    background: linear-gradient(135deg, #588157, #3a5a40);
+    color: #fff;
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+}
+.nav a:hover { opacity: 0.9; }
+.diagram-box {
+    background: #fff;
+    border: 2px solid #a3b18a;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    text-align: center;
+    font-family: 'SF Mono', monospace;
+    line-height: 1.4;
+    overflow-x: auto;
+}
+@media (max-width: 768px) {
+    body { padding: 16px; }
+    h1 { font-size: 1.8em; }
+    pre { font-size: 14px; padding: 16px; }
+    .lang-toggle { padding: 8px 16px; font-size: 13px; }
+}
+</style>
+</head>
+<body>
+
+<button class="lang-toggle" onclick="toggleLang()">한국어</button>
+
+<h1>📘 Day 7: Moore vs Mealy Machines</h1>
+
+<p class="en">Yesterday you learned FSM fundamentals — states, transitions, and how to code them. Today we dive into the <strong>two types</strong> of FSMs: <strong>Moore</strong> and <strong>Mealy</strong>. Understanding when to use each is a key interview topic and essential for real design work.</p>
+<p class="ko" style="display:none;">어제 FSM의 기본을 배웠습니다. 오늘은 FSM의 <strong>두 가지 유형</strong>인 <strong>Moore</strong>와 <strong>Mealy</strong>를 깊이 다룹니다. 각각 언제 사용하는지 아는 것은 면접에서 자주 나오는 핵심 주제입니다.</p>
+
+<h2>1. The Core Difference</h2>
+
+<div class="concept-box">
+<h3>🔑 One Sentence Summary</h3>
+<p class="en"><strong>Moore:</strong> Output depends ONLY on the current state.<br>
+<strong>Mealy:</strong> Output depends on the current state AND current inputs.</p>
+<p class="ko" style="display:none;"><strong>Moore:</strong> 출력은 현재 상태에만 의존합니다.<br>
+<strong>Mealy:</strong> 출력은 현재 상태와 현재 입력 모두에 의존합니다.</p>
+</div>
+
+<p class="en">This single difference has big implications for timing, latency, and how many states you need.</p>
+<p class="ko" style="display:none;">이 하나의 차이가 타이밍, 지연 시간, 필요한 상태 수에 큰 영향을 줍니다.</p>
+
+<div class="diagram-box">
+<p class="en"><strong>Moore Machine</strong></p>
+<p class="ko" style="display:none;"><strong>Moore 머신</strong></p>
+<pre style="background:none; border:none; color:#3d405b; text-align:left; padding:10px; margin:0;">
+  ┌─────────┐     ┌──────────┐     ┌─────────┐
+  │  Input   │────▶│  Next    │────▶│ State   │
+  │          │     │  State   │     │ Register│
+  └─────────┘     │  Logic   │     └────┬────┘
+       ▲          └──────────┘          │
+       │               ▲               │
+       │               │               ▼
+       │          ┌────┴────┐    ┌──────────┐
+       └──────────┤ current │    │  Output  │
+                  │  state  │◀───│  Logic   │
+                  └─────────┘    └────┬─────┘
+                                      │
+                                      ▼
+                                   Output
+                        (depends on state ONLY)
+</pre>
+</div>
+
+<div class="diagram-box">
+<p class="en"><strong>Mealy Machine</strong></p>
+<p class="ko" style="display:none;"><strong>Mealy 머신</strong></p>
+<pre style="background:none; border:none; color:#3d405b; text-align:left; padding:10px; margin:0;">
+  ┌─────────┐     ┌──────────┐     ┌─────────┐
+  │  Input   │────▶│  Next    │────▶│ State   │
+  │          │──┐  │  State   │     │ Register│
+  └─────────┘  │  │  Logic   │     └────┬────┘
+       ▲       │  └──────────┘          │
+       │       │       ▲               │
+       │       │       │               ▼
+       │       │  ┌────┴────┐    ┌──────────┐
+       └───────┴──┤ current │    │  Output  │◀── Input
+                  │  state  │◀───│  Logic   │
+                  └─────────┘    └────┬─────┘
+                                      │
+                                      ▼
+                                   Output
+                        (depends on state + input)
+</pre>
+</div>
+
+<h2>2. Moore Machine: Outputs from State Only</h2>
+
+<p class="en">In a Moore machine, each state has a <strong>fixed output</strong>. The output changes only when the state changes — which means on the next clock edge. This makes Moore outputs <strong>synchronous</strong> and <strong>glitch-free</strong>.</p>
+<p class="ko" style="display:none;">Moore 머신에서는 각 상태가 <strong>고정된 출력</strong>을 가집니다. 출력은 상태가 변할 때만 바뀌므로, 다음 클럭 에지에서만 변합니다. Moore 출력은 <strong>동기적</strong>이고 <strong>글리치가 없습니다</strong>.</p>
+
+<h3>Example: Simple Detector (Moore)</h3>
+<p class="en">Let's design a sequence detector that outputs <code>1</code> when it sees the pattern "01" on the input. Moore version:</p>
+<p class="ko" style="display:none;">입력에서 "01" 패턴을 감지하면 <code>1</code>을 출력하는 시퀀스 감지기를 설계합니다. Moore 버전:</p>
+
+<pre>
+<span class="keyword">module</span> <span class="type">moore_01_detector</span> (
+    <span class="keyword">input</span>  <span class="type">logic</span> <span class="signal">clk</span>, <span class="signal">rst_n</span>, <span class="signal">din</span>,
+    <span class="keyword">output</span> <span class="type">logic</span> <span class="signal">detected</span>
+);
+
+    <span class="keyword">typedef enum logic</span> [<span class="number">1</span>:<span class="number">0</span>] {
+        <span class="signal">IDLE</span>    = <span class="number">2'b00</span>,  <span class="comment">// Haven't seen anything useful</span>
+        <span class="signal">SAW_0</span>   = <span class="number">2'b01</span>,  <span class="comment">// Saw '0', waiting for '1'</span>
+        <span class="signal">SAW_01</span>  = <span class="number">2'b10</span>   <span class="comment">// Saw '01' → output HIGH</span>
+    } <span class="type">state_t</span>;
+
+    <span class="type">state_t</span> <span class="signal">state</span>, <span class="signal">next_state</span>;
+
+    <span class="comment">// State register</span>
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span> <span class="keyword">or negedge</span> <span class="signal">rst_n</span>) <span class="keyword">begin</span>
+        <span class="keyword">if</span> (!<span class="signal">rst_n</span>)
+            <span class="signal">state</span> &lt;= <span class="signal">IDLE</span>;
+        <span class="keyword">else</span>
+            <span class="signal">state</span> &lt;= <span class="signal">next_state</span>;
+    <span class="keyword">end</span>
+
+    <span class="comment">// Next state logic</span>
+    <span class="keyword">always_comb</span> <span class="keyword">begin</span>
+        <span class="keyword">case</span> (<span class="signal">state</span>)
+            <span class="signal">IDLE</span>:   <span class="signal">next_state</span> = <span class="signal">din</span> ? <span class="signal">IDLE</span>  : <span class="signal">SAW_0</span>;
+            <span class="signal">SAW_0</span>:  <span class="signal">next_state</span> = <span class="signal">din</span> ? <span class="signal">SAW_01</span> : <span class="signal">SAW_0</span>;
+            <span class="signal">SAW_01</span>: <span class="signal">next_state</span> = <span class="signal">din</span> ? <span class="signal">IDLE</span>  : <span class="signal">SAW_0</span>;
+            <span class="keyword">default</span>: <span class="signal">next_state</span> = <span class="signal">IDLE</span>;
+        <span class="keyword">endcase</span>
+    <span class="keyword">end</span>
+
+    <span class="comment">// Moore output — depends ONLY on state</span>
+    <span class="keyword">assign</span> <span class="signal">detected</span> = (<span class="signal">state</span> == <span class="signal">SAW_01</span>);
+
+<span class="keyword">endmodule</span>
+</pre>
+
+<div class="tip-box">
+<h3>💡 Key Observation</h3>
+<p class="en">Notice the output line: <code>detected = (state == SAW_01)</code>. No <code>din</code> involved! That's pure Moore — output is a function of state alone.</p>
+<p class="ko" style="display:none;">출력 라인을 주목하세요: <code>detected = (state == SAW_01)</code>. <code>din</code>이 없습니다! 순수 Moore — 출력은 상태만의 함수입니다.</p>
+</div>
+
+<h2>3. Mealy Machine: Outputs from State + Input</h2>
+
+<p class="en">In a Mealy machine, outputs can change <strong>combinationally</strong> with the input — even <em>within</em> a clock cycle. This means Mealy can react <strong>one cycle faster</strong> than Moore, but the output may have glitches.</p>
+<p class="ko" style="display:none;">Mealy 머신에서는 출력이 입력과 함께 <strong>조합적으로</strong> 변할 수 있습니다. 클럭 사이클 <em>내에서도</em> 변합니다. Mealy는 Moore보다 <strong>한 사이클 빠르게</strong> 반응하지만, 출력에 글리치가 있을 수 있습니다.</p>
+
+<h3>Example: Same Detector (Mealy)</h3>
+
+<pre>
+<span class="keyword">module</span> <span class="type">mealy_01_detector</span> (
+    <span class="keyword">input</span>  <span class="type">logic</span> <span class="signal">clk</span>, <span class="signal">rst_n</span>, <span class="signal">din</span>,
+    <span class="keyword">output</span> <span class="type">logic</span> <span class="signal">detected</span>
+);
+
+    <span class="keyword">typedef enum logic</span> {
+        <span class="signal">IDLE</span>  = <span class="number">1'b0</span>,  <span class="comment">// Haven't seen anything useful</span>
+        <span class="signal">SAW_0</span> = <span class="number">1'b1</span>   <span class="comment">// Saw '0', waiting for '1'</span>
+    } <span class="type">state_t</span>;            <span class="comment">// Only 2 states! (vs 3 in Moore)</span>
+
+    <span class="type">state_t</span> <span class="signal">state</span>, <span class="signal">next_state</span>;
+
+    <span class="comment">// State register</span>
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span> <span class="keyword">or negedge</span> <span class="signal">rst_n</span>) <span class="keyword">begin</span>
+        <span class="keyword">if</span> (!<span class="signal">rst_n</span>)
+            <span class="signal">state</span> &lt;= <span class="signal">IDLE</span>;
+        <span class="keyword">else</span>
+            <span class="signal">state</span> &lt;= <span class="signal">next_state</span>;
+    <span class="keyword">end</span>
+
+    <span class="comment">// Next state logic</span>
+    <span class="keyword">always_comb</span> <span class="keyword">begin</span>
+        <span class="keyword">case</span> (<span class="signal">state</span>)
+            <span class="signal">IDLE</span>:  <span class="signal">next_state</span> = <span class="signal">din</span> ? <span class="signal">IDLE</span>  : <span class="signal">SAW_0</span>;
+            <span class="signal">SAW_0</span>: <span class="signal">next_state</span> = <span class="signal">din</span> ? <span class="signal">IDLE</span>  : <span class="signal">SAW_0</span>;
+            <span class="keyword">default</span>: <span class="signal">next_state</span> = <span class="signal">IDLE</span>;
+        <span class="keyword">endcase</span>
+    <span class="keyword">end</span>
+
+    <span class="comment">// Mealy output — depends on state AND input</span>
+    <span class="keyword">assign</span> <span class="signal">detected</span> = (<span class="signal">state</span> == <span class="signal">SAW_0</span>) &amp;&amp; <span class="signal">din</span>;
+
+<span class="keyword">endmodule</span>
+</pre>
+
+<div class="concept-box">
+<h3>🔑 Mealy Advantage: Fewer States!</h3>
+<p class="en">The Mealy version needs only <strong>2 states</strong> vs Moore's <strong>3 states</strong>. Because it can factor the input into the output, it doesn't need a separate "detection" state. The output goes high in the <em>same cycle</em> the '1' arrives.</p>
+<p class="ko" style="display:none;">Mealy 버전은 Moore의 <strong>3개 상태</strong> 대비 <strong>2개 상태</strong>만 필요합니다. 입력을 출력에 반영할 수 있으므로, 별도의 "감지" 상태가 필요 없습니다. '1'이 도착하는 <em>같은 사이클</em>에 출력이 올라갑니다.</p>
+</div>
+
+<h2>4. Timing Comparison</h2>
+
+<p class="en">Let's trace through the same input sequence <code>0, 1, 1, 0, 1</code> and compare outputs:</p>
+<p class="ko" style="display:none;">같은 입력 시퀀스 <code>0, 1, 1, 0, 1</code>을 추적하며 출력을 비교해봅시다:</p>
+
+<table class="comparison-table">
+<tr><th>Cycle</th><th>din</th><th>Moore State</th><th>Moore Out</th><th>Mealy State</th><th>Mealy Out</th></tr>
+<tr><td>1</td><td>0</td><td>IDLE → SAW_0</td><td>0</td><td>IDLE → SAW_0</td><td>0</td></tr>
+<tr><td>2</td><td>1</td><td>SAW_0 → SAW_01</td><td>0</td><td>SAW_0 → IDLE</td><td><strong>1</strong> ✓</td></tr>
+<tr><td>3</td><td>1</td><td>SAW_01 → IDLE</td><td><strong>1</strong> ✓</td><td>IDLE → IDLE</td><td>0</td></tr>
+<tr><td>4</td><td>0</td><td>IDLE → SAW_0</td><td>0</td><td>IDLE → SAW_0</td><td>0</td></tr>
+<tr><td>5</td><td>1</td><td>SAW_0 → SAW_01</td><td>0</td><td>SAW_0 → IDLE</td><td><strong>1</strong> ✓</td></tr>
+</table>
+
+<div class="warning-box">
+<h3>⚠️ Critical Insight: The 1-Cycle Latency Difference</h3>
+<p class="en">Mealy detects the pattern in <strong>cycle 2</strong>, but Moore doesn't output until <strong>cycle 3</strong>. This is because Moore must first <em>enter</em> the SAW_01 state, then output on the <em>next</em> cycle. Mealy outputs immediately because it combines state + input combinationally.</p>
+<p class="ko" style="display:none;">Mealy는 <strong>사이클 2</strong>에서 패턴을 감지하지만, Moore는 <strong>사이클 3</strong>까지 출력하지 않습니다. Moore는 먼저 SAW_01 상태에 <em>진입</em>한 후, <em>다음</em> 사이클에서 출력해야 하기 때문입니다. Mealy는 상태 + 입력을 조합적으로 결합하므로 즉시 출력합니다.</p>
+</div>
+
+<h2>5. Side-by-Side Comparison</h2>
+
+<table class="comparison-table">
+<tr><th>Property</th><th>Moore</th><th>Mealy</th></tr>
+<tr><td>Output depends on</td><td>State only</td><td>State + Input</td></tr>
+<tr><td>Output timing</td><td>Synchronized to clock</td><td>Can change within cycle</td></tr>
+<tr><td>Latency</td><td>+1 cycle</td><td>Immediate (same cycle)</td></tr>
+<tr><td>Number of states</td><td>Usually more</td><td>Usually fewer</td></tr>
+<tr><td>Glitch-free?</td><td>Yes (registered output)</td><td>No (combinational path)</td></tr>
+<tr><td>Typical use</td><td>Control signals, safe defaults</td><td>Low-latency detection</td></tr>
+</table>
+
+<h2>6. Registered Mealy: Best of Both Worlds</h2>
+
+<p class="en">In practice, you often want Mealy's fewer states but Moore's clean output. The solution: <strong>register the Mealy output</strong>. This adds one cycle of latency (matching Moore), but keeps the smaller state space.</p>
+<p class="ko" style="display:none;">실무에서는 Mealy의 적은 상태 수와 Moore의 깨끗한 출력을 모두 원합니다. 해결책: <strong>Mealy 출력을 레지스터에 등록</strong>합니다. 한 사이클의 지연이 추가되지만(Moore와 동일), 상태 공간은 작게 유지됩니다.</p>
+
+<pre>
+<span class="comment">// Registered Mealy output — glitch-free!</span>
+<span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span> <span class="keyword">or negedge</span> <span class="signal">rst_n</span>) <span class="keyword">begin</span>
+    <span class="keyword">if</span> (!<span class="signal">rst_n</span>)
+        <span class="signal">detected_reg</span> &lt;= <span class="number">1'b0</span>;
+    <span class="keyword">else</span>
+        <span class="signal">detected_reg</span> &lt;= (<span class="signal">state</span> == <span class="signal">SAW_0</span>) &amp;&amp; <span class="signal">din</span>;
+<span class="keyword">end</span>
+
+<span class="keyword">assign</span> <span class="signal">detected</span> = <span class="signal">detected_reg</span>;
+</pre>
+
+<div class="tip-box">
+<h3>💡 Industry Practice</h3>
+<p class="en">Most real designs use <strong>registered Mealy</strong> or <strong>Moore</strong>. Raw (unregistered) Mealy outputs are risky because glitches can cause problems in downstream logic. When an interviewer asks "Moore or Mealy?" — mentioning registered Mealy shows deeper understanding.</p>
+<p class="ko" style="display:none;">대부분의 실제 설계는 <strong>레지스터드 Mealy</strong> 또는 <strong>Moore</strong>를 사용합니다. 등록되지 않은 Mealy 출력은 글리치가 하류 로직에 문제를 일으킬 수 있어 위험합니다. 면접에서 "Moore vs Mealy?"라는 질문에 레지스터드 Mealy를 언급하면 깊은 이해를 보여줍니다.</p>
+</div>
+
+<h2>7. When to Choose Which</h2>
+
+<div class="concept-box">
+<h3>🏗️ Design Decision Guide</h3>
+<p class="en"><strong>Choose Moore when:</strong></p>
+<ul class="en">
+<li>Output drives other FSMs or crosses clock domains</li>
+<li>You need guaranteed glitch-free outputs</li>
+<li>Simplicity and safety matter more than latency</li>
+<li>Output is used as a control signal (enable, reset, etc.)</li>
+</ul>
+<p class="ko" style="display:none;"><strong>Moore를 선택할 때:</strong></p>
+<ul class="ko" style="display:none;">
+<li>출력이 다른 FSM을 구동하거나 클럭 도메인을 넘을 때</li>
+<li>글리치 없는 출력이 보장되어야 할 때</li>
+<li>단순성과 안전성이 지연 시간보다 중요할 때</li>
+<li>출력이 제어 신호(enable, reset 등)로 사용될 때</li>
+</ul>
+<p class="en"><strong>Choose Mealy when:</strong></p>
+<ul class="en">
+<li>Latency is critical (need same-cycle response)</li>
+<li>You want to minimize state count</li>
+<li>Output is consumed by registered logic anyway</li>
+<li>Protocol requires immediate acknowledgment</li>
+</ul>
+<p class="ko" style="display:none;"><strong>Mealy를 선택할 때:</strong></p>
+<ul class="ko" style="display:none;">
+<li>지연 시간이 중요할 때 (같은 사이클 응답 필요)</li>
+<li>상태 수를 최소화하고 싶을 때</li>
+<li>출력이 어차피 레지스터된 로직에서 소비될 때</li>
+<li>프로토콜이 즉각적인 확인 응답을 요구할 때</li>
+</ul>
+</div>
+
+<h2>8. Common Interview Question</h2>
+
+<div class="concept-box">
+<h3>🎯 "Can you convert between Moore and Mealy?"</h3>
+<p class="en">Yes! Any Moore machine can be converted to Mealy (and vice versa). The key trade-off:</p>
+<ul class="en">
+<li><strong>Moore → Mealy:</strong> Merge states, reduce count, but output may glitch</li>
+<li><strong>Mealy → Moore:</strong> Split states so each has unique output, adds states but cleans output</li>
+</ul>
+<p class="ko" style="display:none;">네! 모든 Moore 머신은 Mealy로 변환할 수 있고 (반대도 가능). 핵심 트레이드오프:</p>
+<ul class="ko" style="display:none;">
+<li><strong>Moore → Mealy:</strong> 상태를 병합하고 수를 줄이지만, 출력에 글리치 가능</li>
+<li><strong>Mealy → Moore:</strong> 각 상태가 고유한 출력을 갖도록 분할, 상태 수 증가하지만 출력 깨끗</li>
+</ul>
+</div>
+
+<h2>📝 Summary</h2>
+
+<div class="concept-box">
+<h3 class="en">Today's Key Takeaways</h3>
+<h3 class="ko" style="display:none;">오늘의 핵심 포인트</h3>
+<ol class="en">
+<li><strong>Moore</strong>: output = f(state) → clean, +1 cycle latency, more states</li>
+<li><strong>Mealy</strong>: output = f(state, input) → faster, fewer states, may glitch</li>
+<li><strong>Registered Mealy</strong> gives you fewer states + glitch-free output</li>
+<li>Moore is safer for control signals; Mealy is better for low-latency</li>
+<li>Both are interconvertible — knowing when to use which is the real skill</li>
+</ol>
+<ol class="ko" style="display:none;">
+<li><strong>Moore</strong>: output = f(state) → 깨끗, +1 사이클 지연, 상태 더 많음</li>
+<li><strong>Mealy</strong>: output = f(state, input) → 빠름, 상태 적음, 글리치 가능</li>
+<li><strong>레지스터드 Mealy</strong>는 적은 상태 + 글리치 없는 출력을 제공</li>
+<li>Moore는 제어 신호에 안전; Mealy는 저지연에 적합</li>
+<li>둘 다 상호 변환 가능 — 언제 어떤 것을 사용할지 아는 것이 진정한 기술</li>
+</ol>
+</div>
+
+<div class="nav">
+<a href="day-06-lesson.html">← Day 6: FSM Fundamentals</a>
+<a href="day-07-quiz.html">Day 7 Quiz →</a>
+</div>
+
+<script>
+let isKorean = false;
+function toggleLang() {
+    isKorean = !isKorean;
+    document.querySelectorAll('.en').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'none' : 'revert', 'important');
+    });
+    document.querySelectorAll('.ko').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'revert' : 'none', 'important');
+    });
+    document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 7 Quiz: Moore vs Mealy Machines</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    background: linear-gradient(135deg, #fefae0 0%, #faedcd 100%);
+    color: #3d405b;
+    line-height: 1.8;
+    padding: 24px;
+    max-width: 920px;
+    margin: 0 auto;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+h1 { color: #5d4037; border-bottom: 3px solid #c4a77d; padding-bottom: 12px; margin-bottom: 24px; font-size: 2em; }
+h2 { color: #588157; border-bottom: 2px solid #a3b18a; padding-bottom: 8px; margin: 32px 0 16px; }
+h3 { color: #5d4037; margin: 20px 0 10px; }
+p { margin: 12px 0; }
+code {
+    background: #e9f5db; color: #3d405b; padding: 2px 8px; border-radius: 4px;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+}
+pre {
+    background: #2d3436; padding: 24px; border-radius: 12px; margin: 24px 0;
+    border: 3px solid #a3b18a; overflow-x: auto;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace; font-size: 15px; line-height: 1.6; color: #f8f8f2;
+}
+.keyword { color: #ff79c6; font-weight: 600; }
+.type { color: #8be9fd; }
+.signal { color: #50fa7b; }
+.number { color: #ffb86c; }
+.comment { color: #6272a4; font-style: italic; }
+.lang-toggle {
+    position: fixed; top: 16px; right: 16px; background: #588157; border: none;
+    border-radius: 24px; padding: 10px 20px; cursor: pointer; color: #fff;
+    font-size: 14px; font-weight: 600; z-index: 1000;
+}
+.lang-toggle:hover { background: #3a5a40; }
+.ko { display: none; }
+.question {
+    background: #fff8f0; border: 2px solid #c4a77d; border-radius: 12px;
+    padding: 20px; margin: 20px 0;
+}
+.question h3 { color: #5d4037; margin-bottom: 12px; }
+.options { list-style: none; padding: 0; }
+.options li {
+    padding: 10px 16px; margin: 6px 0; border-radius: 8px; cursor: pointer;
+    border: 2px solid #a3b18a; transition: all 0.2s;
+}
+.options li:hover { background: #e9f5db; }
+.options li.correct { background: #d4edda; border-color: #588157; }
+.options li.wrong { background: #fce4e4; border-color: #ef4444; }
+.explanation {
+    display: none; margin-top: 12px; padding: 12px; background: #fff;
+    border-radius: 8px; border-left: 4px solid #588157;
+}
+.score-box {
+    background: #fff8f0; border: 2px solid #c4a77d; border-radius: 12px;
+    padding: 20px; margin: 24px 0; text-align: center;
+}
+.score-box h2 { border: none; }
+.nav { display: flex; justify-content: space-between; margin: 24px 0; }
+.nav a {
+    background: linear-gradient(135deg, #588157, #3a5a40); color: #fff;
+    text-decoration: none; padding: 10px 20px; border-radius: 8px; font-weight: 600;
+}
+@media (max-width: 768px) {
+    body { padding: 16px; }
+    h1 { font-size: 1.8em; }
+    pre { font-size: 14px; padding: 16px; }
+    .lang-toggle { padding: 8px 16px; font-size: 13px; }
+}
+</style>
+</head>
+<body>
+
+<button class="lang-toggle" onclick="toggleLang()">한국어</button>
+
+<h1>📝 Day 7 Quiz: Moore vs Mealy Machines</h1>
+
+<div class="score-box" id="scoreBox" style="display:none;">
+<h2>🎯 Score: <span id="score">0</span>/12</h2>
+<p id="scoreMsg"></p>
+</div>
+
+<!-- Q1 -->
+<div class="question" id="q1">
+<h3>Q1. <span class="en">In a Moore machine, the output depends on:</span><span class="ko" style="display:none;">Moore 머신에서 출력은 무엇에 의존합니까?</span></h3>
+<ul class="options">
+<li onclick="answer(1,this,'b')">A) <span class="en">Current input only</span><span class="ko" style="display:none;">현재 입력만</span></li>
+<li onclick="answer(1,this,'b')">B) <span class="en">Current state only</span><span class="ko" style="display:none;">현재 상태만</span></li>
+<li onclick="answer(1,this,'b')">C) <span class="en">Current state and current input</span><span class="ko" style="display:none;">현재 상태와 현재 입력</span></li>
+<li onclick="answer(1,this,'b')">D) <span class="en">Previous state and current input</span><span class="ko" style="display:none;">이전 상태와 현재 입력</span></li>
+</ul>
+<div class="explanation" id="exp1">
+<p class="en">✅ <strong>B)</strong> Moore machines output depends ONLY on the current state. This is the defining characteristic.</p>
+<p class="ko" style="display:none;">✅ <strong>B)</strong> Moore 머신의 출력은 현재 상태에만 의존합니다. 이것이 정의적 특성입니다.</p>
+</div>
+</div>
+
+<!-- Q2 -->
+<div class="question" id="q2">
+<h3>Q2. <span class="en">Which machine type typically requires fewer states?</span><span class="ko" style="display:none;">어떤 머신 유형이 일반적으로 더 적은 상태를 필요로 합니까?</span></h3>
+<ul class="options">
+<li onclick="answer(2,this,'b')">A) <span class="en">Moore</span><span class="ko" style="display:none;">Moore</span></li>
+<li onclick="answer(2,this,'b')">B) <span class="en">Mealy</span><span class="ko" style="display:none;">Mealy</span></li>
+<li onclick="answer(2,this,'b')">C) <span class="en">They always have the same number</span><span class="ko" style="display:none;">항상 같은 수</span></li>
+<li onclick="answer(2,this,'b')">D) <span class="en">It depends on the clock frequency</span><span class="ko" style="display:none;">클럭 주파수에 따라 다름</span></li>
+</ul>
+<div class="explanation" id="exp2">
+<p class="en">✅ <strong>B)</strong> Mealy machines can combine state + input for outputs, so they often don't need separate states to represent different outputs.</p>
+<p class="ko" style="display:none;">✅ <strong>B)</strong> Mealy 머신은 상태 + 입력을 결합하여 출력할 수 있으므로, 다른 출력을 나타내기 위한 별도의 상태가 필요 없는 경우가 많습니다.</p>
+</div>
+</div>
+
+<!-- Q3 -->
+<div class="question" id="q3">
+<h3>Q3. <span class="en">A Mealy output can change:</span><span class="ko" style="display:none;">Mealy 출력은 언제 변할 수 있습니까?</span></h3>
+<ul class="options">
+<li onclick="answer(3,this,'c')">A) <span class="en">Only on clock edges</span><span class="ko" style="display:none;">클럭 에지에서만</span></li>
+<li onclick="answer(3,this,'c')">B) <span class="en">Only on reset</span><span class="ko" style="display:none;">리셋 시에만</span></li>
+<li onclick="answer(3,this,'c')">C) <span class="en">Within a clock cycle when inputs change</span><span class="ko" style="display:none;">입력이 변할 때 클럭 사이클 내에서</span></li>
+<li onclick="answer(3,this,'c')">D) <span class="en">Only after two clock cycles</span><span class="ko" style="display:none;">두 클럭 사이클 후에만</span></li>
+</ul>
+<div class="explanation" id="exp3">
+<p class="en">✅ <strong>C)</strong> Since Mealy outputs depend on inputs combinationally, they can change mid-cycle whenever the input changes. This is both a feature (faster) and a risk (glitches).</p>
+<p class="ko" style="display:none;">✅ <strong>C)</strong> Mealy 출력은 입력에 조합적으로 의존하므로, 입력이 변할 때마다 사이클 중간에 변할 수 있습니다.</p>
+</div>
+</div>
+
+<!-- Q4 -->
+<div class="question" id="q4">
+<h3>Q4. <span class="en">What is the main risk of unregistered Mealy outputs?</span><span class="ko" style="display:none;">등록되지 않은 Mealy 출력의 주요 위험은 무엇입니까?</span></h3>
+<ul class="options">
+<li onclick="answer(4,this,'a')">A) <span class="en">Output glitches</span><span class="ko" style="display:none;">출력 글리치</span></li>
+<li onclick="answer(4,this,'a')">B) <span class="en">Too many states</span><span class="ko" style="display:none;">너무 많은 상태</span></li>
+<li onclick="answer(4,this,'a')">C) <span class="en">High power consumption</span><span class="ko" style="display:none;">높은 전력 소비</span></li>
+<li onclick="answer(4,this,'a')">D) <span class="en">Cannot be synthesized</span><span class="ko" style="display:none;">합성할 수 없음</span></li>
+</ul>
+<div class="explanation" id="exp4">
+<p class="en">✅ <strong>A)</strong> Since Mealy outputs are combinational, input changes can cause transient glitches that may be captured incorrectly by downstream registers.</p>
+<p class="ko" style="display:none;">✅ <strong>A)</strong> Mealy 출력은 조합적이므로, 입력 변화가 일시적 글리치를 일으켜 하류 레지스터에 잘못 캡처될 수 있습니다.</p>
+</div>
+</div>
+
+<!-- Q5 -->
+<div class="question" id="q5">
+<h3>Q5. <span class="en">Look at this output assignment:<br><code>assign out = (state == S2);</code><br>Is this Moore or Mealy?</span><span class="ko" style="display:none;">이 출력 할당을 보세요:<br><code>assign out = (state == S2);</code><br>이것은 Moore입니까, Mealy입니까?</span></h3>
+<ul class="options">
+<li onclick="answer(5,this,'a')">A) <span class="en">Moore — depends on state only</span><span class="ko" style="display:none;">Moore — 상태에만 의존</span></li>
+<li onclick="answer(5,this,'a')">B) <span class="en">Mealy — uses combinational logic</span><span class="ko" style="display:none;">Mealy — 조합 로직 사용</span></li>
+<li onclick="answer(5,this,'a')">C) <span class="en">Neither — it's invalid</span><span class="ko" style="display:none;">둘 다 아님 — 유효하지 않음</span></li>
+<li onclick="answer(5,this,'a')">D) <span class="en">Cannot determine without seeing the testbench</span><span class="ko" style="display:none;">테스트벤치를 보지 않으면 판단 불가</span></li>
+</ul>
+<div class="explanation" id="exp5">
+<p class="en">✅ <strong>A)</strong> The output depends only on <code>state</code> — no input signals involved. That's the definition of Moore.</p>
+<p class="ko" style="display:none;">✅ <strong>A)</strong> 출력은 <code>state</code>에만 의존합니다 — 입력 신호가 포함되지 않았습니다. 이것이 Moore의 정의입니다.</p>
+</div>
+</div>
+
+<!-- Q6 -->
+<div class="question" id="q6">
+<h3>Q6. <span class="en">Look at this output assignment:<br><code>assign out = (state == S1) && din;</code><br>Is this Moore or Mealy?</span><span class="ko" style="display:none;">이 출력 할당을 보세요:<br><code>assign out = (state == S1) && din;</code><br>이것은 Moore입니까, Mealy입니까?</span></h3>
+<ul class="options">
+<li onclick="answer(6,this,'b')">A) <span class="en">Moore — state drives the output</span><span class="ko" style="display:none;">Moore — 상태가 출력을 구동</span></li>
+<li onclick="answer(6,this,'b')">B) <span class="en">Mealy — output depends on state AND input</span><span class="ko" style="display:none;">Mealy — 출력이 상태와 입력에 의존</span></li>
+<li onclick="answer(6,this,'b')">C) <span class="en">Registered Mealy</span><span class="ko" style="display:none;">레지스터드 Mealy</span></li>
+<li onclick="answer(6,this,'b')">D) <span class="en">Invalid — can't AND state with input</span><span class="ko" style="display:none;">유효하지 않음 — 상태와 입력을 AND할 수 없음</span></li>
+</ul>
+<div class="explanation" id="exp6">
+<p class="en">✅ <strong>B)</strong> The output depends on both <code>state</code> and <code>din</code> (an input). That makes it Mealy.</p>
+<p class="ko" style="display:none;">✅ <strong>B)</strong> 출력이 <code>state</code>와 <code>din</code>(입력) 모두에 의존합니다. 이것이 Mealy입니다.</p>
+</div>
+</div>
+
+<!-- Q7 -->
+<div class="question" id="q7">
+<h3>Q7. <span class="en">What is a "registered Mealy" machine?</span><span class="ko" style="display:none;">"레지스터드 Mealy" 머신이란 무엇입니까?</span></h3>
+<ul class="options">
+<li onclick="answer(7,this,'c')">A) <span class="en">A Mealy machine with more registers in the state</span><span class="ko" style="display:none;">상태에 더 많은 레지스터가 있는 Mealy 머신</span></li>
+<li onclick="answer(7,this,'c')">B) <span class="en">A Moore machine with input-dependent transitions</span><span class="ko" style="display:none;">입력 의존 전이가 있는 Moore 머신</span></li>
+<li onclick="answer(7,this,'c')">C) <span class="en">A Mealy machine whose output is captured by a flip-flop</span><span class="ko" style="display:none;">출력이 플립플롭에 캡처되는 Mealy 머신</span></li>
+<li onclick="answer(7,this,'c')">D) <span class="en">A Mealy machine that uses gray encoding</span><span class="ko" style="display:none;">그레이 인코딩을 사용하는 Mealy 머신</span></li>
+</ul>
+<div class="explanation" id="exp7">
+<p class="en">✅ <strong>C)</strong> Registered Mealy adds a flip-flop on the output, giving you Mealy's fewer states with Moore's glitch-free output quality.</p>
+<p class="ko" style="display:none;">✅ <strong>C)</strong> 레지스터드 Mealy는 출력에 플립플롭을 추가하여, Mealy의 적은 상태 수와 Moore의 글리치 없는 출력 품질을 모두 얻습니다.</p>
+</div>
+</div>
+
+<!-- Q8 -->
+<div class="question" id="q8">
+<h3>Q8. <span class="en">If a Moore machine has N states for a given task, how many states would the equivalent Mealy machine likely have?</span><span class="ko" style="display:none;">Moore 머신이 주어진 작업에 N개 상태가 있다면, 동등한 Mealy 머신은 몇 개의 상태를 가질까요?</span></h3>
+<ul class="options">
+<li onclick="answer(8,this,'b')">A) <span class="en">Exactly N</span><span class="ko" style="display:none;">정확히 N</span></li>
+<li onclick="answer(8,this,'b')">B) <span class="en">≤ N (same or fewer)</span><span class="ko" style="display:none;">≤ N (같거나 적음)</span></li>
+<li onclick="answer(8,this,'b')">C) <span class="en">≥ N (same or more)</span><span class="ko" style="display:none;">≥ N (같거나 많음)</span></li>
+<li onclick="answer(8,this,'b')">D) <span class="en">Always N/2</span><span class="ko" style="display:none;">항상 N/2</span></li>
+</ul>
+<div class="explanation" id="exp8">
+<p class="en">✅ <strong>B)</strong> Mealy can often merge states that differ only in output, so it uses the same or fewer states.</p>
+<p class="ko" style="display:none;">✅ <strong>B)</strong> Mealy는 출력만 다른 상태를 병합할 수 있으므로, 같거나 더 적은 상태를 사용합니다.</p>
+</div>
+</div>
+
+<!-- Q9 -->
+<div class="question" id="q9">
+<h3>Q9. <span class="en">Why are Moore outputs considered "safer" for control signals?</span><span class="ko" style="display:none;">Moore 출력이 제어 신호에 "더 안전"하다고 여겨지는 이유는?</span></h3>
+<ul class="options">
+<li onclick="answer(9,this,'d')">A) <span class="en">They use less power</span><span class="ko" style="display:none;">전력을 덜 사용</span></li>
+<li onclick="answer(9,this,'d')">B) <span class="en">They are always high</span><span class="ko" style="display:none;">항상 높음</span></li>
+<li onclick="answer(9,this,'d')">C) <span class="en">They can't be wrong</span><span class="ko" style="display:none;">틀릴 수 없음</span></li>
+<li onclick="answer(9,this,'d')">D) <span class="en">They are synchronized to the clock and glitch-free</span><span class="ko" style="display:none;">클럭에 동기화되어 글리치가 없음</span></li>
+</ul>
+<div class="explanation" id="exp9">
+<p class="en">✅ <strong>D)</strong> Moore outputs change only when state changes (on clock edges), so they're inherently synchronized and don't have combinational glitches.</p>
+<p class="ko" style="display:none;">✅ <strong>D)</strong> Moore 출력은 상태가 변할 때(클럭 에지에서)만 변하므로, 본질적으로 동기화되어 조합 글리치가 없습니다.</p>
+</div>
+</div>
+
+<!-- Q10 -->
+<div class="question" id="q10">
+<h3>Q10. <span class="en">In the "01" detector example, the Mealy version detects the pattern:</span><span class="ko" style="display:none;">"01" 감지기 예제에서, Mealy 버전은 패턴을 감지하는 시점은:</span></h3>
+<ul class="options">
+<li onclick="answer(10,this,'a')">A) <span class="en">In the same cycle as the '1' arrives</span><span class="ko" style="display:none;">'1'이 도착하는 같은 사이클에서</span></li>
+<li onclick="answer(10,this,'a')">B) <span class="en">One cycle after the '1' arrives</span><span class="ko" style="display:none;">'1'이 도착한 후 한 사이클 후</span></li>
+<li onclick="answer(10,this,'a')">C) <span class="en">Two cycles after the '0' arrives</span><span class="ko" style="display:none;">'0'이 도착한 후 두 사이클 후</span></li>
+<li onclick="answer(10,this,'a')">D) <span class="en">Before the '1' arrives</span><span class="ko" style="display:none;">'1'이 도착하기 전</span></li>
+</ul>
+<div class="explanation" id="exp10">
+<p class="en">✅ <strong>A)</strong> Because the Mealy output is <code>(state == SAW_0) && din</code>, it goes high the instant <code>din</code> is 1 while in SAW_0 — same cycle, no waiting.</p>
+<p class="ko" style="display:none;">✅ <strong>A)</strong> Mealy 출력이 <code>(state == SAW_0) && din</code>이므로, SAW_0 상태에서 <code>din</code>이 1이 되는 순간 출력이 올라갑니다 — 같은 사이클, 대기 없음.</p>
+</div>
+</div>
+
+<!-- Q11 -->
+<div class="question" id="q11">
+<h3>Q11. <span class="en">You're designing an FSM whose output drives an async FIFO's write enable. Should you use Moore or Mealy?</span><span class="ko" style="display:none;">비동기 FIFO의 쓰기 인에이블을 구동하는 FSM을 설계합니다. Moore와 Mealy 중 어느 것을 사용해야 합니까?</span></h3>
+<ul class="options">
+<li onclick="answer(11,this,'a')">A) <span class="en">Moore — glitch-free output is critical for cross-domain signals</span><span class="ko" style="display:none;">Moore — 크로스 도메인 신호에는 글리치 없는 출력이 중요</span></li>
+<li onclick="answer(11,this,'a')">B) <span class="en">Mealy — need the fastest possible response</span><span class="ko" style="display:none;">Mealy — 가능한 가장 빠른 응답 필요</span></li>
+<li onclick="answer(11,this,'a')">C) <span class="en">Either — it doesn't matter</span><span class="ko" style="display:none;">둘 다 — 상관없음</span></li>
+<li onclick="answer(11,this,'a')">D) <span class="en">Neither — FIFOs don't use FSMs</span><span class="ko" style="display:none;">둘 다 아님 — FIFO는 FSM을 사용하지 않음</span></li>
+</ul>
+<div class="explanation" id="exp11">
+<p class="en">✅ <strong>A)</strong> When driving cross-domain signals, a glitch could be captured as a false write. Moore's registered output prevents this.</p>
+<p class="ko" style="display:none;">✅ <strong>A)</strong> 크로스 도메인 신호를 구동할 때, 글리치가 잘못된 쓰기로 캡처될 수 있습니다. Moore의 레지스터된 출력이 이를 방지합니다.</p>
+</div>
+</div>
+
+<!-- Q12 -->
+<div class="question" id="q12">
+<h3>Q12. <span class="en">What does "registered Mealy" give you that raw Mealy doesn't?</span><span class="ko" style="display:none;">"레지스터드 Mealy"가 일반 Mealy보다 제공하는 것은?</span></h3>
+<ul class="options">
+<li onclick="answer(12,this,'c')">A) <span class="en">Faster detection</span><span class="ko" style="display:none;">더 빠른 감지</span></li>
+<li onclick="answer(12,this,'c')">B) <span class="en">Fewer flip-flops</span><span class="ko" style="display:none;">더 적은 플립플롭</span></li>
+<li onclick="answer(12,this,'c')">C) <span class="en">Glitch-free output with fewer states than Moore</span><span class="ko" style="display:none;">Moore보다 적은 상태로 글리치 없는 출력</span></li>
+<li onclick="answer(12,this,'c')">D) <span class="en">Input-independent output</span><span class="ko" style="display:none;">입력 독립적 출력</span></li>
+</ul>
+<div class="explanation" id="exp12">
+<p class="en">✅ <strong>C)</strong> Registered Mealy is the best-of-both-worlds: Mealy's compact state space + Moore's clean, synchronized output.</p>
+<p class="ko" style="display:none;">✅ <strong>C)</strong> 레지스터드 Mealy는 양쪽의 장점을 결합합니다: Mealy의 작은 상태 공간 + Moore의 깨끗하고 동기화된 출력.</p>
+</div>
+</div>
+
+<div class="score-box" id="finalScore" style="display:none;">
+<h2>🎯 Final Score: <span id="finalScoreNum">0</span>/12</h2>
+<p id="finalMsg"></p>
+</div>
+
+<div class="nav">
+<a href="day-07-lesson.html">← Day 7 Lesson</a>
+<a href="day-07-practice.html">Day 7 Practice →</a>
+</div>
+
+<script>
+let isKorean = false;
+function toggleLang() {
+    isKorean = !isKorean;
+    document.querySelectorAll('.en').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'none' : 'revert', 'important');
+    });
+    document.querySelectorAll('.ko').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'revert' : 'none', 'important');
+    });
+    document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+}
+
+let score = 0;
+let answered = {};
+const answers = {1:'b',2:'b',3:'c',4:'a',5:'a',6:'b',7:'c',8:'b',9:'d',10:'a',11:'a',12:'c'};
+
+function answer(q, el, correct) {
+    if (answered[q]) return;
+    answered[q] = true;
+    const options = el.parentElement.children;
+    const correctIdx = {'a':0,'b':1,'c':2,'d':3}[answers[q]];
+    const clickedIdx = Array.from(options).indexOf(el);
+    if (clickedIdx === correctIdx) {
+        el.classList.add('correct');
+        score++;
+    } else {
+        el.classList.add('wrong');
+        options[correctIdx].classList.add('correct');
+    }
+    document.getElementById('exp' + q).style.display = 'block';
+    if (Object.keys(answered).length === 12) {
+        const box = document.getElementById('finalScore');
+        box.style.display = 'block';
+        document.getElementById('finalScoreNum').textContent = score;
+        const msg = document.getElementById('finalMsg');
+        if (score === 12) msg.textContent = '🌟 Perfect! You really understand Moore vs Mealy!';
+        else if (score >= 10) msg.textContent = '🎉 Excellent! Just a couple to review.';
+        else if (score >= 7) msg.textContent = '👍 Good work! Review the ones you missed.';
+        else msg.textContent = '📚 Re-read the lesson and try again!';
+        box.scrollIntoView({behavior:'smooth'});
+    }
+}
+</script>
+
+</body>
+</html>
