@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SnapDigest — TestFlight Status Report</title>
+<style>
+  :root { --bg: #FAF8F5; --card: #FFFFFF; --text: #2C3E2D; --text2: #6B7C6B; --accent: #4A7C59; --green: #2D8544; --red: #C0392B; --orange: #E67E22; --border: #E8E4DF; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, 'Nunito', sans-serif; background: var(--bg); color: var(--text); max-width: 720px; margin: 0 auto; padding: 20px 16px; line-height: 1.6; }
+  .lang-toggle { position: fixed; top: 12px; right: 12px; background: var(--accent); color: #fff; border: none; padding: 6px 14px; border-radius: 20px; cursor: pointer; font-size: 13px; z-index: 99; }
+  h1 { font-size: 28px; font-weight: 700; margin-bottom: 4px; }
+  .subtitle { color: var(--text2); font-size: 14px; margin-bottom: 24px; }
+  .card { background: var(--card); border-radius: 14px; padding: 20px; margin-bottom: 16px; border: 1px solid var(--border); }
+  .card h2 { font-size: 18px; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+  .badge { display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: 12px; font-weight: 600; }
+  .badge-done { background: #D5F5E3; color: var(--green); }
+  .badge-todo { background: #FADBD8; color: var(--red); }
+  .badge-minor { background: #FEF3E2; color: var(--orange); }
+  .badge-info { background: #E8EAF6; color: #3F51B5; }
+  .progress-bar { background: #E8E4DF; border-radius: 8px; height: 12px; margin: 8px 0 16px; overflow: hidden; }
+  .progress-fill { background: linear-gradient(90deg, var(--green), var(--accent)); height: 100%; border-radius: 8px; transition: width 0.5s; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  td, th { padding: 8px 10px; text-align: left; border-bottom: 1px solid var(--border); }
+  th { font-weight: 600; font-size: 12px; text-transform: uppercase; color: var(--text2); }
+  .check { color: var(--green); }
+  .cross { color: var(--red); }
+  .warn { color: var(--orange); }
+  ul { padding-left: 20px; }
+  li { margin-bottom: 6px; font-size: 14px; }
+  .note { background: #FEF9E7; border-left: 4px solid var(--orange); padding: 12px 16px; border-radius: 0 8px 8px 0; margin: 12px 0; font-size: 13px; }
+  .action { background: #FDEDEC; border-left: 4px solid var(--red); padding: 12px 16px; border-radius: 0 8px 8px 0; margin: 8px 0; font-size: 13px; }
+  .totoro { background: #E8F5E9; border-left: 4px solid var(--green); padding: 12px 16px; border-radius: 0 8px 8px 0; margin: 8px 0; font-size: 13px; }
+  .timeline { margin: 16px 0; }
+  .timeline-item { display: flex; gap: 12px; margin-bottom: 12px; font-size: 14px; }
+  .timeline-day { min-width: 70px; font-weight: 700; color: var(--accent); }
+  .ko { display: none; }
+  .ko.show { display: inline !important; }
+  .en.hide { display: none !important; }
+  footer { text-align: center; color: var(--text2); font-size: 12px; margin-top: 24px; padding-bottom: 40px; }
+</style>
+</head>
+<body>
+<button class="lang-toggle" onclick="toggleLang()">한국어</button>
+
+<h1>🍃 SnapDigest</h1>
+<p class="subtitle">
+  <span class="en">TestFlight Status Report — Feb 24, 2026</span>
+  <span class="ko">TestFlight 상태 보고서 — 2026년 2월 24일</span>
+</p>
+
+<!-- Overall Progress -->
+<div class="card">
+  <h2>
+    <span class="en">📊 Overall Progress</span>
+    <span class="ko">📊 전체 진행률</span>
+  </h2>
+  <div style="display:flex;justify-content:space-between;align-items:center;">
+    <span style="font-size:32px;font-weight:700;">88%</span>
+    <span class="badge badge-minor">
+      <span class="en">Almost TestFlight Ready</span>
+      <span class="ko">TestFlight 거의 준비 완료</span>
+    </span>
+  </div>
+  <div class="progress-bar"><div class="progress-fill" style="width:88%"></div></div>
+  <p style="font-size:13px;color:var(--text2);">
+    <span class="en">66 Dart files • 100K+ lines • 9 feature modules • 2 Edge Functions</span>
+    <span class="ko">66개 Dart 파일 • 10만+ 줄 • 9개 기능 모듈 • 2개 Edge Function</span>
+  </p>
+</div>
+
+<!-- Core Features -->
+<div class="card">
+  <h2>
+    <span class="en">✅ Core Features — Complete</span>
+    <span class="ko">✅ 핵심 기능 — 완료</span>
+  </h2>
+  <table>
+    <tr><th><span class="en">Feature</span><span class="ko">기능</span></th><th><span class="en">Status</span><span class="ko">상태</span></th></tr>
+    <tr><td><span class="en">🔐 Auth (Email/Password)</span><span class="ko">🔐 인증 (이메일/비밀번호)</span></td><td><span class="check">✅</span></td></tr>
+    <tr><td><span class="en">🍎 Apple Sign In (native)</span><span class="ko">🍎 Apple 로그인 (네이티브)</span></td><td><span class="check">✅</span></td></tr>
+    <tr><td><span class="en">🔵 Google Sign In (native)</span><span class="ko">🔵 Google 로그인 (네이티브)</span></td><td><span class="check">✅</span></td></tr>
+    <tr><td><span class="en">📰 RSS Feed Aggregation (25+ sources)</span><span class="ko">📰 RSS 피드 집약 (25+ 출처)</span></td><td><span class="check">✅</span></td></tr>
+    <tr><td><span class="en">🤖 AI Curation (gpt-4.1-nano scoring)</span><span class="ko">🤖 AI 큐레이션 (gpt-4.1-nano 스코어링)</span></td><td><span class="check">✅</span></td></tr>
+    <tr><td><span class="en">✨ AI Enhancement (gpt-4.1-mini summaries)</span><span class="ko">✨ AI 강화 (gpt-4.1-mini 요약)</span></td><td><span class="check">✅</span></td></tr>
+    <tr><td><span class="en">🇰🇷 Korean Translation (AI)</span><span class="ko">🇰🇷 한국어 번역 (AI)</span></td><td><span class="check">✅</span></td></tr>
+    <tr><td><span class="en">📖 Story Mode (swipe cards)</span><span class="ko">📖 스토리 모드 (스와이프 카드)</span></td><td><span class="check">✅</span></td></tr>
+    <tr><td><span class="en">📋 Browse Mode (category view)</span><span class="ko">📋 브라우즈 모드 (카테고리 뷰)</span></td><td><span class="check">✅</span></td></tr>
+    <tr><td><span class="en">🔖 Saved Articles</span><span class="ko">🔖 저장된 기사</span></td><td><span class="check">✅</span> <span class="badge badge-done"><span class="en">Fixed today</span><span class="ko">오늘 수정</span></span></td></tr>
+    <tr><td><span class="en">⚙️ Settings (Theme/Language/Notifications)</span><span class="ko">⚙️ 설정 (테마/언어/알림)</span></td><td><span class="check">✅</span></td></tr>
+    <tr><td><span class="en">🌐 Language System (EN ↔ KO)</span><span class="ko">🌐 언어 시스템 (EN ↔ KO)</span></td><td><span class="check">✅</span></td></tr>
+    <tr><td><span class="en">🎵 Audio TTS (Edge Function)</span><span class="ko">🎵 오디오 TTS (Edge Function)</span></td><td><span class="check">✅</span></td></tr>
+    <tr><td><span class="en">🔔 Push Notifications (FCM + Supabase)</span><span class="ko">🔔 푸시 알림 (FCM + Supabase)</span></td><td><span class="check">✅</span></td></tr>
+    <tr><td><span class="en">🗑️ Account Deletion</span><span class="ko">🗑️ 계정 삭제</span></td><td><span class="check">✅</span></td></tr>
+    <tr><td><span class="en">🎨 Ghibli Theme (Light + Dark)</span><span class="ko">🎨 지브리 테마 (라이트 + 다크)</span></td><td><span class="check">✅</span></td></tr>
+    <tr><td><span class="en">📱 Onboarding Flow</span><span class="ko">📱 온보딩 플로우</span></td><td><span class="check">✅</span></td></tr>
+    <tr><td><span class="en">🔗 Deep Links (OAuth callback)</span><span class="ko">🔗 딥 링크 (OAuth 콜백)</span></td><td><span class="check">✅</span></td></tr>
+  </table>
+</div>
+
+<!-- Today's Fixes -->
+<div class="card">
+  <h2>
+    <span class="en">🔧 Fixed Today (Feb 24)</span>
+    <span class="ko">🔧 오늘 수정 사항 (2월 24일)</span>
+  </h2>
+  <ul>
+    <li><span class="en">Apple + Google Sign In — native <code>signInWithIdToken</code> (not browser redirect)</span><span class="ko">Apple + Google 로그인 — 네이티브 <code>signInWithIdToken</code> (브라우저 리다이렉트 아님)</span></li>
+    <li><span class="en">Bundle ID → <code>com.snapdigest.app</code></span><span class="ko">번들 ID → <code>com.snapdigest.app</code></span></li>
+    <li><span class="en">Firebase error in Settings — graceful fallback</span><span class="ko">설정의 Firebase 오류 — 우아한 폴백</span></li>
+    <li><span class="en">Saved articles — fixed FK constraint, self-contained storage</span><span class="ko">저장된 기사 — FK 제약 수정, 자체 포함 저장</span></li>
+    <li><span class="en">Edge Function 401 — fixed auth headers (anon key, not session token)</span><span class="ko">Edge Function 401 — 인증 헤더 수정 (세션 토큰이 아닌 anon 키)</span></li>
+    <li><span class="en">FCM token → Supabase pipeline for push notifications</span><span class="ko">FCM 토큰 → Supabase 파이프라인 (푸시 알림용)</span></li>
+    <li><span class="en">Welcome screen simplified — clean, minimal</span><span class="ko">웰컴 화면 단순화 — 깔끔, 미니멀</span></li>
+    <li><span class="en">Development Team set in Xcode (7373NYW784)</span><span class="ko">Xcode에서 개발팀 설정 (7373NYW784)</span></li>
+  </ul>
+</div>
+
+<!-- BLOCKERS -->
+<div class="card" style="border-color: var(--red);">
+  <h2>
+    <span class="en">🚨 Blockers for TestFlight</span>
+    <span class="ko">🚨 TestFlight 블로커</span>
+    <span class="badge badge-todo">
+      <span class="en">5 items — Minjun needed</span>
+      <span class="ko">5개 항목 — Minjun 필요</span>
+    </span>
+  </h2>
+
+  <div class="action">
+    <strong>1. 🎨 App Icon</strong><br>
+    <span class="en">Current icon is a money/dollar icon — wrong for a news app! Need a proper SnapDigest icon (leaf/news themed). <strong>Minjun: design or approve a new icon.</strong></span>
+    <span class="ko">현재 아이콘은 돈/달러 아이콘 — 뉴스 앱에 맞지 않음! 적절한 SnapDigest 아이콘 필요 (잎/뉴스 테마). <strong>Minjun: 새 아이콘 디자인 또는 승인.</strong></span>
+  </div>
+
+  <div class="action">
+    <strong>2. 🖼️ Splash/Launch Screen</strong><br>
+    <span class="en">Currently a 1x1 pixel placeholder. Need a proper launch screen (can be simple — logo on cream background). <strong>Totoro can generate this once icon is finalized.</strong></span>
+    <span class="ko">현재 1x1 픽셀 플레이스홀더. 적절한 런치 스크린 필요 (간단하게 — 크림 배경에 로고). <strong>아이콘 확정 후 Totoro가 생성 가능.</strong></span>
+  </div>
+
+  <div class="action">
+    <strong>3. 🔥 Firebase — Update GoogleService-Info.plist</strong><br>
+    <span class="en">Bundle ID changed to <code>com.snapdigest.app</code>. Must re-download GoogleService-Info.plist from Firebase Console with the new bundle ID, or add a new iOS app in Firebase. <strong>Minjun: update in Firebase Console → download new plist.</strong></span>
+    <span class="ko">번들 ID가 <code>com.snapdigest.app</code>으로 변경됨. Firebase 콘솔에서 새 번들 ID로 GoogleService-Info.plist 재다운로드 필요. <strong>Minjun: Firebase 콘솔에서 업데이트 → 새 plist 다운로드.</strong></span>
+  </div>
+
+  <div class="action">
+    <strong>4. 📜 Privacy Policy URL</strong><br>
+    <span class="en">Apple requires a privacy policy URL for TestFlight. Need to host a simple privacy policy page. <strong>Totoro can generate + host this on GitHub Pages.</strong></span>
+    <span class="ko">Apple은 TestFlight에 개인정보 처리방침 URL을 요구. 간단한 개인정보 처리방침 페이지 호스팅 필요. <strong>Totoro가 GitHub Pages에 생성 + 호스팅 가능.</strong></span>
+  </div>
+
+  <div class="action">
+    <strong>5. 📱 Real Device Test</strong><br>
+    <span class="en">Must test on a real iPhone before submitting. Google Sign In and Apple Sign In require a real device. <strong>Minjun: plug in iPhone, run <code>flutter run</code>.</strong></span>
+    <span class="ko">제출 전 실제 iPhone에서 테스트 필수. Google 로그인과 Apple 로그인은 실제 기기 필요. <strong>Minjun: iPhone 연결, <code>flutter run</code> 실행.</strong></span>
+  </div>
+</div>
+
+<!-- Nice to have -->
+<div class="card">
+  <h2>
+    <span class="en">💡 Nice-to-Have (Not blocking TestFlight)</span>
+    <span class="ko">💡 있으면 좋은 것 (TestFlight 블로킹 아님)</span>
+  </h2>
+  <table>
+    <tr><th><span class="en">Item</span><span class="ko">항목</span></th><th><span class="en">Status</span><span class="ko">상태</span></th><th><span class="en">Who</span><span class="ko">담당</span></th></tr>
+    <tr><td><span class="en">Production AdMob IDs</span><span class="ko">프로덕션 AdMob ID</span></td><td><span class="badge badge-minor"><span class="en">Test IDs OK for now</span><span class="ko">테스트 ID 당분간 OK</span></span></td><td>Minjun</td></tr>
+    <tr><td><span class="en">iOS Widget (Home Screen)</span><span class="ko">iOS 위젯 (홈 화면)</span></td><td><span class="badge badge-minor"><span class="en">AppGroupId needed</span><span class="ko">AppGroupId 필요</span></span></td><td>Minjun</td></tr>
+    <tr><td><span class="en">Scheduled News Delivery (CRON)</span><span class="ko">예약 뉴스 전송 (CRON)</span></td><td><span class="badge badge-info"><span class="en">Post-launch</span><span class="ko">출시 후</span></span></td><td>Totoro</td></tr>
+    <tr><td><span class="en">Spanish Translation</span><span class="ko">스페인어 번역</span></td><td><span class="badge badge-info"><span class="en">Architecture ready</span><span class="ko">아키텍처 준비됨</span></span></td><td>Totoro</td></tr>
+    <tr><td><span class="en">Offline Article Cache</span><span class="ko">오프라인 기사 캐시</span></td><td><span class="badge badge-info"><span class="en">Post-launch</span><span class="ko">출시 후</span></span></td><td>Totoro</td></tr>
+    <tr><td><span class="en">Share Cards</span><span class="ko">공유 카드</span></td><td><span class="badge badge-info"><span class="en">Post-launch</span><span class="ko">출시 후</span></span></td><td>Totoro</td></tr>
+  </table>
+</div>
+
+<!-- Things Totoro is handling -->
+<div class="card" style="border-color: var(--green);">
+  <h2>
+    <span class="en">🌳 Totoro Is Handling</span>
+    <span class="ko">🌳 Totoro가 처리 중</span>
+  </h2>
+  <div class="totoro">
+    <span class="en">These don't need Minjun's input — I'll take care of them:</span>
+    <span class="ko">Minjun의 입력 불필요 — 제가 처리합니다:</span>
+    <ul style="margin-top:8px;">
+      <li><span class="en">✅ Generate Privacy Policy + Terms of Service pages (GitHub Pages)</span><span class="ko">✅ 개인정보 처리방침 + 이용약관 페이지 생성 (GitHub Pages)</span></li>
+      <li><span class="en">✅ Clean up dead code (old push_notification_service.dart removed)</span><span class="ko">✅ 불필요한 코드 정리 (이전 push_notification_service.dart 삭제)</span></li>
+      <li><span class="en">✅ Generate splash screen (once icon is finalized)</span><span class="ko">✅ 스플래시 화면 생성 (아이콘 확정 후)</span></li>
+      <li><span class="en">✅ Fix remaining TODOs in code</span><span class="ko">✅ 코드의 나머지 TODO 수정</span></li>
+    </ul>
+  </div>
+</div>
+
+<!-- TestFlight Timeline -->
+<div class="card">
+  <h2>
+    <span class="en">🚀 TestFlight Timeline</span>
+    <span class="ko">🚀 TestFlight 타임라인</span>
+  </h2>
+  <div class="timeline">
+    <div class="timeline-item">
+      <span class="timeline-day"><span class="en">Today</span><span class="ko">오늘</span></span>
+      <span><span class="en">Fix blockers (icon, Firebase plist, privacy policy)</span><span class="ko">블로커 수정 (아이콘, Firebase plist, 개인정보 처리방침)</span></span>
+    </div>
+    <div class="timeline-item">
+      <span class="timeline-day"><span class="en">Day 2</span><span class="ko">2일차</span></span>
+      <span><span class="en">Real device test → <code>flutter build ipa</code> → Upload to App Store Connect</span><span class="ko">실제 기기 테스트 → <code>flutter build ipa</code> → App Store Connect 업로드</span></span>
+    </div>
+    <div class="timeline-item">
+      <span class="timeline-day"><span class="en">Day 2-3</span><span class="ko">2-3일차</span></span>
+      <span><span class="en">TestFlight review — typically <strong>24-48 hours</strong> for first submission</span><span class="ko">TestFlight 심사 — 첫 제출 시 보통 <strong>24-48시간</strong></span></span>
+    </div>
+    <div class="timeline-item">
+      <span class="timeline-day"><span class="en">Day 3-4</span><span class="ko">3-4일차</span></span>
+      <span><span class="en">✅ TestFlight build available for testing!</span><span class="ko">✅ TestFlight 빌드 테스트 가능!</span></span>
+    </div>
+  </div>
+  <div class="note">
+    <span class="en"><strong>TestFlight Review:</strong> Apple reviews the first build (Beta App Review). Usually takes <strong>1-2 days</strong>. After initial approval, subsequent builds are typically <strong>approved within hours</strong>. No app content review — just technical checks (crashes, APIs, entitlements).</span>
+    <span class="ko"><strong>TestFlight 심사:</strong> Apple이 첫 빌드를 심사합니다 (Beta App Review). 보통 <strong>1-2일</strong> 소요. 초기 승인 후 후속 빌드는 보통 <strong>몇 시간 내에 승인</strong>. 앱 콘텐츠 심사 아님 — 기술적 확인만 (크래시, API, 권한).</span>
+  </div>
+</div>
+
+<!-- Tech Stack -->
+<div class="card">
+  <h2>
+    <span class="en">🛠 Tech Stack</span>
+    <span class="ko">🛠 기술 스택</span>
+  </h2>
+  <table>
+    <tr><td><span class="en">Framework</span><span class="ko">프레임워크</span></td><td>Flutter + Riverpod + GoRouter</td></tr>
+    <tr><td><span class="en">Backend</span><span class="ko">백엔드</span></td><td>Supabase (fjucduvwktorshyfjgdb)</td></tr>
+    <tr><td><span class="en">AI</span></td><td>OpenAI gpt-4.1-nano + gpt-4.1-mini (Edge Functions)</td></tr>
+    <tr><td><span class="en">Auth</span><span class="ko">인증</span></td><td>Supabase Auth + Apple + Google (native)</td></tr>
+    <tr><td><span class="en">Push</span><span class="ko">푸시</span></td><td>Firebase Cloud Messaging</td></tr>
+    <tr><td><span class="en">Ads</span><span class="ko">광고</span></td><td>AdMob (test IDs)</td></tr>
+    <tr><td><span class="en">Bundle ID</span><span class="ko">번들 ID</span></td><td><code>com.snapdigest.app</code></td></tr>
+    <tr><td><span class="en">Version</span><span class="ko">버전</span></td><td>1.0.0+1</td></tr>
+  </table>
+</div>
+
+<footer>
+  <span class="en">Generated by Totoro 🌳 — Feb 24, 2026</span>
+  <span class="ko">Totoro 🌳 생성 — 2026년 2월 24일</span>
+</footer>
+
+<script>
+let isKorean = false;
+function toggleLang() {
+  isKorean = !isKorean;
+  document.querySelectorAll('.en').forEach(el => el.classList.toggle('hide', isKorean));
+  document.querySelectorAll('.ko').forEach(el => el.classList.toggle('show', isKorean));
+  document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+}
+</script>
+</body>
+</html>
