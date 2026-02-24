@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SnapDigest → TestFlight Checklist</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.7; color: #333; max-width: 720px; margin: 0 auto; padding: 20px 16px 80px; background: #FAFAF5; }
+  h1 { font-size: 24px; color: #4A7C59; margin-bottom: 4px; }
+  .subtitle { font-size: 13px; color: #999; margin-bottom: 24px; }
+  h2 { font-size: 18px; color: #4A7C59; margin-top: 32px; margin-bottom: 12px; padding-bottom: 6px; border-bottom: 2px solid #E8E0D0; }
+  p, li { font-size: 14px; margin-bottom: 8px; }
+  ol, ul { padding-left: 22px; margin-bottom: 14px; }
+  ol > li { margin-bottom: 10px; }
+  code { background: #EDE8E0; padding: 2px 7px; border-radius: 5px; font-size: 13px; font-family: 'SF Mono', Menlo, monospace; }
+  pre { background: #2D2D2D; color: #E8E0D0; padding: 14px 16px; border-radius: 12px; overflow-x: auto; margin: 12px 0; font-size: 13px; line-height: 1.5; }
+  pre code { background: none; padding: 0; color: inherit; }
+  .badge { display: inline-block; padding: 3px 10px; border-radius: 10px; font-size: 11px; font-weight: 700; }
+  .badge-totoro { background: #4A7C5920; color: #4A7C59; }
+  .badge-minjun { background: #E8967D20; color: #C06040; }
+  .badge-done { background: #4A7C5920; color: #4A7C59; }
+  .card { background: #FFFDF8; border: 1px solid #E8E0D0; border-radius: 14px; padding: 16px; margin: 12px 0; }
+  .card-warn { background: #FFF8E8; border-color: #DEB887; }
+  .card-green { background: #F0F7F0; border-color: #7FB07E; }
+  .check-table { width: 100%; border-collapse: collapse; margin: 12px 0; }
+  .check-table td { padding: 10px 12px; border-bottom: 1px solid #E8E0D0; font-size: 14px; vertical-align: top; }
+  .check-table td:first-child { width: 30px; text-align: center; font-size: 18px; }
+  .check-table td:nth-child(2) { font-weight: 600; width: 200px; }
+  .check-table tr.done td { opacity: 0.5; text-decoration: line-through; }
+  .section-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #999; margin-bottom: 8px; margin-top: 24px; }
+  .lang-toggle { position: fixed; top: 12px; right: 12px; background: #4A7C59; color: #fff; border: none; padding: 6px 14px; border-radius: 20px; font-size: 13px; cursor: pointer; z-index: 100; font-weight: 600; }
+  .ko { display: none; }
+  .ko.show { display: inline !important; }
+  .en.hide { display: none !important; }
+  .block-ko { display: none; }
+  .block-ko.show { display: block !important; }
+  .block-en.hide { display: none !important; }
+  a { color: #4A7C59; }
+</style>
+</head>
+<body>
+
+<button class="lang-toggle" onclick="toggleLang()">한국어</button>
+
+<h1>📰 SnapDigest → TestFlight</h1>
+<p class="subtitle"><span class="en">Complete checklist to deploy</span><span class="ko">배포 완료 체크리스트</span> · Feb 23, 2026</p>
+
+<!-- PHASE 1: DONE -->
+<h2>✅ <span class="en">Phase 1: Already Done</span><span class="ko">Phase 1: 완료됨</span></h2>
+
+<table class="check-table">
+<tr class="done"><td>✅</td><td><span class="en">GitHub repo</span><span class="ko">깃허브 레포</span></td><td>feedmiyo6/snapdigest (private)</td></tr>
+<tr class="done"><td>✅</td><td><span class="en">AI pipeline upgrade</span><span class="ko">AI 파이프라인 업그레이드</span></td><td>GPT-4.1-nano + GPT-4.1-mini</td></tr>
+<tr class="done"><td>✅</td><td><span class="en">Edge Function</span><span class="ko">엣지 함수</span></td><td>ai-curate deployed</td></tr>
+<tr class="done"><td>✅</td><td><span class="en">Privacy policy</span><span class="ko">개인정보 처리방침</span></td><td><a href="https://feedmiyo6.github.io/shared-files/mj/snapdigest/privacy-policy.html">Live link</a></td></tr>
+<tr class="done"><td>✅</td><td><span class="en">Offline reading</span><span class="ko">오프라인 읽기</span></td><td>SQLite cache</td></tr>
+<tr class="done"><td>✅</td><td><span class="en">Personalization</span><span class="ko">개인화</span></td><td>Read/save/skip tracking</td></tr>
+<tr class="done"><td>✅</td><td><span class="en">Share cards</span><span class="ko">공유 카드</span></td><td>Auto-generated images</td></tr>
+<tr class="done"><td>✅</td><td><span class="en">Audio briefing</span><span class="ko">오디오 브리핑</span></td><td>5-min TTS on breaking news</td></tr>
+<tr class="done"><td>✅</td><td><span class="en">iOS widget</span><span class="ko">iOS 위젯</span></td><td>Flutter + Swift code ready</td></tr>
+<tr class="done"><td>✅</td><td><span class="en">Push notifications</span><span class="ko">푸시 알림</span></td><td>Daily briefing + breaking alerts</td></tr>
+</table>
+
+<!-- PHASE 2: TOTORO TASKS -->
+<h2>🤖 <span class="en">Phase 2: Totoro Can Do</span><span class="ko">Phase 2: 토토로가 할 수 있는 것</span></h2>
+<p class="section-label"><span class="en">Tell Totoro to start these anytime</span><span class="ko">토토로에게 언제든 시작하라고 하면 됨</span></p>
+
+<table class="check-table">
+<tr><td>🔲</td><td><span class="en">Move remaining AI calls to Edge Functions</span><span class="ko">나머지 AI 호출 엣지 함수로 이전</span> <span class="badge badge-totoro">Totoro</span></td><td><span class="en">Remove OPENAI_API_KEY from client .env entirely. Route all AI curation through Supabase Edge Function instead of direct OpenAI calls.</span><span class="ko">클라이언트 .env에서 OPENAI_API_KEY 완전 제거. 모든 AI 호출을 Supabase 엣지 함수로.</span></td></tr>
+<tr><td>🔲</td><td><span class="en">Account deletion</span><span class="ko">계정 삭제</span> <span class="badge badge-totoro">Totoro</span></td><td><span class="en">Add "Delete Account" in Settings (Apple requires this). Same pattern as Fridgenie.</span><span class="ko">설정에 "계정 삭제" 추가 (Apple 필수). Fridgenie 패턴 동일.</span></td></tr>
+<tr><td>🔲</td><td><span class="en">Build obfuscation script</span><span class="ko">빌드 난독화 스크립트</span> <span class="badge badge-totoro">Totoro</span></td><td><span class="en">Release build script with --obfuscate --split-debug-info</span><span class="ko">--obfuscate --split-debug-info 포함 릴리즈 빌드 스크립트</span></td></tr>
+<tr><td>🔲</td><td><span class="en">Splash screen setup</span><span class="ko">스플래시 스크린 설정</span> <span class="badge badge-totoro">Totoro</span></td><td><span class="en">flutter_native_splash config (warm cream bg, icon placeholder until you provide one)</span><span class="ko">flutter_native_splash 설정 (크림색 배경, 아이콘은 나중에)</span></td></tr>
+<tr><td>🔲</td><td><span class="en">Bug fixes from testing</span><span class="ko">테스트 버그 수정</span> <span class="badge badge-totoro">Totoro</span></td><td><span class="en">Send me any crashes/issues from simulator testing → I fix immediately</span><span class="ko">시뮬레이터 테스트 크래시/이슈 보내주면 바로 수정</span></td></tr>
+</table>
+
+<!-- PHASE 3: MINJUN TASKS -->
+<h2>👨‍💻 <span class="en">Phase 3: Minjun Must Do</span><span class="ko">Phase 3: 민준이 직접 해야 할 것</span></h2>
+<p class="section-label"><span class="en">These require your hands / accounts</span><span class="ko">직접 해야 하는 것들 (계정/기기 필요)</span></p>
+
+<table class="check-table">
+<tr><td>🔲</td><td><span class="en">App icon</span><span class="ko">앱 아이콘</span> <span class="badge badge-minjun">Minjun</span></td><td><span class="en">Design app icon → give to Totoro → I'll plug it into Xcode assets + splash screen</span><span class="ko">앱 아이콘 디자인 → 토토로에게 주면 → Xcode 에셋 + 스플래시에 적용</span></td></tr>
+<tr><td>🔲</td><td><span class="en">Production AdMob IDs</span><span class="ko">프로덕션 AdMob ID</span> <span class="badge badge-minjun">Minjun</span></td><td>
+<div class="block-en">
+<ol>
+<li>Go to <a href="https://admob.google.com" target="_blank">admob.google.com</a></li>
+<li>Create app → iOS → "SnapDigest"</li>
+<li>Create ad units: Banner, Interstitial, Native</li>
+<li>Copy the App ID + ad unit IDs</li>
+<li>Give to Totoro → I replace test IDs in code + Info.plist</li>
+</ol>
+</div>
+<div class="block-ko">
+<ol>
+<li><a href="https://admob.google.com" target="_blank">admob.google.com</a> 접속</li>
+<li>앱 생성 → iOS → "SnapDigest"</li>
+<li>광고 단위 생성: 배너, 전면, 네이티브</li>
+<li>앱 ID + 광고 단위 ID 복사</li>
+<li>토토로에게 주면 코드 + Info.plist에 적용</li>
+</ol>
+</div>
+</td></tr>
+<tr><td>🔲</td><td><span class="en">Simulator testing</span><span class="ko">시뮬레이터 테스트</span> <span class="badge badge-minjun">Minjun</span></td><td>
+<div class="block-en">
+<pre><code>cd ~/Projects/snap_digest
+flutter run</code></pre>
+Test: auth flow, story mode, browse, recipes, audio, settings, offline cache, share cards
+</div>
+<div class="block-ko">
+<pre><code>cd ~/Projects/snap_digest
+flutter run</code></pre>
+테스트: 인증, 스토리모드, 탐색, 레시피, 오디오, 설정, 오프라인, 공유카드
+</div>
+</td></tr>
+<tr><td>🔲</td><td><span class="en">Firebase project</span><span class="ko">Firebase 프로젝트</span> <span class="badge badge-minjun">Minjun</span></td><td>
+<div class="block-en">
+<ol>
+<li>Go to <a href="https://console.firebase.google.com" target="_blank">Firebase Console</a></li>
+<li>Create project "SnapDigest" (or use existing)</li>
+<li>Add iOS app with your Bundle ID</li>
+<li>Download <code>GoogleService-Info.plist</code></li>
+<li>Place in <code>ios/Runner/</code></li>
+<li>Enable Cloud Messaging in Firebase console</li>
+</ol>
+Needed for: push notifications to work on real devices
+</div>
+<div class="block-ko">
+<ol>
+<li><a href="https://console.firebase.google.com" target="_blank">Firebase 콘솔</a> 접속</li>
+<li>"SnapDigest" 프로젝트 생성 (또는 기존 사용)</li>
+<li>iOS 앱 추가 (Bundle ID 입력)</li>
+<li><code>GoogleService-Info.plist</code> 다운로드</li>
+<li><code>ios/Runner/</code>에 넣기</li>
+<li>Firebase 콘솔에서 Cloud Messaging 활성화</li>
+</ol>
+필요 이유: 실기기 푸시 알림 작동
+</div>
+</td></tr>
+<tr><td>🔲</td><td><span class="en">Xcode signing + TestFlight</span><span class="ko">Xcode 서명 + TestFlight</span> <span class="badge badge-minjun">Minjun</span></td><td><span class="en">Same process as Fridgenie! Follow the <a href="https://feedmiyo6.github.io/shared-files/mj/fridgenie/testflight-guide-20260223.html">TestFlight guide</a> — just use <code>snap_digest</code> project instead.</span><span class="ko">Fridgenie와 동일! <a href="https://feedmiyo6.github.io/shared-files/mj/fridgenie/testflight-guide-20260223.html">TestFlight 가이드</a> 따라하면 됨 — <code>snap_digest</code> 프로젝트 사용.</span></td></tr>
+</table>
+
+<!-- PHASE 4: WIDGET BONUS -->
+<h2>⭐ <span class="en">Bonus: iOS Widget Setup (Optional)</span><span class="ko">보너스: iOS 위젯 설정 (선택)</span></h2>
+
+<div class="card card-warn">
+<div class="block-en">
+<p>The widget needs an <strong>Xcode Widget Extension target</strong> to be added manually. Code is ready at <code>ios/SnapDigestWidget/</code>.</p>
+<p>Follow the guide at <code>ios/SnapDigestWidget/SETUP.md</code> in Xcode. This can be done after initial TestFlight launch — the app works fine without the widget.</p>
+</div>
+<div class="block-ko">
+<p>위젯은 Xcode에서 <strong>Widget Extension 타겟</strong>을 수동 추가해야 함. 코드는 <code>ios/SnapDigestWidget/</code>에 준비됨.</p>
+<p><code>ios/SnapDigestWidget/SETUP.md</code> 가이드 따라하기. 첫 TestFlight 이후에 해도 됨 — 위젯 없이도 앱은 정상 작동.</p>
+</div>
+</div>
+
+<!-- SUGGESTED ORDER -->
+<h2>📋 <span class="en">Suggested Order</span><span class="ko">추천 순서</span></h2>
+
+<div class="card card-green">
+<div class="block-en">
+<ol>
+<li><strong>Tell Totoro</strong> to do Phase 2 tasks (security, account deletion, build script) — ~30 min</li>
+<li><strong>You:</strong> Design app icon — whenever you have time</li>
+<li><strong>You:</strong> Run <code>flutter run</code> on simulator — find bugs → send to Totoro</li>
+<li><strong>You:</strong> Create AdMob account + ad units — 15 min</li>
+<li><strong>You:</strong> Firebase project setup — 10 min</li>
+<li><strong>Give Totoro:</strong> app icon + AdMob IDs + GoogleService-Info.plist</li>
+<li><strong>Totoro</strong> plugs everything in, fixes bugs — ~1 hr</li>
+<li><strong>You:</strong> Xcode signing + Archive + Upload — 30 min (follow Fridgenie guide)</li>
+<li>🎉 <strong>TestFlight live!</strong></li>
+</ol>
+</div>
+<div class="block-ko">
+<ol>
+<li><strong>토토로에게</strong> Phase 2 작업 시키기 (보안, 계정 삭제, 빌드 스크립트) — ~30분</li>
+<li><strong>민준:</strong> 앱 아이콘 디자인 — 시간 날 때</li>
+<li><strong>민준:</strong> <code>flutter run</code> 시뮬레이터 테스트 → 버그 토토로에게 보내기</li>
+<li><strong>민준:</strong> AdMob 계정 + 광고 단위 생성 — 15분</li>
+<li><strong>민준:</strong> Firebase 프로젝트 설정 — 10분</li>
+<li><strong>토토로에게:</strong> 앱 아이콘 + AdMob ID + GoogleService-Info.plist 전달</li>
+<li><strong>토토로</strong> 전부 적용 + 버그 수정 — ~1시간</li>
+<li><strong>민준:</strong> Xcode 서명 + Archive + 업로드 — 30분 (Fridgenie 가이드 따라)</li>
+<li>🎉 <strong>TestFlight 출시!</strong></li>
+</ol>
+</div>
+</div>
+
+<div style="text-align: center; margin-top: 32px; padding: 20px; background: #F0F7F0; border-radius: 14px;">
+  <span style="font-size: 32px;">📰✨📱</span><br>
+  <strong style="font-size: 15px; color: #4A7C59;"><span class="en">Almost there! SnapDigest is 90% ready for TestFlight 🚀</span><span class="ko">거의 다 왔다! SnapDigest TestFlight 90% 준비 완료 🚀</span></strong>
+</div>
+
+<script>
+let isKorean = false;
+function toggleLang() {
+  isKorean = !isKorean;
+  document.querySelectorAll('.en').forEach(el => el.classList.toggle('hide', isKorean));
+  document.querySelectorAll('.ko').forEach(el => el.classList.toggle('show', isKorean));
+  document.querySelectorAll('.block-en').forEach(el => el.classList.toggle('hide', isKorean));
+  document.querySelectorAll('.block-ko').forEach(el => el.classList.toggle('show', isKorean));
+  document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+}
+</script>
+</body>
+</html>
