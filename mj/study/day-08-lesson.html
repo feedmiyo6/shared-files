@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 8: State Encoding — Binary, One-Hot, Gray</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    background: linear-gradient(135deg, #fefae0 0%, #faedcd 100%);
+    color: #3d405b;
+    line-height: 1.8;
+    padding: 24px;
+    max-width: 920px;
+    margin: 0 auto;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+h1 {
+    color: #5d4037;
+    border-bottom: 3px solid #c4a77d;
+    padding-bottom: 12px;
+    margin-bottom: 24px;
+    font-size: 2em;
+}
+h2 {
+    color: #588157;
+    border-bottom: 2px solid #a3b18a;
+    padding-bottom: 8px;
+    margin: 32px 0 16px;
+}
+h3 { color: #5d4037; margin: 20px 0 12px; }
+p { margin: 12px 0; }
+pre {
+    background: #2d3436;
+    padding: 24px;
+    border-radius: 12px;
+    margin: 24px 0;
+    border: 3px solid #a3b18a;
+    overflow-x: auto;
+    font-size: 15px;
+    line-height: 1.6;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+    color: #f8f8f2;
+}
+code {
+    background: #e9f5db;
+    color: #3d405b;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+}
+pre code { background: none; color: inherit; padding: 0; }
+.keyword { color: #ff79c6; font-weight: 600; }
+.type { color: #8be9fd; }
+.signal { color: #50fa7b; }
+.number { color: #ffb86c; }
+.comment { color: #6272a4; font-style: italic; }
+.string { color: #f1fa8c; }
+.concept-box {
+    background: #fff8f0;
+    border: 2px solid #c4a77d;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    color: #3d405b;
+}
+.concept-box h3 { color: #5d4037; margin-bottom: 12px; }
+.warning-box {
+    background: #fff8f0;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    border-left: 4px solid #ef4444;
+    color: #3d405b;
+}
+.warning-box h3 { color: #c53030; margin-bottom: 12px; }
+.tip-box {
+    background: #fff8f0;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    border-left: 4px solid #588157;
+    color: #3d405b;
+}
+.comparison-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+.comparison-table th {
+    background: #588157;
+    color: white;
+    padding: 12px;
+    text-align: left;
+}
+.comparison-table td {
+    background: #fff;
+    border: 1px solid #c4a77d;
+    padding: 12px;
+    color: #3d405b;
+}
+.comparison-table tr:nth-child(even) td { background: #fff8f0; }
+.lang-toggle {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    background: #588157;
+    border: none;
+    border-radius: 24px;
+    padding: 10px 20px;
+    cursor: pointer;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    z-index: 1000;
+}
+.lang-toggle:hover { background: #3a5a40; }
+.ko { display: none; }
+.nav { display: flex; justify-content: space-between; margin: 32px 0 16px; }
+.nav a {
+    color: #588157;
+    text-decoration: none;
+    font-weight: 600;
+}
+.nav a:hover { color: #3a5a40; }
+@media (max-width: 768px) {
+    body { padding: 16px; }
+    h1 { font-size: 1.8em; }
+    pre { font-size: 14px; padding: 16px; }
+    .lang-toggle { padding: 8px 16px; font-size: 13px; }
+}
+</style>
+</head>
+<body>
+<button class="lang-toggle" onclick="toggleLang()">한국어</button>
+
+<h1>📐 Day 8: State Encoding</h1>
+<p class="en"><strong>Week 2, Day 3</strong> — How you represent FSM states in hardware matters more than you think.</p>
+<p class="ko" style="display:none;"><strong>2주차 3일</strong> — FSM 상태를 하드웨어에서 어떻게 표현하느냐가 생각보다 중요합니다.</p>
+
+<div class="nav">
+    <a href="day-07-lesson.html">← Day 7: Moore vs Mealy</a>
+    <a href="day-08-quiz.html">Quiz →</a>
+</div>
+
+<h2>🎯 Why State Encoding Matters</h2>
+
+<p class="en">When you design an FSM, you define states like <code>IDLE</code>, <code>RUN</code>, <code>DONE</code>. But the synthesizer needs to turn those into actual flip-flop values. <strong>How</strong> those states are encoded affects area, speed, and power consumption.</p>
+<p class="ko" style="display:none;">FSM을 설계할 때 <code>IDLE</code>, <code>RUN</code>, <code>DONE</code> 같은 상태를 정의합니다. 하지만 합성기는 이를 실제 플립플롭 값으로 변환해야 합니다. 상태가 <strong>어떻게</strong> 인코딩되느냐에 따라 면적, 속도, 전력 소비가 달라집니다.</p>
+
+<div class="concept-box">
+<h3>🔑 The Three Main Encodings</h3>
+<p class="en"><strong>Binary</strong> — Minimum flip-flops, more decode logic<br>
+<strong>One-Hot</strong> — One flip-flop per state, simpler transitions<br>
+<strong>Gray Code</strong> — Only 1 bit changes between adjacent states</p>
+<p class="ko" style="display:none;"><strong>바이너리</strong> — 최소 플립플롭, 더 많은 디코딩 로직<br>
+<strong>원-핫</strong> — 상태당 하나의 플립플롭, 전환이 간단<br>
+<strong>그레이 코드</strong> — 인접 상태 간 1비트만 변경</p>
+</div>
+
+<h2>1️⃣ Binary Encoding</h2>
+
+<p class="en">The most compact encoding. For N states, you need ⌈log₂(N)⌉ flip-flops. States are assigned sequential binary values.</p>
+<p class="ko" style="display:none;">가장 컴팩트한 인코딩입니다. N개 상태에 ⌈log₂(N)⌉개의 플립플롭이 필요합니다. 상태에 순차적 이진값을 할당합니다.</p>
+
+<pre><code><span class="comment">// Binary encoding for 4-state FSM — only 2 flip-flops needed</span>
+<span class="keyword">typedef</span> <span class="keyword">enum</span> <span class="type">logic</span> [<span class="number">1</span>:<span class="number">0</span>] {
+    <span class="signal">IDLE</span>  = <span class="number">2'b00</span>,
+    <span class="signal">START</span> = <span class="number">2'b01</span>,
+    <span class="signal">RUN</span>   = <span class="number">2'b10</span>,
+    <span class="signal">DONE</span>  = <span class="number">2'b11</span>
+} <span class="type">state_t</span>;
+
+<span class="type">state_t</span> <span class="signal">current_state</span>, <span class="signal">next_state</span>;</code></pre>
+
+<div class="concept-box">
+<h3>📊 Binary Encoding Properties</h3>
+<table class="comparison-table">
+<tr><th>Property</th><th>Value</th></tr>
+<tr><td>Flip-flops for 8 states</td><td>3 (⌈log₂(8)⌉)</td></tr>
+<tr><td>Flip-flops for 16 states</td><td>4 (⌈log₂(16)⌉)</td></tr>
+<tr><td>Decode logic</td><td>More complex (all bits must be decoded)</td></tr>
+<tr><td>Best for</td><td>Small FSMs, area-constrained designs</td></tr>
+</table>
+</div>
+
+<h2>2️⃣ One-Hot Encoding</h2>
+
+<p class="en">Each state gets its own flip-flop. In any given state, exactly <strong>one</strong> flip-flop is '1' and all others are '0'. For N states, you need N flip-flops.</p>
+<p class="ko" style="display:none;">각 상태가 자체 플립플롭을 가집니다. 어떤 상태에서든 정확히 <strong>하나의</strong> 플립플롭만 '1'이고 나머지는 '0'입니다. N개 상태에 N개 플립플롭이 필요합니다.</p>
+
+<pre><code><span class="comment">// One-hot encoding for 4-state FSM — 4 flip-flops</span>
+<span class="keyword">typedef</span> <span class="keyword">enum</span> <span class="type">logic</span> [<span class="number">3</span>:<span class="number">0</span>] {
+    <span class="signal">IDLE</span>  = <span class="number">4'b0001</span>,
+    <span class="signal">START</span> = <span class="number">4'b0010</span>,
+    <span class="signal">RUN</span>   = <span class="number">4'b0100</span>,
+    <span class="signal">DONE</span>  = <span class="number">4'b1000</span>
+} <span class="type">state_t</span>;
+
+<span class="type">state_t</span> <span class="signal">current_state</span>, <span class="signal">next_state</span>;
+
+<span class="comment">// Checking state is just a single-bit check!</span>
+<span class="keyword">assign</span> <span class="signal">is_running</span> = <span class="signal">current_state</span>[<span class="number">2</span>]; <span class="comment">// RUN bit</span></code></pre>
+
+<div class="tip-box">
+<h3>💡 Why One-Hot is Fast</h3>
+<p class="en">To check if you're in a specific state, you only need to look at <strong>one bit</strong>. No decoder needed! This means simpler, faster next-state logic. That's why FPGA tools often default to one-hot encoding.</p>
+<p class="ko" style="display:none;">특정 상태에 있는지 확인하려면 <strong>한 비트</strong>만 보면 됩니다. 디코더가 필요 없습니다! 따라서 다음 상태 로직이 더 간단하고 빠릅니다. FPGA 도구들이 종종 원-핫 인코딩을 기본으로 사용하는 이유입니다.</p>
+</div>
+
+<div class="concept-box">
+<h3>📊 One-Hot Encoding Properties</h3>
+<table class="comparison-table">
+<tr><th>Property</th><th>Value</th></tr>
+<tr><td>Flip-flops for 8 states</td><td>8</td></tr>
+<tr><td>Flip-flops for 16 states</td><td>16</td></tr>
+<tr><td>Decode logic</td><td>Minimal (single-bit checks)</td></tr>
+<tr><td>Best for</td><td>FPGAs, speed-critical designs</td></tr>
+</table>
+</div>
+
+<h2>3️⃣ Gray Code Encoding</h2>
+
+<p class="en">In Gray code, only <strong>one bit changes</strong> between consecutive states. This is critical for clock domain crossing (CDC) — you'll learn more about this in Week 4!</p>
+<p class="ko" style="display:none;">그레이 코드에서는 연속된 상태 사이에서 <strong>1비트만 변경</strong>됩니다. 이것은 클록 도메인 크로싱(CDC)에서 매우 중요합니다 — 4주차에서 자세히 배울 예정입니다!</p>
+
+<pre><code><span class="comment">// Gray code for 4-state FSM</span>
+<span class="keyword">typedef</span> <span class="keyword">enum</span> <span class="type">logic</span> [<span class="number">1</span>:<span class="number">0</span>] {
+    <span class="signal">S0</span> = <span class="number">2'b00</span>,
+    <span class="signal">S1</span> = <span class="number">2'b01</span>,
+    <span class="signal">S2</span> = <span class="number">2'b11</span>,  <span class="comment">// Note: NOT 2'b10!</span>
+    <span class="signal">S3</span> = <span class="number">2'b10</span>
+} <span class="type">state_t</span>;
+
+<span class="comment">// Binary:  00 → 01 → 10 → 11  (up to 2 bits change)</span>
+<span class="comment">// Gray:    00 → 01 → 11 → 10  (always 1 bit change)</span></code></pre>
+
+<div class="concept-box">
+<h3>🔄 Binary vs Gray Transition Comparison</h3>
+<table class="comparison-table">
+<tr><th>Transition</th><th>Binary</th><th>Bits Changed</th><th>Gray</th><th>Bits Changed</th></tr>
+<tr><td>State 0 → 1</td><td>00 → 01</td><td>1</td><td>00 → 01</td><td>1</td></tr>
+<tr><td>State 1 → 2</td><td>01 → 10</td><td>2 ⚠️</td><td>01 → 11</td><td>1 ✅</td></tr>
+<tr><td>State 2 → 3</td><td>10 → 11</td><td>1</td><td>11 → 10</td><td>1</td></tr>
+<tr><td>State 3 → 0</td><td>11 → 00</td><td>2 ⚠️</td><td>10 → 00</td><td>1 ✅</td></tr>
+</table>
+</div>
+
+<div class="warning-box">
+<h3>⚠️ Why Multi-Bit Changes Are Dangerous</h3>
+<p class="en">When 2+ bits change simultaneously, there's a brief moment where the value is <strong>neither the old state nor the new state</strong>. For example, going from <code>01</code> to <code>10</code>, the circuit might briefly see <code>00</code> or <code>11</code>. In a single clock domain this is fine (sampled at the right time), but across clock domains this causes <strong>metastability</strong> — a topic you'll master in Week 4.</p>
+<p class="ko" style="display:none;">2개 이상의 비트가 동시에 변경되면 값이 <strong>이전 상태도 새 상태도 아닌</strong> 순간이 발생합니다. 예를 들어 <code>01</code>에서 <code>10</code>으로 갈 때 회로가 잠시 <code>00</code>이나 <code>11</code>을 볼 수 있습니다. 단일 클록 도메인에서는 괜찮지만, 클록 도메인을 넘어가면 <strong>메타스테이빌리티</strong>가 발생합니다 — 4주차에서 마스터할 주제입니다.</p>
+</div>
+
+<h2>📊 Side-by-Side Comparison</h2>
+
+<table class="comparison-table">
+<tr><th>Feature</th><th>Binary</th><th>One-Hot</th><th>Gray</th></tr>
+<tr><td>Flip-flops (8 states)</td><td>3</td><td>8</td><td>3</td></tr>
+<tr><td>Decode complexity</td><td>High</td><td>Low</td><td>Medium</td></tr>
+<tr><td>Speed</td><td>Slower (decode)</td><td>Fastest</td><td>Medium</td></tr>
+<tr><td>Power</td><td>Medium</td><td>Low toggle rate</td><td>Lowest toggle</td></tr>
+<tr><td>CDC safe?</td><td>❌</td><td>❌</td><td>✅</td></tr>
+<tr><td>Common use</td><td>ASIC default</td><td>FPGA default</td><td>CDC counters</td></tr>
+</table>
+
+<h2>💻 Complete Example: Encoding Comparison</h2>
+
+<p class="en">Here's the same 4-state FSM implemented with all three encodings so you can see how each affects the code:</p>
+<p class="ko" style="display:none;">같은 4상태 FSM을 세 가지 인코딩으로 구현하여 각각이 코드에 어떤 영향을 미치는지 보여드리겠습니다:</p>
+
+<pre><code><span class="keyword">module</span> <span class="signal">fsm_binary</span> (
+    <span class="keyword">input</span>  <span class="type">logic</span> <span class="signal">clk</span>, <span class="signal">rst_n</span>, <span class="signal">go</span>, <span class="signal">done_in</span>,
+    <span class="keyword">output</span> <span class="type">logic</span> <span class="signal">busy</span>, <span class="signal">done_out</span>
+);
+    <span class="comment">// Binary: 2 flip-flops for 4 states</span>
+    <span class="keyword">typedef</span> <span class="keyword">enum</span> <span class="type">logic</span> [<span class="number">1</span>:<span class="number">0</span>] {
+        <span class="signal">IDLE</span>  = <span class="number">2'b00</span>,
+        <span class="signal">START</span> = <span class="number">2'b01</span>,
+        <span class="signal">RUN</span>   = <span class="number">2'b10</span>,
+        <span class="signal">DONE</span>  = <span class="number">2'b11</span>
+    } <span class="type">state_t</span>;
+    
+    <span class="type">state_t</span> <span class="signal">state</span>, <span class="signal">next</span>;
+    
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span> <span class="keyword">or</span> <span class="keyword">negedge</span> <span class="signal">rst_n</span>)
+        <span class="keyword">if</span> (!<span class="signal">rst_n</span>) <span class="signal">state</span> &lt;= <span class="signal">IDLE</span>;
+        <span class="keyword">else</span>         <span class="signal">state</span> &lt;= <span class="signal">next</span>;
+    
+    <span class="keyword">always_comb</span> <span class="keyword">begin</span>
+        <span class="signal">next</span> = <span class="signal">state</span>;
+        <span class="keyword">case</span> (<span class="signal">state</span>)
+            <span class="signal">IDLE</span>:  <span class="keyword">if</span> (<span class="signal">go</span>)      <span class="signal">next</span> = <span class="signal">START</span>;
+            <span class="signal">START</span>:                  <span class="signal">next</span> = <span class="signal">RUN</span>;
+            <span class="signal">RUN</span>:   <span class="keyword">if</span> (<span class="signal">done_in</span>) <span class="signal">next</span> = <span class="signal">DONE</span>;
+            <span class="signal">DONE</span>:                   <span class="signal">next</span> = <span class="signal">IDLE</span>;
+        <span class="keyword">endcase</span>
+    <span class="keyword">end</span>
+    
+    <span class="comment">// Outputs require full decode of both bits</span>
+    <span class="keyword">assign</span> <span class="signal">busy</span>     = (<span class="signal">state</span> == <span class="signal">START</span>) || (<span class="signal">state</span> == <span class="signal">RUN</span>);
+    <span class="keyword">assign</span> <span class="signal">done_out</span> = (<span class="signal">state</span> == <span class="signal">DONE</span>);
+<span class="keyword">endmodule</span></code></pre>
+
+<pre><code><span class="keyword">module</span> <span class="signal">fsm_onehot</span> (
+    <span class="keyword">input</span>  <span class="type">logic</span> <span class="signal">clk</span>, <span class="signal">rst_n</span>, <span class="signal">go</span>, <span class="signal">done_in</span>,
+    <span class="keyword">output</span> <span class="type">logic</span> <span class="signal">busy</span>, <span class="signal">done_out</span>
+);
+    <span class="comment">// One-hot: 4 flip-flops for 4 states</span>
+    <span class="keyword">typedef</span> <span class="keyword">enum</span> <span class="type">logic</span> [<span class="number">3</span>:<span class="number">0</span>] {
+        <span class="signal">IDLE</span>  = <span class="number">4'b0001</span>,
+        <span class="signal">START</span> = <span class="number">4'b0010</span>,
+        <span class="signal">RUN</span>   = <span class="number">4'b0100</span>,
+        <span class="signal">DONE</span>  = <span class="number">4'b1000</span>
+    } <span class="type">state_t</span>;
+    
+    <span class="type">state_t</span> <span class="signal">state</span>, <span class="signal">next</span>;
+    
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span> <span class="keyword">or</span> <span class="keyword">negedge</span> <span class="signal">rst_n</span>)
+        <span class="keyword">if</span> (!<span class="signal">rst_n</span>) <span class="signal">state</span> &lt;= <span class="signal">IDLE</span>;
+        <span class="keyword">else</span>         <span class="signal">state</span> &lt;= <span class="signal">next</span>;
+    
+    <span class="keyword">always_comb</span> <span class="keyword">begin</span>
+        <span class="signal">next</span> = <span class="signal">state</span>;
+        <span class="keyword">case</span> (<span class="number">1'b1</span>)  <span class="comment">// One-hot case trick!</span>
+            <span class="signal">state</span>[<span class="number">0</span>]: <span class="keyword">if</span> (<span class="signal">go</span>)      <span class="signal">next</span> = <span class="signal">START</span>;
+            <span class="signal">state</span>[<span class="number">1</span>]:                  <span class="signal">next</span> = <span class="signal">RUN</span>;
+            <span class="signal">state</span>[<span class="number">2</span>]: <span class="keyword">if</span> (<span class="signal">done_in</span>) <span class="signal">next</span> = <span class="signal">DONE</span>;
+            <span class="signal">state</span>[<span class="number">3</span>]:                  <span class="signal">next</span> = <span class="signal">IDLE</span>;
+        <span class="keyword">endcase</span>
+    <span class="keyword">end</span>
+    
+    <span class="comment">// Outputs are single-bit checks — fast!</span>
+    <span class="keyword">assign</span> <span class="signal">busy</span>     = <span class="signal">state</span>[<span class="number">1</span>] | <span class="signal">state</span>[<span class="number">2</span>]; <span class="comment">// START or RUN</span>
+    <span class="keyword">assign</span> <span class="signal">done_out</span> = <span class="signal">state</span>[<span class="number">3</span>];           <span class="comment">// DONE bit</span>
+<span class="keyword">endmodule</span></code></pre>
+
+<div class="tip-box">
+<h3>💡 The One-Hot Case Trick</h3>
+<p class="en">Notice <code>case (1'b1)</code> — instead of comparing the state variable, we check which bit is high. This generates cleaner logic because the synthesizer knows only one bit can be active at a time.</p>
+<p class="ko" style="display:none;"><code>case (1'b1)</code>에 주목하세요 — 상태 변수를 비교하는 대신 어떤 비트가 high인지 확인합니다. 합성기가 한 번에 하나의 비트만 활성화될 수 있다는 것을 알기 때문에 더 깔끔한 로직이 생성됩니다.</p>
+</div>
+
+<h2>🔧 Gray Code Conversion</h2>
+
+<p class="en">Converting between binary and Gray code is a common interview question and useful in practice:</p>
+<p class="ko" style="display:none;">바이너리와 그레이 코드 간의 변환은 흔한 면접 질문이며 실무에서도 유용합니다:</p>
+
+<pre><code><span class="comment">// Binary to Gray conversion</span>
+<span class="keyword">function</span> <span class="type">logic</span> [<span class="number">3</span>:<span class="number">0</span>] <span class="signal">bin2gray</span>(<span class="type">logic</span> [<span class="number">3</span>:<span class="number">0</span>] <span class="signal">bin</span>);
+    <span class="keyword">return</span> <span class="signal">bin</span> ^ (<span class="signal">bin</span> >> <span class="number">1</span>);
+<span class="keyword">endfunction</span>
+
+<span class="comment">// Gray to Binary conversion</span>
+<span class="keyword">function</span> <span class="type">logic</span> [<span class="number">3</span>:<span class="number">0</span>] <span class="signal">gray2bin</span>(<span class="type">logic</span> [<span class="number">3</span>:<span class="number">0</span>] <span class="signal">gray</span>);
+    <span class="type">logic</span> [<span class="number">3</span>:<span class="number">0</span>] <span class="signal">bin</span>;
+    <span class="signal">bin</span>[<span class="number">3</span>] = <span class="signal">gray</span>[<span class="number">3</span>];
+    <span class="signal">bin</span>[<span class="number">2</span>] = <span class="signal">gray</span>[<span class="number">3</span>] ^ <span class="signal">gray</span>[<span class="number">2</span>];
+    <span class="signal">bin</span>[<span class="number">1</span>] = <span class="signal">bin</span>[<span class="number">2</span>]  ^ <span class="signal">gray</span>[<span class="number">1</span>];
+    <span class="signal">bin</span>[<span class="number">0</span>] = <span class="signal">bin</span>[<span class="number">1</span>]  ^ <span class="signal">gray</span>[<span class="number">0</span>];
+    <span class="keyword">return</span> <span class="signal">bin</span>;
+<span class="keyword">endfunction</span>
+
+<span class="comment">// Example values:</span>
+<span class="comment">// Binary: 0000 0001 0010 0011 0100 0101 0110 0111</span>
+<span class="comment">// Gray:   0000 0001 0011 0010 0110 0111 0101 0100</span></code></pre>
+
+<h2>🏭 When to Use What?</h2>
+
+<div class="concept-box">
+<h3>Decision Guide</h3>
+<p class="en">
+<strong>Choose Binary when:</strong><br>
+• Area is the primary concern (ASIC with limited resources)<br>
+• FSM has very few states (< 5)<br>
+• Tool defaults are appropriate (many ASIC tools default to binary)<br><br>
+<strong>Choose One-Hot when:</strong><br>
+• Speed is critical — need fast state decoding<br>
+• Targeting FPGAs (flip-flops are plentiful on FPGAs)<br>
+• FSM has many transitions (simpler next-state logic)<br><br>
+<strong>Choose Gray Code when:</strong><br>
+• Counters crossing clock domains (Week 4!)<br>
+• Need to minimize switching activity (power savings)<br>
+• States are accessed sequentially
+</p>
+<p class="ko" style="display:none;">
+<strong>바이너리 선택 시:</strong><br>
+• 면적이 주요 관심사일 때 (제한된 리소스의 ASIC)<br>
+• FSM 상태가 매우 적을 때 (5개 미만)<br>
+• 도구 기본값이 적절할 때<br><br>
+<strong>원-핫 선택 시:</strong><br>
+• 속도가 중요할 때 — 빠른 상태 디코딩 필요<br>
+• FPGA를 타겟으로 할 때 (FPGA에는 플립플롭이 풍부)<br>
+• FSM에 많은 전환이 있을 때<br><br>
+<strong>그레이 코드 선택 시:</strong><br>
+• 클록 도메인을 넘나드는 카운터 (4주차!)<br>
+• 스위칭 활동을 최소화해야 할 때 (전력 절감)<br>
+• 상태가 순차적으로 접근될 때
+</p>
+</div>
+
+<div class="warning-box">
+<h3>⚠️ Common Mistakes</h3>
+<p class="en">
+1. <strong>Using binary counters across clock domains</strong> — always use Gray code!<br>
+2. <strong>Assuming one-hot is always better</strong> — it wastes area on ASICs with 50+ states<br>
+3. <strong>Forgetting to handle illegal states in one-hot</strong> — SEU (single-event upset) can corrupt bits<br>
+4. <strong>Manually encoding when the tool can do it</strong> — synthesis tools are smart; use attributes like <code>(* fsm_encoding = "one_hot" *)</code>
+</p>
+<p class="ko" style="display:none;">
+1. <strong>클록 도메인 간에 바이너리 카운터 사용</strong> — 항상 그레이 코드를 쓰세요!<br>
+2. <strong>원-핫이 항상 낫다고 가정</strong> — 50개 이상 상태의 ASIC에서는 면적 낭비<br>
+3. <strong>원-핫에서 불법 상태 처리를 잊음</strong> — SEU가 비트를 손상시킬 수 있음<br>
+4. <strong>도구가 할 수 있을 때 수동 인코딩</strong> — 합성 도구는 똑똑합니다; <code>(* fsm_encoding = "one_hot" *)</code> 같은 속성을 사용하세요
+</p>
+</div>
+
+<h2>🧠 Key Takeaways</h2>
+
+<div class="concept-box">
+<h3>Remember These</h3>
+<p class="en">
+✅ Binary = fewest flip-flops, more combo logic<br>
+✅ One-Hot = most flip-flops, simplest/fastest decode<br>
+✅ Gray = 1-bit transitions, essential for CDC<br>
+✅ FPGA → usually one-hot; ASIC → usually binary<br>
+✅ <code>bin ^ (bin >> 1)</code> = binary to Gray conversion<br>
+✅ Synthesis tools can pick encoding for you — guide with attributes
+</p>
+<p class="ko" style="display:none;">
+✅ 바이너리 = 최소 플립플롭, 더 많은 조합 로직<br>
+✅ 원-핫 = 최대 플립플롭, 가장 간단/빠른 디코딩<br>
+✅ 그레이 = 1비트 전환, CDC에 필수<br>
+✅ FPGA → 보통 원-핫; ASIC → 보통 바이너리<br>
+✅ <code>bin ^ (bin >> 1)</code> = 바이너리 → 그레이 변환<br>
+✅ 합성 도구가 인코딩을 선택 가능 — 속성으로 안내
+</p>
+</div>
+
+<div class="nav">
+    <a href="day-07-lesson.html">← Day 7: Moore vs Mealy</a>
+    <a href="day-08-quiz.html">Take the Quiz →</a>
+</div>
+
+<script>
+let isKorean = false;
+function toggleLang() {
+    isKorean = !isKorean;
+    document.querySelectorAll('.en').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'none' : 'revert', 'important');
+    });
+    document.querySelectorAll('.ko').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'revert' : 'none', 'important');
+    });
+    document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+}
+</script>
+</body>
+</html>

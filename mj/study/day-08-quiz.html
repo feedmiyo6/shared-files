@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 8 Quiz: State Encoding</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    background: linear-gradient(135deg, #fefae0 0%, #faedcd 100%);
+    color: #3d405b;
+    line-height: 1.8;
+    padding: 24px;
+    max-width: 920px;
+    margin: 0 auto;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+h1 { color: #5d4037; border-bottom: 3px solid #c4a77d; padding-bottom: 12px; margin-bottom: 24px; font-size: 2em; }
+h2 { color: #588157; border-bottom: 2px solid #a3b18a; padding-bottom: 8px; margin: 32px 0 16px; }
+h3 { color: #5d4037; margin: 20px 0 12px; }
+code { background: #e9f5db; color: #3d405b; padding: 2px 8px; border-radius: 4px; font-family: 'SF Mono', 'Monaco', 'Consolas', monospace; }
+.question {
+    background: #fff;
+    border: 2px solid #c4a77d;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+}
+.question h3 { margin-top: 0; }
+.options label {
+    display: block;
+    padding: 10px 16px;
+    margin: 6px 0;
+    border-radius: 8px;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: all 0.2s;
+}
+.options label:hover { background: #fff8f0; border-color: #c4a77d; }
+.options input { margin-right: 10px; }
+.result {
+    display: none;
+    padding: 12px 16px;
+    border-radius: 8px;
+    margin-top: 12px;
+    font-weight: 600;
+}
+.result.correct { background: #e9f5db; color: #588157; border: 2px solid #a3b18a; }
+.result.incorrect { background: #fff8f0; color: #c53030; border: 2px solid #ef4444; }
+.check-btn {
+    background: linear-gradient(135deg, #588157, #3a5a40);
+    color: white;
+    border: none;
+    padding: 10px 24px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 600;
+    margin-top: 12px;
+}
+.check-btn:hover { opacity: 0.9; }
+.score-box {
+    background: #fff8f0;
+    border: 2px solid #c4a77d;
+    border-radius: 12px;
+    padding: 24px;
+    margin: 24px 0;
+    text-align: center;
+    display: none;
+}
+.score-box h2 { border: none; margin: 0 0 8px; }
+.lang-toggle {
+    position: fixed; top: 16px; right: 16px;
+    background: #588157; border: none; border-radius: 24px;
+    padding: 10px 20px; cursor: pointer; color: #fff;
+    font-size: 14px; font-weight: 600; z-index: 1000;
+}
+.lang-toggle:hover { background: #3a5a40; }
+.ko { display: none; }
+.nav { display: flex; justify-content: space-between; margin: 32px 0 16px; }
+.nav a { color: #588157; text-decoration: none; font-weight: 600; }
+.nav a:hover { color: #3a5a40; }
+@media (max-width: 768px) {
+    body { padding: 16px; }
+    h1 { font-size: 1.8em; }
+    .lang-toggle { padding: 8px 16px; font-size: 13px; }
+}
+</style>
+</head>
+<body>
+<button class="lang-toggle" onclick="toggleLang()">한국어</button>
+
+<h1>📝 Day 8 Quiz: State Encoding</h1>
+<p class="en">Test your understanding of binary, one-hot, and Gray code encoding.</p>
+<p class="ko" style="display:none;">바이너리, 원-핫, 그레이 코드 인코딩에 대한 이해를 테스트하세요.</p>
+
+<div class="nav">
+    <a href="day-08-lesson.html">← Back to Lesson</a>
+    <a href="day-08-practice.html">Practice →</a>
+</div>
+
+<div class="question" id="q1">
+<h3>Q1. <span class="en">How many flip-flops does binary encoding need for 16 states?</span><span class="ko" style="display:none;">16개 상태에 바이너리 인코딩은 몇 개의 플립플롭이 필요한가요?</span></h3>
+<div class="options">
+<label><input type="radio" name="q1" value="a"> 2</label>
+<label><input type="radio" name="q1" value="b"> 4</label>
+<label><input type="radio" name="q1" value="c"> 8</label>
+<label><input type="radio" name="q1" value="d"> 16</label>
+</div>
+<button class="check-btn" onclick="check('q1','b','⌈log₂(16)⌉ = 4 flip-flops','16개 상태의 ⌈log₂(16)⌉ = 4 플립플롭')">Check</button>
+<div class="result" id="q1-result"></div>
+</div>
+
+<div class="question" id="q2">
+<h3>Q2. <span class="en">How many flip-flops does one-hot encoding need for 16 states?</span><span class="ko" style="display:none;">16개 상태에 원-핫 인코딩은 몇 개의 플립플롭이 필요한가요?</span></h3>
+<div class="options">
+<label><input type="radio" name="q2" value="a"> 4</label>
+<label><input type="radio" name="q2" value="b"> 8</label>
+<label><input type="radio" name="q2" value="c"> 16</label>
+<label><input type="radio" name="q2" value="d"> 32</label>
+</div>
+<button class="check-btn" onclick="check('q2','c','One-hot needs exactly N flip-flops for N states.','원-핫은 N개 상태에 정확히 N개 플립플롭이 필요합니다.')">Check</button>
+<div class="result" id="q2-result"></div>
+</div>
+
+<div class="question" id="q3">
+<h3>Q3. <span class="en">What is the Gray code for binary value 0110?</span><span class="ko" style="display:none;">바이너리 값 0110의 그레이 코드는?</span></h3>
+<div class="options">
+<label><input type="radio" name="q3" value="a"> 0100</label>
+<label><input type="radio" name="q3" value="b"> 0101</label>
+<label><input type="radio" name="q3" value="c"> 0111</label>
+<label><input type="radio" name="q3" value="d"> 0011</label>
+</div>
+<button class="check-btn" onclick="check('q3','b','Gray = bin ^ (bin >> 1) = 0110 ^ 0011 = 0101','Gray = bin ^ (bin >> 1) = 0110 ^ 0011 = 0101')">Check</button>
+<div class="result" id="q3-result"></div>
+</div>
+
+<div class="question" id="q4">
+<h3>Q4. <span class="en">Why is Gray code preferred for clock domain crossing?</span><span class="ko" style="display:none;">클록 도메인 크로싱에서 그레이 코드가 선호되는 이유는?</span></h3>
+<div class="options">
+<label><input type="radio" name="q4" value="a"> <span class="en">It uses fewer flip-flops</span><span class="ko" style="display:none;">플립플롭을 더 적게 사용해서</span></label>
+<label><input type="radio" name="q4" value="b"> <span class="en">Only 1 bit changes per transition, preventing intermediate invalid values</span><span class="ko" style="display:none;">전환당 1비트만 변경되어 중간 무효 값을 방지</span></label>
+<label><input type="radio" name="q4" value="c"> <span class="en">It's faster than binary</span><span class="ko" style="display:none;">바이너리보다 빠라서</span></label>
+<label><input type="radio" name="q4" value="d"> <span class="en">It prevents all metastability</span><span class="ko" style="display:none;">모든 메타스테이빌리티를 방지해서</span></label>
+</div>
+<button class="check-btn" onclick="check('q4','b','When only 1 bit changes, a sampled value is either the old or new value — never an invalid intermediate state.','1비트만 변경되면 샘플링된 값은 이전 또는 새 값 — 절대 무효한 중간 상태가 아닙니다.')">Check</button>
+<div class="result" id="q4-result"></div>
+</div>
+
+<div class="question" id="q5">
+<h3>Q5. <span class="en">Which encoding is typically the default for FPGA synthesis tools?</span><span class="ko" style="display:none;">FPGA 합성 도구의 기본 인코딩은 보통 무엇인가요?</span></h3>
+<div class="options">
+<label><input type="radio" name="q5" value="a"> Binary</label>
+<label><input type="radio" name="q5" value="b"> One-hot</label>
+<label><input type="radio" name="q5" value="c"> Gray code</label>
+<label><input type="radio" name="q5" value="d"> Johnson code</label>
+</div>
+<button class="check-btn" onclick="check('q5','b','FPGAs have abundant flip-flops, so one-hot\'s speed advantage with minimal decode logic is preferred.','FPGA는 플립플롭이 풍부하므로 최소 디코드 로직으로 속도 이점이 있는 원-핫이 선호됩니다.')">Check</button>
+<div class="result" id="q5-result"></div>
+</div>
+
+<div class="question" id="q6">
+<h3>Q6. <span class="en">In one-hot encoding, what does <code>case (1'b1)</code> do?</span><span class="ko" style="display:none;">원-핫 인코딩에서 <code>case (1'b1)</code>은 무엇을 하나요?</span></h3>
+<div class="options">
+<label><input type="radio" name="q6" value="a"> <span class="en">Checks if the state is all ones</span><span class="ko" style="display:none;">상태가 모두 1인지 확인</span></label>
+<label><input type="radio" name="q6" value="b"> <span class="en">Matches whichever state bit is high (parallel priority)</span><span class="ko" style="display:none;">어느 상태 비트가 high인지 매칭 (병렬 우선순위)</span></label>
+<label><input type="radio" name="q6" value="c"> <span class="en">Forces the FSM to state 1</span><span class="ko" style="display:none;">FSM을 상태 1로 강제</span></label>
+<label><input type="radio" name="q6" value="d"> <span class="en">It's a syntax error</span><span class="ko" style="display:none;">구문 오류</span></label>
+</div>
+<button class="check-btn" onclick="check('q6','b','Each case item checks individual bits: state[0], state[1], etc. Whichever is 1 gets matched.','각 case 항목이 개별 비트를 확인합니다: state[0], state[1] 등. 1인 것이 매칭됩니다.')">Check</button>
+<div class="result" id="q6-result"></div>
+</div>
+
+<div class="question" id="q7">
+<h3>Q7. <span class="en">Binary transition 01 → 10 changes how many bits?</span><span class="ko" style="display:none;">바이너리 전환 01 → 10은 몇 비트가 변하나요?</span></h3>
+<div class="options">
+<label><input type="radio" name="q7" value="a"> 0</label>
+<label><input type="radio" name="q7" value="b"> 1</label>
+<label><input type="radio" name="q7" value="c"> 2</label>
+<label><input type="radio" name="q7" value="d"> It depends on the clock speed</label>
+</div>
+<button class="check-btn" onclick="check('q7','c','Both bits flip: bit 0 goes 1→0, bit 1 goes 0→1. That\'s 2 bit changes.','두 비트가 모두 뒤집힙니다: 비트0은 1→0, 비트1은 0→1. 2비트 변경입니다.')">Check</button>
+<div class="result" id="q7-result"></div>
+</div>
+
+<div class="question" id="q8">
+<h3>Q8. <span class="en">What formula converts binary to Gray code?</span><span class="ko" style="display:none;">바이너리를 그레이 코드로 변환하는 공식은?</span></h3>
+<div class="options">
+<label><input type="radio" name="q8" value="a"> <code>gray = bin + 1</code></label>
+<label><input type="radio" name="q8" value="b"> <code>gray = bin ^ (bin >> 1)</code></label>
+<label><input type="radio" name="q8" value="c"> <code>gray = bin ^ (bin << 1)</code></label>
+<label><input type="radio" name="q8" value="d"> <code>gray = ~bin</code></label>
+</div>
+<button class="check-btn" onclick="check('q8','b','XOR each bit with the bit above it (right shift by 1).','각 비트를 위의 비트와 XOR합니다 (1만큼 우측 시프트).')">Check</button>
+<div class="result" id="q8-result"></div>
+</div>
+
+<div class="question" id="q9">
+<h3>Q9. <span class="en">What risk does one-hot encoding face from single-event upsets (SEU)?</span><span class="ko" style="display:none;">원-핫 인코딩이 단일 이벤트 업셋(SEU)에서 직면하는 위험은?</span></h3>
+<div class="options">
+<label><input type="radio" name="q9" value="a"> <span class="en">Clock frequency drops</span><span class="ko" style="display:none;">클록 주파수 감소</span></label>
+<label><input type="radio" name="q9" value="b"> <span class="en">A flipped bit creates an illegal state (0 or 2 bits hot)</span><span class="ko" style="display:none;">비트 반전으로 불법 상태 생성 (0개 또는 2개 비트 hot)</span></label>
+<label><input type="radio" name="q9" value="c"> <span class="en">The FSM runs faster</span><span class="ko" style="display:none;">FSM이 더 빨리 실행됨</span></label>
+<label><input type="radio" name="q9" value="d"> <span class="en">Nothing — one-hot is immune to SEU</span><span class="ko" style="display:none;">아무것도 — 원-핫은 SEU에 면역</span></label>
+</div>
+<button class="check-btn" onclick="check('q9','b','If one bit flips, you might have 0 or 2 bits high — an illegal state. Always add default recovery!','비트 하나가 뒤집히면 0개 또는 2개의 비트가 high일 수 있습니다 — 불법 상태입니다. 항상 기본 복구를 추가하세요!')">Check</button>
+<div class="result" id="q9-result"></div>
+</div>
+
+<div class="question" id="q10">
+<h3>Q10. <span class="en">Which synthesis attribute tells the tool to use one-hot encoding?</span><span class="ko" style="display:none;">어떤 합성 속성이 도구에게 원-핫 인코딩을 사용하라고 지시하나요?</span></h3>
+<div class="options">
+<label><input type="radio" name="q10" value="a"> <code>(* encoding = "binary" *)</code></label>
+<label><input type="radio" name="q10" value="b"> <code>(* fsm_encoding = "one_hot" *)</code></label>
+<label><input type="radio" name="q10" value="c"> <code>// synopsys one_hot</code></label>
+<label><input type="radio" name="q10" value="d"> <span class="en">Both B and C are valid (tool-dependent)</span><span class="ko" style="display:none;">B와 C 모두 유효 (도구에 따라 다름)</span></label>
+</div>
+<button class="check-btn" onclick="check('q10','d','Different synthesis tools use different syntax. Xilinx uses (* fsm_encoding *), Synopsys uses pragma comments.','합성 도구마다 다른 구문을 사용합니다. Xilinx는 (* fsm_encoding *), Synopsys는 pragma 주석을 사용합니다.')">Check</button>
+<div class="result" id="q10-result"></div>
+</div>
+
+<div class="score-box" id="score-box">
+<h2 id="score-text"></h2>
+<p id="score-msg"></p>
+</div>
+
+<button class="check-btn" onclick="showScore()" style="display:block;margin:24px auto;padding:14px 40px;font-size:17px;">Show Score</button>
+
+<div class="nav">
+    <a href="day-08-lesson.html">← Back to Lesson</a>
+    <a href="day-08-practice.html">Practice →</a>
+</div>
+
+<script>
+let isKorean = false;
+let answers = {};
+function toggleLang() {
+    isKorean = !isKorean;
+    document.querySelectorAll('.en').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'none' : 'revert', 'important');
+    });
+    document.querySelectorAll('.ko').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'revert' : 'none', 'important');
+    });
+    document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+}
+function check(q, correct, enExpl, koExpl) {
+    const sel = document.querySelector(`input[name="${q}"]:checked`);
+    if (!sel) return;
+    const res = document.getElementById(q + '-result');
+    const isCorrect = sel.value === correct;
+    answers[q] = isCorrect;
+    res.className = 'result ' + (isCorrect ? 'correct' : 'incorrect');
+    const expl = isKorean ? koExpl : enExpl;
+    res.textContent = (isCorrect ? '✅ Correct! ' : '❌ Incorrect. ') + expl;
+    res.style.display = 'block';
+}
+function showScore() {
+    const total = 10;
+    const correct = Object.values(answers).filter(v => v).length;
+    const box = document.getElementById('score-box');
+    box.style.display = 'block';
+    document.getElementById('score-text').textContent = correct + ' / ' + total;
+    const msg = correct >= 9 ? '🌟 Excellent!' : correct >= 7 ? '👍 Good job!' : correct >= 5 ? '📖 Review the lesson!' : '💪 Keep studying!';
+    document.getElementById('score-msg').textContent = msg;
+    box.scrollIntoView({behavior:'smooth'});
+}
+</script>
+</body>
+</html>
