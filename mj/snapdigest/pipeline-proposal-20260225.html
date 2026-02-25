@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SnapDigest Pipeline Overhaul Proposal</title>
+<style>
+  :root {
+    --bg: #1a1a2e;
+    --card: #16213e;
+    --card2: #0f3460;
+    --accent: #e94560;
+    --accent2: #53d769;
+    --text: #eee;
+    --muted: #8892b0;
+    --border: #233554;
+    --green: #53d769;
+    --red: #ff6b6b;
+    --yellow: #ffd93d;
+    --blue: #6c9bff;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    padding: 16px;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  .lang-toggle {
+    position: fixed;
+    top: 12px;
+    right: 12px;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 13px;
+    cursor: pointer;
+    z-index: 100;
+  }
+  .ko { display: none; }
+  .ko.show { display: inline !important; }
+  .en.hide { display: none !important; }
+  h1 { font-size: 1.8em; margin: 20px 0 8px; }
+  h2 { font-size: 1.3em; margin: 28px 0 12px; color: var(--accent); border-bottom: 1px solid var(--border); padding-bottom: 6px; }
+  h3 { font-size: 1.1em; margin: 16px 0 8px; color: var(--blue); }
+  .subtitle { color: var(--muted); font-size: 0.95em; margin-bottom: 24px; }
+  .card {
+    background: var(--card);
+    border-radius: 12px;
+    padding: 16px;
+    margin: 12px 0;
+    border: 1px solid var(--border);
+  }
+  .card.highlight { border-color: var(--accent); }
+  .card.green { border-color: var(--green); }
+  .vs-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0;
+  }
+  .vs-table th, .vs-table td {
+    padding: 10px 12px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.9em;
+  }
+  .vs-table th { color: var(--muted); font-weight: 600; }
+  .bad { color: var(--red); }
+  .good { color: var(--green); }
+  .warn { color: var(--yellow); }
+  ul { margin: 8px 0 8px 20px; }
+  li { margin: 4px 0; font-size: 0.92em; }
+  code {
+    background: rgba(255,255,255,0.08);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.85em;
+  }
+  .file-list { font-family: 'SF Mono', monospace; font-size: 0.82em; color: var(--blue); }
+  .phase {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 0.78em;
+    font-weight: 600;
+    margin-right: 6px;
+  }
+  .phase-1 { background: var(--accent); }
+  .phase-2 { background: var(--card2); border: 1px solid var(--blue); }
+  .phase-3 { background: var(--card2); border: 1px solid var(--green); }
+  .flow-diagram {
+    background: var(--card);
+    border-radius: 12px;
+    padding: 20px;
+    margin: 16px 0;
+    text-align: center;
+    font-family: 'SF Mono', monospace;
+    font-size: 0.85em;
+    line-height: 2;
+    border: 1px solid var(--border);
+    overflow-x: auto;
+  }
+  .flow-arrow { color: var(--accent); font-weight: bold; }
+  .flow-step { color: var(--green); }
+  .flow-ai { color: var(--yellow); }
+  .flow-db { color: var(--blue); }
+  .cost-box {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin: 12px 0;
+  }
+  .cost-item {
+    background: var(--card);
+    border-radius: 10px;
+    padding: 14px;
+    text-align: center;
+    border: 1px solid var(--border);
+  }
+  .cost-item .num { font-size: 1.5em; font-weight: 700; }
+  .cost-item .label { font-size: 0.8em; color: var(--muted); margin-top: 4px; }
+  .timeline {
+    border-left: 2px solid var(--accent);
+    margin: 16px 0 16px 12px;
+    padding-left: 20px;
+  }
+  .timeline-item {
+    margin: 16px 0;
+    position: relative;
+  }
+  .timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -25px;
+    top: 6px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+  .timeline-item .time { font-size: 0.8em; color: var(--muted); }
+  @media (max-width: 600px) {
+    body { padding: 12px; }
+    h1 { font-size: 1.4em; }
+    .cost-box { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<button class="lang-toggle" onclick="toggleLang()">한국어</button>
+
+<h1>
+  <span class="en">📰 SnapDigest: Server-Side Pipeline Overhaul</span>
+  <span class="ko">📰 SnapDigest: 서버 사이드 파이프라인 전면 개편</span>
+</h1>
+<p class="subtitle">
+  <span class="en">From client-side RSS chaos → Server-side Brave Search + AI curation pipeline</span>
+  <span class="ko">클라이언트 RSS 방식 → 서버사이드 Brave Search + AI 큐레이션 파이프라인으로 전환</span>
+</p>
+
+<!-- ============================================ -->
+<h2>
+  <span class="en">🔴 Current Architecture (Problems)</span>
+  <span class="ko">🔴 현재 아키텍처 (문제점)</span>
+</h2>
+
+<div class="flow-diagram">
+  <span class="en">
+    User Opens App <span class="flow-arrow">→</span> <span class="bad">Fetch 25+ RSS feeds</span>
+    <span class="flow-arrow">→</span> <span class="flow-ai">AI Score (nano)</span>
+    <span class="flow-arrow">→</span> <span class="flow-ai">AI Enhance (mini)</span>
+    <span class="flow-arrow">→</span> <span class="flow-ai">AI Translate (mini)</span>
+    <span class="flow-arrow">→</span> Show Articles<br>
+    <span class="bad">⏱️ 30-60 seconds per app open &nbsp;|&nbsp; 💸 3 OpenAI calls per user per open</span>
+  </span>
+  <span class="ko">
+    앱 열기 <span class="flow-arrow">→</span> <span class="bad">25+ RSS 피드 가져오기</span>
+    <span class="flow-arrow">→</span> <span class="flow-ai">AI 점수매기기 (nano)</span>
+    <span class="flow-arrow">→</span> <span class="flow-ai">AI 요약 (mini)</span>
+    <span class="flow-arrow">→</span> <span class="flow-ai">AI 번역 (mini)</span>
+    <span class="flow-arrow">→</span> 기사 표시<br>
+    <span class="bad">⏱️ 앱 열 때마다 30-60초 &nbsp;|&nbsp; 💸 사용자당 매번 OpenAI 3회 호출</span>
+  </span>
+</div>
+
+<table class="vs-table">
+  <tr>
+    <th></th>
+    <th><span class="en">Current (Client-Side RSS)</span><span class="ko">현재 (클라이언트 RSS)</span></th>
+    <th><span class="en">New (Server-Side Brave)</span><span class="ko">신규 (서버사이드 Brave)</span></th>
+  </tr>
+  <tr>
+    <td><span class="en">Load time</span><span class="ko">로딩 시간</span></td>
+    <td class="bad">30-60s</td>
+    <td class="good">&lt;1s</td>
+  </tr>
+  <tr>
+    <td><span class="en">API calls per open</span><span class="ko">앱 열 때 API 호출</span></td>
+    <td class="bad">25+ RSS + 3 OpenAI</td>
+    <td class="good">1 Supabase query</td>
+  </tr>
+  <tr>
+    <td><span class="en">Cost scaling</span><span class="ko">비용 확장성</span></td>
+    <td class="bad">× users × opens/day</td>
+    <td class="good">Fixed ~6 runs/day</td>
+  </tr>
+  <tr>
+    <td><span class="en">News quality</span><span class="ko">뉴스 품질</span></td>
+    <td class="warn">RSS feed quality varies</td>
+    <td class="good">Brave Search ranked results</td>
+  </tr>
+  <tr>
+    <td><span class="en">Offline resilience</span><span class="ko">오프라인 대응</span></td>
+    <td class="bad">Fails completely</td>
+    <td class="good">Cached in DB, always available</td>
+  </tr>
+  <tr>
+    <td><span class="en">User experience</span><span class="ko">사용자 경험</span></td>
+    <td class="bad">Infinite loading spinner</td>
+    <td class="good">Instant content + pull-to-refresh</td>
+  </tr>
+</table>
+
+<!-- ============================================ -->
+<h2>
+  <span class="en">🟢 New Architecture</span>
+  <span class="ko">🟢 새로운 아키텍처</span>
+</h2>
+
+<div class="flow-diagram">
+  <span class="en">
+    <strong>SERVER (runs every 4 hours via cron):</strong><br>
+    <span class="flow-step">Brave Search</span> (4 categories × 3 queries)
+    <span class="flow-arrow">→</span> Deduplicate
+    <span class="flow-arrow">→</span> <span class="flow-ai">AI Score (nano)</span>
+    <span class="flow-arrow">→</span> <span class="flow-ai">AI Enhance (mini)</span>
+    <span class="flow-arrow">→</span> <span class="flow-ai">AI Translate (mini)</span>
+    <span class="flow-arrow">→</span> <span class="flow-db">Store in Supabase</span><br><br>
+    <strong>CLIENT (user opens app):</strong><br>
+    <span class="flow-db">Query Supabase</span>
+    <span class="flow-arrow">→</span> Show Articles ⚡<br>
+    <span class="good">⏱️ &lt;1 second &nbsp;|&nbsp; 💸 $0 per user per open</span>
+  </span>
+  <span class="ko">
+    <strong>서버 (4시간마다 cron 실행):</strong><br>
+    <span class="flow-step">Brave Search</span> (4개 카테고리 × 3개 쿼리)
+    <span class="flow-arrow">→</span> 중복제거
+    <span class="flow-arrow">→</span> <span class="flow-ai">AI 점수매기기 (nano)</span>
+    <span class="flow-arrow">→</span> <span class="flow-ai">AI 요약 (mini)</span>
+    <span class="flow-arrow">→</span> <span class="flow-ai">AI 번역 (mini)</span>
+    <span class="flow-arrow">→</span> <span class="flow-db">Supabase 저장</span><br><br>
+    <strong>클라이언트 (앱 열기):</strong><br>
+    <span class="flow-db">Supabase 쿼리</span>
+    <span class="flow-arrow">→</span> 기사 표시 ⚡<br>
+    <span class="good">⏱️ 1초 미만 &nbsp;|&nbsp; 💸 사용자당 $0</span>
+  </span>
+</div>
+
+<!-- ============================================ -->
+<h2>
+  <span class="en">⚡ Pipeline Detail: Brave Search Edge Function</span>
+  <span class="ko">⚡ 파이프라인 상세: Brave Search Edge Function</span>
+</h2>
+
+<div class="card">
+  <h3><span class="en">Step 1: Brave Search Queries</span><span class="ko">1단계: Brave Search 쿼리</span></h3>
+  <p><span class="en">Targeted queries per category with <code>freshness=pd</code> (past day):</span>
+  <span class="ko">카테고리별 타겟 쿼리, <code>freshness=pd</code> (24시간 이내):</span></p>
+  <ul>
+    <li>💻 <strong>Technology:</strong> "top technology news today", "AI artificial intelligence news", "tech industry latest developments"</li>
+    <li>🌍 <strong>World:</strong> "breaking world news today", "international news today", "major global events today"</li>
+    <li>💰 <strong>Finance:</strong> "stock market news today", "financial markets today", "economy news latest"</li>
+    <li>💼 <strong>Business:</strong> "business news today", "corporate news acquisitions", "startup news funding"</li>
+  </ul>
+  <p style="margin-top:8px;color:var(--muted);font-size:0.85em;">
+    <span class="en">~12 Brave API calls per run × 10 results each = ~120 raw articles</span>
+    <span class="ko">실행당 Brave API 호출 ~12회 × 결과 10개 = 원시 기사 ~120개</span>
+  </p>
+</div>
+
+<div class="card">
+  <h3><span class="en">Step 2: Deduplicate</span><span class="ko">2단계: 중복 제거</span></h3>
+  <p><span class="en">Remove duplicates by URL + title similarity (>50% word overlap = dupe). Also skip articles already in DB from prior runs.</span>
+  <span class="ko">URL + 제목 유사도로 중복 제거 (50% 이상 단어 겹침 = 중복). 이전 실행에서 이미 DB에 있는 기사도 건너뜀.</span></p>
+</div>
+
+<div class="card">
+  <h3><span class="en">Step 3: AI Score (gpt-4.1-nano) — ~$0.002/run</span><span class="ko">3단계: AI 점수매기기 (gpt-4.1-nano) — 실행당 ~$0.002</span></h3>
+  <p><span class="en">Same scoring prompt as current. Classify: breaking / significant / standard / minor / noise. Filter out noise. Keep top ~40-50 articles.</span>
+  <span class="ko">현재와 동일한 점수매기기 프롬프트. 분류: 속보 / 중요 / 보통 / 사소 / 노이즈. 노이즈 필터링. 상위 ~40-50개 기사 유지.</span></p>
+</div>
+
+<div class="card">
+  <h3><span class="en">Step 4: AI Enhance (gpt-4.1-mini) — ~$0.01/run</span><span class="ko">4단계: AI 강화 (gpt-4.1-mini) — 실행당 ~$0.01</span></h3>
+  <p><span class="en">Generate: 2-3 sentence summary, teaser, 3 key takeaways for each article. Batch process in groups of 5.</span>
+  <span class="ko">생성: 기사별 2-3문장 요약, 티저, 핵심 포인트 3개. 5개씩 배치 처리.</span></p>
+</div>
+
+<div class="card">
+  <h3><span class="en">Step 5: AI Translate (gpt-4.1-mini) — ~$0.008/run</span><span class="ko">5단계: AI 번역 (gpt-4.1-mini) — 실행당 ~$0.008</span></h3>
+  <p><span class="en">Korean translations for title + summary. Stored in <code>title_ko</code>, <code>summary_ko</code> columns.</span>
+  <span class="ko">제목 + 요약 한국어 번역. <code>title_ko</code>, <code>summary_ko</code> 컬럼에 저장.</span></p>
+</div>
+
+<div class="card">
+  <h3><span class="en">Step 6: Generate Briefing (gpt-4.1-mini) — ~$0.002/run</span><span class="ko">6단계: 브리핑 생성 (gpt-4.1-mini) — 실행당 ~$0.002</span></h3>
+  <p><span class="en">Morning briefing intro from top 5 articles. Stored in <code>daily_briefings</code> table.</span>
+  <span class="ko">상위 5개 기사로 모닝 브리핑 생성. <code>daily_briefings</code> 테이블에 저장.</span></p>
+</div>
+
+<div class="card">
+  <h3><span class="en">Step 7: Store + Cleanup</span><span class="ko">7단계: 저장 + 정리</span></h3>
+  <p><span class="en">Upsert articles into Supabase (unique on <code>source_url</code>). Create/update daily digest record. Delete articles older than 7 days.</span>
+  <span class="ko">Supabase에 기사 upsert (<code>source_url</code> 기준 고유). 일간 다이제스트 레코드 생성/업데이트. 7일 이상 된 기사 삭제.</span></p>
+</div>
+
+<!-- ============================================ -->
+<h2>
+  <span class="en">💰 Cost Analysis</span>
+  <span class="ko">💰 비용 분석</span>
+</h2>
+
+<div class="cost-box">
+  <div class="cost-item">
+    <div class="num good">~$0.02</div>
+    <div class="label"><span class="en">per pipeline run (OpenAI)</span><span class="ko">파이프라인 실행당 (OpenAI)</span></div>
+  </div>
+  <div class="cost-item">
+    <div class="num good">~$0.12/day</div>
+    <div class="label"><span class="en">6 runs × $0.02</span><span class="ko">6회 실행 × $0.02</span></div>
+  </div>
+  <div class="cost-item">
+    <div class="num good">~$3.60/mo</div>
+    <div class="label"><span class="en">total OpenAI cost</span><span class="ko">총 OpenAI 비용</span></div>
+  </div>
+  <div class="cost-item">
+    <div class="num good">Free</div>
+    <div class="label"><span class="en">Brave Search (2k queries/mo free)</span><span class="ko">Brave Search (월 2천 쿼리 무료)</span></div>
+  </div>
+</div>
+
+<div class="card green">
+  <p><span class="en"><strong>Brave Search Free Tier:</strong> 2,000 queries/month. At ~12 queries per run × 6 runs/day = ~72/day = ~2,160/month. Slightly over free tier — consider reducing to 4 runs/day (1,440/month, well within free tier) or upgrading to $5/mo plan (5,000 queries).</span>
+  <span class="ko"><strong>Brave Search 무료 티어:</strong> 월 2,000 쿼리. 실행당 ~12 쿼리 × 일 6회 = ~72/일 = ~2,160/월. 무료 티어 약간 초과 — 일 4회로 줄이거나 (1,440/월) $5/월 플랜으로 업그레이드 고려.</span></p>
+</div>
+
+<!-- ============================================ -->
+<h2>
+  <span class="en">📂 Files Changed (Impact Map)</span>
+  <span class="ko">📂 변경 파일 (영향 맵)</span>
+</h2>
+
+<h3><span class="phase phase-1">Phase 1</span> <span class="en">New Server-Side Pipeline</span><span class="ko">새 서버사이드 파이프라인</span></h3>
+<div class="card">
+  <ul class="file-list">
+    <li><strong>NEW</strong> supabase/functions/news-pipeline/index.ts <span style="color:var(--muted)">— main Edge Function (Brave → AI → DB)</span></li>
+    <li><strong>MIGRATE</strong> supabase/migrations/YYYYMMDD_news_pipeline_cron.sql <span style="color:var(--muted)">— pg_cron schedule + any schema additions</span></li>
+    <li><strong>EXISTING</strong> supabase/migrations/20260225_add_news_pipeline_tables.sql <span style="color:var(--muted)">— already created (pipeline_runs, daily_briefings, title_ko/summary_ko columns)</span></li>
+  </ul>
+  <p style="margin-top:8px;font-size:0.85em;color:var(--muted);">
+    <span class="en">Env vars needed in Supabase: <code>BRAVE_API_KEY</code>, <code>OPENAI_API_KEY</code> (already set)</span>
+    <span class="ko">Supabase 환경변수 필요: <code>BRAVE_API_KEY</code>, <code>OPENAI_API_KEY</code> (이미 설정됨)</span>
+  </p>
+</div>
+
+<h3><span class="phase phase-2">Phase 2</span> <span class="en">Flutter App Refactor</span><span class="ko">Flutter 앱 리팩터링</span></h3>
+<div class="card">
+  <ul class="file-list">
+    <li><strong>REWRITE</strong> lib/features/digest/providers/digest_provider.dart
+      <br><span style="color:var(--muted);font-size:0.85em;">fetchArticles() → query Supabase instead of calling NewsAggregatorService</span></li>
+    <li><strong>REWRITE</strong> lib/core/services/news_aggregator_service.dart
+      <br><span style="color:var(--muted);font-size:0.85em;">Simplify to Supabase reader. Keep search (query cached articles in DB).</span></li>
+    <li><strong>DEPRECATE</strong> lib/core/services/rss_service.dart <span style="color:var(--muted)">— no longer needed</span></li>
+    <li><strong>DEPRECATE</strong> lib/core/services/ai_curation_service.dart <span style="color:var(--muted)">— moved server-side</span></li>
+    <li><strong>DEPRECATE</strong> lib/core/services/gnews_service.dart <span style="color:var(--muted)">— already unused</span></li>
+    <li><strong>UPDATE</strong> lib/core/services/image_resolver_service.dart <span style="color:var(--muted)">— may not be needed if pipeline stores image URLs</span></li>
+    <li><strong>UPDATE</strong> lib/core/services/content_service.dart <span style="color:var(--muted)">— TTS still needed, remove translate calls</span></li>
+  </ul>
+</div>
+
+<h3><span class="phase phase-2">Phase 2</span> <span class="en">Screen Updates (minimal)</span><span class="ko">화면 업데이트 (최소)</span></h3>
+<div class="card">
+  <ul class="file-list">
+    <li><strong>MINOR</strong> lib/features/browse/presentation/screens/browse_screen.dart <span style="color:var(--muted)">— already calls digestProvider, should just work</span></li>
+    <li><strong>MINOR</strong> lib/features/story_mode/presentation/screens/story_mode_screen.dart <span style="color:var(--muted)">— same, reads from digestProvider</span></li>
+    <li><strong>MINOR</strong> lib/features/breaking_news/presentation/screens/breaking_news_screen.dart <span style="color:var(--muted)">— update to read from DB</span></li>
+    <li><strong>NO CHANGE</strong> lib/shared/models/article.dart <span style="color:var(--muted)">— model already has title_ko, summary_ko fields ✅</span></li>
+    <li><strong>NO CHANGE</strong> lib/shared/models/digest.dart <span style="color:var(--muted)">— already maps to digests table ✅</span></li>
+  </ul>
+</div>
+
+<h3><span class="phase phase-3">Phase 3</span> <span class="en">Cleanup & Polish</span><span class="ko">정리 및 마무리</span></h3>
+<div class="card">
+  <ul class="file-list">
+    <li><strong>KEEP</strong> supabase/functions/ai-curate/index.ts <span style="color:var(--muted)">— keep for now, content_service.dart still uses it for on-demand TTS/translate</span></li>
+    <li><strong>KEEP</strong> supabase/functions/generate-audio/index.ts <span style="color:var(--muted)">— still needed for TTS</span></li>
+    <li><strong>REMOVE</strong> RSS-related dependencies from pubspec.yaml (xml package etc.) <span style="color:var(--muted)">— after testing</span></li>
+  </ul>
+</div>
+
+<!-- ============================================ -->
+<h2>
+  <span class="en">⏰ Cron Schedule</span>
+  <span class="ko">⏰ Cron 스케줄</span>
+</h2>
+
+<div class="card">
+  <p><span class="en">Pipeline runs <strong>every 4 hours</strong> via Supabase pg_cron + pg_net:</span>
+  <span class="ko">파이프라인 <strong>4시간마다</strong> Supabase pg_cron + pg_net으로 실행:</span></p>
+  <div class="flow-diagram" style="text-align:left;">
+    <code>
+-- In Supabase SQL Editor:<br>
+SELECT cron.schedule(<br>
+&nbsp;&nbsp;'news-pipeline',<br>
+&nbsp;&nbsp;'0 */4 * * *', -- every 4 hours<br>
+&nbsp;&nbsp;$$<br>
+&nbsp;&nbsp;SELECT net.http_post(<br>
+&nbsp;&nbsp;&nbsp;&nbsp;url := 'https://fjucduvwktorshyfjgdb.supabase.co/functions/v1/news-pipeline',<br>
+&nbsp;&nbsp;&nbsp;&nbsp;headers := '{"Authorization": "Bearer &lt;service_role_key&gt;", "Content-Type": "application/json"}'::jsonb,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;body := '{}'::jsonb<br>
+&nbsp;&nbsp;);<br>
+&nbsp;&nbsp;$$<br>
+);
+    </code>
+  </div>
+  <p style="font-size:0.85em;color:var(--muted);">
+    <span class="en">Runs at: 12am, 4am, 8am, 12pm, 4pm, 8pm (UTC) — ensures fresh content throughout the day.</span>
+    <span class="ko">실행 시간: 12am, 4am, 8am, 12pm, 4pm, 8pm (UTC) — 하루 종일 최신 콘텐츠 보장.</span>
+  </p>
+  <p style="font-size:0.85em;color:var(--muted);margin-top:4px;">
+    <span class="en">Alternative: Use Supabase Dashboard → Database → Extensions → enable pg_cron and pg_net if not already enabled.</span>
+    <span class="ko">대안: Supabase 대시보드 → Database → Extensions → pg_cron 및 pg_net 활성화 (미활성화 시).</span>
+  </p>
+</div>
+
+<!-- ============================================ -->
+<h2>
+  <span class="en">🚀 Implementation Plan</span>
+  <span class="ko">🚀 구현 계획</span>
+</h2>
+
+<div class="timeline">
+  <div class="timeline-item">
+    <div class="time"><span class="phase phase-1">Phase 1</span> <span class="en">Server Pipeline</span><span class="ko">서버 파이프라인</span></div>
+    <p><span class="en">Build <code>news-pipeline</code> Edge Function. Test manually via curl. Verify articles land in DB correctly.</span>
+    <span class="ko"><code>news-pipeline</code> Edge Function 빌드. curl로 수동 테스트. DB에 기사 정상 저장 확인.</span></p>
+    <p style="font-size:0.85em;color:var(--muted);"><span class="en">Prereq: Minjun provides BRAVE_API_KEY → set in Supabase secrets</span><span class="ko">전제조건: Minjun이 BRAVE_API_KEY 제공 → Supabase secrets에 설정</span></p>
+  </div>
+
+  <div class="timeline-item">
+    <div class="time"><span class="phase phase-2">Phase 2</span> <span class="en">Flutter Refactor</span><span class="ko">Flutter 리팩터링</span></div>
+    <p><span class="en">Rewrite DigestProvider to read from Supabase. Simplify NewsAggregatorService. Test on simulator — should load instantly.</span>
+    <span class="ko">DigestProvider를 Supabase 읽기로 리라이트. NewsAggregatorService 간소화. 시뮬레이터 테스트 — 즉시 로딩되어야 함.</span></p>
+  </div>
+
+  <div class="timeline-item">
+    <div class="time"><span class="phase phase-2">Phase 2</span> <span class="en">Set Up Cron</span><span class="ko">Cron 설정</span></div>
+    <p><span class="en">Enable pg_cron + pg_net in Supabase. Schedule every 4 hours. Monitor first few runs.</span>
+    <span class="ko">Supabase에서 pg_cron + pg_net 활성화. 4시간마다 스케줄. 첫 몇 번 실행 모니터링.</span></p>
+  </div>
+
+  <div class="timeline-item">
+    <div class="time"><span class="phase phase-3">Phase 3</span> <span class="en">Cleanup</span><span class="ko">정리</span></div>
+    <p><span class="en">Remove deprecated services (RSS, client-side AI curation). Clean up unused dependencies. Final testing.</span>
+    <span class="ko">사용하지 않는 서비스 제거 (RSS, 클라이언트사이드 AI 큐레이션). 미사용 의존성 정리. 최종 테스트.</span></p>
+  </div>
+</div>
+
+<!-- ============================================ -->
+<h2>
+  <span class="en">⚠️ Risks & Mitigations</span>
+  <span class="ko">⚠️ 리스크 및 대응</span>
+</h2>
+
+<div class="card">
+  <ul>
+    <li><span class="en"><strong>Brave free tier limit:</strong> ~2,160 queries/month needed at 6 runs/day. Mitigation: start at 4 runs/day (1,440/month = safe). Upgrade to $5/mo plan if needed.</span>
+    <span class="ko"><strong>Brave 무료 티어 제한:</strong> 일 6회 시 월 ~2,160 쿼리 필요. 대응: 일 4회로 시작 (1,440/월 = 안전). 필요시 $5/월 플랜 업그레이드.</span></li>
+    <li><span class="en"><strong>Edge Function timeout:</strong> Supabase has 60s default timeout. Full pipeline may exceed this. Mitigation: batch AI calls, or split into 2 functions (fetch+score → enhance+store).</span>
+    <span class="ko"><strong>Edge Function 타임아웃:</strong> Supabase 기본 60초. 전체 파이프라인 초과 가능. 대응: AI 호출 배치 처리, 또는 2개 함수로 분리.</span></li>
+    <li><span class="en"><strong>Pipeline fails silently:</strong> Mitigation: <code>pipeline_runs</code> table tracks every run. Can add alerting later.</span>
+    <span class="ko"><strong>파이프라인 무음 실패:</strong> 대응: <code>pipeline_runs</code> 테이블에 모든 실행 기록. 나중에 알림 추가 가능.</span></li>
+    <li><span class="en"><strong>No articles between runs:</strong> If last run was 3.5 hours ago, that's fine — articles stay in DB. Fresh batch comes every 4 hours.</span>
+    <span class="ko"><strong>실행 사이 기사 없음:</strong> 마지막 실행 3.5시간 전이어도 괜찮 — 기사는 DB에 유지. 4시간마다 새 배치.</span></li>
+  </ul>
+</div>
+
+<!-- ============================================ -->
+<h2>
+  <span class="en">✅ What I Need From You</span>
+  <span class="ko">✅ 필요한 것</span>
+</h2>
+
+<div class="card highlight">
+  <ol style="margin-left: 20px;">
+    <li><span class="en"><strong>BRAVE_API_KEY</strong> — Get from <a href="https://brave.com/search/api/" style="color:var(--blue);">brave.com/search/api</a>, set in Supabase secrets: <code>~/bin/supabase secrets set BRAVE_API_KEY=your_key</code></span>
+    <span class="ko"><strong>BRAVE_API_KEY</strong> — <a href="https://brave.com/search/api/" style="color:var(--blue);">brave.com/search/api</a>에서 발급, Supabase secrets에 설정</span></li>
+    <li><span class="en"><strong>Enable pg_cron + pg_net</strong> in Supabase Dashboard → Database → Extensions (if not already)</span>
+    <span class="ko">Supabase 대시보드 → Database → Extensions에서 <strong>pg_cron + pg_net 활성화</strong></span></li>
+    <li><span class="en"><strong>Approve this proposal</strong> — then I'll spawn the coding agent and build it 🌳</span>
+    <span class="ko"><strong>이 제안 승인</strong> — 그러면 코딩 에이전트 스폰해서 바로 빌드합니다 🌳</span></li>
+  </ol>
+</div>
+
+<p style="text-align:center;color:var(--muted);margin-top:30px;font-size:0.85em;">
+  SnapDigest Pipeline Proposal — Feb 25, 2026 — by Totoro 🌳
+</p>
+
+<script>
+let isKorean = false;
+function toggleLang() {
+  isKorean = !isKorean;
+  document.querySelectorAll('.en').forEach(el => el.classList.toggle('hide', isKorean));
+  document.querySelectorAll('.ko').forEach(el => el.classList.toggle('show', isKorean));
+  document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+}
+</script>
+</body>
+</html>
