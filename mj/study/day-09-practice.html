@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 9 Practice: Safe FSM Design</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    background: linear-gradient(135deg, #fefae0 0%, #faedcd 100%);
+    color: #3d405b;
+    line-height: 1.8;
+    padding: 24px;
+    max-width: 920px;
+    margin: 0 auto;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+h1 { color: #5d4037; border-bottom: 3px solid #c4a77d; padding-bottom: 12px; margin-bottom: 24px; font-size: 2em; }
+h2 { color: #588157; border-bottom: 2px solid #a3b18a; padding-bottom: 8px; margin: 32px 0 16px; }
+h3 { color: #5d4037; margin: 20px 0 12px; }
+p { margin: 12px 0; }
+ul, ol { margin: 12px 0 12px 24px; }
+li { margin: 6px 0; }
+code {
+    background: #e9f5db; color: #3d405b; padding: 2px 8px; border-radius: 4px;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+}
+pre {
+    background: #2d3436; padding: 24px; border-radius: 12px; margin: 24px 0;
+    border: 3px solid #a3b18a; overflow-x: auto;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace; font-size: 15px; line-height: 1.6; color: #f8f8f2;
+}
+.keyword { color: #ff79c6; font-weight: 600; }
+.type { color: #8be9fd; }
+.signal { color: #50fa7b; }
+.number { color: #ffb86c; }
+.comment { color: #6272a4; font-style: italic; }
+.string { color: #f1fa8c; }
+.concept-box {
+    background: #fff8f0; border: 2px solid #c4a77d; border-radius: 12px;
+    padding: 20px; margin: 20px 0; color: #3d405b;
+}
+.concept-box h3 { color: #5d4037; margin-bottom: 12px; }
+.warning-box {
+    background: #fff8f0; border-radius: 12px; padding: 20px; margin: 20px 0;
+    border-left: 4px solid #ef4444; color: #3d405b;
+}
+.warning-box h3 { color: #c53030; margin-bottom: 12px; }
+.tip-box {
+    background: #fff8f0; border-radius: 12px; padding: 20px; margin: 20px 0;
+    border-left: 4px solid #588157; color: #3d405b;
+}
+.hint-box {
+    background: #fff8f0; border-radius: 8px; padding: 15px; margin: 15px 0;
+    border-left: 4px solid #5d4037; color: #3d405b;
+}
+.lang-toggle {
+    position: fixed; top: 16px; right: 16px; background: #588157;
+    border: none; border-radius: 24px; padding: 10px 20px; cursor: pointer;
+    color: #fff; font-size: 14px; font-weight: 600; z-index: 1000;
+}
+.lang-toggle:hover { background: #3a5a40; }
+.ko { display: none; }
+.nav-links { display: flex; gap: 12px; margin: 20px 0; flex-wrap: wrap; }
+.nav-links a {
+    background: linear-gradient(135deg, #588157, #3a5a40); color: #fff;
+    padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: 600;
+}
+.nav-links a:hover { opacity: 0.9; }
+.reveal-btn {
+    background: linear-gradient(135deg, #588157, #3a5a40); color: #fff;
+    border: none; border-radius: 8px; padding: 10px 20px; cursor: pointer;
+    font-size: 15px; font-weight: 600; margin: 12px 0;
+}
+.reveal-btn:hover { opacity: 0.9; }
+.solution { display: none; }
+@media (max-width: 768px) {
+    body { padding: 16px; } h1 { font-size: 1.8em; }
+    pre { font-size: 14px; padding: 16px; }
+    .lang-toggle { padding: 8px 16px; font-size: 13px; }
+}
+</style>
+</head>
+<body>
+<button class="lang-toggle" onclick="toggleLang()">한국어</button>
+
+<h1>💻 Day 9 Practice: Safe FSM Design</h1>
+
+<div class="nav-links">
+    <a href="day-09-lesson.html">📖 Lesson</a>
+    <a href="day-09-quiz.html">📝 Quiz</a>
+</div>
+
+<!-- Exercise 1 -->
+<h2>Exercise 1: Fix the Unsafe FSM</h2>
+
+<p class="en">The following FSM has multiple safety issues. Identify and fix them all.</p>
+<p class="ko" style="display:none;">다음 FSM에는 여러 안전 문제가 있습니다. 모두 식별하고 수정하세요.</p>
+
+<div class="concept-box">
+    <h3 class="en">🎯 Requirements</h3>
+    <h3 class="ko" style="display:none;">🎯 요구사항</h3>
+    <ol>
+        <li class="en">Add proper reset</li><li class="ko" style="display:none;">적절한 리셋 추가</li>
+        <li class="en">Add default case with recovery</li><li class="ko" style="display:none;">복구 기능이 있는 default 케이스 추가</li>
+        <li class="en">Add error output signal</li><li class="ko" style="display:none;">에러 출력 신호 추가</li>
+        <li class="en">Add timeout watchdog (256 cycles max)</li><li class="ko" style="display:none;">타임아웃 워치독 추가 (최대 256 사이클)</li>
+    </ol>
+</div>
+
+<pre>
+<span class="comment">// BUGGY: Fix this FSM!</span>
+<span class="keyword">module</span> <span class="signal">data_processor</span> (
+    <span class="keyword">input</span>  <span class="type">logic</span> <span class="signal">clk</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span> <span class="signal">req</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span> <span class="signal">data_ready</span>,
+    <span class="keyword">output</span> <span class="type">logic</span> <span class="signal">ack</span>,
+    <span class="keyword">output</span> <span class="type">logic</span> <span class="signal">busy</span>
+);
+    <span class="keyword">typedef</span> <span class="keyword">enum</span> <span class="type">logic</span> [<span class="number">1</span>:<span class="number">0</span>] {
+        <span class="signal">IDLE</span>, <span class="signal">WAIT_DATA</span>, <span class="signal">PROCESS</span>, <span class="signal">RESPOND</span>
+    } <span class="type">state_t</span>;
+    <span class="type">state_t</span> <span class="signal">state</span>;
+
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span>) <span class="keyword">begin</span>
+        <span class="keyword">case</span> (<span class="signal">state</span>)
+            <span class="signal">IDLE</span>:      <span class="keyword">if</span> (<span class="signal">req</span>) <span class="signal">state</span> &lt;= <span class="signal">WAIT_DATA</span>;
+            <span class="signal">WAIT_DATA</span>: <span class="keyword">if</span> (<span class="signal">data_ready</span>) <span class="signal">state</span> &lt;= <span class="signal">PROCESS</span>;
+            <span class="signal">PROCESS</span>:   <span class="signal">state</span> &lt;= <span class="signal">RESPOND</span>;
+            <span class="signal">RESPOND</span>:   <span class="signal">state</span> &lt;= <span class="signal">IDLE</span>;
+        <span class="keyword">endcase</span>
+    <span class="keyword">end</span>
+
+    <span class="keyword">assign</span> <span class="signal">ack</span>  = (<span class="signal">state</span> == <span class="signal">RESPOND</span>);
+    <span class="keyword">assign</span> <span class="signal">busy</span> = (<span class="signal">state</span> != <span class="signal">IDLE</span>);
+<span class="keyword">endmodule</span>
+</pre>
+
+<div class="hint-box">
+    <h3>💡 Hints</h3>
+    <ul>
+        <li class="en">What state does this FSM start in after power-on?</li>
+        <li class="ko" style="display:none;">이 FSM은 전원 투입 후 어떤 상태에서 시작하나요?</li>
+        <li class="en">What if <code>data_ready</code> never goes high?</li>
+        <li class="ko" style="display:none;"><code>data_ready</code>가 절대 high가 되지 않으면?</li>
+        <li class="en">Separate your next-state logic into <code>always_comb</code></li>
+        <li class="ko" style="display:none;">다음 상태 로직을 <code>always_comb</code>로 분리하세요</li>
+    </ul>
+</div>
+
+<button class="reveal-btn" onclick="toggleSolution('sol1')">Show Solution / 정답 보기</button>
+<div class="solution" id="sol1">
+<pre>
+<span class="keyword">module</span> <span class="signal">data_processor</span> (
+    <span class="keyword">input</span>  <span class="type">logic</span> <span class="signal">clk</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span> <span class="signal">rst_n</span>,      <span class="comment">// FIX 1: Added reset</span>
+    <span class="keyword">input</span>  <span class="type">logic</span> <span class="signal">req</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span> <span class="signal">data_ready</span>,
+    <span class="keyword">output</span> <span class="type">logic</span> <span class="signal">ack</span>,
+    <span class="keyword">output</span> <span class="type">logic</span> <span class="signal">busy</span>,
+    <span class="keyword">output</span> <span class="type">logic</span> <span class="signal">error</span>      <span class="comment">// FIX 3: Error output</span>
+);
+    <span class="keyword">typedef</span> <span class="keyword">enum</span> <span class="type">logic</span> [<span class="number">1</span>:<span class="number">0</span>] {
+        <span class="signal">IDLE</span>      = <span class="number">2'b00</span>,
+        <span class="signal">WAIT_DATA</span> = <span class="number">2'b01</span>,
+        <span class="signal">PROCESS</span>   = <span class="number">2'b10</span>,
+        <span class="signal">RESPOND</span>   = <span class="number">2'b11</span>
+    } <span class="type">state_t</span>;
+
+    <span class="type">state_t</span> <span class="signal">state</span>, <span class="signal">next_state</span>;
+    <span class="type">logic</span> [<span class="number">7</span>:<span class="number">0</span>] <span class="signal">timeout_cnt</span>;    <span class="comment">// FIX 4: Watchdog</span>
+    <span class="type">logic</span> <span class="signal">timeout</span>;
+
+    <span class="keyword">assign</span> <span class="signal">timeout</span> = &amp;<span class="signal">timeout_cnt</span>;  <span class="comment">// all 1s = 255</span>
+
+    <span class="comment">// FIX 4: Timeout counter</span>
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span> <span class="keyword">or</span> <span class="keyword">negedge</span> <span class="signal">rst_n</span>) <span class="keyword">begin</span>
+        <span class="keyword">if</span> (!<span class="signal">rst_n</span>)
+            <span class="signal">timeout_cnt</span> &lt;= <span class="number">'0</span>;
+        <span class="keyword">else</span> <span class="keyword">if</span> (<span class="signal">state</span> == <span class="signal">IDLE</span>)
+            <span class="signal">timeout_cnt</span> &lt;= <span class="number">'0</span>;
+        <span class="keyword">else</span> <span class="keyword">if</span> (!<span class="signal">timeout</span>)
+            <span class="signal">timeout_cnt</span> &lt;= <span class="signal">timeout_cnt</span> + <span class="number">1</span>;
+    <span class="keyword">end</span>
+
+    <span class="comment">// FIX 1: State register with async reset</span>
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span> <span class="keyword">or</span> <span class="keyword">negedge</span> <span class="signal">rst_n</span>) <span class="keyword">begin</span>
+        <span class="keyword">if</span> (!<span class="signal">rst_n</span>)
+            <span class="signal">state</span> &lt;= <span class="signal">IDLE</span>;
+        <span class="keyword">else</span>
+            <span class="signal">state</span> &lt;= <span class="signal">next_state</span>;
+    <span class="keyword">end</span>
+
+    <span class="comment">// Separated combinational logic</span>
+    <span class="keyword">always_comb</span> <span class="keyword">begin</span>
+        <span class="signal">next_state</span> = <span class="signal">state</span>;
+        <span class="signal">ack</span>        = <span class="number">1'b0</span>;
+        <span class="signal">busy</span>       = <span class="number">1'b0</span>;
+        <span class="signal">error</span>      = <span class="number">1'b0</span>;
+
+        <span class="keyword">case</span> (<span class="signal">state</span>)
+            <span class="signal">IDLE</span>: <span class="keyword">begin</span>
+                <span class="keyword">if</span> (<span class="signal">req</span>)
+                    <span class="signal">next_state</span> = <span class="signal">WAIT_DATA</span>;
+            <span class="keyword">end</span>
+
+            <span class="signal">WAIT_DATA</span>: <span class="keyword">begin</span>
+                <span class="signal">busy</span> = <span class="number">1'b1</span>;
+                <span class="keyword">if</span> (<span class="signal">timeout</span>) <span class="keyword">begin</span>
+                    <span class="signal">next_state</span> = <span class="signal">IDLE</span>;
+                    <span class="signal">error</span>      = <span class="number">1'b1</span>;
+                <span class="keyword">end</span> <span class="keyword">else</span> <span class="keyword">if</span> (<span class="signal">data_ready</span>)
+                    <span class="signal">next_state</span> = <span class="signal">PROCESS</span>;
+            <span class="keyword">end</span>
+
+            <span class="signal">PROCESS</span>: <span class="keyword">begin</span>
+                <span class="signal">busy</span> = <span class="number">1'b1</span>;
+                <span class="signal">next_state</span> = <span class="signal">RESPOND</span>;
+            <span class="keyword">end</span>
+
+            <span class="signal">RESPOND</span>: <span class="keyword">begin</span>
+                <span class="signal">ack</span>  = <span class="number">1'b1</span>;
+                <span class="signal">busy</span> = <span class="number">1'b1</span>;
+                <span class="signal">next_state</span> = <span class="signal">IDLE</span>;
+            <span class="keyword">end</span>
+
+            <span class="comment">// FIX 2: Default recovery</span>
+            <span class="keyword">default</span>: <span class="keyword">begin</span>
+                <span class="signal">next_state</span> = <span class="signal">IDLE</span>;
+                <span class="signal">error</span>      = <span class="number">1'b1</span>;
+            <span class="keyword">end</span>
+        <span class="keyword">endcase</span>
+    <span class="keyword">end</span>
+<span class="keyword">endmodule</span>
+</pre>
+</div>
+
+<!-- Exercise 2 -->
+<h2>Exercise 2: Write Assertions for a UART FSM</h2>
+
+<p class="en">Given this UART transmitter FSM, write SystemVerilog assertions to verify safety properties.</p>
+<p class="ko" style="display:none;">이 UART 송신기 FSM이 주어졌을 때, 안전 속성을 검증하는 SystemVerilog 어설션을 작성하세요.</p>
+
+<pre>
+<span class="keyword">typedef</span> <span class="keyword">enum</span> <span class="type">logic</span> [<span class="number">2</span>:<span class="number">0</span>] {
+    <span class="signal">TX_IDLE</span>  = <span class="number">3'b001</span>,  <span class="comment">// one-hot</span>
+    <span class="signal">TX_START</span> = <span class="number">3'b010</span>,
+    <span class="signal">TX_DATA</span>  = <span class="number">3'b100</span>
+} <span class="type">tx_state_t</span>;
+<span class="type">tx_state_t</span> <span class="signal">tx_state</span>;
+</pre>
+
+<div class="concept-box">
+    <h3 class="en">🎯 Write These Assertions</h3>
+    <h3 class="ko" style="display:none;">🎯 다음 어설션을 작성하세요</h3>
+    <ol>
+        <li class="en">State must always be one-hot</li><li class="ko" style="display:none;">상태는 항상 원-핫이어야 함</li>
+        <li class="en">State must always be one of the three valid states</li><li class="ko" style="display:none;">상태는 항상 세 가지 유효한 상태 중 하나여야 함</li>
+        <li class="en">From TX_DATA, must reach TX_IDLE within 20 cycles</li><li class="ko" style="display:none;">TX_DATA에서 20 사이클 이내에 TX_IDLE에 도달해야 함</li>
+        <li class="en">TX_START must last exactly 1 cycle</li><li class="ko" style="display:none;">TX_START는 정확히 1 사이클 지속해야 함</li>
+    </ol>
+</div>
+
+<button class="reveal-btn" onclick="toggleSolution('sol2')">Show Solution / 정답 보기</button>
+<div class="solution" id="sol2">
+<pre>
+<span class="comment">// 1. One-hot check</span>
+<span class="signal">assert_onehot</span>: <span class="keyword">assert property</span> (
+    @(<span class="keyword">posedge</span> <span class="signal">clk</span>) <span class="keyword">disable iff</span> (!<span class="signal">rst_n</span>)
+    <span class="signal">$onehot</span>(<span class="signal">tx_state</span>)
+) <span class="keyword">else</span> <span class="signal">$error</span>(<span class="string">"tx_state not one-hot: %b"</span>, <span class="signal">tx_state</span>);
+
+<span class="comment">// 2. Valid state check</span>
+<span class="signal">assert_valid</span>: <span class="keyword">assert property</span> (
+    @(<span class="keyword">posedge</span> <span class="signal">clk</span>) <span class="keyword">disable iff</span> (!<span class="signal">rst_n</span>)
+    <span class="signal">tx_state</span> <span class="keyword">inside</span> {<span class="signal">TX_IDLE</span>, <span class="signal">TX_START</span>, <span class="signal">TX_DATA</span>}
+) <span class="keyword">else</span> <span class="signal">$error</span>(<span class="string">"Invalid state: %b"</span>, <span class="signal">tx_state</span>);
+
+<span class="comment">// 3. Liveness: TX_DATA → TX_IDLE within 20 cycles</span>
+<span class="signal">assert_data_to_idle</span>: <span class="keyword">assert property</span> (
+    @(<span class="keyword">posedge</span> <span class="signal">clk</span>) <span class="keyword">disable iff</span> (!<span class="signal">rst_n</span>)
+    (<span class="signal">tx_state</span> == <span class="signal">TX_DATA</span>) |-> ##[<span class="number">1</span>:<span class="number">20</span>] (<span class="signal">tx_state</span> == <span class="signal">TX_IDLE</span>)
+) <span class="keyword">else</span> <span class="signal">$error</span>(<span class="string">"TX_DATA stuck > 20 cycles"</span>);
+
+<span class="comment">// 4. TX_START lasts exactly 1 cycle</span>
+<span class="signal">assert_start_one_cycle</span>: <span class="keyword">assert property</span> (
+    @(<span class="keyword">posedge</span> <span class="signal">clk</span>) <span class="keyword">disable iff</span> (!<span class="signal">rst_n</span>)
+    (<span class="signal">tx_state</span> == <span class="signal">TX_START</span>) |=> (<span class="signal">tx_state</span> != <span class="signal">TX_START</span>)
+) <span class="keyword">else</span> <span class="signal">$error</span>(<span class="string">"TX_START lasted more than 1 cycle"</span>);
+</pre>
+</div>
+
+<!-- Exercise 3 -->
+<h2>Exercise 3: Design a Safe SPI Controller FSM</h2>
+
+<p class="en">Design a complete safe FSM for a simple SPI master controller with these states: IDLE → LOAD → SHIFT (8 bits) → DONE → IDLE. Include all safety features from today's lesson.</p>
+<p class="ko" style="display:none;">간단한 SPI 마스터 컨트롤러를 위한 완전한 안전 FSM을 설계하세요: IDLE → LOAD → SHIFT (8비트) → DONE → IDLE. 오늘 수업의 모든 안전 기능을 포함하세요.</p>
+
+<div class="concept-box">
+    <h3 class="en">🎯 Requirements</h3>
+    <h3 class="ko" style="display:none;">🎯 요구사항</h3>
+    <ul>
+        <li class="en">Async assert, sync deassert reset</li><li class="ko" style="display:none;">비동기 어서트, 동기 디어서트 리셋</li>
+        <li class="en">3-bit counter to track shift progress</li><li class="ko" style="display:none;">시프트 진행을 추적하는 3비트 카운터</li>
+        <li class="en">Timeout watchdog (64 cycles)</li><li class="ko" style="display:none;">타임아웃 워치독 (64 사이클)</li>
+        <li class="en">Default case recovery + error flag</li><li class="ko" style="display:none;">Default 케이스 복구 + 에러 플래그</li>
+        <li class="en">At least 2 SVA assertions</li><li class="ko" style="display:none;">최소 2개의 SVA 어설션</li>
+    </ul>
+</div>
+
+<div class="hint-box">
+    <h3>💡 Hints</h3>
+    <ul>
+        <li class="en">SHIFT state transitions to DONE when bit_count reaches 7</li>
+        <li class="ko" style="display:none;">SHIFT 상태는 bit_count가 7에 도달하면 DONE으로 전이</li>
+        <li class="en">Use the safe FSM template from the lesson as your starting point</li>
+        <li class="ko" style="display:none;">수업의 안전 FSM 템플릿을 시작점으로 사용하세요</li>
+        <li class="en">Consider: what happens if the SPI slave doesn't respond?</li>
+        <li class="ko" style="display:none;">고려: SPI 슬레이브가 응답하지 않으면 어떻게 되나요?</li>
+    </ul>
+</div>
+
+<button class="reveal-btn" onclick="toggleSolution('sol3')">Show Solution / 정답 보기</button>
+<div class="solution" id="sol3">
+<pre>
+<span class="keyword">module</span> <span class="signal">spi_master_safe</span> (
+    <span class="keyword">input</span>  <span class="type">logic</span>       <span class="signal">clk</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span>       <span class="signal">rst_n</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span>       <span class="signal">start</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span> [<span class="number">7</span>:<span class="number">0</span>] <span class="signal">tx_data</span>,
+    <span class="keyword">output</span> <span class="type">logic</span>       <span class="signal">sclk</span>,
+    <span class="keyword">output</span> <span class="type">logic</span>       <span class="signal">mosi</span>,
+    <span class="keyword">output</span> <span class="type">logic</span>       <span class="signal">cs_n</span>,
+    <span class="keyword">output</span> <span class="type">logic</span>       <span class="signal">done</span>,
+    <span class="keyword">output</span> <span class="type">logic</span>       <span class="signal">error</span>
+);
+
+    <span class="keyword">typedef</span> <span class="keyword">enum</span> <span class="type">logic</span> [<span class="number">2</span>:<span class="number">0</span>] {
+        <span class="signal">S_IDLE</span>  = <span class="number">3'b000</span>,
+        <span class="signal">S_LOAD</span>  = <span class="number">3'b001</span>,
+        <span class="signal">S_SHIFT</span> = <span class="number">3'b010</span>,
+        <span class="signal">S_DONE</span>  = <span class="number">3'b100</span>
+    } <span class="type">state_t</span>;
+
+    <span class="type">state_t</span> <span class="signal">state</span>, <span class="signal">next_state</span>;
+    <span class="type">logic</span> [<span class="number">7</span>:<span class="number">0</span>] <span class="signal">shift_reg</span>;
+    <span class="type">logic</span> [<span class="number">2</span>:<span class="number">0</span>] <span class="signal">bit_cnt</span>;
+    <span class="type">logic</span> [<span class="number">5</span>:<span class="number">0</span>] <span class="signal">wd_cnt</span>;     <span class="comment">// watchdog (64 cycles)</span>
+    <span class="type">logic</span> <span class="signal">wd_timeout</span>;
+
+    <span class="keyword">assign</span> <span class="signal">wd_timeout</span> = &amp;<span class="signal">wd_cnt</span>;
+    <span class="keyword">assign</span> <span class="signal">mosi</span> = <span class="signal">shift_reg</span>[<span class="number">7</span>];
+
+    <span class="comment">// ── Watchdog counter ──</span>
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span> <span class="keyword">or</span> <span class="keyword">negedge</span> <span class="signal">rst_n</span>) <span class="keyword">begin</span>
+        <span class="keyword">if</span> (!<span class="signal">rst_n</span>)
+            <span class="signal">wd_cnt</span> &lt;= <span class="number">'0</span>;
+        <span class="keyword">else</span> <span class="keyword">if</span> (<span class="signal">state</span> == <span class="signal">S_IDLE</span>)
+            <span class="signal">wd_cnt</span> &lt;= <span class="number">'0</span>;
+        <span class="keyword">else</span> <span class="keyword">if</span> (!<span class="signal">wd_timeout</span>)
+            <span class="signal">wd_cnt</span> &lt;= <span class="signal">wd_cnt</span> + <span class="number">1</span>;
+    <span class="keyword">end</span>
+
+    <span class="comment">// ── State register ──</span>
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span> <span class="keyword">or</span> <span class="keyword">negedge</span> <span class="signal">rst_n</span>) <span class="keyword">begin</span>
+        <span class="keyword">if</span> (!<span class="signal">rst_n</span>)
+            <span class="signal">state</span> &lt;= <span class="signal">S_IDLE</span>;
+        <span class="keyword">else</span>
+            <span class="signal">state</span> &lt;= <span class="signal">next_state</span>;
+    <span class="keyword">end</span>
+
+    <span class="comment">// ── Shift register & bit counter ──</span>
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span> <span class="keyword">or</span> <span class="keyword">negedge</span> <span class="signal">rst_n</span>) <span class="keyword">begin</span>
+        <span class="keyword">if</span> (!<span class="signal">rst_n</span>) <span class="keyword">begin</span>
+            <span class="signal">shift_reg</span> &lt;= <span class="number">'0</span>;
+            <span class="signal">bit_cnt</span>   &lt;= <span class="number">'0</span>;
+        <span class="keyword">end</span> <span class="keyword">else</span> <span class="keyword">if</span> (<span class="signal">state</span> == <span class="signal">S_LOAD</span>) <span class="keyword">begin</span>
+            <span class="signal">shift_reg</span> &lt;= <span class="signal">tx_data</span>;
+            <span class="signal">bit_cnt</span>   &lt;= <span class="number">'0</span>;
+        <span class="keyword">end</span> <span class="keyword">else</span> <span class="keyword">if</span> (<span class="signal">state</span> == <span class="signal">S_SHIFT</span>) <span class="keyword">begin</span>
+            <span class="signal">shift_reg</span> &lt;= {<span class="signal">shift_reg</span>[<span class="number">6</span>:<span class="number">0</span>], <span class="number">1'b0</span>};
+            <span class="signal">bit_cnt</span>   &lt;= <span class="signal">bit_cnt</span> + <span class="number">1</span>;
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+
+    <span class="comment">// ── Next-state logic ──</span>
+    <span class="keyword">always_comb</span> <span class="keyword">begin</span>
+        <span class="signal">next_state</span> = <span class="signal">state</span>;
+        <span class="signal">cs_n</span>       = <span class="number">1'b1</span>;
+        <span class="signal">sclk</span>       = <span class="number">1'b0</span>;
+        <span class="signal">done</span>       = <span class="number">1'b0</span>;
+        <span class="signal">error</span>      = <span class="number">1'b0</span>;
+
+        <span class="keyword">case</span> (<span class="signal">state</span>)
+            <span class="signal">S_IDLE</span>: <span class="keyword">begin</span>
+                <span class="keyword">if</span> (<span class="signal">start</span>)
+                    <span class="signal">next_state</span> = <span class="signal">S_LOAD</span>;
+            <span class="keyword">end</span>
+
+            <span class="signal">S_LOAD</span>: <span class="keyword">begin</span>
+                <span class="signal">cs_n</span> = <span class="number">1'b0</span>;
+                <span class="signal">next_state</span> = <span class="signal">S_SHIFT</span>;
+            <span class="keyword">end</span>
+
+            <span class="signal">S_SHIFT</span>: <span class="keyword">begin</span>
+                <span class="signal">cs_n</span> = <span class="number">1'b0</span>;
+                <span class="signal">sclk</span> = <span class="number">1'b1</span>;
+                <span class="keyword">if</span> (<span class="signal">wd_timeout</span>) <span class="keyword">begin</span>
+                    <span class="signal">next_state</span> = <span class="signal">S_IDLE</span>;
+                    <span class="signal">error</span>      = <span class="number">1'b1</span>;
+                <span class="keyword">end</span> <span class="keyword">else</span> <span class="keyword">if</span> (<span class="signal">bit_cnt</span> == <span class="number">3'd7</span>)
+                    <span class="signal">next_state</span> = <span class="signal">S_DONE</span>;
+            <span class="keyword">end</span>
+
+            <span class="signal">S_DONE</span>: <span class="keyword">begin</span>
+                <span class="signal">done</span> = <span class="number">1'b1</span>;
+                <span class="signal">next_state</span> = <span class="signal">S_IDLE</span>;
+            <span class="keyword">end</span>
+
+            <span class="keyword">default</span>: <span class="keyword">begin</span>
+                <span class="signal">next_state</span> = <span class="signal">S_IDLE</span>;
+                <span class="signal">error</span>      = <span class="number">1'b1</span>;
+            <span class="keyword">end</span>
+        <span class="keyword">endcase</span>
+    <span class="keyword">end</span>
+
+    <span class="comment">// ── SVA Assertions ──</span>
+    <span class="comment">// synopsys translate_off</span>
+    <span class="signal">assert_valid_state</span>: <span class="keyword">assert property</span> (
+        @(<span class="keyword">posedge</span> <span class="signal">clk</span>) <span class="keyword">disable iff</span> (!<span class="signal">rst_n</span>)
+        <span class="signal">state</span> <span class="keyword">inside</span> {<span class="signal">S_IDLE</span>, <span class="signal">S_LOAD</span>, <span class="signal">S_SHIFT</span>, <span class="signal">S_DONE</span>}
+    ) <span class="keyword">else</span> <span class="signal">$error</span>(<span class="string">"Illegal SPI state: %b"</span>, <span class="signal">state</span>);
+
+    <span class="signal">assert_returns_idle</span>: <span class="keyword">assert property</span> (
+        @(<span class="keyword">posedge</span> <span class="signal">clk</span>) <span class="keyword">disable iff</span> (!<span class="signal">rst_n</span>)
+        (<span class="signal">state</span> == <span class="signal">S_LOAD</span>) |-> ##[<span class="number">1</span>:<span class="number">20</span>] (<span class="signal">state</span> == <span class="signal">S_IDLE</span>)
+    ) <span class="keyword">else</span> <span class="signal">$error</span>(<span class="string">"SPI stuck after LOAD"</span>);
+    <span class="comment">// synopsys translate_on</span>
+
+<span class="keyword">endmodule</span>
+</pre>
+</div>
+
+<div class="tip-box">
+    <h3 class="en">🎯 What You Practiced Today</h3>
+    <h3 class="ko" style="display:none;">🎯 오늘 연습한 내용</h3>
+    <ul>
+        <li class="en">Identifying safety vulnerabilities in FSMs</li><li class="ko" style="display:none;">FSM의 안전 취약점 식별</li>
+        <li class="en">Adding reset, default cases, watchdogs, and error flags</li><li class="ko" style="display:none;">리셋, default 케이스, 워치독, 에러 플래그 추가</li>
+        <li class="en">Writing SVA assertions for verification</li><li class="ko" style="display:none;">검증을 위한 SVA 어설션 작성</li>
+        <li class="en">Designing a complete safe FSM from scratch</li><li class="ko" style="display:none;">처음부터 완전한 안전 FSM 설계</li>
+    </ul>
+</div>
+
+<div class="nav-links" style="margin-top:32px;">
+    <a href="day-09-lesson.html">📖 Lesson</a>
+    <a href="day-09-quiz.html">📝 Quiz</a>
+</div>
+
+<script>
+let isKorean = false;
+function toggleLang() {
+    isKorean = !isKorean;
+    document.querySelectorAll('.en').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'none' : 'revert', 'important');
+    });
+    document.querySelectorAll('.ko').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'revert' : 'none', 'important');
+    });
+    document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+}
+function toggleSolution(id) {
+    const el = document.getElementById(id);
+    el.style.display = el.style.display === 'none' ? 'block' : (el.style.display === 'block' ? 'none' : 'block');
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 9: Safe FSM Design</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    background: linear-gradient(135deg, #fefae0 0%, #faedcd 100%);
+    color: #3d405b;
+    line-height: 1.8;
+    padding: 24px;
+    max-width: 920px;
+    margin: 0 auto;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+h1 {
+    color: #5d4037;
+    border-bottom: 3px solid #c4a77d;
+    padding-bottom: 12px;
+    margin-bottom: 24px;
+    font-size: 2em;
+}
+h2 {
+    color: #588157;
+    border-bottom: 2px solid #a3b18a;
+    padding-bottom: 8px;
+    margin: 32px 0 16px;
+}
+h3 {
+    color: #5d4037;
+    margin: 20px 0 12px;
+}
+p { margin: 12px 0; }
+ul, ol { margin: 12px 0 12px 24px; }
+li { margin: 6px 0; }
+code {
+    background: #e9f5db;
+    color: #3d405b;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+}
+pre {
+    background: #2d3436;
+    padding: 24px;
+    border-radius: 12px;
+    margin: 24px 0;
+    border: 3px solid #a3b18a;
+    overflow-x: auto;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+    font-size: 15px;
+    line-height: 1.6;
+    color: #f8f8f2;
+}
+.keyword { color: #ff79c6; font-weight: 600; }
+.type { color: #8be9fd; }
+.signal { color: #50fa7b; }
+.number { color: #ffb86c; }
+.comment { color: #6272a4; font-style: italic; }
+.string { color: #f1fa8c; }
+.concept-box {
+    background: #fff8f0;
+    border: 2px solid #c4a77d;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    color: #3d405b;
+}
+.concept-box h3 { color: #5d4037; margin-bottom: 12px; }
+.warning-box {
+    background: #fff8f0;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    border-left: 4px solid #ef4444;
+    color: #3d405b;
+}
+.warning-box h3 { color: #c53030; margin-bottom: 12px; }
+.tip-box {
+    background: #fff8f0;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    border-left: 4px solid #588157;
+    color: #3d405b;
+}
+.comparison-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+.comparison-table th {
+    background: #588157;
+    color: white;
+    padding: 12px;
+    text-align: left;
+}
+.comparison-table td {
+    background: #fff;
+    border: 1px solid #c4a77d;
+    padding: 12px;
+    color: #3d405b;
+}
+.comparison-table tr:nth-child(even) td { background: #fff8f0; }
+.lang-toggle {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    background: #588157;
+    border: none;
+    border-radius: 24px;
+    padding: 10px 20px;
+    cursor: pointer;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    z-index: 1000;
+}
+.lang-toggle:hover { background: #3a5a40; }
+.ko { display: none; }
+.nav-links { display: flex; gap: 12px; margin: 20px 0; flex-wrap: wrap; }
+.nav-links a {
+    background: linear-gradient(135deg, #588157, #3a5a40);
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+}
+.nav-links a:hover { opacity: 0.9; }
+@media (max-width: 768px) {
+    body { padding: 16px; }
+    h1 { font-size: 1.8em; }
+    pre { font-size: 14px; padding: 16px; }
+    .lang-toggle { padding: 8px 16px; font-size: 13px; }
+}
+</style>
+</head>
+<body>
+<button class="lang-toggle" onclick="toggleLang()">한국어</button>
+
+<h1>📅 Day 9: Safe FSM Design</h1>
+
+<div class="nav-links">
+    <a href="day-09-quiz.html">📝 Quiz</a>
+    <a href="day-09-practice.html">💻 Practice</a>
+</div>
+
+<p class="en">Yesterday we learned about state encoding (binary, one-hot, gray). Today we focus on making FSMs <strong>robust and safe</strong> — handling illegal states, adding default transitions, and designing for reliability in real silicon.</p>
+<p class="ko" style="display:none;">어제 상태 인코딩(바이너리, 원-핫, 그레이)을 배웠습니다. 오늘은 FSM을 <strong>견고하고 안전하게</strong> 만드는 방법 — 불법 상태 처리, 기본 전이 추가, 실제 실리콘에서의 안정성 설계에 집중합니다.</p>
+
+<h2>1. Why FSMs Need Safety</h2>
+
+<p class="en">In theory, an FSM only visits defined states. In reality, several things can go wrong:</p>
+<p class="ko" style="display:none;">이론적으로 FSM은 정의된 상태만 방문합니다. 하지만 실제로는 여러 문제가 발생할 수 있습니다:</p>
+
+<div class="concept-box">
+    <h3>🔍 Sources of Illegal States</h3>
+    <ul>
+        <li class="en"><strong>Power-on reset issues:</strong> Flip-flops can start in any state if reset is not applied properly</li>
+        <li class="ko" style="display:none;"><strong>전원 리셋 문제:</strong> 리셋이 제대로 적용되지 않으면 플립플롭이 임의의 상태로 시작할 수 있음</li>
+        <li class="en"><strong>Radiation (SEU):</strong> Single-event upsets can flip bits in state registers</li>
+        <li class="ko" style="display:none;"><strong>방사선 (SEU):</strong> 단일 이벤트 업셋이 상태 레지스터의 비트를 뒤집을 수 있음</li>
+        <li class="en"><strong>Metastability:</strong> Asynchronous inputs can cause undefined state values</li>
+        <li class="ko" style="display:none;"><strong>메타안정성:</strong> 비동기 입력이 정의되지 않은 상태 값을 유발할 수 있음</li>
+        <li class="en"><strong>One-hot corruption:</strong> If using one-hot encoding, a bit flip creates an illegal state</li>
+        <li class="ko" style="display:none;"><strong>원-핫 손상:</strong> 원-핫 인코딩 사용 시 비트 플립이 불법 상태를 생성</li>
+    </ul>
+</div>
+
+<h2>2. The default Case — Your Safety Net</h2>
+
+<p class="en">The most fundamental safety mechanism is the <code>default</code> case in your state machine's <code>case</code> statement. It catches any state value not explicitly handled.</p>
+<p class="ko" style="display:none;">가장 기본적인 안전 메커니즘은 상태 머신의 <code>case</code> 문에서 <code>default</code> 케이스입니다. 명시적으로 처리되지 않은 모든 상태 값을 잡아냅니다.</p>
+
+<div class="warning-box">
+    <h3>⚠️ Common Mistake: Missing default</h3>
+    <p class="en">Without a <code>default</code> case, if the FSM enters an illegal state, it may stay stuck there forever — or worse, the synthesis tool may infer a latch!</p>
+    <p class="ko" style="display:none;"><code>default</code> 케이스가 없으면 FSM이 불법 상태에 진입했을 때 영원히 멈추거나, 더 나쁜 경우 합성 도구가 래치를 유추할 수 있습니다!</p>
+</div>
+
+<h3>❌ Unsafe FSM (No Recovery)</h3>
+<pre>
+<span class="keyword">module</span> <span class="signal">unsafe_fsm</span> (
+    <span class="keyword">input</span>  <span class="type">logic</span> <span class="signal">clk</span>, <span class="signal">rst_n</span>, <span class="signal">go</span>,
+    <span class="keyword">output</span> <span class="type">logic</span> <span class="signal">done</span>
+);
+    <span class="keyword">typedef</span> <span class="keyword">enum</span> <span class="type">logic</span> [<span class="number">1</span>:<span class="number">0</span>] {
+        <span class="signal">IDLE</span>  = <span class="number">2'b00</span>,
+        <span class="signal">RUN</span>   = <span class="number">2'b01</span>,
+        <span class="signal">DONE</span>  = <span class="number">2'b10</span>
+    } <span class="type">state_t</span>;
+
+    <span class="type">state_t</span> <span class="signal">state</span>, <span class="signal">next_state</span>;
+
+    <span class="keyword">always_comb</span> <span class="keyword">begin</span>
+        <span class="signal">next_state</span> = <span class="signal">state</span>;
+        <span class="signal">done</span> = <span class="number">1'b0</span>;
+        <span class="keyword">case</span> (<span class="signal">state</span>)
+            <span class="signal">IDLE</span>: <span class="keyword">if</span> (<span class="signal">go</span>) <span class="signal">next_state</span> = <span class="signal">RUN</span>;
+            <span class="signal">RUN</span>:  <span class="signal">next_state</span> = <span class="signal">DONE</span>;
+            <span class="signal">DONE</span>: <span class="keyword">begin</span>
+                <span class="signal">done</span> = <span class="number">1'b1</span>;
+                <span class="signal">next_state</span> = <span class="signal">IDLE</span>;
+            <span class="keyword">end</span>
+            <span class="comment">// No default! State 2'b11 = STUCK FOREVER</span>
+        <span class="keyword">endcase</span>
+    <span class="keyword">end</span>
+<span class="keyword">endmodule</span>
+</pre>
+
+<h3>✅ Safe FSM (With Recovery)</h3>
+<pre>
+<span class="keyword">module</span> <span class="signal">safe_fsm</span> (
+    <span class="keyword">input</span>  <span class="type">logic</span> <span class="signal">clk</span>, <span class="signal">rst_n</span>, <span class="signal">go</span>,
+    <span class="keyword">output</span> <span class="type">logic</span> <span class="signal">done</span>,
+    <span class="keyword">output</span> <span class="type">logic</span> <span class="signal">err_flag</span>  <span class="comment">// signals illegal state was hit</span>
+);
+    <span class="keyword">typedef</span> <span class="keyword">enum</span> <span class="type">logic</span> [<span class="number">1</span>:<span class="number">0</span>] {
+        <span class="signal">IDLE</span>  = <span class="number">2'b00</span>,
+        <span class="signal">RUN</span>   = <span class="number">2'b01</span>,
+        <span class="signal">DONE</span>  = <span class="number">2'b10</span>
+    } <span class="type">state_t</span>;
+
+    <span class="type">state_t</span> <span class="signal">state</span>, <span class="signal">next_state</span>;
+
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span> <span class="keyword">or</span> <span class="keyword">negedge</span> <span class="signal">rst_n</span>) <span class="keyword">begin</span>
+        <span class="keyword">if</span> (!<span class="signal">rst_n</span>)
+            <span class="signal">state</span> &lt;= <span class="signal">IDLE</span>;
+        <span class="keyword">else</span>
+            <span class="signal">state</span> &lt;= <span class="signal">next_state</span>;
+    <span class="keyword">end</span>
+
+    <span class="keyword">always_comb</span> <span class="keyword">begin</span>
+        <span class="signal">next_state</span> = <span class="signal">state</span>;
+        <span class="signal">done</span>       = <span class="number">1'b0</span>;
+        <span class="signal">err_flag</span>   = <span class="number">1'b0</span>;
+        <span class="keyword">case</span> (<span class="signal">state</span>)
+            <span class="signal">IDLE</span>: <span class="keyword">if</span> (<span class="signal">go</span>) <span class="signal">next_state</span> = <span class="signal">RUN</span>;
+            <span class="signal">RUN</span>:  <span class="signal">next_state</span> = <span class="signal">DONE</span>;
+            <span class="signal">DONE</span>: <span class="keyword">begin</span>
+                <span class="signal">done</span> = <span class="number">1'b1</span>;
+                <span class="signal">next_state</span> = <span class="signal">IDLE</span>;
+            <span class="keyword">end</span>
+            <span class="keyword">default</span>: <span class="keyword">begin</span>
+                <span class="signal">next_state</span> = <span class="signal">IDLE</span>;  <span class="comment">// recover to known state</span>
+                <span class="signal">err_flag</span>   = <span class="number">1'b1</span>;  <span class="comment">// report the error</span>
+            <span class="keyword">end</span>
+        <span class="keyword">endcase</span>
+    <span class="keyword">end</span>
+<span class="keyword">endmodule</span>
+</pre>
+
+<div class="tip-box">
+    <h3>💡 Key Principle</h3>
+    <p class="en">Always include a <code>default</code> case that transitions to a known safe state (usually IDLE or a RESET state). Optionally flag the error so upstream logic can log or respond to it.</p>
+    <p class="ko" style="display:none;">항상 알려진 안전 상태(보통 IDLE 또는 RESET 상태)로 전이하는 <code>default</code> 케이스를 포함하세요. 선택적으로 오류를 플래그하여 상위 로직이 로그하거나 대응할 수 있게 합니다.</p>
+</div>
+
+<h2>3. Reset Strategy</h2>
+
+<p class="en">A proper reset is the first line of defense. Every FSM must reset to a known state.</p>
+<p class="ko" style="display:none;">적절한 리셋은 첫 번째 방어선입니다. 모든 FSM은 알려진 상태로 리셋되어야 합니다.</p>
+
+<table class="comparison-table">
+    <tr>
+        <th>Reset Type</th>
+        <th class="en">Pros</th><th class="ko" style="display:none;">장점</th>
+        <th class="en">Cons</th><th class="ko" style="display:none;">단점</th>
+    </tr>
+    <tr>
+        <td><strong>Synchronous</strong><br><code>if (!rst_n)</code> inside <code>always_ff</code></td>
+        <td class="en">Clean timing, synthesis-friendly</td><td class="ko" style="display:none;">깨끗한 타이밍, 합성 친화적</td>
+        <td class="en">Needs active clock to reset</td><td class="ko" style="display:none;">리셋에 활성 클럭 필요</td>
+    </tr>
+    <tr>
+        <td><strong>Asynchronous</strong><br><code>posedge clk or negedge rst_n</code></td>
+        <td class="en">Works without clock, instant</td><td class="ko" style="display:none;">클럭 없이 작동, 즉각적</td>
+        <td class="en">Can cause metastability on release</td><td class="ko" style="display:none;">릴리스 시 메타안정성 유발 가능</td>
+    </tr>
+    <tr>
+        <td><strong>Async assert, sync deassert</strong></td>
+        <td class="en">Best of both — industry standard</td><td class="ko" style="display:none;">둘 다의 장점 — 업계 표준</td>
+        <td class="en">Requires reset synchronizer circuit</td><td class="ko" style="display:none;">리셋 동기화 회로 필요</td>
+    </tr>
+</table>
+
+<h3>Reset Synchronizer Pattern</h3>
+<pre>
+<span class="comment">// Async assert, sync deassert reset</span>
+<span class="keyword">module</span> <span class="signal">reset_sync</span> (
+    <span class="keyword">input</span>  <span class="type">logic</span> <span class="signal">clk</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span> <span class="signal">rst_n_async</span>,  <span class="comment">// raw async reset</span>
+    <span class="keyword">output</span> <span class="type">logic</span> <span class="signal">rst_n_sync</span>   <span class="comment">// clean sync reset</span>
+);
+    <span class="type">logic</span> <span class="signal">rst_meta</span>;
+
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span> <span class="keyword">or</span> <span class="keyword">negedge</span> <span class="signal">rst_n_async</span>) <span class="keyword">begin</span>
+        <span class="keyword">if</span> (!<span class="signal">rst_n_async</span>) <span class="keyword">begin</span>
+            <span class="signal">rst_meta</span>   &lt;= <span class="number">1'b0</span>;  <span class="comment">// assert immediately</span>
+            <span class="signal">rst_n_sync</span> &lt;= <span class="number">1'b0</span>;
+        <span class="keyword">end</span> <span class="keyword">else</span> <span class="keyword">begin</span>
+            <span class="signal">rst_meta</span>   &lt;= <span class="number">1'b1</span>;  <span class="comment">// deassert through 2 flops</span>
+            <span class="signal">rst_n_sync</span> &lt;= <span class="signal">rst_meta</span>;
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+<span class="keyword">endmodule</span>
+</pre>
+
+<h2>4. One-Hot Safety Techniques</h2>
+
+<p class="en">One-hot encoding is especially vulnerable because any single bit flip creates an invalid state. Here are techniques to protect one-hot FSMs:</p>
+<p class="ko" style="display:none;">원-핫 인코딩은 단일 비트 플립으로 유효하지 않은 상태가 만들어지므로 특히 취약합니다. 원-핫 FSM을 보호하는 기법들입니다:</p>
+
+<h3>Technique 1: Parity Check</h3>
+<pre>
+<span class="comment">// One-hot should have exactly one bit set</span>
+<span class="type">logic</span> <span class="signal">state_valid</span>;
+<span class="keyword">assign</span> <span class="signal">state_valid</span> = (<span class="signal">$countones</span>(<span class="signal">state</span>) == <span class="number">1</span>);
+
+<span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span>) <span class="keyword">begin</span>
+    <span class="keyword">if</span> (!<span class="signal">state_valid</span>)
+        <span class="signal">state</span> &lt;= <span class="signal">IDLE</span>;  <span class="comment">// force recovery</span>
+<span class="keyword">end</span>
+</pre>
+
+<h3>Technique 2: Hamming Distance Encoding</h3>
+<div class="concept-box">
+    <h3>🧠 Hamming Distance</h3>
+    <p class="en">Instead of one-hot, use encodings where adjacent states differ by ≥2 bits. This way, a single bit flip doesn't land on another valid state — it's always detected as an error.</p>
+    <p class="ko" style="display:none;">원-핫 대신, 인접 상태가 최소 2비트 이상 다른 인코딩을 사용합니다. 이렇게 하면 단일 비트 플립이 다른 유효한 상태에 도달하지 않고 항상 오류로 감지됩니다.</p>
+</div>
+
+<h2>5. Synthesis Directives for Safety</h2>
+
+<p class="en">Synthesis tools have special attributes to control FSM behavior:</p>
+<p class="ko" style="display:none;">합성 도구에는 FSM 동작을 제어하는 특별한 속성이 있습니다:</p>
+
+<pre>
+<span class="comment">// Synopsys: force safe FSM implementation</span>
+(* <span class="string">fsm_encoding</span> = <span class="string">"safe"</span> *)
+<span class="type">state_t</span> <span class="signal">state</span>;
+
+<span class="comment">// Xilinx: safe implementation attribute</span>
+(* <span class="string">SAFE_IMPLEMENTATION</span> = <span class="string">"yes"</span> *)
+(* <span class="string">FSM_SAFE_STATE</span> = <span class="string">"reset_state"</span> *)
+<span class="type">state_t</span> <span class="signal">state</span>;
+
+<span class="comment">// These tell synthesis to add recovery logic</span>
+<span class="comment">// even if the tool would optimize it away</span>
+</pre>
+
+<div class="warning-box">
+    <h3>⚠️ Synthesis Can Remove Your Safety!</h3>
+    <p class="en">By default, synthesis tools may <strong>optimize away</strong> your default case if they determine the unused states are unreachable. Use <code>full_case</code> / <code>parallel_case</code> carefully, and add synthesis attributes to preserve safety logic.</p>
+    <p class="ko" style="display:none;">기본적으로 합성 도구는 미사용 상태가 도달 불가능하다고 판단하면 <code>default</code> 케이스를 <strong>최적화하여 제거</strong>할 수 있습니다. <code>full_case</code> / <code>parallel_case</code>를 주의해서 사용하고, 안전 로직을 보존하기 위해 합성 속성을 추가하세요.</p>
+</div>
+
+<h2>6. Full Safe FSM Template</h2>
+
+<p class="en">Here's a production-quality safe FSM template you can use as a starting point:</p>
+<p class="ko" style="display:none;">시작점으로 사용할 수 있는 프로덕션 수준의 안전한 FSM 템플릿입니다:</p>
+
+<pre>
+<span class="keyword">module</span> <span class="signal">safe_fsm_template</span> #(
+    <span class="keyword">parameter</span> <span class="type">int</span> <span class="signal">TIMEOUT_CYCLES</span> = <span class="number">1000</span>
+)(
+    <span class="keyword">input</span>  <span class="type">logic</span> <span class="signal">clk</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span> <span class="signal">rst_n</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span> <span class="signal">start</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span> <span class="signal">data_valid</span>,
+    <span class="keyword">output</span> <span class="type">logic</span> <span class="signal">busy</span>,
+    <span class="keyword">output</span> <span class="type">logic</span> <span class="signal">done</span>,
+    <span class="keyword">output</span> <span class="type">logic</span> <span class="signal">error</span>
+);
+
+    <span class="keyword">typedef</span> <span class="keyword">enum</span> <span class="type">logic</span> [<span class="number">2</span>:<span class="number">0</span>] {
+        <span class="signal">S_IDLE</span>    = <span class="number">3'b000</span>,
+        <span class="signal">S_WAIT</span>    = <span class="number">3'b001</span>,
+        <span class="signal">S_PROCESS</span> = <span class="number">3'b010</span>,
+        <span class="signal">S_DONE</span>    = <span class="number">3'b100</span>
+    } <span class="type">state_t</span>;
+
+    <span class="type">state_t</span> <span class="signal">state</span>, <span class="signal">next_state</span>;
+    <span class="type">logic</span> [<span class="number">9</span>:<span class="number">0</span>] <span class="signal">timeout_cnt</span>;
+    <span class="type">logic</span> <span class="signal">timeout</span>;
+
+    <span class="comment">// ── Timeout watchdog ──</span>
+    <span class="keyword">assign</span> <span class="signal">timeout</span> = (<span class="signal">timeout_cnt</span> >= <span class="signal">TIMEOUT_CYCLES</span>);
+
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span> <span class="keyword">or</span> <span class="keyword">negedge</span> <span class="signal">rst_n</span>) <span class="keyword">begin</span>
+        <span class="keyword">if</span> (!<span class="signal">rst_n</span>)
+            <span class="signal">timeout_cnt</span> &lt;= <span class="number">'0</span>;
+        <span class="keyword">else</span> <span class="keyword">if</span> (<span class="signal">state</span> == <span class="signal">S_IDLE</span>)
+            <span class="signal">timeout_cnt</span> &lt;= <span class="number">'0</span>;
+        <span class="keyword">else</span>
+            <span class="signal">timeout_cnt</span> &lt;= <span class="signal">timeout_cnt</span> + <span class="number">1</span>;
+    <span class="keyword">end</span>
+
+    <span class="comment">// ── State register ──</span>
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span> <span class="keyword">or</span> <span class="keyword">negedge</span> <span class="signal">rst_n</span>) <span class="keyword">begin</span>
+        <span class="keyword">if</span> (!<span class="signal">rst_n</span>)
+            <span class="signal">state</span> &lt;= <span class="signal">S_IDLE</span>;
+        <span class="keyword">else</span>
+            <span class="signal">state</span> &lt;= <span class="signal">next_state</span>;
+    <span class="keyword">end</span>
+
+    <span class="comment">// ── Next-state logic ──</span>
+    <span class="keyword">always_comb</span> <span class="keyword">begin</span>
+        <span class="signal">next_state</span> = <span class="signal">state</span>;
+        <span class="signal">busy</span>       = <span class="number">1'b0</span>;
+        <span class="signal">done</span>       = <span class="number">1'b0</span>;
+        <span class="signal">error</span>      = <span class="number">1'b0</span>;
+
+        <span class="keyword">case</span> (<span class="signal">state</span>)
+            <span class="signal">S_IDLE</span>: <span class="keyword">begin</span>
+                <span class="keyword">if</span> (<span class="signal">start</span>)
+                    <span class="signal">next_state</span> = <span class="signal">S_WAIT</span>;
+            <span class="keyword">end</span>
+
+            <span class="signal">S_WAIT</span>: <span class="keyword">begin</span>
+                <span class="signal">busy</span> = <span class="number">1'b1</span>;
+                <span class="keyword">if</span> (<span class="signal">timeout</span>) <span class="keyword">begin</span>
+                    <span class="signal">next_state</span> = <span class="signal">S_IDLE</span>;
+                    <span class="signal">error</span>      = <span class="number">1'b1</span>;
+                <span class="keyword">end</span> <span class="keyword">else</span> <span class="keyword">if</span> (<span class="signal">data_valid</span>)
+                    <span class="signal">next_state</span> = <span class="signal">S_PROCESS</span>;
+            <span class="keyword">end</span>
+
+            <span class="signal">S_PROCESS</span>: <span class="keyword">begin</span>
+                <span class="signal">busy</span> = <span class="number">1'b1</span>;
+                <span class="signal">next_state</span> = <span class="signal">S_DONE</span>;
+            <span class="keyword">end</span>
+
+            <span class="signal">S_DONE</span>: <span class="keyword">begin</span>
+                <span class="signal">done</span> = <span class="number">1'b1</span>;
+                <span class="signal">next_state</span> = <span class="signal">S_IDLE</span>;
+            <span class="keyword">end</span>
+
+            <span class="keyword">default</span>: <span class="keyword">begin</span>
+                <span class="signal">next_state</span> = <span class="signal">S_IDLE</span>;  <span class="comment">// RECOVER</span>
+                <span class="signal">error</span>      = <span class="number">1'b1</span>;  <span class="comment">// REPORT</span>
+            <span class="keyword">end</span>
+        <span class="keyword">endcase</span>
+    <span class="keyword">end</span>
+
+<span class="keyword">endmodule</span>
+</pre>
+
+<div class="concept-box">
+    <h3>🎯 Safety Features in This Template</h3>
+    <ol>
+        <li class="en"><strong>Async reset</strong> — guaranteed return to IDLE</li>
+        <li class="ko" style="display:none;"><strong>비동기 리셋</strong> — IDLE로의 복귀 보장</li>
+        <li class="en"><strong>default case</strong> — illegal states recover to IDLE</li>
+        <li class="ko" style="display:none;"><strong>default 케이스</strong> — 불법 상태가 IDLE로 복구</li>
+        <li class="en"><strong>Error flag</strong> — upstream logic knows something went wrong</li>
+        <li class="ko" style="display:none;"><strong>에러 플래그</strong> — 상위 로직이 문제 발생을 인지</li>
+        <li class="en"><strong>Timeout watchdog</strong> — prevents getting stuck in wait states</li>
+        <li class="ko" style="display:none;"><strong>타임아웃 워치독</strong> — 대기 상태에서 멈추는 것을 방지</li>
+    </ol>
+</div>
+
+<h2>7. Assertions for Verification</h2>
+
+<p class="en">In simulation, use SystemVerilog assertions to catch illegal states early:</p>
+<p class="ko" style="display:none;">시뮬레이션에서 SystemVerilog 어설션을 사용하여 불법 상태를 조기에 잡습니다:</p>
+
+<pre>
+<span class="comment">// Check that state is always valid</span>
+<span class="signal">assert_valid_state</span>: <span class="keyword">assert property</span> (
+    @(<span class="keyword">posedge</span> <span class="signal">clk</span>) <span class="keyword">disable iff</span> (!<span class="signal">rst_n</span>)
+    <span class="signal">state</span> <span class="keyword">inside</span> {<span class="signal">S_IDLE</span>, <span class="signal">S_WAIT</span>, <span class="signal">S_PROCESS</span>, <span class="signal">S_DONE</span>}
+) <span class="keyword">else</span> <span class="signal">$error</span>(<span class="string">"Illegal state: %b"</span>, <span class="signal">state</span>);
+
+<span class="comment">// Check one-hot property (if using one-hot)</span>
+<span class="signal">assert_one_hot</span>: <span class="keyword">assert property</span> (
+    @(<span class="keyword">posedge</span> <span class="signal">clk</span>) <span class="keyword">disable iff</span> (!<span class="signal">rst_n</span>)
+    <span class="signal">$onehot</span>(<span class="signal">state</span>)
+) <span class="keyword">else</span> <span class="signal">$error</span>(<span class="string">"State not one-hot: %b"</span>, <span class="signal">state</span>);
+
+<span class="comment">// Check no stuck states (liveness)</span>
+<span class="signal">assert_no_stuck</span>: <span class="keyword">assert property</span> (
+    @(<span class="keyword">posedge</span> <span class="signal">clk</span>) <span class="keyword">disable iff</span> (!<span class="signal">rst_n</span>)
+    (<span class="signal">state</span> != <span class="signal">S_IDLE</span>) |-> ##[<span class="number">1</span>:<span class="number">1000</span>] (<span class="signal">state</span> == <span class="signal">S_IDLE</span>)
+) <span class="keyword">else</span> <span class="signal">$error</span>(<span class="string">"FSM stuck — never returned to IDLE"</span>);
+</pre>
+
+<h2>8. Summary Checklist</h2>
+
+<div class="concept-box">
+    <h3 class="en">✅ Safe FSM Design Checklist</h3>
+    <h3 class="ko" style="display:none;">✅ 안전한 FSM 설계 체크리스트</h3>
+    <table class="comparison-table">
+        <tr>
+            <th>#</th>
+            <th class="en">Rule</th><th class="ko" style="display:none;">규칙</th>
+            <th class="en">Why</th><th class="ko" style="display:none;">이유</th>
+        </tr>
+        <tr>
+            <td>1</td>
+            <td class="en">Always include <code>default</code> case</td><td class="ko" style="display:none;"><code>default</code> 케이스 항상 포함</td>
+            <td class="en">Catches illegal states</td><td class="ko" style="display:none;">불법 상태 포착</td>
+        </tr>
+        <tr>
+            <td>2</td>
+            <td class="en">Reset to a known state</td><td class="ko" style="display:none;">알려진 상태로 리셋</td>
+            <td class="en">Predictable power-on behavior</td><td class="ko" style="display:none;">예측 가능한 전원 투입 동작</td>
+        </tr>
+        <tr>
+            <td>3</td>
+            <td class="en">Add error/status output</td><td class="ko" style="display:none;">에러/상태 출력 추가</td>
+            <td class="en">Visibility into FSM health</td><td class="ko" style="display:none;">FSM 상태 가시성</td>
+        </tr>
+        <tr>
+            <td>4</td>
+            <td class="en">Use timeout watchdogs</td><td class="ko" style="display:none;">타임아웃 워치독 사용</td>
+            <td class="en">Prevents infinite waits</td><td class="ko" style="display:none;">무한 대기 방지</td>
+        </tr>
+        <tr>
+            <td>5</td>
+            <td class="en">Add SVA assertions</td><td class="ko" style="display:none;">SVA 어설션 추가</td>
+            <td class="en">Catch issues in simulation</td><td class="ko" style="display:none;">시뮬레이션에서 문제 포착</td>
+        </tr>
+        <tr>
+            <td>6</td>
+            <td class="en">Use synthesis safe attributes</td><td class="ko" style="display:none;">합성 안전 속성 사용</td>
+            <td class="en">Prevent optimization of safety logic</td><td class="ko" style="display:none;">안전 로직 최적화 방지</td>
+        </tr>
+    </table>
+</div>
+
+<div class="nav-links">
+    <a href="day-09-quiz.html">📝 Take the Quiz →</a>
+    <a href="day-09-practice.html">💻 Practice Exercise →</a>
+    <a href="day-08-lesson.html">← Day 8</a>
+</div>
+
+<script>
+let isKorean = false;
+function toggleLang() {
+    isKorean = !isKorean;
+    document.querySelectorAll('.en').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'none' : 'revert', 'important');
+    });
+    document.querySelectorAll('.ko').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'revert' : 'none', 'important');
+    });
+    document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+}
+</script>
+</body>
+</html>

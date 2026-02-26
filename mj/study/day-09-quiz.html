@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 9 Quiz: Safe FSM Design</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    background: linear-gradient(135deg, #fefae0 0%, #faedcd 100%);
+    color: #3d405b;
+    line-height: 1.8;
+    padding: 24px;
+    max-width: 920px;
+    margin: 0 auto;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+h1 { color: #5d4037; border-bottom: 3px solid #c4a77d; padding-bottom: 12px; margin-bottom: 24px; font-size: 2em; }
+h2 { color: #588157; border-bottom: 2px solid #a3b18a; padding-bottom: 8px; margin: 32px 0 16px; }
+h3 { color: #5d4037; margin: 20px 0 12px; }
+p { margin: 12px 0; }
+code {
+    background: #e9f5db; color: #3d405b; padding: 2px 8px; border-radius: 4px;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+}
+pre {
+    background: #2d3436; padding: 24px; border-radius: 12px; margin: 24px 0;
+    border: 3px solid #a3b18a; overflow-x: auto;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace; font-size: 15px; line-height: 1.6; color: #f8f8f2;
+}
+.keyword { color: #ff79c6; font-weight: 600; }
+.type { color: #8be9fd; }
+.signal { color: #50fa7b; }
+.number { color: #ffb86c; }
+.comment { color: #6272a4; font-style: italic; }
+.question-box {
+    background: #fff8f0; border: 2px solid #c4a77d; border-radius: 12px;
+    padding: 20px; margin: 20px 0; color: #3d405b;
+}
+.question-box h3 { color: #5d4037; margin-bottom: 12px; }
+.options { list-style: none; padding: 0; margin: 12px 0; }
+.options li {
+    background: #fff; border: 2px solid #a3b18a; border-radius: 8px;
+    padding: 12px 16px; margin: 8px 0; cursor: pointer; transition: all 0.2s;
+}
+.options li:hover { border-color: #588157; background: #e9f5db; }
+.options li.correct { background: #d4edda; border-color: #10b981; }
+.options li.wrong { background: #fde8e8; border-color: #ef4444; }
+.explanation {
+    display: none; background: #fff8f0; border-left: 4px solid #588157;
+    border-radius: 8px; padding: 15px; margin: 12px 0; color: #3d405b;
+}
+.score-box {
+    background: #fff8f0; border: 3px solid #588157; border-radius: 12px;
+    padding: 24px; margin: 24px 0; text-align: center;
+}
+.score-box h2 { border: none; margin: 0; }
+.lang-toggle {
+    position: fixed; top: 16px; right: 16px; background: #588157;
+    border: none; border-radius: 24px; padding: 10px 20px; cursor: pointer;
+    color: #fff; font-size: 14px; font-weight: 600; z-index: 1000;
+}
+.lang-toggle:hover { background: #3a5a40; }
+.ko { display: none; }
+.nav-links { display: flex; gap: 12px; margin: 20px 0; flex-wrap: wrap; }
+.nav-links a {
+    background: linear-gradient(135deg, #588157, #3a5a40); color: #fff;
+    padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: 600;
+}
+.nav-links a:hover { opacity: 0.9; }
+@media (max-width: 768px) {
+    body { padding: 16px; } h1 { font-size: 1.8em; }
+    pre { font-size: 14px; padding: 16px; }
+    .lang-toggle { padding: 8px 16px; font-size: 13px; }
+}
+</style>
+</head>
+<body>
+<button class="lang-toggle" onclick="toggleLang()">한국어</button>
+
+<h1>📝 Day 9 Quiz: Safe FSM Design</h1>
+
+<div class="nav-links">
+    <a href="day-09-lesson.html">📖 Lesson</a>
+    <a href="day-09-practice.html">💻 Practice</a>
+</div>
+
+<div id="quiz">
+
+<!-- Q1 -->
+<div class="question-box" data-answer="2">
+    <h3>Q1. <span class="en">What happens if an FSM enters an illegal state and there is no <code>default</code> case?</span><span class="ko" style="display:none;">FSM이 불법 상태에 진입했는데 <code>default</code> 케이스가 없으면 어떻게 되나요?</span></h3>
+    <ul class="options">
+        <li onclick="check(this,1)"><span class="en">A) It automatically resets</span><span class="ko" style="display:none;">A) 자동으로 리셋됨</span></li>
+        <li onclick="check(this,2)"><span class="en">B) It may get stuck or a latch may be inferred</span><span class="ko" style="display:none;">B) 멈추거나 래치가 유추될 수 있음</span></li>
+        <li onclick="check(this,3)"><span class="en">C) The synthesis tool adds recovery logic automatically</span><span class="ko" style="display:none;">C) 합성 도구가 자동으로 복구 로직 추가</span></li>
+        <li onclick="check(this,4)"><span class="en">D) A compilation error occurs</span><span class="ko" style="display:none;">D) 컴파일 오류 발생</span></li>
+    </ul>
+    <div class="explanation"><span class="en">Without a default case, the FSM has no defined behavior for illegal states. It may remain stuck forever, or the synthesis tool may infer a latch to hold the current values.</span><span class="ko" style="display:none;">default 케이스가 없으면 FSM은 불법 상태에 대한 정의된 동작이 없습니다. 영원히 멈추거나 합성 도구가 현재 값을 유지하기 위해 래치를 유추할 수 있습니다.</span></div>
+</div>
+
+<!-- Q2 -->
+<div class="question-box" data-answer="3">
+    <h3>Q2. <span class="en">Which reset strategy is considered industry standard?</span><span class="ko" style="display:none;">어떤 리셋 전략이 업계 표준으로 간주되나요?</span></h3>
+    <ul class="options">
+        <li onclick="check(this,1)"><span class="en">A) Synchronous only</span><span class="ko" style="display:none;">A) 동기식만</span></li>
+        <li onclick="check(this,2)"><span class="en">B) Asynchronous only</span><span class="ko" style="display:none;">B) 비동기식만</span></li>
+        <li onclick="check(this,3)"><span class="en">C) Asynchronous assert, synchronous deassert</span><span class="ko" style="display:none;">C) 비동기 어서트, 동기 디어서트</span></li>
+        <li onclick="check(this,4)"><span class="en">D) No reset needed if default case exists</span><span class="ko" style="display:none;">D) default 케이스가 있으면 리셋 불필요</span></li>
+    </ul>
+    <div class="explanation"><span class="en">Async assert / sync deassert gives the instant reset of async with the clean timing of sync release, avoiding metastability on reset removal.</span><span class="ko" style="display:none;">비동기 어서트 / 동기 디어서트는 비동기의 즉각적인 리셋과 동기 릴리스의 깨끗한 타이밍을 결합하여 리셋 해제 시 메타안정성을 방지합니다.</span></div>
+</div>
+
+<!-- Q3 -->
+<div class="question-box" data-answer="1">
+    <h3>Q3. <span class="en">Why is one-hot encoding especially vulnerable to bit flips?</span><span class="ko" style="display:none;">원-핫 인코딩이 비트 플립에 특히 취약한 이유는?</span></h3>
+    <ul class="options">
+        <li onclick="check(this,1)"><span class="en">A) A single bit flip creates a state with 0 or 2 bits set — both invalid</span><span class="ko" style="display:none;">A) 단일 비트 플립이 0개 또는 2개 비트가 설정된 상태를 만듦 — 둘 다 무효</span></li>
+        <li onclick="check(this,2)"><span class="en">B) One-hot uses more flip-flops so there are more bits to flip</span><span class="ko" style="display:none;">B) 원-핫이 더 많은 플립플롭을 사용하므로 뒤집힐 비트가 더 많음</span></li>
+        <li onclick="check(this,3)"><span class="en">C) One-hot doesn't support default cases</span><span class="ko" style="display:none;">C) 원-핫은 default 케이스를 지원하지 않음</span></li>
+        <li onclick="check(this,4)"><span class="en">D) One-hot encoding is slower than binary</span><span class="ko" style="display:none;">D) 원-핫 인코딩이 바이너리보다 느림</span></li>
+    </ul>
+    <div class="explanation"><span class="en">One-hot requires exactly one bit to be 1. Any single bit flip either clears the only set bit (all zeros) or sets a second bit (two bits high) — both are illegal states.</span><span class="ko" style="display:none;">원-핫은 정확히 하나의 비트가 1이어야 합니다. 단일 비트 플립은 유일한 설정 비트를 지우거나(모두 0) 두 번째 비트를 설정하여(2개 비트 하이) — 둘 다 불법 상태입니다.</span></div>
+</div>
+
+<!-- Q4 -->
+<div class="question-box" data-answer="2">
+    <h3>Q4. <span class="en">What does <code>$countones(state) == 1</code> check in a one-hot FSM?</span><span class="ko" style="display:none;">원-핫 FSM에서 <code>$countones(state) == 1</code>은 무엇을 검사하나요?</span></h3>
+    <ul class="options">
+        <li onclick="check(this,1)"><span class="en">A) The FSM has only one state</span><span class="ko" style="display:none;">A) FSM이 하나의 상태만 있음</span></li>
+        <li onclick="check(this,2)"><span class="en">B) Exactly one bit is set — the state is valid one-hot</span><span class="ko" style="display:none;">B) 정확히 하나의 비트가 설정됨 — 유효한 원-핫 상태</span></li>
+        <li onclick="check(this,3)"><span class="en">C) The state register has been reset</span><span class="ko" style="display:none;">C) 상태 레지스터가 리셋됨</span></li>
+        <li onclick="check(this,4)"><span class="en">D) The FSM is in state 1</span><span class="ko" style="display:none;">D) FSM이 상태 1에 있음</span></li>
+    </ul>
+    <div class="explanation"><span class="en"><code>$countones</code> counts the number of 1-bits. For valid one-hot encoding, there must be exactly one bit set at all times.</span><span class="ko" style="display:none;"><code>$countones</code>는 1-비트의 수를 셉니다. 유효한 원-핫 인코딩에서는 항상 정확히 하나의 비트가 설정되어야 합니다.</span></div>
+</div>
+
+<!-- Q5 -->
+<div class="question-box" data-answer="4">
+    <h3>Q5. <span class="en">What is the purpose of a timeout watchdog in an FSM?</span><span class="ko" style="display:none;">FSM에서 타임아웃 워치독의 목적은?</span></h3>
+    <ul class="options">
+        <li onclick="check(this,1)"><span class="en">A) To speed up state transitions</span><span class="ko" style="display:none;">A) 상태 전이 속도 향상</span></li>
+        <li onclick="check(this,2)"><span class="en">B) To reduce power consumption</span><span class="ko" style="display:none;">B) 전력 소비 감소</span></li>
+        <li onclick="check(this,3)"><span class="en">C) To count the number of state transitions</span><span class="ko" style="display:none;">C) 상태 전이 횟수 카운트</span></li>
+        <li onclick="check(this,4)"><span class="en">D) To prevent the FSM from getting stuck in a wait state indefinitely</span><span class="ko" style="display:none;">D) FSM이 대기 상태에 무한히 멈추는 것을 방지</span></li>
+    </ul>
+    <div class="explanation"><span class="en">A watchdog timer counts cycles while the FSM is away from IDLE. If the count exceeds a threshold, it forces recovery — preventing infinite hangs when expected inputs never arrive.</span><span class="ko" style="display:none;">워치독 타이머는 FSM이 IDLE 상태를 벗어난 동안 사이클을 셉니다. 카운트가 임계값을 초과하면 복구를 강제하여 예상 입력이 도착하지 않을 때 무한 행을 방지합니다.</span></div>
+</div>
+
+<!-- Q6 -->
+<div class="question-box" data-answer="3">
+    <h3>Q6. <span class="en">What can happen if you use <code>(* full_case *)</code> pragma carelessly?</span><span class="ko" style="display:none;"><code>(* full_case *)</code> 프라그마를 부주의하게 사용하면 어떻게 되나요?</span></h3>
+    <ul class="options">
+        <li onclick="check(this,1)"><span class="en">A) It adds extra safety logic</span><span class="ko" style="display:none;">A) 추가 안전 로직이 추가됨</span></li>
+        <li onclick="check(this,2)"><span class="en">B) It forces one-hot encoding</span><span class="ko" style="display:none;">B) 원-핫 인코딩을 강제</span></li>
+        <li onclick="check(this,3)"><span class="en">C) Synthesis may optimize away your default recovery logic</span><span class="ko" style="display:none;">C) 합성이 default 복구 로직을 최적화하여 제거할 수 있음</span></li>
+        <li onclick="check(this,4)"><span class="en">D) It prevents latch inference</span><span class="ko" style="display:none;">D) 래치 유추를 방지</span></li>
+    </ul>
+    <div class="explanation"><span class="en"><code>full_case</code> tells synthesis that all possible cases are covered, which can cause it to treat the default branch as don't-care and optimize away your recovery logic.</span><span class="ko" style="display:none;"><code>full_case</code>는 합성에게 모든 가능한 케이스가 포함되었다고 알려, default 분기를 don't-care로 처리하고 복구 로직을 최적화하여 제거할 수 있습니다.</span></div>
+</div>
+
+<!-- Q7 -->
+<div class="question-box" data-answer="1">
+    <h3>Q7. <span class="en">In the reset synchronizer pattern, why are two flip-flops used?</span><span class="ko" style="display:none;">리셋 동기화 패턴에서 왜 두 개의 플립플롭을 사용하나요?</span></h3>
+    <ul class="options">
+        <li onclick="check(this,1)"><span class="en">A) To reduce metastability risk when deasserting the async reset</span><span class="ko" style="display:none;">A) 비동기 리셋 해제 시 메타안정성 위험 감소</span></li>
+        <li onclick="check(this,2)"><span class="en">B) To create a delay of exactly 2 clock cycles</span><span class="ko" style="display:none;">B) 정확히 2 클럭 사이클 지연 생성</span></li>
+        <li onclick="check(this,3)"><span class="en">C) To double the reset signal strength</span><span class="ko" style="display:none;">C) 리셋 신호 강도를 두 배로</span></li>
+        <li onclick="check(this,4)"><span class="en">D) To filter glitches on the reset line</span><span class="ko" style="display:none;">D) 리셋 라인의 글리치 필터링</span></li>
+    </ul>
+    <div class="explanation"><span class="en">The two flip-flops form a synchronizer chain. When the async reset deasserts, it may violate setup/hold timing — the first flop may go metastable but the second flop resolves it to a clean value.</span><span class="ko" style="display:none;">두 개의 플립플롭은 동기화 체인을 형성합니다. 비동기 리셋이 해제될 때 셋업/홀드 타이밍을 위반할 수 있지만, 첫 번째 플롭이 메타안정 상태가 되어도 두 번째 플롭이 깨끗한 값으로 해결합니다.</span></div>
+</div>
+
+<!-- Q8 -->
+<div class="question-box" data-answer="2">
+    <h3>Q8. <span class="en">Which SVA assertion checks that an FSM eventually returns to IDLE?</span><span class="ko" style="display:none;">FSM이 결국 IDLE로 돌아오는지 확인하는 SVA 어설션은?</span></h3>
+    <ul class="options">
+        <li onclick="check(this,1)"><span class="en">A) <code>assert property (state == S_IDLE)</code></span><span class="ko" style="display:none;">A) <code>assert property (state == S_IDLE)</code></span></li>
+        <li onclick="check(this,2)"><span class="en">B) <code>(state != S_IDLE) |-> ##[1:N] (state == S_IDLE)</code></span><span class="ko" style="display:none;">B) <code>(state != S_IDLE) |-> ##[1:N] (state == S_IDLE)</code></span></li>
+        <li onclick="check(this,3)"><span class="en">C) <code>$onehot(state)</code></span><span class="ko" style="display:none;">C) <code>$onehot(state)</code></span></li>
+        <li onclick="check(this,4)"><span class="en">D) <code>state inside {S_IDLE}</code></span><span class="ko" style="display:none;">D) <code>state inside {S_IDLE}</code></span></li>
+    </ul>
+    <div class="explanation"><span class="en">The implication <code>|-> ##[1:N]</code> says: "whenever we're not in IDLE, within 1 to N cycles we must be in IDLE." This is a liveness property — it checks the FSM doesn't get stuck.</span><span class="ko" style="display:none;">함축 <code>|-> ##[1:N]</code>는 "IDLE이 아닐 때마다 1~N 사이클 이내에 IDLE에 있어야 한다"를 의미합니다. 이것은 활성 속성으로 FSM이 멈추지 않는지 확인합니다.</span></div>
+</div>
+
+<!-- Q9 -->
+<div class="question-box" data-answer="3">
+    <h3>Q9. <span class="en">What does the Xilinx <code>FSM_SAFE_STATE = "reset_state"</code> attribute do?</span><span class="ko" style="display:none;">Xilinx의 <code>FSM_SAFE_STATE = "reset_state"</code> 속성은 무엇을 하나요?</span></h3>
+    <ul class="options">
+        <li onclick="check(this,1)"><span class="en">A) Forces binary encoding</span><span class="ko" style="display:none;">A) 바이너리 인코딩 강제</span></li>
+        <li onclick="check(this,2)"><span class="en">B) Removes unused states from synthesis</span><span class="ko" style="display:none;">B) 합성에서 미사용 상태 제거</span></li>
+        <li onclick="check(this,3)"><span class="en">C) Tells synthesis to add hardware that recovers to the reset state from any illegal state</span><span class="ko" style="display:none;">C) 합성에게 불법 상태에서 리셋 상태로 복구하는 하드웨어를 추가하라고 지시</span></li>
+        <li onclick="check(this,4)"><span class="en">D) Disables FSM optimization</span><span class="ko" style="display:none;">D) FSM 최적화 비활성화</span></li>
+    </ul>
+    <div class="explanation"><span class="en">This attribute instructs the Xilinx synthesis tool to insert extra logic that detects illegal states and transitions the FSM back to its reset state, ensuring safety even after optimization.</span><span class="ko" style="display:none;">이 속성은 Xilinx 합성 도구에게 불법 상태를 감지하고 FSM을 리셋 상태로 전이하는 추가 로직을 삽입하도록 지시하여, 최적화 후에도 안전성을 보장합니다.</span></div>
+</div>
+
+<!-- Q10 -->
+<div class="question-box" data-answer="4">
+    <h3>Q10. <span class="en">Which of the following is NOT a source of illegal FSM states?</span><span class="ko" style="display:none;">다음 중 불법 FSM 상태의 원인이 아닌 것은?</span></h3>
+    <ul class="options">
+        <li onclick="check(this,1)"><span class="en">A) Single-event upsets (radiation)</span><span class="ko" style="display:none;">A) 단일 이벤트 업셋 (방사선)</span></li>
+        <li onclick="check(this,2)"><span class="en">B) Missing reset at power-on</span><span class="ko" style="display:none;">B) 전원 투입 시 리셋 누락</span></li>
+        <li onclick="check(this,3)"><span class="en">C) Metastability from asynchronous inputs</span><span class="ko" style="display:none;">C) 비동기 입력으로 인한 메타안정성</span></li>
+        <li onclick="check(this,4)"><span class="en">D) Using too many states in the enum</span><span class="ko" style="display:none;">D) enum에 너무 많은 상태 사용</span></li>
+    </ul>
+    <div class="explanation"><span class="en">Having many states in an enum is a design choice, not a safety hazard. The other three (SEU, missing reset, metastability) are all real causes of illegal FSM states in hardware.</span><span class="ko" style="display:none;">enum에 많은 상태가 있는 것은 설계 선택이지 안전 위험이 아닙니다. 나머지 세 가지(SEU, 리셋 누락, 메타안정성)는 모두 하드웨어에서 불법 FSM 상태의 실제 원인입니다.</span></div>
+</div>
+
+<!-- Q11 -->
+<div class="question-box" data-answer="2">
+    <h3>Q11. <span class="en">What is the advantage of Hamming distance ≥ 2 between state encodings?</span><span class="ko" style="display:none;">상태 인코딩 간 해밍 거리 ≥ 2의 장점은?</span></h3>
+    <ul class="options">
+        <li onclick="check(this,1)"><span class="en">A) Faster state transitions</span><span class="ko" style="display:none;">A) 더 빠른 상태 전이</span></li>
+        <li onclick="check(this,2)"><span class="en">B) A single bit flip can never land on another valid state</span><span class="ko" style="display:none;">B) 단일 비트 플립이 다른 유효한 상태에 도달할 수 없음</span></li>
+        <li onclick="check(this,3)"><span class="en">C) Fewer flip-flops needed</span><span class="ko" style="display:none;">C) 더 적은 플립플롭 필요</span></li>
+        <li onclick="check(this,4)"><span class="en">D) Lower power consumption</span><span class="ko" style="display:none;">D) 더 낮은 전력 소비</span></li>
+    </ul>
+    <div class="explanation"><span class="en">If every pair of valid states differs by at least 2 bits, a single bit error always produces an invalid encoding — making it detectable rather than silently transitioning to a wrong state.</span><span class="ko" style="display:none;">모든 유효 상태 쌍이 최소 2비트 차이가 나면, 단일 비트 오류는 항상 무효한 인코딩을 생성하여 잘못된 상태로 조용히 전이하는 대신 감지 가능합니다.</span></div>
+</div>
+
+<!-- Q12 -->
+<div class="question-box" data-answer="1">
+    <h3>Q12. <span class="en">In a safe FSM, where should the error flag be asserted?</span><span class="ko" style="display:none;">안전한 FSM에서 에러 플래그는 어디서 어서트되어야 하나요?</span></h3>
+    <ul class="options">
+        <li onclick="check(this,1)"><span class="en">A) In the <code>default</code> case and in timeout conditions</span><span class="ko" style="display:none;">A) <code>default</code> 케이스와 타임아웃 조건에서</span></li>
+        <li onclick="check(this,2)"><span class="en">B) Only at reset</span><span class="ko" style="display:none;">B) 리셋 시에만</span></li>
+        <li onclick="check(this,3)"><span class="en">C) In every state transition</span><span class="ko" style="display:none;">C) 모든 상태 전이에서</span></li>
+        <li onclick="check(this,4)"><span class="en">D) Only when the done signal is high</span><span class="ko" style="display:none;">D) done 신호가 높을 때만</span></li>
+    </ul>
+    <div class="explanation"><span class="en">The error flag should signal abnormal conditions — illegal state recovery (default case) and watchdog timeouts are the two main scenarios where something went wrong.</span><span class="ko" style="display:none;">에러 플래그는 비정상적인 조건을 알려야 합니다 — 불법 상태 복구(default 케이스)와 워치독 타임아웃이 문제가 발생한 두 가지 주요 시나리오입니다.</span></div>
+</div>
+
+</div>
+
+<div class="score-box" id="scoreBox" style="display:none;">
+    <h2>🏆 <span id="scoreText"></span></h2>
+    <p id="scoreMsg"></p>
+</div>
+
+<div class="nav-links" style="margin-top:32px;">
+    <a href="day-09-lesson.html">📖 Review Lesson</a>
+    <a href="day-09-practice.html">💻 Practice →</a>
+</div>
+
+<script>
+let isKorean = false;
+let answered = 0;
+let correct = 0;
+const total = document.querySelectorAll('.question-box').length;
+
+function toggleLang() {
+    isKorean = !isKorean;
+    document.querySelectorAll('.en').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'none' : 'revert', 'important');
+    });
+    document.querySelectorAll('.ko').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'revert' : 'none', 'important');
+    });
+    document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+}
+
+function check(li, choice) {
+    const box = li.closest('.question-box');
+    if (box.dataset.done) return;
+    box.dataset.done = '1';
+    const ans = parseInt(box.dataset.answer);
+    answered++;
+    if (choice === ans) {
+        li.classList.add('correct');
+        correct++;
+    } else {
+        li.classList.add('wrong');
+        box.querySelectorAll('.options li')[ans - 1].classList.add('correct');
+    }
+    box.querySelector('.explanation').style.display = 'block';
+    if (answered === total) {
+        const pct = Math.round(correct / total * 100);
+        document.getElementById('scoreText').textContent = correct + ' / ' + total + ' (' + pct + '%)';
+        const msg = pct >= 90 ? '🌟 Excellent!' : pct >= 70 ? '👍 Good job!' : '📖 Review the lesson and try again!';
+        document.getElementById('scoreMsg').textContent = msg;
+        document.getElementById('scoreBox').style.display = 'block';
+    }
+}
+</script>
+</body>
+</html>
