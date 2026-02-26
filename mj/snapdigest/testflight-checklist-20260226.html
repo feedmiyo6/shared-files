@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SnapDigest TestFlight Checklist</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#FAFAF5;color:#2D2D2D;line-height:1.6;padding:16px;max-width:720px;margin:0 auto}
+h1{color:#4A7C59;font-size:1.6em;margin-bottom:4px}
+.subtitle{color:#7A9B6D;font-size:.9em;margin-bottom:20px}
+.lang-toggle{position:fixed;top:12px;right:12px;background:#4A7C59;color:#fff;border:none;padding:8px 14px;border-radius:20px;font-size:.85em;cursor:pointer;z-index:99;box-shadow:0 2px 8px rgba(0,0,0,.15)}
+.lang-toggle:active{opacity:.8}
+.card{background:#FFFDF8;border-radius:12px;padding:16px 18px;margin-bottom:14px;box-shadow:0 1px 4px rgba(74,124,89,.1);border:1px solid #E8E8E0}
+.card h2{font-size:1.15em;margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.phase-done h2{color:#4A7C59}
+.phase-todo h2{color:#8B6914}
+.phase-test h2{color:#5B7BA5}
+.phase-cmd h2{color:#6B6B6B}
+.phase-warn h2{color:#C4652A}
+.item{padding:4px 0;font-size:.92em;display:flex;align-items:flex-start;gap:6px}
+.item .icon{flex-shrink:0}
+.sub{margin-left:24px}
+.code-block{background:#F0EDE6;border-radius:8px;padding:12px;font-family:'SF Mono',Menlo,monospace;font-size:.82em;overflow-x:auto;white-space:pre;line-height:1.5;color:#3D3D3D}
+.note{font-size:.88em;color:#6B6B6B;padding:3px 0 3px 22px}
+.ko{display:none}
+.ko.show{display:inline!important}
+.ko-block{display:none}
+.ko-block.show{display:block!important}
+.en.hide{display:none!important}
+.en-block.hide{display:none!important}
+.leaf{position:fixed;bottom:10px;right:14px;font-size:1.8em;opacity:.3}
+</style>
+</head>
+<body>
+<button class="lang-toggle" onclick="toggleLang()">한국어</button>
+
+<h1>🌿 SnapDigest <span class="en">TestFlight Checklist</span><span class="ko">테스트플라이트 체크리스트</span></h1>
+<p class="subtitle"><span class="en">Updated Feb 26, 2026</span><span class="ko">2026년 2월 26일 업데이트</span></p>
+
+<!-- Phase 1 -->
+<div class="card phase-done">
+<h2>✅ <span class="en">Phase 1: Already Done</span><span class="ko">1단계: 완료됨</span></h2>
+<div class="item"><span class="icon">✅</span> <span class="en">GitHub repo (feedmiyo6/snapdigest, private)</span><span class="ko">GitHub 저장소 (feedmiyo6/snapdigest, 비공개)</span></div>
+<div class="item"><span class="icon">✅</span> <span class="en">AI pipeline: Brave News API + GPT-4.1-mini/nano curation</span><span class="ko">AI 파이프라인: Brave News API + GPT-4.1-mini/nano 큐레이션</span></div>
+<div class="item"><span class="icon">✅</span> <span class="en">Edge Functions: ai-curate, news-pipeline, generate-audio</span><span class="ko">Edge Functions: ai-curate, news-pipeline, generate-audio</span></div>
+<div class="item"><span class="icon">✅</span> <span class="en">Daily Highlights podcast (2-host Alex/Maya, pre-generated)</span><span class="ko">데일리 하이라이트 팟캐스트 (2인 진행 Alex/Maya, 사전 생성)</span></div>
+<div class="item"><span class="icon">✅</span> <span class="en">Junk article filtering (3 layers: News API + server + client)</span><span class="ko">정크 기사 필터링 (3단계: News API + 서버 + 클라이언트)</span></div>
+<div class="item"><span class="icon">✅</span> <span class="en">Privacy policy &amp; Terms of Service (live links)</span><span class="ko">개인정보처리방침 &amp; 이용약관 (라이브 링크)</span></div>
+<div class="item"><span class="icon">✅</span> <span class="en">Offline reading (SQLite cache)</span><span class="ko">오프라인 읽기 (SQLite 캐시)</span></div>
+<div class="item"><span class="icon">✅</span> <span class="en">Personalization engine</span><span class="ko">개인화 엔진</span></div>
+<div class="item"><span class="icon">✅</span> <span class="en">Share cards</span><span class="ko">공유 카드</span></div>
+<div class="item"><span class="icon">✅</span> <span class="en">Audio briefing (5-min individual + daily podcast)</span><span class="ko">오디오 브리핑 (5분 개인 + 데일리 팟캐스트)</span></div>
+<div class="item"><span class="icon">✅</span> <span class="en">Translation (EN/KO)</span><span class="ko">번역 (영어/한국어)</span></div>
+<div class="item"><span class="icon">✅</span> <span class="en">Story mode (swipeable cards, top 10/category)</span><span class="ko">스토리 모드 (스와이프 카드, 상위 10개/카테고리)</span></div>
+<div class="item"><span class="icon">✅</span> <span class="en">AdMob integration (test IDs)</span><span class="ko">AdMob 연동 (테스트 ID)</span></div>
+<div class="item"><span class="icon">✅</span> <span class="en">iOS widget integration</span><span class="ko">iOS 위젯 연동</span></div>
+<div class="item"><span class="icon">✅</span> <span class="en">Push notification setup</span><span class="ko">푸시 알림 설정</span></div>
+<div class="item"><span class="icon">✅</span> <span class="en">Supabase pg_cron pipeline (5AM + 1PM daily)</span><span class="ko">Supabase pg_cron 파이프라인 (매일 오전 5시 + 오후 1시)</span></div>
+<div class="item"><span class="icon">✅</span> <span class="en">Language picker fix (bottom sheet safe area)</span><span class="ko">언어 선택기 수정 (바텀 시트 세이프 영역)</span></div>
+</div>
+
+<!-- Phase 2 -->
+<div class="card phase-todo">
+<h2>⬜ <span class="en">Phase 2: Pre-TestFlight (Minjun Tasks)</span><span class="ko">2단계: 테스트플라이트 준비 (민준 작업)</span></h2>
+<div class="item"><span class="icon">⬜</span> <span class="en">App icon design (Minjun is designing)</span><span class="ko">앱 아이콘 디자인 (민준 작업 중)</span></div>
+<div class="item"><span class="icon">⬜</span> <span class="en">Splash/launch screen</span><span class="ko">스플래시/런치 화면</span></div>
+<div class="item"><span class="icon">⬜</span> <span class="en">Production AdMob IDs (replace test IDs in ad_config.dart)</span><span class="ko">프로덕션 AdMob ID (ad_config.dart의 테스트 ID 교체)</span></div>
+<div class="item"><span class="icon">⬜</span> <span class="en">Apple Developer account setup ($99/year)</span><span class="ko">Apple Developer 계정 설정 (연 $99)</span></div>
+<div class="item"><span class="icon">⬜</span> <span class="en">App Store Connect: create app listing</span><span class="ko">App Store Connect: 앱 등록 생성</span></div>
+<div class="sub item"><span class="icon">·</span> <span class="en">App name, subtitle, description</span><span class="ko">앱 이름, 부제, 설명</span></div>
+<div class="sub item"><span class="icon">·</span> <span class="en">Screenshots (iPhone 15 Pro, 15 Pro Max minimum)</span><span class="ko">스크린샷 (iPhone 15 Pro, 15 Pro Max 최소)</span></div>
+<div class="sub item"><span class="icon">·</span> <span class="en">App category: News</span><span class="ko">앱 카테고리: 뉴스</span></div>
+<div class="sub item"><span class="icon">·</span> <span class="en">Age rating</span><span class="ko">연령 등급</span></div>
+<div class="sub item"><span class="icon">·</span> <span class="en">Privacy nutrition labels (data collection questionnaire)</span><span class="ko">개인정보 영양 라벨 (데이터 수집 설문)</span></div>
+<div class="item"><span class="icon">⬜</span> <span class="en">Bundle ID registration in Apple Developer portal</span><span class="ko">Apple Developer 포털에서 번들 ID 등록</span></div>
+</div>
+
+<!-- Phase 3 -->
+<div class="card phase-todo">
+<h2>⬜ <span class="en">Phase 3: Build &amp; Deploy (Totoro Tasks)</span><span class="ko">3단계: 빌드 &amp; 배포 (토토로 작업)</span></h2>
+<div class="item"><span class="icon">⬜</span> <span class="en">Firebase setup (needed for push notifications)</span><span class="ko">Firebase 설정 (푸시 알림에 필요)</span></div>
+<div class="sub item"><span class="icon">·</span> <span class="en">Create Firebase project</span><span class="ko">Firebase 프로젝트 생성</span></div>
+<div class="sub item"><span class="icon">·</span> <span class="en">Add iOS app with bundle ID</span><span class="ko">번들 ID로 iOS 앱 추가</span></div>
+<div class="sub item"><span class="icon">·</span> <span class="en">Download GoogleService-Info.plist</span><span class="ko">GoogleService-Info.plist 다운로드</span></div>
+<div class="sub item"><span class="icon">·</span> <span class="en">Configure APNs key in Firebase Console</span><span class="ko">Firebase 콘솔에서 APNs 키 설정</span></div>
+<div class="item"><span class="icon">⬜</span> <span class="en">Xcode project config</span><span class="ko">Xcode 프로젝트 설정</span></div>
+<div class="sub item"><span class="icon">·</span> <span class="en">Set bundle ID (com.feedmiyo6.snapdigest)</span><span class="ko">번들 ID 설정 (com.feedmiyo6.snapdigest)</span></div>
+<div class="sub item"><span class="icon">·</span> <span class="en">Set version/build number (1.0.0 / 1)</span><span class="ko">버전/빌드 번호 설정 (1.0.0 / 1)</span></div>
+<div class="sub item"><span class="icon">·</span> <span class="en">Set minimum iOS version (16.0)</span><span class="ko">최소 iOS 버전 설정 (16.0)</span></div>
+<div class="sub item"><span class="icon">·</span> <span class="en">Configure signing (automatic)</span><span class="ko">서명 설정 (자동)</span></div>
+<div class="sub item"><span class="icon">·</span> <span class="en">Add push notification capability</span><span class="ko">푸시 알림 기능 추가</span></div>
+<div class="sub item"><span class="icon">·</span> <span class="en">Add background modes capability</span><span class="ko">백그라운드 모드 기능 추가</span></div>
+<div class="item"><span class="icon">⬜</span> <span class="en">Move remaining API calls to Edge Functions</span><span class="ko">나머지 API 호출을 Edge Functions로 이동</span></div>
+<div class="item"><span class="icon">⬜</span> <span class="en">Production build: <code>flutter build ios --release</code></span><span class="ko">프로덕션 빌드: <code>flutter build ios --release</code></span></div>
+<div class="item"><span class="icon">⬜</span> <span class="en">Archive in Xcode → Upload to App Store Connect</span><span class="ko">Xcode에서 아카이브 → App Store Connect 업로드</span></div>
+<div class="item"><span class="icon">⬜</span> <span class="en">Create TestFlight group, add testers</span><span class="ko">TestFlight 그룹 생성, 테스터 추가</span></div>
+<div class="item"><span class="icon">⬜</span> <span class="en">Submit for TestFlight review (24-48h)</span><span class="ko">TestFlight 심사 제출 (24-48시간)</span></div>
+</div>
+
+<!-- Phase 4 -->
+<div class="card phase-test">
+<h2>🧪 <span class="en">Phase 4: TestFlight Testing</span><span class="ko">4단계: 테스트플라이트 테스트</span></h2>
+<div class="item"><span class="icon">⬜</span> <span class="en">Verify article loading on real device</span><span class="ko">실제 기기에서 기사 로딩 확인</span></div>
+<div class="item"><span class="icon">⬜</span> <span class="en">Test Daily Highlights podcast playback</span><span class="ko">데일리 하이라이트 팟캐스트 재생 테스트</span></div>
+<div class="item"><span class="icon">⬜</span> <span class="en">Test story mode swiping</span><span class="ko">스토리 모드 스와이프 테스트</span></div>
+<div class="item"><span class="icon">⬜</span> <span class="en">Test language switching (EN/KO)</span><span class="ko">언어 전환 테스트 (영어/한국어)</span></div>
+<div class="item"><span class="icon">⬜</span> <span class="en">Test push notifications</span><span class="ko">푸시 알림 테스트</span></div>
+<div class="item"><span class="icon">⬜</span> <span class="en">Test offline reading</span><span class="ko">오프라인 읽기 테스트</span></div>
+<div class="item"><span class="icon">⬜</span> <span class="en">Test share cards</span><span class="ko">공유 카드 테스트</span></div>
+<div class="item"><span class="icon">⬜</span> <span class="en">Performance testing (memory, battery)</span><span class="ko">성능 테스트 (메모리, 배터리)</span></div>
+<div class="item"><span class="icon">⬜</span> <span class="en">Crash monitoring (Firebase Crashlytics)</span><span class="ko">크래시 모니터링 (Firebase Crashlytics)</span></div>
+</div>
+
+<!-- Commands -->
+<div class="card phase-cmd">
+<h2>📋 <span class="en">Quick Commands</span><span class="ko">빠른 명령어</span></h2>
+<div class="code-block"># Build for release
+flutter build ios --release
+
+# Open in Xcode for archive
+open ios/Runner.xcworkspace
+
+# Run on connected device
+flutter run --release
+
+# Check for issues
+flutter analyze
+flutter test</div>
+</div>
+
+<!-- Known Issues -->
+<div class="card phase-warn">
+<h2>⚠️ <span class="en">Known Issues / Notes</span><span class="ko">알려진 이슈 / 참고사항</span></h2>
+<div class="item"><span class="icon">⚠️</span> <span class="en">Firebase not initialized — push notifications won't work until configured</span><span class="ko">Firebase 미초기화 — 설정 전까지 푸시 알림 작동 안 함</span></div>
+<div class="item"><span class="icon">⚠️</span> <span class="en">Widget needs AppGroupId configured</span><span class="ko">위젯에 AppGroupId 설정 필요</span></div>
+<div class="item"><span class="icon">⚠️</span> <span class="en">AdMob using test IDs (swap before App Store, OK for TestFlight)</span><span class="ko">AdMob 테스트 ID 사용 중 (앱스토어 전 교체, TestFlight은 OK)</span></div>
+<div class="item"><span class="icon">⚠️</span> <span class="en">Audio generation depends on OpenAI API key in Supabase secrets</span><span class="ko">오디오 생성은 Supabase secrets의 OpenAI API 키에 의존</span></div>
+</div>
+
+<div class="leaf">🍃</div>
+
+<script>
+var isKorean=false;
+function toggleLang(){
+isKorean=!isKorean;
+document.querySelectorAll('.en').forEach(function(el){el.classList.toggle('hide',isKorean)});
+document.querySelectorAll('.ko').forEach(function(el){el.classList.toggle('show',isKorean)});
+document.querySelectorAll('.en-block').forEach(function(el){el.classList.toggle('hide',isKorean)});
+document.querySelectorAll('.ko-block').forEach(function(el){el.classList.toggle('show',isKorean)});
+document.querySelector('.lang-toggle').textContent=isKorean?'English':'한국어';
+}
+</script>
+</body>
+</html>
