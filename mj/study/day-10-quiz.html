@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 10 Quiz: FSM Practice</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    background: linear-gradient(135deg, #fefae0 0%, #faedcd 100%);
+    color: #3d405b;
+    line-height: 1.8;
+    padding: 24px;
+    max-width: 920px;
+    margin: 0 auto;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+h1 { color: #5d4037; border-bottom: 3px solid #c4a77d; padding-bottom: 12px; margin-bottom: 24px; font-size: 2em; }
+h2 { color: #588157; border-bottom: 2px solid #a3b18a; padding-bottom: 8px; margin: 32px 0 16px; }
+h3 { color: #5d4037; margin: 20px 0 12px; }
+p { margin: 12px 0; }
+code {
+    background: #e9f5db;
+    color: #3d405b;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+}
+pre {
+    background: #2d3436;
+    padding: 24px;
+    border-radius: 12px;
+    margin: 24px 0;
+    border: 3px solid #a3b18a;
+    overflow-x: auto;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+    font-size: 15px;
+    line-height: 1.6;
+    color: #f8f8f2;
+}
+.keyword { color: #ff79c6; font-weight: 600; }
+.type { color: #8be9fd; }
+.signal { color: #50fa7b; }
+.number { color: #ffb86c; }
+.comment { color: #6272a4; font-style: italic; }
+.lang-toggle {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    background: #588157;
+    border: none;
+    border-radius: 24px;
+    padding: 10px 20px;
+    cursor: pointer;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    z-index: 1000;
+}
+.lang-toggle:hover { background: #3a5a40; }
+.ko { display: none; }
+.nav-links { display: flex; gap: 12px; margin: 20px 0; flex-wrap: wrap; }
+.nav-links a {
+    background: linear-gradient(135deg, #588157, #3a5a40);
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14px;
+}
+.nav-links a:hover { opacity: 0.9; }
+.question {
+    background: #fff;
+    border-radius: 12px;
+    padding: 24px;
+    margin: 20px 0;
+    border: 1px solid #c4a77d;
+}
+.question h3 { color: #5d4037; }
+.options { margin: 12px 0; }
+.options label {
+    display: block;
+    padding: 10px 16px;
+    margin: 6px 0;
+    background: #fff8f0;
+    border: 2px solid #c4a77d;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.options label:hover { border-color: #588157; }
+.options input { margin-right: 10px; }
+.answer {
+    display: none;
+    margin-top: 12px;
+    padding: 16px;
+    border-radius: 8px;
+    background: #fff8f0;
+    border-left: 4px solid #588157;
+}
+.answer.wrong { border-left-color: #ef4444; }
+.answer.correct { border-left-color: #10b981; }
+.check-btn {
+    background: linear-gradient(135deg, #588157, #3a5a40);
+    color: #fff;
+    border: none;
+    padding: 10px 24px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    margin-top: 10px;
+}
+.check-btn:hover { opacity: 0.9; }
+.score-box {
+    background: #fff8f0;
+    border: 2px solid #c4a77d;
+    border-radius: 12px;
+    padding: 24px;
+    margin: 24px 0;
+    text-align: center;
+    display: none;
+}
+.score-box h2 { border: none; }
+#score-btn {
+    background: linear-gradient(135deg, #588157, #3a5a40);
+    color: #fff;
+    border: none;
+    padding: 14px 32px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 16px;
+}
+@media (max-width: 768px) {
+    body { padding: 16px; }
+    h1 { font-size: 1.8em; }
+    pre { font-size: 14px; padding: 16px; }
+    .lang-toggle { padding: 8px 16px; font-size: 13px; }
+}
+</style>
+</head>
+<body>
+<button class="lang-toggle" onclick="toggleLang()">한국어</button>
+
+<h1>📝 Day 10 Quiz: FSM Practice</h1>
+
+<div class="nav-links">
+    <a href="day-10-lesson.html">📖 Lesson</a>
+    <a href="day-10-practice.html">💻 Practice</a>
+</div>
+
+<div class="question" id="q1">
+<h3>Q1. <span class="en">In the traffic light controller, why is the emergency check placed BEFORE the case statement?</span><span class="ko" style="display:none;">교통 신호등 컨트롤러에서 비상 체크를 case문 앞에 배치하는 이유는?</span></h3>
+<div class="options">
+<label><input type="radio" name="q1" value="a"> <span class="en">It's just a coding style preference</span><span class="ko" style="display:none;">단순한 코딩 스타일 선호</span></label>
+<label><input type="radio" name="q1" value="b"> <span class="en">Emergency has highest priority — overrides any current state</span><span class="ko" style="display:none;">비상이 최우선 순위 — 현재 상태를 무시</span></label>
+<label><input type="radio" name="q1" value="c"> <span class="en">The case statement can't handle emergency</span><span class="ko" style="display:none;">case문이 비상을 처리할 수 없어서</span></label>
+<label><input type="radio" name="q1" value="d"> <span class="en">It reduces gate count in synthesis</span><span class="ko" style="display:none;">합성에서 게이트 수를 줄이기 위해</span></label>
+</div>
+<button class="check-btn" onclick="checkAnswer('q1','b')">Check</button>
+<div class="answer" id="a1"><span class="en">✅ <strong>B.</strong> By placing the emergency check in an if-else before the case, it takes priority over all other state transitions regardless of current state.</span><span class="ko" style="display:none;">✅ <strong>B.</strong> case문 앞에 if-else로 비상 체크를 배치하면, 현재 상태와 관계없이 모든 상태 전환보다 우선합니다.</span></div>
+</div>
+
+<div class="question" id="q2">
+<h3>Q2. <span class="en">The traffic light uses a separate <code>timer</code> register. What's the alternative, and why is it worse?</span><span class="ko" style="display:none;">신호등이 별도의 <code>timer</code> 레지스터를 사용합니다. 대안은 무엇이고 왜 더 나쁜가요?</span></h3>
+<div class="options">
+<label><input type="radio" name="q2" value="a"> <span class="en">Use a global counter — but it can't reset per state</span><span class="ko" style="display:none;">글로벌 카운터 사용 — 상태별 리셋 불가</span></label>
+<label><input type="radio" name="q2" value="b"> <span class="en">Encode timing into states (GREEN_NS_1, GREEN_NS_2, ...) — state explosion</span><span class="ko" style="display:none;">타이밍을 상태에 인코딩 (GREEN_NS_1, GREEN_NS_2, ...) — 상태 폭발</span></label>
+<label><input type="radio" name="q2" value="c"> <span class="en">Use delays — not synthesizable</span><span class="ko" style="display:none;">딜레이 사용 — 합성 불가</span></label>
+<label><input type="radio" name="q2" value="d"> <span class="en">All of the above are valid alternatives</span><span class="ko" style="display:none;">위의 모든 것이 유효한 대안</span></label>
+</div>
+<button class="check-btn" onclick="checkAnswer('q2','b')">Check</button>
+<div class="answer" id="a2"><span class="en">✅ <strong>B.</strong> Without a timer, you'd need separate states for each cycle (GREEN_NS_1 through GREEN_NS_10), creating 26+ states instead of 5. A timer register is much cleaner.</span><span class="ko" style="display:none;">✅ <strong>B.</strong> 타이머 없이는 각 사이클마다 별도 상태가 필요합니다 (GREEN_NS_1부터 GREEN_NS_10까지), 5개 대신 26개 이상의 상태가 됩니다.</span></div>
+</div>
+
+<div class="question" id="q3">
+<h3>Q3. <span class="en">In the sequence detector, what state transition happens when we're in GOT_101 and receive <code>din=0</code>?</span><span class="ko" style="display:none;">시퀀스 디텍터에서 GOT_101 상태에서 <code>din=0</code>을 받으면 어떤 상태 전환이 일어나나요?</span></h3>
+<div class="options">
+<label><input type="radio" name="q3" value="a"> <span class="en">Go to IDLE — start fresh</span><span class="ko" style="display:none;">IDLE로 이동 — 처음부터 시작</span></label>
+<label><input type="radio" name="q3" value="b"> <span class="en">Go to GOT_10 — "1010" shares "10" prefix</span><span class="ko" style="display:none;">GOT_10으로 이동 — "1010"이 "10" 접두사 공유</span></label>
+<label><input type="radio" name="q3" value="c"> <span class="en">Go to GOT_1 — reuse the last "1"</span><span class="ko" style="display:none;">GOT_1으로 이동 — 마지막 "1" 재사용</span></label>
+<label><input type="radio" name="q3" value="d"> <span class="en">Stay in GOT_101</span><span class="ko" style="display:none;">GOT_101에 머무름</span></label>
+</div>
+<button class="check-btn" onclick="checkAnswer('q3','b')">Check</button>
+<div class="answer" id="a3"><span class="en">✅ <strong>B.</strong> We've seen "1010". The last two bits "10" could be the start of "1011", so we go to GOT_10. This is the key insight for overlapping detection.</span><span class="ko" style="display:none;">✅ <strong>B.</strong> "1010"을 보았습니다. 마지막 두 비트 "10"이 "1011"의 시작일 수 있으므로 GOT_10으로 갑니다. 오버래핑 감지의 핵심 통찰입니다.</span></div>
+</div>
+
+<div class="question" id="q4">
+<h3>Q4. <span class="en">The sequence detector uses a Mealy machine. What makes it Mealy?</span><span class="ko" style="display:none;">시퀀스 디텍터는 Mealy 머신을 사용합니다. Mealy인 이유는?</span></h3>
+<div class="options">
+<label><input type="radio" name="q4" value="a"> <span class="en">It has fewer states than a Moore version</span><span class="ko" style="display:none;">Moore 버전보다 상태가 적어서</span></label>
+<label><input type="radio" name="q4" value="b"> <span class="en">The output <code>detected</code> depends on both state AND input <code>din</code></span><span class="ko" style="display:none;">출력 <code>detected</code>가 상태와 입력 <code>din</code> 모두에 의존</span></label>
+<label><input type="radio" name="q4" value="c"> <span class="en">It uses one-hot encoding</span><span class="ko" style="display:none;">원핫 인코딩을 사용해서</span></label>
+<label><input type="radio" name="q4" value="d"> <span class="en">The output is registered</span><span class="ko" style="display:none;">출력이 레지스터링되어서</span></label>
+</div>
+<button class="check-btn" onclick="checkAnswer('q4','b')">Check</button>
+<div class="answer" id="a4"><span class="en">✅ <strong>B.</strong> In the GOT_101 state, <code>detected</code> is only asserted when <code>din=1</code>. Output depends on current state AND current input = Mealy.</span><span class="ko" style="display:none;">✅ <strong>B.</strong> GOT_101 상태에서 <code>detected</code>는 <code>din=1</code>일 때만 어서트됩니다. 출력이 현재 상태와 현재 입력에 의존 = Mealy.</span></div>
+</div>
+
+<div class="question" id="q5">
+<h3>Q5. <span class="en">For a non-overlapping version of the 1011 detector, what changes in GOT_101 when <code>din=1</code>?</span><span class="ko" style="display:none;">1011 디텍터의 논오버래핑 버전에서 GOT_101에서 <code>din=1</code>일 때 무엇이 변하나요?</span></h3>
+<div class="options">
+<label><input type="radio" name="q5" value="a"> <span class="en"><code>next_state = IDLE</code> instead of <code>GOT_1</code></span><span class="ko" style="display:none;"><code>GOT_1</code> 대신 <code>next_state = IDLE</code></span></label>
+<label><input type="radio" name="q5" value="b"> <span class="en"><code>detected</code> is not asserted</span><span class="ko" style="display:none;"><code>detected</code>가 어서트되지 않음</span></label>
+<label><input type="radio" name="q5" value="c"> <span class="en">Nothing changes — overlapping is automatic</span><span class="ko" style="display:none;">변하는 것 없음 — 오버래핑은 자동</span></label>
+<label><input type="radio" name="q5" value="d"> <span class="en">Remove the GOT_101 state entirely</span><span class="ko" style="display:none;">GOT_101 상태를 완전히 제거</span></label>
+</div>
+<button class="check-btn" onclick="checkAnswer('q5','a')">Check</button>
+<div class="answer" id="a5"><span class="en">✅ <strong>A.</strong> Non-overlapping: after detecting "1011", go to IDLE to start fresh. Overlapping: go to GOT_1 because the final "1" could start a new "1011".</span><span class="ko" style="display:none;">✅ <strong>A.</strong> 논오버래핑: "1011" 감지 후 IDLE로 가서 새로 시작. 오버래핑: 마지막 "1"이 새로운 "1011"을 시작할 수 있으므로 GOT_1로 이동.</span></div>
+</div>
+
+<div class="question" id="q6">
+<h3>Q6. <span class="en">Why does the traffic light output logic use a separate <code>always_comb</code> block?</span><span class="ko" style="display:none;">신호등 출력 로직이 별도의 <code>always_comb</code> 블록을 사용하는 이유는?</span></h3>
+<div class="options">
+<label><input type="radio" name="q6" value="a"> <span class="en">Required by SystemVerilog syntax</span><span class="ko" style="display:none;">SystemVerilog 구문에 의해 필수</span></label>
+<label><input type="radio" name="q6" value="b"> <span class="en">Keeps the 3-block FSM pattern: state reg, next state, outputs</span><span class="ko" style="display:none;">3블록 FSM 패턴 유지: 상태 레지스터, 다음 상태, 출력</span></label>
+<label><input type="radio" name="q6" value="c"> <span class="en">Outputs must always be in <code>always_comb</code></span><span class="ko" style="display:none;">출력은 항상 <code>always_comb</code>에 있어야 함</span></label>
+<label><input type="radio" name="q6" value="d"> <span class="en">It generates fewer gates</span><span class="ko" style="display:none;">더 적은 게이트 생성</span></label>
+</div>
+<button class="check-btn" onclick="checkAnswer('q6','b')">Check</button>
+<div class="answer" id="a6"><span class="en">✅ <strong>B.</strong> The 3-block pattern (Day 6!) keeps code organized and maintainable. Each block has one job: register state, compute next state, compute outputs.</span><span class="ko" style="display:none;">✅ <strong>B.</strong> 3블록 패턴(6일차!)은 코드를 체계적이고 유지보수하기 쉽게 합니다. 각 블록은 하나의 역할: 상태 등록, 다음 상태 계산, 출력 계산.</span></div>
+</div>
+
+<div class="question" id="q7">
+<h3>Q7. <span class="en">What happens if the traffic light FSM enters an illegal state and there's no default case?</span><span class="ko" style="display:none;">신호등 FSM이 불법 상태에 진입하고 default case가 없으면 어떻게 되나요?</span></h3>
+<div class="options">
+<label><input type="radio" name="q7" value="a"> <span class="en">Simulation crashes</span><span class="ko" style="display:none;">시뮬레이션이 충돌</span></label>
+<label><input type="radio" name="q7" value="b"> <span class="en">Latch is inferred — FSM stays stuck forever</span><span class="ko" style="display:none;">래치가 추론됨 — FSM이 영원히 멈춤</span></label>
+<label><input type="radio" name="q7" value="c"> <span class="en">Synthesis tool automatically adds a default</span><span class="ko" style="display:none;">합성 도구가 자동으로 default 추가</span></label>
+<label><input type="radio" name="q7" value="d"> <span class="en">Nothing — unused states are optimized away</span><span class="ko" style="display:none;">아무 일도 없음 — 미사용 상태는 최적화됨</span></label>
+</div>
+<button class="check-btn" onclick="checkAnswer('q7','b')">Check</button>
+<div class="answer" id="a7"><span class="en">✅ <strong>B.</strong> Without a default case, the combinational block doesn't define outputs for unknown states, causing latch inference. The FSM gets stuck with no way to recover — exactly what Day 9 warned about!</span><span class="ko" style="display:none;">✅ <strong>B.</strong> default case 없이는 조합 블록이 알 수 없는 상태의 출력을 정의하지 않아 래치가 추론됩니다. FSM은 복구할 방법 없이 멈춥니다 — 9일차에서 경고한 것!</span></div>
+</div>
+
+<div class="question" id="q8">
+<h3>Q8. <span class="en">In the testbench, what does <code>@(posedge clk)</code> inside the task do?</span><span class="ko" style="display:none;">테스트벤치에서 task 안의 <code>@(posedge clk)</code>은 무엇을 하나요?</span></h3>
+<div class="options">
+<label><input type="radio" name="q8" value="a"> <span class="en">Creates a new clock edge</span><span class="ko" style="display:none;">새로운 클럭 에지를 생성</span></label>
+<label><input type="radio" name="q8" value="b"> <span class="en">Waits for the next rising clock edge before applying the input</span><span class="ko" style="display:none;">입력 적용 전에 다음 상승 클럭 에지를 기다림</span></label>
+<label><input type="radio" name="q8" value="c"> <span class="en">Checks that the clock is running</span><span class="ko" style="display:none;">클럭이 동작하는지 확인</span></label>
+<label><input type="radio" name="q8" value="d"> <span class="en">Resets the clock counter</span><span class="ko" style="display:none;">클럭 카운터를 리셋</span></label>
+</div>
+<button class="check-btn" onclick="checkAnswer('q8','b')">Check</button>
+<div class="answer" id="a8"><span class="en">✅ <strong>B.</strong> The <code>@(posedge clk)</code> event control waits until the next rising edge, synchronizing our test stimulus with the clock — just like real hardware would sample inputs.</span><span class="ko" style="display:none;">✅ <strong>B.</strong> <code>@(posedge clk)</code> 이벤트 제어는 다음 상승 에지까지 기다려서, 테스트 자극을 클럭과 동기화합니다 — 실제 하드웨어가 입력을 샘플링하는 것처럼.</span></div>
+</div>
+
+<div class="question" id="q9">
+<h3>Q9. <span class="en">For the traffic light, what type of FSM is the output logic?</span><span class="ko" style="display:none;">신호등에서 출력 로직은 어떤 타입의 FSM인가요?</span></h3>
+<div class="options">
+<label><input type="radio" name="q9" value="a"> <span class="en">Mealy — outputs depend on state and timer</span><span class="ko" style="display:none;">Mealy — 출력이 상태와 타이머에 의존</span></label>
+<label><input type="radio" name="q9" value="b"> <span class="en">Moore — outputs depend only on current state</span><span class="ko" style="display:none;">Moore — 출력이 현재 상태에만 의존</span></label>
+<label><input type="radio" name="q9" value="c"> <span class="en">Neither — it's combinational</span><span class="ko" style="display:none;">둘 다 아님 — 조합 로직</span></label>
+<label><input type="radio" name="q9" value="d"> <span class="en">Both Moore and Mealy</span><span class="ko" style="display:none;">Moore와 Mealy 둘 다</span></label>
+</div>
+<button class="check-btn" onclick="checkAnswer('q9','b')">Check</button>
+<div class="answer" id="a9"><span class="en">✅ <strong>B.</strong> The output case statement only looks at <code>state</code> — not any inputs. Outputs are purely a function of current state = Moore machine.</span><span class="ko" style="display:none;">✅ <strong>B.</strong> 출력 case문은 <code>state</code>만 봅니다 — 입력은 보지 않습니다. 출력이 순전히 현재 상태의 함수 = Moore 머신.</span></div>
+</div>
+
+<div class="question" id="q10">
+<h3>Q10. <span class="en">When designing an FSM for an interview, what should you do FIRST?</span><span class="ko" style="display:none;">면접에서 FSM을 설계할 때 가장 먼저 해야 할 일은?</span></h3>
+<div class="options">
+<label><input type="radio" name="q10" value="a"> <span class="en">Write the SystemVerilog code</span><span class="ko" style="display:none;">SystemVerilog 코드 작성</span></label>
+<label><input type="radio" name="q10" value="b"> <span class="en">Choose the state encoding</span><span class="ko" style="display:none;">상태 인코딩 선택</span></label>
+<label><input type="radio" name="q10" value="c"> <span class="en">Draw the state diagram and clarify requirements</span><span class="ko" style="display:none;">상태 다이어그램을 그리고 요구사항 명확화</span></label>
+<label><input type="radio" name="q10" value="d"> <span class="en">Write the testbench</span><span class="ko" style="display:none;">테스트벤치 작성</span></label>
+</div>
+<button class="check-btn" onclick="checkAnswer('q10','c')">Check</button>
+<div class="answer" id="a10"><span class="en">✅ <strong>C.</strong> Always start with requirements and a state diagram. Ask clarifying questions (overlapping? Moore/Mealy?). Then code. Interviewers value structured thinking over fast typing.</span><span class="ko" style="display:none;">✅ <strong>C.</strong> 항상 요구사항과 상태 다이어그램으로 시작하세요. 명확한 질문을 하세요 (오버래핑? Moore/Mealy?). 그 다음 코딩. 면접관은 빠른 타이핑보다 구조적 사고를 중시합니다.</span></div>
+</div>
+
+<div class="score-box" id="score-box">
+<h2 id="score-text"></h2>
+<p id="score-msg"></p>
+</div>
+<div style="text-align:center; margin: 24px 0;">
+<button id="score-btn" onclick="showScore()">Show Score</button>
+</div>
+
+<div class="nav-links">
+    <a href="day-10-lesson.html">📖 Review Lesson</a>
+    <a href="day-10-practice.html">💻 Practice</a>
+</div>
+
+<script>
+let isKorean = false;
+function toggleLang() {
+    isKorean = !isKorean;
+    document.querySelectorAll('.en').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'none' : 'revert', 'important');
+    });
+    document.querySelectorAll('.ko').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'revert' : 'none', 'important');
+    });
+    document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+}
+
+const answers = {};
+function checkAnswer(qId, correct) {
+    const selected = document.querySelector(`input[name="${qId}"]:checked`);
+    if (!selected) return;
+    const answerDiv = document.getElementById('a' + qId.substring(1));
+    answerDiv.style.display = 'block';
+    const isCorrect = selected.value === correct;
+    answerDiv.className = 'answer ' + (isCorrect ? 'correct' : 'wrong');
+    answers[qId] = isCorrect;
+}
+
+function showScore() {
+    const total = 10;
+    const correct = Object.values(answers).filter(v => v).length;
+    const pct = Math.round(correct / total * 100);
+    document.getElementById('score-text').textContent = `${correct}/${total} (${pct}%)`;
+    const msgs = pct >= 90 ? '🌟 Outstanding! FSM master!' : pct >= 70 ? '👍 Great work! Review the ones you missed.' : pct >= 50 ? '📚 Good effort — revisit the lesson for missed concepts.' : '💪 Keep studying — review Days 6-10 before moving on.';
+    document.getElementById('score-msg').textContent = msgs;
+    document.getElementById('score-box').style.display = 'block';
+}
+</script>
+</body>
+</html>

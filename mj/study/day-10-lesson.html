@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 10: FSM Practice — Traffic Light & Sequence Detector</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    background: linear-gradient(135deg, #fefae0 0%, #faedcd 100%);
+    color: #3d405b;
+    line-height: 1.8;
+    padding: 24px;
+    max-width: 920px;
+    margin: 0 auto;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+h1 { color: #5d4037; border-bottom: 3px solid #c4a77d; padding-bottom: 12px; margin-bottom: 24px; font-size: 2em; }
+h2 { color: #588157; border-bottom: 2px solid #a3b18a; padding-bottom: 8px; margin: 32px 0 16px; }
+h3 { color: #5d4037; margin: 20px 0 12px; }
+p { margin: 12px 0; }
+ul, ol { margin: 12px 0 12px 24px; }
+li { margin: 6px 0; }
+code {
+    background: #e9f5db;
+    color: #3d405b;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+}
+pre {
+    background: #2d3436;
+    padding: 24px;
+    border-radius: 12px;
+    margin: 24px 0;
+    border: 3px solid #a3b18a;
+    overflow-x: auto;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+    font-size: 15px;
+    line-height: 1.6;
+    color: #f8f8f2;
+}
+.keyword { color: #ff79c6; font-weight: 600; }
+.type { color: #8be9fd; }
+.signal { color: #50fa7b; }
+.number { color: #ffb86c; }
+.comment { color: #6272a4; font-style: italic; }
+.string { color: #f1fa8c; }
+.concept-box {
+    background: #fff8f0;
+    border: 2px solid #c4a77d;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    color: #3d405b;
+}
+.concept-box h3 { color: #5d4037; margin-bottom: 12px; }
+.warning-box {
+    background: #fff8f0;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    border-left: 4px solid #ef4444;
+    color: #3d405b;
+}
+.warning-box h3 { color: #c53030; margin-bottom: 12px; }
+.tip-box {
+    background: #fff8f0;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    border-left: 4px solid #588157;
+    color: #3d405b;
+}
+.comparison-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+.comparison-table th {
+    background: #588157;
+    color: white;
+    padding: 12px;
+    text-align: left;
+}
+.comparison-table td {
+    background: #fff;
+    border: 1px solid #c4a77d;
+    padding: 12px;
+    color: #3d405b;
+}
+.comparison-table tr:nth-child(even) td { background: #fff8f0; }
+.lang-toggle {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    background: #588157;
+    border: none;
+    border-radius: 24px;
+    padding: 10px 20px;
+    cursor: pointer;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    z-index: 1000;
+}
+.lang-toggle:hover { background: #3a5a40; }
+.ko { display: none; }
+.nav-links { display: flex; gap: 12px; margin: 20px 0; flex-wrap: wrap; }
+.nav-links a {
+    background: linear-gradient(135deg, #588157, #3a5a40);
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14px;
+}
+.nav-links a:hover { opacity: 0.9; }
+.section { background: #fff; border-radius: 12px; padding: 24px; margin: 24px 0; border: 1px solid #c4a77d; }
+@media (max-width: 768px) {
+    body { padding: 16px; }
+    h1 { font-size: 1.8em; }
+    pre { font-size: 14px; padding: 16px; }
+    .lang-toggle { padding: 8px 16px; font-size: 13px; }
+}
+</style>
+</head>
+<body>
+<button class="lang-toggle" onclick="toggleLang()">한국어</button>
+
+<h1>📅 Day 10: FSM Practice</h1>
+<p class="en">Week 2 finale! Today we put everything together — building real FSMs from scratch: a <strong>traffic light controller</strong> and a <strong>sequence detector</strong>.</p>
+<p class="ko" style="display:none;">2주차 마무리! 오늘은 모든 것을 종합합니다 — <strong>교통 신호등 컨트롤러</strong>와 <strong>시퀀스 디텍터</strong>를 처음부터 만들어봅니다.</p>
+
+<div class="nav-links">
+    <a href="day-10-quiz.html">📝 Quiz</a>
+    <a href="day-10-practice.html">💻 Practice</a>
+    <a href="day-09-lesson.html">← Day 9</a>
+</div>
+
+<div class="section">
+<h2>🚦 Project 1: Traffic Light Controller</h2>
+
+<p class="en">A classic FSM problem. We'll build a controller for a simple intersection with North-South and East-West lights.</p>
+<p class="ko" style="display:none;">클래식한 FSM 문제입니다. 남북/동서 방향 신호등이 있는 간단한 교차로 컨트롤러를 만들겠습니다.</p>
+
+<div class="concept-box">
+<h3>📋 Specification</h3>
+<p class="en"><strong>States:</strong> GREEN_NS → YELLOW_NS → GREEN_EW → YELLOW_EW → (repeat)</p>
+<p class="ko" style="display:none;"><strong>상태:</strong> GREEN_NS → YELLOW_NS → GREEN_EW → YELLOW_EW → (반복)</p>
+<ul class="en">
+    <li>Green lasts <strong>10 cycles</strong></li>
+    <li>Yellow lasts <strong>3 cycles</strong></li>
+    <li>When one direction is green/yellow, the other is <strong>red</strong></li>
+    <li>Emergency input → both directions go <strong>red</strong></li>
+</ul>
+<ul class="ko" style="display:none;">
+    <li>초록불은 <strong>10 사이클</strong> 유지</li>
+    <li>노란불은 <strong>3 사이클</strong> 유지</li>
+    <li>한 방향이 초록/노란불일 때 다른 방향은 <strong>빨간불</strong></li>
+    <li>비상 입력 → 양방향 모두 <strong>빨간불</strong></li>
+</ul>
+</div>
+
+<h3>State Diagram</h3>
+<p class="en">Think of it as a circular FSM with a timer-based transition and an emergency override:</p>
+<p class="ko" style="display:none;">타이머 기반 전환과 비상 오버라이드가 있는 순환 FSM으로 생각하세요:</p>
+
+<pre>
+<span class="comment">// State Encoding — using one-hot for clarity</span>
+<span class="keyword">typedef enum</span> <span class="type">logic</span> [<span class="number">4</span>:<span class="number">0</span>] {
+    <span class="signal">GREEN_NS</span>   = <span class="number">5'b00001</span>,
+    <span class="signal">YELLOW_NS</span>  = <span class="number">5'b00010</span>,
+    <span class="signal">GREEN_EW</span>   = <span class="number">5'b00100</span>,
+    <span class="signal">YELLOW_EW</span>  = <span class="number">5'b01000</span>,
+    <span class="signal">EMERGENCY</span>  = <span class="number">5'b10000</span>
+} <span class="type">state_t</span>;
+</pre>
+
+<h3>Full Implementation</h3>
+
+<pre>
+<span class="keyword">module</span> <span class="signal">traffic_light</span> (
+    <span class="keyword">input</span>  <span class="type">logic</span>       <span class="signal">clk</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span>       <span class="signal">rst_n</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span>       <span class="signal">emergency</span>,
+    <span class="keyword">output</span> <span class="type">logic</span> [<span class="number">2</span>:<span class="number">0</span>] <span class="signal">ns_light</span>,  <span class="comment">// {red, yellow, green}</span>
+    <span class="keyword">output</span> <span class="type">logic</span> [<span class="number">2</span>:<span class="number">0</span>] <span class="signal">ew_light</span>   <span class="comment">// {red, yellow, green}</span>
+);
+
+    <span class="comment">// Light encoding</span>
+    <span class="keyword">localparam</span> <span class="type">logic</span> [<span class="number">2</span>:<span class="number">0</span>] <span class="signal">RED</span>    = <span class="number">3'b100</span>;
+    <span class="keyword">localparam</span> <span class="type">logic</span> [<span class="number">2</span>:<span class="number">0</span>] <span class="signal">YELLOW</span> = <span class="number">3'b010</span>;
+    <span class="keyword">localparam</span> <span class="type">logic</span> [<span class="number">2</span>:<span class="number">0</span>] <span class="signal">GREEN</span>  = <span class="number">3'b001</span>;
+
+    <span class="keyword">typedef enum</span> <span class="type">logic</span> [<span class="number">2</span>:<span class="number">0</span>] {
+        <span class="signal">S_GREEN_NS</span>,
+        <span class="signal">S_YELLOW_NS</span>,
+        <span class="signal">S_GREEN_EW</span>,
+        <span class="signal">S_YELLOW_EW</span>,
+        <span class="signal">S_EMERGENCY</span>
+    } <span class="type">state_t</span>;
+
+    <span class="type">state_t</span> <span class="signal">state</span>, <span class="signal">next_state</span>;
+    <span class="type">logic</span> [<span class="number">3</span>:<span class="number">0</span>] <span class="signal">timer</span>, <span class="signal">next_timer</span>;
+
+    <span class="comment">// State register</span>
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span> <span class="keyword">or negedge</span> <span class="signal">rst_n</span>) <span class="keyword">begin</span>
+        <span class="keyword">if</span> (!<span class="signal">rst_n</span>) <span class="keyword">begin</span>
+            <span class="signal">state</span> &lt;= <span class="signal">S_GREEN_NS</span>;
+            <span class="signal">timer</span> &lt;= <span class="number">4'd0</span>;
+        <span class="keyword">end else begin</span>
+            <span class="signal">state</span> &lt;= <span class="signal">next_state</span>;
+            <span class="signal">timer</span> &lt;= <span class="signal">next_timer</span>;
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+
+    <span class="comment">// Next state logic</span>
+    <span class="keyword">always_comb</span> <span class="keyword">begin</span>
+        <span class="signal">next_state</span> = <span class="signal">state</span>;
+        <span class="signal">next_timer</span> = <span class="signal">timer</span> + <span class="number">4'd1</span>;
+
+        <span class="keyword">if</span> (<span class="signal">emergency</span>) <span class="keyword">begin</span>
+            <span class="signal">next_state</span> = <span class="signal">S_EMERGENCY</span>;
+            <span class="signal">next_timer</span> = <span class="number">4'd0</span>;
+        <span class="keyword">end else begin</span>
+            <span class="keyword">case</span> (<span class="signal">state</span>)
+                <span class="signal">S_GREEN_NS</span>: <span class="keyword">if</span> (<span class="signal">timer</span> == <span class="number">4'd9</span>) <span class="keyword">begin</span>
+                    <span class="signal">next_state</span> = <span class="signal">S_YELLOW_NS</span>;
+                    <span class="signal">next_timer</span> = <span class="number">4'd0</span>;
+                <span class="keyword">end</span>
+
+                <span class="signal">S_YELLOW_NS</span>: <span class="keyword">if</span> (<span class="signal">timer</span> == <span class="number">4'd2</span>) <span class="keyword">begin</span>
+                    <span class="signal">next_state</span> = <span class="signal">S_GREEN_EW</span>;
+                    <span class="signal">next_timer</span> = <span class="number">4'd0</span>;
+                <span class="keyword">end</span>
+
+                <span class="signal">S_GREEN_EW</span>: <span class="keyword">if</span> (<span class="signal">timer</span> == <span class="number">4'd9</span>) <span class="keyword">begin</span>
+                    <span class="signal">next_state</span> = <span class="signal">S_YELLOW_EW</span>;
+                    <span class="signal">next_timer</span> = <span class="number">4'd0</span>;
+                <span class="keyword">end</span>
+
+                <span class="signal">S_YELLOW_EW</span>: <span class="keyword">if</span> (<span class="signal">timer</span> == <span class="number">4'd2</span>) <span class="keyword">begin</span>
+                    <span class="signal">next_state</span> = <span class="signal">S_GREEN_NS</span>;
+                    <span class="signal">next_timer</span> = <span class="number">4'd0</span>;
+                <span class="keyword">end</span>
+
+                <span class="signal">S_EMERGENCY</span>: <span class="keyword">if</span> (!<span class="signal">emergency</span>) <span class="keyword">begin</span>
+                    <span class="signal">next_state</span> = <span class="signal">S_GREEN_NS</span>;
+                    <span class="signal">next_timer</span> = <span class="number">4'd0</span>;
+                <span class="keyword">end</span>
+
+                <span class="keyword">default</span>: <span class="keyword">begin</span>
+                    <span class="signal">next_state</span> = <span class="signal">S_GREEN_NS</span>;
+                    <span class="signal">next_timer</span> = <span class="number">4'd0</span>;
+                <span class="keyword">end</span>
+            <span class="keyword">endcase</span>
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+
+    <span class="comment">// Output logic (Moore — outputs depend only on state)</span>
+    <span class="keyword">always_comb</span> <span class="keyword">begin</span>
+        <span class="keyword">case</span> (<span class="signal">state</span>)
+            <span class="signal">S_GREEN_NS</span>:  <span class="keyword">begin</span> <span class="signal">ns_light</span> = <span class="signal">GREEN</span>;  <span class="signal">ew_light</span> = <span class="signal">RED</span>;    <span class="keyword">end</span>
+            <span class="signal">S_YELLOW_NS</span>: <span class="keyword">begin</span> <span class="signal">ns_light</span> = <span class="signal">YELLOW</span>; <span class="signal">ew_light</span> = <span class="signal">RED</span>;    <span class="keyword">end</span>
+            <span class="signal">S_GREEN_EW</span>:  <span class="keyword">begin</span> <span class="signal">ns_light</span> = <span class="signal">RED</span>;    <span class="signal">ew_light</span> = <span class="signal">GREEN</span>;  <span class="keyword">end</span>
+            <span class="signal">S_YELLOW_EW</span>: <span class="keyword">begin</span> <span class="signal">ns_light</span> = <span class="signal">RED</span>;    <span class="signal">ew_light</span> = <span class="signal">YELLOW</span>; <span class="keyword">end</span>
+            <span class="signal">S_EMERGENCY</span>: <span class="keyword">begin</span> <span class="signal">ns_light</span> = <span class="signal">RED</span>;    <span class="signal">ew_light</span> = <span class="signal">RED</span>;    <span class="keyword">end</span>
+            <span class="keyword">default</span>:     <span class="keyword">begin</span> <span class="signal">ns_light</span> = <span class="signal">RED</span>;    <span class="signal">ew_light</span> = <span class="signal">RED</span>;    <span class="keyword">end</span>
+        <span class="keyword">endcase</span>
+    <span class="keyword">end</span>
+
+<span class="keyword">endmodule</span>
+</pre>
+
+<div class="tip-box">
+<h3>💡 Design Patterns Used</h3>
+<ul class="en">
+    <li><strong>Timer counter</strong> — separate counter register avoids complex state explosion</li>
+    <li><strong>Emergency override</strong> — checked before the case statement (highest priority)</li>
+    <li><strong>Moore outputs</strong> — clean, glitch-free output from registered state</li>
+    <li><strong>Default case</strong> — safe recovery from illegal states (Day 9!)</li>
+</ul>
+<ul class="ko" style="display:none;">
+    <li><strong>타이머 카운터</strong> — 별도 카운터 레지스터로 복잡한 상태 폭발 방지</li>
+    <li><strong>비상 오버라이드</strong> — case문 전에 체크 (최우선 순위)</li>
+    <li><strong>Moore 출력</strong> — 등록된 상태에서 깔끔하고 글리치 없는 출력</li>
+    <li><strong>Default case</strong> — 불법 상태에서의 안전한 복구 (9일차!)</li>
+</ul>
+</div>
+</div>
+
+<div class="section">
+<h2>🔍 Project 2: Sequence Detector (1011)</h2>
+
+<p class="en">Detects the pattern <code>1011</code> on a serial input. We'll build both <strong>overlapping</strong> and <strong>non-overlapping</strong> versions.</p>
+<p class="ko" style="display:none;">직렬 입력에서 패턴 <code>1011</code>을 감지합니다. <strong>오버래핑</strong>과 <strong>논오버래핑</strong> 버전을 모두 만들겠습니다.</p>
+
+<div class="concept-box">
+<h3>🔄 Overlapping vs Non-Overlapping</h3>
+<p class="en">Input: <code>1 0 1 1 0 1 1</code></p>
+<p class="ko" style="display:none;">입력: <code>1 0 1 1 0 1 1</code></p>
+<table class="comparison-table">
+<tr><th>Type</th><th>Detections</th><th>Explanation</th></tr>
+<tr class="en"><td>Non-overlapping</td><td>1 (at position 4)</td><td>Resets to idle after detection</td></tr>
+<tr class="ko" style="display:none;"><td>논오버래핑</td><td>1회 (위치 4)</td><td>감지 후 초기 상태로 리셋</td></tr>
+<tr class="en"><td>Overlapping</td><td>2 (at positions 4, 7)</td><td>Reuses matched bits for next pattern</td></tr>
+<tr class="ko" style="display:none;"><td>오버래핑</td><td>2회 (위치 4, 7)</td><td>매치된 비트를 다음 패턴에 재사용</td></tr>
+</table>
+</div>
+
+<h3>Overlapping Sequence Detector (Mealy)</h3>
+
+<pre>
+<span class="keyword">module</span> <span class="signal">seq_detector_1011</span> (
+    <span class="keyword">input</span>  <span class="type">logic</span> <span class="signal">clk</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span> <span class="signal">rst_n</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span> <span class="signal">din</span>,
+    <span class="keyword">output</span> <span class="type">logic</span> <span class="signal">detected</span>
+);
+
+    <span class="keyword">typedef enum</span> <span class="type">logic</span> [<span class="number">2</span>:<span class="number">0</span>] {
+        <span class="signal">IDLE</span>,    <span class="comment">// Waiting for '1'</span>
+        <span class="signal">GOT_1</span>,   <span class="comment">// Seen "1"</span>
+        <span class="signal">GOT_10</span>,  <span class="comment">// Seen "10"</span>
+        <span class="signal">GOT_101</span>  <span class="comment">// Seen "101"</span>
+    } <span class="type">state_t</span>;
+
+    <span class="type">state_t</span> <span class="signal">state</span>, <span class="signal">next_state</span>;
+
+    <span class="comment">// State register</span>
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span> <span class="keyword">or negedge</span> <span class="signal">rst_n</span>) <span class="keyword">begin</span>
+        <span class="keyword">if</span> (!<span class="signal">rst_n</span>)
+            <span class="signal">state</span> &lt;= <span class="signal">IDLE</span>;
+        <span class="keyword">else</span>
+            <span class="signal">state</span> &lt;= <span class="signal">next_state</span>;
+    <span class="keyword">end</span>
+
+    <span class="comment">// Next state + output (Mealy: output depends on state AND input)</span>
+    <span class="keyword">always_comb</span> <span class="keyword">begin</span>
+        <span class="signal">next_state</span> = <span class="signal">IDLE</span>;
+        <span class="signal">detected</span>  = <span class="number">1'b0</span>;
+
+        <span class="keyword">case</span> (<span class="signal">state</span>)
+            <span class="signal">IDLE</span>: <span class="keyword">begin</span>
+                <span class="signal">next_state</span> = <span class="signal">din</span> ? <span class="signal">GOT_1</span> : <span class="signal">IDLE</span>;
+            <span class="keyword">end</span>
+
+            <span class="signal">GOT_1</span>: <span class="keyword">begin</span>
+                <span class="signal">next_state</span> = <span class="signal">din</span> ? <span class="signal">GOT_1</span> : <span class="signal">GOT_10</span>;
+            <span class="keyword">end</span>
+
+            <span class="signal">GOT_10</span>: <span class="keyword">begin</span>
+                <span class="signal">next_state</span> = <span class="signal">din</span> ? <span class="signal">GOT_101</span> : <span class="signal">IDLE</span>;
+            <span class="keyword">end</span>
+
+            <span class="signal">GOT_101</span>: <span class="keyword">begin</span>
+                <span class="keyword">if</span> (<span class="signal">din</span>) <span class="keyword">begin</span>
+                    <span class="signal">detected</span>  = <span class="number">1'b1</span>;    <span class="comment">// Pattern found!</span>
+                    <span class="signal">next_state</span> = <span class="signal">GOT_1</span>;  <span class="comment">// Overlap: "1" can start new match</span>
+                <span class="keyword">end else begin</span>
+                    <span class="signal">next_state</span> = <span class="signal">GOT_10</span>; <span class="comment">// "1010" — reuse "10"</span>
+                <span class="keyword">end</span>
+            <span class="keyword">end</span>
+
+            <span class="keyword">default</span>: <span class="signal">next_state</span> = <span class="signal">IDLE</span>;
+        <span class="keyword">endcase</span>
+    <span class="keyword">end</span>
+
+<span class="keyword">endmodule</span>
+</pre>
+
+<div class="warning-box">
+<h3>⚠️ Mealy vs Moore Tradeoff</h3>
+<p class="en">This is a <strong>Mealy machine</strong> — <code>detected</code> depends on both state AND <code>din</code>. This gives us <strong>one cycle earlier</strong> detection, but the output can <strong>glitch</strong> if <code>din</code> changes asynchronously. For safer designs, register the output:</p>
+<p class="ko" style="display:none;">이것은 <strong>Mealy 머신</strong>입니다 — <code>detected</code>가 상태와 <code>din</code> 모두에 의존합니다. <strong>한 사이클 빨리</strong> 감지하지만, <code>din</code>이 비동기적으로 변하면 출력이 <strong>글리치</strong>할 수 있습니다. 안전한 설계를 위해 출력을 레지스터링하세요:</p>
+<pre>
+<span class="comment">// Registered Mealy output — no glitches</span>
+<span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span> <span class="keyword">or negedge</span> <span class="signal">rst_n</span>) <span class="keyword">begin</span>
+    <span class="keyword">if</span> (!<span class="signal">rst_n</span>)
+        <span class="signal">detected_reg</span> &lt;= <span class="number">1'b0</span>;
+    <span class="keyword">else</span>
+        <span class="signal">detected_reg</span> &lt;= <span class="signal">detected</span>;
+<span class="keyword">end</span>
+</pre>
+</div>
+</div>
+
+<div class="section">
+<h2>🧪 Testbench Techniques</h2>
+
+<p class="en">Good testbenches are just as important as the design. Here's how to verify our FSMs:</p>
+<p class="ko" style="display:none;">좋은 테스트벤치는 설계만큼 중요합니다. FSM을 검증하는 방법입니다:</p>
+
+<pre>
+<span class="keyword">module</span> <span class="signal">tb_seq_detector</span>;
+    <span class="type">logic</span> <span class="signal">clk</span>, <span class="signal">rst_n</span>, <span class="signal">din</span>, <span class="signal">detected</span>;
+
+    <span class="signal">seq_detector_1011</span> <span class="signal">dut</span> (.*);
+
+    <span class="comment">// Clock generation</span>
+    <span class="keyword">always</span> #<span class="number">5</span> <span class="signal">clk</span> = ~<span class="signal">clk</span>;
+
+    <span class="comment">// Test sequence</span>
+    <span class="keyword">task</span> <span class="signal">send_bit</span>(<span class="keyword">input</span> <span class="type">logic</span> <span class="signal">bit_val</span>);
+        @(<span class="keyword">posedge</span> <span class="signal">clk</span>);
+        <span class="signal">din</span> = <span class="signal">bit_val</span>;
+    <span class="keyword">endtask</span>
+
+    <span class="keyword">initial</span> <span class="keyword">begin</span>
+        <span class="signal">clk</span> = <span class="number">0</span>; <span class="signal">rst_n</span> = <span class="number">0</span>; <span class="signal">din</span> = <span class="number">0</span>;
+        #<span class="number">20</span> <span class="signal">rst_n</span> = <span class="number">1</span>;
+
+        <span class="comment">// Send: 1 0 1 1 → should detect</span>
+        <span class="signal">send_bit</span>(<span class="number">1</span>);
+        <span class="signal">send_bit</span>(<span class="number">0</span>);
+        <span class="signal">send_bit</span>(<span class="number">1</span>);
+        <span class="signal">send_bit</span>(<span class="number">1</span>);
+        @(<span class="keyword">posedge</span> <span class="signal">clk</span>);
+        <span class="keyword">assert</span>(<span class="signal">detected</span>) <span class="keyword">else</span> $error(<span class="string">"Missed 1011!"</span>);
+
+        <span class="comment">// Test overlapping: continue with 0 1 1</span>
+        <span class="signal">send_bit</span>(<span class="number">0</span>);
+        <span class="signal">send_bit</span>(<span class="number">1</span>);
+        <span class="signal">send_bit</span>(<span class="number">1</span>);
+        @(<span class="keyword">posedge</span> <span class="signal">clk</span>);
+        <span class="keyword">assert</span>(<span class="signal">detected</span>) <span class="keyword">else</span> $error(<span class="string">"Missed overlap!"</span>);
+
+        $display(<span class="string">"All tests passed!"</span>);
+        $finish;
+    <span class="keyword">end</span>
+<span class="keyword">endmodule</span>
+</pre>
+</div>
+
+<div class="section">
+<h2>📊 Week 2 Summary: FSM Mastery</h2>
+
+<table class="comparison-table">
+<tr><th>Day</th><th class="en">Topic</th><th class="ko" style="display:none;">주제</th><th class="en">Key Takeaway</th><th class="ko" style="display:none;">핵심 포인트</th></tr>
+<tr><td>6</td><td class="en">FSM Fundamentals</td><td class="ko" style="display:none;">FSM 기본</td><td class="en">3-block pattern: state reg, next state, outputs</td><td class="ko" style="display:none;">3블록 패턴: 상태 레지스터, 다음 상태, 출력</td></tr>
+<tr><td>7</td><td class="en">Moore vs Mealy</td><td class="ko" style="display:none;">Moore vs Mealy</td><td class="en">Moore = stable outputs; Mealy = faster response</td><td class="ko" style="display:none;">Moore = 안정적 출력; Mealy = 빠른 응답</td></tr>
+<tr><td>8</td><td class="en">State Encoding</td><td class="ko" style="display:none;">상태 인코딩</td><td class="en">One-hot for FPGAs, binary for small FSMs</td><td class="ko" style="display:none;">FPGA는 원핫, 작은 FSM은 바이너리</td></tr>
+<tr><td>9</td><td class="en">Safe FSM Design</td><td class="ko" style="display:none;">안전한 FSM</td><td class="en">Default states, illegal state recovery</td><td class="ko" style="display:none;">기본 상태, 불법 상태 복구</td></tr>
+<tr><td>10</td><td class="en">FSM Practice</td><td class="ko" style="display:none;">FSM 실습</td><td class="en">Real designs: traffic light + sequence detector</td><td class="ko" style="display:none;">실제 설계: 신호등 + 시퀀스 디텍터</td></tr>
+</table>
+</div>
+
+<div class="tip-box">
+<h3>🎯 Interview Tips: FSM Questions</h3>
+<ul class="en">
+    <li><strong>"Design a traffic light controller"</strong> — always add emergency state and timer</li>
+    <li><strong>"Design a sequence detector"</strong> — ask: overlapping or non-overlapping? Mealy or Moore?</li>
+    <li><strong>Draw the state diagram first</strong> — interviewers want to see your thought process</li>
+    <li><strong>Don't forget the default case</strong> — shows you think about safety</li>
+</ul>
+<ul class="ko" style="display:none;">
+    <li><strong>"신호등 컨트롤러 설계"</strong> — 항상 비상 상태와 타이머 추가</li>
+    <li><strong>"시퀀스 디텍터 설계"</strong> — 질문: 오버래핑? 논오버래핑? Mealy? Moore?</li>
+    <li><strong>상태 다이어그램을 먼저 그리세요</strong> — 면접관은 사고 과정을 보고 싶어합니다</li>
+    <li><strong>default case를 잊지 마세요</strong> — 안전성을 고려한다는 것을 보여줍니다</li>
+</ul>
+</div>
+
+<div class="nav-links">
+    <a href="day-10-quiz.html">📝 Take the Quiz</a>
+    <a href="day-10-practice.html">💻 Practice Exercises</a>
+</div>
+
+<script>
+let isKorean = false;
+function toggleLang() {
+    isKorean = !isKorean;
+    document.querySelectorAll('.en').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'none' : 'revert', 'important');
+    });
+    document.querySelectorAll('.ko').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'revert' : 'none', 'important');
+    });
+    document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+}
+</script>
+</body>
+</html>
