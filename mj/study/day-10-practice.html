@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 10 Practice: FSM Practice Exercises</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    background: linear-gradient(135deg, #fefae0 0%, #faedcd 100%);
+    color: #3d405b;
+    line-height: 1.8;
+    padding: 24px;
+    max-width: 920px;
+    margin: 0 auto;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+h1 { color: #5d4037; border-bottom: 3px solid #c4a77d; padding-bottom: 12px; margin-bottom: 24px; font-size: 2em; }
+h2 { color: #588157; border-bottom: 2px solid #a3b18a; padding-bottom: 8px; margin: 32px 0 16px; }
+h3 { color: #5d4037; margin: 20px 0 12px; }
+p { margin: 12px 0; }
+ul, ol { margin: 12px 0 12px 24px; }
+li { margin: 6px 0; }
+code {
+    background: #e9f5db;
+    color: #3d405b;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+}
+pre {
+    background: #2d3436;
+    padding: 24px;
+    border-radius: 12px;
+    margin: 24px 0;
+    border: 3px solid #a3b18a;
+    overflow-x: auto;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+    font-size: 15px;
+    line-height: 1.6;
+    color: #f8f8f2;
+}
+.keyword { color: #ff79c6; font-weight: 600; }
+.type { color: #8be9fd; }
+.signal { color: #50fa7b; }
+.number { color: #ffb86c; }
+.comment { color: #6272a4; font-style: italic; }
+.string { color: #f1fa8c; }
+.concept-box {
+    background: #fff8f0;
+    border: 2px solid #c4a77d;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    color: #3d405b;
+}
+.concept-box h3 { color: #5d4037; margin-bottom: 12px; }
+.warning-box {
+    background: #fff8f0;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    border-left: 4px solid #ef4444;
+    color: #3d405b;
+}
+.warning-box h3 { color: #c53030; margin-bottom: 12px; }
+.tip-box {
+    background: #fff8f0;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    border-left: 4px solid #588157;
+    color: #3d405b;
+}
+.hint-box {
+    background: #fff8f0;
+    border-radius: 8px;
+    padding: 15px;
+    margin: 15px 0;
+    border-left: 4px solid #5d4037;
+    color: #3d405b;
+}
+.lang-toggle {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    background: #588157;
+    border: none;
+    border-radius: 24px;
+    padding: 10px 20px;
+    cursor: pointer;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    z-index: 1000;
+}
+.lang-toggle:hover { background: #3a5a40; }
+.ko { display: none; }
+.nav-links { display: flex; gap: 12px; margin: 20px 0; flex-wrap: wrap; }
+.nav-links a {
+    background: linear-gradient(135deg, #588157, #3a5a40);
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14px;
+}
+.nav-links a:hover { opacity: 0.9; }
+.section { background: #fff; border-radius: 12px; padding: 24px; margin: 24px 0; border: 1px solid #c4a77d; }
+.reveal-btn {
+    background: linear-gradient(135deg, #588157, #3a5a40);
+    color: #fff;
+    border: none;
+    padding: 10px 24px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    margin: 12px 0;
+}
+.reveal-btn:hover { opacity: 0.9; }
+.solution { display: none; }
+.difficulty {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 13px;
+    font-weight: 600;
+    margin-left: 8px;
+}
+.easy { background: #e9f5db; color: #588157; }
+.medium { background: #fff8f0; color: #c4a77d; border: 1px solid #c4a77d; }
+.hard { background: #fff0f0; color: #c53030; border: 1px solid #ef4444; }
+@media (max-width: 768px) {
+    body { padding: 16px; }
+    h1 { font-size: 1.8em; }
+    pre { font-size: 14px; padding: 16px; }
+    .lang-toggle { padding: 8px 16px; font-size: 13px; }
+}
+</style>
+</head>
+<body>
+<button class="lang-toggle" onclick="toggleLang()">한국어</button>
+
+<h1>💻 Day 10 Practice: FSM Exercises</h1>
+
+<div class="nav-links">
+    <a href="day-10-lesson.html">📖 Lesson</a>
+    <a href="day-10-quiz.html">📝 Quiz</a>
+    <a href="https://www.edaplayground.com" target="_blank">🔧 EDA Playground</a>
+</div>
+
+<div class="tip-box">
+<h3>🛠️ How to Practice</h3>
+<p class="en">Use <a href="https://www.edaplayground.com" target="_blank" style="color:#588157;">EDA Playground</a> — select <strong>SystemVerilog</strong> and <strong>Icarus Verilog</strong> or <strong>Synopsys VCS</strong>. Write your module in the left pane, testbench in the right.</p>
+<p class="ko" style="display:none;"><a href="https://www.edaplayground.com" target="_blank" style="color:#588157;">EDA Playground</a>를 사용하세요 — <strong>SystemVerilog</strong>와 <strong>Icarus Verilog</strong> 또는 <strong>Synopsys VCS</strong>를 선택하세요. 왼쪽에 모듈, 오른쪽에 테스트벤치를 작성합니다.</p>
+</div>
+
+<!-- Exercise 1 -->
+<div class="section">
+<h2>Exercise 1: Vending Machine FSM <span class="difficulty medium">Medium</span></h2>
+
+<div class="concept-box">
+<h3>📋 Specification</h3>
+<p class="en">Design a vending machine that accepts <strong>5¢</strong> and <strong>10¢</strong> coins. Item costs <strong>15¢</strong>. The machine should:</p>
+<p class="ko" style="display:none;"><strong>5¢</strong>와 <strong>10¢</strong> 동전을 받는 자판기를 설계하세요. 물건 가격은 <strong>15¢</strong>입니다:</p>
+<ul class="en">
+    <li>Accept coins and track total</li>
+    <li>Dispense when total ≥ 15¢</li>
+    <li>Give change if overpaid (e.g., 10¢ + 10¢ = 5¢ change)</li>
+    <li>Return to idle after dispensing</li>
+</ul>
+<ul class="ko" style="display:none;">
+    <li>동전을 받고 총액 추적</li>
+    <li>총액 ≥ 15¢이면 물건 배출</li>
+    <li>초과 지불 시 거스름돈 (예: 10¢ + 10¢ = 5¢ 거스름돈)</li>
+    <li>배출 후 대기 상태로 복귀</li>
+</ul>
+</div>
+
+<pre>
+<span class="keyword">module</span> <span class="signal">vending_machine</span> (
+    <span class="keyword">input</span>  <span class="type">logic</span>       <span class="signal">clk</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span>       <span class="signal">rst_n</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span>       <span class="signal">nickel</span>,    <span class="comment">// 5¢ inserted</span>
+    <span class="keyword">input</span>  <span class="type">logic</span>       <span class="signal">dime</span>,      <span class="comment">// 10¢ inserted</span>
+    <span class="keyword">output</span> <span class="type">logic</span>       <span class="signal">dispense</span>,  <span class="comment">// item out</span>
+    <span class="keyword">output</span> <span class="type">logic</span>       <span class="signal">change</span>     <span class="comment">// 5¢ change</span>
+);
+
+    <span class="comment">// YOUR CODE HERE</span>
+    <span class="comment">// States: IDLE, FIVE, TEN, DISPENSE</span>
+    <span class="comment">// Think about: What inputs cause transitions?</span>
+    <span class="comment">//              When do we dispense + give change?</span>
+
+<span class="keyword">endmodule</span>
+</pre>
+
+<div class="hint-box">
+<h3>💡 Hints</h3>
+<p class="en">States represent accumulated money: IDLE(0¢), FIVE(5¢), TEN(10¢). From TEN, a dime means 20¢ → dispense + change. Use Moore outputs for clean design.</p>
+<p class="ko" style="display:none;">상태는 누적된 금액을 나타냅니다: IDLE(0¢), FIVE(5¢), TEN(10¢). TEN에서 dime이면 20¢ → 배출 + 거스름돈. 깔끔한 설계를 위해 Moore 출력 사용.</p>
+</div>
+
+<button class="reveal-btn" onclick="toggleSolution('sol1')">Show Solution</button>
+<div class="solution" id="sol1">
+<pre>
+<span class="keyword">module</span> <span class="signal">vending_machine</span> (
+    <span class="keyword">input</span>  <span class="type">logic</span>       <span class="signal">clk</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span>       <span class="signal">rst_n</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span>       <span class="signal">nickel</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span>       <span class="signal">dime</span>,
+    <span class="keyword">output</span> <span class="type">logic</span>       <span class="signal">dispense</span>,
+    <span class="keyword">output</span> <span class="type">logic</span>       <span class="signal">change</span>
+);
+
+    <span class="keyword">typedef enum</span> <span class="type">logic</span> [<span class="number">2</span>:<span class="number">0</span>] {
+        <span class="signal">IDLE</span>,          <span class="comment">// 0¢</span>
+        <span class="signal">FIVE</span>,          <span class="comment">// 5¢</span>
+        <span class="signal">TEN</span>,           <span class="comment">// 10¢</span>
+        <span class="signal">DISPENSE</span>,      <span class="comment">// exact — no change</span>
+        <span class="signal">DISPENSE_CHG</span>   <span class="comment">// overpaid — return 5¢</span>
+    } <span class="type">state_t</span>;
+
+    <span class="type">state_t</span> <span class="signal">state</span>, <span class="signal">next_state</span>;
+
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span> <span class="keyword">or negedge</span> <span class="signal">rst_n</span>) <span class="keyword">begin</span>
+        <span class="keyword">if</span> (!<span class="signal">rst_n</span>)
+            <span class="signal">state</span> &lt;= <span class="signal">IDLE</span>;
+        <span class="keyword">else</span>
+            <span class="signal">state</span> &lt;= <span class="signal">next_state</span>;
+    <span class="keyword">end</span>
+
+    <span class="keyword">always_comb</span> <span class="keyword">begin</span>
+        <span class="signal">next_state</span> = <span class="signal">state</span>;
+        <span class="keyword">case</span> (<span class="signal">state</span>)
+            <span class="signal">IDLE</span>: <span class="keyword">begin</span>
+                <span class="keyword">if</span> (<span class="signal">nickel</span>)     <span class="signal">next_state</span> = <span class="signal">FIVE</span>;
+                <span class="keyword">else if</span> (<span class="signal">dime</span>) <span class="signal">next_state</span> = <span class="signal">TEN</span>;
+            <span class="keyword">end</span>
+            <span class="signal">FIVE</span>: <span class="keyword">begin</span>
+                <span class="keyword">if</span> (<span class="signal">nickel</span>)     <span class="signal">next_state</span> = <span class="signal">TEN</span>;
+                <span class="keyword">else if</span> (<span class="signal">dime</span>) <span class="signal">next_state</span> = <span class="signal">DISPENSE</span>;
+            <span class="keyword">end</span>
+            <span class="signal">TEN</span>: <span class="keyword">begin</span>
+                <span class="keyword">if</span> (<span class="signal">nickel</span>)     <span class="signal">next_state</span> = <span class="signal">DISPENSE</span>;
+                <span class="keyword">else if</span> (<span class="signal">dime</span>) <span class="signal">next_state</span> = <span class="signal">DISPENSE_CHG</span>;
+            <span class="keyword">end</span>
+            <span class="signal">DISPENSE</span>:      <span class="signal">next_state</span> = <span class="signal">IDLE</span>;
+            <span class="signal">DISPENSE_CHG</span>:  <span class="signal">next_state</span> = <span class="signal">IDLE</span>;
+            <span class="keyword">default</span>:       <span class="signal">next_state</span> = <span class="signal">IDLE</span>;
+        <span class="keyword">endcase</span>
+    <span class="keyword">end</span>
+
+    <span class="comment">// Moore outputs</span>
+    <span class="keyword">assign</span> <span class="signal">dispense</span> = (<span class="signal">state</span> == <span class="signal">DISPENSE</span>) || (<span class="signal">state</span> == <span class="signal">DISPENSE_CHG</span>);
+    <span class="keyword">assign</span> <span class="signal">change</span>   = (<span class="signal">state</span> == <span class="signal">DISPENSE_CHG</span>);
+
+<span class="keyword">endmodule</span>
+</pre>
+</div>
+</div>
+
+<!-- Exercise 2 -->
+<div class="section">
+<h2>Exercise 2: Pattern Detector "110" (Moore) <span class="difficulty medium">Medium</span></h2>
+
+<div class="concept-box">
+<h3>📋 Specification</h3>
+<p class="en">Build an <strong>overlapping Moore</strong> sequence detector for pattern <code>110</code>. The output should assert <strong>one cycle after</strong> the pattern completes (since Moore outputs are registered).</p>
+<p class="ko" style="display:none;"><strong>오버래핑 Moore</strong> 시퀀스 디텍터를 패턴 <code>110</code>에 대해 만드세요. Moore 출력은 레지스터링되므로 패턴 완료 <strong>한 사이클 후</strong>에 출력이 어서트됩니다.</p>
+</div>
+
+<pre>
+<span class="keyword">module</span> <span class="signal">seq_detect_110_moore</span> (
+    <span class="keyword">input</span>  <span class="type">logic</span> <span class="signal">clk</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span> <span class="signal">rst_n</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span> <span class="signal">din</span>,
+    <span class="keyword">output</span> <span class="type">logic</span> <span class="signal">detected</span>
+);
+
+    <span class="comment">// YOUR CODE HERE</span>
+    <span class="comment">// Moore needs an extra state: DETECTED</span>
+    <span class="comment">// States: IDLE, GOT_1, GOT_11, DETECTED</span>
+    <span class="comment">// Key difference from Mealy: output is part of state!</span>
+
+<span class="keyword">endmodule</span>
+</pre>
+
+<div class="hint-box">
+<h3>💡 Hints</h3>
+<p class="en">Moore needs a DETECTED state where <code>detected=1</code>. From DETECTED, check <code>din</code> to handle overlapping: if <code>din=1</code>, go to GOT_1 (potential new match). Compare: Mealy has 3 states, Moore has 4.</p>
+<p class="ko" style="display:none;">Moore는 <code>detected=1</code>인 DETECTED 상태가 필요합니다. DETECTED에서 <code>din</code>을 확인하여 오버래핑 처리: <code>din=1</code>이면 GOT_1로 (새 매치 가능). 비교: Mealy는 3상태, Moore는 4상태.</p>
+</div>
+
+<button class="reveal-btn" onclick="toggleSolution('sol2')">Show Solution</button>
+<div class="solution" id="sol2">
+<pre>
+<span class="keyword">module</span> <span class="signal">seq_detect_110_moore</span> (
+    <span class="keyword">input</span>  <span class="type">logic</span> <span class="signal">clk</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span> <span class="signal">rst_n</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span> <span class="signal">din</span>,
+    <span class="keyword">output</span> <span class="type">logic</span> <span class="signal">detected</span>
+);
+
+    <span class="keyword">typedef enum</span> <span class="type">logic</span> [<span class="number">2</span>:<span class="number">0</span>] {
+        <span class="signal">IDLE</span>,
+        <span class="signal">GOT_1</span>,
+        <span class="signal">GOT_11</span>,
+        <span class="signal">DETECTED</span>   <span class="comment">// Moore: output state</span>
+    } <span class="type">state_t</span>;
+
+    <span class="type">state_t</span> <span class="signal">state</span>, <span class="signal">next_state</span>;
+
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span> <span class="keyword">or negedge</span> <span class="signal">rst_n</span>) <span class="keyword">begin</span>
+        <span class="keyword">if</span> (!<span class="signal">rst_n</span>)
+            <span class="signal">state</span> &lt;= <span class="signal">IDLE</span>;
+        <span class="keyword">else</span>
+            <span class="signal">state</span> &lt;= <span class="signal">next_state</span>;
+    <span class="keyword">end</span>
+
+    <span class="keyword">always_comb</span> <span class="keyword">begin</span>
+        <span class="signal">next_state</span> = <span class="signal">IDLE</span>;
+        <span class="keyword">case</span> (<span class="signal">state</span>)
+            <span class="signal">IDLE</span>:     <span class="signal">next_state</span> = <span class="signal">din</span> ? <span class="signal">GOT_1</span>  : <span class="signal">IDLE</span>;
+            <span class="signal">GOT_1</span>:    <span class="signal">next_state</span> = <span class="signal">din</span> ? <span class="signal">GOT_11</span> : <span class="signal">IDLE</span>;
+            <span class="signal">GOT_11</span>:   <span class="signal">next_state</span> = <span class="signal">din</span> ? <span class="signal">GOT_11</span> : <span class="signal">DETECTED</span>;
+            <span class="signal">DETECTED</span>: <span class="signal">next_state</span> = <span class="signal">din</span> ? <span class="signal">GOT_1</span>  : <span class="signal">IDLE</span>;
+            <span class="keyword">default</span>:  <span class="signal">next_state</span> = <span class="signal">IDLE</span>;
+        <span class="keyword">endcase</span>
+    <span class="keyword">end</span>
+
+    <span class="comment">// Moore output: depends ONLY on state</span>
+    <span class="keyword">assign</span> <span class="signal">detected</span> = (<span class="signal">state</span> == <span class="signal">DETECTED</span>);
+
+<span class="keyword">endmodule</span>
+</pre>
+</div>
+</div>
+
+<!-- Exercise 3 -->
+<div class="section">
+<h2>Exercise 3: Pedestrian Traffic Light <span class="difficulty hard">Hard</span></h2>
+
+<div class="concept-box">
+<h3>📋 Specification</h3>
+<p class="en">Extend the traffic light controller with a <strong>pedestrian crossing button</strong>:</p>
+<p class="ko" style="display:none;">교통 신호등 컨트롤러에 <strong>보행자 횡단 버튼</strong>을 추가하세요:</p>
+<ul class="en">
+    <li>Pedestrian button press is remembered (latched) until serviced</li>
+    <li>During GREEN_NS: if pedestrian requested, shorten green to 5 cycles (instead of 10)</li>
+    <li>Add a WALK state (6 cycles) after YELLOW_NS when pedestrian is pending</li>
+    <li>Add a FLASH state (4 cycles) after WALK — warning before EW goes green</li>
+    <li>Clear the pedestrian request after FLASH completes</li>
+</ul>
+<ul class="ko" style="display:none;">
+    <li>보행자 버튼 누름은 처리될 때까지 기억됨 (래치)</li>
+    <li>GREEN_NS 중: 보행자 요청 시 초록을 5사이클로 단축 (10 대신)</li>
+    <li>보행자 대기 중이면 YELLOW_NS 후 WALK 상태 추가 (6 사이클)</li>
+    <li>WALK 후 FLASH 상태 추가 (4 사이클) — EW 초록 전 경고</li>
+    <li>FLASH 완료 후 보행자 요청 클리어</li>
+</ul>
+</div>
+
+<pre>
+<span class="keyword">module</span> <span class="signal">ped_traffic_light</span> (
+    <span class="keyword">input</span>  <span class="type">logic</span>       <span class="signal">clk</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span>       <span class="signal">rst_n</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span>       <span class="signal">ped_btn</span>,    <span class="comment">// pedestrian button</span>
+    <span class="keyword">output</span> <span class="type">logic</span> [<span class="number">2</span>:<span class="number">0</span>] <span class="signal">ns_light</span>,
+    <span class="keyword">output</span> <span class="type">logic</span> [<span class="number">2</span>:<span class="number">0</span>] <span class="signal">ew_light</span>,
+    <span class="keyword">output</span> <span class="type">logic</span>       <span class="signal">walk_sign</span>,  <span class="comment">// walk indicator</span>
+    <span class="keyword">output</span> <span class="type">logic</span>       <span class="signal">flash_sign</span>  <span class="comment">// flashing warning</span>
+);
+
+    <span class="comment">// YOUR CODE HERE</span>
+    <span class="comment">// Key challenges:</span>
+    <span class="comment">// 1. Latch ped_btn into a ped_pending register</span>
+    <span class="comment">// 2. Conditional timer values based on ped_pending</span>
+    <span class="comment">// 3. New states: WALK, FLASH</span>
+    <span class="comment">// 4. Clear ped_pending when FLASH finishes</span>
+
+<span class="keyword">endmodule</span>
+</pre>
+
+<div class="hint-box">
+<h3>💡 Hints</h3>
+<p class="en"><strong>Latching the button:</strong> Use a separate <code>always_ff</code> block for <code>ped_pending</code>. Set on <code>ped_btn</code>, clear when leaving FLASH state. <strong>Timer trick:</strong> In GREEN_NS, compare timer to <code>ped_pending ? 4'd4 : 4'd9</code>.</p>
+<p class="ko" style="display:none;"><strong>버튼 래칭:</strong> <code>ped_pending</code>을 위한 별도의 <code>always_ff</code> 블록을 사용하세요. <code>ped_btn</code>에서 설정, FLASH 상태를 떠날 때 클리어. <strong>타이머 트릭:</strong> GREEN_NS에서 타이머를 <code>ped_pending ? 4'd4 : 4'd9</code>와 비교.</p>
+</div>
+
+<button class="reveal-btn" onclick="toggleSolution('sol3')">Show Solution</button>
+<div class="solution" id="sol3">
+<pre>
+<span class="keyword">module</span> <span class="signal">ped_traffic_light</span> (
+    <span class="keyword">input</span>  <span class="type">logic</span>       <span class="signal">clk</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span>       <span class="signal">rst_n</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span>       <span class="signal">ped_btn</span>,
+    <span class="keyword">output</span> <span class="type">logic</span> [<span class="number">2</span>:<span class="number">0</span>] <span class="signal">ns_light</span>,
+    <span class="keyword">output</span> <span class="type">logic</span> [<span class="number">2</span>:<span class="number">0</span>] <span class="signal">ew_light</span>,
+    <span class="keyword">output</span> <span class="type">logic</span>       <span class="signal">walk_sign</span>,
+    <span class="keyword">output</span> <span class="type">logic</span>       <span class="signal">flash_sign</span>
+);
+
+    <span class="keyword">localparam</span> <span class="type">logic</span> [<span class="number">2</span>:<span class="number">0</span>] <span class="signal">RED</span> = <span class="number">3'b100</span>, <span class="signal">YELLOW</span> = <span class="number">3'b010</span>, <span class="signal">GREEN</span> = <span class="number">3'b001</span>;
+
+    <span class="keyword">typedef enum</span> <span class="type">logic</span> [<span class="number">2</span>:<span class="number">0</span>] {
+        <span class="signal">S_GREEN_NS</span>, <span class="signal">S_YELLOW_NS</span>,
+        <span class="signal">S_WALK</span>, <span class="signal">S_FLASH</span>,
+        <span class="signal">S_GREEN_EW</span>, <span class="signal">S_YELLOW_EW</span>
+    } <span class="type">state_t</span>;
+
+    <span class="type">state_t</span> <span class="signal">state</span>, <span class="signal">next_state</span>;
+    <span class="type">logic</span> [<span class="number">3</span>:<span class="number">0</span>] <span class="signal">timer</span>, <span class="signal">next_timer</span>;
+    <span class="type">logic</span> <span class="signal">ped_pending</span>, <span class="signal">clear_ped</span>;
+
+    <span class="comment">// Pedestrian latch</span>
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span> <span class="keyword">or negedge</span> <span class="signal">rst_n</span>) <span class="keyword">begin</span>
+        <span class="keyword">if</span> (!<span class="signal">rst_n</span>)
+            <span class="signal">ped_pending</span> &lt;= <span class="number">1'b0</span>;
+        <span class="keyword">else if</span> (<span class="signal">clear_ped</span>)
+            <span class="signal">ped_pending</span> &lt;= <span class="number">1'b0</span>;
+        <span class="keyword">else if</span> (<span class="signal">ped_btn</span>)
+            <span class="signal">ped_pending</span> &lt;= <span class="number">1'b1</span>;
+    <span class="keyword">end</span>
+
+    <span class="comment">// State + timer register</span>
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span> <span class="keyword">or negedge</span> <span class="signal">rst_n</span>) <span class="keyword">begin</span>
+        <span class="keyword">if</span> (!<span class="signal">rst_n</span>) <span class="keyword">begin</span>
+            <span class="signal">state</span> &lt;= <span class="signal">S_GREEN_NS</span>;
+            <span class="signal">timer</span> &lt;= <span class="number">4'd0</span>;
+        <span class="keyword">end else begin</span>
+            <span class="signal">state</span> &lt;= <span class="signal">next_state</span>;
+            <span class="signal">timer</span> &lt;= <span class="signal">next_timer</span>;
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+
+    <span class="keyword">always_comb</span> <span class="keyword">begin</span>
+        <span class="signal">next_state</span> = <span class="signal">state</span>;
+        <span class="signal">next_timer</span> = <span class="signal">timer</span> + <span class="number">4'd1</span>;
+        <span class="signal">clear_ped</span>  = <span class="number">1'b0</span>;
+
+        <span class="keyword">case</span> (<span class="signal">state</span>)
+            <span class="signal">S_GREEN_NS</span>: <span class="keyword">begin</span>
+                <span class="comment">// Shorten if pedestrian waiting</span>
+                <span class="keyword">if</span> (<span class="signal">timer</span> == (<span class="signal">ped_pending</span> ? <span class="number">4'd4</span> : <span class="number">4'd9</span>)) <span class="keyword">begin</span>
+                    <span class="signal">next_state</span> = <span class="signal">S_YELLOW_NS</span>;
+                    <span class="signal">next_timer</span> = <span class="number">4'd0</span>;
+                <span class="keyword">end</span>
+            <span class="keyword">end</span>
+            <span class="signal">S_YELLOW_NS</span>: <span class="keyword">if</span> (<span class="signal">timer</span> == <span class="number">4'd2</span>) <span class="keyword">begin</span>
+                <span class="signal">next_state</span> = <span class="signal">ped_pending</span> ? <span class="signal">S_WALK</span> : <span class="signal">S_GREEN_EW</span>;
+                <span class="signal">next_timer</span> = <span class="number">4'd0</span>;
+            <span class="keyword">end</span>
+            <span class="signal">S_WALK</span>: <span class="keyword">if</span> (<span class="signal">timer</span> == <span class="number">4'd5</span>) <span class="keyword">begin</span>
+                <span class="signal">next_state</span> = <span class="signal">S_FLASH</span>;
+                <span class="signal">next_timer</span> = <span class="number">4'd0</span>;
+            <span class="keyword">end</span>
+            <span class="signal">S_FLASH</span>: <span class="keyword">if</span> (<span class="signal">timer</span> == <span class="number">4'd3</span>) <span class="keyword">begin</span>
+                <span class="signal">next_state</span> = <span class="signal">S_GREEN_EW</span>;
+                <span class="signal">next_timer</span> = <span class="number">4'd0</span>;
+                <span class="signal">clear_ped</span>  = <span class="number">1'b1</span>;
+            <span class="keyword">end</span>
+            <span class="signal">S_GREEN_EW</span>: <span class="keyword">if</span> (<span class="signal">timer</span> == <span class="number">4'd9</span>) <span class="keyword">begin</span>
+                <span class="signal">next_state</span> = <span class="signal">S_YELLOW_EW</span>;
+                <span class="signal">next_timer</span> = <span class="number">4'd0</span>;
+            <span class="keyword">end</span>
+            <span class="signal">S_YELLOW_EW</span>: <span class="keyword">if</span> (<span class="signal">timer</span> == <span class="number">4'd2</span>) <span class="keyword">begin</span>
+                <span class="signal">next_state</span> = <span class="signal">S_GREEN_NS</span>;
+                <span class="signal">next_timer</span> = <span class="number">4'd0</span>;
+            <span class="keyword">end</span>
+            <span class="keyword">default</span>: <span class="keyword">begin</span>
+                <span class="signal">next_state</span> = <span class="signal">S_GREEN_NS</span>;
+                <span class="signal">next_timer</span> = <span class="number">4'd0</span>;
+            <span class="keyword">end</span>
+        <span class="keyword">endcase</span>
+    <span class="keyword">end</span>
+
+    <span class="comment">// Moore outputs</span>
+    <span class="keyword">always_comb</span> <span class="keyword">begin</span>
+        <span class="signal">walk_sign</span>  = <span class="number">1'b0</span>;
+        <span class="signal">flash_sign</span> = <span class="number">1'b0</span>;
+        <span class="keyword">case</span> (<span class="signal">state</span>)
+            <span class="signal">S_GREEN_NS</span>:  <span class="keyword">begin</span> <span class="signal">ns_light</span>=<span class="signal">GREEN</span>;  <span class="signal">ew_light</span>=<span class="signal">RED</span>;    <span class="keyword">end</span>
+            <span class="signal">S_YELLOW_NS</span>: <span class="keyword">begin</span> <span class="signal">ns_light</span>=<span class="signal">YELLOW</span>; <span class="signal">ew_light</span>=<span class="signal">RED</span>;    <span class="keyword">end</span>
+            <span class="signal">S_WALK</span>:      <span class="keyword">begin</span> <span class="signal">ns_light</span>=<span class="signal">RED</span>;    <span class="signal">ew_light</span>=<span class="signal">RED</span>; <span class="signal">walk_sign</span>=<span class="number">1'b1</span>;  <span class="keyword">end</span>
+            <span class="signal">S_FLASH</span>:     <span class="keyword">begin</span> <span class="signal">ns_light</span>=<span class="signal">RED</span>;    <span class="signal">ew_light</span>=<span class="signal">RED</span>; <span class="signal">flash_sign</span>=<span class="number">1'b1</span>; <span class="keyword">end</span>
+            <span class="signal">S_GREEN_EW</span>:  <span class="keyword">begin</span> <span class="signal">ns_light</span>=<span class="signal">RED</span>;    <span class="signal">ew_light</span>=<span class="signal">GREEN</span>;  <span class="keyword">end</span>
+            <span class="signal">S_YELLOW_EW</span>: <span class="keyword">begin</span> <span class="signal">ns_light</span>=<span class="signal">RED</span>;    <span class="signal">ew_light</span>=<span class="signal">YELLOW</span>; <span class="keyword">end</span>
+            <span class="keyword">default</span>:     <span class="keyword">begin</span> <span class="signal">ns_light</span>=<span class="signal">RED</span>;    <span class="signal">ew_light</span>=<span class="signal">RED</span>;    <span class="keyword">end</span>
+        <span class="keyword">endcase</span>
+    <span class="keyword">end</span>
+
+<span class="keyword">endmodule</span>
+</pre>
+</div>
+</div>
+
+<div class="section">
+<h2>🏆 Week 2 Complete!</h2>
+<div class="concept-box">
+<h3 class="en">What You've Mastered</h3>
+<h3 class="ko" style="display:none;">마스터한 것들</h3>
+<ul class="en">
+    <li>✅ FSM fundamentals — 3-block pattern</li>
+    <li>✅ Moore vs Mealy — when to use each</li>
+    <li>✅ State encoding — binary, one-hot, gray</li>
+    <li>✅ Safe design — default states, illegal recovery</li>
+    <li>✅ Real projects — traffic lights, sequence detectors, vending machines</li>
+</ul>
+<ul class="ko" style="display:none;">
+    <li>✅ FSM 기본 — 3블록 패턴</li>
+    <li>✅ Moore vs Mealy — 각각 언제 사용</li>
+    <li>✅ 상태 인코딩 — 바이너리, 원핫, 그레이</li>
+    <li>✅ 안전한 설계 — 기본 상태, 불법 복구</li>
+    <li>✅ 실전 프로젝트 — 신호등, 시퀀스 디텍터, 자판기</li>
+</ul>
+</div>
+<p class="en"><strong>Next week:</strong> ⏱️ <strong>Timing Fundamentals</strong> — setup time, hold time, clock skew, and critical path analysis. The hardware gets real!</p>
+<p class="ko" style="display:none;"><strong>다음 주:</strong> ⏱️ <strong>타이밍 기본</strong> — 셋업 타임, 홀드 타임, 클럭 스큐, 크리티컬 패스 분석. 하드웨어가 진짜로 시작됩니다!</p>
+</div>
+
+<div class="nav-links">
+    <a href="day-10-lesson.html">📖 Lesson</a>
+    <a href="day-10-quiz.html">📝 Quiz</a>
+</div>
+
+<script>
+let isKorean = false;
+function toggleLang() {
+    isKorean = !isKorean;
+    document.querySelectorAll('.en').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'none' : 'revert', 'important');
+    });
+    document.querySelectorAll('.ko').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'revert' : 'none', 'important');
+    });
+    document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+}
+
+function toggleSolution(id) {
+    const el = document.getElementById(id);
+    const btn = el.previousElementSibling;
+    if (el.style.display === 'block') {
+        el.style.display = 'none';
+        btn.textContent = 'Show Solution';
+    } else {
+        el.style.display = 'block';
+        btn.textContent = 'Hide Solution';
+    }
+}
+</script>
+</body>
+</html>
