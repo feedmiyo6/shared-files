@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 11 Practice: Setup Time | Digital Design Study</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    background: linear-gradient(135deg, #fefae0 0%, #faedcd 100%);
+    color: #3d405b;
+    line-height: 1.8;
+    padding: 24px;
+    max-width: 920px;
+    margin: 0 auto;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+h1 { color: #5d4037; border-bottom: 3px solid #c4a77d; padding-bottom: 12px; margin-bottom: 24px; font-size: 2em; }
+h2 { color: #588157; border-bottom: 2px solid #a3b18a; padding-bottom: 8px; margin: 32px 0 16px; }
+h3 { color: #5d4037; margin: 20px 0 12px; }
+p { margin: 12px 0; }
+code { background: #e9f5db; color: #3d405b; padding: 2px 8px; border-radius: 4px; font-family: 'SF Mono', 'Monaco', 'Consolas', monospace; }
+pre {
+    background: #2d3436;
+    padding: 24px;
+    border-radius: 12px;
+    margin: 24px 0;
+    border: 3px solid #a3b18a;
+    overflow-x: auto;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+    font-size: 15px;
+    line-height: 1.6;
+    color: #f8f8f2;
+}
+.keyword { color: #ff79c6; font-weight: 600; }
+.type { color: #8be9fd; }
+.signal { color: #50fa7b; }
+.number { color: #ffb86c; }
+.comment { color: #6272a4; font-style: italic; }
+.string { color: #f1fa8c; }
+.concept-box { background: #fff8f0; border: 2px solid #c4a77d; border-radius: 12px; padding: 20px; margin: 20px 0; color: #3d405b; }
+.concept-box h3 { color: #5d4037; margin-bottom: 12px; }
+.warning-box { background: #fff8f0; border-radius: 12px; padding: 20px; margin: 20px 0; border-left: 4px solid #ef4444; color: #3d405b; }
+.warning-box h3 { color: #c53030; margin-bottom: 12px; }
+.tip-box { background: #fff8f0; border-radius: 12px; padding: 20px; margin: 20px 0; border-left: 4px solid #588157; color: #3d405b; }
+.hint-box { background: #fff8f0; border-radius: 8px; padding: 15px; margin: 15px 0; border-left: 4px solid #5d4037; color: #3d405b; }
+.lang-toggle { position: fixed; top: 16px; right: 16px; background: #588157; border: none; border-radius: 24px; padding: 10px 20px; cursor: pointer; color: #fff; font-size: 14px; font-weight: 600; z-index: 1000; }
+.lang-toggle:hover { background: #3a5a40; }
+.ko { display: none; }
+.nav-links { display: flex; gap: 12px; margin: 20px 0; flex-wrap: wrap; }
+.nav-links a { background: linear-gradient(135deg, #588157, #3a5a40); color: #fff; text-decoration: none; padding: 10px 20px; border-radius: 8px; font-weight: 600; font-size: 14px; }
+.nav-links a:hover { opacity: 0.9; }
+.comparison-table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+.comparison-table th { background: #588157; color: white; padding: 12px; text-align: left; }
+.comparison-table td { background: #fff; border: 1px solid #c4a77d; padding: 12px; color: #3d405b; }
+.comparison-table tr:nth-child(even) td { background: #fff8f0; }
+details { margin: 12px 0; }
+details summary { cursor: pointer; color: #588157; font-weight: 600; padding: 8px 0; }
+@media (max-width: 768px) { body { padding: 16px; } h1 { font-size: 1.8em; } pre { font-size: 14px; padding: 16px; } .lang-toggle { padding: 8px 16px; font-size: 13px; } }
+</style>
+</head>
+<body>
+<button class="lang-toggle" onclick="toggleLang()">한국어</button>
+
+<h1>🔧 Day 11 Practice: Setup Time Analysis</h1>
+<p class="en">Work through these timing analysis exercises to build intuition for setup time constraints.</p>
+<p class="ko" style="display:none;">이 타이밍 분석 연습을 통해 셋업 타임 제약에 대한 직관을 키워보세요.</p>
+
+<div class="nav-links">
+    <a href="day-11-lesson.html">📖 Back to Lesson</a>
+    <a href="day-11-quiz.html">📝 Take the Quiz</a>
+</div>
+
+<h2>Exercise 1: Timing Path Analysis</h2>
+
+<p class="en">You have a design with these parameters:</p>
+<p class="ko" style="display:none;">다음 매개변수를 가진 설계가 있습니다:</p>
+
+<table class="comparison-table">
+    <tr><th class="en">Parameter</th><th class="en">Value</th><th class="ko" style="display:none;">매개변수</th><th class="ko" style="display:none;">값</th></tr>
+    <tr><td>T_cq (source FF)</td><td>150ps</td></tr>
+    <tr><td>T_su (dest FF)</td><td>80ps</td></tr>
+    <tr><td>Target frequency</td><td>800 MHz</td></tr>
+</table>
+
+<div class="concept-box">
+    <h3 class="en">📌 Tasks</h3>
+    <h3 class="ko" style="display:none;">📌 과제</h3>
+    <ol>
+        <li class="en">Calculate the clock period</li>
+        <li class="ko" style="display:none;">클럭 주기를 계산하세요</li>
+        <li class="en">Calculate the maximum allowable T_comb</li>
+        <li class="ko" style="display:none;">허용되는 최대 T_comb를 계산하세요</li>
+        <li class="en">If the actual T_comb is 900ps, calculate the slack. Is there a violation?</li>
+        <li class="ko" style="display:none;">실제 T_comb가 900ps인 경우, 슬랙을 계산하세요. 위반이 있나요?</li>
+        <li class="en">What is the maximum frequency this path can support?</li>
+        <li class="ko" style="display:none;">이 경로가 지원할 수 있는 최대 주파수는?</li>
+    </ol>
+</div>
+
+<details>
+    <summary class="en">💡 Show Solution</summary>
+    <summary class="ko" style="display:none;">💡 풀이 보기</summary>
+    <div class="hint-box">
+        <p class="en"><strong>1.</strong> T_clk = 1/800MHz = 1250ps</p>
+        <p class="ko" style="display:none;"><strong>1.</strong> T_clk = 1/800MHz = 1250ps</p>
+        <p class="en"><strong>2.</strong> T_comb_max = T_clk - T_cq - T_su = 1250 - 150 - 80 = <strong>1020ps</strong></p>
+        <p class="ko" style="display:none;"><strong>2.</strong> T_comb_max = T_clk - T_cq - T_su = 1250 - 150 - 80 = <strong>1020ps</strong></p>
+        <p class="en"><strong>3.</strong> Slack = T_comb_max - T_comb_actual = 1020 - 900 = <strong>+120ps</strong> → No violation! ✅</p>
+        <p class="ko" style="display:none;"><strong>3.</strong> 슬랙 = T_comb_max - T_comb_actual = 1020 - 900 = <strong>+120ps</strong> → 위반 없음! ✅</p>
+        <p class="en"><strong>4.</strong> F_max = 1/(150 + 900 + 80)ps = 1/1130ps ≈ <strong>885 MHz</strong></p>
+        <p class="ko" style="display:none;"><strong>4.</strong> F_max = 1/(150 + 900 + 80)ps = 1/1130ps ≈ <strong>885 MHz</strong></p>
+    </div>
+</details>
+
+<h2>Exercise 2: Pipeline to Fix a Violation</h2>
+
+<p class="en">You have a 4-stage combinational multiplier with these delays:</p>
+<p class="ko" style="display:none;">다음 지연을 가진 4단계 조합 곱셈기가 있습니다:</p>
+
+<pre>
+<span class="comment">// Unpipelined multiplier — all in one cycle</span>
+<span class="comment">// Stage A: Partial product generation  = 200ps</span>
+<span class="comment">// Stage B: First reduction              = 300ps</span>
+<span class="comment">// Stage C: Second reduction             = 250ps</span>
+<span class="comment">// Stage D: Final addition               = 150ps</span>
+<span class="comment">// Total T_comb = 900ps</span>
+<span class="comment">//</span>
+<span class="comment">// T_cq = 100ps, T_su = 50ps</span>
+<span class="comment">// Target: 1 GHz (T_clk = 1000ps)</span>
+</pre>
+
+<div class="concept-box">
+    <h3 class="en">📌 Tasks</h3>
+    <h3 class="ko" style="display:none;">📌 과제</h3>
+    <ol>
+        <li class="en">Does the unpipelined design meet timing at 1 GHz?</li>
+        <li class="ko" style="display:none;">파이프라인 없는 설계가 1 GHz에서 타이밍을 충족하나요?</li>
+        <li class="en">Insert ONE pipeline register to create 2 stages. Where would you place it to balance the paths?</li>
+        <li class="ko" style="display:none;">하나의 파이프라인 레지스터를 삽입하여 2단계를 만드세요. 경로의 균형을 맞추려면 어디에 배치하겠습니까?</li>
+        <li class="en">Calculate the new F_max for each stage after pipelining.</li>
+        <li class="ko" style="display:none;">파이프라이닝 후 각 단계의 새로운 F_max를 계산하세요.</li>
+        <li class="en">What is the new latency (in clock cycles)?</li>
+        <li class="ko" style="display:none;">새로운 지연 시간(클럭 사이클)은?</li>
+    </ol>
+</div>
+
+<details>
+    <summary class="en">💡 Show Solution</summary>
+    <summary class="ko" style="display:none;">💡 풀이 보기</summary>
+    <div class="hint-box">
+        <p class="en"><strong>1.</strong> Check: T_cq + T_comb + T_su = 100 + 900 + 50 = 1050ps > 1000ps → <strong>VIOLATION!</strong> ❌ (slack = -50ps)</p>
+        <p class="ko" style="display:none;"><strong>1.</strong> 확인: T_cq + T_comb + T_su = 100 + 900 + 50 = 1050ps > 1000ps → <strong>위반!</strong> ❌ (슬랙 = -50ps)</p>
+        <p class="en"><strong>2.</strong> Place register between Stage B and Stage C:<br>
+        — Stage 1: A+B = 200+300 = 500ps<br>
+        — Stage 2: C+D = 250+150 = 400ps<br>
+        This gives the best balance (500 vs 400, rather than 200/700 or 750/150).</p>
+        <p class="ko" style="display:none;"><strong>2.</strong> Stage B와 Stage C 사이에 레지스터 배치:<br>
+        — 단계 1: A+B = 200+300 = 500ps<br>
+        — 단계 2: C+D = 250+150 = 400ps<br>
+        최적의 균형 (500 vs 400).</p>
+        <p class="en"><strong>3.</strong> Slowest stage determines F_max:<br>
+        — Stage 1: T_cq + 500 + T_su = 100 + 500 + 50 = 650ps → 1.54 GHz<br>
+        — Stage 2: T_cq + 400 + T_su = 100 + 400 + 50 = 550ps → 1.82 GHz<br>
+        — <strong>F_max = 1.54 GHz</strong> (limited by slowest stage) ✅</p>
+        <p class="ko" style="display:none;"><strong>3.</strong> 가장 느린 단계가 F_max를 결정:<br>
+        — 단계 1: T_cq + 500 + T_su = 100 + 500 + 50 = 650ps → 1.54 GHz<br>
+        — 단계 2: T_cq + 400 + T_su = 100 + 400 + 50 = 550ps → 1.82 GHz<br>
+        — <strong>F_max = 1.54 GHz</strong> (가장 느린 단계에 의해 제한) ✅</p>
+        <p class="en"><strong>4.</strong> Latency = <strong>2 clock cycles</strong> (was 1 cycle). Throughput is still 1 result per cycle after pipeline is full.</p>
+        <p class="ko" style="display:none;"><strong>4.</strong> 지연 = <strong>2 클럭 사이클</strong> (이전 1 사이클). 파이프라인이 차면 여전히 사이클당 1개의 결과를 출력합니다.</p>
+    </div>
+</details>
+
+<h2>Exercise 3: Code It — Pipeline a Long Path</h2>
+
+<p class="en">Transform this unpipelined module into a 2-stage pipelined version. Try it yourself, then check the solution!</p>
+<p class="ko" style="display:none;">이 파이프라인 없는 모듈을 2단계 파이프라인 버전으로 변환하세요. 직접 해본 후 풀이를 확인하세요!</p>
+
+<pre>
+<span class="comment">// GIVEN: Unpipelined — violates setup at target frequency</span>
+<span class="keyword">module</span> <span class="type">compute</span> (
+    <span class="keyword">input</span>  <span class="type">logic</span>        <span class="signal">clk</span>, <span class="signal">rst_n</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span> [<span class="number">15</span>:<span class="number">0</span>] <span class="signal">a</span>, <span class="signal">b</span>, <span class="signal">c</span>,
+    <span class="keyword">output</span> <span class="type">logic</span> [<span class="number">31</span>:<span class="number">0</span>] <span class="signal">result</span>
+);
+    <span class="type">logic</span> [<span class="number">31</span>:<span class="number">0</span>] <span class="signal">product</span>, <span class="signal">sum</span>;
+
+    <span class="comment">// Long combinational path: multiply then add</span>
+    <span class="keyword">always_comb</span> <span class="keyword">begin</span>
+        <span class="signal">product</span> = <span class="signal">a</span> * <span class="signal">b</span>;       <span class="comment">// Slow multiply</span>
+        <span class="signal">sum</span>     = <span class="signal">product</span> + <span class="signal">c</span>;  <span class="comment">// Add on top</span>
+    <span class="keyword">end</span>
+
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span> <span class="keyword">or</span> <span class="keyword">negedge</span> <span class="signal">rst_n</span>)
+        <span class="keyword">if</span> (!<span class="signal">rst_n</span>) <span class="signal">result</span> &lt;= <span class="number">'0</span>;
+        <span class="keyword">else</span>        <span class="signal">result</span> &lt;= <span class="signal">sum</span>;
+<span class="keyword">endmodule</span>
+</pre>
+
+<div class="hint-box">
+    <h3 class="en">💡 Hint</h3>
+    <h3 class="ko" style="display:none;">💡 힌트</h3>
+    <p class="en">Split the multiply and add into two separate clock cycles. You'll need a pipeline register to store the intermediate product, and you'll also need to delay the <code>c</code> input by one cycle so it's available when needed.</p>
+    <p class="ko" style="display:none;">곱셈과 덧셈을 두 개의 별도 클럭 사이클로 분할하세요. 중간 곱을 저장할 파이프라인 레지스터가 필요하고, <code>c</code> 입력도 한 사이클 지연시켜 필요할 때 사용할 수 있도록 해야 합니다.</p>
+</div>
+
+<details>
+    <summary class="en">💡 Show Solution</summary>
+    <summary class="ko" style="display:none;">💡 풀이 보기</summary>
+    <pre>
+<span class="comment">// SOLUTION: 2-stage pipeline</span>
+<span class="keyword">module</span> <span class="type">compute_pipelined</span> (
+    <span class="keyword">input</span>  <span class="type">logic</span>        <span class="signal">clk</span>, <span class="signal">rst_n</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span> [<span class="number">15</span>:<span class="number">0</span>] <span class="signal">a</span>, <span class="signal">b</span>, <span class="signal">c</span>,
+    <span class="keyword">output</span> <span class="type">logic</span> [<span class="number">31</span>:<span class="number">0</span>] <span class="signal">result</span>
+);
+    <span class="comment">// Pipeline registers</span>
+    <span class="type">logic</span> [<span class="number">31</span>:<span class="number">0</span>] <span class="signal">product_r</span>;  <span class="comment">// Stores multiply result</span>
+    <span class="type">logic</span> [<span class="number">15</span>:<span class="number">0</span>] <span class="signal">c_r</span>;        <span class="comment">// Delayed c input</span>
+
+    <span class="comment">// Stage 1: Multiply (slow operation isolated)</span>
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span> <span class="keyword">or</span> <span class="keyword">negedge</span> <span class="signal">rst_n</span>) <span class="keyword">begin</span>
+        <span class="keyword">if</span> (!<span class="signal">rst_n</span>) <span class="keyword">begin</span>
+            <span class="signal">product_r</span> &lt;= <span class="number">'0</span>;
+            <span class="signal">c_r</span>       &lt;= <span class="number">'0</span>;
+        <span class="keyword">end</span> <span class="keyword">else</span> <span class="keyword">begin</span>
+            <span class="signal">product_r</span> &lt;= <span class="signal">a</span> * <span class="signal">b</span>;  <span class="comment">// Multiply in stage 1</span>
+            <span class="signal">c_r</span>       &lt;= <span class="signal">c</span>;      <span class="comment">// Delay c to match!</span>
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+
+    <span class="comment">// Stage 2: Add (uses pipelined values)</span>
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span> <span class="keyword">or</span> <span class="keyword">negedge</span> <span class="signal">rst_n</span>) <span class="keyword">begin</span>
+        <span class="keyword">if</span> (!<span class="signal">rst_n</span>)
+            <span class="signal">result</span> &lt;= <span class="number">'0</span>;
+        <span class="keyword">else</span>
+            <span class="signal">result</span> &lt;= <span class="signal">product_r</span> + <span class="signal">c_r</span>;  <span class="comment">// Add in stage 2</span>
+    <span class="keyword">end</span>
+
+    <span class="comment">// Result appears 2 cycles after input</span>
+    <span class="comment">// But each stage has shorter combinational path!</span>
+<span class="keyword">endmodule</span>
+</pre>
+</details>
+
+<div class="warning-box">
+    <h3>⚠️ Common Mistake</h3>
+    <p class="en">Don't forget to pipeline ALL inputs that are needed in later stages! If <code>c</code> is used in stage 2 but enters in stage 1, it must be delayed by one cycle. Forgetting this causes a functional bug where stage 2 uses the <em>wrong</em> value of <code>c</code>.</p>
+    <p class="ko" style="display:none;">후속 단계에서 필요한 모든 입력을 파이프라이닝하는 것을 잊지 마세요! <code>c</code>가 단계 2에서 사용되지만 단계 1에서 입력되면, 한 사이클 지연시켜야 합니다. 이를 잊으면 단계 2가 <em>잘못된</em> <code>c</code> 값을 사용하는 기능 버그가 발생합니다.</p>
+</div>
+
+<h2>Exercise 4: Multi-Path Analysis</h2>
+
+<p class="en">A design has three paths between flip-flops. Determine which path limits the maximum frequency.</p>
+<p class="ko" style="display:none;">플립플롭 사이에 세 개의 경로가 있는 설계입니다. 어떤 경로가 최대 주파수를 제한하는지 결정하세요.</p>
+
+<table class="comparison-table">
+    <tr>
+        <th>Path</th><th>T_cq</th><th>T_comb</th><th>T_su</th><th class="en">Total</th><th class="ko" style="display:none;">합계</th>
+    </tr>
+    <tr><td>A → B</td><td>100ps</td><td>450ps</td><td>60ps</td><td>?</td></tr>
+    <tr><td>A → C</td><td>100ps</td><td>700ps</td><td>80ps</td><td>?</td></tr>
+    <tr><td>B → C</td><td>120ps</td><td>350ps</td><td>80ps</td><td>?</td></tr>
+</table>
+
+<div class="concept-box">
+    <h3 class="en">📌 Tasks</h3>
+    <h3 class="ko" style="display:none;">📌 과제</h3>
+    <ol>
+        <li class="en">Calculate the total delay for each path</li>
+        <li class="ko" style="display:none;">각 경로의 총 지연을 계산하세요</li>
+        <li class="en">Which path is the critical path?</li>
+        <li class="ko" style="display:none;">어떤 경로가 크리티컬 패스인가요?</li>
+        <li class="en">What is the F_max for the whole design?</li>
+        <li class="ko" style="display:none;">전체 설계의 F_max는?</li>
+        <li class="en">If the target is 1 GHz, what is the slack on each path?</li>
+        <li class="ko" style="display:none;">목표가 1 GHz인 경우, 각 경로의 슬랙은?</li>
+    </ol>
+</div>
+
+<details>
+    <summary class="en">💡 Show Solution</summary>
+    <summary class="ko" style="display:none;">💡 풀이 보기</summary>
+    <div class="hint-box">
+        <p class="en"><strong>1. Totals:</strong><br>
+        A→B: 100 + 450 + 60 = <strong>610ps</strong><br>
+        A→C: 100 + 700 + 80 = <strong>880ps</strong> ← critical path!<br>
+        B→C: 120 + 350 + 80 = <strong>550ps</strong></p>
+        <p class="ko" style="display:none;"><strong>1. 합계:</strong><br>
+        A→B: 100 + 450 + 60 = <strong>610ps</strong><br>
+        A→C: 100 + 700 + 80 = <strong>880ps</strong> ← 크리티컬 패스!<br>
+        B→C: 120 + 350 + 80 = <strong>550ps</strong></p>
+        <p class="en"><strong>2.</strong> Path A→C is the critical path (longest delay).</p>
+        <p class="ko" style="display:none;"><strong>2.</strong> 경로 A→C가 크리티컬 패스입니다 (가장 긴 지연).</p>
+        <p class="en"><strong>3.</strong> F_max = 1/880ps ≈ <strong>1.14 GHz</strong></p>
+        <p class="ko" style="display:none;"><strong>3.</strong> F_max = 1/880ps ≈ <strong>1.14 GHz</strong></p>
+        <p class="en"><strong>4.</strong> At 1 GHz (T_clk = 1000ps):<br>
+        A→B slack: 1000 - 610 = +390ps ✅<br>
+        A→C slack: 1000 - 880 = +120ps ✅<br>
+        B→C slack: 1000 - 550 = +450ps ✅<br>
+        All paths meet timing at 1 GHz!</p>
+        <p class="ko" style="display:none;"><strong>4.</strong> 1 GHz에서 (T_clk = 1000ps):<br>
+        A→B 슬랙: 1000 - 610 = +390ps ✅<br>
+        A→C 슬랙: 1000 - 880 = +120ps ✅<br>
+        B→C 슬랙: 1000 - 550 = +450ps ✅<br>
+        모든 경로가 1 GHz에서 타이밍을 충족합니다!</p>
+    </div>
+</details>
+
+<div class="tip-box">
+    <h3 class="en">🎯 What You Practiced Today</h3>
+    <h3 class="ko" style="display:none;">🎯 오늘 연습한 내용</h3>
+    <ul>
+        <li class="en">Calculating setup time slack from timing parameters</li>
+        <li class="ko" style="display:none;">타이밍 매개변수에서 셋업 타임 슬랙 계산</li>
+        <li class="en">Deciding where to place pipeline registers for balanced stages</li>
+        <li class="ko" style="display:none;">균형 잡힌 단계를 위한 파이프라인 레지스터 배치 결정</li>
+        <li class="en">Writing pipelined SystemVerilog (including input delay matching)</li>
+        <li class="ko" style="display:none;">파이프라인 SystemVerilog 작성 (입력 지연 매칭 포함)</li>
+        <li class="en">Identifying the critical path in multi-path designs</li>
+        <li class="ko" style="display:none;">다중 경로 설계에서 크리티컬 패스 식별</li>
+    </ul>
+    <p class="en"><strong>Tomorrow:</strong> Hold Time — the other half of the timing puzzle! 🧩</p>
+    <p class="ko" style="display:none;"><strong>내일:</strong> 홀드 타임 — 타이밍 퍼즐의 나머지 반! 🧩</p>
+</div>
+
+<div class="nav-links" style="margin-top:32px;">
+    <a href="day-11-lesson.html">📖 Back to Lesson</a>
+    <a href="day-11-quiz.html">📝 Take the Quiz</a>
+</div>
+
+<script>
+let isKorean = false;
+function toggleLang() {
+    isKorean = !isKorean;
+    document.querySelectorAll('.en').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'none' : 'revert', 'important');
+    });
+    document.querySelectorAll('.ko').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'revert' : 'none', 'important');
+    });
+    document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+}
+</script>
+</body>
+</html>

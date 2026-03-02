@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 11 Quiz: Setup Time | Digital Design Study</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    background: linear-gradient(135deg, #fefae0 0%, #faedcd 100%);
+    color: #3d405b;
+    line-height: 1.8;
+    padding: 24px;
+    max-width: 920px;
+    margin: 0 auto;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+h1 { color: #5d4037; border-bottom: 3px solid #c4a77d; padding-bottom: 12px; margin-bottom: 24px; font-size: 2em; }
+h2 { color: #588157; border-bottom: 2px solid #a3b18a; padding-bottom: 8px; margin: 32px 0 16px; }
+h3 { color: #5d4037; margin: 20px 0 12px; }
+code { background: #e9f5db; color: #3d405b; padding: 2px 8px; border-radius: 4px; font-family: 'SF Mono', 'Monaco', 'Consolas', monospace; }
+.lang-toggle { position: fixed; top: 16px; right: 16px; background: #588157; border: none; border-radius: 24px; padding: 10px 20px; cursor: pointer; color: #fff; font-size: 14px; font-weight: 600; z-index: 1000; }
+.lang-toggle:hover { background: #3a5a40; }
+.ko { display: none; }
+.question {
+    background: #fff8f0;
+    border: 2px solid #c4a77d;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+}
+.question h3 { color: #5d4037; }
+.options { list-style: none; padding: 0; margin: 12px 0; }
+.options li {
+    padding: 10px 16px;
+    margin: 6px 0;
+    border-radius: 8px;
+    cursor: pointer;
+    border: 2px solid #c4a77d;
+    background: #fff;
+    transition: all 0.2s;
+}
+.options li:hover { background: #e9f5db; }
+.options li.correct { background: #d4edda; border-color: #588157; }
+.options li.wrong { background: #f8d7da; border-color: #ef4444; }
+.options li.disabled { pointer-events: none; }
+.explanation {
+    display: none;
+    background: #fff;
+    border-left: 4px solid #588157;
+    padding: 12px 16px;
+    margin-top: 12px;
+    border-radius: 0 8px 8px 0;
+    color: #3d405b;
+}
+.score-box {
+    background: #fff8f0;
+    border: 2px solid #588157;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    text-align: center;
+    display: none;
+}
+.score-box h2 { border: none; }
+.nav-links { display: flex; gap: 12px; margin: 20px 0; flex-wrap: wrap; }
+.nav-links a { background: linear-gradient(135deg, #588157, #3a5a40); color: #fff; text-decoration: none; padding: 10px 20px; border-radius: 8px; font-weight: 600; font-size: 14px; }
+.nav-links a:hover { opacity: 0.9; }
+@media (max-width: 768px) { body { padding: 16px; } h1 { font-size: 1.8em; } .lang-toggle { padding: 8px 16px; font-size: 13px; } }
+</style>
+</head>
+<body>
+<button class="lang-toggle" onclick="toggleLang()">한국어</button>
+
+<h1>📝 Day 11 Quiz: Setup Time</h1>
+<p class="en">Test your understanding of setup time concepts. Click an answer to check!</p>
+<p class="ko" style="display:none;">셋업 타임 개념에 대한 이해를 테스트하세요. 답을 클릭하세요!</p>
+
+<div class="nav-links">
+    <a href="day-11-lesson.html">📖 Back to Lesson</a>
+    <a href="day-11-practice.html">🔧 Practice Exercise</a>
+</div>
+
+<div id="quiz">
+
+<div class="question" data-answer="1">
+    <h3 class="en">Q1. What is setup time?</h3>
+    <h3 class="ko" style="display:none;">Q1. 셋업 타임이란 무엇인가요?</h3>
+    <ul class="options">
+        <li onclick="check(this,0)" class="en">A) Time after the clock edge that data must remain stable</li>
+        <li onclick="check(this,0)" class="ko" style="display:none;">A) 클럭 에지 이후 데이터가 안정되어야 하는 시간</li>
+        <li onclick="check(this,1)" class="en">B) Minimum time data must be stable before the clock edge</li>
+        <li onclick="check(this,1)" class="ko" style="display:none;">B) 클럭 에지 전에 데이터가 안정되어야 하는 최소 시간</li>
+        <li onclick="check(this,2)" class="en">C) The propagation delay through combinational logic</li>
+        <li onclick="check(this,2)" class="ko" style="display:none;">C) 조합 논리를 통한 전파 지연</li>
+        <li onclick="check(this,3)" class="en">D) The delay from clock input to Q output</li>
+        <li onclick="check(this,3)" class="ko" style="display:none;">D) 클럭 입력에서 Q 출력까지의 지연</li>
+    </ul>
+    <div class="explanation">
+        <p class="en">✅ <strong>B</strong> — Setup time is the minimum time data must be stable <em>before</em> the active clock edge. Option A describes hold time, C describes combinational delay, and D describes clock-to-Q delay.</p>
+        <p class="ko" style="display:none;">✅ <strong>B</strong> — 셋업 타임은 유효 클럭 에지 <em>전에</em> 데이터가 안정되어야 하는 최소 시간입니다. A는 홀드 타임, C는 조합 지연, D는 클럭-투-Q 지연입니다.</p>
+    </div>
+</div>
+
+<div class="question" data-answer="2">
+    <h3 class="en">Q2. Given T_cq = 120ps, T_comb = 500ps, T_su = 80ps, what is F_max?</h3>
+    <h3 class="ko" style="display:none;">Q2. T_cq = 120ps, T_comb = 500ps, T_su = 80ps일 때, F_max는?</h3>
+    <ul class="options">
+        <li onclick="check(this,0)" class="en">A) 1.00 GHz</li>
+        <li onclick="check(this,0)" class="ko" style="display:none;">A) 1.00 GHz</li>
+        <li onclick="check(this,1)" class="en">B) 1.67 GHz</li>
+        <li onclick="check(this,1)" class="ko" style="display:none;">B) 1.67 GHz</li>
+        <li onclick="check(this,2)" class="en">C) 1.43 GHz</li>
+        <li onclick="check(this,2)" class="ko" style="display:none;">C) 1.43 GHz</li>
+        <li onclick="check(this,3)" class="en">D) 2.00 GHz</li>
+        <li onclick="check(this,3)" class="ko" style="display:none;">D) 2.00 GHz</li>
+    </ul>
+    <div class="explanation">
+        <p class="en">✅ <strong>C</strong> — F_max = 1 / (120 + 500 + 80)ps = 1/700ps = 1.43 GHz.</p>
+        <p class="ko" style="display:none;">✅ <strong>C</strong> — F_max = 1 / (120 + 500 + 80)ps = 1/700ps = 1.43 GHz.</p>
+    </div>
+</div>
+
+<div class="question" data-answer="0">
+    <h3 class="en">Q3. What does "negative slack" in a timing report indicate?</h3>
+    <h3 class="ko" style="display:none;">Q3. 타이밍 리포트에서 "음의 슬랙(negative slack)"은 무엇을 나타내나요?</h3>
+    <ul class="options">
+        <li onclick="check(this,0)" class="en">A) A setup time violation — data arrives too late</li>
+        <li onclick="check(this,0)" class="ko" style="display:none;">A) 셋업 타임 위반 — 데이터가 너무 늦게 도착</li>
+        <li onclick="check(this,1)" class="en">B) The design has extra timing margin</li>
+        <li onclick="check(this,1)" class="ko" style="display:none;">B) 설계에 여유 타이밍 마진이 있음</li>
+        <li onclick="check(this,2)" class="en">C) A hold time violation</li>
+        <li onclick="check(this,2)" class="ko" style="display:none;">C) 홀드 타임 위반</li>
+        <li onclick="check(this,3)" class="en">D) The clock is running too slowly</li>
+        <li onclick="check(this,3)" class="ko" style="display:none;">D) 클럭이 너무 느리게 동작</li>
+    </ul>
+    <div class="explanation">
+        <p class="en">✅ <strong>A</strong> — Negative slack means data required time minus data arrival time is negative, meaning data arrives after the deadline. This is a setup violation.</p>
+        <p class="ko" style="display:none;">✅ <strong>A</strong> — 음의 슬랙은 데이터 요구 시간에서 데이터 도착 시간을 뺀 값이 음수임을 의미하며, 데이터가 기한 후에 도착함을 뜻합니다. 이것은 셋업 위반입니다.</p>
+    </div>
+</div>
+
+<div class="question" data-answer="1">
+    <h3 class="en">Q4. Which fix for a setup violation adds latency but enables higher frequency?</h3>
+    <h3 class="ko" style="display:none;">Q4. 셋업 위반을 수정하는 방법 중 지연을 추가하지만 더 높은 주파수를 가능하게 하는 것은?</h3>
+    <ul class="options">
+        <li onclick="check(this,0)" class="en">A) Reducing clock frequency</li>
+        <li onclick="check(this,0)" class="ko" style="display:none;">A) 클럭 주파수 감소</li>
+        <li onclick="check(this,1)" class="en">B) Pipelining (inserting registers)</li>
+        <li onclick="check(this,1)" class="ko" style="display:none;">B) 파이프라이닝 (레지스터 삽입)</li>
+        <li onclick="check(this,2)" class="en">C) Using faster library cells</li>
+        <li onclick="check(this,2)" class="ko" style="display:none;">C) 더 빠른 라이브러리 셀 사용</li>
+        <li onclick="check(this,3)" class="en">D) Removing flip-flops</li>
+        <li onclick="check(this,3)" class="ko" style="display:none;">D) 플립플롭 제거</li>
+    </ul>
+    <div class="explanation">
+        <p class="en">✅ <strong>B</strong> — Pipelining breaks a long combinational path into shorter stages. Each stage is faster (higher frequency), but the total result takes more clock cycles (added latency).</p>
+        <p class="ko" style="display:none;">✅ <strong>B</strong> — 파이프라이닝은 긴 조합 경로를 더 짧은 단계로 분할합니다. 각 단계가 더 빠르지만(높은 주파수), 전체 결과는 더 많은 클럭 사이클이 필요합니다(지연 추가).</p>
+    </div>
+</div>
+
+<div class="question" data-answer="2">
+    <h3 class="en">Q5. Setup time is a property of:</h3>
+    <h3 class="ko" style="display:none;">Q5. 셋업 타임은 다음의 속성입니다:</h3>
+    <ul class="options">
+        <li onclick="check(this,0)" class="en">A) The combinational logic between flip-flops</li>
+        <li onclick="check(this,0)" class="ko" style="display:none;">A) 플립플롭 사이의 조합 논리</li>
+        <li onclick="check(this,1)" class="en">B) The clock network</li>
+        <li onclick="check(this,1)" class="ko" style="display:none;">B) 클럭 네트워크</li>
+        <li onclick="check(this,2)" class="en">C) The destination flip-flop (silicon technology)</li>
+        <li onclick="check(this,2)" class="ko" style="display:none;">C) 대상 플립플롭 (실리콘 기술)</li>
+        <li onclick="check(this,3)" class="en">D) The source flip-flop</li>
+        <li onclick="check(this,3)" class="ko" style="display:none;">D) 소스 플립플롭</li>
+    </ul>
+    <div class="explanation">
+        <p class="en">✅ <strong>C</strong> — Setup time is an intrinsic property of the destination flip-flop, determined by the silicon technology and cell library. It cannot be changed by the designer.</p>
+        <p class="ko" style="display:none;">✅ <strong>C</strong> — 셋업 타임은 실리콘 기술과 셀 라이브러리에 의해 결정되는 대상 플립플롭의 고유 속성입니다. 설계자가 변경할 수 없습니다.</p>
+    </div>
+</div>
+
+<div class="question" data-answer="3">
+    <h3 class="en">Q6. If your design runs at 1 GHz and T_cq = 100ps, T_su = 50ps, what is the maximum T_comb allowed?</h3>
+    <h3 class="ko" style="display:none;">Q6. 설계가 1 GHz로 동작하고 T_cq = 100ps, T_su = 50ps일 때, 허용되는 최대 T_comb는?</h3>
+    <ul class="options">
+        <li onclick="check(this,0)" class="en">A) 1000ps</li>
+        <li onclick="check(this,0)" class="ko" style="display:none;">A) 1000ps</li>
+        <li onclick="check(this,1)" class="en">B) 900ps</li>
+        <li onclick="check(this,1)" class="ko" style="display:none;">B) 900ps</li>
+        <li onclick="check(this,2)" class="en">C) 800ps</li>
+        <li onclick="check(this,2)" class="ko" style="display:none;">C) 800ps</li>
+        <li onclick="check(this,3)" class="en">D) 850ps</li>
+        <li onclick="check(this,3)" class="ko" style="display:none;">D) 850ps</li>
+    </ul>
+    <div class="explanation">
+        <p class="en">✅ <strong>D</strong> — T_clk = 1/1GHz = 1000ps. T_comb ≤ T_clk - T_cq - T_su = 1000 - 100 - 50 = 850ps.</p>
+        <p class="ko" style="display:none;">✅ <strong>D</strong> — T_clk = 1/1GHz = 1000ps. T_comb ≤ T_clk - T_cq - T_su = 1000 - 100 - 50 = 850ps.</p>
+    </div>
+</div>
+
+<div class="question" data-answer="1">
+    <h3 class="en">Q7. What happens when a setup time violation occurs?</h3>
+    <h3 class="ko" style="display:none;">Q7. 셋업 타임 위반이 발생하면 어떻게 되나요?</h3>
+    <ul class="options">
+        <li onclick="check(this,0)" class="en">A) The flip-flop always outputs 0</li>
+        <li onclick="check(this,0)" class="ko" style="display:none;">A) 플립플롭이 항상 0을 출력</li>
+        <li onclick="check(this,1)" class="en">B) The flip-flop may capture wrong data or become metastable</li>
+        <li onclick="check(this,1)" class="ko" style="display:none;">B) 플립플롭이 잘못된 데이터를 잡거나 메타스테이블 상태가 될 수 있음</li>
+        <li onclick="check(this,2)" class="en">C) The clock stops working</li>
+        <li onclick="check(this,2)" class="ko" style="display:none;">C) 클럭이 작동을 멈춤</li>
+        <li onclick="check(this,3)" class="en">D) The flip-flop holds its previous value</li>
+        <li onclick="check(this,3)" class="ko" style="display:none;">D) 플립플롭이 이전 값을 유지</li>
+    </ul>
+    <div class="explanation">
+        <p class="en">✅ <strong>B</strong> — A setup violation means data wasn't stable long enough. The flip-flop might capture the old value, the new value, or enter metastability where the output oscillates unpredictably.</p>
+        <p class="ko" style="display:none;">✅ <strong>B</strong> — 셋업 위반은 데이터가 충분히 오래 안정되지 않았음을 의미합니다. 플립플롭은 이전 값, 새 값을 잡거나, 출력이 예측 불가능하게 진동하는 메타스테이빌리티에 빠질 수 있습니다.</p>
+    </div>
+</div>
+
+<div class="question" data-answer="0">
+    <h3 class="en">Q8. Which tool performs setup time analysis in industry?</h3>
+    <h3 class="ko" style="display:none;">Q8. 산업에서 셋업 타임 분석을 수행하는 도구는?</h3>
+    <ul class="options">
+        <li onclick="check(this,0)" class="en">A) Static Timing Analysis (STA) tools</li>
+        <li onclick="check(this,0)" class="ko" style="display:none;">A) 정적 타이밍 분석(STA) 도구</li>
+        <li onclick="check(this,1)" class="en">B) Logic simulators only</li>
+        <li onclick="check(this,1)" class="ko" style="display:none;">B) 로직 시뮬레이터만</li>
+        <li onclick="check(this,2)" class="en">C) Waveform viewers</li>
+        <li onclick="check(this,2)" class="ko" style="display:none;">C) 파형 뷰어</li>
+        <li onclick="check(this,3)" class="en">D) Text editors</li>
+        <li onclick="check(this,3)" class="ko" style="display:none;">D) 텍스트 에디터</li>
+    </ul>
+    <div class="explanation">
+        <p class="en">✅ <strong>A</strong> — STA tools like Synopsys PrimeTime and Cadence Tempus analyze every timing path without simulation. They're the primary method for verifying setup (and hold) time constraints.</p>
+        <p class="ko" style="display:none;">✅ <strong>A</strong> — Synopsys PrimeTime과 Cadence Tempus 같은 STA 도구는 시뮬레이션 없이 모든 타이밍 경로를 분석합니다. 셋업(및 홀드) 타임 제약을 검증하는 주요 방법입니다.</p>
+    </div>
+</div>
+
+<div class="question" data-answer="2">
+    <h3 class="en">Q9. In the equation T_clk ≥ T_cq + T_comb + T_su, what does T_cq represent?</h3>
+    <h3 class="ko" style="display:none;">Q9. T_clk ≥ T_cq + T_comb + T_su 방정식에서 T_cq는 무엇을 나타내나요?</h3>
+    <ul class="options">
+        <li onclick="check(this,0)" class="en">A) Clock period</li>
+        <li onclick="check(this,0)" class="ko" style="display:none;">A) 클럭 주기</li>
+        <li onclick="check(this,1)" class="en">B) Setup time of the destination flip-flop</li>
+        <li onclick="check(this,1)" class="ko" style="display:none;">B) 대상 플립플롭의 셋업 타임</li>
+        <li onclick="check(this,2)" class="en">C) Clock-to-Q delay of the source flip-flop</li>
+        <li onclick="check(this,2)" class="ko" style="display:none;">C) 소스 플립플롭의 클럭-투-Q 지연</li>
+        <li onclick="check(this,3)" class="en">D) Combinational logic delay</li>
+        <li onclick="check(this,3)" class="ko" style="display:none;">D) 조합 논리 지연</li>
+    </ul>
+    <div class="explanation">
+        <p class="en">✅ <strong>C</strong> — T_cq (clock-to-Q) is the delay from the clock edge to the output of the source flip-flop becoming valid. It's how long the source FF takes to produce its output after being clocked.</p>
+        <p class="ko" style="display:none;">✅ <strong>C</strong> — T_cq(클럭-투-Q)는 클럭 에지에서 소스 플립플롭의 출력이 유효해지기까지의 지연입니다. 소스 FF가 클럭된 후 출력을 생성하는 데 걸리는 시간입니다.</p>
+    </div>
+</div>
+
+<div class="question" data-answer="1">
+    <h3 class="en">Q10. Using faster library cells to fix setup violations has which trade-off?</h3>
+    <h3 class="ko" style="display:none;">Q10. 셋업 위반을 수정하기 위해 더 빠른 라이브러리 셀을 사용하면 어떤 트레이드오프가 있나요?</h3>
+    <ul class="options">
+        <li onclick="check(this,0)" class="en">A) Increased latency</li>
+        <li onclick="check(this,0)" class="ko" style="display:none;">A) 지연 시간 증가</li>
+        <li onclick="check(this,1)" class="en">B) Higher power consumption</li>
+        <li onclick="check(this,1)" class="ko" style="display:none;">B) 전력 소비 증가</li>
+        <li onclick="check(this,2)" class="en">C) Lower frequency</li>
+        <li onclick="check(this,2)" class="ko" style="display:none;">C) 주파수 감소</li>
+        <li onclick="check(this,3)" class="en">D) No trade-off</li>
+        <li onclick="check(this,3)" class="ko" style="display:none;">D) 트레이드오프 없음</li>
+    </ul>
+    <div class="explanation">
+        <p class="en">✅ <strong>B</strong> — Faster cells use more current to switch quickly, which increases power consumption. This is one of the fundamental area/power/performance trade-offs in chip design.</p>
+        <p class="ko" style="display:none;">✅ <strong>B</strong> — 더 빠른 셀은 빠르게 스위칭하기 위해 더 많은 전류를 사용하여 전력 소비가 증가합니다. 이것은 칩 설계에서 면적/전력/성능의 기본적인 트레이드오프 중 하나입니다.</p>
+    </div>
+</div>
+
+</div>
+
+<div class="score-box" id="scoreBox">
+    <h2 id="scoreText"></h2>
+    <p id="scoreMsg"></p>
+</div>
+
+<div class="nav-links" style="margin-top:32px;">
+    <a href="day-11-lesson.html">📖 Back to Lesson</a>
+    <a href="day-11-practice.html">🔧 Practice Exercise</a>
+</div>
+
+<script>
+let isKorean = false;
+let score = 0;
+let answered = 0;
+const total = document.querySelectorAll('.question').length;
+
+function toggleLang() {
+    isKorean = !isKorean;
+    document.querySelectorAll('.en').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'none' : 'revert', 'important');
+    });
+    document.querySelectorAll('.ko').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'revert' : 'none', 'important');
+    });
+    document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+}
+
+function check(el, idx) {
+    const q = el.closest('.question');
+    if (q.classList.contains('answered')) return;
+    q.classList.add('answered');
+    const correct = parseInt(q.dataset.answer);
+    const options = q.querySelectorAll('.options li');
+    answered++;
+
+    if (idx === correct) {
+        el.classList.add('correct');
+        score++;
+    } else {
+        el.classList.add('wrong');
+        // highlight correct
+        const lang = isKorean ? '.ko' : '.en';
+        const langOptions = q.querySelectorAll('.options li' + lang);
+        langOptions[correct].classList.add('correct');
+    }
+    options.forEach(o => o.classList.add('disabled'));
+    q.querySelector('.explanation').style.display = 'block';
+
+    if (answered === total) {
+        const box = document.getElementById('scoreBox');
+        box.style.display = 'block';
+        const pct = Math.round(score / total * 100);
+        document.getElementById('scoreText').textContent = `Score: ${score}/${total} (${pct}%)`;
+        document.getElementById('scoreMsg').textContent = pct >= 80 ? '🎉 Excellent work!' : pct >= 60 ? '👍 Good job, review the ones you missed!' : '📚 Review the lesson and try again!';
+    }
+}
+</script>
+</body>
+</html>
