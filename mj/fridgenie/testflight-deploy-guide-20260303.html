@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fridgenie — TestFlight Deployment Guide</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#1a1a2e;--card:#16213e;--card2:#0f3460;--green:#5B8C5A;--cream:#FFF8F0;--text:#e0e0e0;--muted:#999;--border:#2a2a4a;--code-bg:#0d1117;--warn:#e6a817;--danger:#e74c3c;--success:#27ae60}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--text);line-height:1.7;padding:0 0 60px}
+.header{background:linear-gradient(135deg,var(--card) 0%,var(--card2) 100%);padding:30px 20px;text-align:center;border-bottom:3px solid var(--green);position:relative}
+.header h1{font-size:1.8em;color:var(--cream)}
+.header h1 span{color:var(--green)}
+.header p{color:var(--muted);margin-top:6px;font-size:.95em}
+.lang-toggle{position:absolute;top:16px;right:16px;background:var(--green);color:#fff;border:none;padding:8px 14px;border-radius:20px;cursor:pointer;font-size:.85em;font-weight:600}
+.lang-toggle:hover{opacity:.85}
+.container{max-width:800px;margin:0 auto;padding:16px}
+.ko{display:none}.ko.show{display:inline!important}.en.hide{display:none!important}
+.note{background:rgba(91,140,90,.15);border-left:4px solid var(--green);padding:12px 16px;border-radius:0 8px 8px 0;margin:12px 0;font-size:.9em}
+.warn{background:rgba(230,168,23,.12);border-left:4px solid var(--warn);padding:12px 16px;border-radius:0 8px 8px 0;margin:12px 0;font-size:.9em}
+.danger{background:rgba(231,76,60,.12);border-left:4px solid var(--danger);padding:12px 16px;border-radius:0 8px 8px 0;margin:12px 0;font-size:.9em}
+details{background:var(--card);border:1px solid var(--border);border-radius:12px;margin:14px 0;overflow:hidden}
+summary{padding:16px 20px;cursor:pointer;font-weight:700;font-size:1.05em;color:var(--cream);list-style:none;display:flex;align-items:center;gap:10px;user-select:none}
+summary::before{content:'▸';color:var(--green);font-size:1.2em;transition:transform .2s}
+details[open] summary::before{transform:rotate(90deg)}
+summary::-webkit-details-marker{display:none}
+.step-content{padding:4px 20px 20px}
+.step-num{background:var(--green);color:#fff;width:28px;height:28px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:.85em;flex-shrink:0}
+code{background:var(--code-bg);padding:2px 6px;border-radius:4px;font-size:.88em;color:var(--green)}
+pre{background:var(--code-bg);padding:14px;border-radius:8px;overflow-x:auto;margin:10px 0;font-size:.85em;line-height:1.5;border:1px solid var(--border)}
+pre code{background:none;padding:0;color:var(--cream)}
+h3{color:var(--green);margin:16px 0 8px;font-size:1em}
+h4{color:var(--cream);margin:14px 0 6px;font-size:.95em}
+ol,ul{margin:8px 0 8px 20px}
+li{margin:4px 0}
+.screenshot-desc{background:rgba(255,248,240,.06);border:1px dashed var(--border);border-radius:8px;padding:10px 14px;margin:8px 0;font-size:.85em;color:var(--muted);font-style:italic}
+.checklist{list-style:none;margin-left:0;padding:0}
+.checklist li{padding:6px 0;border-bottom:1px solid var(--border)}
+.checklist li::before{content:'☐ ';color:var(--green);font-size:1.1em}
+a{color:var(--green)}
+.progress-bar{display:flex;gap:4px;margin:20px 0;flex-wrap:wrap}
+.progress-bar .dot{width:10px;height:10px;border-radius:50%;background:var(--border)}
+.progress-bar .dot.active{background:var(--green)}
+.toc{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;margin:20px 0}
+.toc h3{margin-top:0}
+.toc ol{margin-left:18px}
+.toc li{margin:6px 0}
+.toc a{text-decoration:none;color:var(--cream)}
+.toc a:hover{color:var(--green)}
+.time-est{font-size:.8em;color:var(--muted);font-weight:400}
+@media(max-width:600px){.header h1{font-size:1.4em}.container{padding:10px}summary{padding:12px 14px;font-size:.95em}.step-content{padding:4px 14px 14px}}
+</style>
+</head>
+<body>
+<div class="header">
+<button class="lang-toggle" onclick="toggleLang()">한국어</button>
+<h1>🧊 <span>Fridgenie</span> <span class="en">TestFlight Deploy Guide</span><span class="ko">TestFlight 배포 가이드</span></h1>
+<p class="en">First-time TestFlight deployment — step by step 🚀</p>
+<p class="ko">처음 하는 TestFlight 배포 — 단계별 가이드 🚀</p>
+</div>
+
+<div class="container">
+
+<div class="note">
+<span class="en">⏱ <strong>Estimated total time:</strong> 45–90 minutes (mostly waiting for Apple processing). Grab some coffee ☕ and take it step by step!</span>
+<span class="ko">⏱ <strong>예상 소요 시간:</strong> 45–90분 (대부분 Apple 처리 대기 시간). 커피 ☕ 한 잔 들고 천천히 따라가세요!</span>
+</div>
+
+<div class="toc">
+<h3 class="en">📋 Table of Contents</h3>
+<h3 class="ko">📋 목차</h3>
+<ol>
+<li><a href="#s1"><span class="en">Prerequisites Check</span><span class="ko">사전 준비 확인</span></a> <span class="time-est">5 min</span></li>
+<li><a href="#s2"><span class="en">Signing & Certificates</span><span class="ko">서명 & 인증서</span></a> <span class="time-est">10 min</span></li>
+<li><a href="#s3"><span class="en">App Store Connect Setup</span><span class="ko">App Store Connect 설정</span></a> <span class="time-est">10 min</span></li>
+<li><a href="#s4"><span class="en">Privacy Policy</span><span class="ko">개인정보 처리방침</span></a> <span class="time-est">5 min</span></li>
+<li><a href="#s5"><span class="en">Building the Archive</span><span class="ko">아카이브 빌드</span></a> <span class="time-est">10 min</span></li>
+<li><a href="#s6"><span class="en">Common Build Issues</span><span class="ko">자주 발생하는 빌드 문제</span></a> <span class="time-est">as needed</span></li>
+<li><a href="#s7"><span class="en">Uploading to TestFlight</span><span class="ko">TestFlight 업로드</span></a> <span class="time-est">10 min</span></li>
+<li><a href="#s8"><span class="en">TestFlight Configuration</span><span class="ko">TestFlight 설정</span></a> <span class="time-est">10 min</span></li>
+<li><a href="#s9"><span class="en">Installing on iPhone</span><span class="ko">iPhone에 설치</span></a> <span class="time-est">5 min</span></li>
+<li><a href="#s10"><span class="en">Testing Checklist</span><span class="ko">테스트 체크리스트</span></a> <span class="time-est">ongoing</span></li>
+</ol>
+</div>
+
+<!-- STEP 1 -->
+<details id="s1" open>
+<summary><span class="step-num">1</span> <span class="en">Prerequisites Check</span><span class="ko">사전 준비 확인</span></summary>
+<div class="step-content">
+
+<h3 class="en">Verify these before starting:</h3>
+<h3 class="ko">시작 전에 확인할 것들:</h3>
+
+<h4 class="en">Xcode Version</h4>
+<h4 class="ko">Xcode 버전</h4>
+<p class="en">You need Xcode 15+ (ideally latest). Check in terminal:</p>
+<p class="ko">Xcode 15 이상 필요 (최신 버전 권장). 터미널에서 확인:</p>
+<pre><code>xcodebuild -version</code></pre>
+
+<h4 class="en">Apple Developer Account</h4>
+<h4 class="ko">Apple Developer 계정</h4>
+<p class="en">Make sure your <strong>paid</strong> Apple Developer membership ($99/year) is active. Free accounts can't use TestFlight.</p>
+<p class="ko"><strong>유료</strong> Apple Developer 멤버십 ($99/년)이 활성화되어 있는지 확인. 무료 계정으로는 TestFlight 사용 불가.</p>
+<p class="en">→ Check at <a href="https://developer.apple.com/account" target="_blank">developer.apple.com/account</a></p>
+<p class="ko">→ <a href="https://developer.apple.com/account" target="_blank">developer.apple.com/account</a>에서 확인</p>
+
+<h4 class="en">Xcode Signed In</h4>
+<h4 class="ko">Xcode 로그인</h4>
+<p class="en">Open Xcode → <strong>Settings (⌘,)</strong> → <strong>Accounts</strong> tab. Your Apple ID should be listed with "Apple Development" and "Apple Distribution" certificates.</p>
+<p class="ko">Xcode → <strong>Settings (⌘,)</strong> → <strong>Accounts</strong> 탭. Apple ID가 "Apple Development"와 "Apple Distribution" 인증서와 함께 표시되어야 함.</p>
+<div class="screenshot-desc">
+<span class="en">📸 You should see your Apple ID with your Team "7373NYW784" and role listed as "Agent" or "Admin".</span>
+<span class="ko">📸 Apple ID와 Team "7373NYW784"가 표시되고 역할이 "Agent" 또는 "Admin"으로 나와야 합니다.</span>
+</div>
+
+<h4 class="en">Add Photo Library Permission</h4>
+<h4 class="ko">사진 라이브러리 권한 추가</h4>
+<p class="en">Fridgenie needs photo library access for receipt scanning. Add this to <code>ios/Runner/Info.plist</code>:</p>
+<p class="ko">영수증 스캔을 위해 사진 라이브러리 접근 권한이 필요합니다. <code>ios/Runner/Info.plist</code>에 추가:</p>
+<pre><code>&lt;key&gt;NSPhotoLibraryUsageDescription&lt;/key&gt;
+&lt;string&gt;Fridgenie needs access to your photo library to scan receipts and add food items.&lt;/string&gt;</code></pre>
+
+<h4 class="en">Flutter Check</h4>
+<h4 class="ko">Flutter 점검</h4>
+<pre><code>cd ~/Projects/fridgenie
+flutter doctor -v</code></pre>
+<p class="en">Make sure there are no red ✗ marks for iOS development.</p>
+<p class="ko">iOS 개발 항목에 빨간 ✗ 표시가 없는지 확인.</p>
+
+<div class="note">
+<span class="en">✅ <strong>Already done for you:</strong> App icon (all sizes), Camera & Microphone privacy descriptions, bundle ID (com.fridgenie.app).</span>
+<span class="ko">✅ <strong>이미 완료됨:</strong> 앱 아이콘 (모든 사이즈), 카메라 & 마이크 권한 설명, 번들 ID (com.fridgenie.app).</span>
+</div>
+
+</div>
+</details>
+
+<!-- STEP 2 -->
+<details id="s2">
+<summary><span class="step-num">2</span> <span class="en">Signing & Certificates</span><span class="ko">서명 & 인증서</span></summary>
+<div class="step-content">
+
+<h3 class="en">Let Xcode handle it (Automatic Signing)</h3>
+<h3 class="ko">Xcode가 자동으로 처리하게 하기 (자동 서명)</h3>
+
+<ol>
+<li>
+<span class="en">Open the iOS project in Xcode:</span>
+<span class="ko">Xcode에서 iOS 프로젝트 열기:</span>
+<pre><code>cd ~/Projects/fridgenie
+open ios/Runner.xcworkspace</code></pre>
+<div class="warn">
+<span class="en">⚠️ Always open <code>.xcworkspace</code>, NOT <code>.xcodeproj</code>! Flutter uses CocoaPods which requires the workspace.</span>
+<span class="ko">⚠️ 항상 <code>.xcworkspace</code>를 열어야 합니다. <code>.xcodeproj</code> 아님! Flutter는 CocoaPods를 사용하므로 workspace 필수.</span>
+</div>
+</li>
+
+<li>
+<span class="en">In the left sidebar, click <strong>Runner</strong> (the blue project icon at the very top).</span>
+<span class="ko">왼쪽 사이드바에서 <strong>Runner</strong> (맨 위의 파란 프로젝트 아이콘) 클릭.</span>
+</li>
+
+<li>
+<span class="en">Select <strong>Runner</strong> under TARGETS → <strong>Signing & Capabilities</strong> tab.</span>
+<span class="ko">TARGETS에서 <strong>Runner</strong> 선택 → <strong>Signing & Capabilities</strong> 탭.</span>
+</li>
+
+<li>
+<span class="en">Check ✅ <strong>"Automatically manage signing"</strong>.</span>
+<span class="ko">✅ <strong>"Automatically manage signing"</strong> 체크.</span>
+</li>
+
+<li>
+<span class="en">Set <strong>Team</strong> to your team (ID: 7373NYW784). Select it from the dropdown.</span>
+<span class="ko"><strong>Team</strong>을 본인 팀 (ID: 7373NYW784)으로 설정. 드롭다운에서 선택.</span>
+</li>
+
+<li>
+<span class="en">Verify <strong>Bundle Identifier</strong> is <code>com.fridgenie.app</code>.</span>
+<span class="ko"><strong>Bundle Identifier</strong>가 <code>com.fridgenie.app</code>인지 확인.</span>
+</li>
+</ol>
+
+<div class="screenshot-desc">
+<span class="en">📸 You should see a green checkmark with "Signing Certificate: Apple Development: [your name]" and a valid provisioning profile. No red errors.</span>
+<span class="ko">📸 녹색 체크마크와 "Signing Certificate: Apple Development: [이름]" 및 유효한 프로비저닝 프로파일이 표시되어야 합니다. 빨간 에러 없어야 함.</span>
+</div>
+
+<div class="note">
+<span class="en">💡 <strong>What Xcode does automatically:</strong> Creates a development certificate, an App ID, and a provisioning profile. For distribution, it'll create a distribution certificate when you archive. You don't need to touch the Apple Developer portal manually!</span>
+<span class="ko">💡 <strong>Xcode가 자동으로 하는 것:</strong> 개발 인증서, App ID, 프로비저닝 프로파일 생성. 배포용 인증서는 아카이브할 때 자동 생성됩니다. Apple Developer 포털을 직접 건드릴 필요 없어요!</span>
+</div>
+
+<h4 class="en">Important: Check BOTH configurations</h4>
+<h4 class="ko">중요: 두 가지 설정 모두 확인</h4>
+<p class="en">Make sure signing is set for <strong>both</strong> Debug and Release. Click "Build Settings" tab → search "signing" → verify team is set for both.</p>
+<p class="ko"><strong>Debug와 Release 모두</strong> 서명이 설정되어 있는지 확인. "Build Settings" 탭 → "signing" 검색 → 두 가지 모두 팀 설정 확인.</p>
+
+</div>
+</details>
+
+<!-- STEP 3 -->
+<details id="s3">
+<summary><span class="step-num">3</span> <span class="en">App Store Connect Setup</span><span class="ko">App Store Connect 설정</span></summary>
+<div class="step-content">
+
+<h3 class="en">Create your app in App Store Connect</h3>
+<h3 class="ko">App Store Connect에서 앱 생성</h3>
+
+<ol>
+<li>
+<span class="en">Go to <a href="https://appstoreconnect.apple.com" target="_blank">appstoreconnect.apple.com</a> → sign in.</span>
+<span class="ko"><a href="https://appstoreconnect.apple.com" target="_blank">appstoreconnect.apple.com</a> → 로그인.</span>
+</li>
+
+<li>
+<span class="en">Click <strong>"Apps"</strong> → blue <strong>"+"</strong> button → <strong>"New App"</strong>.</span>
+<span class="ko"><strong>"Apps"</strong> 클릭 → 파란 <strong>"+"</strong> 버튼 → <strong>"New App"</strong>.</span>
+</li>
+
+<li>
+<span class="en">Fill in the form:</span>
+<span class="ko">양식 작성:</span>
+<ul>
+<li><strong>Platform:</strong> iOS</li>
+<li><strong>Name:</strong> Fridgenie</li>
+<li><strong>Primary Language:</strong> English (U.S.) <span class="en">or Korean</span><span class="ko">또는 한국어</span></li>
+<li><strong>Bundle ID:</strong> com.fridgenie.app <span class="en">(select from dropdown — it appears after Xcode registers it)</span><span class="ko">(드롭다운에서 선택 — Xcode가 등록한 후 나타남)</span></li>
+<li><strong>SKU:</strong> fridgenie-001 <span class="en">(any unique string, internal use only)</span><span class="ko">(아무 고유 문자열, 내부 용도)</span></li>
+<li><strong>User Access:</strong> Full Access</li>
+</ul>
+</li>
+
+<li>
+<span class="en">Click <strong>"Create"</strong>.</span>
+<span class="ko"><strong>"Create"</strong> 클릭.</span>
+</li>
+</ol>
+
+<div class="warn">
+<span class="en">⚠️ <strong>Bundle ID not showing in dropdown?</strong> Go back to Xcode, make sure signing succeeded (Step 2), then try again. Xcode auto-registers the App ID with Apple. It may take a minute to appear.</span>
+<span class="ko">⚠️ <strong>번들 ID가 드롭다운에 안 나타나나요?</strong> Xcode로 돌아가서 서명이 성공했는지 확인 (2단계), 그다음 다시 시도. Xcode가 App ID를 Apple에 자동 등록합니다. 나타나는 데 1분 정도 걸릴 수 있음.</span>
+</div>
+
+<div class="note">
+<span class="en">💡 You do NOT need to fill in app descriptions, screenshots, or pricing right now. Those are only needed for App Store release. For TestFlight, just creating the app entry is enough!</span>
+<span class="ko">💡 앱 설명, 스크린샷, 가격 설정은 지금 안 해도 됩니다. App Store 출시 때만 필요. TestFlight에는 앱 항목 생성만으로 충분!</span>
+</div>
+
+</div>
+</details>
+
+<!-- STEP 4 -->
+<details id="s4">
+<summary><span class="step-num">4</span> <span class="en">Privacy Policy</span><span class="ko">개인정보 처리방침</span></summary>
+<div class="step-content">
+
+<h3 class="en">Apple requires a Privacy Policy URL</h3>
+<h3 class="ko">Apple은 개인정보 처리방침 URL을 요구합니다</h3>
+
+<p class="en">Even for TestFlight, Apple now requires a privacy policy URL. We'll host a simple one on GitHub Pages.</p>
+<p class="ko">TestFlight에도 Apple은 개인정보 처리방침 URL을 요구합니다. GitHub Pages에 간단한 것을 호스팅하면 됩니다.</p>
+
+<h4 class="en">Quick Setup</h4>
+<h4 class="ko">빠른 설정</h4>
+<ol>
+<li>
+<span class="en">Tell Totoro and we'll generate a privacy policy page and host it for you! 🌳</span>
+<span class="ko">토토로한테 말해주면 개인정보 처리방침 페이지를 만들어서 호스팅해 줄게요! 🌳</span>
+</li>
+<li>
+<span class="en">Once you have the URL (e.g., <code>https://feedmiyo6.github.io/shared-files/mj/fridgenie/privacy.html</code>), go to App Store Connect → your app → <strong>App Information</strong> (left sidebar) → paste the URL in <strong>"Privacy Policy URL"</strong>.</span>
+<span class="ko">URL이 준비되면 (예: <code>https://feedmiyo6.github.io/shared-files/mj/fridgenie/privacy.html</code>), App Store Connect → 앱 → <strong>"App Information"</strong> (왼쪽 사이드바) → <strong>"Privacy Policy URL"</strong>에 붙여넣기.</span>
+</li>
+</ol>
+
+<div class="note">
+<span class="en">💡 The privacy policy should mention: data collected (camera photos, microphone for voice input, food inventory data), use of Supabase for storage, and that data is not sold to third parties.</span>
+<span class="ko">💡 개인정보 처리방침에 포함할 내용: 수집 데이터 (카메라 사진, 음성 입력용 마이크, 식품 재고 데이터), Supabase 저장소 사용, 제3자에게 데이터 판매 안 함.</span>
+</div>
+
+</div>
+</details>
+
+<!-- STEP 5 -->
+<details id="s5">
+<summary><span class="step-num">5</span> <span class="en">Building the Archive</span><span class="ko">아카이브 빌드</span></summary>
+<div class="step-content">
+
+<h3 class="en">Prepare & Build</h3>
+<h3 class="ko">준비 & 빌드</h3>
+
+<h4 class="en">Step A: Clean & Get Dependencies</h4>
+<h4 class="ko">A단계: 클린 & 의존성 설치</h4>
+<pre><code>cd ~/Projects/fridgenie
+flutter clean
+flutter pub get
+cd ios
+pod install --repo-update
+cd ..</code></pre>
+
+<h4 class="en">Step B: Set the build number</h4>
+<h4 class="ko">B단계: 빌드 번호 설정</h4>
+<p class="en">In <code>pubspec.yaml</code>, check your version line:</p>
+<p class="ko"><code>pubspec.yaml</code>에서 version 줄 확인:</p>
+<pre><code>version: 1.0.0+1</code></pre>
+<p class="en">Format: <code>version_name+build_number</code>. Each TestFlight upload needs a unique build number. Start with <code>+1</code>.</p>
+<p class="ko">형식: <code>버전이름+빌드번호</code>. TestFlight 업로드마다 고유한 빌드 번호 필요. <code>+1</code>부터 시작.</p>
+
+<h4 class="en">Step C: Build the release IPA</h4>
+<h4 class="ko">C단계: 릴리스 IPA 빌드</h4>
+<pre><code>flutter build ipa --release</code></pre>
+<p class="en">This runs <code>flutter build ios</code> + creates an archive. Wait for it to complete (2–5 minutes).</p>
+<p class="ko"><code>flutter build ios</code> + 아카이브 생성을 수행합니다. 완료까지 2–5분 대기.</p>
+
+<div class="note">
+<span class="en">💡 <strong>Alternative: Build from Xcode directly</strong><br>
+1. In Xcode, set the device to <strong>"Any iOS Device (arm64)"</strong> at the top (NOT a simulator)<br>
+2. Menu: <strong>Product → Archive</strong><br>
+3. Wait for the build to complete<br>
+4. The Organizer window opens automatically when done</span>
+<span class="ko">💡 <strong>대안: Xcode에서 직접 빌드</strong><br>
+1. Xcode 상단에서 기기를 <strong>"Any iOS Device (arm64)"</strong>로 설정 (시뮬레이터 아님)<br>
+2. 메뉴: <strong>Product → Archive</strong><br>
+3. 빌드 완료 대기<br>
+4. 완료되면 Organizer 창이 자동으로 열림</span>
+</div>
+
+<div class="screenshot-desc">
+<span class="en">📸 After archiving, the Xcode Organizer window opens showing your archive with the app name, version, date, and a "Distribute App" button on the right.</span>
+<span class="ko">📸 아카이브 후 Xcode Organizer 창이 열리며 앱 이름, 버전, 날짜가 표시되고 오른쪽에 "Distribute App" 버튼이 있습니다.</span>
+</div>
+
+</div>
+</details>
+
+<!-- STEP 6 -->
+<details id="s6">
+<summary><span class="step-num">6</span> <span class="en">Common Build Issues & Fixes</span><span class="ko">자주 발생하는 빌드 문제 & 해결</span></summary>
+<div class="step-content">
+
+<h4>❌ "No signing certificate" / "No provisioning profile"</h4>
+<p class="en">→ Go to Xcode → Signing & Capabilities → uncheck then re-check "Automatically manage signing". Select your team again.</p>
+<p class="ko">→ Xcode → Signing & Capabilities → "Automatically manage signing" 체크 해제 후 다시 체크. 팀 다시 선택.</p>
+
+<h4>❌ <code>CocoaPods could not find compatible versions</code></h4>
+<pre><code>cd ios
+rm Podfile.lock
+pod install --repo-update</code></pre>
+
+<h4>❌ <code>The sandbox is not in sync with the Podfile.lock</code></h4>
+<pre><code>cd ios
+pod install</code></pre>
+
+<h4>❌ Minimum deployment target issues</h4>
+<p class="en">Open <code>ios/Podfile</code> and make sure the platform line is:</p>
+<p class="ko"><code>ios/Podfile</code>을 열어서 platform 줄 확인:</p>
+<pre><code>platform :ios, '15.0'</code></pre>
+<p class="en">Also check in Xcode: Runner target → Build Settings → search "iOS Deployment Target" → set to 15.0+.</p>
+<p class="ko">Xcode에서도 확인: Runner target → Build Settings → "iOS Deployment Target" 검색 → 15.0+ 설정.</p>
+
+<h4>❌ <code>Module 'xxx' not found</code></h4>
+<pre><code>flutter clean
+flutter pub get
+cd ios && pod install --repo-update && cd ..
+flutter build ipa --release</code></pre>
+
+<h4>❌ Archive fails with "Provisioning profile doesn't include signing certificate"</h4>
+<p class="en">→ Xcode → Settings → Accounts → select your team → click "Download Manual Profiles" or "Manage Certificates" → make sure you have an "Apple Distribution" certificate.</p>
+<p class="ko">→ Xcode → Settings → Accounts → 팀 선택 → "Download Manual Profiles" 또는 "Manage Certificates" 클릭 → "Apple Distribution" 인증서 확인.</p>
+
+<h4>❌ Build succeeds but archive is greyed out</h4>
+<p class="en">→ Make sure device is set to <strong>"Any iOS Device (arm64)"</strong>, not a simulator. Archive is disabled when targeting a simulator.</p>
+<p class="ko">→ 기기가 <strong>"Any iOS Device (arm64)"</strong>로 설정되어 있는지 확인. 시뮬레이터 타겟이면 Archive 비활성화됨.</p>
+
+<div class="warn">
+<span class="en">⚠️ <strong>Nuclear option:</strong> If nothing works, try deleting the build folder and derived data:
+<pre><code>flutter clean
+rm -rf ios/Pods ios/Podfile.lock
+rm -rf ~/Library/Developer/Xcode/DerivedData
+flutter pub get
+cd ios && pod install --repo-update && cd ..
+flutter build ipa --release</code></pre></span>
+<span class="ko">⚠️ <strong>최후의 수단:</strong> 아무것도 안 되면 빌드 폴더와 derived data 삭제:
+<pre><code>flutter clean
+rm -rf ios/Pods ios/Podfile.lock
+rm -rf ~/Library/Developer/Xcode/DerivedData
+flutter pub get
+cd ios && pod install --repo-update && cd ..
+flutter build ipa --release</code></pre></span>
+</div>
+
+</div>
+</details>
+
+<!-- STEP 7 -->
+<details id="s7">
+<summary><span class="step-num">7</span> <span class="en">Uploading to TestFlight</span><span class="ko">TestFlight 업로드</span></summary>
+<div class="step-content">
+
+<h3 class="en">From Xcode Organizer</h3>
+<h3 class="ko">Xcode Organizer에서</h3>
+
+<h4 class="en">Option A: After <code>flutter build ipa</code></h4>
+<h4 class="ko">옵션 A: <code>flutter build ipa</code> 후</h4>
+<p class="en">Flutter tells you where the archive is. Open it:</p>
+<p class="ko">Flutter가 아카이브 위치를 알려줍니다. 열기:</p>
+<pre><code># Flutter prints something like:
+# Build archive: build/ios/archive/Runner.xcarchive
+# Open Xcode Organizer:
+open build/ios/archive/Runner.xcarchive</code></pre>
+<p class="en">This opens the Organizer. Or go to Xcode → <strong>Window → Organizer</strong> (⌘⇧O → won't work, use menu).</p>
+<p class="ko">Organizer가 열립니다. 또는 Xcode → <strong>Window → Organizer</strong>.</p>
+
+<h4 class="en">Option B: Upload directly via command line</h4>
+<h4 class="ko">옵션 B: 커맨드 라인으로 직접 업로드</h4>
+<pre><code># After flutter build ipa, the .ipa is at:
+# build/ios/ipa/fridgenie.ipa
+xcrun altool --upload-app --type ios \
+  --file build/ios/ipa/fridgenie.ipa \
+  --apiKey YOUR_API_KEY --apiIssuer YOUR_ISSUER_ID</code></pre>
+<p class="en">(The Xcode GUI method below is easier for first-timers.)</p>
+<p class="ko">(처음이라면 아래 Xcode GUI 방법이 더 쉬움.)</p>
+
+<h4 class="en">Distribute via Xcode Organizer (Recommended)</h4>
+<h4 class="ko">Xcode Organizer로 배포 (권장)</h4>
+
+<ol>
+<li>
+<span class="en">In Organizer, select your archive → click <strong>"Distribute App"</strong>.</span>
+<span class="ko">Organizer에서 아카이브 선택 → <strong>"Distribute App"</strong> 클릭.</span>
+</li>
+<li>
+<span class="en">Select <strong>"TestFlight & App Store"</strong> → <strong>Next</strong>.</span>
+<span class="ko"><strong>"TestFlight & App Store"</strong> 선택 → <strong>Next</strong>.</span>
+</li>
+<li>
+<span class="en">Select <strong>"Upload"</strong> (not Export) → <strong>Next</strong>.</span>
+<span class="ko"><strong>"Upload"</strong> 선택 (Export 아님) → <strong>Next</strong>.</span>
+</li>
+<li>
+<span class="en">Leave all checkboxes as default (Include bitcode, Upload symbols, Manage signing automatically) → <strong>Next</strong>.</span>
+<span class="ko">체크박스 기본값 유지 → <strong>Next</strong>.</span>
+</li>
+<li>
+<span class="en">Select <strong>"Automatically manage signing"</strong> → <strong>Next</strong>.</span>
+<span class="ko"><strong>"Automatically manage signing"</strong> 선택 → <strong>Next</strong>.</span>
+</li>
+<li>
+<span class="en">Review the summary → click <strong>"Upload"</strong>.</span>
+<span class="ko">요약 확인 → <strong>"Upload"</strong> 클릭.</span>
+</li>
+<li>
+<span class="en">Wait for upload to complete (1–5 minutes depending on internet). You'll see a success message. ✅</span>
+<span class="ko">업로드 완료 대기 (인터넷 속도에 따라 1–5분). 성공 메시지 표시. ✅</span>
+</li>
+</ol>
+
+<div class="screenshot-desc">
+<span class="en">📸 After successful upload, you'll see "Your binary has been uploaded" with a green checkmark. The build will appear in App Store Connect within 5-15 minutes.</span>
+<span class="ko">📸 업로드 성공 시 "Your binary has been uploaded"와 녹색 체크마크 표시. 5-15분 내에 App Store Connect에 빌드가 나타남.</span>
+</div>
+
+<div class="warn">
+<span class="en">⚠️ <strong>After upload, Apple processes the build.</strong> This takes 5–30 minutes. You'll get an email when it's ready (or if there are issues). Check App Store Connect → TestFlight tab to see the status.</span>
+<span class="ko">⚠️ <strong>업로드 후 Apple이 빌드를 처리합니다.</strong> 5–30분 소요. 준비되면 (또는 문제 있으면) 이메일이 옵니다. App Store Connect → TestFlight 탭에서 상태 확인.</span>
+</div>
+
+</div>
+</details>
+
+<!-- STEP 8 -->
+<details id="s8">
+<summary><span class="step-num">8</span> <span class="en">TestFlight Configuration</span><span class="ko">TestFlight 설정</span></summary>
+<div class="step-content">
+
+<h3 class="en">Set up testers & groups</h3>
+<h3 class="ko">테스터 & 그룹 설정</h3>
+
+<h4 class="en">Compliance (Export Regulations)</h4>
+<h4 class="ko">규정 준수 (수출 규정)</h4>
+<p class="en">When your build appears in TestFlight, you'll see a yellow "Missing Compliance" warning. Click <strong>"Manage"</strong> next to it.</p>
+<p class="ko">빌드가 TestFlight에 나타나면 노란색 "Missing Compliance" 경고가 보입니다. 옆에 <strong>"Manage"</strong> 클릭.</p>
+<ul>
+<li><span class="en">Question: "Does your app use encryption?" → Select <strong>"Yes"</strong> (because HTTPS/TLS counts)</span><span class="ko">질문: "Does your app use encryption?" → <strong>"Yes"</strong> 선택 (HTTPS/TLS도 암호화에 해당)</span></li>
+<li><span class="en">Then: "Does your app qualify for any exemptions?" → Select <strong>"Yes"</strong> (standard HTTPS exemption)</span><span class="ko">그다음: "Does your app qualify for any exemptions?" → <strong>"Yes"</strong> 선택 (표준 HTTPS 면제)</span></li>
+</ul>
+
+<div class="note">
+<span class="en">💡 <strong>Pro tip:</strong> To skip this every time, add this to your <code>Info.plist</code>:
+<pre><code>&lt;key&gt;ITSAppUsesNonExemptEncryption&lt;/key&gt;
+&lt;false/&gt;</code></pre>
+This tells Apple your app only uses standard HTTPS encryption.</span>
+<span class="ko">💡 <strong>프로 팁:</strong> 매번 이 과정을 건너뛰려면 <code>Info.plist</code>에 추가:
+<pre><code>&lt;key&gt;ITSAppUsesNonExemptEncryption&lt;/key&gt;
+&lt;false/&gt;</code></pre>
+앱이 표준 HTTPS 암호화만 사용한다고 Apple에 알려줍니다.</span>
+</div>
+
+<h4 class="en">Internal Testing (Fastest — no review needed!)</h4>
+<h4 class="ko">내부 테스트 (가장 빠름 — 심사 불필요!)</h4>
+<ol>
+<li><span class="en">App Store Connect → your app → <strong>TestFlight</strong> tab.</span><span class="ko">App Store Connect → 앱 → <strong>TestFlight</strong> 탭.</span></li>
+<li><span class="en">Under <strong>"Internal Testing"</strong> on the left, click <strong>"+"</strong> to create a group (e.g., "Dev Team").</span><span class="ko">왼쪽 <strong>"Internal Testing"</strong>에서 <strong>"+"</strong> 클릭하여 그룹 생성 (예: "Dev Team").</span></li>
+<li><span class="en">Add yourself as a tester (use the same Apple ID email).</span><span class="ko">본인을 테스터로 추가 (같은 Apple ID 이메일 사용).</span></li>
+<li><span class="en">Select the build → <strong>enable it</strong> for the group.</span><span class="ko">빌드 선택 → 그룹에 <strong>활성화</strong>.</span></li>
+</ol>
+
+<div class="note">
+<span class="en">✅ <strong>Internal testers get access immediately!</strong> No beta app review needed. Up to 100 internal testers (must be part of your App Store Connect team).</span>
+<span class="ko">✅ <strong>내부 테스터는 즉시 접근 가능!</strong> 베타 앱 심사 불필요. 최대 100명 (App Store Connect 팀 멤버여야 함).</span>
+</div>
+
+<h4 class="en">External Testing (For others — requires review)</h4>
+<h4 class="ko">외부 테스트 (다른 사람용 — 심사 필요)</h4>
+<p class="en">If you want to invite people outside your dev team:</p>
+<p class="ko">개발 팀 외부 사람을 초대하려면:</p>
+<ol>
+<li><span class="en">Create an <strong>"External Testing"</strong> group.</span><span class="ko"><strong>"External Testing"</strong> 그룹 생성.</span></li>
+<li><span class="en">Add testers by email or share a <strong>public link</strong>.</span><span class="ko">이메일로 테스터 추가 또는 <strong>공개 링크</strong> 공유.</span></li>
+<li><span class="en">Submit the build for <strong>Beta App Review</strong> (usually approved within 24-48 hours).</span><span class="ko">빌드를 <strong>Beta App Review</strong>에 제출 (보통 24-48시간 내 승인).</span></li>
+<li><span class="en">Fill in test info: what to test, contact email, privacy policy URL.</span><span class="ko">테스트 정보 작성: 테스트 내용, 연락 이메일, 개인정보 처리방침 URL.</span></li>
+</ol>
+
+<div class="warn">
+<span class="en">⚠️ For tonight, stick with <strong>Internal Testing</strong> — it's instant. You can set up external testing later.</span>
+<span class="ko">⚠️ 오늘 밤에는 <strong>내부 테스트</strong>만 하세요 — 즉시 됩니다. 외부 테스트는 나중에 설정.</span>
+</div>
+
+</div>
+</details>
+
+<!-- STEP 9 -->
+<details id="s9">
+<summary><span class="step-num">9</span> <span class="en">Installing on Your iPhone</span><span class="ko">iPhone에 설치</span></summary>
+<div class="step-content">
+
+<ol>
+<li>
+<span class="en">On your iPhone, install <strong>TestFlight</strong> from the App Store (if not already installed).</span>
+<span class="ko">iPhone에서 App Store에서 <strong>TestFlight</strong> 설치 (미설치 시).</span>
+</li>
+<li>
+<span class="en">Check your email (the Apple ID you added as tester) for a <strong>TestFlight invitation</strong>.</span>
+<span class="ko">테스터로 추가한 Apple ID 이메일에서 <strong>TestFlight 초대</strong> 확인.</span>
+</li>
+<li>
+<span class="en">Open the email on your iPhone → tap <strong>"View in TestFlight"</strong>.</span>
+<span class="ko">iPhone에서 이메일 열기 → <strong>"View in TestFlight"</strong> 탭.</span>
+</li>
+<li>
+<span class="en">In TestFlight, tap <strong>"Install"</strong> next to Fridgenie.</span>
+<span class="ko">TestFlight에서 Fridgenie 옆의 <strong>"Install"</strong> 탭.</span>
+</li>
+<li>
+<span class="en">The app icon appears on your home screen! 🎉</span>
+<span class="ko">홈 화면에 앱 아이콘이 나타남! 🎉</span>
+</li>
+</ol>
+
+<div class="screenshot-desc">
+<span class="en">📸 In TestFlight, you'll see the Fridgenie app with its icon, version number, and an "INSTALL" button. After installing, it shows "OPEN".</span>
+<span class="ko">📸 TestFlight에서 Fridgenie 앱의 아이콘, 버전 번호, "INSTALL" 버튼이 보입니다. 설치 후 "OPEN"으로 변경.</span>
+</div>
+
+<div class="note">
+<span class="en">💡 <strong>No email yet?</strong> Open TestFlight directly — sometimes the app appears before the email arrives. Also check your spam folder!</span>
+<span class="ko">💡 <strong>이메일 안 왔나요?</strong> TestFlight를 직접 열어보세요 — 이메일보다 먼저 앱이 나타나기도 합니다. 스팸 폴더도 확인!</span>
+</div>
+
+</div>
+</details>
+
+<!-- STEP 10 -->
+<details id="s10">
+<summary><span class="step-num">10</span> <span class="en">Testing Checklist</span><span class="ko">테스트 체크리스트</span></summary>
+<div class="step-content">
+
+<h3 class="en">What to test on your real iPhone</h3>
+<h3 class="ko">실제 iPhone에서 테스트할 것들</h3>
+
+<h4 class="en">🔐 Authentication</h4>
+<h4 class="ko">🔐 인증</h4>
+<ul class="checklist">
+<li><span class="en">Sign up with new account</span><span class="ko">새 계정으로 가입</span></li>
+<li><span class="en">Sign in / sign out</span><span class="ko">로그인 / 로그아웃</span></li>
+<li><span class="en">Password reset flow</span><span class="ko">비밀번호 재설정 흐름</span></li>
+<li><span class="en">Session persistence (close app, reopen)</span><span class="ko">세션 유지 (앱 닫고 다시 열기)</span></li>
+</ul>
+
+<h4 class="en">📷 Camera & Photos</h4>
+<h4 class="ko">📷 카메라 & 사진</h4>
+<ul class="checklist">
+<li><span class="en">Camera permission prompt appears</span><span class="ko">카메라 권한 요청 표시됨</span></li>
+<li><span class="en">Take a photo of a receipt</span><span class="ko">영수증 사진 촬영</span></li>
+<li><span class="en">Select photo from gallery</span><span class="ko">갤러리에서 사진 선택</span></li>
+<li><span class="en">Receipt scanning / OCR works</span><span class="ko">영수증 스캔 / OCR 작동</span></li>
+</ul>
+
+<h4 class="en">🎤 Voice Input</h4>
+<h4 class="ko">🎤 음성 입력</h4>
+<ul class="checklist">
+<li><span class="en">Microphone permission prompt appears</span><span class="ko">마이크 권한 요청 표시됨</span></li>
+<li><span class="en">Voice input works for adding items</span><span class="ko">아이템 추가 시 음성 입력 작동</span></li>
+<li><span class="en">Speech-to-text accuracy is acceptable</span><span class="ko">음성-텍스트 변환 정확도 확인</span></li>
+</ul>
+
+<h4 class="en">🥬 Core Features</h4>
+<h4 class="ko">🥬 핵심 기능</h4>
+<ul class="checklist">
+<li><span class="en">Add food item manually</span><span class="ko">식품 수동 추가</span></li>
+<li><span class="en">Edit food item</span><span class="ko">식품 수정</span></li>
+<li><span class="en">Delete food item</span><span class="ko">식품 삭제</span></li>
+<li><span class="en">Expiration date tracking</span><span class="ko">유통기한 추적</span></li>
+<li><span class="en">Data syncs with Supabase (check another device or web)</span><span class="ko">Supabase와 데이터 동기화 확인</span></li>
+</ul>
+
+<h4 class="en">📱 UI & Performance</h4>
+<h4 class="ko">📱 UI & 성능</h4>
+<ul class="checklist">
+<li><span class="en">App doesn't crash on launch</span><span class="ko">앱 실행 시 크래시 없음</span></li>
+<li><span class="en">All screens load properly</span><span class="ko">모든 화면 정상 로드</span></li>
+<li><span class="en">Dark/light mode looks correct</span><span class="ko">다크/라이트 모드 정상 표시</span></li>
+<li><span class="en">Safe area (notch/Dynamic Island) respected</span><span class="ko">Safe area (노치/Dynamic Island) 적용됨</span></li>
+<li><span class="en">Keyboard doesn't cover input fields</span><span class="ko">키보드가 입력 필드를 가리지 않음</span></li>
+<li><span class="en">App works in background / multitasking</span><span class="ko">백그라운드 / 멀티태스킹 작동</span></li>
+</ul>
+
+<h4 class="en">🔔 Notifications (if implemented)</h4>
+<h4 class="ko">🔔 알림 (구현된 경우)</h4>
+<ul class="checklist">
+<li><span class="en">Push notification permission prompt</span><span class="ko">푸시 알림 권한 요청</span></li>
+<li><span class="en">Expiration reminders arrive</span><span class="ko">유통기한 알림 수신</span></li>
+<li><span class="en">Tapping notification opens correct screen</span><span class="ko">알림 탭 시 올바른 화면 열림</span></li>
+</ul>
+
+<h4 class="en">🌐 Network</h4>
+<h4 class="ko">🌐 네트워크</h4>
+<ul class="checklist">
+<li><span class="en">Works on WiFi</span><span class="ko">WiFi에서 작동</span></li>
+<li><span class="en">Works on cellular data</span><span class="ko">셀룰러 데이터에서 작동</span></li>
+<li><span class="en">Graceful handling of no internet</span><span class="ko">인터넷 없을 때 적절한 처리</span></li>
+</ul>
+
+<div class="note">
+<span class="en">💡 <strong>TestFlight feedback:</strong> In TestFlight, users can take a screenshot and it automatically prompts them to send feedback. You'll see this in App Store Connect → TestFlight → Feedback.</span>
+<span class="ko">💡 <strong>TestFlight 피드백:</strong> TestFlight에서 스크린샷을 찍으면 자동으로 피드백 전송 프롬프트가 나타납니다. App Store Connect → TestFlight → Feedback에서 확인 가능.</span>
+</div>
+
+</div>
+</details>
+
+<!-- BONUS -->
+<details>
+<summary>🎁 <span class="en">Bonus: Quick Reference Commands</span><span class="ko">보너스: 빠른 참조 명령어</span></summary>
+<div class="step-content">
+
+<h4 class="en">Useful commands for future builds</h4>
+<h4 class="ko">향후 빌드에 유용한 명령어</h4>
+
+<pre><code># Full clean rebuild
+flutter clean && flutter pub get && cd ios && pod install --repo-update && cd ..
+
+# Build and archive
+flutter build ipa --release
+
+# Bump version (edit pubspec.yaml)
+# version: 1.0.0+2  (increment the +N for each upload)
+
+# Open Xcode workspace
+open ios/Runner.xcworkspace
+
+# Open Organizer directly
+# Xcode menu: Window → Organizer
+
+# Check connected devices
+flutter devices</code></pre>
+
+<div class="note">
+<span class="en">🌳 <strong>Remember:</strong> Every TestFlight upload needs a unique build number. Just increment the <code>+N</code> in <code>pubspec.yaml</code> each time!</span>
+<span class="ko">🌳 <strong>기억하세요:</strong> 매 TestFlight 업로드마다 고유한 빌드 번호 필요. <code>pubspec.yaml</code>에서 <code>+N</code>을 매번 올리면 됩니다!</span>
+</div>
+
+</div>
+</details>
+
+<div style="text-align:center;margin-top:40px;color:var(--muted);font-size:.85em">
+<p>🧊 <span class="en">Made with care by Totoro</span><span class="ko">토토로가 정성껏 만들었어요</span> 🌳</p>
+<p style="margin-top:4px">2026.03.03</p>
+</div>
+
+</div>
+
+<script>
+let isKorean = false;
+function toggleLang() {
+  isKorean = !isKorean;
+  document.querySelectorAll('.en').forEach(el => el.classList.toggle('hide', isKorean));
+  document.querySelectorAll('.ko').forEach(el => el.classList.toggle('show', isKorean));
+  document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+}
+</script>
+</body>
+</html>
