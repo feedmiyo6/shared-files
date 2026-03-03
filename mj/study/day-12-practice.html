@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 12 Practice: Hold Time Analysis</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    background: linear-gradient(135deg, #fefae0 0%, #faedcd 100%);
+    color: #3d405b;
+    line-height: 1.8;
+    padding: 24px;
+    max-width: 920px;
+    margin: 0 auto;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+h1 { color: #5d4037; border-bottom: 3px solid #c4a77d; padding-bottom: 12px; margin-bottom: 24px; font-size: 2em; }
+h2 { color: #588157; border-bottom: 2px solid #a3b18a; padding-bottom: 8px; margin: 32px 0 16px; }
+h3 { color: #5d4037; margin: 20px 0 10px; }
+p { margin: 12px 0; }
+code { background: #e9f5db; color: #3d405b; padding: 2px 8px; border-radius: 4px; font-family: 'SF Mono', 'Monaco', 'Consolas', monospace; }
+pre {
+    background: #2d3436;
+    padding: 24px;
+    border-radius: 12px;
+    margin: 24px 0;
+    border: 3px solid #a3b18a;
+    overflow-x: auto;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+    font-size: 15px;
+    line-height: 1.6;
+    color: #f8f8f2;
+}
+.keyword { color: #ff79c6; font-weight: 600; }
+.type { color: #8be9fd; }
+.signal { color: #50fa7b; }
+.number { color: #ffb86c; }
+.comment { color: #6272a4; font-style: italic; }
+.string { color: #f1fa8c; }
+.concept-box { background: #fff8f0; border: 2px solid #c4a77d; border-radius: 12px; padding: 20px; margin: 20px 0; color: #3d405b; }
+.concept-box h3 { color: #5d4037; margin-bottom: 12px; }
+.warning-box { background: #fff8f0; border-radius: 12px; padding: 20px; margin: 20px 0; border-left: 4px solid #ef4444; color: #3d405b; }
+.warning-box h3 { color: #c53030; margin-bottom: 12px; }
+.tip-box { background: #fff8f0; border-radius: 12px; padding: 20px; margin: 20px 0; border-left: 4px solid #588157; color: #3d405b; }
+.hint-box { background: #fff8f0; border-radius: 8px; padding: 15px; margin: 15px 0; border-left: 4px solid #5d4037; color: #3d405b; }
+.lang-toggle { position: fixed; top: 16px; right: 16px; background: #588157; border: none; border-radius: 24px; padding: 10px 20px; cursor: pointer; color: #fff; font-size: 14px; font-weight: 600; z-index: 1000; }
+.lang-toggle:hover { background: #3a5a40; }
+.ko { display: none; }
+.nav { display: flex; justify-content: space-between; margin: 32px 0 16px; }
+.nav a { color: #588157; text-decoration: none; font-weight: 600; }
+.nav a:hover { color: #3a5a40; }
+.exercise { background: #fff; border: 2px solid #a3b18a; border-radius: 12px; padding: 24px; margin: 24px 0; }
+.exercise h3 { color: #588157; }
+.reveal-btn {
+    background: linear-gradient(135deg, #588157, #3a5a40);
+    color: white; border: none; border-radius: 8px;
+    padding: 10px 24px; cursor: pointer; font-size: 14px; margin-top: 12px;
+}
+.reveal-btn:hover { opacity: 0.9; }
+.solution { display: none; margin-top: 16px; padding: 16px; background: #fff8f0; border-radius: 8px; border: 1px solid #c4a77d; }
+.comparison-table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+.comparison-table th { background: #588157; color: white; padding: 12px; text-align: left; }
+.comparison-table td { background: #fff; border: 1px solid #c4a77d; padding: 12px; color: #3d405b; }
+.comparison-table tr:nth-child(even) td { background: #fff8f0; }
+input[type="text"] {
+    border: 2px solid #a3b18a; border-radius: 8px; padding: 8px 12px;
+    font-family: 'SF Mono', monospace; font-size: 14px; width: 120px;
+    background: #fff; color: #3d405b;
+}
+@media (max-width: 768px) {
+    body { padding: 16px; }
+    h1 { font-size: 1.8em; }
+    pre { font-size: 14px; padding: 16px; }
+    .lang-toggle { padding: 8px 16px; font-size: 13px; }
+}
+</style>
+</head>
+<body>
+<button class="lang-toggle" onclick="toggleLang()">한국어</button>
+
+<h1>🔧 Day 12 Practice: Hold Time Analysis</h1>
+
+<div class="nav">
+    <a href="day-12-lesson.html">← Lesson</a>
+    <a href="day-12-quiz.html">← Quiz</a>
+</div>
+
+<!-- Exercise 1 -->
+<div class="exercise">
+    <h3>Exercise 1: Calculate Hold Slack</h3>
+    <p class="en">Given the following timing parameters for a path between FF_A → FF_B, calculate the hold slack and determine if it passes.</p>
+    <p class="ko" style="display:none;">FF_A → FF_B 경로에 대한 다음 타이밍 파라미터가 주어졌을 때, 홀드 슬랙을 계산하고 통과 여부를 판단하세요.</p>
+    
+    <table class="comparison-table">
+        <tr><th>Parameter</th><th>Value</th></tr>
+        <tr><td>t_clk2q (FF_A)</td><td>0.15 ns</td></tr>
+        <tr><td>t_comb (logic delay)</td><td>0.08 ns</td></tr>
+        <tr><td>t_hold (FF_B)</td><td>0.10 ns</td></tr>
+        <tr><td>Clock skew</td><td>0 ns</td></tr>
+    </table>
+    
+    <p class="en"><strong>Hold slack = </strong><input type="text" id="ex1" placeholder="? ns"> ns</p>
+    <p class="ko" style="display:none;"><strong>홀드 슬랙 = </strong><input type="text" id="ex1k" placeholder="? ns"> ns</p>
+    
+    <button class="reveal-btn" onclick="toggleSolution('sol1')">Show Solution</button>
+    <div class="solution" id="sol1">
+        <p class="en"><strong>Hold slack = (t_clk2q + t_comb) - t_hold = (0.15 + 0.08) - 0.10 = +0.13 ns ✅</strong></p>
+        <p class="ko" style="display:none;"><strong>홀드 슬랙 = (t_clk2q + t_comb) - t_hold = (0.15 + 0.08) - 0.10 = +0.13 ns ✅</strong></p>
+        <p class="en">Positive slack → hold requirement is met. Data stays stable for 0.13ns longer than needed.</p>
+        <p class="ko" style="display:none;">양의 슬랙 → 홀드 요구 사항 충족. 데이터가 필요한 것보다 0.13ns 더 오래 안정적입니다.</p>
+    </div>
+</div>
+
+<!-- Exercise 2 -->
+<div class="exercise">
+    <h3>Exercise 2: Clock Skew Impact</h3>
+    <p class="en">Same path as Exercise 1, but now the capture clock (FF_B) arrives 0.15ns <strong>early</strong>. What's the new hold slack?</p>
+    <p class="ko" style="display:none;">연습 1과 같은 경로지만, 캡처 클럭(FF_B)이 0.15ns <strong>일찍</strong> 도착합니다. 새로운 홀드 슬랙은?</p>
+    
+    <table class="comparison-table">
+        <tr><th>Parameter</th><th>Value</th></tr>
+        <tr><td>t_clk2q (FF_A)</td><td>0.15 ns</td></tr>
+        <tr><td>t_comb</td><td>0.08 ns</td></tr>
+        <tr><td>t_hold (FF_B)</td><td>0.10 ns</td></tr>
+        <tr><td>Clock skew</td><td>0.15 ns (capture early)</td></tr>
+    </table>
+    
+    <p class="en"><strong>Hold slack = </strong><input type="text" id="ex2" placeholder="? ns"> ns</p>
+    <p class="ko" style="display:none;"><strong>홀드 슬랙 = </strong><input type="text" id="ex2k" placeholder="? ns"> ns</p>
+    
+    <button class="reveal-btn" onclick="toggleSolution('sol2')">Show Solution</button>
+    <div class="solution" id="sol2">
+        <p class="en"><strong>Hold slack = (t_clk2q + t_comb) - (t_hold + t_skew) = (0.15 + 0.08) - (0.10 + 0.15) = 0.23 - 0.25 = -0.02 ns ❌</strong></p>
+        <p class="ko" style="display:none;"><strong>홀드 슬랙 = (t_clk2q + t_comb) - (t_hold + t_skew) = (0.15 + 0.08) - (0.10 + 0.15) = 0.23 - 0.25 = -0.02 ns ❌</strong></p>
+        <p class="en">Negative slack → <strong>HOLD VIOLATION!</strong> The clock skew turned a passing path into a failing one. A delay buffer of at least 0.02ns must be inserted.</p>
+        <p class="ko" style="display:none;">음의 슬랙 → <strong>홀드 위반!</strong> 클럭 스큐가 통과 경로를 실패 경로로 바꿨습니다. 최소 0.02ns의 지연 버퍼를 삽입해야 합니다.</p>
+    </div>
+</div>
+
+<!-- Exercise 3 -->
+<div class="exercise">
+    <h3>Exercise 3: Identify the Problem</h3>
+    <p class="en">Look at this SystemVerilog code. Which paths are most at risk for hold violations and why?</p>
+    <p class="ko" style="display:none;">이 SystemVerilog 코드를 보세요. 홀드 위반 위험이 가장 높은 경로는 어디이며 그 이유는?</p>
+    
+    <pre><span class="keyword">module</span> <span class="type">shift_register</span> (
+    <span class="keyword">input</span>  <span class="type">logic</span>       <span class="signal">clk</span>, <span class="signal">rst_n</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span>       <span class="signal">d_in</span>,
+    <span class="keyword">output</span> <span class="type">logic</span> [<span class="number">3</span>:<span class="number">0</span>] <span class="signal">q</span>
+);
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span> <span class="keyword">or</span> <span class="keyword">negedge</span> <span class="signal">rst_n</span>) <span class="keyword">begin</span>
+        <span class="keyword">if</span> (!<span class="signal">rst_n</span>) <span class="keyword">begin</span>
+            <span class="signal">q</span> &lt;= <span class="number">4'b0</span>;
+        <span class="keyword">end</span> <span class="keyword">else</span> <span class="keyword">begin</span>
+            <span class="signal">q</span>[<span class="number">0</span>] &lt;= <span class="signal">d_in</span>;       <span class="comment">// Path A: d_in → q[0]</span>
+            <span class="signal">q</span>[<span class="number">1</span>] &lt;= <span class="signal">q</span>[<span class="number">0</span>];        <span class="comment">// Path B: q[0] → q[1]</span>
+            <span class="signal">q</span>[<span class="number">2</span>] &lt;= <span class="signal">q</span>[<span class="number">1</span>];        <span class="comment">// Path C: q[1] → q[2]</span>
+            <span class="signal">q</span>[<span class="number">3</span>] &lt;= <span class="signal">q</span>[<span class="number">2</span>];        <span class="comment">// Path D: q[2] → q[3]</span>
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+<span class="keyword">endmodule</span></pre>
+    
+    <button class="reveal-btn" onclick="toggleSolution('sol3')">Show Solution</button>
+    <div class="solution" id="sol3">
+        <p class="en"><strong>Paths B, C, and D are all at risk for hold violations!</strong></p>
+        <p class="ko" style="display:none;"><strong>경로 B, C, D 모두 홀드 위반 위험이 있습니다!</strong></p>
+        <p class="en">Each is a <strong>direct flip-flop to flip-flop connection</strong> with zero combinational logic in between. The data path delay is just t_clk2q (no t_comb). If there's any clock skew between the source and destination FFs, hold violations are very likely.</p>
+        <p class="ko" style="display:none;">각각은 중간에 조합 로직이 없는 <strong>플립플롭 간 직접 연결</strong>입니다. 데이터 경로 지연은 t_clk2q뿐입니다 (t_comb 없음). 소스와 목적지 FF 사이에 클럭 스큐가 있으면 홀드 위반이 매우 발생하기 쉽습니다.</p>
+        <p class="en"><strong>Shift registers are classic hold-violation hotspots!</strong> The P&R tool will automatically insert delay buffers on these paths. This is why shift registers are commonly mentioned in timing closure discussions.</p>
+        <p class="ko" style="display:none;"><strong>시프트 레지스터는 전형적인 홀드 위반 핫스팟입니다!</strong> P&R 도구가 이 경로에 자동으로 지연 버퍼를 삽입합니다. 이것이 시프트 레지스터가 타이밍 클로저 논의에서 자주 언급되는 이유입니다.</p>
+    </div>
+</div>
+
+<!-- Exercise 4 -->
+<div class="exercise">
+    <h3>Exercise 4: Multi-Path Analysis</h3>
+    <p class="en">A design has three paths to the same capturing flip-flop. Determine which paths pass/fail hold check (t_hold = 0.12ns, skew = 0.05ns).</p>
+    <p class="ko" style="display:none;">설계에 같은 캡처 플립플롭으로의 세 경로가 있습니다. 어떤 경로가 홀드 체크를 통과/실패하는지 판단하세요 (t_hold = 0.12ns, 스큐 = 0.05ns).</p>
+    
+    <table class="comparison-table">
+        <tr><th>Path</th><th>t_clk2q</th><th>t_comb</th><th>Hold Slack</th><th>Pass/Fail?</th></tr>
+        <tr><td>Path 1</td><td>0.18 ns</td><td>0.10 ns</td><td><input type="text" id="ex4a" placeholder="?" style="width:80px"></td><td><input type="text" id="ex4a2" placeholder="?" style="width:60px"></td></tr>
+        <tr><td>Path 2</td><td>0.15 ns</td><td>0.02 ns</td><td><input type="text" id="ex4b" placeholder="?" style="width:80px"></td><td><input type="text" id="ex4b2" placeholder="?" style="width:60px"></td></tr>
+        <tr><td>Path 3</td><td>0.20 ns</td><td>0.00 ns</td><td><input type="text" id="ex4c" placeholder="?" style="width:80px"></td><td><input type="text" id="ex4c2" placeholder="?" style="width:60px"></td></tr>
+    </table>
+    
+    <button class="reveal-btn" onclick="toggleSolution('sol4')">Show Solution</button>
+    <div class="solution" id="sol4">
+        <p class="en"><strong>Required: t_clk2q + t_comb ≥ t_hold + t_skew = 0.12 + 0.05 = 0.17 ns</strong></p>
+        <p class="ko" style="display:none;"><strong>필요: t_clk2q + t_comb ≥ t_hold + t_skew = 0.12 + 0.05 = 0.17 ns</strong></p>
+        <table class="comparison-table">
+            <tr><th>Path</th><th>Data Delay</th><th>Slack</th><th>Result</th></tr>
+            <tr><td>Path 1</td><td>0.18 + 0.10 = 0.28</td><td>+0.11 ns</td><td>✅ PASS</td></tr>
+            <tr><td>Path 2</td><td>0.15 + 0.02 = 0.17</td><td>+0.00 ns</td><td>⚠️ PASS (barely!)</td></tr>
+            <tr><td>Path 3</td><td>0.20 + 0.00 = 0.20</td><td>+0.03 ns</td><td>✅ PASS</td></tr>
+        </table>
+        <p class="en">Path 2 is the most dangerous — zero slack means any additional variation could cause failure. In practice, you'd want the tool to add a small buffer for margin.</p>
+        <p class="ko" style="display:none;">경로 2가 가장 위험합니다 — 슬랙이 0이면 추가 변동이 실패를 유발할 수 있습니다. 실제로는 마진을 위해 도구가 작은 버퍼를 추가하길 원할 것입니다.</p>
+    </div>
+</div>
+
+<!-- Exercise 5 -->
+<div class="exercise">
+    <h3>Exercise 5: Fix the Hold Violation</h3>
+    <p class="en">You have a hold violation with slack = -0.08ns. Each delay buffer adds 0.03ns of delay. How many buffers do you need to insert?</p>
+    <p class="ko" style="display:none;">홀드 슬랙이 -0.08ns인 위반이 있습니다. 각 지연 버퍼는 0.03ns의 지연을 추가합니다. 몇 개의 버퍼를 삽입해야 하나요?</p>
+    
+    <p class="en"><strong>Number of buffers needed: </strong><input type="text" id="ex5" placeholder="?"></p>
+    <p class="ko" style="display:none;"><strong>필요한 버퍼 수: </strong><input type="text" id="ex5k" placeholder="?"></p>
+    
+    <button class="reveal-btn" onclick="toggleSolution('sol5')">Show Solution</button>
+    <div class="solution" id="sol5">
+        <p class="en"><strong>3 buffers needed.</strong></p>
+        <p class="ko" style="display:none;"><strong>3개의 버퍼가 필요합니다.</strong></p>
+        <p class="en">Need to add at least 0.08ns of delay. Each buffer = 0.03ns.<br>
+        • 2 buffers = 0.06ns → still -0.02ns slack ❌<br>
+        • 3 buffers = 0.09ns → now +0.01ns slack ✅<br>
+        Always round UP — you need to fully cover the violation.</p>
+        <p class="ko" style="display:none;">최소 0.08ns의 지연을 추가해야 합니다. 각 버퍼 = 0.03ns.<br>
+        • 2개 버퍼 = 0.06ns → 여전히 -0.02ns 슬랙 ❌<br>
+        • 3개 버퍼 = 0.09ns → 이제 +0.01ns 슬랙 ✅<br>
+        항상 올림하세요 — 위반을 완전히 커버해야 합니다.</p>
+    </div>
+</div>
+
+<div class="tip-box">
+    <h3>💡 Tomorrow's Preview</h3>
+    <p class="en"><strong>Day 13: Clock Skew</strong> — We'll dive deeper into what causes clock skew, how it affects both setup and hold time, and how Clock Tree Synthesis (CTS) manages it.</p>
+    <p class="ko" style="display:none;"><strong>Day 13: 클럭 스큐</strong> — 클럭 스큐의 원인, 셋업과 홀드 타임에 미치는 영향, 그리고 클럭 트리 합성(CTS)이 어떻게 관리하는지 더 깊이 살펴봅니다.</p>
+</div>
+
+<div class="nav">
+    <a href="day-12-lesson.html">← Lesson</a>
+    <a href="day-12-quiz.html">← Quiz</a>
+</div>
+
+<script>
+let isKorean = false;
+function toggleLang() {
+    isKorean = !isKorean;
+    document.querySelectorAll('.en').forEach(el => { el.style.setProperty('display', isKorean ? 'none' : 'revert', 'important'); });
+    document.querySelectorAll('.ko').forEach(el => { el.style.setProperty('display', isKorean ? 'revert' : 'none', 'important'); });
+    document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+}
+function toggleSolution(id) {
+    const sol = document.getElementById(id);
+    sol.style.display = sol.style.display === 'none' ? 'block' : (sol.style.display === 'block' ? 'none' : 'block');
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 12 Quiz: Hold Time</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    background: linear-gradient(135deg, #fefae0 0%, #faedcd 100%);
+    color: #3d405b;
+    line-height: 1.8;
+    padding: 24px;
+    max-width: 920px;
+    margin: 0 auto;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+h1 { color: #5d4037; border-bottom: 3px solid #c4a77d; padding-bottom: 12px; margin-bottom: 24px; font-size: 2em; }
+h2 { color: #588157; border-bottom: 2px solid #a3b18a; padding-bottom: 8px; margin: 32px 0 16px; }
+h3 { color: #5d4037; margin: 20px 0 10px; }
+code { background: #e9f5db; color: #3d405b; padding: 2px 8px; border-radius: 4px; font-family: 'SF Mono', 'Monaco', 'Consolas', monospace; }
+.lang-toggle { position: fixed; top: 16px; right: 16px; background: #588157; border: none; border-radius: 24px; padding: 10px 20px; cursor: pointer; color: #fff; font-size: 14px; font-weight: 600; z-index: 1000; }
+.lang-toggle:hover { background: #3a5a40; }
+.ko { display: none; }
+.nav { display: flex; justify-content: space-between; margin: 32px 0 16px; }
+.nav a { color: #588157; text-decoration: none; font-weight: 600; }
+.nav a:hover { color: #3a5a40; }
+.question {
+    background: #fff8f0;
+    border: 2px solid #c4a77d;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    color: #3d405b;
+}
+.question h3 { color: #5d4037; margin-bottom: 12px; }
+.options label {
+    display: block;
+    padding: 10px 16px;
+    margin: 6px 0;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.2s;
+    color: #3d405b;
+}
+.options label:hover { background: #e9f5db; }
+.options input[type="radio"] { margin-right: 10px; }
+.answer {
+    display: none;
+    margin-top: 12px;
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-weight: 500;
+}
+.answer.correct { background: #e9f5db; border-left: 4px solid #588157; }
+.answer.wrong { background: #fee2e2; border-left: 4px solid #ef4444; }
+.show-btn {
+    background: linear-gradient(135deg, #588157, #3a5a40);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 20px;
+    cursor: pointer;
+    font-size: 14px;
+    margin-top: 10px;
+}
+.show-btn:hover { opacity: 0.9; }
+.score-box {
+    background: #fff8f0;
+    border: 2px solid #588157;
+    border-radius: 12px;
+    padding: 24px;
+    margin: 32px 0;
+    text-align: center;
+}
+.score-box h2 { border: none; margin: 0 0 12px; }
+#scoreDisplay { font-size: 2em; color: #588157; font-weight: 700; }
+.check-all-btn {
+    background: linear-gradient(135deg, #588157, #3a5a40);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    padding: 14px 32px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    display: block;
+    margin: 24px auto;
+}
+.check-all-btn:hover { opacity: 0.9; }
+@media (max-width: 768px) {
+    body { padding: 16px; }
+    h1 { font-size: 1.8em; }
+    .lang-toggle { padding: 8px 16px; font-size: 13px; }
+}
+</style>
+</head>
+<body>
+<button class="lang-toggle" onclick="toggleLang()">한국어</button>
+
+<h1>📝 Day 12 Quiz: Hold Time</h1>
+
+<div class="nav">
+    <a href="day-12-lesson.html">← Back to Lesson</a>
+    <a href="day-12-practice.html">Practice →</a>
+</div>
+
+<!-- Q1 -->
+<div class="question" id="q1">
+    <h3>Q1. <span class="en">What is hold time?</span><span class="ko" style="display:none;">홀드 타임이란 무엇인가요?</span></h3>
+    <div class="options">
+        <label><input type="radio" name="q1" value="a"> <span class="en">Time data must be stable before the clock edge</span><span class="ko" style="display:none;">클럭 에지 이전에 데이터가 안정되어야 하는 시간</span></label>
+        <label><input type="radio" name="q1" value="b"> <span class="en">Time data must remain stable after the clock edge</span><span class="ko" style="display:none;">클럭 에지 이후에 데이터가 안정 상태를 유지해야 하는 시간</span></label>
+        <label><input type="radio" name="q1" value="c"> <span class="en">The clock period minus setup time</span><span class="ko" style="display:none;">클럭 주기에서 셋업 타임을 뺀 시간</span></label>
+        <label><input type="radio" name="q1" value="d"> <span class="en">The propagation delay through combinational logic</span><span class="ko" style="display:none;">조합 로직을 통한 전파 지연</span></label>
+    </div>
+    <div class="answer" id="a1"></div>
+</div>
+
+<!-- Q2 -->
+<div class="question" id="q2">
+    <h3>Q2. <span class="en">Can a hold violation be fixed by reducing the clock frequency?</span><span class="ko" style="display:none;">클럭 주파수를 줄여 홀드 위반을 수정할 수 있나요?</span></h3>
+    <div class="options">
+        <label><input type="radio" name="q2" value="a"> <span class="en">Yes, slower clock gives more time</span><span class="ko" style="display:none;">네, 느린 클럭이 더 많은 시간을 줌</span></label>
+        <label><input type="radio" name="q2" value="b"> <span class="en">No, hold time is independent of clock frequency</span><span class="ko" style="display:none;">아니요, 홀드 타임은 클럭 주파수와 무관</span></label>
+        <label><input type="radio" name="q2" value="c"> <span class="en">Only if the skew is positive</span><span class="ko" style="display:none;">스큐가 양수일 때만</span></label>
+        <label><input type="radio" name="q2" value="d"> <span class="en">Only in simulation, not in real silicon</span><span class="ko" style="display:none;">시뮬레이션에서만, 실제 실리콘에서는 아님</span></label>
+    </div>
+    <div class="answer" id="a2"></div>
+</div>
+
+<!-- Q3 -->
+<div class="question" id="q3">
+    <h3>Q3. <span class="en">What is the hold time check formula?</span><span class="ko" style="display:none;">홀드 타임 체크 공식은?</span></h3>
+    <div class="options">
+        <label><input type="radio" name="q3" value="a"> <span class="en">t_clk2q + t_comb ≤ T_clk - t_setup</span><span class="ko" style="display:none;">t_clk2q + t_comb ≤ T_clk - t_setup</span></label>
+        <label><input type="radio" name="q3" value="b"> <span class="en">t_clk2q + t_comb ≥ t_hold</span><span class="ko" style="display:none;">t_clk2q + t_comb ≥ t_hold</span></label>
+        <label><input type="radio" name="q3" value="c"> <span class="en">T_clk ≥ t_hold + t_setup</span><span class="ko" style="display:none;">T_clk ≥ t_hold + t_setup</span></label>
+        <label><input type="radio" name="q3" value="d"> <span class="en">t_comb ≥ T_clk - t_clk2q</span><span class="ko" style="display:none;">t_comb ≥ T_clk - t_clk2q</span></label>
+    </div>
+    <div class="answer" id="a3"></div>
+</div>
+
+<!-- Q4 -->
+<div class="question" id="q4">
+    <h3>Q4. <span class="en">What is the most common fix for hold violations?</span><span class="ko" style="display:none;">홀드 위반의 가장 일반적인 수정 방법은?</span></h3>
+    <div class="options">
+        <label><input type="radio" name="q4" value="a"> <span class="en">Reduce clock frequency</span><span class="ko" style="display:none;">클럭 주파수 감소</span></label>
+        <label><input type="radio" name="q4" value="b"> <span class="en">Add pipeline stages</span><span class="ko" style="display:none;">파이프라인 단계 추가</span></label>
+        <label><input type="radio" name="q4" value="c"> <span class="en">Insert delay buffers in the data path</span><span class="ko" style="display:none;">데이터 경로에 지연 버퍼 삽입</span></label>
+        <label><input type="radio" name="q4" value="d"> <span class="en">Use a different encoding scheme</span><span class="ko" style="display:none;">다른 인코딩 방식 사용</span></label>
+    </div>
+    <div class="answer" id="a4"></div>
+</div>
+
+<!-- Q5 -->
+<div class="question" id="q5">
+    <h3>Q5. <span class="en">At which process corner is hold time checked?</span><span class="ko" style="display:none;">홀드 타임은 어떤 프로세스 코너에서 확인하나요?</span></h3>
+    <div class="options">
+        <label><input type="radio" name="q5" value="a"> <span class="en">Slow corner (worst-case delay)</span><span class="ko" style="display:none;">느린 코너 (최악의 지연)</span></label>
+        <label><input type="radio" name="q5" value="b"> <span class="en">Fast corner (best-case delay)</span><span class="ko" style="display:none;">빠른 코너 (최적의 지연)</span></label>
+        <label><input type="radio" name="q5" value="c"> <span class="en">Typical corner only</span><span class="ko" style="display:none;">일반 코너만</span></label>
+        <label><input type="radio" name="q5" value="d"> <span class="en">All corners equally</span><span class="ko" style="display:none;">모든 코너 동일하게</span></label>
+    </div>
+    <div class="answer" id="a5"></div>
+</div>
+
+<!-- Q6 -->
+<div class="question" id="q6">
+    <h3>Q6. <span class="en">Which scenario is most likely to cause a hold violation?</span><span class="ko" style="display:none;">홀드 위반이 가장 발생하기 쉬운 시나리오는?</span></h3>
+    <div class="options">
+        <label><input type="radio" name="q6" value="a"> <span class="en">Long combinational path between flip-flops</span><span class="ko" style="display:none;">플립플롭 사이의 긴 조합 경로</span></label>
+        <label><input type="radio" name="q6" value="b"> <span class="en">Direct connection between flip-flops with clock skew</span><span class="ko" style="display:none;">클럭 스큐가 있는 플립플롭 간 직접 연결</span></label>
+        <label><input type="radio" name="q6" value="c"> <span class="en">Multiple pipeline stages</span><span class="ko" style="display:none;">여러 파이프라인 단계</span></label>
+        <label><input type="radio" name="q6" value="d"> <span class="en">High clock frequency</span><span class="ko" style="display:none;">높은 클럭 주파수</span></label>
+    </div>
+    <div class="answer" id="a6"></div>
+</div>
+
+<!-- Q7 -->
+<div class="question" id="q7">
+    <h3>Q7. <span class="en">If t_clk2q = 0.2ns, t_comb = 0.05ns, and t_hold = 0.3ns, what is the hold slack?</span><span class="ko" style="display:none;">t_clk2q = 0.2ns, t_comb = 0.05ns, t_hold = 0.3ns일 때, 홀드 슬랙은?</span></h3>
+    <div class="options">
+        <label><input type="radio" name="q7" value="a"> <span class="en">+0.05ns (met)</span><span class="ko" style="display:none;">+0.05ns (통과)</span></label>
+        <label><input type="radio" name="q7" value="b"> <span class="en">-0.05ns (violated)</span><span class="ko" style="display:none;">-0.05ns (위반)</span></label>
+        <label><input type="radio" name="q7" value="c"> <span class="en">+0.25ns (met)</span><span class="ko" style="display:none;">+0.25ns (통과)</span></label>
+        <label><input type="radio" name="q7" value="d"> <span class="en">-0.25ns (violated)</span><span class="ko" style="display:none;">-0.25ns (위반)</span></label>
+    </div>
+    <div class="answer" id="a7"></div>
+</div>
+
+<!-- Q8 -->
+<div class="question" id="q8">
+    <h3>Q8. <span class="en">How does positive clock skew (capture clock arrives early) affect hold time?</span><span class="ko" style="display:none;">양의 클럭 스큐(캡처 클럭이 일찍 도착)가 홀드 타임에 미치는 영향은?</span></h3>
+    <div class="options">
+        <label><input type="radio" name="q8" value="a"> <span class="en">Makes hold easier to meet</span><span class="ko" style="display:none;">홀드를 더 쉽게 충족</span></label>
+        <label><input type="radio" name="q8" value="b"> <span class="en">Makes hold harder to meet</span><span class="ko" style="display:none;">홀드를 더 어렵게 충족</span></label>
+        <label><input type="radio" name="q8" value="c"> <span class="en">No effect on hold time</span><span class="ko" style="display:none;">홀드 타임에 영향 없음</span></label>
+        <label><input type="radio" name="q8" value="d"> <span class="en">Only affects setup time</span><span class="ko" style="display:none;">셋업 타임에만 영향</span></label>
+    </div>
+    <div class="answer" id="a8"></div>
+</div>
+
+<!-- Q9 -->
+<div class="question" id="q9">
+    <h3>Q9. <span class="en">What does CTS (Clock Tree Synthesis) help with?</span><span class="ko" style="display:none;">CTS(클럭 트리 합성)는 무엇에 도움이 되나요?</span></h3>
+    <div class="options">
+        <label><input type="radio" name="q9" value="a"> <span class="en">Reducing combinational delay</span><span class="ko" style="display:none;">조합 지연 감소</span></label>
+        <label><input type="radio" name="q9" value="b"> <span class="en">Minimizing clock skew across flip-flops</span><span class="ko" style="display:none;">플립플롭 간 클럭 스큐 최소화</span></label>
+        <label><input type="radio" name="q9" value="c"> <span class="en">Increasing clock frequency</span><span class="ko" style="display:none;">클럭 주파수 증가</span></label>
+        <label><input type="radio" name="q9" value="d"> <span class="en">Removing unnecessary flip-flops</span><span class="ko" style="display:none;">불필요한 플립플롭 제거</span></label>
+    </div>
+    <div class="answer" id="a9"></div>
+</div>
+
+<!-- Q10 -->
+<div class="question" id="q10">
+    <h3>Q10. <span class="en">Why are hold violations considered more dangerous than setup violations?</span><span class="ko" style="display:none;">홀드 위반이 셋업 위반보다 더 위험한 이유는?</span></h3>
+    <div class="options">
+        <label><input type="radio" name="q10" value="a"> <span class="en">They cause more power consumption</span><span class="ko" style="display:none;">더 많은 전력 소비를 유발</span></label>
+        <label><input type="radio" name="q10" value="b"> <span class="en">They can't be fixed by changing clock speed — they fail at ALL frequencies</span><span class="ko" style="display:none;">클럭 속도 변경으로 수정 불가 — 모든 주파수에서 실패</span></label>
+        <label><input type="radio" name="q10" value="c"> <span class="en">They only appear in simulation</span><span class="ko" style="display:none;">시뮬레이션에서만 나타남</span></label>
+        <label><input type="radio" name="q10" value="d"> <span class="en">They require more area to fix</span><span class="ko" style="display:none;">수정에 더 많은 면적 필요</span></label>
+    </div>
+    <div class="answer" id="a10"></div>
+</div>
+
+<button class="check-all-btn" onclick="checkAll()">Check All Answers</button>
+
+<div class="score-box" id="scoreBox" style="display:none;">
+    <h2 class="en">Your Score</h2>
+    <h2 class="ko" style="display:none;">점수</h2>
+    <div id="scoreDisplay"></div>
+</div>
+
+<div class="nav">
+    <a href="day-12-lesson.html">← Back to Lesson</a>
+    <a href="day-12-practice.html">Practice →</a>
+</div>
+
+<script>
+const answers = {q1:'b',q2:'b',q3:'b',q4:'c',q5:'b',q6:'b',q7:'b',q8:'b',q9:'b',q10:'b'};
+const explanations_en = {
+    q1: 'Hold time is the minimum time data must remain stable AFTER the active clock edge.',
+    q2: 'Hold time depends only on the data path delay between flip-flops on the same clock edge, not the clock period.',
+    q3: 'The hold check ensures the data path delay (t_clk2q + t_comb) is greater than or equal to t_hold.',
+    q4: 'Delay buffers are inserted into short data paths to ensure data doesn\'t change too soon after the clock edge.',
+    q5: 'Hold is checked at the fast corner because we want to ensure data doesn\'t arrive too quickly (minimum delays).',
+    q6: 'Direct FF-to-FF connections have minimal combinational delay, and clock skew can push the hold window beyond what the path provides.',
+    q7: 'Hold slack = (0.2 + 0.05) - 0.3 = -0.05ns. Negative slack means violation!',
+    q8: 'If the capture clock arrives early, the data must be held stable even longer, making hold harder to meet.',
+    q9: 'CTS creates a balanced clock distribution tree so all flip-flops receive the clock at nearly the same time, minimizing skew.',
+    q10: 'Hold violations cause failures regardless of clock frequency. You can\'t "slow down" your way out of a hold problem.'
+};
+const explanations_ko = {
+    q1: '홀드 타임은 클럭 에지 이후에 데이터가 안정 상태를 유지해야 하는 최소 시간입니다.',
+    q2: '홀드 타임은 같은 클럭 에지에서 플립플롭 간의 데이터 경로 지연에만 의존하며, 클럭 주기와 무관합니다.',
+    q3: '홀드 체크는 데이터 경로 지연(t_clk2q + t_comb)이 t_hold 이상인지 확인합니다.',
+    q4: '짧은 데이터 경로에 지연 버퍼를 삽입하여 클럭 에지 이후 데이터가 너무 빨리 변경되지 않도록 합니다.',
+    q5: '홀드는 데이터가 너무 빨리 도착하지 않도록 빠른 코너(최소 지연)에서 확인합니다.',
+    q6: 'FF 간 직접 연결은 조합 지연이 최소이며, 클럭 스큐가 홀드 윈도우를 경로가 제공하는 것 이상으로 확장할 수 있습니다.',
+    q7: '홀드 슬랙 = (0.2 + 0.05) - 0.3 = -0.05ns. 음의 슬랙은 위반을 의미합니다!',
+    q8: '캡처 클럭이 일찍 도착하면 데이터를 더 오래 안정적으로 유지해야 하므로 홀드 충족이 더 어려워집니다.',
+    q9: 'CTS는 균형 잡힌 클럭 분배 트리를 만들어 모든 플립플롭이 거의 동시에 클럭을 받도록 하여 스큐를 최소화합니다.',
+    q10: '홀드 위반은 클럭 주파수에 관계없이 실패를 유발합니다. 홀드 문제는 "느리게" 해서 벗어날 수 없습니다.'
+};
+
+let isKorean = false;
+function toggleLang() {
+    isKorean = !isKorean;
+    document.querySelectorAll('.en').forEach(el => { el.style.setProperty('display', isKorean ? 'none' : 'revert', 'important'); });
+    document.querySelectorAll('.ko').forEach(el => { el.style.setProperty('display', isKorean ? 'revert' : 'none', 'important'); });
+    document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+}
+
+function checkAll() {
+    let score = 0;
+    for (let i = 1; i <= 10; i++) {
+        const selected = document.querySelector(`input[name="q${i}"]:checked`);
+        const ansDiv = document.getElementById(`a${i}`);
+        const correct = answers[`q${i}`];
+        const explanation = isKorean ? explanations_ko[`q${i}`] : explanations_en[`q${i}`];
+        if (selected && selected.value === correct) {
+            score++;
+            ansDiv.className = 'answer correct';
+            ansDiv.innerHTML = `✅ ${isKorean ? '정답!' : 'Correct!'} ${explanation}`;
+        } else {
+            ansDiv.className = 'answer wrong';
+            ansDiv.innerHTML = `❌ ${isKorean ? '오답. 정답: ' : 'Wrong. Answer: '}${correct.toUpperCase()}. ${explanation}`;
+        }
+        ansDiv.style.display = 'block';
+    }
+    document.getElementById('scoreBox').style.display = 'block';
+    document.getElementById('scoreDisplay').textContent = `${score} / 10`;
+}
+</script>
+</body>
+</html>

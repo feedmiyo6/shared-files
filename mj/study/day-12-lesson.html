@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 12: Hold Time — Violations and Fixes</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    background: linear-gradient(135deg, #fefae0 0%, #faedcd 100%);
+    color: #3d405b;
+    line-height: 1.8;
+    padding: 24px;
+    max-width: 920px;
+    margin: 0 auto;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+h1 {
+    color: #5d4037;
+    border-bottom: 3px solid #c4a77d;
+    padding-bottom: 12px;
+    margin-bottom: 24px;
+    font-size: 2em;
+}
+h2 {
+    color: #588157;
+    border-bottom: 2px solid #a3b18a;
+    padding-bottom: 8px;
+    margin: 32px 0 16px;
+}
+h3 {
+    color: #5d4037;
+    margin: 20px 0 10px;
+}
+p { margin: 12px 0; }
+code {
+    background: #e9f5db;
+    color: #3d405b;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+}
+pre {
+    background: #2d3436;
+    padding: 24px;
+    border-radius: 12px;
+    margin: 24px 0;
+    border: 3px solid #a3b18a;
+    overflow-x: auto;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+    font-size: 15px;
+    line-height: 1.6;
+    color: #f8f8f2;
+}
+.keyword { color: #ff79c6; font-weight: 600; }
+.type { color: #8be9fd; }
+.signal { color: #50fa7b; }
+.number { color: #ffb86c; }
+.comment { color: #6272a4; font-style: italic; }
+.string { color: #f1fa8c; }
+.concept-box {
+    background: #fff8f0;
+    border: 2px solid #c4a77d;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    color: #3d405b;
+}
+.concept-box h3 { color: #5d4037; margin-bottom: 12px; }
+.warning-box {
+    background: #fff8f0;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    border-left: 4px solid #ef4444;
+    color: #3d405b;
+}
+.warning-box h3 { color: #c53030; margin-bottom: 12px; }
+.tip-box {
+    background: #fff8f0;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    border-left: 4px solid #588157;
+    color: #3d405b;
+}
+.comparison-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+.comparison-table th {
+    background: #588157;
+    color: white;
+    padding: 12px;
+    text-align: left;
+}
+.comparison-table td {
+    background: #fff;
+    border: 1px solid #c4a77d;
+    padding: 12px;
+    color: #3d405b;
+}
+.comparison-table tr:nth-child(even) td { background: #fff8f0; }
+.lang-toggle {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    background: #588157;
+    border: none;
+    border-radius: 24px;
+    padding: 10px 20px;
+    cursor: pointer;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    z-index: 1000;
+}
+.lang-toggle:hover { background: #3a5a40; }
+.ko { display: none; }
+.nav { display: flex; justify-content: space-between; margin: 32px 0 16px; }
+.nav a {
+    color: #588157;
+    text-decoration: none;
+    font-weight: 600;
+}
+.nav a:hover { color: #3a5a40; }
+.diagram-box {
+    background: #fff;
+    border: 2px solid #a3b18a;
+    border-radius: 12px;
+    padding: 24px;
+    margin: 20px 0;
+    text-align: center;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+    white-space: pre;
+    line-height: 1.4;
+    overflow-x: auto;
+    color: #3d405b;
+}
+@media (max-width: 768px) {
+    body { padding: 16px; }
+    h1 { font-size: 1.8em; }
+    pre { font-size: 14px; padding: 16px; }
+    .lang-toggle { padding: 8px 16px; font-size: 13px; }
+}
+</style>
+</head>
+<body>
+<button class="lang-toggle" onclick="toggleLang()">한국어</button>
+
+<h1>📅 Day 12: Hold Time</h1>
+<p class="en"><strong>Week 3, Lesson 2</strong> — Violations and Fixes</p>
+<p class="ko" style="display:none;"><strong>3주차, 레슨 2</strong> — 홀드 타임 위반과 해결 방법</p>
+
+<div class="nav">
+    <a href="day-11-lesson.html">← Day 11: Setup Time</a>
+    <a href="day-12-quiz.html">Quiz →</a>
+</div>
+
+<!-- Section 1: What is Hold Time? -->
+<h2>1. What is Hold Time?</h2>
+
+<p class="en">Yesterday we learned about <strong>setup time</strong> — data must be stable <em>before</em> the clock edge. Today we tackle the other half: <strong>hold time (t<sub>h</sub>)</strong> — data must remain stable <em>after</em> the clock edge.</p>
+<p class="ko" style="display:none;">어제 우리는 <strong>셋업 타임</strong>을 배웠습니다 — 데이터가 클럭 에지 <em>이전에</em> 안정되어야 한다는 것이었죠. 오늘은 나머지 반쪽인 <strong>홀드 타임 (t<sub>h</sub>)</strong>을 다룹니다 — 데이터가 클럭 에지 <em>이후에도</em> 안정되어야 합니다.</p>
+
+<div class="concept-box">
+    <h3>📌 Hold Time Definition</h3>
+    <p class="en"><strong>Hold time (t<sub>h</sub>)</strong> is the minimum time that data must remain stable <em>after</em> the active clock edge for the flip-flop to reliably capture it.</p>
+    <p class="ko" style="display:none;"><strong>홀드 타임 (t<sub>h</sub>)</strong>은 플립플롭이 데이터를 안정적으로 캡처하기 위해 클럭 에지 <em>이후에</em> 데이터가 안정 상태를 유지해야 하는 최소 시간입니다.</p>
+    <p class="en">Think of it like a camera shutter — even after you press the button, you need to hold still for a brief moment for a clear picture.</p>
+    <p class="ko" style="display:none;">카메라 셔터처럼 생각하세요 — 버튼을 누른 후에도 선명한 사진을 위해 잠시 동안 움직이지 않아야 합니다.</p>
+</div>
+
+<div class="diagram-box">
+         CLK
+          ┌──────┐      ┌──────┐
+──────────┘      └──────┘      └──────
+          │
+     ◄────┤ t_h ►│
+          │      │
+  Data ───╋══════╋─── Data can change after this
+          │ HOLD │
+        clock  hold time
+        edge   window ends
+</div>
+
+<!-- Section 2: Setup vs Hold Comparison -->
+<h2>2. Setup Time vs Hold Time</h2>
+
+<p class="en">These two constraints form a <strong>timing window</strong> around the clock edge where data must be stable:</p>
+<p class="ko" style="display:none;">이 두 가지 제약 조건은 클럭 에지 주변에서 데이터가 안정되어야 하는 <strong>타이밍 윈도우</strong>를 형성합니다:</p>
+
+<table class="comparison-table">
+<tr><th>Property</th><th>Setup Time (t<sub>su</sub>)</th><th>Hold Time (t<sub>h</sub>)</th></tr>
+<tr><td class="en">When?</td><td class="en">Before clock edge</td><td class="en">After clock edge</td></tr>
+<tr class="ko" style="display:none;"><td>언제?</td><td>클럭 에지 이전</td><td>클럭 에지 이후</td></tr>
+<tr><td class="en">Violated by?</td><td class="en">Data arriving too late</td><td class="en">Data changing too soon</td></tr>
+<tr class="ko" style="display:none;"><td>위반 원인?</td><td>데이터가 너무 늦게 도착</td><td>데이터가 너무 빨리 변경</td></tr>
+<tr><td class="en">Fixed by?</td><td class="en">Faster logic or slower clock</td><td class="en">Adding delay to data path</td></tr>
+<tr class="ko" style="display:none;"><td>해결 방법?</td><td>더 빠른 로직 또는 느린 클럭</td><td>데이터 경로에 지연 추가</td></tr>
+<tr><td class="en">Clock frequency?</td><td class="en">Can fix by slowing clock</td><td class="en">Clock speed does NOT help!</td></tr>
+<tr class="ko" style="display:none;"><td>클럭 주파수?</td><td>클럭을 늦추면 해결 가능</td><td>클럭 속도로 해결 불가!</td></tr>
+</table>
+
+<div class="warning-box">
+    <h3>⚠️ Critical Difference!</h3>
+    <p class="en"><strong>Setup violations</strong> can be fixed by slowing down the clock. <strong>Hold violations cannot!</strong> Hold time is independent of clock frequency — it only depends on the delay between two flip-flops. This makes hold violations especially dangerous.</p>
+    <p class="ko" style="display:none;"><strong>셋업 위반</strong>은 클럭을 느리게 하면 해결됩니다. <strong>홀드 위반은 불가능합니다!</strong> 홀드 타임은 클럭 주파수와 무관하며, 오직 두 플립플롭 사이의 지연에만 의존합니다. 이것이 홀드 위반을 특히 위험하게 만듭니다.</p>
+</div>
+
+<div class="diagram-box">
+                ◄── t_su ──►◄── t_h ──►
+                │           │          │
+  Data must be  │  STABLE   │  STABLE  │  Data can
+  stable here → │===========│==========│ ← change after
+                │           │          │
+              setup      CLOCK       hold
+              window     EDGE        window
+              starts                  ends
+</div>
+
+<!-- Section 3: Hold Time Violations -->
+<h2>3. What Causes Hold Violations?</h2>
+
+<p class="en">A hold violation happens when data at a flip-flop's input changes <strong>too quickly</strong> after the clock edge — before the flip-flop has finished capturing the old value.</p>
+<p class="ko" style="display:none;">홀드 위반은 플립플롭의 입력 데이터가 클럭 에지 이후 <strong>너무 빨리</strong> 변경되어, 플립플롭이 이전 값을 캡처하기 전에 바뀌는 경우 발생합니다.</p>
+
+<h3>The Hold Time Equation</h3>
+
+<div class="concept-box">
+    <h3>📌 Hold Check Formula</h3>
+    <p class="en">For the data to be stable long enough after the clock edge:</p>
+    <p class="ko" style="display:none;">클럭 에지 이후 데이터가 충분히 오래 안정되려면:</p>
+    <pre><span class="comment">// Hold time check (same clock edge)</span>
+<span class="signal">t_clk2q</span> + <span class="signal">t_comb</span> ≥ <span class="signal">t_hold</span>
+
+<span class="comment">// Where:</span>
+<span class="comment">// t_clk2q  = clock-to-output delay of launching FF</span>
+<span class="comment">// t_comb   = combinational delay between FFs</span>
+<span class="comment">// t_hold   = hold time requirement of capturing FF</span>
+
+<span class="comment">// Slack (positive = good, negative = violation)</span>
+<span class="signal">hold_slack</span> = (<span class="signal">t_clk2q</span> + <span class="signal">t_comb</span>) - <span class="signal">t_hold</span></pre>
+</div>
+
+<p class="en">Let's trace through an example:</p>
+<p class="ko" style="display:none;">예시를 따라가 봅시다:</p>
+
+<pre><span class="comment">// Example: Two flip-flops with minimal logic between them</span>
+
+<span class="comment">//   FF_A ──► (tiny logic) ──► FF_B</span>
+<span class="comment">//   t_clk2q = 0.2ns</span>
+<span class="comment">//   t_comb  = 0.1ns  (very short path!)</span>
+<span class="comment">//   t_hold  = 0.15ns</span>
+
+<span class="comment">// Hold slack = (0.2 + 0.1) - 0.15 = +0.15ns ✅ OK</span>
+
+<span class="comment">// But what if t_comb = 0?</span>
+<span class="comment">// Hold slack = (0.2 + 0) - 0.15 = +0.05ns ⚠️ Tight!</span>
+
+<span class="comment">// With clock skew making clock arrive early at FF_B:</span>
+<span class="comment">// Hold slack = (0.2 + 0) - 0.15 - 0.1(skew) = -0.05ns ❌ VIOLATION!</span></pre>
+
+<h3>Common Causes</h3>
+
+<div class="concept-box">
+    <h3>🔍 What Makes Hold Violations Happen?</h3>
+    <ol class="en">
+        <li><strong>Very short paths between flip-flops</strong> — direct connections or minimal logic</li>
+        <li><strong>Clock skew</strong> — if the capturing FF's clock arrives early, the hold window extends</li>
+        <li><strong>Fast process corners</strong> — gates switch faster than expected</li>
+        <li><strong>Reset/set paths</strong> — synchronous reset can create short paths</li>
+    </ol>
+    <ol class="ko" style="display:none;">
+        <li><strong>플립플롭 사이의 매우 짧은 경로</strong> — 직접 연결 또는 최소한의 로직</li>
+        <li><strong>클럭 스큐</strong> — 캡처 FF의 클럭이 일찍 도착하면 홀드 윈도우가 확장됨</li>
+        <li><strong>빠른 프로세스 코너</strong> — 게이트가 예상보다 빨리 스위칭</li>
+        <li><strong>리셋/셋 경로</strong> — 동기식 리셋이 짧은 경로를 만들 수 있음</li>
+    </ol>
+</div>
+
+<!-- Section 4: Clock Skew and Hold Time -->
+<h2>4. Clock Skew Makes It Worse</h2>
+
+<p class="en">Clock skew is the #1 contributor to hold violations. If the capturing flip-flop's clock arrives <strong>earlier</strong> than the launching flip-flop's clock, the hold requirement effectively increases:</p>
+<p class="ko" style="display:none;">클럭 스큐는 홀드 위반의 가장 큰 원인입니다. 캡처 플립플롭의 클럭이 발사 플립플롭의 클럭보다 <strong>일찍</strong> 도착하면, 홀드 요구 사항이 사실상 증가합니다:</p>
+
+<pre><span class="comment">// Hold check WITH clock skew</span>
+<span class="signal">t_clk2q</span> + <span class="signal">t_comb</span> ≥ <span class="signal">t_hold</span> + <span class="signal">t_skew</span>
+
+<span class="comment">// Positive skew = capturing clock arrives EARLIER</span>
+<span class="comment">// This is the DANGEROUS direction for hold time!</span>
+
+<span class="comment">// Example:</span>
+<span class="comment">//   Launch clock arrives at 0.0ns</span>
+<span class="comment">//   Capture clock arrives at -0.1ns (skew = 0.1ns early)</span>
+<span class="comment">//   Data must be held 0.1ns LONGER than normal</span></pre>
+
+<div class="diagram-box">
+  Launch CLK  ────────┐         ┌──────
+                      └─────────┘
+                      ↑
+  Capture CLK ─────┐         ┌─────────
+  (arrives early)  └─────────┘
+                   ↑
+                   │◄─ skew ─►│
+                   │          │
+  The hold window  │  now extends by the skew amount
+  gets LONGER!     │  making violations more likely
+</div>
+
+<!-- Section 5: Fixing Hold Violations -->
+<h2>5. How to Fix Hold Violations</h2>
+
+<p class="en">The fix is conceptually simple: <strong>add delay</strong> to the data path so data doesn't change too quickly.</p>
+<p class="ko" style="display:none;">해결 방법은 개념적으로 간단합니다: 데이터가 너무 빨리 변경되지 않도록 데이터 경로에 <strong>지연을 추가</strong>합니다.</p>
+
+<h3>Fix #1: Buffer Insertion (Most Common)</h3>
+
+<pre><span class="comment">// The synthesis tool automatically inserts delay buffers</span>
+<span class="comment">// Before fix:</span>
+<span class="comment">//   FF_A ──────────────────► FF_B   (too fast!)</span>
+
+<span class="comment">// After fix:</span>
+<span class="comment">//   FF_A ──► [BUF] ──► [BUF] ──► FF_B   (enough delay)</span>
+
+<span class="comment">// Each buffer adds ~0.02-0.05ns of delay</span>
+<span class="comment">// Tool adds just enough buffers to meet hold</span></pre>
+
+<div class="tip-box">
+    <h3>💡 Good News</h3>
+    <p class="en">In modern design flows, the <strong>synthesis and place-and-route tools automatically fix hold violations</strong> by inserting delay buffers. You rarely need to fix them manually. However, understanding the concept is crucial for debugging timing reports and interviews!</p>
+    <p class="ko" style="display:none;">현대 설계 흐름에서는 <strong>합성 및 배치배선 도구가 지연 버퍼를 삽입하여 자동으로 홀드 위반을 수정</strong>합니다. 수동으로 수정할 필요는 거의 없습니다. 하지만 타이밍 보고서 디버깅과 면접을 위해 개념을 이해하는 것이 중요합니다!</p>
+</div>
+
+<h3>Fix #2: Minimize Clock Skew</h3>
+
+<pre><span class="comment">// Use balanced clock trees (CTS - Clock Tree Synthesis)</span>
+<span class="comment">// Goal: all flip-flops receive the clock at nearly the same time</span>
+
+<span class="comment">//           CLK_SOURCE</span>
+<span class="comment">//              │</span>
+<span class="comment">//          ┌───┴───┐</span>
+<span class="comment">//          │       │</span>
+<span class="comment">//       ┌──┴──┐ ┌──┴──┐</span>
+<span class="comment">//       │     │ │     │</span>
+<span class="comment">//      FF_A  FF_B FF_C FF_D</span>
+<span class="comment">//</span>
+<span class="comment">// Balanced tree = equal path length = minimal skew</span></pre>
+
+<h3>Fix #3: Add Logic to Short Paths</h3>
+
+<pre><span class="comment">// If you have a direct FF-to-FF connection, add intentional delay</span>
+<span class="keyword">module</span> <span class="type">hold_fix_example</span> (
+    <span class="keyword">input</span>  <span class="type">logic</span> <span class="signal">clk</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span> <span class="signal">d_in</span>,
+    <span class="keyword">output</span> <span class="type">logic</span> <span class="signal">q_out</span>
+);
+    <span class="type">logic</span> <span class="signal">stage1</span>, <span class="signal">stage1_delayed</span>;
+    
+    <span class="comment">// Stage 1 flip-flop</span>
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span>) <span class="keyword">begin</span>
+        <span class="signal">stage1</span> &lt;= <span class="signal">d_in</span>;
+    <span class="keyword">end</span>
+    
+    <span class="comment">// Intentional delay (synthesis will honor this)</span>
+    <span class="comment">// In real design, use: (* dont_touch = "true" *) on buffer</span>
+    <span class="keyword">assign</span> <span class="signal">stage1_delayed</span> = <span class="signal">stage1</span>;  <span class="comment">// Tool adds buffers here</span>
+    
+    <span class="comment">// Stage 2 flip-flop</span>
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span>) <span class="keyword">begin</span>
+        <span class="signal">q_out</span> &lt;= <span class="signal">stage1_delayed</span>;
+    <span class="keyword">end</span>
+<span class="keyword">endmodule</span></pre>
+
+<!-- Section 6: Reading Timing Reports -->
+<h2>6. Reading Hold Time in Timing Reports</h2>
+
+<p class="en">Here's what a hold violation looks like in a timing report:</p>
+<p class="ko" style="display:none;">타이밍 보고서에서 홀드 위반은 다음과 같이 나타납니다:</p>
+
+<pre><span class="comment">// Typical timing report (simplified)</span>
+<span class="string">=============================================</span>
+<span class="string"> Hold Check: FF_A/Q → FF_B/D</span>
+<span class="string">=============================================</span>
+<span class="string"> Data Path Delay (min):      0.15 ns</span>
+<span class="string">   FF_A clk-to-q:           0.10 ns</span>
+<span class="string">   Combinational:            0.05 ns</span>
+<span class="string">---------------------------------------------</span>
+<span class="string"> Clock Path Skew:           +0.08 ns</span>
+<span class="string"> Hold Requirement:           0.05 ns</span>
+<span class="string"> Required Data Stability:    0.13 ns</span>
+<span class="string">---------------------------------------------</span>
+<span class="string"> Hold Slack:                +0.02 ns  ✅ MET</span>
+<span class="string">=============================================</span>
+
+<span class="comment">// If slack were negative:</span>
+<span class="string"> Hold Slack:                -0.03 ns  ❌ VIOLATED</span>
+<span class="comment">// Tool would insert 1-2 delay buffers to fix this</span></pre>
+
+<!-- Section 7: Hold Time in Real Designs -->
+<h2>7. Practical Insights</h2>
+
+<div class="concept-box">
+    <h3>🏭 In Industry</h3>
+    <ul class="en">
+        <li><strong>Hold fixes happen at place-and-route</strong> — the tool knows exact wire delays and can insert buffers precisely</li>
+        <li><strong>Hold is checked at the "fast" corner</strong> — best-case timing (fastest transistors, lowest temperature, highest voltage)</li>
+        <li><strong>Setup is checked at the "slow" corner</strong> — worst-case timing</li>
+        <li><strong>Both must pass simultaneously</strong> across all process/voltage/temperature (PVT) corners</li>
+        <li><strong>Hold violations cause functional failures</strong> at any clock speed — they're not just "push it'll work at lower freq"</li>
+    </ul>
+    <ul class="ko" style="display:none;">
+        <li><strong>홀드 수정은 배치배선 단계에서 수행</strong> — 도구가 정확한 배선 지연을 알고 있어 버퍼를 정밀하게 삽입</li>
+        <li><strong>홀드는 "빠른" 코너에서 확인</strong> — 최적 타이밍 (가장 빠른 트랜지스터, 최저 온도, 최고 전압)</li>
+        <li><strong>셋업은 "느린" 코너에서 확인</strong> — 최악의 타이밍</li>
+        <li><strong>모든 PVT 코너에서 둘 다 동시에 통과해야 함</strong></li>
+        <li><strong>홀드 위반은 모든 클럭 속도에서 기능 오류 발생</strong> — "낮은 주파수에서는 작동할 것"이 통하지 않음</li>
+    </ul>
+</div>
+
+<div class="warning-box">
+    <h3>⚠️ Interview Alert!</h3>
+    <p class="en">A classic interview question: <strong>"Can you fix a hold violation by changing the clock frequency?"</strong> The answer is <strong>NO!</strong> Hold time only depends on the data path delay between flip-flops on the <em>same</em> clock edge. Slowing the clock gives more time between edges but doesn't change what happens right after an edge.</p>
+    <p class="ko" style="display:none;">대표적인 면접 질문: <strong>"클럭 주파수를 변경하여 홀드 위반을 수정할 수 있나요?"</strong> 답은 <strong>아니요!</strong> 홀드 타임은 <em>같은</em> 클럭 에지에서 플립플롭 간의 데이터 경로 지연에만 의존합니다. 클럭을 느리게 하면 에지 사이 시간은 늘어나지만 에지 직후에 일어나는 일은 변하지 않습니다.</p>
+</div>
+
+<!-- Section 8: Summary -->
+<h2>8. Key Takeaways</h2>
+
+<div class="concept-box">
+    <h3>📝 Today's Summary</h3>
+    <ol class="en">
+        <li><strong>Hold time</strong> = data must stay stable after the clock edge</li>
+        <li><strong>Hold check:</strong> t<sub>clk2q</sub> + t<sub>comb</sub> ≥ t<sub>hold</sub> + t<sub>skew</sub></li>
+        <li><strong>Cannot fix by slowing clock</strong> — this is the key difference from setup</li>
+        <li><strong>Main causes:</strong> short paths, clock skew, fast process corners</li>
+        <li><strong>Main fix:</strong> insert delay buffers (tools do this automatically)</li>
+        <li><strong>Checked at fast corner</strong> (opposite of setup time)</li>
+    </ol>
+    <ol class="ko" style="display:none;">
+        <li><strong>홀드 타임</strong> = 클럭 에지 이후 데이터가 안정 유지되어야 함</li>
+        <li><strong>홀드 체크:</strong> t<sub>clk2q</sub> + t<sub>comb</sub> ≥ t<sub>hold</sub> + t<sub>skew</sub></li>
+        <li><strong>클럭을 느리게 해도 해결 불가</strong> — 셋업과의 핵심 차이점</li>
+        <li><strong>주요 원인:</strong> 짧은 경로, 클럭 스큐, 빠른 프로세스 코너</li>
+        <li><strong>주요 해결:</strong> 지연 버퍼 삽입 (도구가 자동으로 수행)</li>
+        <li><strong>빠른 코너에서 확인</strong> (셋업 타임과 반대)</li>
+    </ol>
+</div>
+
+<div class="nav">
+    <a href="day-11-lesson.html">← Day 11: Setup Time</a>
+    <a href="day-12-quiz.html">Take the Quiz →</a>
+</div>
+
+<script>
+let isKorean = false;
+function toggleLang() {
+    isKorean = !isKorean;
+    document.querySelectorAll('.en').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'none' : 'revert', 'important');
+    });
+    document.querySelectorAll('.ko').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'revert' : 'none', 'important');
+    });
+    document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+}
+</script>
+</body>
+</html>
