@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 13 Quiz: Clock Skew</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    background: linear-gradient(135deg, #fefae0 0%, #faedcd 100%);
+    color: #3d405b;
+    line-height: 1.8;
+    padding: 24px;
+    max-width: 920px;
+    margin: 0 auto;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+h1 { color: #5d4037; border-bottom: 3px solid #c4a77d; padding-bottom: 12px; margin: 24px 0 16px; font-size: 2em; }
+h2 { color: #588157; border-bottom: 2px solid #a3b18a; padding-bottom: 8px; margin: 28px 0 14px; font-size: 1.5em; }
+h3 { color: #5d4037; margin: 20px 0 10px; }
+p { margin: 10px 0; }
+code {
+    background: #e9f5db;
+    color: #3d405b;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+}
+.nav-links { display: flex; gap: 12px; margin: 20px 0; flex-wrap: wrap; }
+.nav-links a {
+    background: linear-gradient(135deg, #588157, #3a5a40);
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 24px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14px;
+}
+.nav-links a:hover { opacity: 0.9; }
+.lang-toggle {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    background: #588157;
+    border: none;
+    border-radius: 24px;
+    padding: 10px 20px;
+    cursor: pointer;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    z-index: 1000;
+}
+.lang-toggle:hover { background: #3a5a40; }
+.ko { display: none; }
+.question {
+    background: #fff8f0;
+    border: 2px solid #c4a77d;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+}
+.question h3 { color: #5d4037; margin-bottom: 12px; }
+.options { list-style: none; padding: 0; margin: 10px 0; }
+.options li {
+    background: #fff;
+    border: 2px solid #a3b18a;
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin: 8px 0;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.options li:hover { border-color: #588157; background: #f0f7ec; }
+.options li.correct { background: #d4edda; border-color: #10b981; }
+.options li.wrong { background: #fde8e8; border-color: #ef4444; }
+.options li.disabled { pointer-events: none; opacity: 0.7; }
+.explanation {
+    display: none;
+    background: #fff8f0;
+    border-left: 4px solid #588157;
+    padding: 15px;
+    margin-top: 12px;
+    border-radius: 0 8px 8px 0;
+}
+.score-box {
+    background: #fff8f0;
+    border: 3px solid #588157;
+    border-radius: 12px;
+    padding: 24px;
+    margin: 24px 0;
+    text-align: center;
+    display: none;
+}
+.score-box h2 { border: none; }
+.score-btn {
+    background: linear-gradient(135deg, #588157, #3a5a40);
+    color: #fff;
+    border: none;
+    border-radius: 24px;
+    padding: 14px 32px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    margin: 20px 0;
+}
+.score-btn:hover { opacity: 0.9; }
+@media (max-width: 768px) {
+    body { padding: 16px; }
+    h1 { font-size: 1.8em; }
+    .lang-toggle { padding: 8px 16px; font-size: 13px; }
+}
+</style>
+</head>
+<body>
+
+<button class="lang-toggle" onclick="toggleLang()">한국어</button>
+
+<h1>📝 Day 13 Quiz: Clock Skew</h1>
+<div class="nav-links">
+    <a href="day-13-lesson.html">📖 Lesson</a>
+    <a href="day-13-practice.html">🔧 Practice</a>
+</div>
+
+<div id="quiz">
+
+<div class="question" data-answer="2">
+    <h3>Q1. <span class="en">What is clock skew?</span><span class="ko" style="display:none;">클럭 스큐란 무엇인가요?</span></h3>
+    <ul class="options">
+        <li onclick="pick(this)"><span class="en">A) Variation in clock frequency over time</span><span class="ko" style="display:none;">A) 시간에 따른 클럭 주파수 변동</span></li>
+        <li onclick="pick(this)"><span class="en">B) Difference in clock arrival time at two different flip-flops</span><span class="ko" style="display:none;">B) 두 개의 서로 다른 플립플롭에서의 클럭 도달 시간 차이</span></li>
+        <li onclick="pick(this)"><span class="en">C) The rise time of the clock signal</span><span class="ko" style="display:none;">C) 클럭 신호의 상승 시간</span></li>
+        <li onclick="pick(this)"><span class="en">D) The duty cycle imbalance of the clock</span><span class="ko" style="display:none;">D) 클럭의 듀티 사이클 불균형</span></li>
+    </ul>
+    <div class="explanation"><span class="en">Clock skew is the spatial difference in arrival time of the same clock edge at different flip-flops, caused by different wire lengths and buffer delays in the clock tree.</span><span class="ko" style="display:none;">클럭 스큐는 클럭 트리의 다른 와이어 길이와 버퍼 지연으로 인해 같은 클럭 에지가 다른 플립플롭에 도달하는 시간 차이입니다.</span></div>
+</div>
+
+<div class="question" data-answer="1">
+    <h3>Q2. <span class="en">Positive clock skew means the capturing flip-flop gets the clock:</span><span class="ko" style="display:none;">양의 클럭 스큐는 수신 플립플롭이 클럭을:</span></h3>
+    <ul class="options">
+        <li onclick="pick(this)"><span class="en">A) Later than the launching flip-flop</span><span class="ko" style="display:none;">A) 발신 플립플롭보다 늦게 받음</span></li>
+        <li onclick="pick(this)"><span class="en">B) Earlier than the launching flip-flop</span><span class="ko" style="display:none;">B) 발신 플립플롭보다 일찍 받음</span></li>
+        <li onclick="pick(this)"><span class="en">C) At exactly the same time</span><span class="ko" style="display:none;">C) 정확히 같은 시간에 받음</span></li>
+        <li onclick="pick(this)"><span class="en">D) On the opposite edge</span><span class="ko" style="display:none;">D) 반대 에지에서 받음</span></li>
+    </ul>
+    <div class="explanation"><span class="en">Positive skew = t_clk→FF2 > t_clk→FF1, meaning the capturing flop gets the clock later. This gives the data more time to arrive (helps setup).</span><span class="ko" style="display:none;">양의 스큐 = t_clk→FF2 > t_clk→FF1, 즉 수신 플립플롭이 클럭을 늦게 받습니다. 이는 데이터가 도달할 시간을 더 줍니다 (셋업에 유리).</span></div>
+</div>
+
+<div class="question" data-answer="3">
+    <h3>Q3. <span class="en">Positive skew helps _____ timing but hurts _____ timing.</span><span class="ko" style="display:none;">양의 스큐는 _____ 타이밍에 도움이 되지만 _____ 타이밍에 불리합니다.</span></h3>
+    <ul class="options">
+        <li onclick="pick(this)"><span class="en">A) hold, setup</span><span class="ko" style="display:none;">A) 홀드, 셋업</span></li>
+        <li onclick="pick(this)"><span class="en">B) hold, hold</span><span class="ko" style="display:none;">B) 홀드, 홀드</span></li>
+        <li onclick="pick(this)"><span class="en">C) setup, hold</span><span class="ko" style="display:none;">C) 셋업, 홀드</span></li>
+        <li onclick="pick(this)"><span class="en">D) setup, setup</span><span class="ko" style="display:none;">D) 셋업, 셋업</span></li>
+    </ul>
+    <div class="explanation"><span class="en">Positive skew adds effective time for the data path (helps setup) but requires MORE minimum delay to prevent the new data from overwriting the old (hurts hold).</span><span class="ko" style="display:none;">양의 스큐는 데이터 경로에 유효 시간을 추가하지만(셋업에 유리), 새 데이터가 이전 데이터를 덮어쓰는 것을 방지하기 위해 더 많은 최소 지연이 필요합니다(홀드에 불리).</span></div>
+</div>
+
+<div class="question" data-answer="2">
+    <h3>Q4. <span class="en">Why are hold violations more critical than setup violations?</span><span class="ko" style="display:none;">왜 홀드 위반이 셋업 위반보다 더 치명적인가요?</span></h3>
+    <ul class="options">
+        <li onclick="pick(this)"><span class="en">A) Hold violations cause more power consumption</span><span class="ko" style="display:none;">A) 홀드 위반이 더 많은 전력을 소비해서</span></li>
+        <li onclick="pick(this)"><span class="en">B) Hold violations cannot be fixed by reducing clock frequency</span><span class="ko" style="display:none;">B) 홀드 위반은 클럭 주파수를 줄여도 고칠 수 없어서</span></li>
+        <li onclick="pick(this)"><span class="en">C) Hold violations only happen at high temperatures</span><span class="ko" style="display:none;">C) 홀드 위반은 높은 온도에서만 발생해서</span></li>
+        <li onclick="pick(this)"><span class="en">D) Hold violations affect more flip-flops</span><span class="ko" style="display:none;">D) 홀드 위반이 더 많은 플립플롭에 영향을 줘서</span></li>
+    </ul>
+    <div class="explanation"><span class="en">Hold timing is frequency-independent — the constraint t_cq + t_comb ≥ t_hold + t_skew has no clock period term. You can't fix it by slowing the clock!</span><span class="ko" style="display:none;">홀드 타이밍은 주파수와 무관합니다 — 제약 t_cq + t_comb ≥ t_hold + t_skew에는 클럭 주기 항이 없습니다. 클럭을 느리게 해도 고칠 수 없습니다!</span></div>
+</div>
+
+<div class="question" data-answer="3">
+    <h3>Q5. <span class="en">Which is NOT a source of clock skew?</span><span class="ko" style="display:none;">다음 중 클럭 스큐의 원인이 아닌 것은?</span></h3>
+    <ul class="options">
+        <li onclick="pick(this)"><span class="en">A) Wire length differences</span><span class="ko" style="display:none;">A) 와이어 길이 차이</span></li>
+        <li onclick="pick(this)"><span class="en">B) Buffer delay variation</span><span class="ko" style="display:none;">B) 버퍼 지연 변동</span></li>
+        <li onclick="pick(this)"><span class="en">C) PLL phase noise</span><span class="ko" style="display:none;">C) PLL 위상 노이즈</span></li>
+        <li onclick="pick(this)"><span class="en">D) Temperature gradients across the chip</span><span class="ko" style="display:none;">D) 칩 전체의 온도 기울기</span></li>
+    </ul>
+    <div class="explanation"><span class="en">PLL phase noise causes clock <strong>jitter</strong> (temporal variation), not skew (spatial variation). Wire length, buffer delays, and temperature gradients all cause skew.</span><span class="ko" style="display:none;">PLL 위상 노이즈는 클럭 <strong>지터</strong>(시간적 변동)를 유발하며, 스큐(공간적 변동)가 아닙니다.</span></div>
+</div>
+
+<div class="question" data-answer="2">
+    <h3>Q6. <span class="en">Clock Tree Synthesis (CTS) aims to:</span><span class="ko" style="display:none;">클럭 트리 합성(CTS)의 목표는:</span></h3>
+    <ul class="options">
+        <li onclick="pick(this)"><span class="en">A) Maximize clock frequency</span><span class="ko" style="display:none;">A) 클럭 주파수 최대화</span></li>
+        <li onclick="pick(this)"><span class="en">B) Balance clock arrival times across all flip-flops</span><span class="ko" style="display:none;">B) 모든 플립플롭에서 클럭 도달 시간 균형 맞추기</span></li>
+        <li onclick="pick(this)"><span class="en">C) Remove all clock buffers</span><span class="ko" style="display:none;">C) 모든 클럭 버퍼 제거</span></li>
+        <li onclick="pick(this)"><span class="en">D) Eliminate clock jitter</span><span class="ko" style="display:none;">D) 클럭 지터 제거</span></li>
+    </ul>
+    <div class="explanation"><span class="en">CTS builds a balanced tree of buffers so the clock signal reaches all flip-flops at approximately the same time, minimizing skew.</span><span class="ko" style="display:none;">CTS는 클럭 신호가 모든 플립플롭에 거의 동시에 도달하도록 균형 잡힌 버퍼 트리를 구축하여 스큐를 최소화합니다.</span></div>
+</div>
+
+<div class="question" data-answer="1">
+    <h3>Q7. <span class="en">Given: t_clk=10ns, t_cq=0.3ns, t_setup=0.2ns, t_skew=−0.4ns. What is the max combinational delay?</span><span class="ko" style="display:none;">주어진 값: t_clk=10ns, t_cq=0.3ns, t_setup=0.2ns, t_skew=−0.4ns. 최대 조합 지연은?</span></h3>
+    <ul class="options">
+        <li onclick="pick(this)"><span class="en">A) 9.1 ns</span><span class="ko" style="display:none;">A) 9.1 ns</span></li>
+        <li onclick="pick(this)"><span class="en">B) 9.9 ns</span><span class="ko" style="display:none;">B) 9.9 ns</span></li>
+        <li onclick="pick(this)"><span class="en">C) 9.5 ns</span><span class="ko" style="display:none;">C) 9.5 ns</span></li>
+        <li onclick="pick(this)"><span class="en">D) 10.1 ns</span><span class="ko" style="display:none;">D) 10.1 ns</span></li>
+    </ul>
+    <div class="explanation"><span class="en">t_comb_max ≤ t_clk + t_skew − t_cq − t_setup = 10 + (−0.4) − 0.3 − 0.2 = 9.1 ns. Negative skew reduces available time!</span><span class="ko" style="display:none;">t_comb_max ≤ t_clk + t_skew − t_cq − t_setup = 10 + (−0.4) − 0.3 − 0.2 = 9.1 ns. 음의 스큐는 가용 시간을 줄입니다!</span></div>
+</div>
+
+<div class="question" data-answer="4">
+    <h3>Q8. <span class="en">"Useful skew" refers to:</span><span class="ko" style="display:none;">"유용한 스큐"란:</span></h3>
+    <ul class="options">
+        <li onclick="pick(this)"><span class="en">A) Skew that occurs naturally and happens to be beneficial</span><span class="ko" style="display:none;">A) 자연적으로 발생하여 우연히 유익한 스큐</span></li>
+        <li onclick="pick(this)"><span class="en">B) Skew that eliminates the need for flip-flops</span><span class="ko" style="display:none;">B) 플립플롭의 필요성을 제거하는 스큐</span></li>
+        <li onclick="pick(this)"><span class="en">C) Skew caused by temperature variations</span><span class="ko" style="display:none;">C) 온도 변동에 의한 스큐</span></li>
+        <li onclick="pick(this)"><span class="en">D) Intentionally added skew to borrow time from relaxed paths</span><span class="ko" style="display:none;">D) 여유 있는 경로에서 시간을 빌리기 위해 의도적으로 추가한 스큐</span></li>
+    </ul>
+    <div class="explanation"><span class="en">Useful skew is an intentional design technique where you delay the clock to a capturing flop to give more time to a critical setup path, borrowing time from a relaxed subsequent path.</span><span class="ko" style="display:none;">유용한 스큐는 수신 플립플롭의 클럭을 지연시켜 크리티컬 셋업 경로에 더 많은 시간을 주고, 여유 있는 후속 경로에서 시간을 빌리는 의도적 설계 기법입니다.</span></div>
+</div>
+
+<div class="question" data-answer="2">
+    <h3>Q9. <span class="en">How do you fix a hold violation caused by clock skew?</span><span class="ko" style="display:none;">클럭 스큐로 인한 홀드 위반은 어떻게 고치나요?</span></h3>
+    <ul class="options">
+        <li onclick="pick(this)"><span class="en">A) Increase the clock period</span><span class="ko" style="display:none;">A) 클럭 주기 증가</span></li>
+        <li onclick="pick(this)"><span class="en">B) Insert delay buffers in the data path</span><span class="ko" style="display:none;">B) 데이터 경로에 지연 버퍼 삽입</span></li>
+        <li onclick="pick(this)"><span class="en">C) Add more pipeline stages</span><span class="ko" style="display:none;">C) 더 많은 파이프라인 단계 추가</span></li>
+        <li onclick="pick(this)"><span class="en">D) Use a faster flip-flop</span><span class="ko" style="display:none;">D) 더 빠른 플립플롭 사용</span></li>
+    </ul>
+    <div class="explanation"><span class="en">Hold violations need more delay in the data path. Inserting delay buffers increases t_comb to satisfy: t_cq + t_comb ≥ t_hold + t_skew. Increasing clock period doesn't help (hold is frequency-independent).</span><span class="ko" style="display:none;">홀드 위반은 데이터 경로에 더 많은 지연이 필요합니다. 지연 버퍼를 삽입하면 t_comb가 증가하여 조건을 만족시킵니다. 클럭 주기를 늘리는 것은 도움이 되지 않습니다.</span></div>
+</div>
+
+<div class="question" data-answer="3">
+    <h3>Q10. <span class="en">The main difference between clock skew and clock jitter is:</span><span class="ko" style="display:none;">클럭 스큐와 클럭 지터의 주요 차이점은:</span></h3>
+    <ul class="options">
+        <li onclick="pick(this)"><span class="en">A) Skew affects setup, jitter affects hold</span><span class="ko" style="display:none;">A) 스큐는 셋업에, 지터는 홀드에 영향</span></li>
+        <li onclick="pick(this)"><span class="en">B) Skew is random, jitter is deterministic</span><span class="ko" style="display:none;">B) 스큐는 무작위, 지터는 결정적</span></li>
+        <li onclick="pick(this)"><span class="en">C) Skew is spatial (different locations), jitter is temporal (different cycles)</span><span class="ko" style="display:none;">C) 스큐는 공간적(다른 위치), 지터는 시간적(다른 사이클)</span></li>
+        <li onclick="pick(this)"><span class="en">D) They are the same thing</span><span class="ko" style="display:none;">D) 같은 것임</span></li>
+    </ul>
+    <div class="explanation"><span class="en">Skew is the spatial variation in clock arrival across different flip-flops in the same cycle. Jitter is the temporal variation at the same flip-flop across different cycles.</span><span class="ko" style="display:none;">스큐는 같은 사이클에서 다른 플립플롭에 걸친 클럭 도달의 공간적 변동입니다. 지터는 다른 사이클에서 같은 플립플롭에서의 시간적 변동입니다.</span></div>
+</div>
+
+<div class="question" data-answer="1">
+    <h3>Q11. <span class="en">Which clock tree topology provides the lowest skew?</span><span class="ko" style="display:none;">어떤 클럭 트리 토폴로지가 가장 낮은 스큐를 제공하나요?</span></h3>
+    <ul class="options">
+        <li onclick="pick(this)"><span class="en">A) Clock mesh/grid</span><span class="ko" style="display:none;">A) 클럭 메시/그리드</span></li>
+        <li onclick="pick(this)"><span class="en">B) Single buffer fan-out</span><span class="ko" style="display:none;">B) 단일 버퍼 팬아웃</span></li>
+        <li onclick="pick(this)"><span class="en">C) Daisy chain</span><span class="ko" style="display:none;">C) 데이지 체인</span></li>
+        <li onclick="pick(this)"><span class="en">D) Unbalanced tree</span><span class="ko" style="display:none;">D) 불균형 트리</span></li>
+    </ul>
+    <div class="explanation"><span class="en">A clock mesh/grid provides the lowest skew by shorting clock wires together in a grid pattern, but at significant power cost. It's used in high-performance designs.</span><span class="ko" style="display:none;">클럭 메시/그리드는 그리드 패턴으로 클럭 와이어를 함께 단락하여 가장 낮은 스큐를 제공하지만, 상당한 전력 비용이 듭니다.</span></div>
+</div>
+
+<div class="question" data-answer="4">
+    <h3>Q12. <span class="en">Given: t_cq=0.2ns, t_hold=0.1ns, t_skew=+0.8ns. What is the minimum data path delay needed?</span><span class="ko" style="display:none;">주어진 값: t_cq=0.2ns, t_hold=0.1ns, t_skew=+0.8ns. 필요한 최소 데이터 경로 지연은?</span></h3>
+    <ul class="options">
+        <li onclick="pick(this)"><span class="en">A) 0.1 ns</span><span class="ko" style="display:none;">A) 0.1 ns</span></li>
+        <li onclick="pick(this)"><span class="en">B) 0.3 ns</span><span class="ko" style="display:none;">B) 0.3 ns</span></li>
+        <li onclick="pick(this)"><span class="en">C) 0.8 ns</span><span class="ko" style="display:none;">C) 0.8 ns</span></li>
+        <li onclick="pick(this)"><span class="en">D) 0.7 ns</span><span class="ko" style="display:none;">D) 0.7 ns</span></li>
+    </ul>
+    <div class="explanation"><span class="en">t_comb_min ≥ t_hold + t_skew − t_cq = 0.1 + 0.8 − 0.2 = 0.7 ns. Large positive skew creates a significant hold constraint!</span><span class="ko" style="display:none;">t_comb_min ≥ t_hold + t_skew − t_cq = 0.1 + 0.8 − 0.2 = 0.7 ns. 큰 양의 스큐는 상당한 홀드 제약을 만듭니다!</span></div>
+</div>
+
+</div>
+
+<div class="score-box" id="scoreBox">
+    <h2 id="scoreText"></h2>
+    <p id="scoreSummary"></p>
+</div>
+
+<button class="score-btn" onclick="showScore()">Show Score / 점수 보기</button>
+
+<div class="nav-links" style="margin-top:24px;">
+    <a href="day-13-lesson.html">📖 Review Lesson</a>
+    <a href="day-13-practice.html">🔧 Practice →</a>
+</div>
+
+<script>
+let isKorean = false;
+function toggleLang() {
+    isKorean = !isKorean;
+    document.querySelectorAll('.en').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'none' : 'revert', 'important');
+    });
+    document.querySelectorAll('.ko').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'revert' : 'none', 'important');
+    });
+    document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+}
+
+function pick(li) {
+    const question = li.closest('.question');
+    if (question.classList.contains('answered')) return;
+    question.classList.add('answered');
+    const options = question.querySelectorAll('.options li');
+    const correct = parseInt(question.dataset.answer);
+    const picked = Array.from(options).indexOf(li) + 1;
+    options.forEach(o => o.classList.add('disabled'));
+    if (picked === correct) {
+        li.classList.add('correct');
+        li.innerHTML = '✅ ' + li.innerHTML;
+    } else {
+        li.classList.add('wrong');
+        li.innerHTML = '❌ ' + li.innerHTML;
+        options[correct - 1].classList.add('correct');
+        options[correct - 1].innerHTML = '✅ ' + options[correct - 1].innerHTML;
+    }
+    question.querySelector('.explanation').style.display = 'block';
+}
+
+function showScore() {
+    const questions = document.querySelectorAll('.question');
+    let total = questions.length, correct = 0;
+    questions.forEach(q => {
+        if (!q.classList.contains('answered')) return;
+        const ans = parseInt(q.dataset.answer);
+        const opts = q.querySelectorAll('.options li');
+        if (opts[ans - 1].classList.contains('correct') && !opts[ans - 1].innerHTML.startsWith('❌')) correct++;
+    });
+    const answered = document.querySelectorAll('.question.answered').length;
+    const box = document.getElementById('scoreBox');
+    box.style.display = 'block';
+    document.getElementById('scoreText').textContent = correct + ' / ' + total;
+    const pct = total > 0 ? Math.round(correct / total * 100) : 0;
+    let msg = pct >= 90 ? '🌟 Excellent!' : pct >= 70 ? '👍 Good job!' : pct >= 50 ? '📚 Review the lesson.' : '💪 Keep studying!';
+    if (answered < total) msg += ' (' + (total - answered) + ' unanswered)';
+    document.getElementById('scoreSummary').textContent = msg;
+    box.scrollIntoView({ behavior: 'smooth' });
+}
+</script>
+
+</body>
+</html>

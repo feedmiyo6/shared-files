@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 13: Clock Skew — Sources & Impact on Timing</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    background: linear-gradient(135deg, #fefae0 0%, #faedcd 100%);
+    color: #3d405b;
+    line-height: 1.8;
+    padding: 24px;
+    max-width: 920px;
+    margin: 0 auto;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+h1 { color: #5d4037; border-bottom: 3px solid #c4a77d; padding-bottom: 12px; margin: 24px 0 16px; font-size: 2em; }
+h2 { color: #588157; border-bottom: 2px solid #a3b18a; padding-bottom: 8px; margin: 28px 0 14px; font-size: 1.5em; }
+h3 { color: #5d4037; margin: 20px 0 10px; font-size: 1.2em; }
+p { margin: 10px 0; }
+ul, ol { margin: 10px 0 10px 24px; }
+li { margin: 4px 0; }
+pre {
+    background: #2d3436;
+    padding: 24px;
+    border-radius: 12px;
+    margin: 24px 0;
+    border: 3px solid #a3b18a;
+    overflow-x: auto;
+    font-size: 15px;
+    line-height: 1.6;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+    color: #f8f8f2;
+}
+code {
+    background: #e9f5db;
+    color: #3d405b;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+}
+pre code { background: none; color: inherit; padding: 0; }
+.keyword { color: #ff79c6; font-weight: 600; }
+.type { color: #8be9fd; }
+.signal { color: #50fa7b; }
+.number { color: #ffb86c; }
+.comment { color: #6272a4; font-style: italic; }
+.string { color: #f1fa8c; }
+.concept-box {
+    background: #fff8f0;
+    border: 2px solid #c4a77d;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    color: #3d405b;
+}
+.concept-box h3 { color: #5d4037; margin-bottom: 12px; }
+.warning-box {
+    background: #fff8f0;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    border-left: 4px solid #ef4444;
+    color: #3d405b;
+}
+.warning-box h3 { color: #c53030; margin-bottom: 12px; }
+.tip-box {
+    background: #fff8f0;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    border-left: 4px solid #588157;
+    color: #3d405b;
+}
+.comparison-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+.comparison-table th {
+    background: #588157;
+    color: white;
+    padding: 12px;
+    text-align: left;
+}
+.comparison-table td {
+    background: #fff;
+    border: 1px solid #c4a77d;
+    padding: 12px;
+    color: #3d405b;
+}
+.comparison-table tr:nth-child(even) td { background: #fff8f0; }
+.nav-links { display: flex; gap: 12px; margin: 20px 0; flex-wrap: wrap; }
+.nav-links a {
+    background: linear-gradient(135deg, #588157, #3a5a40);
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 24px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14px;
+}
+.nav-links a:hover { opacity: 0.9; }
+.lang-toggle {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    background: #588157;
+    border: none;
+    border-radius: 24px;
+    padding: 10px 20px;
+    cursor: pointer;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    z-index: 1000;
+}
+.lang-toggle:hover { background: #3a5a40; }
+.ko { display: none; }
+.diagram-box {
+    background: #fff;
+    border: 2px solid #a3b18a;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    text-align: center;
+    font-family: 'SF Mono', monospace;
+    line-height: 1.4;
+    overflow-x: auto;
+}
+@media (max-width: 768px) {
+    body { padding: 16px; }
+    h1 { font-size: 1.8em; }
+    pre { font-size: 14px; padding: 16px; }
+    .lang-toggle { padding: 8px 16px; font-size: 13px; }
+}
+</style>
+</head>
+<body>
+
+<button class="lang-toggle" onclick="toggleLang()">한국어</button>
+
+<h1>📅 Day 13: Clock Skew</h1>
+<p class="en"><strong>Week 3, Lesson 3</strong> — Sources of clock skew and its impact on digital timing</p>
+<p class="ko" style="display:none;"><strong>3주차, 3번째 수업</strong> — 클럭 스큐의 원인과 디지털 타이밍에 미치는 영향</p>
+
+<div class="nav-links">
+    <a href="day-13-quiz.html">📝 Quiz</a>
+    <a href="day-13-practice.html">🔧 Practice</a>
+    <a href="day-12-lesson.html">← Day 12</a>
+</div>
+
+<h2>1. What is Clock Skew?</h2>
+
+<p class="en">Clock skew is the <strong>difference in arrival time</strong> of the same clock edge at two different flip-flops. Even though we draw one clock driving everything, the physical reality is that the clock signal travels through wires and buffers, arriving at different points at slightly different times.</p>
+<p class="ko" style="display:none;">클럭 스큐는 동일한 클럭 에지가 두 개의 서로 다른 플립플롭에 도달하는 <strong>시간 차이</strong>입니다. 하나의 클럭이 모든 것을 구동하는 것처럼 그리지만, 물리적으로 클럭 신호는 와이어와 버퍼를 통해 전파되므로 각 지점에 약간 다른 시간에 도달합니다.</p>
+
+<div class="concept-box">
+    <h3>📐 Formal Definition</h3>
+    <p class="en"><strong>Clock skew (t<sub>skew</sub>)</strong> = t<sub>clk→FF2</sub> − t<sub>clk→FF1</sub></p>
+    <p class="ko" style="display:none;"><strong>클럭 스큐 (t<sub>skew</sub>)</strong> = t<sub>clk→FF2</sub> − t<sub>clk→FF1</sub></p>
+    <p class="en">Where FF1 is the launching flop and FF2 is the capturing flop.</p>
+    <p class="ko" style="display:none;">여기서 FF1은 발신 플립플롭이고 FF2는 수신 플립플롭입니다.</p>
+    <ul>
+        <li class="en"><strong>Positive skew:</strong> Clock arrives at FF2 <em>later</em> than FF1 → helps setup, hurts hold</li>
+        <li class="ko" style="display:none;"><strong>양의 스큐:</strong> 클럭이 FF2에 FF1보다 <em>늦게</em> 도달 → 셋업에 유리, 홀드에 불리</li>
+        <li class="en"><strong>Negative skew:</strong> Clock arrives at FF2 <em>earlier</em> than FF1 → hurts setup, helps hold</li>
+        <li class="ko" style="display:none;"><strong>음의 스큐:</strong> 클럭이 FF2에 FF1보다 <em>일찍</em> 도달 → 셋업에 불리, 홀드에 유리</li>
+    </ul>
+</div>
+
+<div class="diagram-box">
+<pre style="background:none;border:none;padding:0;margin:0;text-align:left;color:#3d405b;">
+         CLK Source
+             │
+        ┌────┴────┐
+        │ Clock   │
+        │  Tree   │
+        └─┬────┬──┘
+          │    │
+     Buffer  Buffer
+       +     ++
+          │    │
+     ┌────┴┐ ┌┴────┐
+     │ FF1 │ │ FF2 │
+     └─────┘ └─────┘
+       t₁       t₂
+
+  Skew = t₂ - t₁
+</pre>
+</div>
+
+<h2>2. Sources of Clock Skew</h2>
+
+<p class="en">Clock skew has several root causes in real chips:</p>
+<p class="ko" style="display:none;">실제 칩에서 클럭 스큐의 근본 원인은 여러 가지가 있습니다:</p>
+
+<table class="comparison-table">
+    <tr>
+        <th>Source</th>
+        <th class="en">Description</th>
+        <th class="ko" style="display:none;">설명</th>
+        <th class="en">Typical Impact</th>
+        <th class="ko" style="display:none;">일반적 영향</th>
+    </tr>
+    <tr>
+        <td><strong>Wire Length</strong></td>
+        <td class="en">Different distances from clock source to flip-flops</td>
+        <td class="ko" style="display:none;">클럭 소스에서 플립플롭까지 거리 차이</td>
+        <td class="en">10-100 ps</td>
+        <td class="ko" style="display:none;">10-100 ps</td>
+    </tr>
+    <tr>
+        <td><strong>Buffer Delay Variation</strong></td>
+        <td class="en">Clock buffers in the tree have different delays due to process variation</td>
+        <td class="ko" style="display:none;">클럭 트리의 버퍼들이 공정 변동으로 지연 차이 발생</td>
+        <td class="en">5-50 ps</td>
+        <td class="ko" style="display:none;">5-50 ps</td>
+    </tr>
+    <tr>
+        <td><strong>Load Imbalance</strong></td>
+        <td class="en">Different fan-out at different branches of clock tree</td>
+        <td class="ko" style="display:none;">클럭 트리의 다른 분기에서 팬아웃 차이</td>
+        <td class="en">10-30 ps</td>
+        <td class="ko" style="display:none;">10-30 ps</td>
+    </tr>
+    <tr>
+        <td><strong>Temperature Gradient</strong></td>
+        <td class="en">Hot spots on chip cause locally faster/slower buffers</td>
+        <td class="ko" style="display:none;">칩의 핫스팟이 국부적으로 빠르거나 느린 버퍼를 유발</td>
+        <td class="en">5-20 ps</td>
+        <td class="ko" style="display:none;">5-20 ps</td>
+    </tr>
+    <tr>
+        <td><strong>Voltage Drop (IR Drop)</strong></td>
+        <td class="en">Power supply voltage varies across the chip</td>
+        <td class="ko" style="display:none;">전원 공급 전압이 칩 전체에서 변동</td>
+        <td class="en">10-50 ps</td>
+        <td class="ko" style="display:none;">10-50 ps</td>
+    </tr>
+</table>
+
+<h2>3. Clock Trees: How Chips Distribute Clocks</h2>
+
+<p class="en">To minimize skew, chips use <strong>clock tree synthesis (CTS)</strong> — the tool builds a balanced tree of buffers so the clock arrives at all flip-flops at roughly the same time.</p>
+<p class="ko" style="display:none;">스큐를 최소화하기 위해 칩은 <strong>클럭 트리 합성(CTS)</strong>을 사용합니다 — 도구가 균형 잡힌 버퍼 트리를 구축하여 클럭이 모든 플립플롭에 거의 동시에 도달하도록 합니다.</p>
+
+<div class="concept-box">
+    <h3>🌳 Clock Tree Topologies</h3>
+    <ul>
+        <li class="en"><strong>H-Tree:</strong> Symmetric H-shaped structure — equal path length to all endpoints</li>
+        <li class="ko" style="display:none;"><strong>H-트리:</strong> 대칭 H자 구조 — 모든 종단까지 동일한 경로 길이</li>
+        <li class="en"><strong>Balanced Buffer Tree:</strong> CTS tool inserts buffers to balance delays</li>
+        <li class="ko" style="display:none;"><strong>균형 버퍼 트리:</strong> CTS 도구가 지연을 균형 맞추기 위해 버퍼를 삽입</li>
+        <li class="en"><strong>Clock Mesh/Grid:</strong> Low-skew but high-power, used in high-performance designs</li>
+        <li class="ko" style="display:none;"><strong>클럭 메시/그리드:</strong> 낮은 스큐지만 높은 전력, 고성능 설계에 사용</li>
+    </ul>
+</div>
+
+<h2>4. Clock Skew and Timing Equations</h2>
+
+<p class="en">Remember the setup and hold equations from Days 11 and 12? Clock skew modifies both:</p>
+<p class="ko" style="display:none;">11일과 12일에서 배운 셋업 및 홀드 방정식을 기억하시나요? 클럭 스큐는 두 가지 모두 수정합니다:</p>
+
+<div class="concept-box">
+    <h3>⏱ Setup Time with Skew</h3>
+    <p class="en">The data must arrive at FF2 before the clock edge at FF2:</p>
+    <p class="ko" style="display:none;">데이터는 FF2에서의 클럭 에지 전에 FF2에 도달해야 합니다:</p>
+    <pre><code><span class="comment">// Setup constraint (must satisfy):</span>
+<span class="signal">t_clk_period</span> + <span class="signal">t_skew</span> ≥ <span class="signal">t_cq</span> + <span class="signal">t_comb</span> + <span class="signal">t_setup</span>
+
+<span class="comment">// Rearranged — maximum combinational delay:</span>
+<span class="signal">t_comb_max</span> ≤ <span class="signal">t_clk_period</span> + <span class="signal">t_skew</span> - <span class="signal">t_cq</span> - <span class="signal">t_setup</span>
+
+<span class="comment">// Positive skew → MORE time for combinational logic (helpful!)</span>
+<span class="comment">// Negative skew → LESS time for combinational logic (harmful!)</span></code></pre>
+</div>
+
+<div class="warning-box">
+    <h3>⚠️ Hold Time with Skew</h3>
+    <p class="en">This is where positive skew becomes <strong>dangerous</strong>:</p>
+    <p class="ko" style="display:none;">양의 스큐가 <strong>위험</strong>해지는 부분입니다:</p>
+    <pre><code><span class="comment">// Hold constraint (must satisfy):</span>
+<span class="signal">t_cq</span> + <span class="signal">t_comb</span> ≥ <span class="signal">t_hold</span> + <span class="signal">t_skew</span>
+
+<span class="comment">// Rearranged — minimum combinational delay:</span>
+<span class="signal">t_comb_min</span> ≥ <span class="signal">t_hold</span> + <span class="signal">t_skew</span> - <span class="signal">t_cq</span>
+
+<span class="comment">// Positive skew → need MORE combinational delay (harder to meet!)</span>
+<span class="comment">// Negative skew → need LESS combinational delay (easier to meet!)</span></code></pre>
+    <p class="en"><strong>Key insight:</strong> Hold violations from skew <em>cannot be fixed by slowing the clock</em>. They are frequency-independent! This is why hold violations are more critical.</p>
+    <p class="ko" style="display:none;"><strong>핵심 통찰:</strong> 스큐로 인한 홀드 위반은 <em>클럭을 느리게 해도 고칠 수 없습니다</em>. 주파수와 무관합니다! 이것이 홀드 위반이 더 치명적인 이유입니다.</p>
+</div>
+
+<h2>5. Worked Example</h2>
+
+<p class="en">Let's trace through a concrete timing scenario:</p>
+<p class="ko" style="display:none;">구체적인 타이밍 시나리오를 추적해봅시다:</p>
+
+<div class="concept-box">
+    <h3>📊 Example Circuit Parameters</h3>
+    <pre><code><span class="comment">// Given:</span>
+<span class="signal">Clock period</span>    = <span class="number">5 ns</span> (200 MHz)
+<span class="signal">t_cq</span>            = <span class="number">0.3 ns</span>
+<span class="signal">t_setup</span>         = <span class="number">0.2 ns</span>
+<span class="signal">t_hold</span>          = <span class="number">0.1 ns</span>
+<span class="signal">t_comb</span>          = <span class="number">2.0 ns</span>
+<span class="signal">Clock skew</span>      = <span class="number">+0.5 ns</span> (positive — FF2 gets clock late)
+
+<span class="comment">// ─── Setup Check ───</span>
+<span class="signal">Required:</span> t_clk + t_skew ≥ t_cq + t_comb + t_setup
+           <span class="number">5.0</span> + <span class="number">0.5</span> ≥ <span class="number">0.3</span> + <span class="number">2.0</span> + <span class="number">0.2</span>
+           <span class="number">5.5</span> ≥ <span class="number">2.5</span>  ✅ <span class="signal">PASS</span> (slack = 3.0 ns)
+
+<span class="comment">// ─── Hold Check ───</span>
+<span class="signal">Required:</span> t_cq + t_comb ≥ t_hold + t_skew
+           <span class="number">0.3</span> + <span class="number">2.0</span> ≥ <span class="number">0.1</span> + <span class="number">0.5</span>
+           <span class="number">2.3</span> ≥ <span class="number">0.6</span>  ✅ <span class="signal">PASS</span> (slack = 1.7 ns)</code></pre>
+    <p class="en">Now what if the combinational path is very short (e.g., direct wire from FF1 to FF2)?</p>
+    <p class="ko" style="display:none;">조합 경로가 매우 짧다면 어떻게 될까요? (예: FF1에서 FF2로 직접 와이어)</p>
+    <pre><code><span class="signal">t_comb</span> = <span class="number">0.0 ns</span> (direct connection!)
+
+<span class="comment">// Hold Check:</span>
+<span class="number">0.3</span> + <span class="number">0.0</span> ≥ <span class="number">0.1</span> + <span class="number">0.5</span>
+<span class="number">0.3</span> ≥ <span class="number">0.6</span>  ❌ <span class="keyword">FAIL!</span> (slack = -0.3 ns)
+
+<span class="comment">// The new data arrives at FF2 BEFORE the old data is captured!</span>
+<span class="comment">// Fix: Insert delay buffers to add ≥ 0.3 ns of path delay</span></code></pre>
+</div>
+
+<h2>6. Fixing Clock Skew Issues</h2>
+
+<table class="comparison-table">
+    <tr>
+        <th class="en">Fix</th>
+        <th class="ko" style="display:none;">해결책</th>
+        <th class="en">When to Use</th>
+        <th class="ko" style="display:none;">사용 시기</th>
+        <th class="en">Trade-off</th>
+        <th class="ko" style="display:none;">트레이드오프</th>
+    </tr>
+    <tr>
+        <td><strong>Clock Tree Synthesis (CTS)</strong></td>
+        <td class="en">Always — first line of defense</td>
+        <td class="ko" style="display:none;">항상 — 첫 번째 방어선</td>
+        <td class="en">Adds area and power for clock buffers</td>
+        <td class="ko" style="display:none;">클럭 버퍼를 위한 면적과 전력 추가</td>
+    </tr>
+    <tr>
+        <td><strong>Buffer Insertion (Hold Fix)</strong></td>
+        <td class="en">When hold violations exist on short paths</td>
+        <td class="ko" style="display:none;">짧은 경로에 홀드 위반이 있을 때</td>
+        <td class="en">Adds a tiny amount of delay and area</td>
+        <td class="ko" style="display:none;">약간의 지연과 면적 추가</td>
+    </tr>
+    <tr>
+        <td><strong>Useful Skew</strong></td>
+        <td class="en">Intentionally skew clock to help critical setup paths</td>
+        <td class="ko" style="display:none;">의도적으로 클럭 스큐를 적용해 셋업 경로 도움</td>
+        <td class="en">Must check hold paths carefully</td>
+        <td class="ko" style="display:none;">홀드 경로를 신중히 확인해야 함</td>
+    </tr>
+    <tr>
+        <td><strong>Clock Mesh</strong></td>
+        <td class="en">High-performance designs needing minimal skew</td>
+        <td class="ko" style="display:none;">최소 스큐가 필요한 고성능 설계</td>
+        <td class="en">Significant power overhead</td>
+        <td class="ko" style="display:none;">상당한 전력 오버헤드</td>
+    </tr>
+</table>
+
+<h2>7. Useful Skew — Intentional Clock Skew</h2>
+
+<p class="en">Sometimes engineers <strong>intentionally add skew</strong> to help timing. If Path A is the critical setup path and has negative slack, you can delay the clock to FF2 (positive skew) to borrow time from the next stage.</p>
+<p class="ko" style="display:none;">때로는 엔지니어가 타이밍을 돕기 위해 <strong>의도적으로 스큐를 추가</strong>합니다. Path A가 셋업의 크리티컬 패스이고 음의 슬랙이 있다면, FF2의 클럭을 지연시켜(양의 스큐) 다음 단계에서 시간을 빌릴 수 있습니다.</p>
+
+<div class="diagram-box">
+<pre style="background:none;border:none;padding:0;margin:0;text-align:left;color:#3d405b;">
+Without useful skew:
+  FF1 ──[4.8ns path]──> FF2 ──[2.0ns path]──> FF3
+  Period = 5ns          Period = 5ns
+  Slack = -0.1ns ❌     Slack = +2.8ns ✅
+
+With useful skew (+0.5ns on FF2):
+  FF1 ──[4.8ns path]──> FF2 ──[2.0ns path]──> FF3
+  Period = 5.5ns        Period = 4.5ns
+  Slack = +0.4ns ✅     Slack = +2.3ns ✅
+
+  "Borrowed" 0.5ns from the relaxed path!
+</pre>
+</div>
+
+<div class="tip-box">
+    <h3>💡 Interview Tip</h3>
+    <p class="en">When asked "Can you increase clock frequency by adding skew?" — the answer is <strong>YES, with useful skew</strong>. But emphasize that it's a <strong>zero-sum game</strong>: you borrow time from one stage and give it to another. Total cycle time doesn't change. And you must re-verify hold timing!</p>
+    <p class="ko" style="display:none;">"스큐를 추가하면 클럭 주파수를 높일 수 있나요?"라는 질문에 — 답은 <strong>네, 유용한 스큐로 가능합니다</strong>. 하지만 이것이 <strong>제로섬 게임</strong>임을 강조하세요: 한 단계에서 시간을 빌려 다른 단계에 줍니다. 총 사이클 시간은 변하지 않습니다. 그리고 홀드 타이밍을 재검증해야 합니다!</p>
+</div>
+
+<h2>8. Clock Skew vs Clock Jitter</h2>
+
+<p class="en">These are often confused — know the difference!</p>
+<p class="ko" style="display:none;">이 두 개념은 자주 혼동됩니다 — 차이를 알아두세요!</p>
+
+<table class="comparison-table">
+    <tr>
+        <th>Property</th>
+        <th>Clock Skew</th>
+        <th>Clock Jitter</th>
+    </tr>
+    <tr>
+        <td class="en"><strong>Definition</strong></td>
+        <td class="en">Spatial — different arrival times at different flip-flops in the <em>same</em> cycle</td>
+        <td class="en">Temporal — variation in clock period from <em>cycle to cycle</em> at the same flip-flop</td>
+    </tr>
+    <tr class="ko" style="display:none;">
+        <td><strong>정의</strong></td>
+        <td>공간적 — <em>같은</em> 사이클에서 다른 플립플롭에 다른 도달 시간</td>
+        <td>시간적 — 같은 플립플롭에서 <em>사이클마다</em> 클럭 주기 변동</td>
+    </tr>
+    <tr>
+        <td><strong>Predictable?</strong></td>
+        <td class="en">Mostly yes — deterministic based on physical layout</td>
+        <td class="en">No — random variation from PLL, noise, power supply</td>
+    </tr>
+    <tr class="ko" style="display:none;">
+        <td><strong>예측 가능?</strong></td>
+        <td>대부분 예 — 물리적 레이아웃 기반 결정적</td>
+        <td>아니오 — PLL, 노이즈, 전원 공급의 무작위 변동</td>
+    </tr>
+    <tr>
+        <td class="en"><strong>Affects</strong></td>
+        <td class="en">Both setup and hold</td>
+        <td class="en">Mainly setup (reduces effective period)</td>
+    </tr>
+    <tr class="ko" style="display:none;">
+        <td><strong>영향</strong></td>
+        <td>셋업과 홀드 모두</td>
+        <td>주로 셋업 (유효 주기 감소)</td>
+    </tr>
+    <tr>
+        <td class="en"><strong>Fix</strong></td>
+        <td class="en">Better clock tree (CTS)</td>
+        <td class="en">Better PLL, power supply filtering</td>
+    </tr>
+    <tr class="ko" style="display:none;">
+        <td><strong>해결</strong></td>
+        <td>더 나은 클럭 트리 (CTS)</td>
+        <td>더 나은 PLL, 전원 공급 필터링</td>
+    </tr>
+</table>
+
+<h2>9. Key Takeaways</h2>
+
+<div class="concept-box">
+    <h3>🎯 Remember These</h3>
+    <ol>
+        <li class="en"><strong>Clock skew</strong> = arrival time difference of the same clock edge at two flip-flops</li>
+        <li class="ko" style="display:none;"><strong>클럭 스큐</strong> = 같은 클럭 에지의 두 플립플롭 도달 시간 차이</li>
+        <li class="en"><strong>Positive skew helps setup, hurts hold</strong> — and vice versa for negative skew</li>
+        <li class="ko" style="display:none;"><strong>양의 스큐는 셋업에 유리, 홀드에 불리</strong> — 음의 스큐는 반대</li>
+        <li class="en"><strong>Hold violations are frequency-independent</strong> — can't fix by slowing the clock!</li>
+        <li class="ko" style="display:none;"><strong>홀드 위반은 주파수와 무관</strong> — 클럭을 느리게 해도 고칠 수 없음!</li>
+        <li class="en"><strong>CTS (Clock Tree Synthesis)</strong> is the primary tool to minimize skew</li>
+        <li class="ko" style="display:none;"><strong>CTS (클럭 트리 합성)</strong>가 스큐를 최소화하는 주요 도구</li>
+        <li class="en"><strong>Useful skew</strong> is intentional — borrows time from relaxed paths</li>
+        <li class="ko" style="display:none;"><strong>유용한 스큐</strong>는 의도적 — 여유 있는 경로에서 시간을 빌림</li>
+        <li class="en"><strong>Skew ≠ Jitter</strong> — skew is spatial, jitter is temporal</li>
+        <li class="ko" style="display:none;"><strong>스큐 ≠ 지터</strong> — 스큐는 공간적, 지터는 시간적</li>
+    </ol>
+</div>
+
+<div class="nav-links">
+    <a href="day-13-quiz.html">📝 Take the Quiz →</a>
+    <a href="day-13-practice.html">🔧 Practice Exercise →</a>
+</div>
+
+<script>
+let isKorean = false;
+function toggleLang() {
+    isKorean = !isKorean;
+    document.querySelectorAll('.en').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'none' : 'revert', 'important');
+    });
+    document.querySelectorAll('.ko').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'revert' : 'none', 'important');
+    });
+    document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+}
+</script>
+
+</body>
+</html>

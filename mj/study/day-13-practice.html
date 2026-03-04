@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 13 Practice: Clock Skew Analysis</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    background: linear-gradient(135deg, #fefae0 0%, #faedcd 100%);
+    color: #3d405b;
+    line-height: 1.8;
+    padding: 24px;
+    max-width: 920px;
+    margin: 0 auto;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+h1 { color: #5d4037; border-bottom: 3px solid #c4a77d; padding-bottom: 12px; margin: 24px 0 16px; font-size: 2em; }
+h2 { color: #588157; border-bottom: 2px solid #a3b18a; padding-bottom: 8px; margin: 28px 0 14px; font-size: 1.5em; }
+h3 { color: #5d4037; margin: 20px 0 10px; }
+p { margin: 10px 0; }
+ul, ol { margin: 10px 0 10px 24px; }
+li { margin: 4px 0; }
+pre {
+    background: #2d3436;
+    padding: 24px;
+    border-radius: 12px;
+    margin: 24px 0;
+    border: 3px solid #a3b18a;
+    overflow-x: auto;
+    font-size: 15px;
+    line-height: 1.6;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+    color: #f8f8f2;
+}
+code {
+    background: #e9f5db;
+    color: #3d405b;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+}
+pre code { background: none; color: inherit; padding: 0; }
+.keyword { color: #ff79c6; font-weight: 600; }
+.type { color: #8be9fd; }
+.signal { color: #50fa7b; }
+.number { color: #ffb86c; }
+.comment { color: #6272a4; font-style: italic; }
+.string { color: #f1fa8c; }
+.concept-box {
+    background: #fff8f0;
+    border: 2px solid #c4a77d;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    color: #3d405b;
+}
+.concept-box h3 { color: #5d4037; margin-bottom: 12px; }
+.warning-box {
+    background: #fff8f0;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    border-left: 4px solid #ef4444;
+    color: #3d405b;
+}
+.warning-box h3 { color: #c53030; margin-bottom: 12px; }
+.tip-box {
+    background: #fff8f0;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    border-left: 4px solid #588157;
+    color: #3d405b;
+}
+.hint-box {
+    background: #fff8f0;
+    border-radius: 8px;
+    padding: 15px;
+    margin: 15px 0;
+    border-left: 4px solid #5d4037;
+    color: #3d405b;
+}
+.nav-links { display: flex; gap: 12px; margin: 20px 0; flex-wrap: wrap; }
+.nav-links a {
+    background: linear-gradient(135deg, #588157, #3a5a40);
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 24px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14px;
+}
+.nav-links a:hover { opacity: 0.9; }
+.lang-toggle {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    background: #588157;
+    border: none;
+    border-radius: 24px;
+    padding: 10px 20px;
+    cursor: pointer;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    z-index: 1000;
+}
+.lang-toggle:hover { background: #3a5a40; }
+.ko { display: none; }
+.exercise {
+    background: #fff;
+    border: 2px solid #a3b18a;
+    border-radius: 12px;
+    padding: 24px;
+    margin: 24px 0;
+}
+.exercise h3 { color: #588157; }
+.reveal-btn {
+    background: linear-gradient(135deg, #588157, #3a5a40);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-weight: 600;
+    margin: 10px 0;
+}
+.reveal-btn:hover { opacity: 0.9; }
+.solution { display: none; margin-top: 16px; }
+.comparison-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+.comparison-table th {
+    background: #588157;
+    color: white;
+    padding: 12px;
+    text-align: left;
+}
+.comparison-table td {
+    background: #fff;
+    border: 1px solid #c4a77d;
+    padding: 12px;
+    color: #3d405b;
+}
+.comparison-table tr:nth-child(even) td { background: #fff8f0; }
+input[type="text"], input[type="number"] {
+    border: 2px solid #a3b18a;
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 16px;
+    width: 120px;
+    font-family: 'SF Mono', monospace;
+    color: #3d405b;
+    background: #fff;
+}
+input:focus { outline: none; border-color: #588157; }
+.check-btn {
+    background: #588157;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 16px;
+    cursor: pointer;
+    font-weight: 600;
+    margin-left: 8px;
+}
+.result { font-weight: 600; margin-left: 8px; }
+.result.correct { color: #10b981; }
+.result.wrong { color: #ef4444; }
+@media (max-width: 768px) {
+    body { padding: 16px; }
+    h1 { font-size: 1.8em; }
+    pre { font-size: 14px; padding: 16px; }
+    .lang-toggle { padding: 8px 16px; font-size: 13px; }
+}
+</style>
+</head>
+<body>
+
+<button class="lang-toggle" onclick="toggleLang()">한국어</button>
+
+<h1>🔧 Day 13 Practice: Clock Skew Analysis</h1>
+
+<div class="nav-links">
+    <a href="day-13-lesson.html">📖 Lesson</a>
+    <a href="day-13-quiz.html">📝 Quiz</a>
+</div>
+
+<p class="en">Work through these exercises to build intuition about clock skew's impact on setup and hold timing.</p>
+<p class="ko" style="display:none;">이 연습을 통해 클럭 스큐가 셋업과 홀드 타이밍에 미치는 영향에 대한 직관을 키우세요.</p>
+
+<!-- Exercise 1 -->
+<div class="exercise">
+    <h3>Exercise 1: Setup & Hold Analysis with Skew</h3>
+    <p class="en">Given the following circuit parameters, determine if setup and hold constraints are met:</p>
+    <p class="ko" style="display:none;">다음 회로 매개변수가 주어졌을 때, 셋업과 홀드 제약이 충족되는지 판단하세요:</p>
+    <pre><code><span class="comment">// Circuit parameters:</span>
+<span class="signal">Clock period</span>   = <span class="number">8 ns</span>
+<span class="signal">t_cq</span>           = <span class="number">0.4 ns</span>
+<span class="signal">t_setup</span>        = <span class="number">0.3 ns</span>
+<span class="signal">t_hold</span>         = <span class="number">0.15 ns</span>
+<span class="signal">t_comb</span>         = <span class="number">6.5 ns</span>
+<span class="signal">Clock skew</span>     = <span class="number">+0.3 ns</span></code></pre>
+
+    <p><strong>a)</strong> <span class="en">Setup slack = </span><span class="ko" style="display:none;">셋업 슬랙 = </span>
+        <input type="text" id="ex1a" placeholder="? ns"> ns
+        <button class="check-btn" onclick="checkAns('ex1a','1.1')">Check</button>
+        <span class="result" id="ex1a-r"></span>
+    </p>
+    <p><strong>b)</strong> <span class="en">Hold slack = </span><span class="ko" style="display:none;">홀드 슬랙 = </span>
+        <input type="text" id="ex1b" placeholder="? ns"> ns
+        <button class="check-btn" onclick="checkAns('ex1b','6.45')">Check</button>
+        <span class="result" id="ex1b-r"></span>
+    </p>
+
+    <div class="hint-box">
+        <strong>💡 Hint:</strong>
+        <span class="en">Setup slack = (t_clk + t_skew) − (t_cq + t_comb + t_setup). Hold slack = (t_cq + t_comb) − (t_hold + t_skew).</span>
+        <span class="ko" style="display:none;">셋업 슬랙 = (t_clk + t_skew) − (t_cq + t_comb + t_setup). 홀드 슬랙 = (t_cq + t_comb) − (t_hold + t_skew).</span>
+    </div>
+
+    <button class="reveal-btn" onclick="this.nextElementSibling.style.display='block'">Show Solution / 풀이 보기</button>
+    <div class="solution">
+        <pre><code><span class="comment">// Setup check:</span>
+<span class="signal">Setup slack</span> = (t_clk + t_skew) - (t_cq + t_comb + t_setup)
+           = (<span class="number">8.0</span> + <span class="number">0.3</span>) - (<span class="number">0.4</span> + <span class="number">6.5</span> + <span class="number">0.3</span>)
+           = <span class="number">8.3</span> - <span class="number">7.2</span>
+           = <span class="number">+1.1 ns</span> ✅ <span class="signal">PASS</span>
+
+<span class="comment">// Hold check:</span>
+<span class="signal">Hold slack</span> = (t_cq + t_comb) - (t_hold + t_skew)
+           = (<span class="number">0.4</span> + <span class="number">6.5</span>) - (<span class="number">0.15</span> + <span class="number">0.3</span>)
+           = <span class="number">6.9</span> - <span class="number">0.45</span>
+           = <span class="number">+6.45 ns</span> ✅ <span class="signal">PASS</span></code></pre>
+    </div>
+</div>
+
+<!-- Exercise 2 -->
+<div class="exercise">
+    <h3>Exercise 2: Finding the Maximum Safe Skew</h3>
+    <p class="en">A path has these parameters. What is the <strong>maximum positive skew</strong> that won't cause a hold violation?</p>
+    <p class="ko" style="display:none;">경로의 매개변수입니다. 홀드 위반을 일으키지 않는 <strong>최대 양의 스큐</strong>는 얼마인가요?</p>
+    <pre><code><span class="signal">t_cq</span>   = <span class="number">0.25 ns</span>
+<span class="signal">t_hold</span> = <span class="number">0.1 ns</span>
+<span class="signal">t_comb</span> = <span class="number">0.5 ns</span> <span class="comment">(short path — nearly direct connection)</span></code></pre>
+
+    <p><span class="en">Max safe skew = </span><span class="ko" style="display:none;">최대 안전 스큐 = </span>
+        <input type="text" id="ex2" placeholder="? ns"> ns
+        <button class="check-btn" onclick="checkAns('ex2','0.65')">Check</button>
+        <span class="result" id="ex2-r"></span>
+    </p>
+
+    <div class="hint-box">
+        <strong>💡 Hint:</strong>
+        <span class="en">At the hold limit: t_cq + t_comb = t_hold + t_skew_max. Solve for t_skew_max.</span>
+        <span class="ko" style="display:none;">홀드 한계에서: t_cq + t_comb = t_hold + t_skew_max. t_skew_max를 구하세요.</span>
+    </div>
+
+    <button class="reveal-btn" onclick="this.nextElementSibling.style.display='block'">Show Solution / 풀이 보기</button>
+    <div class="solution">
+        <pre><code><span class="comment">// At hold limit (slack = 0):</span>
+<span class="signal">t_cq + t_comb</span> = <span class="signal">t_hold + t_skew_max</span>
+<span class="number">0.25</span> + <span class="number">0.5</span> = <span class="number">0.1</span> + <span class="signal">t_skew_max</span>
+<span class="signal">t_skew_max</span> = <span class="number">0.75</span> - <span class="number">0.1</span> = <span class="number">0.65 ns</span>
+
+<span class="comment">// Any skew > 0.65 ns causes hold violation!</span>
+<span class="comment">// This is why short paths near clock tree imbalances are dangerous</span></code></pre>
+    </div>
+</div>
+
+<!-- Exercise 3 -->
+<div class="exercise">
+    <h3>Exercise 3: Useful Skew Application</h3>
+    <p class="en">You have a two-stage pipeline. Stage 1 is critical (setup failing), Stage 2 has plenty of slack. Calculate the optimal useful skew.</p>
+    <p class="ko" style="display:none;">2단계 파이프라인이 있습니다. 1단계는 크리티컬(셋업 실패), 2단계는 충분한 슬랙을 가집니다. 최적의 유용한 스큐를 계산하세요.</p>
+    <pre><code><span class="signal">Clock period</span> = <span class="number">4 ns</span>
+<span class="signal">t_cq</span>         = <span class="number">0.2 ns</span>
+<span class="signal">t_setup</span>      = <span class="number">0.15 ns</span>
+<span class="signal">t_hold</span>       = <span class="number">0.1 ns</span>
+
+<span class="comment">// Stage 1: FF_A → [comb1] → FF_B</span>
+<span class="signal">t_comb1</span>      = <span class="number">4.2 ns</span>  <span class="comment">// Too long! Violates setup</span>
+
+<span class="comment">// Stage 2: FF_B → [comb2] → FF_C</span>
+<span class="signal">t_comb2</span>      = <span class="number">2.0 ns</span>  <span class="comment">// Plenty of slack</span>
+
+<span class="comment">// Shortest path from FF_A to FF_B:</span>
+<span class="signal">t_comb1_min</span> = <span class="number">0.3 ns</span></code></pre>
+
+    <p><strong>a)</strong> <span class="en">Stage 1 setup slack (no skew) = </span><span class="ko" style="display:none;">1단계 셋업 슬랙 (스큐 없음) = </span>
+        <input type="text" id="ex3a" placeholder="? ns"> ns
+        <button class="check-btn" onclick="checkAns('ex3a','-0.55')">Check</button>
+        <span class="result" id="ex3a-r"></span>
+    </p>
+    <p><strong>b)</strong> <span class="en">How much useful skew on FF_B to fix Stage 1? (minimum) = </span><span class="ko" style="display:none;">1단계를 수정하기 위한 FF_B의 유용한 스큐 (최소) = </span>
+        <input type="text" id="ex3b" placeholder="? ns"> ns
+        <button class="check-btn" onclick="checkAns('ex3b','0.55')">Check</button>
+        <span class="result" id="ex3b-r"></span>
+    </p>
+    <p><strong>c)</strong> <span class="en">With 0.6ns useful skew on FF_B, does the hold check on Stage 1's shortest path pass? </span><span class="ko" style="display:none;">FF_B에 0.6ns 유용한 스큐 적용 시, 1단계 최단 경로의 홀드 검사는 통과하나요? </span>
+        <input type="text" id="ex3c" placeholder="yes/no">
+        <button class="check-btn" onclick="checkAnsText('ex3c','yes')">Check</button>
+        <span class="result" id="ex3c-r"></span>
+    </p>
+
+    <button class="reveal-btn" onclick="this.nextElementSibling.style.display='block'">Show Solution / 풀이 보기</button>
+    <div class="solution">
+        <pre><code><span class="comment">// a) Stage 1 setup slack (no skew):</span>
+<span class="signal">slack</span> = t_clk - (t_cq + t_comb1 + t_setup)
+     = <span class="number">4.0</span> - (<span class="number">0.2</span> + <span class="number">4.2</span> + <span class="number">0.15</span>)
+     = <span class="number">4.0</span> - <span class="number">4.55</span> = <span class="number">-0.55 ns</span> ❌ <span class="keyword">FAIL!</span>
+
+<span class="comment">// b) Need skew ≥ 0.55 ns to make slack ≥ 0</span>
+<span class="comment">// Setup: t_clk + t_skew ≥ t_cq + t_comb + t_setup</span>
+<span class="comment">//   4.0 + t_skew ≥ 4.55</span>
+<span class="comment">//   t_skew ≥ 0.55 ns</span>
+
+<span class="comment">// c) With 0.6ns useful skew, hold check on shortest path:</span>
+<span class="signal">Hold slack</span> = (t_cq + t_comb1_min) - (t_hold + t_skew)
+           = (<span class="number">0.2</span> + <span class="number">0.3</span>) - (<span class="number">0.1</span> + <span class="number">0.6</span>)
+           = <span class="number">0.5</span> - <span class="number">0.7</span> = <span class="number">-0.2 ns</span>
+
+<span class="comment">// Wait — HOLD VIOLATION! The answer is actually NO.</span>
+<span class="comment">// But the max path hold slack:</span>
+<span class="signal">Hold slack (max path)</span> = (<span class="number">0.2</span> + <span class="number">0.3</span>) - (<span class="number">0.1</span> + <span class="number">0.6</span>) = <span class="number">-0.2 ns</span> ❌
+
+<span class="comment">// Hmm, let me reconsider...</span>
+<span class="comment">// t_cq + t_comb_min = 0.2 + 0.3 = 0.5 ns</span>
+<span class="comment">// t_hold + t_skew = 0.1 + 0.6 = 0.7 ns</span>
+<span class="comment">// 0.5 < 0.7 → HOLD VIOLATION!</span>
+<span class="comment">// Need to insert 0.2ns delay buffer on shortest path</span></code></pre>
+
+        <div class="warning-box">
+            <h3>⚠️ Trick Question!</h3>
+            <p class="en">The hold check actually <strong>fails</strong>! This demonstrates why useful skew must be applied carefully — you must check hold timing on ALL paths, especially the shortest ones. A 0.2ns delay buffer would fix this.</p>
+            <p class="ko" style="display:none;">홀드 검사가 실제로 <strong>실패</strong>합니다! 이것은 유용한 스큐를 신중하게 적용해야 하는 이유를 보여줍니다 — 모든 경로, 특히 최단 경로의 홀드 타이밍을 검사해야 합니다. 0.2ns 지연 버퍼로 이를 수정할 수 있습니다.</p>
+        </div>
+    </div>
+</div>
+
+<!-- Exercise 4 -->
+<div class="exercise">
+    <h3>Exercise 4: Skew Impact Table</h3>
+    <p class="en">Fill in the table: for each scenario, determine the effect on setup and hold slack compared to zero-skew.</p>
+    <p class="ko" style="display:none;">표를 채우세요: 각 시나리오에서 스큐 없음 대비 셋업과 홀드 슬랙에 미치는 영향을 판단하세요.</p>
+
+    <table class="comparison-table">
+        <tr>
+            <th>Scenario</th>
+            <th>Setup Slack</th>
+            <th>Hold Slack</th>
+        </tr>
+        <tr>
+            <td>Positive skew (+0.3ns)</td>
+            <td>
+                <select id="ex4a" style="padding:8px;border-radius:6px;border:2px solid #a3b18a;">
+                    <option value="">Select...</option>
+                    <option value="better">Better (↑)</option>
+                    <option value="worse">Worse (↓)</option>
+                    <option value="same">Same (→)</option>
+                </select>
+            </td>
+            <td>
+                <select id="ex4b" style="padding:8px;border-radius:6px;border:2px solid #a3b18a;">
+                    <option value="">Select...</option>
+                    <option value="better">Better (↑)</option>
+                    <option value="worse">Worse (↓)</option>
+                    <option value="same">Same (→)</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>Negative skew (−0.3ns)</td>
+            <td>
+                <select id="ex4c" style="padding:8px;border-radius:6px;border:2px solid #a3b18a;">
+                    <option value="">Select...</option>
+                    <option value="better">Better (↑)</option>
+                    <option value="worse">Worse (↓)</option>
+                    <option value="same">Same (→)</option>
+                </select>
+            </td>
+            <td>
+                <select id="ex4d" style="padding:8px;border-radius:6px;border:2px solid #a3b18a;">
+                    <option value="">Select...</option>
+                    <option value="better">Better (↑)</option>
+                    <option value="worse">Worse (↓)</option>
+                    <option value="same">Same (→)</option>
+                </select>
+            </td>
+        </tr>
+    </table>
+    <button class="check-btn" onclick="checkEx4()" style="margin-left:0;">Check All / 확인</button>
+    <span class="result" id="ex4-r"></span>
+
+    <button class="reveal-btn" onclick="this.nextElementSibling.style.display='block'" style="margin-top:12px;">Show Solution / 풀이 보기</button>
+    <div class="solution">
+        <div class="concept-box">
+            <p class="en"><strong>Positive skew:</strong> Setup = Better ↑ (more time), Hold = Worse ↓ (less margin)</p>
+            <p class="ko" style="display:none;"><strong>양의 스큐:</strong> 셋업 = 개선 ↑ (더 많은 시간), 홀드 = 악화 ↓ (적은 마진)</p>
+            <p class="en"><strong>Negative skew:</strong> Setup = Worse ↓ (less time), Hold = Better ↑ (more margin)</p>
+            <p class="ko" style="display:none;"><strong>음의 스큐:</strong> 셋업 = 악화 ↓ (적은 시간), 홀드 = 개선 ↑ (더 많은 마진)</p>
+            <p class="en">Remember: skew adds to one side and subtracts from the other — it's always a tradeoff!</p>
+            <p class="ko" style="display:none;">기억하세요: 스큐는 한 쪽에 더하고 다른 쪽에서 빼는 것입니다 — 항상 트레이드오프입니다!</p>
+        </div>
+    </div>
+</div>
+
+<!-- Exercise 5 -->
+<div class="exercise">
+    <h3>Exercise 5: Multi-Path Skew Analysis</h3>
+    <p class="en">A chip has three paths between flip-flops with the following clock arrival times. Identify which paths have potential hold violations.</p>
+    <p class="ko" style="display:none;">칩에 다음 클럭 도달 시간을 가진 세 개의 경로가 있습니다. 잠재적 홀드 위반이 있는 경로를 식별하세요.</p>
+
+    <pre><code><span class="comment">// Common parameters:</span>
+<span class="signal">t_cq</span>   = <span class="number">0.2 ns</span>,  <span class="signal">t_hold</span> = <span class="number">0.1 ns</span>
+
+<span class="comment">// Path A: FF1 → FF2</span>
+<span class="signal">t_clk→FF1</span> = <span class="number">1.0 ns</span>,  <span class="signal">t_clk→FF2</span> = <span class="number">1.8 ns</span>
+<span class="signal">t_comb_min</span> = <span class="number">0.5 ns</span>
+
+<span class="comment">// Path B: FF3 → FF4</span>
+<span class="signal">t_clk→FF3</span> = <span class="number">1.2 ns</span>,  <span class="signal">t_clk→FF4</span> = <span class="number">1.1 ns</span>
+<span class="signal">t_comb_min</span> = <span class="number">0.1 ns</span>
+
+<span class="comment">// Path C: FF5 → FF6</span>
+<span class="signal">t_clk→FF5</span> = <span class="number">0.8 ns</span>,  <span class="signal">t_clk→FF6</span> = <span class="number">1.5 ns</span>
+<span class="signal">t_comb_min</span> = <span class="number">0.2 ns</span></code></pre>
+
+    <p class="en">Which paths have hold violations? (Enter A, B, C, or combinations like AC)</p>
+    <p class="ko" style="display:none;">어떤 경로에 홀드 위반이 있나요? (A, B, C 또는 AC 같은 조합 입력)</p>
+    <input type="text" id="ex5" placeholder="e.g. AC" style="width:80px;">
+    <button class="check-btn" onclick="checkAnsText('ex5','C')">Check</button>
+    <span class="result" id="ex5-r"></span>
+
+    <button class="reveal-btn" onclick="this.nextElementSibling.style.display='block'">Show Solution / 풀이 보기</button>
+    <div class="solution">
+        <pre><code><span class="comment">// Path A: skew = 1.8 - 1.0 = +0.8 ns</span>
+<span class="signal">Hold slack</span> = (0.2 + 0.5) - (0.1 + 0.8) = 0.7 - 0.9 = <span class="number">-0.2 ns</span> ❌
+
+<span class="comment">// Wait — Path A also fails!</span>
+<span class="comment">// Path B: skew = 1.1 - 1.2 = -0.1 ns</span>
+<span class="signal">Hold slack</span> = (0.2 + 0.1) - (0.1 + (-0.1)) = 0.3 - 0.0 = <span class="number">+0.3 ns</span> ✅
+
+<span class="comment">// Path C: skew = 1.5 - 0.8 = +0.7 ns</span>
+<span class="signal">Hold slack</span> = (0.2 + 0.2) - (0.1 + 0.7) = 0.4 - 0.8 = <span class="number">-0.4 ns</span> ❌
+
+<span class="comment">// Both A and C have hold violations!</span>
+<span class="comment">// Path A needs ≥ 0.2ns delay buffer</span>
+<span class="comment">// Path C needs ≥ 0.4ns delay buffer</span></code></pre>
+        <div class="warning-box">
+            <h3>⚠️ Correction</h3>
+            <p class="en">Both paths A and C fail hold timing! Large positive skew on short paths is the classic hold violation pattern. The correct answer is <strong>AC</strong>.</p>
+            <p class="ko" style="display:none;">경로 A와 C 모두 홀드 타이밍에 실패합니다! 짧은 경로에 대한 큰 양의 스큐는 전형적인 홀드 위반 패턴입니다. 정답은 <strong>AC</strong>입니다.</p>
+        </div>
+    </div>
+</div>
+
+<div class="tip-box">
+    <h3>🎯 Practice Summary</h3>
+    <p class="en">Key skills practiced today:</p>
+    <p class="ko" style="display:none;">오늘 연습한 핵심 기술:</p>
+    <ol>
+        <li class="en">Calculating setup and hold slack with skew</li>
+        <li class="ko" style="display:none;">스큐를 포함한 셋업과 홀드 슬랙 계산</li>
+        <li class="en">Finding maximum safe skew for a path</li>
+        <li class="ko" style="display:none;">경로에 대한 최대 안전 스큐 찾기</li>
+        <li class="en">Applying and verifying useful skew</li>
+        <li class="ko" style="display:none;">유용한 스큐 적용 및 검증</li>
+        <li class="en">Identifying hold-vulnerable paths in multi-path designs</li>
+        <li class="ko" style="display:none;">다중 경로 설계에서 홀드 취약 경로 식별</li>
+    </ol>
+</div>
+
+<div class="nav-links" style="margin-top:24px;">
+    <a href="day-13-lesson.html">📖 Review Lesson</a>
+    <a href="day-13-quiz.html">📝 Take Quiz</a>
+</div>
+
+<script>
+let isKorean = false;
+function toggleLang() {
+    isKorean = !isKorean;
+    document.querySelectorAll('.en').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'none' : 'revert', 'important');
+    });
+    document.querySelectorAll('.ko').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'revert' : 'none', 'important');
+    });
+    document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+}
+
+function checkAns(id, expected) {
+    const input = document.getElementById(id);
+    const result = document.getElementById(id + '-r');
+    const val = parseFloat(input.value);
+    const exp = parseFloat(expected);
+    if (Math.abs(val - exp) < 0.05) {
+        result.textContent = '✅ Correct!';
+        result.className = 'result correct';
+    } else {
+        result.textContent = '❌ Expected ' + expected;
+        result.className = 'result wrong';
+    }
+}
+
+function checkAnsText(id, expected) {
+    const input = document.getElementById(id);
+    const result = document.getElementById(id + '-r');
+    const val = input.value.trim().toLowerCase().replace(/\s/g,'');
+    const exp = expected.toLowerCase();
+    // Accept multiple valid answers
+    const alts = {
+        'c': ['c', 'ac', 'ca'],
+        'yes': ['yes', 'y'],
+        'no': ['no', 'n']
+    };
+    // For ex5, accept AC as correct
+    if (id === 'ex5') {
+        if (['ac','ca'].includes(val)) {
+            result.textContent = '✅ Correct! Both A and C fail!';
+            result.className = 'result correct';
+        } else if (val === 'c') {
+            result.textContent = '⚠️ Close — check Path A too!';
+            result.className = 'result wrong';
+        } else {
+            result.textContent = '❌ Try again';
+            result.className = 'result wrong';
+        }
+        return;
+    }
+    if (id === 'ex3c') {
+        if (['no','n'].includes(val)) {
+            result.textContent = '✅ Correct! Hold fails!';
+            result.className = 'result correct';
+        } else {
+            result.textContent = '❌ Check: t_cq + t_comb_min vs t_hold + t_skew';
+            result.className = 'result wrong';
+        }
+        return;
+    }
+    if (val === exp) {
+        result.textContent = '✅ Correct!';
+        result.className = 'result correct';
+    } else {
+        result.textContent = '❌ Expected: ' + expected;
+        result.className = 'result wrong';
+    }
+}
+
+function checkEx4() {
+    const a = document.getElementById('ex4a').value;
+    const b = document.getElementById('ex4b').value;
+    const c = document.getElementById('ex4c').value;
+    const d = document.getElementById('ex4d').value;
+    const result = document.getElementById('ex4-r');
+    if (a === 'better' && b === 'worse' && c === 'worse' && d === 'better') {
+        result.textContent = '✅ All correct!';
+        result.className = 'result correct';
+    } else {
+        let wrong = [];
+        if (a !== 'better') wrong.push('+skew/setup');
+        if (b !== 'worse') wrong.push('+skew/hold');
+        if (c !== 'worse') wrong.push('-skew/setup');
+        if (d !== 'better') wrong.push('-skew/hold');
+        result.textContent = '❌ Check: ' + wrong.join(', ');
+        result.className = 'result wrong';
+    }
+}
+</script>
+
+</body>
+</html>
