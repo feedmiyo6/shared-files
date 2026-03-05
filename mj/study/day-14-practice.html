@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 14 Practice: Critical Path Optimization</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    background: linear-gradient(135deg, #fefae0 0%, #faedcd 100%);
+    color: #3d405b;
+    line-height: 1.8;
+    padding: 24px;
+    max-width: 920px;
+    margin: 0 auto;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+h1 { color: #5d4037; border-bottom: 3px solid #c4a77d; padding-bottom: 12px; margin-bottom: 24px; font-size: 2em; }
+h2 { color: #588157; border-bottom: 2px solid #a3b18a; padding-bottom: 8px; margin: 32px 0 16px; }
+h3 { color: #5d4037; margin: 20px 0 12px; }
+p { margin: 12px 0; }
+ul, ol { margin: 12px 0 12px 24px; }
+li { margin: 6px 0; }
+pre {
+    background: #2d3436;
+    padding: 24px;
+    border-radius: 12px;
+    margin: 24px 0;
+    border: 3px solid #a3b18a;
+    overflow-x: auto;
+    font-size: 15px;
+    line-height: 1.6;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+    color: #f8f8f2;
+}
+code { background: #e9f5db; color: #3d405b; padding: 2px 8px; border-radius: 4px; font-family: 'SF Mono', 'Monaco', 'Consolas', monospace; }
+pre code { background: none; color: inherit; padding: 0; }
+.keyword { color: #ff79c6; font-weight: 600; }
+.type { color: #8be9fd; }
+.signal { color: #50fa7b; }
+.number { color: #ffb86c; }
+.comment { color: #6272a4; font-style: italic; }
+.string { color: #f1fa8c; }
+.concept-box { background: #fff8f0; border: 2px solid #c4a77d; border-radius: 12px; padding: 20px; margin: 20px 0; color: #3d405b; }
+.concept-box h3 { color: #5d4037; margin-bottom: 12px; }
+.warning-box { background: #fff8f0; border-radius: 12px; padding: 20px; margin: 20px 0; border-left: 4px solid #ef4444; color: #3d405b; }
+.warning-box h3 { color: #c53030; margin-bottom: 12px; }
+.tip-box { background: #fff8f0; border-radius: 12px; padding: 20px; margin: 20px 0; border-left: 4px solid #588157; color: #3d405b; }
+.hint-box { background: #fff8f0; border-radius: 8px; padding: 15px; margin: 15px 0; border-left: 4px solid #5d4037; color: #3d405b; }
+.lang-toggle { position: fixed; top: 16px; right: 16px; background: #588157; border: none; border-radius: 24px; padding: 10px 20px; cursor: pointer; color: #fff; font-size: 14px; font-weight: 600; z-index: 1000; }
+.lang-toggle:hover { background: #3a5a40; }
+.ko { display: none; }
+.nav-links { display: flex; gap: 12px; margin: 24px 0; flex-wrap: wrap; }
+.nav-links a { background: linear-gradient(135deg, #588157, #3a5a40); color: #fff; text-decoration: none; padding: 10px 20px; border-radius: 8px; font-weight: 600; font-size: 14px; }
+.reveal-btn { background: linear-gradient(135deg, #588157, #3a5a40); color: #fff; border: none; padding: 10px 24px; border-radius: 8px; cursor: pointer; font-weight: 600; margin: 12px 0; font-size: 14px; }
+.reveal-btn:hover { opacity: 0.9; }
+.solution { display: none; margin-top: 16px; }
+@media (max-width: 768px) { body { padding: 16px; } h1 { font-size: 1.8em; } pre { font-size: 14px; padding: 16px; } .lang-toggle { padding: 8px 16px; font-size: 13px; } }
+</style>
+</head>
+<body>
+<button class="lang-toggle" onclick="toggleLang()">한국어</button>
+
+<h1>
+<span class="en">🔧 Day 14 Practice: Critical Path Optimization</span>
+<span class="ko" style="display:none;">🔧 Day 14 실습: 크리티컬 패스 최적화</span>
+</h1>
+
+<div class="nav-links">
+    <a href="day-14-lesson.html">📖 Lesson</a>
+    <a href="day-14-quiz.html">📝 Quiz</a>
+</div>
+
+<!-- Exercise 1 -->
+<h2>
+<span class="en">Exercise 1: Identify the Critical Path</span>
+<span class="ko" style="display:none;">연습 1: 크리티컬 패스 식별</span>
+</h2>
+
+<p class="en">Analyze this code and identify the critical path. What is the combinational depth?</p>
+<p class="ko" style="display:none;">이 코드를 분석하고 크리티컬 패스를 식별하세요. 조합 논리 깊이는 얼마인가요?</p>
+
+<pre><code><span class="keyword">module</span> <span class="type">datapath</span> (
+    <span class="keyword">input</span>  <span class="keyword">logic</span>        <span class="signal">clk</span>,
+    <span class="keyword">input</span>  <span class="keyword">logic</span> [<span class="number">15</span>:<span class="number">0</span>] <span class="signal">a</span>, <span class="signal">b</span>, <span class="signal">c</span>, <span class="signal">d</span>,
+    <span class="keyword">input</span>  <span class="keyword">logic</span> [<span class="number">1</span>:<span class="number">0</span>]  <span class="signal">sel</span>,
+    <span class="keyword">output</span> <span class="keyword">logic</span> [<span class="number">15</span>:<span class="number">0</span>] <span class="signal">result</span>
+);
+    <span class="keyword">logic</span> [<span class="number">31</span>:<span class="number">0</span>] <span class="signal">prod</span>;
+    <span class="keyword">logic</span> [<span class="number">15</span>:<span class="number">0</span>] <span class="signal">mux_out</span>, <span class="signal">sum</span>;
+
+    <span class="comment">// Combinational block</span>
+    <span class="keyword">always_comb</span> <span class="keyword">begin</span>
+        <span class="comment">// Step 1: Multiply</span>
+        <span class="signal">prod</span> = <span class="signal">a</span> * <span class="signal">b</span>;
+
+        <span class="comment">// Step 2: Select</span>
+        <span class="keyword">case</span> (<span class="signal">sel</span>)
+            <span class="number">2'b00</span>: <span class="signal">mux_out</span> = <span class="signal">prod</span>[<span class="number">15</span>:<span class="number">0</span>];
+            <span class="number">2'b01</span>: <span class="signal">mux_out</span> = <span class="signal">c</span>;
+            <span class="number">2'b10</span>: <span class="signal">mux_out</span> = <span class="signal">d</span>;
+            <span class="number">2'b11</span>: <span class="signal">mux_out</span> = <span class="number">16'h0</span>;
+        <span class="keyword">endcase</span>
+
+        <span class="comment">// Step 3: Add</span>
+        <span class="signal">sum</span> = <span class="signal">mux_out</span> + <span class="signal">d</span>;
+    <span class="keyword">end</span>
+
+    <span class="comment">// Register the output</span>
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span>)
+        <span class="signal">result</span> &lt;= <span class="signal">sum</span>;
+<span class="keyword">endmodule</span></code></pre>
+
+<div class="hint-box">
+<h3>💡 Hint</h3>
+<p class="en">Trace each possible path from inputs to <code>result</code>. Which input path goes through the most operations?</p>
+<p class="ko" style="display:none;">입력에서 <code>result</code>까지 각 가능한 경로를 추적하세요. 어떤 입력 경로가 가장 많은 연산을 거치나요?</p>
+</div>
+
+<button class="reveal-btn" onclick="document.getElementById('sol1').style.display='block'">Show Solution</button>
+<div class="solution" id="sol1">
+<div class="concept-box">
+<h3>✅ Solution</h3>
+<p class="en"><strong>Critical path:</strong> <code>a/b → multiply → MUX → adder → result</code></p>
+<p class="ko" style="display:none;"><strong>크리티컬 패스:</strong> <code>a/b → 곱셈 → MUX → 가산기 → result</code></p>
+<p class="en">The path through <code>sel=2'b00</code> is the longest because it includes the multiplier. Other paths (c or d directly to MUX) skip the multiplier and are much shorter.</p>
+<p class="ko" style="display:none;"><code>sel=2'b00</code>을 거치는 경로가 곱셈기를 포함하므로 가장 깁니다. 다른 경로(c 또는 d가 직접 MUX로)는 곱셈기를 건너뛰어 훨씬 짧습니다.</p>
+<p class="en"><strong>Depth:</strong> Multiplier (~many gates) + 4:1 MUX (2 levels) + 16-bit Adder (~16 gates for ripple carry)</p>
+<p class="ko" style="display:none;"><strong>깊이:</strong> 곱셈기 (~많은 게이트) + 4:1 MUX (2 레벨) + 16비트 가산기 (~리플 캐리의 경우 ~16 게이트)</p>
+</div>
+</div>
+
+<!-- Exercise 2 -->
+<h2>
+<span class="en">Exercise 2: Pipeline This Design</span>
+<span class="ko" style="display:none;">연습 2: 이 설계를 파이프라인화하기</span>
+</h2>
+
+<p class="en">Take the design from Exercise 1 and split it into a 2-stage pipeline to reduce the critical path. Write the pipelined SystemVerilog code.</p>
+<p class="ko" style="display:none;">연습 1의 설계를 가져와서 2단계 파이프라인으로 분할하여 크리티컬 패스를 줄이세요. 파이프라인된 SystemVerilog 코드를 작성하세요.</p>
+
+<div class="hint-box">
+<h3>💡 Hint</h3>
+<p class="en">Stage 1: Multiply + register. Stage 2: MUX + Add + register. Don't forget to pipeline the signals that are needed in later stages (like <code>sel</code>, <code>c</code>, <code>d</code>)!</p>
+<p class="ko" style="display:none;">스테이지 1: 곱셈 + 레지스터. 스테이지 2: MUX + 덧셈 + 레지스터. 이후 스테이지에서 필요한 신호(<code>sel</code>, <code>c</code>, <code>d</code>)를 파이프라인하는 것을 잊지 마세요!</p>
+</div>
+
+<button class="reveal-btn" onclick="document.getElementById('sol2').style.display='block'">Show Solution</button>
+<div class="solution" id="sol2">
+<div class="concept-box">
+<h3>✅ Solution</h3>
+<pre><code><span class="keyword">module</span> <span class="type">datapath_pipelined</span> (
+    <span class="keyword">input</span>  <span class="keyword">logic</span>        <span class="signal">clk</span>,
+    <span class="keyword">input</span>  <span class="keyword">logic</span> [<span class="number">15</span>:<span class="number">0</span>] <span class="signal">a</span>, <span class="signal">b</span>, <span class="signal">c</span>, <span class="signal">d</span>,
+    <span class="keyword">input</span>  <span class="keyword">logic</span> [<span class="number">1</span>:<span class="number">0</span>]  <span class="signal">sel</span>,
+    <span class="keyword">output</span> <span class="keyword">logic</span> [<span class="number">15</span>:<span class="number">0</span>] <span class="signal">result</span>
+);
+    <span class="comment">// Stage 1 pipeline registers</span>
+    <span class="keyword">logic</span> [<span class="number">31</span>:<span class="number">0</span>] <span class="signal">prod_s1</span>;
+    <span class="keyword">logic</span> [<span class="number">15</span>:<span class="number">0</span>] <span class="signal">c_s1</span>, <span class="signal">d_s1</span>;
+    <span class="keyword">logic</span> [<span class="number">1</span>:<span class="number">0</span>]  <span class="signal">sel_s1</span>;
+
+    <span class="comment">// Stage 2 signals</span>
+    <span class="keyword">logic</span> [<span class="number">15</span>:<span class="number">0</span>] <span class="signal">mux_out</span>, <span class="signal">sum</span>;
+
+    <span class="comment">// ── Stage 1: Multiply ──</span>
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span>) <span class="keyword">begin</span>
+        <span class="signal">prod_s1</span> &lt;= <span class="signal">a</span> * <span class="signal">b</span>;
+        <span class="signal">c_s1</span>    &lt;= <span class="signal">c</span>;      <span class="comment">// Pipeline c</span>
+        <span class="signal">d_s1</span>    &lt;= <span class="signal">d</span>;      <span class="comment">// Pipeline d</span>
+        <span class="signal">sel_s1</span>  &lt;= <span class="signal">sel</span>;    <span class="comment">// Pipeline sel</span>
+    <span class="keyword">end</span>
+
+    <span class="comment">// ── Stage 2: MUX + Add ──</span>
+    <span class="keyword">always_comb</span> <span class="keyword">begin</span>
+        <span class="keyword">case</span> (<span class="signal">sel_s1</span>)
+            <span class="number">2'b00</span>: <span class="signal">mux_out</span> = <span class="signal">prod_s1</span>[<span class="number">15</span>:<span class="number">0</span>];
+            <span class="number">2'b01</span>: <span class="signal">mux_out</span> = <span class="signal">c_s1</span>;
+            <span class="number">2'b10</span>: <span class="signal">mux_out</span> = <span class="signal">d_s1</span>;
+            <span class="number">2'b11</span>: <span class="signal">mux_out</span> = <span class="number">16'h0</span>;
+        <span class="keyword">endcase</span>
+        <span class="signal">sum</span> = <span class="signal">mux_out</span> + <span class="signal">d_s1</span>;
+    <span class="keyword">end</span>
+
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span>)
+        <span class="signal">result</span> &lt;= <span class="signal">sum</span>;
+<span class="keyword">endmodule</span></code></pre>
+<p class="en"><strong>Key insight:</strong> We must pipeline <code>c</code>, <code>d</code>, and <code>sel</code> alongside the multiply so they arrive at stage 2 at the same time as <code>prod_s1</code>. Forgetting to pipeline these signals is the #1 pipelining bug!</p>
+<p class="ko" style="display:none;"><strong>핵심 포인트:</strong> 곱셈과 함께 <code>c</code>, <code>d</code>, <code>sel</code>을 파이프라인하여 <code>prod_s1</code>과 동시에 스테이지 2에 도착하게 해야 합니다. 이 신호들의 파이프라인을 잊는 것이 가장 흔한 파이프라이닝 버그입니다!</p>
+</div>
+</div>
+
+<!-- Exercise 3 -->
+<h2>
+<span class="en">Exercise 3: Optimize with Precomputation</span>
+<span class="ko" style="display:none;">연습 3: 사전 계산으로 최적화</span>
+</h2>
+
+<p class="en">The following code has a critical path through the MUX and then the adder. Rewrite it using precomputation to move the adder off the MUX-select critical path.</p>
+<p class="ko" style="display:none;">다음 코드는 MUX를 거친 후 가산기를 통과하는 크리티컬 패스가 있습니다. 사전 계산을 사용하여 MUX 선택 크리티컬 패스에서 가산기를 제거하도록 다시 작성하세요.</p>
+
+<pre><code><span class="keyword">always_comb</span> <span class="keyword">begin</span>
+    <span class="keyword">case</span> (<span class="signal">sel</span>)
+        <span class="number">3'b000</span>: <span class="signal">val</span> = <span class="signal">in0</span>;
+        <span class="number">3'b001</span>: <span class="signal">val</span> = <span class="signal">in1</span>;
+        <span class="number">3'b010</span>: <span class="signal">val</span> = <span class="signal">in2</span>;
+        <span class="number">3'b011</span>: <span class="signal">val</span> = <span class="signal">in3</span>;
+        <span class="number">3'b100</span>: <span class="signal">val</span> = <span class="signal">in4</span>;
+        <span class="number">3'b101</span>: <span class="signal">val</span> = <span class="signal">in5</span>;
+        <span class="number">3'b110</span>: <span class="signal">val</span> = <span class="signal">in6</span>;
+        <span class="number">3'b111</span>: <span class="signal">val</span> = <span class="signal">in7</span>;
+    <span class="keyword">endcase</span>
+    <span class="signal">result</span> = <span class="signal">val</span> + <span class="signal">bias</span>;
+<span class="keyword">end</span></code></pre>
+
+<button class="reveal-btn" onclick="document.getElementById('sol3').style.display='block'">Show Solution</button>
+<div class="solution" id="sol3">
+<div class="concept-box">
+<h3>✅ Solution</h3>
+<pre><code><span class="keyword">always_comb</span> <span class="keyword">begin</span>
+    <span class="comment">// Precompute ALL additions in parallel</span>
+    <span class="signal">sum0</span> = <span class="signal">in0</span> + <span class="signal">bias</span>;
+    <span class="signal">sum1</span> = <span class="signal">in1</span> + <span class="signal">bias</span>;
+    <span class="signal">sum2</span> = <span class="signal">in2</span> + <span class="signal">bias</span>;
+    <span class="signal">sum3</span> = <span class="signal">in3</span> + <span class="signal">bias</span>;
+    <span class="signal">sum4</span> = <span class="signal">in4</span> + <span class="signal">bias</span>;
+    <span class="signal">sum5</span> = <span class="signal">in5</span> + <span class="signal">bias</span>;
+    <span class="signal">sum6</span> = <span class="signal">in6</span> + <span class="signal">bias</span>;
+    <span class="signal">sum7</span> = <span class="signal">in7</span> + <span class="signal">bias</span>;
+
+    <span class="comment">// MUX selects pre-computed result</span>
+    <span class="keyword">case</span> (<span class="signal">sel</span>)
+        <span class="number">3'b000</span>: <span class="signal">result</span> = <span class="signal">sum0</span>;
+        <span class="number">3'b001</span>: <span class="signal">result</span> = <span class="signal">sum1</span>;
+        <span class="number">3'b010</span>: <span class="signal">result</span> = <span class="signal">sum2</span>;
+        <span class="number">3'b011</span>: <span class="signal">result</span> = <span class="signal">sum3</span>;
+        <span class="number">3'b100</span>: <span class="signal">result</span> = <span class="signal">sum4</span>;
+        <span class="number">3'b101</span>: <span class="signal">result</span> = <span class="signal">sum5</span>;
+        <span class="number">3'b110</span>: <span class="signal">result</span> = <span class="signal">sum6</span>;
+        <span class="number">3'b111</span>: <span class="signal">result</span> = <span class="signal">sum7</span>;
+    <span class="keyword">endcase</span>
+<span class="keyword">end</span></code></pre>
+<p class="en"><strong>Before:</strong> Critical path = 8:1 MUX (~3 levels) + Adder. The <code>sel</code> signal must propagate through MUX then adder.</p>
+<p class="ko" style="display:none;"><strong>이전:</strong> 크리티컬 패스 = 8:1 MUX (~3 레벨) + 가산기. <code>sel</code> 신호가 MUX를 거친 후 가산기를 통과해야 합니다.</p>
+<p class="en"><strong>After:</strong> Critical path = max(Adder, MUX). The adder and MUX delays don't stack — <code>sel</code> only needs to go through the MUX. Cost: 8 adders instead of 1.</p>
+<p class="ko" style="display:none;"><strong>이후:</strong> 크리티컬 패스 = max(가산기, MUX). 가산기와 MUX 지연이 겹치지 않음 — <code>sel</code>은 MUX만 통과하면 됩니다. 비용: 1개 대신 8개의 가산기.</p>
+</div>
+</div>
+
+<!-- Exercise 4 -->
+<h2>
+<span class="en">Exercise 4: Tree Reduction</span>
+<span class="ko" style="display:none;">연습 4: 트리 축소</span>
+</h2>
+
+<p class="en">Rewrite this serial chain addition as a tree structure to minimize logic depth:</p>
+<p class="ko" style="display:none;">이 직렬 체인 덧셈을 트리 구조로 다시 작성하여 로직 깊이를 최소화하세요:</p>
+
+<pre><code><span class="comment">// Serial chain: depth = 5</span>
+<span class="signal">total</span> = <span class="signal">v0</span> + <span class="signal">v1</span> + <span class="signal">v2</span> + <span class="signal">v3</span> + <span class="signal">v4</span> + <span class="signal">v5</span>;</code></pre>
+
+<div class="hint-box">
+<h3>💡 Hint</h3>
+<p class="en">Group pairs first, then add the pairs. For 6 values, think about how to balance the tree (it won't be perfectly balanced, and that's okay).</p>
+<p class="ko" style="display:none;">먼저 쌍을 묶은 다음 쌍을 더하세요. 6개의 값의 경우 트리 균형을 어떻게 맞출지 생각하세요 (완벽히 균형잡히지 않아도 괜찮습니다).</p>
+</div>
+
+<button class="reveal-btn" onclick="document.getElementById('sol4').style.display='block'">Show Solution</button>
+<div class="solution" id="sol4">
+<div class="concept-box">
+<h3>✅ Solution</h3>
+<pre><code><span class="comment">// Tree reduction: depth = 3 (instead of 5)</span>
+
+<span class="comment">// Level 1: Three parallel additions</span>
+<span class="signal">pair_01</span> = <span class="signal">v0</span> + <span class="signal">v1</span>;
+<span class="signal">pair_23</span> = <span class="signal">v2</span> + <span class="signal">v3</span>;
+<span class="signal">pair_45</span> = <span class="signal">v4</span> + <span class="signal">v5</span>;
+
+<span class="comment">// Level 2: Two additions (one pair waits)</span>
+<span class="signal">quad_03</span> = <span class="signal">pair_01</span> + <span class="signal">pair_23</span>;
+
+<span class="comment">// Level 3: Final addition</span>
+<span class="signal">total</span>   = <span class="signal">quad_03</span> + <span class="signal">pair_45</span>;</code></pre>
+<p class="en"><strong>Depth reduced from 5 to 3!</strong> For 6 values, the tree can't be perfectly balanced (6 isn't a power of 2), but 3 levels is still much better than 5.</p>
+<p class="ko" style="display:none;"><strong>깊이가 5에서 3으로 줄었습니다!</strong> 6개의 값에서 트리는 완벽히 균형잡히지 않지만 (6은 2의 거듭제곱이 아님), 3 레벨은 5보다 훨씬 좋습니다.</p>
+</div>
+</div>
+
+<!-- Exercise 5 -->
+<h2>
+<span class="en">Exercise 5: Timing Calculation</span>
+<span class="ko" style="display:none;">연습 5: 타이밍 계산</span>
+</h2>
+
+<p class="en">Given these delays, calculate the maximum clock frequency and slack:</p>
+<p class="ko" style="display:none;">다음 지연이 주어졌을 때 최대 클럭 주파수와 슬랙을 계산하세요:</p>
+
+<div class="concept-box">
+<ul>
+<li>T_cq = 0.15ns</li>
+<li>16-bit Multiplier = 2.5ns</li>
+<li>16-bit Adder = 0.8ns</li>
+<li>4:1 MUX = 0.3ns</li>
+<li>T_setup = 0.1ns</li>
+<li>Target clock = 300 MHz (3.33ns period)</li>
+</ul>
+<p class="en"><strong>Questions:</strong></p>
+<p class="ko" style="display:none;"><strong>질문:</strong></p>
+<ol>
+<li class="en">What is the critical path delay for the unpipelined design (Ex. 1)?</li>
+<li class="ko" style="display:none;">파이프라인되지 않은 설계(연습 1)의 크리티컬 패스 지연은?</li>
+<li class="en">What is the slack? Does it meet timing?</li>
+<li class="ko" style="display:none;">슬랙은? 타이밍을 충족하나요?</li>
+<li class="en">After pipelining (Ex. 2), what is each stage's delay?</li>
+<li class="ko" style="display:none;">파이프라이닝 후(연습 2), 각 스테이지의 지연은?</li>
+<li class="en">What maximum frequency can the pipelined design achieve?</li>
+<li class="ko" style="display:none;">파이프라인된 설계가 달성할 수 있는 최대 주파수는?</li>
+</ol>
+</div>
+
+<button class="reveal-btn" onclick="document.getElementById('sol5').style.display='block'">Show Solution</button>
+<div class="solution" id="sol5">
+<div class="concept-box">
+<h3>✅ Solution</h3>
+<p class="en"><strong>1. Unpipelined critical path:</strong></p>
+<p class="ko" style="display:none;"><strong>1. 파이프라인되지 않은 크리티컬 패스:</strong></p>
+<p><code>T_cq + Multiplier + MUX + Adder + T_setup</code></p>
+<p><code>= 0.15 + 2.5 + 0.3 + 0.8 + 0.1 = <strong>3.85ns</strong></code></p>
+
+<p class="en"><strong>2. Slack:</strong></p>
+<p class="ko" style="display:none;"><strong>2. 슬랙:</strong></p>
+<p><code>Slack = 3.33ns - 3.85ns = <strong>-0.52ns</strong> ❌ FAILS!</code></p>
+<p class="en">Negative slack — cannot run at 300 MHz. Max frequency = 1/3.85ns = <strong>259 MHz</strong>.</p>
+<p class="ko" style="display:none;">음의 슬랙 — 300 MHz로 실행 불가. 최대 주파수 = 1/3.85ns = <strong>259 MHz</strong>.</p>
+
+<p class="en"><strong>3. Pipelined stage delays:</strong></p>
+<p class="ko" style="display:none;"><strong>3. 파이프라인 스테이지 지연:</strong></p>
+<p>Stage 1: <code>T_cq + Multiplier + T_setup = 0.15 + 2.5 + 0.1 = <strong>2.75ns</strong></code></p>
+<p>Stage 2: <code>T_cq + MUX + Adder + T_setup = 0.15 + 0.3 + 0.8 + 0.1 = <strong>1.35ns</strong></code></p>
+
+<p class="en"><strong>4. Max pipelined frequency:</strong></p>
+<p class="ko" style="display:none;"><strong>4. 최대 파이프라인 주파수:</strong></p>
+<p class="en">Critical stage = Stage 1 at 2.75ns. Max freq = 1/2.75ns = <strong>363 MHz</strong> ✅</p>
+<p class="ko" style="display:none;">크리티컬 스테이지 = 2.75ns의 스테이지 1. 최대 주파수 = 1/2.75ns = <strong>363 MHz</strong> ✅</p>
+<p class="en">Slack at 300 MHz = 3.33 - 2.75 = <strong>+0.58ns</strong> ✅ Passes with margin!</p>
+<p class="ko" style="display:none;">300 MHz에서의 슬랙 = 3.33 - 2.75 = <strong>+0.58ns</strong> ✅ 마진과 함께 통과!</p>
+</div>
+</div>
+
+<div class="tip-box">
+<h3>🎯 Today's Key Skill</h3>
+<p class="en">Being able to <strong>identify the critical path in RTL code</strong> and <strong>apply the right optimization technique</strong> is a core interview skill. Practice tracing paths through your code and estimating relative depths!</p>
+<p class="ko" style="display:none;"><strong>RTL 코드에서 크리티컬 패스를 식별</strong>하고 <strong>올바른 최적화 기법을 적용</strong>하는 것은 핵심 면접 스킬입니다. 코드를 통해 경로를 추적하고 상대적 깊이를 추정하는 연습을 하세요!</p>
+</div>
+
+<div class="nav-links">
+    <a href="day-14-lesson.html">📖 Review Lesson</a>
+    <a href="day-14-quiz.html">📝 Take Quiz</a>
+    <a href="day-13-practice.html">← Day 13</a>
+</div>
+
+<script>
+let isKorean = false;
+function toggleLang() {
+    isKorean = !isKorean;
+    document.querySelectorAll('.en').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'none' : 'revert', 'important');
+    });
+    document.querySelectorAll('.ko').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'revert' : 'none', 'important');
+    });
+    document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+}
+</script>
+</body>
+</html>

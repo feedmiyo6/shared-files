@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 14 Quiz: Critical Path</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    background: linear-gradient(135deg, #fefae0 0%, #faedcd 100%);
+    color: #3d405b;
+    line-height: 1.8;
+    padding: 24px;
+    max-width: 920px;
+    margin: 0 auto;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+h1 { color: #5d4037; border-bottom: 3px solid #c4a77d; padding-bottom: 12px; margin-bottom: 24px; font-size: 2em; }
+h2 { color: #588157; border-bottom: 2px solid #a3b18a; padding-bottom: 8px; margin: 32px 0 16px; }
+h3 { color: #5d4037; margin: 20px 0 12px; }
+code { background: #e9f5db; color: #3d405b; padding: 2px 8px; border-radius: 4px; font-family: 'SF Mono', 'Monaco', 'Consolas', monospace; }
+.lang-toggle { position: fixed; top: 16px; right: 16px; background: #588157; border: none; border-radius: 24px; padding: 10px 20px; cursor: pointer; color: #fff; font-size: 14px; font-weight: 600; z-index: 1000; }
+.lang-toggle:hover { background: #3a5a40; }
+.ko { display: none; }
+.nav-links { display: flex; gap: 12px; margin: 24px 0; flex-wrap: wrap; }
+.nav-links a { background: linear-gradient(135deg, #588157, #3a5a40); color: #fff; text-decoration: none; padding: 10px 20px; border-radius: 8px; font-weight: 600; font-size: 14px; }
+.quiz-question { background: #fff8f0; border: 2px solid #c4a77d; border-radius: 12px; padding: 20px; margin: 20px 0; }
+.quiz-question h3 { color: #5d4037; margin-bottom: 12px; }
+.options { list-style: none; padding: 0; }
+.options li { margin: 8px 0; }
+.options label { cursor: pointer; display: block; padding: 10px 16px; border-radius: 8px; border: 2px solid #a3b18a; background: #fff; transition: all 0.2s; }
+.options label:hover { background: #e9f5db; }
+.options input[type="radio"] { margin-right: 10px; }
+.answer-box { display: none; margin-top: 12px; padding: 16px; border-radius: 8px; }
+.answer-box.correct { background: #e9f5db; border-left: 4px solid #588157; }
+.answer-box.incorrect { background: #fff8f0; border-left: 4px solid #ef4444; }
+.check-btn { background: linear-gradient(135deg, #588157, #3a5a40); color: #fff; border: none; padding: 10px 24px; border-radius: 8px; cursor: pointer; font-weight: 600; margin-top: 12px; font-size: 14px; }
+.check-btn:hover { opacity: 0.9; }
+.score-box { background: #fff8f0; border: 2px solid #c4a77d; border-radius: 12px; padding: 24px; margin: 24px 0; text-align: center; }
+.score-box h2 { border: none; margin: 0 0 12px; }
+pre { background: #2d3436; padding: 24px; border-radius: 12px; margin: 16px 0; border: 3px solid #a3b18a; overflow-x: auto; font-size: 15px; line-height: 1.6; font-family: 'SF Mono', 'Monaco', 'Consolas', monospace; color: #f8f8f2; }
+pre code { background: none; color: inherit; padding: 0; }
+.keyword { color: #ff79c6; font-weight: 600; }
+.signal { color: #50fa7b; }
+.comment { color: #6272a4; font-style: italic; }
+.number { color: #ffb86c; }
+@media (max-width: 768px) { body { padding: 16px; } h1 { font-size: 1.8em; } .lang-toggle { padding: 8px 16px; font-size: 13px; } pre { font-size: 14px; padding: 16px; } }
+</style>
+</head>
+<body>
+<button class="lang-toggle" onclick="toggleLang()">한국어</button>
+
+<h1>
+<span class="en">📝 Day 14 Quiz: Critical Path</span>
+<span class="ko" style="display:none;">📝 Day 14 퀴즈: 크리티컬 패스</span>
+</h1>
+
+<div class="nav-links">
+    <a href="day-14-lesson.html">📖 Lesson</a>
+    <a href="day-14-practice.html">🔧 Practice</a>
+</div>
+
+<div id="quiz">
+
+<div class="quiz-question" id="q1">
+<h3>Q1. <span class="en">What defines the critical path in a digital design?</span><span class="ko" style="display:none;">디지털 설계에서 크리티컬 패스를 정의하는 것은?</span></h3>
+<ul class="options">
+<li><label><input type="radio" name="q1" value="a"> <span class="en">The shortest combinational path between flip-flops</span><span class="ko" style="display:none;">플립플롭 사이의 가장 짧은 조합 경로</span></label></li>
+<li><label><input type="radio" name="q1" value="b"> <span class="en">The longest combinational delay path between sequential elements</span><span class="ko" style="display:none;">순차 요소 사이의 가장 긴 조합 논리 지연 경로</span></label></li>
+<li><label><input type="radio" name="q1" value="c"> <span class="en">The path with the most flip-flops</span><span class="ko" style="display:none;">플립플롭이 가장 많은 경로</span></label></li>
+<li><label><input type="radio" name="q1" value="d"> <span class="en">The path with the most wires</span><span class="ko" style="display:none;">와이어가 가장 많은 경로</span></label></li>
+</ul>
+<button class="check-btn" onclick="checkAnswer('q1','b')">Check Answer</button>
+<div class="answer-box" id="q1-answer">
+<p class="en"><strong>Answer: B.</strong> The critical path is the longest combinational delay between any two sequential elements — it determines the maximum clock frequency.</p>
+<p class="ko" style="display:none;"><strong>정답: B.</strong> 크리티컬 패스는 두 순차 요소 사이의 가장 긴 조합 논리 지연으로, 최대 클럭 주파수를 결정합니다.</p>
+</div>
+</div>
+
+<div class="quiz-question" id="q2">
+<h3>Q2. <span class="en">What is the fundamental timing equation?</span><span class="ko" style="display:none;">기본 타이밍 방정식은?</span></h3>
+<ul class="options">
+<li><label><input type="radio" name="q2" value="a"> <code>T_clk ≥ T_cq + T_comb + T_hold</code></label></li>
+<li><label><input type="radio" name="q2" value="b"> <code>T_clk ≥ T_cq + T_comb + T_setup</code></label></li>
+<li><label><input type="radio" name="q2" value="c"> <code>T_clk ≥ T_setup + T_hold</code></label></li>
+<li><label><input type="radio" name="q2" value="d"> <code>T_clk ≥ T_comb - T_setup</code></label></li>
+</ul>
+<button class="check-btn" onclick="checkAnswer('q2','b')">Check Answer</button>
+<div class="answer-box" id="q2-answer">
+<p class="en"><strong>Answer: B.</strong> <code>T_clk ≥ T_cq + T_comb + T_setup</code>. The clock period must be at least the sum of clock-to-Q, combinational delay, and setup time.</p>
+<p class="ko" style="display:none;"><strong>정답: B.</strong> <code>T_clk ≥ T_cq + T_comb + T_setup</code>. 클럭 주기는 최소한 Clock-to-Q, 조합 논리 지연, 셋업 타임의 합 이상이어야 합니다.</p>
+</div>
+</div>
+
+<div class="quiz-question" id="q3">
+<h3>Q3. <span class="en">Which operation typically creates the deepest combinational logic?</span><span class="ko" style="display:none;">일반적으로 가장 깊은 조합 논리를 만드는 연산은?</span></h3>
+<ul class="options">
+<li><label><input type="radio" name="q3" value="a"> <span class="en">AND gate</span><span class="ko" style="display:none;">AND 게이트</span></label></li>
+<li><label><input type="radio" name="q3" value="b"> <span class="en">2:1 MUX</span><span class="ko" style="display:none;">2:1 MUX</span></label></li>
+<li><label><input type="radio" name="q3" value="c"> <span class="en">32-bit multiplication</span><span class="ko" style="display:none;">32비트 곱셈</span></label></li>
+<li><label><input type="radio" name="q3" value="d"> <span class="en">Bit shift</span><span class="ko" style="display:none;">비트 시프트</span></label></li>
+</ul>
+<button class="check-btn" onclick="checkAnswer('q3','c')">Check Answer</button>
+<div class="answer-box" id="q3-answer">
+<p class="en"><strong>Answer: C.</strong> Multiplication involves many levels of addition and carry propagation, making it one of the deepest combinational operations.</p>
+<p class="ko" style="display:none;"><strong>정답: C.</strong> 곱셈은 여러 단계의 덧셈과 캐리 전파를 포함하여, 가장 깊은 조합 연산 중 하나입니다.</p>
+</div>
+</div>
+
+<div class="quiz-question" id="q4">
+<h3>Q4. <span class="en">What does pipelining trade to reduce critical path delay?</span><span class="ko" style="display:none;">파이프라이닝은 크리티컬 패스 지연을 줄이기 위해 무엇을 교환하나요?</span></h3>
+<ul class="options">
+<li><label><input type="radio" name="q4" value="a"> <span class="en">Less area for more speed</span><span class="ko" style="display:none;">더 적은 면적으로 더 많은 속도</span></label></li>
+<li><label><input type="radio" name="q4" value="b"> <span class="en">More latency (cycles) for higher clock frequency</span><span class="ko" style="display:none;">더 높은 클럭 주파수를 위해 더 많은 레이턴시(사이클)</span></label></li>
+<li><label><input type="radio" name="q4" value="c"> <span class="en">More power for less delay</span><span class="ko" style="display:none;">더 적은 지연을 위해 더 많은 전력</span></label></li>
+<li><label><input type="radio" name="q4" value="d"> <span class="en">Nothing — pipelining has no cost</span><span class="ko" style="display:none;">없음 — 파이프라이닝에는 비용이 없음</span></label></li>
+</ul>
+<button class="check-btn" onclick="checkAnswer('q4','b')">Check Answer</button>
+<div class="answer-box" id="q4-answer">
+<p class="en"><strong>Answer: B.</strong> Pipelining adds registers that increase latency (results take more cycles) but allows a faster clock because each stage has less combinational logic.</p>
+<p class="ko" style="display:none;"><strong>정답: B.</strong> 파이프라이닝은 레이턴시를 증가시키는 레지스터를 추가하지만, 각 스테이지의 조합 논리가 적어 더 빠른 클럭을 허용합니다.</p>
+</div>
+</div>
+
+<div class="quiz-question" id="q5">
+<h3>Q5. <span class="en">Adding 8 values using a tree structure has what logic depth?</span><span class="ko" style="display:none;">트리 구조로 8개의 값을 더하면 로직 깊이는?</span></h3>
+<ul class="options">
+<li><label><input type="radio" name="q5" value="a"> <span class="en">7 levels</span><span class="ko" style="display:none;">7 레벨</span></label></li>
+<li><label><input type="radio" name="q5" value="b"> <span class="en">8 levels</span><span class="ko" style="display:none;">8 레벨</span></label></li>
+<li><label><input type="radio" name="q5" value="c"> <span class="en">3 levels</span><span class="ko" style="display:none;">3 레벨</span></label></li>
+<li><label><input type="radio" name="q5" value="d"> <span class="en">4 levels</span><span class="ko" style="display:none;">4 레벨</span></label></li>
+</ul>
+<button class="check-btn" onclick="checkAnswer('q5','c')">Check Answer</button>
+<div class="answer-box" id="q5-answer">
+<p class="en"><strong>Answer: C.</strong> Tree addition has depth log₂(N). For 8 values: log₂(8) = 3 levels. Chain addition would be 7 levels.</p>
+<p class="ko" style="display:none;"><strong>정답: C.</strong> 트리 덧셈의 깊이는 log₂(N)입니다. 8개의 값: log₂(8) = 3 레벨. 체인 덧셈은 7 레벨이 됩니다.</p>
+</div>
+</div>
+
+<div class="quiz-question" id="q6">
+<h3>Q6. <span class="en">What does precomputation do to optimize the critical path?</span><span class="ko" style="display:none;">사전 계산은 크리티컬 패스를 어떻게 최적화하나요?</span></h3>
+<ul class="options">
+<li><label><input type="radio" name="q6" value="a"> <span class="en">Removes all combinational logic</span><span class="ko" style="display:none;">모든 조합 논리 제거</span></label></li>
+<li><label><input type="radio" name="q6" value="b"> <span class="en">Computes all possible results in parallel, then selects</span><span class="ko" style="display:none;">모든 가능한 결과를 병렬로 계산한 후 선택</span></label></li>
+<li><label><input type="radio" name="q6" value="c"> <span class="en">Adds more pipeline stages</span><span class="ko" style="display:none;">더 많은 파이프라인 스테이지 추가</span></label></li>
+<li><label><input type="radio" name="q6" value="d"> <span class="en">Slows down the clock</span><span class="ko" style="display:none;">클럭을 느리게 함</span></label></li>
+</ul>
+<button class="check-btn" onclick="checkAnswer('q6','b')">Check Answer</button>
+<div class="answer-box" id="q6-answer">
+<p class="en"><strong>Answer: B.</strong> Precomputation calculates all possible outcomes in parallel (using more area), then uses a MUX to select the right one. This moves the computation off the MUX-select critical path.</p>
+<p class="ko" style="display:none;"><strong>정답: B.</strong> 사전 계산은 모든 가능한 결과를 병렬로 계산한 후(더 많은 면적 사용) MUX로 올바른 결과를 선택합니다. 이렇게 하면 MUX 선택 크리티컬 패스에서 계산이 제거됩니다.</p>
+</div>
+</div>
+
+<div class="quiz-question" id="q7">
+<h3>Q7. <span class="en">What does <code>unique case</code> tell the synthesis tool?</span><span class="ko" style="display:none;"><code>unique case</code>는 합성 도구에 무엇을 알려주나요?</span></h3>
+<ul class="options">
+<li><label><input type="radio" name="q7" value="a"> <span class="en">Conditions may overlap</span><span class="ko" style="display:none;">조건이 겹칠 수 있음</span></label></li>
+<li><label><input type="radio" name="q7" value="b"> <span class="en">Only one condition can match at a time (mutually exclusive)</span><span class="ko" style="display:none;">한 번에 하나의 조건만 일치 가능 (상호 배타적)</span></label></li>
+<li><label><input type="radio" name="q7" value="c"> <span class="en">All conditions must match</span><span class="ko" style="display:none;">모든 조건이 일치해야 함</span></label></li>
+<li><label><input type="radio" name="q7" value="d"> <span class="en">Conditions should be evaluated in order</span><span class="ko" style="display:none;">조건을 순서대로 평가해야 함</span></label></li>
+</ul>
+<button class="check-btn" onclick="checkAnswer('q7','b')">Check Answer</button>
+<div class="answer-box" id="q7-answer">
+<p class="en"><strong>Answer: B.</strong> <code>unique case</code> asserts that conditions are mutually exclusive, allowing the synthesizer to generate a parallel MUX tree instead of a priority chain, reducing logic depth.</p>
+<p class="ko" style="display:none;"><strong>정답: B.</strong> <code>unique case</code>는 조건이 상호 배타적임을 선언하여, 합성기가 우선순위 체인 대신 병렬 MUX 트리를 생성하게 하여 로직 깊이를 줄입니다.</p>
+</div>
+</div>
+
+<div class="quiz-question" id="q8">
+<h3>Q8. <span class="en">What does negative slack in a timing report mean?</span><span class="ko" style="display:none;">타이밍 리포트에서 음의 슬랙은 무엇을 의미하나요?</span></h3>
+<ul class="options">
+<li><label><input type="radio" name="q8" value="a"> <span class="en">The design is faster than required</span><span class="ko" style="display:none;">설계가 요구보다 빠름</span></label></li>
+<li><label><input type="radio" name="q8" value="b"> <span class="en">The design has extra timing margin</span><span class="ko" style="display:none;">설계에 추가 타이밍 마진이 있음</span></label></li>
+<li><label><input type="radio" name="q8" value="c"> <span class="en">Data arrives too late — timing violation</span><span class="ko" style="display:none;">데이터가 너무 늦게 도착 — 타이밍 위반</span></label></li>
+<li><label><input type="radio" name="q8" value="d"> <span class="en">The clock is too slow</span><span class="ko" style="display:none;">클럭이 너무 느림</span></label></li>
+</ul>
+<button class="check-btn" onclick="checkAnswer('q8','c')">Check Answer</button>
+<div class="answer-box" id="q8-answer">
+<p class="en"><strong>Answer: C.</strong> Negative slack = Required Time - Arrival Time < 0, meaning data doesn't arrive before the setup time requirement. The design will fail at this clock frequency.</p>
+<p class="ko" style="display:none;"><strong>정답: C.</strong> 음의 슬랙 = 요구 시간 - 도착 시간 < 0으로, 데이터가 셋업 타임 요구사항 전에 도착하지 못함을 의미합니다. 이 클럭 주파수에서 설계가 실패합니다.</p>
+</div>
+</div>
+
+<div class="quiz-question" id="q9">
+<h3>Q9. <span class="en">If T_cq = 0.2ns, T_setup = 0.1ns, and the critical path combinational delay is 4.7ns, what is the minimum clock period?</span><span class="ko" style="display:none;">T_cq = 0.2ns, T_setup = 0.1ns이고 크리티컬 패스 조합 논리 지연이 4.7ns이면 최소 클럭 주기는?</span></h3>
+<ul class="options">
+<li><label><input type="radio" name="q9" value="a"> <span class="en">4.7ns</span></label></li>
+<li><label><input type="radio" name="q9" value="b"> <span class="en">5.0ns</span></label></li>
+<li><label><input type="radio" name="q9" value="c"> <span class="en">4.9ns</span></label></li>
+<li><label><input type="radio" name="q9" value="d"> <span class="en">4.8ns</span></label></li>
+</ul>
+<button class="check-btn" onclick="checkAnswer('q9','b')">Check Answer</button>
+<div class="answer-box" id="q9-answer">
+<p class="en"><strong>Answer: B.</strong> T_clk ≥ 0.2 + 4.7 + 0.1 = 5.0ns. Maximum frequency = 1/5.0ns = 200 MHz.</p>
+<p class="ko" style="display:none;"><strong>정답: B.</strong> T_clk ≥ 0.2 + 4.7 + 0.1 = 5.0ns. 최대 주파수 = 1/5.0ns = 200 MHz.</p>
+</div>
+</div>
+
+<div class="quiz-question" id="q10">
+<h3>Q10. <span class="en">Which is NOT a valid way to reduce critical path delay?</span><span class="ko" style="display:none;">크리티컬 패스 지연을 줄이는 유효한 방법이 아닌 것은?</span></h3>
+<ul class="options">
+<li><label><input type="radio" name="q10" value="a"> <span class="en">Adding pipeline registers</span><span class="ko" style="display:none;">파이프라인 레지스터 추가</span></label></li>
+<li><label><input type="radio" name="q10" value="b"> <span class="en">Using tree reduction for parallel operations</span><span class="ko" style="display:none;">병렬 연산에 트리 축소 사용</span></label></li>
+<li><label><input type="radio" name="q10" value="c"> <span class="en">Adding more combinational logic stages in series</span><span class="ko" style="display:none;">더 많은 조합 논리 스테이지를 직렬로 추가</span></label></li>
+<li><label><input type="radio" name="q10" value="d"> <span class="en">Precomputing results before a MUX</span><span class="ko" style="display:none;">MUX 앞에서 결과를 사전 계산</span></label></li>
+</ul>
+<button class="check-btn" onclick="checkAnswer('q10','c')">Check Answer</button>
+<div class="answer-box" id="q10-answer">
+<p class="en"><strong>Answer: C.</strong> Adding more combinational logic in series makes the path LONGER, not shorter. All other options are valid optimization techniques.</p>
+<p class="ko" style="display:none;"><strong>정답: C.</strong> 더 많은 조합 논리를 직렬로 추가하면 경로가 더 길어집니다. 다른 모든 옵션은 유효한 최적화 기법입니다.</p>
+</div>
+</div>
+
+</div>
+
+<div class="score-box" id="score-box" style="display:none;">
+<h2>🏆 <span class="en">Your Score</span><span class="ko" style="display:none;">점수</span></h2>
+<p id="score-text" style="font-size:1.5em;font-weight:bold;"></p>
+</div>
+
+<div class="nav-links">
+    <a href="day-14-lesson.html">📖 Review Lesson</a>
+    <a href="day-14-practice.html">🔧 Practice →</a>
+</div>
+
+<script>
+let isKorean = false;
+let score = 0;
+let answered = 0;
+const total = 10;
+
+function toggleLang() {
+    isKorean = !isKorean;
+    document.querySelectorAll('.en').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'none' : 'revert', 'important');
+    });
+    document.querySelectorAll('.ko').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'revert' : 'none', 'important');
+    });
+    document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+}
+
+function checkAnswer(qId, correct) {
+    const selected = document.querySelector(`input[name="${qId}"]:checked`);
+    if (!selected) return;
+    const answerBox = document.getElementById(qId + '-answer');
+    const btn = answerBox.previousElementSibling;
+    btn.disabled = true;
+    btn.style.opacity = '0.5';
+    if (selected.value === correct) {
+        answerBox.className = 'answer-box correct';
+        score++;
+    } else {
+        answerBox.className = 'answer-box incorrect';
+    }
+    answerBox.style.display = 'block';
+    answered++;
+    if (answered === total) {
+        const box = document.getElementById('score-box');
+        box.style.display = 'block';
+        document.getElementById('score-text').textContent = score + ' / ' + total + (score >= 8 ? ' 🎉' : score >= 6 ? ' 👍' : ' 📚');
+    }
+}
+</script>
+</body>
+</html>

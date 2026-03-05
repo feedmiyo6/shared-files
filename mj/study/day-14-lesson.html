@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 14: Critical Path — Identifying and Optimizing</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    background: linear-gradient(135deg, #fefae0 0%, #faedcd 100%);
+    color: #3d405b;
+    line-height: 1.8;
+    padding: 24px;
+    max-width: 920px;
+    margin: 0 auto;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+h1 {
+    color: #5d4037;
+    border-bottom: 3px solid #c4a77d;
+    padding-bottom: 12px;
+    margin-bottom: 24px;
+    font-size: 2em;
+}
+h2 {
+    color: #588157;
+    border-bottom: 2px solid #a3b18a;
+    padding-bottom: 8px;
+    margin: 32px 0 16px;
+}
+h3 {
+    color: #5d4037;
+    margin: 20px 0 12px;
+}
+p { margin: 12px 0; }
+ul, ol { margin: 12px 0 12px 24px; }
+li { margin: 6px 0; }
+pre {
+    background: #2d3436;
+    padding: 24px;
+    border-radius: 12px;
+    margin: 24px 0;
+    border: 3px solid #a3b18a;
+    overflow-x: auto;
+    font-size: 15px;
+    line-height: 1.6;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+    color: #f8f8f2;
+}
+code {
+    background: #e9f5db;
+    color: #3d405b;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+}
+pre code { background: none; color: inherit; padding: 0; }
+.keyword { color: #ff79c6; font-weight: 600; }
+.type { color: #8be9fd; }
+.signal { color: #50fa7b; }
+.number { color: #ffb86c; }
+.comment { color: #6272a4; font-style: italic; }
+.string { color: #f1fa8c; }
+.concept-box {
+    background: #fff8f0;
+    border: 2px solid #c4a77d;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    color: #3d405b;
+}
+.concept-box h3 { color: #5d4037; margin-bottom: 12px; }
+.warning-box {
+    background: #fff8f0;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    border-left: 4px solid #ef4444;
+    color: #3d405b;
+}
+.warning-box h3 { color: #c53030; margin-bottom: 12px; }
+.tip-box {
+    background: #fff8f0;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    border-left: 4px solid #588157;
+    color: #3d405b;
+}
+.comparison-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+.comparison-table th {
+    background: #588157;
+    color: white;
+    padding: 12px;
+    text-align: left;
+}
+.comparison-table td {
+    background: #fff;
+    border: 1px solid #c4a77d;
+    padding: 12px;
+    color: #3d405b;
+}
+.comparison-table tr:nth-child(even) td { background: #fff8f0; }
+.lang-toggle {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    background: #588157;
+    border: none;
+    border-radius: 24px;
+    padding: 10px 20px;
+    cursor: pointer;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    z-index: 1000;
+}
+.lang-toggle:hover { background: #3a5a40; }
+.ko { display: none; }
+.nav-links {
+    display: flex;
+    gap: 12px;
+    margin: 24px 0;
+    flex-wrap: wrap;
+}
+.nav-links a {
+    background: linear-gradient(135deg, #588157, #3a5a40);
+    color: #fff;
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 14px;
+}
+.nav-links a:hover { opacity: 0.9; }
+.diagram-box {
+    background: #fff;
+    border: 2px solid #a3b18a;
+    border-radius: 12px;
+    padding: 24px;
+    margin: 20px 0;
+    text-align: center;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+    font-size: 14px;
+    line-height: 1.8;
+    overflow-x: auto;
+    color: #3d405b;
+}
+@media (max-width: 768px) {
+    body { padding: 16px; }
+    h1 { font-size: 1.8em; }
+    pre { font-size: 14px; padding: 16px; }
+    .lang-toggle { padding: 8px 16px; font-size: 13px; }
+}
+</style>
+</head>
+<body>
+<button class="lang-toggle" onclick="toggleLang()">한국어</button>
+
+<h1>
+<span class="en">📐 Day 14: Critical Path — Identifying and Optimizing</span>
+<span class="ko" style="display:none;">📐 Day 14: 크리티컬 패스 — 식별과 최적화</span>
+</h1>
+
+<div class="nav-links">
+    <a href="day-14-quiz.html">📝 Quiz</a>
+    <a href="day-14-practice.html">🔧 Practice</a>
+</div>
+
+<h2>
+<span class="en">What Is the Critical Path?</span>
+<span class="ko" style="display:none;">크리티컬 패스란?</span>
+</h2>
+
+<p class="en">The <strong>critical path</strong> is the longest combinational delay path between any two sequential elements (flip-flops) in your design. It determines the maximum clock frequency — your entire chip can only run as fast as its slowest path.</p>
+<p class="ko" style="display:none;"><strong>크리티컬 패스(Critical Path)</strong>는 설계에서 두 순차 요소(플립플롭) 사이의 가장 긴 조합 논리 지연 경로입니다. 최대 클럭 주파수를 결정하며, 칩 전체는 가장 느린 경로만큼만 빠르게 동작할 수 있습니다.</p>
+
+<div class="concept-box">
+<h3>🔑 Key Relationship</h3>
+<p class="en"><code>T_clk ≥ T_cq + T_comb + T_setup</code></p>
+<p class="ko" style="display:none;"><code>T_clk ≥ T_cq + T_comb + T_setup</code></p>
+<ul>
+<li class="en"><strong>T_cq</strong> — Clock-to-Q delay of the source flip-flop</li>
+<li class="ko" style="display:none;"><strong>T_cq</strong> — 소스 플립플롭의 Clock-to-Q 지연</li>
+<li class="en"><strong>T_comb</strong> — Total combinational logic delay (THIS is what you optimize!)</li>
+<li class="ko" style="display:none;"><strong>T_comb</strong> — 전체 조합 논리 지연 (이것을 최적화합니다!)</li>
+<li class="en"><strong>T_setup</strong> — Setup time requirement of the destination flip-flop</li>
+<li class="ko" style="display:none;"><strong>T_setup</strong> — 목적지 플립플롭의 셋업 타임 요구사항</li>
+</ul>
+</div>
+
+<h2>
+<span class="en">Visualizing the Critical Path</span>
+<span class="ko" style="display:none;">크리티컬 패스 시각화</span>
+</h2>
+
+<p class="en">Consider a circuit with multiple paths between two flip-flops:</p>
+<p class="ko" style="display:none;">두 플립플롭 사이에 여러 경로가 있는 회로를 생각해봅시다:</p>
+
+<div class="diagram-box">
+<pre style="background:none;border:none;color:#3d405b;text-align:left;padding:0;margin:0;">
+         Path A: 2ns          Path B: 1ns
+        ┌─────────┐          ┌─────────┐
+   FF1 ─┤  Adder  ├── MUX ──┤ Buffer  ├── FF2
+        └─────────┘  (0.5ns) └─────────┘
+              │
+              │      Path C: 3ns
+              └──┤ Multiplier ├── MUX ── FF3
+                 └────────────┘  (0.5ns)
+
+  Path to FF2: T_cq + 2ns + 0.5ns + 1ns + T_setup = T_cq + 3.5ns + T_setup
+  Path to FF3: T_cq + 2ns + 3ns + 0.5ns + T_setup = T_cq + 5.5ns + T_setup  ← CRITICAL!
+</pre>
+</div>
+
+<p class="en">The path through the multiplier to FF3 is the <strong>critical path</strong> — it has the longest combinational delay. Even if every other path is fast, the clock period must accommodate this worst case.</p>
+<p class="ko" style="display:none;">곱셈기를 거쳐 FF3에 이르는 경로가 <strong>크리티컬 패스</strong>입니다 — 가장 긴 조합 논리 지연을 가집니다. 다른 모든 경로가 빠르더라도 클럭 주기는 이 최악의 경우를 수용해야 합니다.</p>
+
+<h2>
+<span class="en">Finding the Critical Path</span>
+<span class="ko" style="display:none;">크리티컬 패스 찾기</span>
+</h2>
+
+<p class="en">In real design flows, synthesis tools (Synopsys Design Compiler, Cadence Genus) automatically report the critical path. But understanding how to spot it in RTL is essential for interviews and good design intuition.</p>
+<p class="ko" style="display:none;">실제 설계 플로우에서는 합성 도구(Synopsys Design Compiler, Cadence Genus)가 자동으로 크리티컬 패스를 보고합니다. 하지만 RTL에서 이를 찾는 방법을 이해하는 것은 면접과 좋은 설계 직관에 필수적입니다.</p>
+
+<div class="concept-box">
+<h3>🔍 What Creates Long Paths?</h3>
+<table class="comparison-table">
+<tr><th>Source</th><th>Why It's Slow</th><th>Example</th></tr>
+<tr><td class="en">Wide multiplexers</td><td class="en">Each MUX level adds gate delay</td><td class="en">32:1 MUX = ~5 levels of 2:1 MUX</td></tr>
+<tr><td class="ko" style="display:none;">넓은 멀티플렉서</td><td class="ko" style="display:none;">각 MUX 레벨이 게이트 지연 추가</td><td class="ko" style="display:none;">32:1 MUX = ~5 레벨의 2:1 MUX</td></tr>
+<tr><td class="en">Arithmetic (multiply, divide)</td><td class="en">Many gate levels for carry propagation</td><td class="en">32-bit multiply = deep logic</td></tr>
+<tr><td class="ko" style="display:none;">산술 연산 (곱셈, 나눗셈)</td><td class="ko" style="display:none;">캐리 전파를 위한 많은 게이트 레벨</td><td class="ko" style="display:none;">32비트 곱셈 = 깊은 로직</td></tr>
+<tr><td class="en">Chained comparisons</td><td class="en">Priority logic creates long chains</td><td class="en">Nested if-else with many conditions</td></tr>
+<tr><td class="ko" style="display:none;">연쇄 비교</td><td class="ko" style="display:none;">우선순위 로직이 긴 체인 생성</td><td class="ko" style="display:none;">많은 조건이 있는 중첩 if-else</td></tr>
+<tr><td class="en">Wide buses</td><td class="en">More bits = more logic depth</td><td class="en">64-bit adder vs 8-bit adder</td></tr>
+<tr><td class="ko" style="display:none;">넓은 버스</td><td class="ko" style="display:none;">더 많은 비트 = 더 깊은 로직</td><td class="ko" style="display:none;">64비트 가산기 vs 8비트 가산기</td></tr>
+</table>
+</div>
+
+<h2>
+<span class="en">Example: Spotting the Critical Path in RTL</span>
+<span class="ko" style="display:none;">예제: RTL에서 크리티컬 패스 찾기</span>
+</h2>
+
+<p class="en">Look at this combinational block — can you spot what makes the critical path long?</p>
+<p class="ko" style="display:none;">이 조합 논리 블록을 보세요 — 크리티컬 패스를 길게 만드는 것이 무엇인지 찾을 수 있나요?</p>
+
+<pre><code><span class="keyword">always_comb</span> <span class="keyword">begin</span>
+    <span class="comment">// Step 1: 32-bit multiply (DEEP logic)</span>
+    <span class="signal">product</span> = <span class="signal">a</span> * <span class="signal">b</span>;
+
+    <span class="comment">// Step 2: Add offset (adds carry chain)</span>
+    <span class="signal">sum</span> = <span class="signal">product</span> + <span class="signal">offset</span>;
+
+    <span class="comment">// Step 3: Compare and select (more logic depth)</span>
+    <span class="keyword">if</span> (<span class="signal">sum</span> > <span class="signal">threshold</span>)
+        <span class="signal">result</span> = <span class="signal">sum</span> - <span class="signal">threshold</span>;
+    <span class="keyword">else</span>
+        <span class="signal">result</span> = <span class="signal">sum</span>;
+<span class="keyword">end</span></code></pre>
+
+<p class="en">The critical path here: <code>a/b → multiply → add → compare → subtract → result</code>. That's multiply + add + compare + subtract all in one clock cycle! This will be very slow.</p>
+<p class="ko" style="display:none;">여기서 크리티컬 패스: <code>a/b → 곱셈 → 덧셈 → 비교 → 뺄셈 → result</code>. 곱셈 + 덧셈 + 비교 + 뺄셈이 모두 하나의 클럭 사이클에! 매우 느릴 것입니다.</p>
+
+<h2>
+<span class="en">Optimization Technique #1: Pipelining</span>
+<span class="ko" style="display:none;">최적화 기법 #1: 파이프라이닝</span>
+</h2>
+
+<p class="en">The most powerful optimization: <strong>break the long path with flip-flops</strong>. Trade latency (more cycles) for throughput (faster clock).</p>
+<p class="ko" style="display:none;">가장 강력한 최적화: <strong>긴 경로를 플립플롭으로 분할</strong>합니다. 레이턴시(더 많은 사이클)를 스루풋(더 빠른 클럭)과 교환합니다.</p>
+
+<pre><code><span class="comment">// BEFORE: Everything in one cycle (slow clock)</span>
+<span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span>) <span class="keyword">begin</span>
+    <span class="signal">result</span> &lt;= (<span class="signal">a</span> * <span class="signal">b</span>) + <span class="signal">offset</span>;  <span class="comment">// multiply + add in one cycle!</span>
+<span class="keyword">end</span>
+
+<span class="comment">// AFTER: Pipelined into two stages (faster clock)</span>
+<span class="comment">// Stage 1: Multiply</span>
+<span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span>) <span class="keyword">begin</span>
+    <span class="signal">product_reg</span> &lt;= <span class="signal">a</span> * <span class="signal">b</span>;       <span class="comment">// Only multiply this cycle</span>
+    <span class="signal">offset_reg</span>  &lt;= <span class="signal">offset</span>;        <span class="comment">// Save offset for next stage</span>
+<span class="keyword">end</span>
+
+<span class="comment">// Stage 2: Add</span>
+<span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span>) <span class="keyword">begin</span>
+    <span class="signal">result</span> &lt;= <span class="signal">product_reg</span> + <span class="signal">offset_reg</span>;  <span class="comment">// Only add this cycle</span>
+<span class="keyword">end</span></code></pre>
+
+<div class="tip-box">
+<h3>💡 Pipeline Tradeoff</h3>
+<p class="en">Pipelining doesn't reduce total computation time — it still takes the same total nanoseconds. But it lets you <strong>increase clock frequency</strong> because each stage has less combinational logic. Result arrives one cycle later, but you can start a new computation every cycle.</p>
+<p class="ko" style="display:none;">파이프라이닝은 총 계산 시간을 줄이지 않습니다 — 여전히 같은 나노초가 걸립니다. 하지만 각 스테이지의 조합 논리가 줄어들어 <strong>클럭 주파수를 높일 수</strong> 있습니다. 결과는 한 사이클 늦게 나오지만, 매 사이클마다 새로운 계산을 시작할 수 있습니다.</p>
+</div>
+
+<h2>
+<span class="en">Optimization Technique #2: Logic Restructuring</span>
+<span class="ko" style="display:none;">최적화 기법 #2: 로직 재구성</span>
+</h2>
+
+<p class="en">Sometimes you can reduce the critical path without adding pipeline stages — by rearranging the logic.</p>
+<p class="ko" style="display:none;">때로는 파이프라인 스테이지를 추가하지 않고도 로직을 재배치하여 크리티컬 패스를 줄일 수 있습니다.</p>
+
+<h3>
+<span class="en">Example: Tree vs Chain Addition</span>
+<span class="ko" style="display:none;">예제: 트리 vs 체인 덧셈</span>
+</h3>
+
+<pre><code><span class="comment">// SLOW: Chain addition (3 adder delays in series)</span>
+<span class="signal">sum</span> = <span class="signal">a</span> + <span class="signal">b</span> + <span class="signal">c</span> + <span class="signal">d</span>;
+<span class="comment">//      └─┬─┘</span>
+<span class="comment">//        └───┬─┘</span>
+<span class="comment">//            └───┬─┘   → 3 levels deep</span>
+
+<span class="comment">// FAST: Tree addition (2 adder delays — parallel!)</span>
+<span class="signal">sum_ab</span> = <span class="signal">a</span> + <span class="signal">b</span>;    <span class="comment">// These two happen</span>
+<span class="signal">sum_cd</span> = <span class="signal">c</span> + <span class="signal">d</span>;    <span class="comment">// in PARALLEL!</span>
+<span class="signal">sum</span>    = <span class="signal">sum_ab</span> + <span class="signal">sum_cd</span>;  <span class="comment">// → 2 levels deep</span></code></pre>
+
+<div class="concept-box">
+<h3>📊 Depth Comparison</h3>
+<p class="en">For adding N values:</p>
+<p class="ko" style="display:none;">N개의 값을 더할 때:</p>
+<table class="comparison-table">
+<tr><th>Method</th><th>Logic Depth</th><th>4 Values</th><th>8 Values</th></tr>
+<tr><td>Chain (serial)</td><td>N - 1</td><td>3 levels</td><td>7 levels</td></tr>
+<tr><td>Tree (parallel)</td><td>log₂(N)</td><td>2 levels</td><td>3 levels</td></tr>
+</table>
+</div>
+
+<h2>
+<span class="en">Optimization Technique #3: Precomputation</span>
+<span class="ko" style="display:none;">최적화 기법 #3: 사전 계산</span>
+</h2>
+
+<p class="en">Move computation <em>before</em> the MUX instead of after, so the MUX select signal is on the critical path for less time.</p>
+<p class="ko" style="display:none;">MUX 뒤가 아닌 <em>앞에서</em> 계산을 수행하여, MUX 선택 신호가 크리티컬 패스에 있는 시간을 줄입니다.</p>
+
+<pre><code><span class="comment">// SLOW: Compute after MUX (MUX + adder on critical path)</span>
+<span class="keyword">always_comb</span> <span class="keyword">begin</span>
+    <span class="keyword">case</span> (<span class="signal">sel</span>)
+        <span class="number">2'b00</span>: <span class="signal">val</span> = <span class="signal">a</span>;
+        <span class="number">2'b01</span>: <span class="signal">val</span> = <span class="signal">b</span>;
+        <span class="number">2'b10</span>: <span class="signal">val</span> = <span class="signal">c</span>;
+        <span class="number">2'b11</span>: <span class="signal">val</span> = <span class="signal">d</span>;
+    <span class="keyword">endcase</span>
+    <span class="signal">result</span> = <span class="signal">val</span> + <span class="signal">offset</span>;  <span class="comment">// Adder AFTER mux</span>
+<span class="keyword">end</span>
+
+<span class="comment">// FAST: Precompute all options, then MUX (only MUX on critical path)</span>
+<span class="keyword">always_comb</span> <span class="keyword">begin</span>
+    <span class="signal">sum_a</span> = <span class="signal">a</span> + <span class="signal">offset</span>;  <span class="comment">// All 4 additions</span>
+    <span class="signal">sum_b</span> = <span class="signal">b</span> + <span class="signal">offset</span>;  <span class="comment">// happen in PARALLEL</span>
+    <span class="signal">sum_c</span> = <span class="signal">c</span> + <span class="signal">offset</span>;
+    <span class="signal">sum_d</span> = <span class="signal">d</span> + <span class="signal">offset</span>;
+
+    <span class="keyword">case</span> (<span class="signal">sel</span>)
+        <span class="number">2'b00</span>: <span class="signal">result</span> = <span class="signal">sum_a</span>;
+        <span class="number">2'b01</span>: <span class="signal">result</span> = <span class="signal">sum_b</span>;
+        <span class="number">2'b10</span>: <span class="signal">result</span> = <span class="signal">sum_c</span>;
+        <span class="number">2'b11</span>: <span class="signal">result</span> = <span class="signal">sum_d</span>;
+    <span class="keyword">endcase</span>
+<span class="keyword">end</span></code></pre>
+
+<div class="warning-box">
+<h3>⚠️ Precomputation Tradeoff</h3>
+<p class="en">Precomputation uses <strong>more area</strong> (4 adders instead of 1) to get <strong>less delay</strong>. This is a classic area vs. speed tradeoff. Use it when timing is critical and area budget allows.</p>
+<p class="ko" style="display:none;">사전 계산은 <strong>더 적은 지연</strong>을 위해 <strong>더 많은 면적</strong>을 사용합니다 (1개 대신 4개의 가산기). 이것은 전형적인 면적 vs 속도 트레이드오프입니다. 타이밍이 중요하고 면적 예산이 허용될 때 사용하세요.</p>
+</div>
+
+<h2>
+<span class="en">Optimization Technique #4: Flatten Priority Logic</span>
+<span class="ko" style="display:none;">최적화 기법 #4: 우선순위 로직 평탄화</span>
+</h2>
+
+<p class="en">Deeply nested <code>if-else</code> creates a priority chain. If priority isn't needed, use <code>case</code> or <code>unique case</code> instead.</p>
+<p class="ko" style="display:none;">깊이 중첩된 <code>if-else</code>는 우선순위 체인을 만듭니다. 우선순위가 필요하지 않다면 <code>case</code> 또는 <code>unique case</code>를 사용하세요.</p>
+
+<pre><code><span class="comment">// SLOW: Priority chain (N conditions = N mux levels)</span>
+<span class="keyword">if</span> (<span class="signal">cond_a</span>)      <span class="signal">out</span> = <span class="signal">val_a</span>;
+<span class="keyword">else if</span> (<span class="signal">cond_b</span>) <span class="signal">out</span> = <span class="signal">val_b</span>;
+<span class="keyword">else if</span> (<span class="signal">cond_c</span>) <span class="signal">out</span> = <span class="signal">val_c</span>;
+<span class="keyword">else if</span> (<span class="signal">cond_d</span>) <span class="signal">out</span> = <span class="signal">val_d</span>;
+<span class="keyword">else</span>             <span class="signal">out</span> = <span class="signal">val_default</span>;
+
+<span class="comment">// FAST: Parallel decode (if conditions are mutually exclusive)</span>
+<span class="keyword">unique case</span> (<span class="number">1'b1</span>)
+    <span class="signal">cond_a</span>: <span class="signal">out</span> = <span class="signal">val_a</span>;
+    <span class="signal">cond_b</span>: <span class="signal">out</span> = <span class="signal">val_b</span>;
+    <span class="signal">cond_c</span>: <span class="signal">out</span> = <span class="signal">val_c</span>;
+    <span class="signal">cond_d</span>: <span class="signal">out</span> = <span class="signal">val_d</span>;
+    <span class="keyword">default</span>: <span class="signal">out</span> = <span class="signal">val_default</span>;
+<span class="keyword">endcase</span></code></pre>
+
+<div class="tip-box">
+<h3>💡 unique case Tells the Synthesizer</h3>
+<p class="en"><code>unique case</code> tells the synthesis tool that conditions are mutually exclusive, allowing it to generate a <strong>parallel MUX tree</strong> instead of a priority chain. This can significantly reduce logic depth.</p>
+<p class="ko" style="display:none;"><code>unique case</code>는 합성 도구에게 조건이 상호 배타적임을 알려, 우선순위 체인 대신 <strong>병렬 MUX 트리</strong>를 생성할 수 있게 합니다. 이는 로직 깊이를 크게 줄일 수 있습니다.</p>
+</div>
+
+<h2>
+<span class="en">Summary of Optimization Strategies</span>
+<span class="ko" style="display:none;">최적화 전략 요약</span>
+</h2>
+
+<table class="comparison-table">
+<tr><th>Technique</th><th>How It Helps</th><th>Cost</th></tr>
+<tr>
+<td class="en">Pipelining</td><td class="en">Breaks long paths into shorter stages</td><td class="en">+Latency, +Registers</td>
+</tr>
+<tr class="ko" style="display:none;">
+<td>파이프라이닝</td><td>긴 경로를 짧은 스테이지로 분할</td><td>+레이턴시, +레지스터</td>
+</tr>
+<tr>
+<td class="en">Tree Reduction</td><td class="en">Parallel instead of serial operations</td><td class="en">Same area</td>
+</tr>
+<tr class="ko" style="display:none;">
+<td>트리 축소</td><td>직렬 대신 병렬 연산</td><td>같은 면적</td>
+</tr>
+<tr>
+<td class="en">Precomputation</td><td class="en">Move logic off the critical path</td><td class="en">+Area (duplicate logic)</td>
+</tr>
+<tr class="ko" style="display:none;">
+<td>사전 계산</td><td>크리티컬 패스에서 로직 이동</td><td>+면적 (중복 로직)</td>
+</tr>
+<tr>
+<td class="en">Flatten Priority</td><td class="en">Parallel MUX instead of chain</td><td class="en">Requires mutual exclusivity</td>
+</tr>
+<tr class="ko" style="display:none;">
+<td>우선순위 평탄화</td><td>체인 대신 병렬 MUX</td><td>상호 배타성 필요</td>
+</tr>
+</table>
+
+<div class="concept-box">
+<h3>🎯 Interview Tip</h3>
+<p class="en">"How would you reduce the critical path?" is one of the most common digital design interview questions. Always think: <strong>(1) Can I pipeline it?</strong> <strong>(2) Can I restructure the logic tree?</strong> <strong>(3) Can I precompute?</strong> <strong>(4) Do I really need priority encoding?</strong></p>
+<p class="ko" style="display:none;">"크리티컬 패스를 어떻게 줄이겠습니까?"는 가장 흔한 디지털 설계 면접 질문 중 하나입니다. 항상 생각하세요: <strong>(1) 파이프라인 가능한가?</strong> <strong>(2) 로직 트리를 재구성 가능한가?</strong> <strong>(3) 사전 계산 가능한가?</strong> <strong>(4) 우선순위 인코딩이 정말 필요한가?</strong></p>
+</div>
+
+<h2>
+<span class="en">Real-World: Reading a Timing Report</span>
+<span class="ko" style="display:none;">실무: 타이밍 리포트 읽기</span>
+</h2>
+
+<p class="en">In real ASIC/FPGA flows, the synthesis tool generates timing reports. Here's what a simplified critical path report looks like:</p>
+<p class="ko" style="display:none;">실제 ASIC/FPGA 플로우에서 합성 도구는 타이밍 리포트를 생성합니다. 간소화된 크리티컬 패스 리포트의 모습:</p>
+
+<pre><code><span class="comment">// Timing Report (simplified)</span>
+<span class="string">Startpoint: reg_a (rising edge-triggered flip-flop)</span>
+<span class="string">Endpoint:   reg_result (rising edge-triggered flip-flop)</span>
+<span class="string">Path Group:  clk</span>
+<span class="string">Path Type:   max (setup check)</span>
+
+<span class="type">Point                          Delay      Total</span>
+<span class="signal">----------------------------------------------</span>
+<span class="signal">clock clk (rise edge)           0.00       0.00</span>
+<span class="signal">reg_a/CK (DFF)                  0.00       0.00</span>
+<span class="signal">reg_a/Q  (clock-to-Q)           0.15       0.15</span>   <span class="comment">← T_cq</span>
+<span class="signal">mult_u1/Z (multiplier)          1.80       1.95</span>   <span class="comment">← Biggest delay!</span>
+<span class="signal">add_u2/S  (adder)               0.40       2.35</span>
+<span class="signal">mux_u3/Y  (mux)                 0.20       2.55</span>
+<span class="signal">reg_result/D (setup)            0.10       2.65</span>   <span class="comment">← T_setup</span>
+
+<span class="type">Required time:                              2.50</span>   <span class="comment">← Clock period</span>
+<span class="type">Arrival time:                               2.65</span>
+<span class="keyword">Slack:                                     -0.15</span>   <span class="comment">← NEGATIVE = VIOLATION!</span></code></pre>
+
+<div class="warning-box">
+<h3>⚠️ Negative Slack = Timing Violation</h3>
+<p class="en"><strong>Slack = Required Time - Arrival Time</strong>. Negative slack means the data arrives too late — the design won't work at this clock frequency. You must optimize the critical path or slow down the clock.</p>
+<p class="ko" style="display:none;"><strong>Slack = 요구 시간 - 도착 시간</strong>. 음의 슬랙은 데이터가 너무 늦게 도착한다는 의미입니다 — 이 클럭 주파수에서 설계가 작동하지 않습니다. 크리티컬 패스를 최적화하거나 클럭을 느리게 해야 합니다.</p>
+</div>
+
+<h2>
+<span class="en">Key Takeaways</span>
+<span class="ko" style="display:none;">핵심 정리</span>
+</h2>
+
+<div class="concept-box">
+<h3>📝 Remember These</h3>
+<ol>
+<li class="en">Critical path = longest combinational delay between flip-flops</li>
+<li class="ko" style="display:none;">크리티컬 패스 = 플립플롭 사이의 가장 긴 조합 논리 지연</li>
+<li class="en"><code>T_clk ≥ T_cq + T_comb + T_setup</code> — the fundamental timing equation</li>
+<li class="ko" style="display:none;"><code>T_clk ≥ T_cq + T_comb + T_setup</code> — 기본 타이밍 방정식</li>
+<li class="en">Multipliers, wide MUXes, and chained comparisons are common culprits</li>
+<li class="ko" style="display:none;">곱셈기, 넓은 MUX, 연쇄 비교가 흔한 원인</li>
+<li class="en">Pipelining is the #1 tool — break paths with registers</li>
+<li class="ko" style="display:none;">파이프라이닝이 #1 도구 — 레지스터로 경로 분할</li>
+<li class="en">Tree structures beat chains for parallel operations</li>
+<li class="ko" style="display:none;">병렬 연산에서 트리 구조가 체인보다 우수</li>
+<li class="en">Negative slack means timing failure — must fix before tapeout!</li>
+<li class="ko" style="display:none;">음의 슬랙은 타이밍 실패 — 테이프아웃 전에 반드시 수정!</li>
+</ol>
+</div>
+
+<div class="nav-links">
+    <a href="day-14-quiz.html">📝 Take the Quiz →</a>
+    <a href="day-14-practice.html">🔧 Practice Exercise →</a>
+    <a href="day-13-lesson.html">← Day 13</a>
+</div>
+
+<script>
+let isKorean = false;
+function toggleLang() {
+    isKorean = !isKorean;
+    document.querySelectorAll('.en').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'none' : 'revert', 'important');
+    });
+    document.querySelectorAll('.ko').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'revert' : 'none', 'important');
+    });
+    document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+}
+</script>
+</body>
+</html>
