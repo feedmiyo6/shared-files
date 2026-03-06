@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 15: Timing Closure — Digital Design Study</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    background: linear-gradient(135deg, #fefae0 0%, #faedcd 100%);
+    color: #3d405b;
+    line-height: 1.8;
+    padding: 24px;
+    max-width: 920px;
+    margin: 0 auto;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+h1 {
+    color: #5d4037;
+    border-bottom: 3px solid #c4a77d;
+    padding-bottom: 12px;
+    margin: 20px 0;
+    font-size: 2em;
+}
+h2 {
+    color: #588157;
+    border-bottom: 2px solid #a3b18a;
+    padding-bottom: 8px;
+    margin: 28px 0 16px;
+}
+h3 {
+    color: #5d4037;
+    margin: 16px 0 8px;
+}
+p { margin: 12px 0; }
+ul, ol { margin: 12px 0 12px 24px; }
+li { margin: 4px 0; }
+pre {
+    background: #2d3436;
+    padding: 24px;
+    border-radius: 12px;
+    margin: 24px 0;
+    border: 3px solid #a3b18a;
+    overflow-x: auto;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+    font-size: 15px;
+    line-height: 1.6;
+    color: #f8f8f2;
+}
+code {
+    background: #e9f5db;
+    color: #3d405b;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+}
+pre code { background: none; color: inherit; padding: 0; }
+.keyword { color: #ff79c6; font-weight: 600; }
+.type { color: #8be9fd; }
+.signal { color: #50fa7b; }
+.number { color: #ffb86c; }
+.comment { color: #6272a4; font-style: italic; }
+.string { color: #f1fa8c; }
+.concept-box {
+    background: #fff8f0;
+    border: 2px solid #c4a77d;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    color: #3d405b;
+}
+.concept-box h3 { color: #5d4037; margin-bottom: 12px; }
+.warning-box {
+    background: #fff8f0;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    border-left: 4px solid #ef4444;
+    color: #3d405b;
+}
+.warning-box h3 { color: #c53030; margin-bottom: 12px; }
+.tip-box {
+    background: #fff8f0;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    border-left: 4px solid #588157;
+    color: #3d405b;
+}
+.comparison-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+.comparison-table th {
+    background: #588157;
+    color: white;
+    padding: 12px;
+    text-align: left;
+}
+.comparison-table td {
+    background: #fff;
+    border: 1px solid #c4a77d;
+    padding: 12px;
+    color: #3d405b;
+}
+.comparison-table tr:nth-child(even) td { background: #fff8f0; }
+.nav-links {
+    display: flex;
+    gap: 12px;
+    margin: 20px 0;
+    flex-wrap: wrap;
+}
+.nav-links a {
+    background: linear-gradient(135deg, #588157, #3a5a40);
+    color: #fff;
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 14px;
+}
+.nav-links a:hover { opacity: 0.9; }
+.lang-toggle {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    background: #588157;
+    border: none;
+    border-radius: 24px;
+    padding: 10px 20px;
+    cursor: pointer;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    z-index: 1000;
+}
+.lang-toggle:hover { background: #3a5a40; }
+.ko { display: none; }
+@media (max-width: 768px) {
+    body { padding: 16px; }
+    h1 { font-size: 1.8em; }
+    pre { font-size: 14px; padding: 16px; }
+    .lang-toggle { padding: 8px 16px; font-size: 13px; }
+}
+</style>
+</head>
+<body>
+
+<button class="lang-toggle" onclick="toggleLang()">한국어</button>
+
+<h1>📐 Day 15: Timing Closure</h1>
+
+<div class="nav-links">
+    <a href="day-15-quiz.html">📝 Quiz</a>
+    <a href="day-15-practice.html">💻 Practice</a>
+    <a href="day-14-lesson.html">← Day 14</a>
+</div>
+
+<p class="en">Today we bring together everything from this week — setup time, hold time, clock skew, and critical path — into the practical discipline of <strong>timing closure</strong>. This is the process of ensuring your design meets all timing constraints so the hardware works at the desired clock frequency.</p>
+<p class="ko" style="display:none;">오늘은 이번 주에 배운 모든 것 — 셋업 타임, 홀드 타임, 클럭 스큐, 크리티컬 패스 — 을 <strong>타이밍 클로저(Timing Closure)</strong>라는 실전 과정으로 통합합니다. 이는 설계가 원하는 클럭 주파수에서 모든 타이밍 제약을 충족하도록 보장하는 프로세스입니다.</p>
+
+<h2>1. What Is Timing Closure?</h2>
+
+<p class="en">Timing closure means your design passes all timing checks — every path meets setup and hold requirements. Until you achieve timing closure, your chip or FPGA won't reliably work at the target frequency.</p>
+<p class="ko" style="display:none;">타이밍 클로저란 설계가 모든 타이밍 검사를 통과하는 것을 의미합니다 — 모든 경로가 셋업 및 홀드 요구 사항을 충족합니다. 타이밍 클로저를 달성하기 전까지, 칩이나 FPGA는 목표 주파수에서 안정적으로 작동하지 않습니다.</p>
+
+<div class="concept-box">
+    <h3>🎯 The Timing Closure Flow</h3>
+    <p class="en">1. <strong>Write RTL</strong> → 2. <strong>Define Constraints (SDC)</strong> → 3. <strong>Synthesize</strong> → 4. <strong>Run STA</strong> → 5. <strong>Fix Violations</strong> → 6. <strong>Repeat until clean</strong></p>
+    <p class="ko" style="display:none;">1. <strong>RTL 작성</strong> → 2. <strong>제약 조건 정의 (SDC)</strong> → 3. <strong>합성</strong> → 4. <strong>STA 실행</strong> → 5. <strong>위반 수정</strong> → 6. <strong>깨끗해질 때까지 반복</strong></p>
+</div>
+
+<h2>2. SDC — Synopsys Design Constraints</h2>
+
+<p class="en">SDC is the industry-standard format for specifying timing constraints. It tells the synthesis and STA tools what your timing goals are.</p>
+<p class="ko" style="display:none;">SDC는 타이밍 제약 조건을 지정하는 산업 표준 형식입니다. 합성 및 STA 도구에 타이밍 목표가 무엇인지 알려줍니다.</p>
+
+<pre><code><span class="comment"># Define a 200 MHz clock (5 ns period)</span>
+<span class="keyword">create_clock</span> <span class="signal">-name</span> clk <span class="signal">-period</span> <span class="number">5.0</span> [<span class="keyword">get_ports</span> clk]
+
+<span class="comment"># Input delay: signals arrive 1.5 ns after clock edge</span>
+<span class="keyword">set_input_delay</span> <span class="signal">-clock</span> clk <span class="number">1.5</span> [<span class="keyword">get_ports</span> data_in*]
+
+<span class="comment"># Output delay: signals must be stable 1.0 ns before next edge</span>
+<span class="keyword">set_output_delay</span> <span class="signal">-clock</span> clk <span class="number">1.0</span> [<span class="keyword">get_ports</span> data_out*]
+
+<span class="comment"># False path: async reset doesn't need timing</span>
+<span class="keyword">set_false_path</span> <span class="signal">-from</span> [<span class="keyword">get_ports</span> rst_n]
+
+<span class="comment"># Multicycle path: takes 2 clock cycles</span>
+<span class="keyword">set_multicycle_path</span> <span class="number">2</span> <span class="signal">-setup</span> <span class="signal">-from</span> [<span class="keyword">get_cells</span> slow_reg*] <span class="signal">-to</span> [<span class="keyword">get_cells</span> result_reg*]</code></pre>
+
+<div class="concept-box">
+    <h3 class="en">📋 Key SDC Commands</h3>
+    <h3 class="ko" style="display:none;">📋 주요 SDC 명령어</h3>
+    <table class="comparison-table">
+        <tr><th>Command</th><th class="en">Purpose</th><th class="ko" style="display:none;">용도</th></tr>
+        <tr><td><code>create_clock</code></td><td class="en">Define clock with period & source</td><td class="ko" style="display:none;">클럭의 주기와 소스 정의</td></tr>
+        <tr><td><code>set_input_delay</code></td><td class="en">When external data arrives relative to clock</td><td class="ko" style="display:none;">외부 데이터가 클럭에 대해 언제 도착하는지</td></tr>
+        <tr><td><code>set_output_delay</code></td><td class="en">When output data must be stable</td><td class="ko" style="display:none;">출력 데이터가 언제 안정되어야 하는지</td></tr>
+        <tr><td><code>set_false_path</code></td><td class="en">Exclude a path from timing analysis</td><td class="ko" style="display:none;">타이밍 분석에서 경로 제외</td></tr>
+        <tr><td><code>set_multicycle_path</code></td><td class="en">Path intentionally takes multiple cycles</td><td class="ko" style="display:none;">의도적으로 여러 사이클을 사용하는 경로</td></tr>
+    </table>
+</div>
+
+<h2>3. Static Timing Analysis (STA)</h2>
+
+<p class="en">STA checks every path in your design without running simulation. It's exhaustive — it finds violations that simulation might miss.</p>
+<p class="ko" style="display:none;">STA는 시뮬레이션을 실행하지 않고 설계의 모든 경로를 검사합니다. 철저하게 검사하므로 시뮬레이션이 놓칠 수 있는 위반 사항도 찾아냅니다.</p>
+
+<div class="concept-box">
+    <h3 class="en">🔍 Setup Check Formula (Recap)</h3>
+    <h3 class="ko" style="display:none;">🔍 셋업 체크 공식 (복습)</h3>
+    <p class="en"><strong>T<sub>clk</sub> &gt; T<sub>cq</sub> + T<sub>comb</sub> + T<sub>setup</sub> - T<sub>skew</sub></strong></p>
+    <p class="ko" style="display:none;"><strong>T<sub>clk</sub> &gt; T<sub>cq</sub> + T<sub>comb</sub> + T<sub>setup</sub> - T<sub>skew</sub></strong></p>
+    <p class="en"><strong>Slack = T<sub>clk</sub> - (T<sub>cq</sub> + T<sub>comb</sub> + T<sub>setup</sub>)</strong></p>
+    <p class="ko" style="display:none;"><strong>슬랙 = T<sub>clk</sub> - (T<sub>cq</sub> + T<sub>comb</sub> + T<sub>setup</sub>)</strong></p>
+    <ul>
+        <li class="en"><strong>Positive slack</strong> → Path meets timing ✅</li>
+        <li class="ko" style="display:none;"><strong>양의 슬랙</strong> → 경로가 타이밍을 충족 ✅</li>
+        <li class="en"><strong>Zero slack</strong> → Path barely meets timing ⚠️</li>
+        <li class="ko" style="display:none;"><strong>0 슬랙</strong> → 경로가 간신히 타이밍을 충족 ⚠️</li>
+        <li class="en"><strong>Negative slack</strong> → Timing violation! ❌</li>
+        <li class="ko" style="display:none;"><strong>음의 슬랙</strong> → 타이밍 위반! ❌</li>
+    </ul>
+</div>
+
+<h3 class="en">STA Report Example</h3>
+<h3 class="ko" style="display:none;">STA 보고서 예시</h3>
+
+<pre><code><span class="comment">/* Typical STA timing report */</span>
+Startpoint: data_reg (<span class="type">rising edge-triggered flip-flop</span>)
+Endpoint:   result_reg (<span class="type">rising edge-triggered flip-flop</span>)
+
+Path Type: <span class="keyword">max</span> (setup check)
+Clock Period: <span class="number">5.000</span> ns
+
+  Point                          Delay      Path
+  ─────────────────────────────────────────────────
+  clock clk (rise edge)         <span class="number">0.000</span>      <span class="number">0.000</span>
+  data_reg/CK (DFF)             <span class="number">0.100</span>      <span class="number">0.100</span>   <span class="comment">← clock network</span>
+  data_reg/Q  (Tcq)             <span class="number">0.150</span>      <span class="number">0.250</span>   <span class="comment">← clock-to-Q</span>
+  add_32/SUM  (adder)           <span class="number">1.200</span>      <span class="number">1.450</span>   <span class="comment">← combinational</span>
+  mux_4x1/Y   (mux)            <span class="number">0.300</span>      <span class="number">1.750</span>   <span class="comment">← combinational</span>
+  comp_16/Z   (comparator)      <span class="number">0.800</span>      <span class="number">2.550</span>   <span class="comment">← combinational</span>
+  result_reg/D                   <span class="number">0.000</span>      <span class="number">2.550</span>   <span class="comment">← data arrival</span>
+  ─────────────────────────────────────────────────
+  Data Required Time:            <span class="number">4.850</span>            <span class="comment">← 5.0 - Tsetup(0.15)</span>
+  Data Arrival Time:             <span class="number">2.550</span>
+  ─────────────────────────────────────────────────
+  Slack:                         <span class="signal">+2.300</span>            <span class="comment">← PASS ✅</span></code></pre>
+
+<h2>4. Common Timing Violations & Fixes</h2>
+
+<h3 class="en">Setup Violations (Negative Slack)</h3>
+<h3 class="ko" style="display:none;">셋업 위반 (음의 슬랙)</h3>
+
+<table class="comparison-table">
+    <tr><th class="en">Technique</th><th class="en">How It Helps</th><th class="en">Trade-off</th>
+        <th class="ko" style="display:none;">기법</th><th class="ko" style="display:none;">효과</th><th class="ko" style="display:none;">트레이드오프</th></tr>
+    <tr><td class="en">Pipelining</td><td class="en">Breaks long paths into shorter stages</td><td class="en">+1 cycle latency per stage</td>
+        <td class="ko" style="display:none;">파이프라이닝</td><td class="ko" style="display:none;">긴 경로를 짧은 단계로 분할</td><td class="ko" style="display:none;">단계당 +1 사이클 지연</td></tr>
+    <tr><td class="en">Logic restructuring</td><td class="en">Reduces combinational depth</td><td class="en">May increase area</td>
+        <td class="ko" style="display:none;">로직 구조 변경</td><td class="ko" style="display:none;">조합 논리 깊이 감소</td><td class="ko" style="display:none;">면적 증가 가능</td></tr>
+    <tr><td class="en">Retiming</td><td class="en">Moves registers to balance paths</td><td class="en">Changes pipeline stage boundaries</td>
+        <td class="ko" style="display:none;">리타이밍</td><td class="ko" style="display:none;">레지스터를 이동하여 경로 균형</td><td class="ko" style="display:none;">파이프라인 단계 경계 변경</td></tr>
+    <tr><td class="en">Reduce clock frequency</td><td class="en">More time per cycle</td><td class="en">Lower performance</td>
+        <td class="ko" style="display:none;">클럭 주파수 감소</td><td class="ko" style="display:none;">사이클당 더 많은 시간</td><td class="ko" style="display:none;">성능 저하</td></tr>
+</table>
+
+<h3 class="en">Hold Violations</h3>
+<h3 class="ko" style="display:none;">홀드 위반</h3>
+
+<table class="comparison-table">
+    <tr><th class="en">Technique</th><th class="en">How It Helps</th>
+        <th class="ko" style="display:none;">기법</th><th class="ko" style="display:none;">효과</th></tr>
+    <tr><td class="en">Insert delay buffers</td><td class="en">Slows down fast paths</td>
+        <td class="ko" style="display:none;">지연 버퍼 삽입</td><td class="ko" style="display:none;">빠른 경로를 느리게 함</td></tr>
+    <tr><td class="en">Fix clock skew</td><td class="en">Reduces launch-capture difference</td>
+        <td class="ko" style="display:none;">클럭 스큐 수정</td><td class="ko" style="display:none;">발사-캡처 차이 감소</td></tr>
+    <tr><td class="en">Use balanced clock tree</td><td class="en">Equalizes clock arrival times</td>
+        <td class="ko" style="display:none;">균형 잡힌 클럭 트리 사용</td><td class="ko" style="display:none;">클럭 도착 시간 균등화</td></tr>
+</table>
+
+<h2>5. Pipelining to Fix Setup Violations</h2>
+
+<p class="en">The most common RTL-level fix. When a path is too long, insert a register in the middle.</p>
+<p class="ko" style="display:none;">가장 흔한 RTL 수준의 수정법입니다. 경로가 너무 길면 중간에 레지스터를 삽입합니다.</p>
+
+<h3 class="en">Before: Single-Stage (Fails at 200 MHz)</h3>
+<h3 class="ko" style="display:none;">수정 전: 단일 단계 (200 MHz에서 실패)</h3>
+
+<pre><code><span class="comment">// Critical path: adder + comparator + mux = 6.2 ns</span>
+<span class="comment">// Need: 5.0 ns (200 MHz) — FAILS!</span>
+<span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span>) <span class="keyword">begin</span>
+    <span class="signal">result</span> &lt;= <span class="signal">select</span> ? (<span class="signal">a</span> + <span class="signal">b</span> &gt; <span class="signal">threshold</span>) : (<span class="signal">c</span> + <span class="signal">d</span> &gt; <span class="signal">threshold</span>);
+<span class="keyword">end</span></code></pre>
+
+<h3 class="en">After: Two-Stage Pipeline (Meets 200 MHz)</h3>
+<h3 class="ko" style="display:none;">수정 후: 2단계 파이프라인 (200 MHz 충족)</h3>
+
+<pre><code><span class="comment">// Stage 1: Compute sums (3.1 ns path)</span>
+<span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span>) <span class="keyword">begin</span>
+    <span class="signal">sum_ab</span>      &lt;= <span class="signal">a</span> + <span class="signal">b</span>;
+    <span class="signal">sum_cd</span>      &lt;= <span class="signal">c</span> + <span class="signal">d</span>;
+    <span class="signal">select_d1</span>   &lt;= <span class="signal">select</span>;     <span class="comment">// Pipeline the control signal too!</span>
+    <span class="signal">threshold_d1</span> &lt;= <span class="signal">threshold</span>; <span class="comment">// Pipeline all inputs used in stage 2</span>
+<span class="keyword">end</span>
+
+<span class="comment">// Stage 2: Compare and select (2.8 ns path)</span>
+<span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span>) <span class="keyword">begin</span>
+    <span class="signal">result</span> &lt;= <span class="signal">select_d1</span> ? (<span class="signal">sum_ab</span> &gt; <span class="signal">threshold_d1</span>) : (<span class="signal">sum_cd</span> &gt; <span class="signal">threshold_d1</span>);
+<span class="keyword">end</span></code></pre>
+
+<div class="warning-box">
+    <h3>⚠️ Pipeline Gotcha: Don't Forget Control Signals!</h3>
+    <p class="en">When you pipeline data, you must also pipeline any control or reference signals that are used in later stages. Forgetting <code>select_d1</code> or <code>threshold_d1</code> above would cause functional bugs — the compare would use the wrong cycle's values.</p>
+    <p class="ko" style="display:none;">데이터를 파이프라인할 때, 이후 단계에서 사용되는 제어 또는 참조 신호도 반드시 파이프라인해야 합니다. 위의 <code>select_d1</code>이나 <code>threshold_d1</code>을 잊으면 기능적 버그가 발생합니다 — 비교가 잘못된 사이클의 값을 사용하게 됩니다.</p>
+</div>
+
+<h2>6. False Paths & Multicycle Paths</h2>
+
+<p class="en">Not all paths are real. Properly constraining your design avoids wasted effort optimizing paths that don't matter.</p>
+<p class="ko" style="display:none;">모든 경로가 실제로 작동하는 것은 아닙니다. 설계를 적절히 제약하면 중요하지 않은 경로를 최적화하는 데 낭비되는 노력을 피할 수 있습니다.</p>
+
+<div class="concept-box">
+    <h3 class="en">🚫 False Paths</h3>
+    <h3 class="ko" style="display:none;">🚫 거짓 경로 (False Path)</h3>
+    <p class="en">Paths that structurally exist but can never be activated in real operation:</p>
+    <p class="ko" style="display:none;">구조적으로 존재하지만 실제 동작에서는 절대 활성화될 수 없는 경로:</p>
+    <ul>
+        <li class="en">Asynchronous reset to data registers</li>
+        <li class="ko" style="display:none;">비동기 리셋에서 데이터 레지스터로의 경로</li>
+        <li class="en">Paths between unrelated clock domains (handled by CDC)</li>
+        <li class="ko" style="display:none;">관련 없는 클럭 도메인 간의 경로 (CDC로 처리)</li>
+        <li class="en">Test/debug paths not active in normal mode</li>
+        <li class="ko" style="display:none;">일반 모드에서 활성화되지 않는 테스트/디버그 경로</li>
+    </ul>
+</div>
+
+<div class="concept-box">
+    <h3 class="en">🔄 Multicycle Paths</h3>
+    <h3 class="ko" style="display:none;">🔄 멀티사이클 경로</h3>
+    <p class="en">Paths that intentionally take more than one clock cycle. Common examples:</p>
+    <p class="ko" style="display:none;">의도적으로 하나 이상의 클럭 사이클을 사용하는 경로. 일반적인 예:</p>
+    <ul>
+        <li class="en">Multiplier results sampled every 2 cycles</li>
+        <li class="ko" style="display:none;">2사이클마다 샘플링되는 곱셈기 결과</li>
+        <li class="en">Slow configuration registers updated infrequently</li>
+        <li class="ko" style="display:none;">드물게 업데이트되는 느린 구성 레지스터</li>
+        <li class="en">Enable-gated data paths</li>
+        <li class="ko" style="display:none;">인에이블 게이트된 데이터 경로</li>
+    </ul>
+</div>
+
+<pre><code><span class="comment">// Multicycle example: multiplier takes 2 cycles</span>
+<span class="keyword">module</span> <span class="type">slow_multiply</span> (
+    <span class="keyword">input</span>  <span class="keyword">logic</span>        <span class="signal">clk</span>, <span class="signal">rst_n</span>,
+    <span class="keyword">input</span>  <span class="keyword">logic</span> [<span class="number">15</span>:<span class="number">0</span>] <span class="signal">a</span>, <span class="signal">b</span>,
+    <span class="keyword">input</span>  <span class="keyword">logic</span>        <span class="signal">valid_in</span>,
+    <span class="keyword">output</span> <span class="keyword">logic</span> [<span class="number">31</span>:<span class="number">0</span>] <span class="signal">product</span>,
+    <span class="keyword">output</span> <span class="keyword">logic</span>        <span class="signal">valid_out</span>
+);
+    <span class="keyword">logic</span> [<span class="number">31</span>:<span class="number">0</span>] <span class="signal">mult_result</span>;
+    <span class="keyword">logic</span>        <span class="signal">valid_d1</span>;
+
+    <span class="comment">// Combinational multiply — big, slow</span>
+    <span class="keyword">assign</span> <span class="signal">mult_result</span> = <span class="signal">a</span> * <span class="signal">b</span>;
+
+    <span class="comment">// Sample result every 2 cycles (valid_in pulses every 2 clocks)</span>
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span> <span class="keyword">or negedge</span> <span class="signal">rst_n</span>) <span class="keyword">begin</span>
+        <span class="keyword">if</span> (!<span class="signal">rst_n</span>) <span class="keyword">begin</span>
+            <span class="signal">product</span>   &lt;= <span class="number">'0</span>;
+            <span class="signal">valid_d1</span>  &lt;= <span class="number">1'b0</span>;
+            <span class="signal">valid_out</span> &lt;= <span class="number">1'b0</span>;
+        <span class="keyword">end else begin</span>
+            <span class="signal">valid_d1</span>  &lt;= <span class="signal">valid_in</span>;
+            <span class="signal">valid_out</span> &lt;= <span class="signal">valid_d1</span>;
+            <span class="keyword">if</span> (<span class="signal">valid_d1</span>)
+                <span class="signal">product</span> &lt;= <span class="signal">mult_result</span>;
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+<span class="keyword">endmodule</span>
+
+<span class="comment">// SDC constraint for this module:</span>
+<span class="comment">// set_multicycle_path 2 -setup -from [get_pins a_reg*/Q] -to [get_pins product_reg*/D]</span>
+<span class="comment">// set_multicycle_path 1 -hold  -from [get_pins a_reg*/Q] -to [get_pins product_reg*/D]</span></code></pre>
+
+<h2>7. Timing Closure Strategies Summary</h2>
+
+<div class="concept-box">
+    <h3 class="en">🎯 Timing Closure Decision Tree</h3>
+    <h3 class="ko" style="display:none;">🎯 타이밍 클로저 결정 트리</h3>
+    <p class="en"><strong>Negative setup slack?</strong></p>
+    <p class="ko" style="display:none;"><strong>셋업 슬랙이 음수인가?</strong></p>
+    <ol>
+        <li class="en">Is the path real? → If not, mark as false path</li>
+        <li class="ko" style="display:none;">경로가 실제인가? → 아니면 거짓 경로로 표시</li>
+        <li class="en">Does it need 1 cycle? → If not, mark as multicycle</li>
+        <li class="ko" style="display:none;">1사이클이 필요한가? → 아니면 멀티사이클로 표시</li>
+        <li class="en">Can you restructure logic? → Reduce combinational depth</li>
+        <li class="ko" style="display:none;">로직을 재구성할 수 있는가? → 조합 논리 깊이 감소</li>
+        <li class="en">Can you pipeline? → Add register stages</li>
+        <li class="ko" style="display:none;">파이프라인할 수 있는가? → 레지스터 단계 추가</li>
+        <li class="en">Last resort → Reduce clock frequency</li>
+        <li class="ko" style="display:none;">최후의 수단 → 클럭 주파수 감소</li>
+    </ol>
+</div>
+
+<div class="tip-box">
+    <h3>💡 Interview Tip</h3>
+    <p class="en">Timing closure questions are extremely common in digital design interviews. Be ready to explain: (1) What slack is and how it's calculated, (2) How to fix setup vs hold violations, (3) When to use false_path vs multicycle_path, and (4) How pipelining trades latency for frequency.</p>
+    <p class="ko" style="display:none;">타이밍 클로저 질문은 디지털 설계 면접에서 매우 흔합니다. 다음을 설명할 준비를 하세요: (1) 슬랙이란 무엇이고 어떻게 계산되는지, (2) 셋업 vs 홀드 위반을 어떻게 수정하는지, (3) false_path vs multicycle_path를 언제 사용하는지, (4) 파이프라이닝이 어떻게 지연 시간을 대가로 주파수를 높이는지.</p>
+</div>
+
+<h2>8. Week 3 Recap: Timing Fundamentals</h2>
+
+<div class="concept-box">
+    <h3 class="en">📚 This Week at a Glance</h3>
+    <h3 class="ko" style="display:none;">📚 이번 주 한눈에 보기</h3>
+    <table class="comparison-table">
+        <tr><th>Day</th><th class="en">Topic</th><th class="en">Key Takeaway</th>
+            <th class="ko" style="display:none;">주제</th><th class="ko" style="display:none;">핵심 요점</th></tr>
+        <tr><td>11</td><td class="en">Setup Time</td><td class="en">Data must be stable <em>before</em> clock edge</td>
+            <td class="ko" style="display:none;">셋업 타임</td><td class="ko" style="display:none;">데이터는 클럭 에지 <em>전에</em> 안정되어야 함</td></tr>
+        <tr><td>12</td><td class="en">Hold Time</td><td class="en">Data must stay stable <em>after</em> clock edge</td>
+            <td class="ko" style="display:none;">홀드 타임</td><td class="ko" style="display:none;">데이터는 클럭 에지 <em>후에</em> 안정 유지해야 함</td></tr>
+        <tr><td>13</td><td class="en">Clock Skew</td><td class="en">Clock arrives at different times; helps setup, hurts hold (or vice versa)</td>
+            <td class="ko" style="display:none;">클럭 스큐</td><td class="ko" style="display:none;">클럭이 다른 시간에 도착; 셋업에 도움, 홀드에 해로움 (또는 반대)</td></tr>
+        <tr><td>14</td><td class="en">Critical Path</td><td class="en">Longest delay path limits max frequency</td>
+            <td class="ko" style="display:none;">크리티컬 패스</td><td class="ko" style="display:none;">최장 지연 경로가 최대 주파수를 제한</td></tr>
+        <tr><td>15</td><td class="en">Timing Closure</td><td class="en">SDC constraints + STA + iterative fixing</td>
+            <td class="ko" style="display:none;">타이밍 클로저</td><td class="ko" style="display:none;">SDC 제약 + STA + 반복적 수정</td></tr>
+    </table>
+</div>
+
+<div class="nav-links">
+    <a href="day-15-quiz.html">📝 Take the Quiz</a>
+    <a href="day-15-practice.html">💻 Practice Exercise</a>
+</div>
+
+<script>
+let isKorean = false;
+function toggleLang() {
+    isKorean = !isKorean;
+    document.querySelectorAll('.en').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'none' : 'revert', 'important');
+    });
+    document.querySelectorAll('.ko').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'revert' : 'none', 'important');
+    });
+    document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+}
+</script>
+
+</body>
+</html>

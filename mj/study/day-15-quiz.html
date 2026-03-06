@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 15 Quiz: Timing Closure</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    background: linear-gradient(135deg, #fefae0 0%, #faedcd 100%);
+    color: #3d405b;
+    line-height: 1.8;
+    padding: 24px;
+    max-width: 920px;
+    margin: 0 auto;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+h1 { color: #5d4037; border-bottom: 3px solid #c4a77d; padding-bottom: 12px; margin: 20px 0; font-size: 2em; }
+h2 { color: #588157; border-bottom: 2px solid #a3b18a; padding-bottom: 8px; margin: 28px 0 16px; }
+h3 { color: #5d4037; margin: 16px 0 8px; }
+p { margin: 12px 0; }
+code {
+    background: #e9f5db;
+    color: #3d405b;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+}
+.question {
+    background: #fff8f0;
+    border: 2px solid #c4a77d;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    color: #3d405b;
+}
+.question h3 { color: #5d4037; margin-bottom: 12px; }
+.options { list-style: none; padding: 0; margin: 12px 0; }
+.options li {
+    padding: 10px 16px;
+    margin: 6px 0;
+    border-radius: 8px;
+    cursor: pointer;
+    border: 2px solid #c4a77d;
+    background: #fff;
+    transition: all 0.2s;
+}
+.options li:hover { background: #e9f5db; }
+.options li.correct { background: #d4edda; border-color: #588157; }
+.options li.wrong { background: #fde8e8; border-color: #ef4444; }
+.options li.disabled { pointer-events: none; }
+.explanation {
+    display: none;
+    margin-top: 12px;
+    padding: 12px;
+    background: #fff;
+    border-radius: 8px;
+    border-left: 4px solid #588157;
+    color: #3d405b;
+}
+.score-box {
+    background: #fff8f0;
+    border: 2px solid #588157;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    text-align: center;
+    display: none;
+}
+.score-box h2 { border: none; }
+.nav-links { display: flex; gap: 12px; margin: 20px 0; flex-wrap: wrap; }
+.nav-links a {
+    background: linear-gradient(135deg, #588157, #3a5a40);
+    color: #fff;
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 14px;
+}
+.nav-links a:hover { opacity: 0.9; }
+.lang-toggle {
+    position: fixed; top: 16px; right: 16px;
+    background: #588157; border: none; border-radius: 24px;
+    padding: 10px 20px; cursor: pointer; color: #fff;
+    font-size: 14px; font-weight: 600; z-index: 1000;
+}
+.lang-toggle:hover { background: #3a5a40; }
+.ko { display: none; }
+@media (max-width: 768px) {
+    body { padding: 16px; }
+    h1 { font-size: 1.8em; }
+    .lang-toggle { padding: 8px 16px; font-size: 13px; }
+}
+</style>
+</head>
+<body>
+
+<button class="lang-toggle" onclick="toggleLang()">한국어</button>
+
+<h1>📝 Day 15 Quiz: Timing Closure</h1>
+
+<div class="nav-links">
+    <a href="day-15-lesson.html">📖 Lesson</a>
+    <a href="day-15-practice.html">💻 Practice</a>
+</div>
+
+<p class="en">Test your understanding of timing closure, SDC constraints, and STA. Click an answer to check!</p>
+<p class="ko" style="display:none;">타이밍 클로저, SDC 제약 조건, STA에 대한 이해도를 테스트하세요. 답을 클릭하세요!</p>
+
+<div id="quiz-container">
+
+<div class="question" data-answer="2">
+    <h3>Q1. <span class="en">What does "timing closure" mean?</span><span class="ko" style="display:none;">"타이밍 클로저"란 무엇을 의미합니까?</span></h3>
+    <ul class="options">
+        <li onclick="check(this)"><span class="en">A) The design compiles without syntax errors</span><span class="ko" style="display:none;">A) 설계가 구문 오류 없이 컴파일됨</span></li>
+        <li onclick="check(this)"><span class="en">B) All timing paths meet setup and hold requirements</span><span class="ko" style="display:none;">B) 모든 타이밍 경로가 셋업 및 홀드 요구 사항을 충족</span></li>
+        <li onclick="check(this)"><span class="en">C) The simulation passes all test cases</span><span class="ko" style="display:none;">C) 시뮬레이션이 모든 테스트 케이스를 통과</span></li>
+        <li onclick="check(this)"><span class="en">D) The clock signal is properly terminated</span><span class="ko" style="display:none;">D) 클럭 신호가 올바르게 종료됨</span></li>
+    </ul>
+    <div class="explanation"><span class="en">✅ Timing closure means every path in the design meets its setup and hold timing constraints at the target frequency.</span><span class="ko" style="display:none;">✅ 타이밍 클로저란 설계의 모든 경로가 목표 주파수에서 셋업 및 홀드 타이밍 제약을 충족하는 것을 의미합니다.</span></div>
+</div>
+
+<div class="question" data-answer="1">
+    <h3>Q2. <span class="en">What SDC command defines the clock?</span><span class="ko" style="display:none;">클럭을 정의하는 SDC 명령은?</span></h3>
+    <ul class="options">
+        <li onclick="check(this)"><span class="en">A) <code>create_clock</code></span><span class="ko" style="display:none;">A) <code>create_clock</code></span></li>
+        <li onclick="check(this)"><span class="en">B) <code>set_clock</code></span><span class="ko" style="display:none;">B) <code>set_clock</code></span></li>
+        <li onclick="check(this)"><span class="en">C) <code>define_clock</code></span><span class="ko" style="display:none;">C) <code>define_clock</code></span></li>
+        <li onclick="check(this)"><span class="en">D) <code>add_clock</code></span><span class="ko" style="display:none;">D) <code>add_clock</code></span></li>
+    </ul>
+    <div class="explanation"><span class="en">✅ <code>create_clock</code> is the standard SDC command for defining a clock with its period and source port.</span><span class="ko" style="display:none;">✅ <code>create_clock</code>은 주기와 소스 포트로 클럭을 정의하는 표준 SDC 명령입니다.</span></div>
+</div>
+
+<div class="question" data-answer="3">
+    <h3>Q3. <span class="en">Positive slack means:</span><span class="ko" style="display:none;">양의 슬랙은 다음을 의미합니다:</span></h3>
+    <ul class="options">
+        <li onclick="check(this)"><span class="en">A) The path has a timing violation</span><span class="ko" style="display:none;">A) 경로에 타이밍 위반이 있음</span></li>
+        <li onclick="check(this)"><span class="en">B) The path barely meets timing</span><span class="ko" style="display:none;">B) 경로가 간신히 타이밍을 충족</span></li>
+        <li onclick="check(this)"><span class="en">C) The path has margin — it meets timing with room to spare</span><span class="ko" style="display:none;">C) 경로에 여유가 있음 — 여유를 가지고 타이밍을 충족</span></li>
+        <li onclick="check(this)"><span class="en">D) The clock is too fast</span><span class="ko" style="display:none;">D) 클럭이 너무 빠름</span></li>
+    </ul>
+    <div class="explanation"><span class="en">✅ Positive slack = Required time - Arrival time > 0. The data arrives early, so there's timing margin.</span><span class="ko" style="display:none;">✅ 양의 슬랙 = 필요 시간 - 도착 시간 > 0. 데이터가 일찍 도착하므로 타이밍 여유가 있습니다.</span></div>
+</div>
+
+<div class="question" data-answer="2">
+    <h3>Q4. <span class="en">Which SDC command excludes a path from timing analysis?</span><span class="ko" style="display:none;">타이밍 분석에서 경로를 제외하는 SDC 명령은?</span></h3>
+    <ul class="options">
+        <li onclick="check(this)"><span class="en">A) <code>set_multicycle_path</code></span><span class="ko" style="display:none;">A) <code>set_multicycle_path</code></span></li>
+        <li onclick="check(this)"><span class="en">B) <code>set_false_path</code></span><span class="ko" style="display:none;">B) <code>set_false_path</code></span></li>
+        <li onclick="check(this)"><span class="en">C) <code>set_disable_timing</code></span><span class="ko" style="display:none;">C) <code>set_disable_timing</code></span></li>
+        <li onclick="check(this)"><span class="en">D) <code>remove_path</code></span><span class="ko" style="display:none;">D) <code>remove_path</code></span></li>
+    </ul>
+    <div class="explanation"><span class="en">✅ <code>set_false_path</code> tells STA to ignore a path entirely — useful for async resets, CDC paths, and debug-only logic.</span><span class="ko" style="display:none;">✅ <code>set_false_path</code>는 STA에게 경로를 완전히 무시하도록 지시합니다 — 비동기 리셋, CDC 경로, 디버그 전용 로직에 유용합니다.</span></div>
+</div>
+
+<div class="question" data-answer="1">
+    <h3>Q5. <span class="en">What is the PRIMARY fix for setup violations at the RTL level?</span><span class="ko" style="display:none;">RTL 수준에서 셋업 위반의 주요 수정 방법은?</span></h3>
+    <ul class="options">
+        <li onclick="check(this)"><span class="en">A) Pipelining — add register stages to break long paths</span><span class="ko" style="display:none;">A) 파이프라이닝 — 긴 경로를 나누기 위해 레지스터 단계 추가</span></li>
+        <li onclick="check(this)"><span class="en">B) Adding delay buffers</span><span class="ko" style="display:none;">B) 지연 버퍼 추가</span></li>
+        <li onclick="check(this)"><span class="en">C) Increasing clock skew</span><span class="ko" style="display:none;">C) 클럭 스큐 증가</span></li>
+        <li onclick="check(this)"><span class="en">D) Removing flip-flops</span><span class="ko" style="display:none;">D) 플립플롭 제거</span></li>
+    </ul>
+    <div class="explanation"><span class="en">✅ Pipelining splits a long combinational path into shorter stages, each fitting within one clock period. It increases latency by 1 cycle per stage but allows higher frequency.</span><span class="ko" style="display:none;">✅ 파이프라이닝은 긴 조합 논리 경로를 더 짧은 단계로 분할하여 각 단계가 하나의 클럭 주기 내에 맞도록 합니다. 단계당 1사이클의 지연이 증가하지만 더 높은 주파수를 허용합니다.</span></div>
+</div>
+
+<div class="question" data-answer="3">
+    <h3>Q6. <span class="en">When pipelining, what must you do with control signals used in later stages?</span><span class="ko" style="display:none;">파이프라이닝 시, 이후 단계에서 사용되는 제어 신호는 어떻게 해야 합니까?</span></h3>
+    <ul class="options">
+        <li onclick="check(this)"><span class="en">A) Leave them connected directly — they're fast enough</span><span class="ko" style="display:none;">A) 직접 연결한 채로 두기 — 충분히 빠름</span></li>
+        <li onclick="check(this)"><span class="en">B) Remove them from the design</span><span class="ko" style="display:none;">B) 설계에서 제거</span></li>
+        <li onclick="check(this)"><span class="en">C) Pipeline them too — delay them the same number of stages</span><span class="ko" style="display:none;">C) 함께 파이프라인 — 같은 수의 단계만큼 지연</span></li>
+        <li onclick="check(this)"><span class="en">D) Convert them to asynchronous signals</span><span class="ko" style="display:none;">D) 비동기 신호로 변환</span></li>
+    </ul>
+    <div class="explanation"><span class="en">✅ All signals used together in a pipeline stage must be aligned. If you pipeline data but not the select signal, the mux would use a select value from a different cycle — a functional bug!</span><span class="ko" style="display:none;">✅ 파이프라인 단계에서 함께 사용되는 모든 신호는 정렬되어야 합니다. 데이터는 파이프라인하면서 선택 신호는 하지 않으면, 먹스가 다른 사이클의 선택 값을 사용하게 됩니다 — 기능적 버그!</span></div>
+</div>
+
+<div class="question" data-answer="4">
+    <h3>Q7. <span class="en">Which is NOT a valid use of <code>set_false_path</code>?</span><span class="ko" style="display:none;"><code>set_false_path</code>의 올바르지 않은 사용은?</span></h3>
+    <ul class="options">
+        <li onclick="check(this)"><span class="en">A) Async reset to data registers</span><span class="ko" style="display:none;">A) 비동기 리셋에서 데이터 레지스터로</span></li>
+        <li onclick="check(this)"><span class="en">B) Paths between unrelated clock domains</span><span class="ko" style="display:none;">B) 관련 없는 클럭 도메인 간의 경로</span></li>
+        <li onclick="check(this)"><span class="en">C) Debug-only logic not active in normal mode</span><span class="ko" style="display:none;">C) 일반 모드에서 활성화되지 않는 디버그 전용 로직</span></li>
+        <li onclick="check(this)"><span class="en">D) The critical path that's hard to optimize</span><span class="ko" style="display:none;">D) 최적화하기 어려운 크리티컬 패스</span></li>
+    </ul>
+    <div class="explanation"><span class="en">✅ You can't mark a real functional path as false just because it's hard to meet timing! False paths must be structurally impossible or functionally inactive.</span><span class="ko" style="display:none;">✅ 타이밍을 충족하기 어렵다고 해서 실제 기능 경로를 거짓으로 표시할 수는 없습니다! 거짓 경로는 구조적으로 불가능하거나 기능적으로 비활성인 경로여야 합니다.</span></div>
+</div>
+
+<div class="question" data-answer="2">
+    <h3>Q8. <span class="en">STA stands for:</span><span class="ko" style="display:none;">STA는 다음의 약자입니다:</span></h3>
+    <ul class="options">
+        <li onclick="check(this)"><span class="en">A) Sequential Timing Analyzer</span><span class="ko" style="display:none;">A) Sequential Timing Analyzer</span></li>
+        <li onclick="check(this)"><span class="en">B) Static Timing Analysis</span><span class="ko" style="display:none;">B) Static Timing Analysis</span></li>
+        <li onclick="check(this)"><span class="en">C) Synchronous Test Application</span><span class="ko" style="display:none;">C) Synchronous Test Application</span></li>
+        <li onclick="check(this)"><span class="en">D) Standard Timing Assessment</span><span class="ko" style="display:none;">D) Standard Timing Assessment</span></li>
+    </ul>
+    <div class="explanation"><span class="en">✅ Static Timing Analysis — it exhaustively checks every path without running simulation vectors.</span><span class="ko" style="display:none;">✅ Static Timing Analysis — 시뮬레이션 벡터 없이 모든 경로를 철저히 검사합니다.</span></div>
+</div>
+
+<div class="question" data-answer="3">
+    <h3>Q9. <span class="en">A <code>set_multicycle_path 2 -setup</code> constraint means:</span><span class="ko" style="display:none;"><code>set_multicycle_path 2 -setup</code> 제약은 다음을 의미합니다:</span></h3>
+    <ul class="options">
+        <li onclick="check(this)"><span class="en">A) The path must complete in half a cycle</span><span class="ko" style="display:none;">A) 경로가 반 사이클 내에 완료되어야 함</span></li>
+        <li onclick="check(this)"><span class="en">B) The path is checked twice per cycle</span><span class="ko" style="display:none;">B) 경로가 사이클당 두 번 검사됨</span></li>
+        <li onclick="check(this)"><span class="en">C) Data has 2 clock cycles to propagate (setup check relaxed)</span><span class="ko" style="display:none;">C) 데이터가 전파되는 데 2 클럭 사이클이 있음 (셋업 체크 완화)</span></li>
+        <li onclick="check(this)"><span class="en">D) The clock runs at half speed on this path</span><span class="ko" style="display:none;">D) 이 경로에서 클럭이 절반 속도로 작동</span></li>
+    </ul>
+    <div class="explanation"><span class="en">✅ Multicycle path of 2 means the capturing flip-flop doesn't sample until the 2nd clock edge, giving the combinational logic twice as long to settle.</span><span class="ko" style="display:none;">✅ 멀티사이클 경로 2는 캡처 플립플롭이 2번째 클럭 에지까지 샘플링하지 않아, 조합 논리가 안정되는 데 두 배의 시간을 준다는 의미입니다.</span></div>
+</div>
+
+<div class="question" data-answer="2">
+    <h3>Q10. <span class="en">Hold violations are typically fixed by:</span><span class="ko" style="display:none;">홀드 위반은 일반적으로 다음으로 수정됩니다:</span></h3>
+    <ul class="options">
+        <li onclick="check(this)"><span class="en">A) Removing pipeline stages</span><span class="ko" style="display:none;">A) 파이프라인 단계 제거</span></li>
+        <li onclick="check(this)"><span class="en">B) Inserting delay buffers on fast paths</span><span class="ko" style="display:none;">B) 빠른 경로에 지연 버퍼 삽입</span></li>
+        <li onclick="check(this)"><span class="en">C) Increasing clock frequency</span><span class="ko" style="display:none;">C) 클럭 주파수 증가</span></li>
+        <li onclick="check(this)"><span class="en">D) Adding more combinational logic</span><span class="ko" style="display:none;">D) 더 많은 조합 논리 추가</span></li>
+    </ul>
+    <div class="explanation"><span class="en">✅ Hold violations occur when data changes too quickly. Inserting delay buffers slows the data path so it remains stable long enough after the clock edge.</span><span class="ko" style="display:none;">✅ 홀드 위반은 데이터가 너무 빨리 변할 때 발생합니다. 지연 버퍼를 삽입하면 데이터 경로가 느려져 클럭 에지 후 충분히 오래 안정 상태를 유지합니다.</span></div>
+</div>
+
+<div class="question" data-answer="1">
+    <h3>Q11. <span class="en">What is the correct order of the timing closure flow?</span><span class="ko" style="display:none;">타이밍 클로저 흐름의 올바른 순서는?</span></h3>
+    <ul class="options">
+        <li onclick="check(this)"><span class="en">A) RTL → SDC → Synthesis → STA → Fix → Repeat</span><span class="ko" style="display:none;">A) RTL → SDC → 합성 → STA → 수정 → 반복</span></li>
+        <li onclick="check(this)"><span class="en">B) STA → RTL → SDC → Fix → Synthesis</span><span class="ko" style="display:none;">B) STA → RTL → SDC → 수정 → 합성</span></li>
+        <li onclick="check(this)"><span class="en">C) SDC → STA → RTL → Synthesis → Fix</span><span class="ko" style="display:none;">C) SDC → STA → RTL → 합성 → 수정</span></li>
+        <li onclick="check(this)"><span class="en">D) Synthesis → RTL → Fix → SDC → STA</span><span class="ko" style="display:none;">D) 합성 → RTL → 수정 → SDC → STA</span></li>
+    </ul>
+    <div class="explanation"><span class="en">✅ Write RTL first, define constraints (SDC), synthesize to gates, run STA to find violations, fix them, and iterate.</span><span class="ko" style="display:none;">✅ 먼저 RTL을 작성하고, 제약 조건(SDC)을 정의하고, 게이트로 합성하고, STA를 실행하여 위반을 찾고, 수정한 후 반복합니다.</span></div>
+</div>
+
+<div class="question" data-answer="4">
+    <h3>Q12. <span class="en">When should reducing clock frequency be considered?</span><span class="ko" style="display:none;">클럭 주파수 감소는 언제 고려해야 합니까?</span></h3>
+    <ul class="options">
+        <li onclick="check(this)"><span class="en">A) As the first optimization attempt</span><span class="ko" style="display:none;">A) 첫 번째 최적화 시도로</span></li>
+        <li onclick="check(this)"><span class="en">B) Before trying pipelining</span><span class="ko" style="display:none;">B) 파이프라이닝을 시도하기 전에</span></li>
+        <li onclick="check(this)"><span class="en">C) Whenever there's negative slack</span><span class="ko" style="display:none;">C) 음의 슬랙이 있을 때마다</span></li>
+        <li onclick="check(this)"><span class="en">D) As a last resort after other techniques fail</span><span class="ko" style="display:none;">D) 다른 기법이 실패한 후 최후의 수단으로</span></li>
+    </ul>
+    <div class="explanation"><span class="en">✅ Reducing frequency means lower performance. Try false paths, multicycle paths, logic restructuring, and pipelining first. Frequency reduction is the last resort.</span><span class="ko" style="display:none;">✅ 주파수 감소는 성능 저하를 의미합니다. 먼저 거짓 경로, 멀티사이클 경로, 로직 구조 변경, 파이프라이닝을 시도하세요. 주파수 감소는 최후의 수단입니다.</span></div>
+</div>
+
+</div>
+
+<div class="score-box" id="scoreBox">
+    <h2 id="scoreText"></h2>
+    <p id="scoreMsg"></p>
+</div>
+
+<div class="nav-links">
+    <a href="day-15-lesson.html">📖 Review Lesson</a>
+    <a href="day-15-practice.html">💻 Practice</a>
+</div>
+
+<script>
+let isKorean = false;
+let total = document.querySelectorAll('.question').length;
+let answered = 0;
+let correct = 0;
+
+function toggleLang() {
+    isKorean = !isKorean;
+    document.querySelectorAll('.en').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'none' : 'revert', 'important');
+    });
+    document.querySelectorAll('.ko').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'revert' : 'none', 'important');
+    });
+    document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+}
+
+function check(li) {
+    const q = li.closest('.question');
+    if (q.classList.contains('answered')) return;
+    q.classList.add('answered');
+    const options = q.querySelectorAll('.options li');
+    const correctIdx = parseInt(q.dataset.answer) - 1;
+    const clickedIdx = Array.from(options).indexOf(li);
+
+    options.forEach(o => o.classList.add('disabled'));
+    options[correctIdx].classList.add('correct');
+
+    answered++;
+    if (clickedIdx === correctIdx) {
+        correct++;
+    } else {
+        li.classList.add('wrong');
+    }
+
+    q.querySelector('.explanation').style.display = 'block';
+
+    if (answered === total) {
+        const pct = Math.round(correct / total * 100);
+        const box = document.getElementById('scoreBox');
+        document.getElementById('scoreText').textContent = `${correct}/${total} (${pct}%)`;
+        let msg = pct >= 90 ? '🌟 Outstanding!' : pct >= 70 ? '👍 Good job!' : '📚 Review the lesson and try again!';
+        document.getElementById('scoreMsg').textContent = msg;
+        box.style.display = 'block';
+    }
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 15 Practice: Timing Closure</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    background: linear-gradient(135deg, #fefae0 0%, #faedcd 100%);
+    color: #3d405b;
+    line-height: 1.8;
+    padding: 24px;
+    max-width: 920px;
+    margin: 0 auto;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+h1 { color: #5d4037; border-bottom: 3px solid #c4a77d; padding-bottom: 12px; margin: 20px 0; font-size: 2em; }
+h2 { color: #588157; border-bottom: 2px solid #a3b18a; padding-bottom: 8px; margin: 28px 0 16px; }
+h3 { color: #5d4037; margin: 16px 0 8px; }
+p { margin: 12px 0; }
+ul, ol { margin: 12px 0 12px 24px; }
+li { margin: 4px 0; }
+pre {
+    background: #2d3436;
+    padding: 24px;
+    border-radius: 12px;
+    margin: 24px 0;
+    border: 3px solid #a3b18a;
+    overflow-x: auto;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+    font-size: 15px;
+    line-height: 1.6;
+    color: #f8f8f2;
+}
+code {
+    background: #e9f5db;
+    color: #3d405b;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+}
+pre code { background: none; color: inherit; padding: 0; }
+.keyword { color: #ff79c6; font-weight: 600; }
+.type { color: #8be9fd; }
+.signal { color: #50fa7b; }
+.number { color: #ffb86c; }
+.comment { color: #6272a4; font-style: italic; }
+.string { color: #f1fa8c; }
+.concept-box {
+    background: #fff8f0;
+    border: 2px solid #c4a77d;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    color: #3d405b;
+}
+.concept-box h3 { color: #5d4037; margin-bottom: 12px; }
+.warning-box {
+    background: #fff8f0;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    border-left: 4px solid #ef4444;
+    color: #3d405b;
+}
+.warning-box h3 { color: #c53030; margin-bottom: 12px; }
+.tip-box {
+    background: #fff8f0;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    border-left: 4px solid #588157;
+    color: #3d405b;
+}
+.hint-box {
+    background: #fff8f0;
+    border-radius: 8px;
+    padding: 15px;
+    margin: 15px 0;
+    border-left: 4px solid #5d4037;
+    color: #3d405b;
+}
+.exercise {
+    background: #fff;
+    border: 2px solid #a3b18a;
+    border-radius: 12px;
+    padding: 24px;
+    margin: 24px 0;
+}
+.exercise h3 { color: #588157; }
+.toggle-btn {
+    background: linear-gradient(135deg, #588157, #3a5a40);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 14px;
+    margin: 12px 0;
+}
+.toggle-btn:hover { opacity: 0.9; }
+.solution { display: none; margin-top: 16px; }
+.nav-links { display: flex; gap: 12px; margin: 20px 0; flex-wrap: wrap; }
+.nav-links a {
+    background: linear-gradient(135deg, #588157, #3a5a40);
+    color: #fff;
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 14px;
+}
+.nav-links a:hover { opacity: 0.9; }
+.lang-toggle {
+    position: fixed; top: 16px; right: 16px;
+    background: #588157; border: none; border-radius: 24px;
+    padding: 10px 20px; cursor: pointer; color: #fff;
+    font-size: 14px; font-weight: 600; z-index: 1000;
+}
+.lang-toggle:hover { background: #3a5a40; }
+.ko { display: none; }
+@media (max-width: 768px) {
+    body { padding: 16px; }
+    h1 { font-size: 1.8em; }
+    pre { font-size: 14px; padding: 16px; }
+    .lang-toggle { padding: 8px 16px; font-size: 13px; }
+}
+</style>
+</head>
+<body>
+
+<button class="lang-toggle" onclick="toggleLang()">한국어</button>
+
+<h1>💻 Day 15 Practice: Timing Closure</h1>
+
+<div class="nav-links">
+    <a href="day-15-lesson.html">📖 Lesson</a>
+    <a href="day-15-quiz.html">📝 Quiz</a>
+</div>
+
+<p class="en">Apply timing closure concepts: write SDC constraints, calculate slack, and pipeline a design to meet timing.</p>
+<p class="ko" style="display:none;">타이밍 클로저 개념 적용: SDC 제약 작성, 슬랙 계산, 타이밍 충족을 위한 파이프라인 설계.</p>
+
+<!-- Exercise 1 -->
+<div class="exercise">
+    <h3>Exercise 1: <span class="en">Calculate Slack</span><span class="ko" style="display:none;">슬랙 계산</span></h3>
+    <p class="en">Given the following timing information, calculate the setup slack and determine if the path meets timing:</p>
+    <p class="ko" style="display:none;">다음 타이밍 정보가 주어졌을 때, 셋업 슬랙을 계산하고 경로가 타이밍을 충족하는지 판단하세요:</p>
+
+    <div class="concept-box">
+        <ul>
+            <li class="en">Clock period: <strong>4.0 ns</strong> (250 MHz)</li>
+            <li class="ko" style="display:none;">클럭 주기: <strong>4.0 ns</strong> (250 MHz)</li>
+            <li class="en">T<sub>cq</sub> (clock-to-Q): <strong>0.15 ns</strong></li>
+            <li class="ko" style="display:none;">T<sub>cq</sub> (clock-to-Q): <strong>0.15 ns</strong></li>
+            <li class="en">Combinational delay: Adder (1.2 ns) + Comparator (0.8 ns) + Mux (0.3 ns) = <strong>2.3 ns</strong></li>
+            <li class="ko" style="display:none;">조합 논리 지연: 가산기 (1.2 ns) + 비교기 (0.8 ns) + 먹스 (0.3 ns) = <strong>2.3 ns</strong></li>
+            <li class="en">T<sub>setup</sub>: <strong>0.12 ns</strong></li>
+            <li class="ko" style="display:none;">T<sub>setup</sub>: <strong>0.12 ns</strong></li>
+            <li class="en">Clock skew: <strong>0 ns</strong></li>
+            <li class="ko" style="display:none;">클럭 스큐: <strong>0 ns</strong></li>
+        </ul>
+    </div>
+
+    <p class="en"><strong>Questions:</strong></p>
+    <p class="ko" style="display:none;"><strong>질문:</strong></p>
+    <ol>
+        <li class="en">What is the data arrival time?</li>
+        <li class="ko" style="display:none;">데이터 도착 시간은?</li>
+        <li class="en">What is the data required time?</li>
+        <li class="ko" style="display:none;">데이터 필요 시간은?</li>
+        <li class="en">What is the slack?</li>
+        <li class="ko" style="display:none;">슬랙은?</li>
+        <li class="en">Does the path meet timing?</li>
+        <li class="ko" style="display:none;">경로가 타이밍을 충족합니까?</li>
+    </ol>
+
+    <button class="toggle-btn" onclick="toggleSolution('sol1')">Show Solution</button>
+    <div class="solution" id="sol1">
+        <pre><code><span class="comment">// Data Arrival Time = Tcq + Tcomb</span>
+<span class="comment">//                   = 0.15 + 2.3 = 2.45 ns</span>
+
+<span class="comment">// Data Required Time = Tclk - Tsetup</span>
+<span class="comment">//                    = 4.0 - 0.12 = 3.88 ns</span>
+
+<span class="comment">// Slack = Required - Arrival</span>
+<span class="comment">//       = 3.88 - 2.45 = +1.43 ns</span>
+
+<span class="comment">// ✅ PASS — Positive slack means path meets timing</span>
+<span class="comment">// with 1.43 ns of margin</span>
+
+<span class="comment">// Max frequency this path supports:</span>
+<span class="comment">// Min period = Tcq + Tcomb + Tsetup</span>
+<span class="comment">//            = 0.15 + 2.3 + 0.12 = 2.57 ns</span>
+<span class="comment">// Max freq   = 1 / 2.57 ns ≈ 389 MHz</span></code></pre>
+    </div>
+</div>
+
+<!-- Exercise 2 -->
+<div class="exercise">
+    <h3>Exercise 2: <span class="en">Write SDC Constraints</span><span class="ko" style="display:none;">SDC 제약 작성</span></h3>
+    <p class="en">Write SDC constraints for a design with these requirements:</p>
+    <p class="ko" style="display:none;">다음 요구 사항을 가진 설계에 대한 SDC 제약을 작성하세요:</p>
+    <ul>
+        <li class="en">100 MHz clock on port <code>sys_clk</code></li>
+        <li class="ko" style="display:none;">포트 <code>sys_clk</code>에 100 MHz 클럭</li>
+        <li class="en">Input data arrives 2 ns after clock edge on ports <code>data_in[7:0]</code></li>
+        <li class="ko" style="display:none;">포트 <code>data_in[7:0]</code>에서 클럭 에지 후 2 ns에 입력 데이터 도착</li>
+        <li class="en">Output must be stable 1.5 ns before next clock on port <code>result_out</code></li>
+        <li class="ko" style="display:none;">포트 <code>result_out</code>에서 다음 클럭 1.5 ns 전에 출력이 안정되어야 함</li>
+        <li class="en">Async reset <code>rst_n</code> — exclude from timing</li>
+        <li class="ko" style="display:none;">비동기 리셋 <code>rst_n</code> — 타이밍에서 제외</li>
+        <li class="en">A slow config register path that takes 3 cycles</li>
+        <li class="ko" style="display:none;">3사이클이 소요되는 느린 구성 레지스터 경로</li>
+    </ul>
+
+    <button class="toggle-btn" onclick="toggleSolution('sol2')">Show Solution</button>
+    <div class="solution" id="sol2">
+        <pre><code><span class="comment"># 100 MHz clock → 10 ns period</span>
+<span class="keyword">create_clock</span> <span class="signal">-name</span> sys_clk <span class="signal">-period</span> <span class="number">10.0</span> [<span class="keyword">get_ports</span> sys_clk]
+
+<span class="comment"># Input delay: data arrives 2 ns after clock edge</span>
+<span class="keyword">set_input_delay</span> <span class="signal">-clock</span> sys_clk <span class="number">2.0</span> [<span class="keyword">get_ports</span> data_in*]
+
+<span class="comment"># Output delay: data must be stable 1.5 ns before next edge</span>
+<span class="keyword">set_output_delay</span> <span class="signal">-clock</span> sys_clk <span class="number">1.5</span> [<span class="keyword">get_ports</span> result_out]
+
+<span class="comment"># Async reset: false path (not timing-critical)</span>
+<span class="keyword">set_false_path</span> <span class="signal">-from</span> [<span class="keyword">get_ports</span> rst_n]
+
+<span class="comment"># Slow config register: 3-cycle multicycle path</span>
+<span class="keyword">set_multicycle_path</span> <span class="number">3</span> <span class="signal">-setup</span> \
+    <span class="signal">-from</span> [<span class="keyword">get_cells</span> config_reg*] \
+    <span class="signal">-to</span>   [<span class="keyword">get_cells</span> config_dest_reg*]
+<span class="keyword">set_multicycle_path</span> <span class="number">2</span> <span class="signal">-hold</span> \
+    <span class="signal">-from</span> [<span class="keyword">get_cells</span> config_reg*] \
+    <span class="signal">-to</span>   [<span class="keyword">get_cells</span> config_dest_reg*]
+
+<span class="comment"># Note: hold multicycle = setup multicycle - 1</span>
+<span class="comment"># This is the standard convention!</span></code></pre>
+
+        <div class="hint-box">
+            <p class="en"><strong>💡 Why hold multicycle = setup - 1?</strong> When you relax setup to N cycles, the hold check still defaults to the original capture edge. Setting hold to N-1 moves the hold reference back to match, preventing overly conservative hold checks.</p>
+            <p class="ko" style="display:none;"><strong>💡 왜 hold multicycle = setup - 1인가?</strong> 셋업을 N 사이클로 완화하면 홀드 체크는 여전히 원래 캡처 에지를 기본으로 합니다. 홀드를 N-1로 설정하면 홀드 참조가 뒤로 이동하여 과도하게 보수적인 홀드 체크를 방지합니다.</p>
+        </div>
+    </div>
+</div>
+
+<!-- Exercise 3 -->
+<div class="exercise">
+    <h3>Exercise 3: <span class="en">Pipeline a Failing Design</span><span class="ko" style="display:none;">실패하는 설계를 파이프라인</span></h3>
+    <p class="en">This design fails timing at 250 MHz (4 ns period). The combinational path takes 5.8 ns. Pipeline it into 2 stages to meet timing.</p>
+    <p class="ko" style="display:none;">이 설계는 250 MHz (4 ns 주기)에서 타이밍을 실패합니다. 조합 논리 경로가 5.8 ns 소요됩니다. 타이밍을 충족하기 위해 2단계 파이프라인으로 나누세요.</p>
+
+    <pre><code><span class="comment">// FAILS at 250 MHz — combinational path = 5.8 ns > 4.0 ns</span>
+<span class="keyword">module</span> <span class="type">data_processor</span> (
+    <span class="keyword">input</span>  <span class="keyword">logic</span>        <span class="signal">clk</span>, <span class="signal">rst_n</span>,
+    <span class="keyword">input</span>  <span class="keyword">logic</span> [<span class="number">15</span>:<span class="number">0</span>] <span class="signal">a</span>, <span class="signal">b</span>, <span class="signal">c</span>,
+    <span class="keyword">input</span>  <span class="keyword">logic</span> [<span class="number">1</span>:<span class="number">0</span>]  <span class="signal">mode</span>,
+    <span class="keyword">output</span> <span class="keyword">logic</span> [<span class="number">15</span>:<span class="number">0</span>] <span class="signal">result</span>
+);
+    <span class="keyword">logic</span> [<span class="number">15</span>:<span class="number">0</span>] <span class="signal">sum</span>, <span class="signal">diff</span>, <span class="signal">product_trunc</span>;
+
+    <span class="comment">// All in one cycle: add, subtract, multiply, mux</span>
+    <span class="keyword">always_comb</span> <span class="keyword">begin</span>
+        <span class="signal">sum</span>           = <span class="signal">a</span> + <span class="signal">b</span> + <span class="signal">c</span>;        <span class="comment">// ~1.8 ns</span>
+        <span class="signal">diff</span>          = <span class="signal">a</span> - <span class="signal">b</span>;             <span class="comment">// ~1.2 ns</span>
+        <span class="signal">product_trunc</span> = (<span class="signal">a</span> * <span class="signal">b</span>) &gt;&gt; <span class="number">8</span>;      <span class="comment">// ~3.0 ns</span>
+    <span class="keyword">end</span>
+
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span> <span class="keyword">or negedge</span> <span class="signal">rst_n</span>) <span class="keyword">begin</span>
+        <span class="keyword">if</span> (!<span class="signal">rst_n</span>)
+            <span class="signal">result</span> &lt;= <span class="number">'0</span>;
+        <span class="keyword">else begin</span>
+            <span class="keyword">case</span> (<span class="signal">mode</span>)                        <span class="comment">// ~0.8 ns mux</span>
+                <span class="number">2'b00</span>: <span class="signal">result</span> &lt;= <span class="signal">sum</span>;
+                <span class="number">2'b01</span>: <span class="signal">result</span> &lt;= <span class="signal">diff</span>;
+                <span class="number">2'b10</span>: <span class="signal">result</span> &lt;= <span class="signal">product_trunc</span>;
+                <span class="number">2'b11</span>: <span class="signal">result</span> &lt;= <span class="signal">sum</span> + <span class="signal">diff</span>;    <span class="comment">// additional add</span>
+            <span class="keyword">endcase</span>
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+<span class="keyword">endmodule</span></code></pre>
+
+    <div class="hint-box">
+        <p class="en"><strong>💡 Hints:</strong> (1) Stage 1: Compute sum, diff, product_trunc. (2) Stage 2: Mux select. (3) Don't forget to pipeline <code>mode</code>! (4) Critical path is through the multiply → mux.</p>
+        <p class="ko" style="display:none;"><strong>💡 힌트:</strong> (1) 1단계: sum, diff, product_trunc 계산. (2) 2단계: Mux 선택. (3) <code>mode</code>를 파이프라인하는 것을 잊지 마세요! (4) 크리티컬 패스는 곱셈 → 먹스를 통과합니다.</p>
+    </div>
+
+    <button class="toggle-btn" onclick="toggleSolution('sol3')">Show Solution</button>
+    <div class="solution" id="sol3">
+        <pre><code><span class="comment">// 2-stage pipeline — meets 250 MHz</span>
+<span class="keyword">module</span> <span class="type">data_processor</span> (
+    <span class="keyword">input</span>  <span class="keyword">logic</span>        <span class="signal">clk</span>, <span class="signal">rst_n</span>,
+    <span class="keyword">input</span>  <span class="keyword">logic</span> [<span class="number">15</span>:<span class="number">0</span>] <span class="signal">a</span>, <span class="signal">b</span>, <span class="signal">c</span>,
+    <span class="keyword">input</span>  <span class="keyword">logic</span> [<span class="number">1</span>:<span class="number">0</span>]  <span class="signal">mode</span>,
+    <span class="keyword">output</span> <span class="keyword">logic</span> [<span class="number">15</span>:<span class="number">0</span>] <span class="signal">result</span>
+);
+    <span class="comment">// ── Stage 1 registers ──</span>
+    <span class="keyword">logic</span> [<span class="number">15</span>:<span class="number">0</span>] <span class="signal">sum_s1</span>, <span class="signal">diff_s1</span>, <span class="signal">product_trunc_s1</span>;
+    <span class="keyword">logic</span> [<span class="number">1</span>:<span class="number">0</span>]  <span class="signal">mode_s1</span>;  <span class="comment">// Pipeline the control signal!</span>
+
+    <span class="comment">// Stage 1: Compute all operations (~3.0 ns worst case)</span>
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span> <span class="keyword">or negedge</span> <span class="signal">rst_n</span>) <span class="keyword">begin</span>
+        <span class="keyword">if</span> (!<span class="signal">rst_n</span>) <span class="keyword">begin</span>
+            <span class="signal">sum_s1</span>           &lt;= <span class="number">'0</span>;
+            <span class="signal">diff_s1</span>          &lt;= <span class="number">'0</span>;
+            <span class="signal">product_trunc_s1</span> &lt;= <span class="number">'0</span>;
+            <span class="signal">mode_s1</span>          &lt;= <span class="number">'0</span>;
+        <span class="keyword">end else begin</span>
+            <span class="signal">sum_s1</span>           &lt;= <span class="signal">a</span> + <span class="signal">b</span> + <span class="signal">c</span>;
+            <span class="signal">diff_s1</span>          &lt;= <span class="signal">a</span> - <span class="signal">b</span>;
+            <span class="signal">product_trunc_s1</span> &lt;= (<span class="signal">a</span> * <span class="signal">b</span>) &gt;&gt; <span class="number">8</span>;
+            <span class="signal">mode_s1</span>          &lt;= <span class="signal">mode</span>;
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+
+    <span class="comment">// Stage 2: Mux select (~0.8 ns + add for mode 11)</span>
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span> <span class="keyword">or negedge</span> <span class="signal">rst_n</span>) <span class="keyword">begin</span>
+        <span class="keyword">if</span> (!<span class="signal">rst_n</span>)
+            <span class="signal">result</span> &lt;= <span class="number">'0</span>;
+        <span class="keyword">else begin</span>
+            <span class="keyword">case</span> (<span class="signal">mode_s1</span>)
+                <span class="number">2'b00</span>: <span class="signal">result</span> &lt;= <span class="signal">sum_s1</span>;
+                <span class="number">2'b01</span>: <span class="signal">result</span> &lt;= <span class="signal">diff_s1</span>;
+                <span class="number">2'b10</span>: <span class="signal">result</span> &lt;= <span class="signal">product_trunc_s1</span>;
+                <span class="number">2'b11</span>: <span class="signal">result</span> &lt;= <span class="signal">sum_s1</span> + <span class="signal">diff_s1</span>;
+            <span class="keyword">endcase</span>
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+
+    <span class="comment">// Result: +1 cycle latency, but meets 250 MHz!</span>
+    <span class="comment">// Stage 1 critical path: ~3.0 ns (multiply) ✅ < 4.0 ns</span>
+    <span class="comment">// Stage 2 critical path: ~2.0 ns (add+mux)  ✅ < 4.0 ns</span>
+<span class="keyword">endmodule</span></code></pre>
+
+        <div class="tip-box">
+            <p class="en"><strong>Key takeaways:</strong> (1) <code>mode_s1</code> is pipelined — without it, stage 2 would use the wrong mode. (2) The multiply (slowest operation) is now isolated in stage 1. (3) Total latency increased by 1 cycle, but throughput stays at 1 result per clock.</p>
+            <p class="ko" style="display:none;"><strong>핵심 포인트:</strong> (1) <code>mode_s1</code>이 파이프라인됨 — 없으면 2단계가 잘못된 모드를 사용. (2) 곱셈(가장 느린 연산)이 이제 1단계에 격리됨. (3) 총 지연이 1사이클 증가했지만, 처리량은 클럭당 1결과로 유지.</p>
+        </div>
+    </div>
+</div>
+
+<!-- Exercise 4 -->
+<div class="exercise">
+    <h3>Exercise 4: <span class="en">Identify the Fix</span><span class="ko" style="display:none;">수정 방법 식별</span></h3>
+    <p class="en">For each scenario, choose the best timing closure strategy:</p>
+    <p class="ko" style="display:none;">각 시나리오에 대해 최적의 타이밍 클로저 전략을 선택하세요:</p>
+
+    <div class="concept-box">
+        <p class="en"><strong>Scenario A:</strong> A path from <code>rst_n</code> to <code>data_reg</code> shows -2.0 ns slack. The reset is asynchronous.</p>
+        <p class="ko" style="display:none;"><strong>시나리오 A:</strong> <code>rst_n</code>에서 <code>data_reg</code>로의 경로가 -2.0 ns 슬랙을 보입니다. 리셋은 비동기입니다.</p>
+
+        <p class="en"><strong>Scenario B:</strong> The critical path through a 32-bit multiplier has -1.5 ns slack. The multiplier output is only sampled every 3 clock cycles.</p>
+        <p class="ko" style="display:none;"><strong>시나리오 B:</strong> 32비트 곱셈기를 통한 크리티컬 패스가 -1.5 ns 슬랙을 가집니다. 곱셈기 출력은 3 클럭 사이클마다만 샘플링됩니다.</p>
+
+        <p class="en"><strong>Scenario C:</strong> A long chain of adders and comparators has -0.8 ns slack. All signals are used every cycle.</p>
+        <p class="ko" style="display:none;"><strong>시나리오 C:</strong> 가산기와 비교기의 긴 체인이 -0.8 ns 슬랙을 가집니다. 모든 신호는 매 사이클 사용됩니다.</p>
+
+        <p class="en"><strong>Scenario D:</strong> A path between <code>clk_a</code> domain and <code>clk_b</code> domain (unrelated clocks) fails timing.</p>
+        <p class="ko" style="display:none;"><strong>시나리오 D:</strong> <code>clk_a</code> 도메인과 <code>clk_b</code> 도메인(관련 없는 클럭) 간의 경로가 타이밍을 실패합니다.</p>
+    </div>
+
+    <button class="toggle-btn" onclick="toggleSolution('sol4')">Show Solution</button>
+    <div class="solution" id="sol4">
+        <div class="concept-box">
+            <p class="en"><strong>A: <code>set_false_path</code></strong> — Async reset to data registers is not a real timing path. Mark it false.</p>
+            <p class="ko" style="display:none;"><strong>A: <code>set_false_path</code></strong> — 비동기 리셋에서 데이터 레지스터로는 실제 타이밍 경로가 아닙니다. 거짓 경로로 표시.</p>
+
+            <p class="en"><strong>B: <code>set_multicycle_path 3</code></strong> — The multiplier output is only sampled every 3 cycles, so give it 3 cycles to settle.</p>
+            <p class="ko" style="display:none;"><strong>B: <code>set_multicycle_path 3</code></strong> — 곱셈기 출력은 3사이클마다만 샘플링되므로, 안정되는 데 3사이클을 줍니다.</p>
+
+            <p class="en"><strong>C: Pipeline</strong> — Real path used every cycle. Must break it into shorter stages with pipeline registers.</p>
+            <p class="ko" style="display:none;"><strong>C: 파이프라인</strong> — 매 사이클 사용되는 실제 경로. 파이프라인 레지스터로 더 짧은 단계로 나눠야 합니다.</p>
+
+            <p class="en"><strong>D: <code>set_false_path</code></strong> — Unrelated clock domains should be handled by CDC logic (synchronizers), not timing analysis. Mark the crossing as a false path.</p>
+            <p class="ko" style="display:none;"><strong>D: <code>set_false_path</code></strong> — 관련 없는 클럭 도메인은 타이밍 분석이 아닌 CDC 로직(동기화기)으로 처리해야 합니다. 크로싱을 거짓 경로로 표시.</p>
+        </div>
+    </div>
+</div>
+
+<div class="tip-box">
+    <h3>🎉 <span class="en">Week 3 Complete!</span><span class="ko" style="display:none;">3주차 완료!</span></h3>
+    <p class="en">You've completed the Timing Fundamentals week! You now understand setup time, hold time, clock skew, critical paths, and timing closure. Next week: <strong>Clock Domain Crossing (CDC)</strong> — one of the most important topics in digital design!</p>
+    <p class="ko" style="display:none;">타이밍 기초 주를 완료했습니다! 이제 셋업 타임, 홀드 타임, 클럭 스큐, 크리티컬 패스, 타이밍 클로저를 이해합니다. 다음 주: <strong>클럭 도메인 크로싱(CDC)</strong> — 디지털 설계에서 가장 중요한 주제 중 하나!</p>
+</div>
+
+<div class="nav-links">
+    <a href="day-15-lesson.html">📖 Review Lesson</a>
+    <a href="day-15-quiz.html">📝 Take the Quiz</a>
+</div>
+
+<script>
+let isKorean = false;
+function toggleLang() {
+    isKorean = !isKorean;
+    document.querySelectorAll('.en').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'none' : 'revert', 'important');
+    });
+    document.querySelectorAll('.ko').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'revert' : 'none', 'important');
+    });
+    document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+}
+function toggleSolution(id) {
+    const sol = document.getElementById(id);
+    const btn = sol.previousElementSibling;
+    if (sol.style.display === 'block') {
+        sol.style.display = 'none';
+        btn.textContent = 'Show Solution';
+    } else {
+        sol.style.display = 'block';
+        btn.textContent = 'Hide Solution';
+    }
+}
+</script>
+
+</body>
+</html>
