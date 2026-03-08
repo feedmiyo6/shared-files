@@ -1,5 +1,494 @@
 <!DOCTYPE html>
-<html><head><meta charset="UTF-8"><title>Shared Files</title></head>
-<body><p>Nothing to see here.</p></body></html>
-<!-- Mon Feb  2 17:05:14 MST 2026 -->
-<!-- deploy Tue Feb  3 09:12:35 MST 2026 -->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fridgenie — Your Smart Kitchen Companion</title>
+<meta name="description" content="Fridgenie helps you track pantry items, discover recipes with what you have, and reduce food waste. Your AI-powered kitchen companion.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --green: #4A7C59;
+    --green-light: #6B9F7B;
+    --green-pale: #E8F0E5;
+    --cream: #FFF8F0;
+    --cream-dark: #F5EDE0;
+    --brown: #5C4033;
+    --brown-light: #8B6F5E;
+    --orange: #E8945A;
+    --orange-light: #F0B88A;
+    --text: #3D3328;
+    --text-light: #6B5E52;
+  }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: var(--cream);
+    color: var(--text);
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3 { font-family: 'Fredoka', sans-serif; }
+
+  /* Hero */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 40px 24px;
+    background: linear-gradient(180deg, var(--green-pale) 0%, var(--cream) 60%);
+    position: relative;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background:
+      radial-gradient(circle at 15% 20%, rgba(74,124,89,0.08) 0%, transparent 50%),
+      radial-gradient(circle at 85% 30%, rgba(232,148,90,0.06) 0%, transparent 50%),
+      radial-gradient(circle at 50% 80%, rgba(74,124,89,0.05) 0%, transparent 50%);
+    pointer-events: none;
+  }
+
+  .logo {
+    font-size: 64px;
+    margin-bottom: 8px;
+    filter: drop-shadow(0 4px 12px rgba(74,124,89,0.2));
+    animation: float 3s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+
+  .hero h1 {
+    font-size: clamp(2.4rem, 6vw, 3.6rem);
+    color: var(--green);
+    margin-bottom: 8px;
+    letter-spacing: -0.5px;
+  }
+
+  .hero .tagline {
+    font-size: clamp(1.1rem, 3vw, 1.35rem);
+    color: var(--brown-light);
+    font-weight: 500;
+    max-width: 500px;
+    margin-bottom: 32px;
+    line-height: 1.5;
+  }
+
+  .badge-row {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 40px;
+  }
+
+  .badge {
+    background: white;
+    border: 1.5px solid var(--green-pale);
+    border-radius: 24px;
+    padding: 8px 18px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--green);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    box-shadow: 0 2px 8px rgba(74,124,89,0.08);
+  }
+
+  .cta-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--green);
+    color: white;
+    font-family: 'Fredoka', sans-serif;
+    font-size: 1.15rem;
+    font-weight: 600;
+    padding: 16px 36px;
+    border-radius: 50px;
+    text-decoration: none;
+    box-shadow: 0 4px 20px rgba(74,124,89,0.3);
+    transition: all 0.3s ease;
+  }
+
+  .cta-btn:hover {
+    background: var(--green-light);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 28px rgba(74,124,89,0.35);
+  }
+
+  .cta-sub {
+    margin-top: 12px;
+    font-size: 0.85rem;
+    color: var(--text-light);
+  }
+
+  /* Scroll hint */
+  .scroll-hint {
+    position: absolute;
+    bottom: 32px;
+    animation: bounce 2s ease-in-out infinite;
+    color: var(--green-light);
+    font-size: 1.5rem;
+  }
+
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); opacity: 0.6; }
+    50% { transform: translateY(8px); opacity: 1; }
+  }
+
+  /* Features */
+  .features {
+    padding: 80px 24px;
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+
+  .features h2 {
+    text-align: center;
+    font-size: clamp(1.8rem, 4vw, 2.4rem);
+    color: var(--green);
+    margin-bottom: 48px;
+  }
+
+  .feature-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px;
+  }
+
+  .feature-card {
+    background: white;
+    border-radius: 20px;
+    padding: 32px 28px;
+    border: 1.5px solid var(--green-pale);
+    box-shadow: 0 4px 16px rgba(74,124,89,0.06);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .feature-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 28px rgba(74,124,89,0.12);
+  }
+
+  .feature-icon {
+    font-size: 2.4rem;
+    margin-bottom: 16px;
+  }
+
+  .feature-card h3 {
+    font-size: 1.2rem;
+    color: var(--green);
+    margin-bottom: 8px;
+  }
+
+  .feature-card p {
+    font-size: 0.95rem;
+    color: var(--text-light);
+    line-height: 1.6;
+  }
+
+  /* How it works */
+  .how-it-works {
+    background: var(--green-pale);
+    padding: 80px 24px;
+  }
+
+  .how-it-works h2 {
+    text-align: center;
+    font-size: clamp(1.8rem, 4vw, 2.4rem);
+    color: var(--green);
+    margin-bottom: 48px;
+  }
+
+  .steps {
+    max-width: 700px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+  }
+
+  .step {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    background: white;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 2px 12px rgba(74,124,89,0.06);
+  }
+
+  .step-num {
+    background: var(--green);
+    color: white;
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Fredoka', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+  }
+
+  .step h3 {
+    font-size: 1.1rem;
+    color: var(--brown);
+    margin-bottom: 4px;
+  }
+
+  .step p {
+    font-size: 0.9rem;
+    color: var(--text-light);
+    line-height: 1.5;
+  }
+
+  /* Stats */
+  .stats {
+    padding: 60px 24px;
+    max-width: 800px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    gap: 48px;
+    flex-wrap: wrap;
+    text-align: center;
+  }
+
+  .stat h3 {
+    font-size: clamp(2rem, 5vw, 2.8rem);
+    color: var(--orange);
+  }
+
+  .stat p {
+    font-size: 0.9rem;
+    color: var(--text-light);
+    font-weight: 600;
+  }
+
+  /* Multilingual */
+  .multilingual {
+    text-align: center;
+    padding: 60px 24px;
+    background: var(--cream-dark);
+  }
+
+  .multilingual h2 {
+    font-size: clamp(1.6rem, 4vw, 2rem);
+    color: var(--green);
+    margin-bottom: 12px;
+  }
+
+  .multilingual p {
+    color: var(--text-light);
+    font-size: 1rem;
+    margin-bottom: 24px;
+  }
+
+  .lang-flags {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .lang-flag {
+    background: white;
+    border-radius: 16px;
+    padding: 16px 28px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--brown);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    border: 1.5px solid var(--green-pale);
+  }
+
+  /* Footer CTA */
+  .footer-cta {
+    text-align: center;
+    padding: 80px 24px;
+    background: linear-gradient(180deg, var(--cream) 0%, var(--green-pale) 100%);
+  }
+
+  .footer-cta h2 {
+    font-size: clamp(1.8rem, 4vw, 2.4rem);
+    color: var(--green);
+    margin-bottom: 12px;
+  }
+
+  .footer-cta p {
+    color: var(--text-light);
+    margin-bottom: 28px;
+    font-size: 1.05rem;
+  }
+
+  /* Footer */
+  footer {
+    text-align: center;
+    padding: 32px 24px;
+    background: var(--green);
+    color: rgba(255,255,255,0.7);
+    font-size: 0.85rem;
+  }
+
+  footer a {
+    color: rgba(255,255,255,0.9);
+    text-decoration: none;
+  }
+
+  footer .footer-brand {
+    font-family: 'Fredoka', sans-serif;
+    font-size: 1.1rem;
+    color: white;
+    margin-bottom: 8px;
+  }
+
+  /* Mobile */
+  @media (max-width: 600px) {
+    .stats { gap: 32px; }
+    .feature-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="logo">🧞‍♂️🍳</div>
+  <h1>Fridgenie</h1>
+  <p class="tagline">Your AI-powered kitchen companion. Track what you have, discover what to cook, waste less food.</p>
+  <div class="badge-row">
+    <span class="badge">🤖 AI-Powered</span>
+    <span class="badge">🎙️ Voice Input</span>
+    <span class="badge">📸 Receipt Scan</span>
+    <span class="badge">🌍 Multilingual</span>
+  </div>
+  <a href="#" class="cta-btn">🍎 Download on the App Store</a>
+  <p class="cta-sub">Free · iOS · Coming Soon</p>
+  <div class="scroll-hint">↓</div>
+</section>
+
+<!-- Features -->
+<section class="features">
+  <h2>Everything your kitchen needs ✨</h2>
+  <div class="feature-grid">
+    <div class="feature-card">
+      <div class="feature-icon">🧊</div>
+      <h3>Smart Pantry Tracking</h3>
+      <p>Organize your fridge, freezer, and pantry in one place. Track expiry dates and never let food go to waste again.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🧑‍🍳</div>
+      <h3>AI Recipe Discovery</h3>
+      <p>Tell Fridgenie what you have and it'll suggest delicious recipes — matched to your ingredients and cuisine preferences.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🎙️</div>
+      <h3>Voice Input</h3>
+      <p>Hands full? Just speak! Add items to your pantry with natural voice commands powered by AI transcription.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">📸</div>
+      <h3>Receipt Scanning</h3>
+      <p>Snap a photo of your grocery receipt and Fridgenie automatically adds items to your inventory. Magic!</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🛒</div>
+      <h3>Smart Shopping Lists</h3>
+      <p>Magic Shop builds your list from missing recipe ingredients. Staples list remembers your essentials.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">👨‍👩‍👧‍👦</div>
+      <h3>Household Sharing</h3>
+      <p>Share your kitchen with family members. Everyone stays on the same page about what's in stock.</p>
+    </div>
+  </div>
+</section>
+
+<!-- How it works -->
+<section class="how-it-works">
+  <h2>How it works 🌿</h2>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div>
+        <h3>Add your items</h3>
+        <p>Type, speak, or scan receipts to add groceries. Fridgenie organizes them into fridge, freezer, and pantry automatically.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div>
+        <h3>Discover recipes</h3>
+        <p>Pick your favorite cuisines and let AI find recipes that match what you already have at home.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div>
+        <h3>Cook & enjoy</h3>
+        <p>Follow the recipe, check off used ingredients, and add missing ones to your shopping list for next time.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Stats -->
+<section class="stats">
+  <div class="stat">
+    <h3>40%</h3>
+    <p>Less food waste</p>
+  </div>
+  <div class="stat">
+    <h3>3x</h3>
+    <p>Faster meal planning</p>
+  </div>
+  <div class="stat">
+    <h3>50+</h3>
+    <p>Cuisine types</p>
+  </div>
+</section>
+
+<!-- Multilingual -->
+<section class="multilingual">
+  <h2>Speaks your language 🌏</h2>
+  <p>Fridgenie is designed to be inclusive, with full support for multiple languages.</p>
+  <div class="lang-flags">
+    <div class="lang-flag">🇺🇸 English</div>
+    <div class="lang-flag">🇰🇷 한국어</div>
+    <div class="lang-flag">🇨🇳 中文</div>
+  </div>
+</section>
+
+<!-- Footer CTA -->
+<section class="footer-cta">
+  <h2>Ready to transform your kitchen? 🍳</h2>
+  <p>Join the Fridgenie family and start cooking smarter today.</p>
+  <a href="#" class="cta-btn">🍎 Get Fridgenie — It's Free</a>
+</section>
+
+<!-- Footer -->
+<footer>
+  <div class="footer-brand">🧞‍♂️ Fridgenie</div>
+  <p>© 2026 Fridgenie. All rights reserved.</p>
+  <p style="margin-top: 8px;"><a href="#">Privacy Policy</a> · <a href="#">Terms of Service</a> · <a href="mailto:hello@fridgenie.app">Contact</a></p>
+</footer>
+
+</body>
+</html>
