@@ -175,8 +175,9 @@ button,input{font-family:'Nunito',sans-serif}
 .phone-carousel{
   display:flex;gap:28px;overflow-x:auto;scroll-snap-type:x mandatory;
   padding:20px 24px 40px;-webkit-overflow-scrolling:touch;
-  scrollbar-width:none;
+  scrollbar-width:none;justify-content:center;
 }
+@media(max-width:1440px){.phone-carousel{justify-content:flex-start;}}
 .phone-carousel::-webkit-scrollbar{display:none}
 .phone-frame{
   flex:0 0 270px;scroll-snap-align:center;
@@ -361,6 +362,18 @@ button,input{font-family:'Nunito',sans-serif}
 .author-info .author-name{font-weight:700;font-size:.88rem;color:var(--dark-green)}
 .author-info .author-role{font-size:.78rem;color:var(--text-light)}
 @media(max-width:800px){.testimonials-grid{grid-template-columns:1fr}}
+@media(max-width:600px){
+  .phone-frame{flex:0 0 240px;border-radius:28px;padding:10px}
+  .phone-carousel{gap:16px;padding:16px 16px 32px}
+  .phone-notch{width:80px;height:22px;border-radius:0 0 12px 12px}
+  .phone-screen{border-radius:18px}
+  .section-title{font-size:1.6rem}
+  .cta-section h2{font-size:1.5rem}
+  .cta-form{flex-direction:column}
+  .cta-form input,.cta-form button{width:100%}
+  .screenshots{padding:60px 0}
+  .faq{padding:60px 24px}
+}
 
 /* ── FAQ ─────────────────────────────────────────────── */
 .faq{padding:100px 0;background:linear-gradient(180deg,transparent,rgba(74,124,89,.03),transparent)}
