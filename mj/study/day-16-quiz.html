@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 16 Quiz: Metastability | Digital Design Study</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    background: linear-gradient(135deg, #fefae0 0%, #faedcd 100%);
+    color: #3d405b;
+    line-height: 1.8;
+    padding: 24px;
+    max-width: 920px;
+    margin: 0 auto;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+h1 { color: #5d4037; border-bottom: 3px solid #c4a77d; padding-bottom: 12px; margin-bottom: 24px; font-size: 2em; }
+h2 { color: #588157; border-bottom: 2px solid #a3b18a; padding-bottom: 8px; margin: 32px 0 16px; }
+h3 { color: #5d4037; margin: 20px 0 12px; }
+p { margin: 12px 0; }
+code { background: #e9f5db; color: #3d405b; padding: 2px 8px; border-radius: 4px; font-family: 'SF Mono', 'Monaco', 'Consolas', monospace; }
+
+.question-block {
+    background: #fff8f0;
+    border: 2px solid #c4a77d;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    color: #3d405b;
+}
+.question-block h3 { color: #5d4037; margin-bottom: 12px; }
+.options { list-style: none; padding: 0; }
+.options li {
+    padding: 10px 16px;
+    margin: 8px 0;
+    border-radius: 8px;
+    cursor: pointer;
+    border: 2px solid #c4a77d;
+    background: #fff;
+    transition: all 0.2s;
+}
+.options li:hover { border-color: #588157; background: #f0f7e8; }
+.options li.correct { background: #d4edda; border-color: #10b981; }
+.options li.wrong { background: #fde8e8; border-color: #ef4444; }
+.options li.disabled { pointer-events: none; opacity: 0.7; }
+.explanation {
+    display: none;
+    margin-top: 12px;
+    padding: 12px;
+    background: #e9f5db;
+    border-radius: 8px;
+    color: #3d405b;
+}
+
+.score-bar {
+    background: #fff8f0;
+    border: 2px solid #c4a77d;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    text-align: center;
+    font-size: 1.2em;
+    color: #5d4037;
+    font-weight: 600;
+}
+
+.nav-links { display: flex; gap: 12px; margin: 24px 0; flex-wrap: wrap; }
+.nav-links a {
+    background: linear-gradient(135deg, #588157, #3a5a40);
+    color: #fff; text-decoration: none; padding: 10px 20px;
+    border-radius: 24px; font-weight: 600; font-size: 14px;
+}
+.nav-links a:hover { opacity: 0.9; }
+
+.lang-toggle {
+    position: fixed; top: 16px; right: 16px; background: #588157;
+    border: none; border-radius: 24px; padding: 10px 20px; cursor: pointer;
+    color: #fff; font-size: 14px; font-weight: 600; z-index: 1000;
+}
+.lang-toggle:hover { background: #3a5a40; }
+.ko { display: none; }
+
+@media (max-width: 768px) {
+    body { padding: 16px; }
+    h1 { font-size: 1.8em; }
+    .lang-toggle { padding: 8px 16px; font-size: 13px; }
+}
+</style>
+</head>
+<body>
+
+<button class="lang-toggle" onclick="toggleLang()">한국어</button>
+
+<h1>📝 Day 16 Quiz: Metastability</h1>
+
+<div class="nav-links">
+    <a href="day-16-lesson.html">📖 Lesson</a>
+    <a href="day-16-practice.html">💻 Practice</a>
+</div>
+
+<div class="score-bar" id="score">Score: 0 / 12</div>
+
+<!-- Q1 -->
+<div class="question-block">
+    <h3>Q1. <span class="en">What causes metastability in a flip-flop?</span><span class="ko" style="display:none;">플립플롭에서 메타스테이빌리티의 원인은?</span></h3>
+    <ul class="options" data-correct="2">
+        <li onclick="answer(this)">A) <span class="en">Clock frequency too high</span><span class="ko" style="display:none;">클록 주파수가 너무 높음</span></li>
+        <li onclick="answer(this)">B) <span class="en">Data changes during the setup/hold window</span><span class="ko" style="display:none;">셋업/홀드 윈도우 동안 데이터가 변함</span></li>
+        <li onclick="answer(this)">C) <span class="en">Power supply noise</span><span class="ko" style="display:none;">전원 공급 노이즈</span></li>
+        <li onclick="answer(this)">D) <span class="en">Using non-blocking assignments</span><span class="ko" style="display:none;">논블로킹 할당 사용</span></li>
+    </ul>
+    <div class="explanation"><span class="en">Metastability occurs when input data transitions during the setup/hold time window around the clock edge, causing the flip-flop to enter an indeterminate state.</span><span class="ko" style="display:none;">메타스테이빌리티는 클록 에지 주변의 셋업/홀드 시간 윈도우 동안 입력 데이터가 전환될 때 발생하여 플립플롭이 불확정 상태에 진입합니다.</span></div>
+</div>
+
+<!-- Q2 -->
+<div class="question-block">
+    <h3>Q2. <span class="en">In the ball-on-hill analogy, what does the hilltop represent?</span><span class="ko" style="display:none;">언덕 위의 공 비유에서 언덕 꼭대기는 무엇을 나타내나요?</span></h3>
+    <ul class="options" data-correct="3">
+        <li onclick="answer(this)">A) <span class="en">Logic 1</span><span class="ko" style="display:none;">로직 1</span></li>
+        <li onclick="answer(this)">B) <span class="en">Logic 0</span><span class="ko" style="display:none;">로직 0</span></li>
+        <li onclick="answer(this)">C) <span class="en">The metastable (unstable equilibrium) state</span><span class="ko" style="display:none;">준안정(불안정 평형) 상태</span></li>
+        <li onclick="answer(this)">D) <span class="en">The clock threshold voltage</span><span class="ko" style="display:none;">클록 임계 전압</span></li>
+    </ul>
+    <div class="explanation"><span class="en">The hilltop is the unstable equilibrium point — the metastable state. The two valleys represent the two stable states (logic 0 and logic 1).</span><span class="ko" style="display:none;">언덕 꼭대기는 불안정 평형점 — 준안정 상태입니다. 두 골짜기는 두 안정 상태(로직 0과 로직 1)를 나타냅니다.</span></div>
+</div>
+
+<!-- Q3 -->
+<div class="question-block">
+    <h3>Q3. <span class="en">How does the probability of remaining metastable change with time?</span><span class="ko" style="display:none;">준안정 상태를 유지할 확률은 시간에 따라 어떻게 변하나요?</span></h3>
+    <ul class="options" data-correct="1">
+        <li onclick="answer(this)">A) <span class="en">Decreases exponentially</span><span class="ko" style="display:none;">기하급수적으로 감소</span></li>
+        <li onclick="answer(this)">B) <span class="en">Decreases linearly</span><span class="ko" style="display:none;">선형적으로 감소</span></li>
+        <li onclick="answer(this)">C) <span class="en">Remains constant</span><span class="ko" style="display:none;">일정하게 유지</span></li>
+        <li onclick="answer(this)">D) <span class="en">Increases with time</span><span class="ko" style="display:none;">시간이 지남에 따라 증가</span></li>
+    </ul>
+    <div class="explanation"><span class="en">The probability decreases exponentially: P ∝ e^(-t/τ). This is why adding even one more clock cycle of resolution time dramatically improves MTBF.</span><span class="ko" style="display:none;">확률은 기하급수적으로 감소합니다: P ∝ e^(-t/τ). 그래서 해결 시간에 클록 주기를 하나만 더 추가해도 MTBF가 극적으로 향상됩니다.</span></div>
+</div>
+
+<!-- Q4 -->
+<div class="question-block">
+    <h3>Q4. <span class="en">What is the standard solution for single-bit clock domain crossing?</span><span class="ko" style="display:none;">단일 비트 클록 도메인 크로싱의 표준 해결책은?</span></h3>
+    <ul class="options" data-correct="2">
+        <li onclick="answer(this)">A) <span class="en">One flip-flop synchronizer</span><span class="ko" style="display:none;">1-플립플롭 동기화기</span></li>
+        <li onclick="answer(this)">B) <span class="en">Two flip-flop (2FF) synchronizer</span><span class="ko" style="display:none;">2-플립플롭(2FF) 동기화기</span></li>
+        <li onclick="answer(this)">C) <span class="en">Latch-based synchronizer</span><span class="ko" style="display:none;">래치 기반 동기화기</span></li>
+        <li onclick="answer(this)">D) <span class="en">Direct wire connection</span><span class="ko" style="display:none;">직접 와이어 연결</span></li>
+    </ul>
+    <div class="explanation"><span class="en">The 2-flop synchronizer is the industry standard. The first flop may go metastable, but has a full clock period to resolve before the second flop samples it.</span><span class="ko" style="display:none;">2-플립플롭 동기화기는 업계 표준입니다. 첫 번째 플립플롭이 준안정 상태가 될 수 있지만, 두 번째 플립플롭이 샘플링하기 전에 전체 클록 주기 동안 해결할 시간이 있습니다.</span></div>
+</div>
+
+<!-- Q5 -->
+<div class="question-block">
+    <h3>Q5. <span class="en">Why should you NEVER put combinational logic between synchronizer flip-flops?</span><span class="ko" style="display:none;">동기화 플립플롭 사이에 조합 로직을 넣으면 안 되는 이유는?</span></h3>
+    <ul class="options" data-correct="3">
+        <li onclick="answer(this)">A) <span class="en">It increases power consumption</span><span class="ko" style="display:none;">전력 소비가 증가함</span></li>
+        <li onclick="answer(this)">B) <span class="en">It makes the code harder to read</span><span class="ko" style="display:none;">코드를 읽기 어렵게 만듦</span></li>
+        <li onclick="answer(this)">C) <span class="en">It reduces the time available for metastability resolution</span><span class="ko" style="display:none;">메타스테이빌리티 해결에 사용 가능한 시간을 줄임</span></li>
+        <li onclick="answer(this)">D) <span class="en">It causes setup time violations</span><span class="ko" style="display:none;">셋업 시간 위반을 일으킴</span></li>
+    </ul>
+    <div class="explanation"><span class="en">Logic between the flops adds delay, eating into the precious resolution time. The first flop's output needs maximum time to settle to a valid logic level before the second flop samples it.</span><span class="ko" style="display:none;">플립플롭 사이의 로직은 지연을 추가하여 귀중한 해결 시간을 줄입니다. 첫 번째 플립플롭의 출력은 두 번째 플립플롭이 샘플링하기 전에 유효한 로직 레벨로 안정되기 위해 최대한의 시간이 필요합니다.</span></div>
+</div>
+
+<!-- Q6 -->
+<div class="question-block">
+    <h3>Q6. <span class="en">What happens to MTBF if you increase the clock frequency?</span><span class="ko" style="display:none;">클록 주파수를 높이면 MTBF는 어떻게 되나요?</span></h3>
+    <ul class="options" data-correct="2">
+        <li onclick="answer(this)">A) <span class="en">MTBF increases</span><span class="ko" style="display:none;">MTBF가 증가</span></li>
+        <li onclick="answer(this)">B) <span class="en">MTBF decreases (more failures)</span><span class="ko" style="display:none;">MTBF가 감소 (더 많은 실패)</span></li>
+        <li onclick="answer(this)">C) <span class="en">MTBF stays the same</span><span class="ko" style="display:none;">MTBF가 동일하게 유지</span></li>
+        <li onclick="answer(this)">D) <span class="en">MTBF becomes unpredictable</span><span class="ko" style="display:none;">MTBF가 예측 불가능해짐</span></li>
+    </ul>
+    <div class="explanation"><span class="en">Higher clock frequency means more clock edges per second, each one an opportunity for metastability. Also, each clock period is shorter, giving less resolution time. Both effects decrease MTBF.</span><span class="ko" style="display:none;">클록 주파수가 높으면 초당 더 많은 클록 에지가 있고, 각각이 메타스테이빌리티의 기회입니다. 또한 각 클록 주기가 짧아져 해결 시간이 줄어듭니다. 두 효과 모두 MTBF를 감소시킵니다.</span></div>
+</div>
+
+<!-- Q7 -->
+<div class="question-block">
+    <h3>Q7. <span class="en">Can metastability be completely eliminated?</span><span class="ko" style="display:none;">메타스테이빌리티를 완전히 제거할 수 있나요?</span></h3>
+    <ul class="options" data-correct="2">
+        <li onclick="answer(this)">A) <span class="en">Yes, with enough flip-flop stages</span><span class="ko" style="display:none;">예, 충분한 플립플롭 단계로</span></li>
+        <li onclick="answer(this)">B) <span class="en">No, only made astronomically unlikely</span><span class="ko" style="display:none;">아니요, 천문학적으로 낮은 확률로만 가능</span></li>
+        <li onclick="answer(this)">C) <span class="en">Yes, with proper timing constraints</span><span class="ko" style="display:none;">예, 적절한 타이밍 제약으로</span></li>
+        <li onclick="answer(this)">D) <span class="en">Yes, with lower clock frequencies</span><span class="ko" style="display:none;">예, 더 낮은 클록 주파수로</span></li>
+    </ul>
+    <div class="explanation"><span class="en">Metastability is a fundamental physics phenomenon — it can never be completely eliminated when crossing clock domains. We can only reduce its probability to negligible levels (MTBF of millions of years).</span><span class="ko" style="display:none;">메타스테이빌리티는 근본적인 물리 현상입니다 — 클록 도메인을 넘을 때 완전히 제거할 수 없습니다. 확률을 무시할 수 있는 수준(수백만 년의 MTBF)으로만 줄일 수 있습니다.</span></div>
+</div>
+
+<!-- Q8 -->
+<div class="question-block">
+    <h3>Q8. <span class="en">Why can't you use separate 2-flop synchronizers for each bit of a multi-bit signal?</span><span class="ko" style="display:none;">멀티비트 신호의 각 비트에 별도의 2-플립플롭 동기화기를 사용할 수 없는 이유는?</span></h3>
+    <ul class="options" data-correct="3">
+        <li onclick="answer(this)">A) <span class="en">It uses too many flip-flops</span><span class="ko" style="display:none;">너무 많은 플립플롭을 사용</span></li>
+        <li onclick="answer(this)">B) <span class="en">It's too slow</span><span class="ko" style="display:none;">너무 느림</span></li>
+        <li onclick="answer(this)">C) <span class="en">Different bits may resolve on different clock cycles, corrupting the value</span><span class="ko" style="display:none;">다른 비트가 다른 클록 사이클에서 해결되어 값이 손상될 수 있음</span></li>
+        <li onclick="answer(this)">D) <span class="en">Synthesis tools don't support it</span><span class="ko" style="display:none;">합성 도구가 지원하지 않음</span></li>
+    </ul>
+    <div class="explanation"><span class="en">Each bit's synchronizer resolves independently. Bit 0 might update one cycle before Bit 1, giving you a mix of old and new values — a completely wrong result. Use Gray code or handshake protocols instead.</span><span class="ko" style="display:none;">각 비트의 동기화기는 독립적으로 해결됩니다. 비트 0이 비트 1보다 한 사이클 먼저 업데이트될 수 있어 이전 값과 새 값이 섞여 완전히 잘못된 결과를 줍니다. 대신 그레이 코드나 핸드셰이크 프로토콜을 사용하세요.</span></div>
+</div>
+
+<!-- Q9 -->
+<div class="question-block">
+    <h3>Q9. <span class="en">Which scenario does NOT risk metastability?</span><span class="ko" style="display:none;">메타스테이빌리티 위험이 없는 시나리오는?</span></h3>
+    <ul class="options" data-correct="1">
+        <li onclick="answer(this)">A) <span class="en">Flip-flop to flip-flop in the same clock domain (timing met)</span><span class="ko" style="display:none;">같은 클록 도메인에서 플립플롭 간 전달 (타이밍 충족)</span></li>
+        <li onclick="answer(this)">B) <span class="en">Button input to an FPGA</span><span class="ko" style="display:none;">FPGA에 버튼 입력</span></li>
+        <li onclick="answer(this)">C) <span class="en">UART RX signal</span><span class="ko" style="display:none;">UART RX 신호</span></li>
+        <li onclick="answer(this)">D) <span class="en">Signal from 100 MHz to 200 MHz domain</span><span class="ko" style="display:none;">100 MHz에서 200 MHz 도메인으로의 신호</span></li>
+    </ul>
+    <div class="explanation"><span class="en">Within the same clock domain, if timing constraints are met, data is guaranteed to be stable during the setup/hold window. All other options involve asynchronous or cross-domain signals.</span><span class="ko" style="display:none;">같은 클록 도메인 내에서 타이밍 제약이 충족되면 셋업/홀드 윈도우 동안 데이터가 안정적임이 보장됩니다. 다른 모든 옵션은 비동기 또는 교차 도메인 신호를 포함합니다.</span></div>
+</div>
+
+<!-- Q10 -->
+<div class="question-block">
+    <h3>Q10. <span class="en">What does τ (tau) represent in the MTBF formula?</span><span class="ko" style="display:none;">MTBF 공식에서 τ (타우)는 무엇을 나타내나요?</span></h3>
+    <ul class="options" data-correct="2">
+        <li onclick="answer(this)">A) <span class="en">The clock period</span><span class="ko" style="display:none;">클록 주기</span></li>
+        <li onclick="answer(this)">B) <span class="en">The resolution time constant (technology-dependent)</span><span class="ko" style="display:none;">해결 시간 상수 (기술 의존적)</span></li>
+        <li onclick="answer(this)">C) <span class="en">The setup time</span><span class="ko" style="display:none;">셋업 시간</span></li>
+        <li onclick="answer(this)">D) <span class="en">The propagation delay</span><span class="ko" style="display:none;">전파 지연</span></li>
+    </ul>
+    <div class="explanation"><span class="en">τ is the resolution time constant — a property of the flip-flop technology (process node). Smaller τ means the flip-flop resolves metastability faster, leading to higher MTBF.</span><span class="ko" style="display:none;">τ는 해결 시간 상수 — 플립플롭 기술(공정 노드)의 특성입니다. 작은 τ는 플립플롭이 메타스테이빌리티를 더 빠르게 해결함을 의미하며, 더 높은 MTBF로 이어집니다.</span></div>
+</div>
+
+<!-- Q11 -->
+<div class="question-block">
+    <h3>Q11. <span class="en">A 2-flop synchronizer at 500 MHz typically has an MTBF of:</span><span class="ko" style="display:none;">500 MHz에서 2-플립플롭 동기화기의 일반적인 MTBF는:</span></h3>
+    <ul class="options" data-correct="4">
+        <li onclick="answer(this)">A) <span class="en">A few hours</span><span class="ko" style="display:none;">몇 시간</span></li>
+        <li onclick="answer(this)">B) <span class="en">A few years</span><span class="ko" style="display:none;">몇 년</span></li>
+        <li onclick="answer(this)">C) <span class="en">Thousands of years</span><span class="ko" style="display:none;">수천 년</span></li>
+        <li onclick="answer(this)">D) <span class="en">Millions to billions of years (or more)</span><span class="ko" style="display:none;">수백만에서 수십억 년 (또는 그 이상)</span></li>
+    </ul>
+    <div class="explanation"><span class="en">With modern process technology, a properly designed 2-flop synchronizer achieves MTBF values far exceeding the age of the universe. This is why 2 stages is sufficient for most applications.</span><span class="ko" style="display:none;">최신 공정 기술로 적절히 설계된 2-플립플롭 동기화기는 우주의 나이를 훨씬 초과하는 MTBF 값을 달성합니다. 이것이 대부분의 응용에서 2단계면 충분한 이유입니다.</span></div>
+</div>
+
+<!-- Q12 -->
+<div class="question-block">
+    <h3>Q12. <span class="en">Why are metastability failures hard to debug?</span><span class="ko" style="display:none;">메타스테이빌리티 실패가 디버깅하기 어려운 이유는?</span></h3>
+    <ul class="options" data-correct="3">
+        <li onclick="answer(this)">A) <span class="en">They always cause the same error</span><span class="ko" style="display:none;">항상 같은 오류를 일으킴</span></li>
+        <li onclick="answer(this)">B) <span class="en">They only happen in simulation</span><span class="ko" style="display:none;">시뮬레이션에서만 발생</span></li>
+        <li onclick="answer(this)">C) <span class="en">They are non-deterministic, non-reproducible, and invisible in simulation</span><span class="ko" style="display:none;">비결정적이고 재현 불가능하며 시뮬레이션에서 보이지 않음</span></li>
+        <li onclick="answer(this)">D) <span class="en">They only happen at high temperatures</span><span class="ko" style="display:none;">고온에서만 발생</span></li>
+    </ul>
+    <div class="explanation"><span class="en">Metastability is an analog phenomenon that digital simulators don't model. Failures are random, can't be reliably reproduced, and manifest as seemingly unrelated bugs. Prevention (proper synchronization) is the only reliable approach.</span><span class="ko" style="display:none;">메타스테이빌리티는 디지털 시뮬레이터가 모델링하지 않는 아날로그 현상입니다. 실패는 무작위이며, 안정적으로 재현할 수 없고, 관련 없어 보이는 버그로 나타납니다. 예방(적절한 동기화)이 유일하게 신뢰할 수 있는 접근법입니다.</span></div>
+</div>
+
+<div class="score-bar" id="final-score" style="display:none;">
+    🎉 <span class="en">Final Score: <span id="final-num">0</span> / 12</span><span class="ko" style="display:none;">최종 점수: <span id="final-num-ko">0</span> / 12</span>
+</div>
+
+<div class="nav-links">
+    <a href="day-16-lesson.html">📖 Review Lesson</a>
+    <a href="day-16-practice.html">💻 Practice</a>
+</div>
+
+<script>
+let score = 0;
+let answered = 0;
+const total = 12;
+let isKorean = false;
+
+function answer(li) {
+    const options = li.parentElement;
+    if (options.classList.contains('answered')) return;
+    options.classList.add('answered');
+    const correct = parseInt(options.dataset.correct);
+    const idx = Array.from(options.children).indexOf(li) + 1;
+    if (idx === correct) {
+        li.classList.add('correct');
+        score++;
+    } else {
+        li.classList.add('wrong');
+        options.children[correct - 1].classList.add('correct');
+    }
+    Array.from(options.children).forEach(c => c.classList.add('disabled'));
+    options.nextElementSibling.style.display = 'block';
+    answered++;
+    document.getElementById('score').textContent = `Score: ${score} / ${total}`;
+    if (answered === total) {
+        document.getElementById('final-score').style.display = 'block';
+        document.getElementById('final-num').textContent = score;
+        document.getElementById('final-num-ko').textContent = score;
+    }
+}
+
+function toggleLang() {
+    isKorean = !isKorean;
+    document.querySelectorAll('.en').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'none' : 'revert', 'important');
+    });
+    document.querySelectorAll('.ko').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'revert' : 'none', 'important');
+    });
+    document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+}
+</script>
+
+</body>
+</html>

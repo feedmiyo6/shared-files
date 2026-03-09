@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 16: Metastability | Digital Design Study</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    background: linear-gradient(135deg, #fefae0 0%, #faedcd 100%);
+    color: #3d405b;
+    line-height: 1.8;
+    padding: 24px;
+    max-width: 920px;
+    margin: 0 auto;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+h1 {
+    color: #5d4037;
+    border-bottom: 3px solid #c4a77d;
+    padding-bottom: 12px;
+    margin-bottom: 24px;
+    font-size: 2em;
+}
+h2 {
+    color: #588157;
+    border-bottom: 2px solid #a3b18a;
+    padding-bottom: 8px;
+    margin: 32px 0 16px;
+}
+h3 {
+    color: #5d4037;
+    margin: 20px 0 12px;
+}
+p { margin: 12px 0; }
+code {
+    background: #e9f5db;
+    color: #3d405b;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+}
+pre {
+    background: #2d3436;
+    padding: 24px;
+    border-radius: 12px;
+    margin: 24px 0;
+    border: 3px solid #a3b18a;
+    overflow-x: auto;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+    font-size: 15px;
+    line-height: 1.6;
+    color: #f8f8f2;
+}
+.keyword { color: #ff79c6; font-weight: 600; }
+.type { color: #8be9fd; }
+.signal { color: #50fa7b; }
+.number { color: #ffb86c; }
+.comment { color: #6272a4; font-style: italic; }
+.string { color: #f1fa8c; }
+
+.concept-box {
+    background: #fff8f0;
+    border: 2px solid #c4a77d;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    color: #3d405b;
+}
+.concept-box h3 { color: #5d4037; margin-bottom: 12px; }
+
+.warning-box {
+    background: #fff8f0;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    border-left: 4px solid #ef4444;
+    color: #3d405b;
+}
+.warning-box h3 { color: #c53030; margin-bottom: 12px; }
+
+.tip-box {
+    background: #fff8f0;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    border-left: 4px solid #588157;
+    color: #3d405b;
+}
+
+.comparison-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+.comparison-table th {
+    background: #588157;
+    color: white;
+    padding: 12px;
+    text-align: left;
+}
+.comparison-table td {
+    background: #fff;
+    border: 1px solid #c4a77d;
+    padding: 12px;
+    color: #3d405b;
+}
+.comparison-table tr:nth-child(even) td {
+    background: #fff8f0;
+}
+
+.nav-links {
+    display: flex;
+    gap: 12px;
+    margin: 24px 0;
+    flex-wrap: wrap;
+}
+.nav-links a {
+    background: linear-gradient(135deg, #588157, #3a5a40);
+    color: #fff;
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 24px;
+    font-weight: 600;
+    font-size: 14px;
+}
+.nav-links a:hover { opacity: 0.9; }
+
+.lang-toggle {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    background: #588157;
+    border: none;
+    border-radius: 24px;
+    padding: 10px 20px;
+    cursor: pointer;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    z-index: 1000;
+}
+.lang-toggle:hover { background: #3a5a40; }
+.ko { display: none; }
+
+.diagram {
+    background: #fff;
+    border: 2px solid #c4a77d;
+    border-radius: 12px;
+    padding: 24px;
+    margin: 20px 0;
+    text-align: center;
+    font-family: 'SF Mono', monospace;
+    line-height: 1.4;
+    overflow-x: auto;
+}
+
+@media (max-width: 768px) {
+    body { padding: 16px; }
+    h1 { font-size: 1.8em; }
+    pre { font-size: 14px; padding: 16px; }
+    .lang-toggle { padding: 8px 16px; font-size: 13px; }
+}
+</style>
+</head>
+<body>
+
+<button class="lang-toggle" onclick="toggleLang()">한국어</button>
+
+<h1>📅 Day 16: Metastability</h1>
+<p class="en"><strong>Week 4: Clock Domain Crossing</strong> — Welcome to the scariest topic in digital design! Today we tackle metastability — the fundamental physics problem that makes clock domain crossing so dangerous.</p>
+<p class="ko" style="display:none;"><strong>4주차: 클록 도메인 크로싱</strong> — 디지털 설계에서 가장 무서운 주제에 오신 것을 환영합니다! 오늘은 메타스테이빌리티(준안정 상태)를 다룹니다 — 클록 도메인 크로싱을 위험하게 만드는 근본적인 물리 문제입니다.</p>
+
+<div class="nav-links">
+    <a href="day-16-quiz.html">📝 Quiz</a>
+    <a href="day-16-practice.html">💻 Practice</a>
+    <a href="day-15-lesson.html">← Day 15</a>
+</div>
+
+<h2>1. What Is Metastability?</h2>
+
+<p class="en">Every flip-flop needs data to be <strong>stable</strong> for a minimum time window around the clock edge. This window has two parts:</p>
+<p class="ko" style="display:none;">모든 플립플롭은 클록 에지 주변의 최소 시간 창 동안 데이터가 <strong>안정적</strong>이어야 합니다. 이 창은 두 부분으로 구성됩니다:</p>
+
+<ul>
+    <li class="en"><strong>Setup time (t<sub>su</sub>):</strong> Data must be stable <em>before</em> the clock edge</li>
+    <li class="ko" style="display:none;"><strong>셋업 시간 (t<sub>su</sub>):</strong> 클록 에지 <em>이전에</em> 데이터가 안정적이어야 함</li>
+    <li class="en"><strong>Hold time (t<sub>h</sub>):</strong> Data must remain stable <em>after</em> the clock edge</li>
+    <li class="ko" style="display:none;"><strong>홀드 시간 (t<sub>h</sub>):</strong> 클록 에지 <em>이후에</em> 데이터가 안정적으로 유지되어야 함</li>
+</ul>
+
+<div class="concept-box">
+    <h3>🎯 The Problem</h3>
+    <p class="en">When data transitions <strong>during</strong> the setup/hold window, the flip-flop enters a <strong>metastable state</strong> — it's neither 0 nor 1, but somewhere in between. The output voltage hovers near the threshold, and it takes an unpredictable amount of time to resolve to a valid logic level.</p>
+    <p class="ko" style="display:none;">데이터가 셋업/홀드 윈도우 <strong>동안</strong> 전환되면, 플립플롭은 <strong>준안정 상태</strong>에 진입합니다 — 0도 아니고 1도 아닌 그 사이 어딘가에 있게 됩니다. 출력 전압이 임계값 근처에서 머물며, 유효한 로직 레벨로 안정되는 데 예측 불가능한 시간이 걸립니다.</p>
+</div>
+
+<div class="diagram">
+<pre style="background:none;border:none;color:#3d405b;text-align:left;padding:0;margin:0;font-size:14px;">
+         Setup Window    Hold Window
+         ◄──────────►   ◄──────────►
+              t_su            t_h
+                    │
+    Data:  ─────────┼─────────────────
+           STABLE   │ clock  STABLE
+                    │  edge
+                    ▼
+
+    If data changes HERE (in the window):
+
+    Output:  ───────╱╲╱╲╱╲──── ?
+                   metastable
+                   (neither 0 nor 1)
+</pre>
+</div>
+
+<h2>2. Why Does This Happen? (The Physics)</h2>
+
+<p class="en">A flip-flop is built from two cross-coupled inverters forming a <strong>bistable element</strong> — it has two stable states (0 and 1) and one <strong>unstable equilibrium</strong> point in between.</p>
+<p class="ko" style="display:none;">플립플롭은 <strong>쌍안정 요소</strong>를 형성하는 교차 결합된 두 인버터로 구성됩니다 — 두 개의 안정 상태(0과 1)와 그 사이에 하나의 <strong>불안정 평형점</strong>이 있습니다.</p>
+
+<div class="concept-box">
+    <h3>⚖️ The Ball-on-a-Hill Analogy</h3>
+    <p class="en">Imagine a ball on a hill with valleys on each side:</p>
+    <p class="ko" style="display:none;">양쪽에 골짜기가 있는 언덕 위의 공을 상상해보세요:</p>
+    <ul>
+        <li class="en"><strong>Left valley = Logic 0</strong> (stable)</li>
+        <li class="ko" style="display:none;"><strong>왼쪽 골짜기 = 로직 0</strong> (안정적)</li>
+        <li class="en"><strong>Right valley = Logic 1</strong> (stable)</li>
+        <li class="ko" style="display:none;"><strong>오른쪽 골짜기 = 로직 1</strong> (안정적)</li>
+        <li class="en"><strong>Hilltop = Metastable</strong> (unstable — any tiny noise will push it one way)</li>
+        <li class="ko" style="display:none;"><strong>언덕 꼭대기 = 준안정</strong> (불안정 — 아주 작은 노이즈도 한쪽으로 밀어냄)</li>
+    </ul>
+    <p class="en">When data changes during the window, you're placing the ball perfectly on top of the hill. It <em>will</em> eventually fall to one side, but you don't know <strong>when</strong> or <strong>which side</strong>.</p>
+    <p class="ko" style="display:none;">데이터가 윈도우 동안 변하면, 공을 언덕 꼭대기에 완벽하게 올려놓는 것입니다. 결국 한쪽으로 <em>떨어지겠지만</em>, <strong>언제</strong> 그리고 <strong>어느 쪽으로</strong> 떨어질지 알 수 없습니다.</p>
+</div>
+
+<div class="diagram">
+<pre style="background:none;border:none;color:#3d405b;text-align:left;padding:0;margin:0;font-size:14px;">
+    Voltage
+    VDD ─── ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─  Logic 1 (stable)
+         │                        ╱
+         │                      ╱
+    Vth  │─ ─ ─ ─ ─ ● ─ ─ ─ ╱─ ─ ─  Metastable point
+         │          (ball on hill)
+         │
+    GND ─── ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─  Logic 0 (stable)
+</pre>
+</div>
+
+<h2>3. Resolution Time</h2>
+
+<p class="en">The time a flip-flop takes to escape the metastable state is called the <strong>resolution time</strong>. It follows an exponential probability distribution:</p>
+<p class="ko" style="display:none;">플립플롭이 준안정 상태에서 벗어나는 데 걸리는 시간을 <strong>해결 시간</strong>이라고 합니다. 이것은 지수 확률 분포를 따릅니다:</p>
+
+<div class="concept-box">
+    <h3>📐 Resolution Time Formula</h3>
+    <p class="en">The probability of staying metastable decreases <strong>exponentially</strong> with time:</p>
+    <p class="ko" style="display:none;">준안정 상태를 유지할 확률은 시간이 지남에 따라 <strong>기하급수적으로</strong> 감소합니다:</p>
+    <pre><span class="comment">// Probability of remaining metastable after time t:</span>
+P(t<sub>res</sub> > t) = T<sub>w</sub> · f<sub>clk</sub> · f<sub>data</sub> · e<sup><span class="number">-t/τ</span></sup>
+
+<span class="comment">// Where:</span>
+<span class="comment">//   T_w    = metastability window (setup + hold violation zone)</span>
+<span class="comment">//   f_clk  = clock frequency</span>
+<span class="comment">//   f_data = data change frequency</span>
+<span class="comment">//   τ (tau) = resolution time constant (technology dependent)</span>
+<span class="comment">//   t      = time allowed for resolution</span></pre>
+</div>
+
+<p class="en">Key takeaway: <strong>You can never eliminate metastability — you can only make it astronomically unlikely</strong> by giving the flip-flop more time to resolve.</p>
+<p class="ko" style="display:none;">핵심 요점: <strong>메타스테이빌리티를 완전히 제거할 수는 없습니다 — 플립플롭에게 해결할 시간을 더 줌으로써 천문학적으로 낮은 확률로만 만들 수 있습니다.</strong></p>
+
+<h2>4. Mean Time Between Failures (MTBF)</h2>
+
+<p class="en">MTBF tells you how often, on average, a metastability failure will occur:</p>
+<p class="ko" style="display:none;">MTBF는 평균적으로 메타스테이빌리티 실패가 얼마나 자주 발생하는지 알려줍니다:</p>
+
+<div class="concept-box">
+    <h3>📊 MTBF Formula</h3>
+    <pre><span class="comment">// Mean Time Between Failures:</span>
+MTBF = e<sup><span class="number">t_res/τ</span></sup> / (T<sub>w</sub> · f<sub>clk</sub> · f<sub>data</sub>)
+
+<span class="comment">// Example: 2-flop synchronizer at 500 MHz</span>
+<span class="comment">//   τ = 20 ps (typical 7nm process)</span>
+<span class="comment">//   T_w = 40 ps</span>
+<span class="comment">//   f_clk = 500 MHz, f_data = 100 MHz</span>
+<span class="comment">//   t_res = 1 clock period = 2 ns</span>
+
+MTBF = e<sup><span class="number">2000ps/20ps</span></sup> / (<span class="number">40e-12</span> × <span class="number">500e6</span> × <span class="number">100e6</span>)
+MTBF ≈ e<sup><span class="number">100</span></sup> / <span class="number">2000</span>
+MTBF ≈ <span class="number">1.3 × 10<sup>40</sup> seconds</span>  <span class="comment">// Way longer than the universe!</span></pre>
+</div>
+
+<p class="en">With a 2-flop synchronizer, MTBF is typically <strong>billions of years</strong>. Without synchronization, failures can happen <strong>every few seconds</strong>!</p>
+<p class="ko" style="display:none;">2-플립플롭 동기화기를 사용하면 MTBF는 일반적으로 <strong>수십억 년</strong>입니다. 동기화 없이는 <strong>몇 초마다</strong> 실패가 발생할 수 있습니다!</p>
+
+<table class="comparison-table">
+    <tr>
+        <th>Synchronizer Stages</th>
+        <th>Resolution Time</th>
+        <th>Typical MTBF</th>
+    </tr>
+    <tr>
+        <td>0 (no sync)</td>
+        <td>0</td>
+        <td>Seconds to minutes</td>
+    </tr>
+    <tr>
+        <td>1 flip-flop</td>
+        <td>~1 clock period</td>
+        <td>Hours to days</td>
+    </tr>
+    <tr>
+        <td>2 flip-flops ✅</td>
+        <td>~2 clock periods</td>
+        <td>Millions of years</td>
+    </tr>
+    <tr>
+        <td>3 flip-flops</td>
+        <td>~3 clock periods</td>
+        <td>10<sup>30+</sup> years</td>
+    </tr>
+</table>
+
+<h2>5. When Does Metastability Occur?</h2>
+
+<p class="en">Metastability is <strong>inevitable</strong> whenever you cross between clock domains or handle asynchronous signals:</p>
+<p class="ko" style="display:none;">메타스테이빌리티는 클록 도메인 간 전환이나 비동기 신호를 처리할 때 <strong>불가피</strong>합니다:</p>
+
+<table class="comparison-table">
+    <tr>
+        <th>Scenario</th>
+        <th>Risk Level</th>
+        <th>Example</th>
+    </tr>
+    <tr>
+        <td>Same clock domain</td>
+        <td>None (if timing is met)</td>
+        <td>Flip-flop to flip-flop, same clock</td>
+    </tr>
+    <tr>
+        <td>Button/switch input</td>
+        <td>🔴 High</td>
+        <td>User pressing a button (async)</td>
+    </tr>
+    <tr>
+        <td>Different clock frequencies</td>
+        <td>🔴 High</td>
+        <td>100 MHz → 250 MHz domain</td>
+    </tr>
+    <tr>
+        <td>Same freq, different phase</td>
+        <td>🔴 High</td>
+        <td>Two PLLs generating same freq</td>
+    </tr>
+    <tr>
+        <td>External interface signals</td>
+        <td>🔴 High</td>
+        <td>UART RX, SPI MISO</td>
+    </tr>
+</table>
+
+<h2>6. The 2-Flop Synchronizer</h2>
+
+<p class="en">The standard solution for single-bit signals crossing clock domains is the <strong>2-flop synchronizer</strong>:</p>
+<p class="ko" style="display:none;">클록 도메인을 넘나드는 단일 비트 신호의 표준 해결책은 <strong>2-플립플롭 동기화기</strong>입니다:</p>
+
+<pre><span class="keyword">module</span> <span class="type">sync_2ff</span> (
+    <span class="keyword">input</span>  <span class="type">logic</span> <span class="signal">clk_dst</span>,     <span class="comment">// Destination clock</span>
+    <span class="keyword">input</span>  <span class="type">logic</span> <span class="signal">rst_n</span>,       <span class="comment">// Active-low reset</span>
+    <span class="keyword">input</span>  <span class="type">logic</span> <span class="signal">data_in</span>,     <span class="comment">// Async input (from source domain)</span>
+    <span class="keyword">output</span> <span class="type">logic</span> <span class="signal">data_out</span>     <span class="comment">// Synchronized output</span>
+);
+
+    <span class="type">logic</span> <span class="signal">meta_ff</span>;  <span class="comment">// First flop - might go metastable!</span>
+
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk_dst</span> <span class="keyword">or</span> <span class="keyword">negedge</span> <span class="signal">rst_n</span>) <span class="keyword">begin</span>
+        <span class="keyword">if</span> (!<span class="signal">rst_n</span>) <span class="keyword">begin</span>
+            <span class="signal">meta_ff</span>  &lt;= <span class="number">1'b0</span>;
+            <span class="signal">data_out</span> &lt;= <span class="number">1'b0</span>;
+        <span class="keyword">end</span> <span class="keyword">else</span> <span class="keyword">begin</span>
+            <span class="signal">meta_ff</span>  &lt;= <span class="signal">data_in</span>;   <span class="comment">// Stage 1: capture (may be metastable)</span>
+            <span class="signal">data_out</span> &lt;= <span class="signal">meta_ff</span>;  <span class="comment">// Stage 2: resolve (almost certainly stable)</span>
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+
+<span class="keyword">endmodule</span></pre>
+
+<div class="tip-box">
+    <h3>💡 Why Two Flops?</h3>
+    <p class="en">The first flop <em>might</em> go metastable, but it has an entire clock period to resolve before the second flop samples it. The probability of <em>both</em> flops being metastable is exponentially smaller — the exponent in the MTBF formula doubles!</p>
+    <p class="ko" style="display:none;">첫 번째 플립플롭은 준안정 상태가 <em>될 수 있지만</em>, 두 번째 플립플롭이 샘플링하기 전에 전체 클록 주기 동안 해결할 시간이 있습니다. <em>두</em> 플립플롭 모두 준안정 상태일 확률은 기하급수적으로 작습니다 — MTBF 공식의 지수가 두 배가 됩니다!</p>
+</div>
+
+<div class="warning-box">
+    <h3>⚠️ Common Mistakes</h3>
+    <ul>
+        <li class="en"><strong>Adding logic between sync flops:</strong> Never put combinational logic between the two synchronizer flip-flops — it eats into resolution time</li>
+        <li class="ko" style="display:none;"><strong>동기화 플립플롭 사이에 로직 추가:</strong> 두 동기화 플립플롭 사이에 조합 로직을 넣지 마세요 — 해결 시간을 줄입니다</li>
+        <li class="en"><strong>Synchronizing multi-bit signals with separate 2FFs:</strong> Each bit may resolve on different cycles, giving you corrupted data. Use Gray code or handshake protocols instead (Days 18-19)</li>
+        <li class="ko" style="display:none;"><strong>별도의 2FF로 멀티비트 신호 동기화:</strong> 각 비트가 다른 사이클에서 해결되어 손상된 데이터를 줄 수 있습니다. 대신 그레이 코드나 핸드셰이크 프로토콜을 사용하세요 (18-19일차)</li>
+        <li class="en"><strong>Forgetting to constrain in synthesis:</strong> Tell the tool these are synchronizer flops so it places them close together</li>
+        <li class="ko" style="display:none;"><strong>합성에서 제약을 잊기:</strong> 이것이 동기화 플립플롭임을 도구에 알려서 서로 가까이 배치하도록 하세요</li>
+    </ul>
+</div>
+
+<h2>7. Factors Affecting MTBF</h2>
+
+<table class="comparison-table">
+    <tr>
+        <th>Factor</th>
+        <th>Effect on MTBF</th>
+        <th>What You Can Do</th>
+    </tr>
+    <tr>
+        <td>Higher clock frequency</td>
+        <td>⬇️ Decreases MTBF</td>
+        <td>Add more sync stages</td>
+    </tr>
+    <tr>
+        <td>Higher data rate</td>
+        <td>⬇️ Decreases MTBF</td>
+        <td>Reduce unnecessary transitions</td>
+    </tr>
+    <tr>
+        <td>More sync stages</td>
+        <td>⬆️ Increases MTBF exponentially</td>
+        <td>Use 3 stages for very high freq</td>
+    </tr>
+    <tr>
+        <td>Faster technology (smaller τ)</td>
+        <td>⬆️ Increases MTBF</td>
+        <td>Choose appropriate process node</td>
+    </tr>
+    <tr>
+        <td>Higher voltage</td>
+        <td>⬆️ Increases MTBF (faster switching)</td>
+        <td>Trade power for reliability</td>
+    </tr>
+</table>
+
+<h2>8. Real-World Consequences</h2>
+
+<div class="concept-box">
+    <h3>💥 What Happens When Metastability Hits?</h3>
+    <ul>
+        <li class="en"><strong>Data corruption:</strong> Downstream logic sees a glitch or wrong value</li>
+        <li class="ko" style="display:none;"><strong>데이터 손상:</strong> 하위 로직이 글리치나 잘못된 값을 봄</li>
+        <li class="en"><strong>FSM lockup:</strong> State machine enters illegal state (remember Day 9?)</li>
+        <li class="ko" style="display:none;"><strong>FSM 잠금:</strong> 상태 머신이 불법 상태에 진입 (9일차 기억나세요?)</li>
+        <li class="en"><strong>Control signal errors:</strong> Enable/reset signals fire at wrong time</li>
+        <li class="ko" style="display:none;"><strong>제어 신호 오류:</strong> 활성화/리셋 신호가 잘못된 시간에 발생</li>
+        <li class="en"><strong>System crash:</strong> In the worst case, entire system becomes non-functional</li>
+        <li class="ko" style="display:none;"><strong>시스템 충돌:</strong> 최악의 경우 전체 시스템이 작동 불능 상태</li>
+    </ul>
+    <p class="en" style="margin-top:12px;">The scary part: these failures are <strong>non-deterministic</strong> and <strong>non-reproducible</strong>. They might happen once a week, and you'll never see them in simulation!</p>
+    <p class="ko" style="display:none;" style="margin-top:12px;">무서운 점: 이러한 실패는 <strong>비결정적</strong>이고 <strong>재현 불가능</strong>합니다. 일주일에 한 번 발생할 수 있으며, 시뮬레이션에서는 절대 볼 수 없습니다!</p>
+</div>
+
+<h2>9. Summary</h2>
+
+<div class="concept-box">
+    <h3>📝 Key Takeaways</h3>
+    <ol>
+        <li class="en"><strong>Metastability</strong> occurs when data changes during the setup/hold window</li>
+        <li class="ko" style="display:none;"><strong>메타스테이빌리티</strong>는 데이터가 셋업/홀드 윈도우 동안 변할 때 발생합니다</li>
+        <li class="en">It <strong>cannot be eliminated</strong>, only made astronomically unlikely</li>
+        <li class="ko" style="display:none;"><strong>제거할 수 없으며</strong>, 천문학적으로 낮은 확률로만 만들 수 있습니다</li>
+        <li class="en">The <strong>2-flop synchronizer</strong> is the standard solution for single-bit CDC</li>
+        <li class="ko" style="display:none;"><strong>2-플립플롭 동기화기</strong>는 단일 비트 CDC의 표준 해결책입니다</li>
+        <li class="en"><strong>MTBF</strong> increases <strong>exponentially</strong> with each synchronizer stage</li>
+        <li class="ko" style="display:none;"><strong>MTBF</strong>는 각 동기화 단계마다 <strong>기하급수적으로</strong> 증가합니다</li>
+        <li class="en"><strong>Never</strong> put logic between synchronizer flip-flops</li>
+        <li class="ko" style="display:none;">동기화 플립플롭 사이에 로직을 <strong>절대</strong> 넣지 마세요</li>
+        <li class="en"><strong>Multi-bit</strong> signals need special techniques (Gray code, handshake, FIFO)</li>
+        <li class="ko" style="display:none;"><strong>멀티비트</strong> 신호는 특별한 기술이 필요합니다 (그레이 코드, 핸드셰이크, FIFO)</li>
+    </ol>
+</div>
+
+<div class="nav-links">
+    <a href="day-16-quiz.html">📝 Take the Quiz</a>
+    <a href="day-16-practice.html">💻 Practice Exercise</a>
+    <a href="day-15-lesson.html">← Day 15</a>
+</div>
+
+<script>
+let isKorean = false;
+function toggleLang() {
+    isKorean = !isKorean;
+    document.querySelectorAll('.en').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'none' : 'revert', 'important');
+    });
+    document.querySelectorAll('.ko').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'revert' : 'none', 'important');
+    });
+    document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 16 Practice: Metastability | Digital Design Study</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    background: linear-gradient(135deg, #fefae0 0%, #faedcd 100%);
+    color: #3d405b;
+    line-height: 1.8;
+    padding: 24px;
+    max-width: 920px;
+    margin: 0 auto;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+h1 { color: #5d4037; border-bottom: 3px solid #c4a77d; padding-bottom: 12px; margin-bottom: 24px; font-size: 2em; }
+h2 { color: #588157; border-bottom: 2px solid #a3b18a; padding-bottom: 8px; margin: 32px 0 16px; }
+h3 { color: #5d4037; margin: 20px 0 12px; }
+p { margin: 12px 0; }
+code { background: #e9f5db; color: #3d405b; padding: 2px 8px; border-radius: 4px; font-family: 'SF Mono', 'Monaco', 'Consolas', monospace; }
+pre {
+    background: #2d3436;
+    padding: 24px;
+    border-radius: 12px;
+    margin: 24px 0;
+    border: 3px solid #a3b18a;
+    overflow-x: auto;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+    font-size: 15px;
+    line-height: 1.6;
+    color: #f8f8f2;
+}
+.keyword { color: #ff79c6; font-weight: 600; }
+.type { color: #8be9fd; }
+.signal { color: #50fa7b; }
+.number { color: #ffb86c; }
+.comment { color: #6272a4; font-style: italic; }
+.string { color: #f1fa8c; }
+
+.concept-box {
+    background: #fff8f0;
+    border: 2px solid #c4a77d;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    color: #3d405b;
+}
+.concept-box h3 { color: #5d4037; margin-bottom: 12px; }
+
+.warning-box {
+    background: #fff8f0;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    border-left: 4px solid #ef4444;
+    color: #3d405b;
+}
+.warning-box h3 { color: #c53030; margin-bottom: 12px; }
+
+.tip-box {
+    background: #fff8f0;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    border-left: 4px solid #588157;
+    color: #3d405b;
+}
+
+.hint-box {
+    background: #fff8f0;
+    border-radius: 8px;
+    padding: 15px;
+    margin: 15px 0;
+    border-left: 4px solid #5d4037;
+    color: #3d405b;
+}
+
+.exercise-box {
+    background: #fff;
+    border: 2px solid #a3b18a;
+    border-radius: 12px;
+    padding: 24px;
+    margin: 24px 0;
+}
+
+.reveal-btn {
+    background: linear-gradient(135deg, #588157, #3a5a40);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 14px;
+    margin-top: 12px;
+}
+.reveal-btn:hover { opacity: 0.9; }
+.solution { display: none; margin-top: 16px; }
+
+.nav-links { display: flex; gap: 12px; margin: 24px 0; flex-wrap: wrap; }
+.nav-links a {
+    background: linear-gradient(135deg, #588157, #3a5a40);
+    color: #fff; text-decoration: none; padding: 10px 20px;
+    border-radius: 24px; font-weight: 600; font-size: 14px;
+}
+.nav-links a:hover { opacity: 0.9; }
+
+.lang-toggle {
+    position: fixed; top: 16px; right: 16px; background: #588157;
+    border: none; border-radius: 24px; padding: 10px 20px; cursor: pointer;
+    color: #fff; font-size: 14px; font-weight: 600; z-index: 1000;
+}
+.lang-toggle:hover { background: #3a5a40; }
+.ko { display: none; }
+
+@media (max-width: 768px) {
+    body { padding: 16px; }
+    h1 { font-size: 1.8em; }
+    pre { font-size: 14px; padding: 16px; }
+    .lang-toggle { padding: 8px 16px; font-size: 13px; }
+}
+</style>
+</head>
+<body>
+
+<button class="lang-toggle" onclick="toggleLang()">한국어</button>
+
+<h1>💻 Day 16 Practice: Metastability</h1>
+
+<div class="nav-links">
+    <a href="day-16-lesson.html">📖 Lesson</a>
+    <a href="day-16-quiz.html">📝 Quiz</a>
+</div>
+
+<p class="en">Today's exercises focus on building and testing synchronizer circuits. You'll implement a 2-flop synchronizer and a parameterized N-stage synchronizer, then write testbenches to verify them.</p>
+<p class="ko" style="display:none;">오늘의 연습은 동기화 회로를 구축하고 테스트하는 데 중점을 둡니다. 2-플립플롭 동기화기와 매개변수화된 N-단계 동기화기를 구현한 다음, 테스트벤치를 작성하여 검증합니다.</p>
+
+<!-- Exercise 1 -->
+<div class="exercise-box">
+    <h2>Exercise 1: Basic 2-Flop Synchronizer</h2>
+    <p class="en">Implement a 2-flop synchronizer for a single-bit asynchronous input. This is the most common CDC circuit you'll encounter.</p>
+    <p class="ko" style="display:none;">단일 비트 비동기 입력을 위한 2-플립플롭 동기화기를 구현하세요. 이것은 가장 흔한 CDC 회로입니다.</p>
+
+    <div class="concept-box">
+        <h3>📋 Requirements</h3>
+        <ul>
+            <li class="en">Inputs: <code>clk</code>, <code>rst_n</code> (active-low async reset), <code>async_in</code></li>
+            <li class="ko" style="display:none;">입력: <code>clk</code>, <code>rst_n</code> (액티브 로우 비동기 리셋), <code>async_in</code></li>
+            <li class="en">Output: <code>sync_out</code></li>
+            <li class="ko" style="display:none;">출력: <code>sync_out</code></li>
+            <li class="en">Two flip-flop stages, both clocked by <code>clk</code></li>
+            <li class="ko" style="display:none;">두 플립플롭 단계, 둘 다 <code>clk</code>으로 클록</li>
+            <li class="en">No logic between the flip-flops!</li>
+            <li class="ko" style="display:none;">플립플롭 사이에 로직 없음!</li>
+        </ul>
+    </div>
+
+    <div class="hint-box">
+        <strong>💡 Hint:</strong>
+        <span class="en">Use a single <code>always_ff</code> block with two registers: <code>meta</code> (stage 1) and <code>sync_out</code> (stage 2). The key is <code>meta <= async_in; sync_out <= meta;</code></span>
+        <span class="ko" style="display:none;">두 레지스터가 있는 단일 <code>always_ff</code> 블록을 사용하세요: <code>meta</code> (1단계)와 <code>sync_out</code> (2단계). 핵심은 <code>meta <= async_in; sync_out <= meta;</code></span>
+    </div>
+
+    <button class="reveal-btn" onclick="reveal('sol1')">Show Solution</button>
+    <div class="solution" id="sol1">
+        <pre><span class="keyword">module</span> <span class="type">sync_2ff</span> (
+    <span class="keyword">input</span>  <span class="type">logic</span> <span class="signal">clk</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span> <span class="signal">rst_n</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span> <span class="signal">async_in</span>,
+    <span class="keyword">output</span> <span class="type">logic</span> <span class="signal">sync_out</span>
+);
+
+    <span class="type">logic</span> <span class="signal">meta</span>;  <span class="comment">// First stage - may go metastable</span>
+
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span> <span class="keyword">or</span> <span class="keyword">negedge</span> <span class="signal">rst_n</span>) <span class="keyword">begin</span>
+        <span class="keyword">if</span> (!<span class="signal">rst_n</span>) <span class="keyword">begin</span>
+            <span class="signal">meta</span>     &lt;= <span class="number">1'b0</span>;
+            <span class="signal">sync_out</span> &lt;= <span class="number">1'b0</span>;
+        <span class="keyword">end</span> <span class="keyword">else</span> <span class="keyword">begin</span>
+            <span class="signal">meta</span>     &lt;= <span class="signal">async_in</span>;  <span class="comment">// Capture - might be metastable</span>
+            <span class="signal">sync_out</span> &lt;= <span class="signal">meta</span>;      <span class="comment">// Resolve - almost certainly stable</span>
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+
+<span class="keyword">endmodule</span></pre>
+    </div>
+</div>
+
+<!-- Exercise 2 -->
+<div class="exercise-box">
+    <h2>Exercise 2: Parameterized N-Stage Synchronizer</h2>
+    <p class="en">Create a synchronizer with a configurable number of stages. Some high-frequency designs need 3 or even 4 stages.</p>
+    <p class="ko" style="display:none;">구성 가능한 단계 수를 가진 동기화기를 만드세요. 일부 고주파 설계에서는 3단계 또는 4단계가 필요합니다.</p>
+
+    <div class="concept-box">
+        <h3>📋 Requirements</h3>
+        <ul>
+            <li class="en">Parameter <code>STAGES</code> with default value of 2</li>
+            <li class="ko" style="display:none;">기본값 2인 매개변수 <code>STAGES</code></li>
+            <li class="en">Use a shift register of width <code>STAGES</code></li>
+            <li class="ko" style="display:none;">폭이 <code>STAGES</code>인 시프트 레지스터 사용</li>
+            <li class="en">Output comes from the last stage</li>
+            <li class="ko" style="display:none;">출력은 마지막 단계에서 나옴</li>
+            <li class="en">Minimum <code>STAGES</code> should be 2</li>
+            <li class="ko" style="display:none;">최소 <code>STAGES</code>는 2여야 함</li>
+        </ul>
+    </div>
+
+    <div class="hint-box">
+        <strong>💡 Hint:</strong>
+        <span class="en">Declare <code>logic [STAGES-1:0] sync_pipe;</code> and shift: <code>sync_pipe <= {sync_pipe[STAGES-2:0], async_in};</code>. Output is <code>sync_pipe[STAGES-1]</code>.</span>
+        <span class="ko" style="display:none;"><code>logic [STAGES-1:0] sync_pipe;</code>를 선언하고 시프트: <code>sync_pipe <= {sync_pipe[STAGES-2:0], async_in};</code>. 출력은 <code>sync_pipe[STAGES-1]</code>.</span>
+    </div>
+
+    <button class="reveal-btn" onclick="reveal('sol2')">Show Solution</button>
+    <div class="solution" id="sol2">
+        <pre><span class="keyword">module</span> <span class="type">sync_nff</span> #(
+    <span class="keyword">parameter</span> <span class="type">int</span> <span class="signal">STAGES</span> = <span class="number">2</span>  <span class="comment">// Minimum 2</span>
+) (
+    <span class="keyword">input</span>  <span class="type">logic</span> <span class="signal">clk</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span> <span class="signal">rst_n</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span> <span class="signal">async_in</span>,
+    <span class="keyword">output</span> <span class="type">logic</span> <span class="signal">sync_out</span>
+);
+
+    <span class="comment">// Shift register for synchronizer pipeline</span>
+    <span class="type">logic</span> [<span class="signal">STAGES</span>-<span class="number">1</span>:<span class="number">0</span>] <span class="signal">sync_pipe</span>;
+
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span> <span class="keyword">or</span> <span class="keyword">negedge</span> <span class="signal">rst_n</span>) <span class="keyword">begin</span>
+        <span class="keyword">if</span> (!<span class="signal">rst_n</span>) <span class="keyword">begin</span>
+            <span class="signal">sync_pipe</span> &lt;= <span class="string">'0</span>;
+        <span class="keyword">end</span> <span class="keyword">else</span> <span class="keyword">begin</span>
+            <span class="signal">sync_pipe</span> &lt;= {<span class="signal">sync_pipe</span>[<span class="signal">STAGES</span>-<span class="number">2</span>:<span class="number">0</span>], <span class="signal">async_in</span>};
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+
+    <span class="keyword">assign</span> <span class="signal">sync_out</span> = <span class="signal">sync_pipe</span>[<span class="signal">STAGES</span>-<span class="number">1</span>];
+
+<span class="keyword">endmodule</span></pre>
+    </div>
+</div>
+
+<!-- Exercise 3 -->
+<div class="exercise-box">
+    <h2>Exercise 3: Synchronizer Testbench</h2>
+    <p class="en">Write a testbench that drives an asynchronous signal into your 2-flop synchronizer. Verify the output appears 2 clock cycles later.</p>
+    <p class="ko" style="display:none;">2-플립플롭 동기화기에 비동기 신호를 구동하는 테스트벤치를 작성하세요. 출력이 2 클록 사이클 후에 나타나는지 확인하세요.</p>
+
+    <div class="concept-box">
+        <h3>📋 Requirements</h3>
+        <ul>
+            <li class="en">Generate a 100 MHz clock</li>
+            <li class="ko" style="display:none;">100 MHz 클록 생성</li>
+            <li class="en">Toggle <code>async_in</code> at non-clock-aligned times (e.g., #7, #13)</li>
+            <li class="ko" style="display:none;"><code>async_in</code>을 클록과 정렬되지 않은 시간에 토글 (예: #7, #13)</li>
+            <li class="en">Monitor <code>sync_out</code> and verify it follows <code>async_in</code> with 2-cycle latency</li>
+            <li class="ko" style="display:none;"><code>sync_out</code>를 모니터링하고 2 사이클 지연으로 <code>async_in</code>을 따르는지 확인</li>
+            <li class="en">Use <code>$display</code> to show the signal values over time</li>
+            <li class="ko" style="display:none;"><code>$display</code>를 사용하여 시간에 따른 신호 값 표시</li>
+        </ul>
+    </div>
+
+    <div class="hint-box">
+        <strong>💡 Hint:</strong>
+        <span class="en">Use <code>#7</code> and <code>#13</code> delays to ensure transitions happen at non-clock-edge times. This simulates real asynchronous behavior. Check <code>sync_out</code> after <code>@(posedge clk); @(posedge clk);</code> — it should reflect the input.</span>
+        <span class="ko" style="display:none;"><code>#7</code>과 <code>#13</code> 지연을 사용하여 전환이 클록 에지가 아닌 시간에 발생하도록 하세요. 이것은 실제 비동기 동작을 시뮬레이션합니다. <code>@(posedge clk); @(posedge clk);</code> 후에 <code>sync_out</code>을 확인하세요 — 입력을 반영해야 합니다.</span>
+    </div>
+
+    <button class="reveal-btn" onclick="reveal('sol3')">Show Solution</button>
+    <div class="solution" id="sol3">
+        <pre><span class="keyword">module</span> <span class="type">tb_sync_2ff</span>;
+
+    <span class="type">logic</span> <span class="signal">clk</span>, <span class="signal">rst_n</span>, <span class="signal">async_in</span>, <span class="signal">sync_out</span>;
+
+    <span class="comment">// Instantiate DUT</span>
+    <span class="type">sync_2ff</span> <span class="signal">dut</span> (
+        .<span class="signal">clk</span>(<span class="signal">clk</span>),
+        .<span class="signal">rst_n</span>(<span class="signal">rst_n</span>),
+        .<span class="signal">async_in</span>(<span class="signal">async_in</span>),
+        .<span class="signal">sync_out</span>(<span class="signal">sync_out</span>)
+    );
+
+    <span class="comment">// 100 MHz clock (10ns period)</span>
+    <span class="keyword">initial</span> <span class="signal">clk</span> = <span class="number">0</span>;
+    <span class="keyword">always</span> #<span class="number">5</span> <span class="signal">clk</span> = ~<span class="signal">clk</span>;
+
+    <span class="comment">// Monitor signals</span>
+    <span class="keyword">initial</span> <span class="keyword">begin</span>
+        $<span class="signal">monitor</span>(<span class="string">"t=%0t  async_in=%b  meta=%b  sync_out=%b"</span>,
+                $<span class="signal">time</span>, <span class="signal">async_in</span>, <span class="signal">dut</span>.<span class="signal">meta</span>, <span class="signal">sync_out</span>);
+    <span class="keyword">end</span>
+
+    <span class="keyword">initial</span> <span class="keyword">begin</span>
+        <span class="comment">// Initialize</span>
+        <span class="signal">rst_n</span>    = <span class="number">0</span>;
+        <span class="signal">async_in</span> = <span class="number">0</span>;
+        #<span class="number">20</span>;
+        <span class="signal">rst_n</span> = <span class="number">1</span>;
+
+        <span class="comment">// Test 1: Assert async_in at non-aligned time</span>
+        #<span class="number">7</span>;  <span class="comment">// NOT aligned to clock edge</span>
+        <span class="signal">async_in</span> = <span class="number">1</span>;
+        $<span class="signal">display</span>(<span class="string">"\n--- async_in asserted at t=%0t ---"</span>, $<span class="signal">time</span>);
+
+        <span class="comment">// Wait 2 clock cycles — sync_out should be 1</span>
+        @(<span class="keyword">posedge</span> <span class="signal">clk</span>);  <span class="comment">// meta captures</span>
+        @(<span class="keyword">posedge</span> <span class="signal">clk</span>);  <span class="comment">// sync_out captures meta</span>
+        #<span class="number">1</span>;
+        <span class="keyword">if</span> (<span class="signal">sync_out</span> === <span class="number">1'b1</span>)
+            $<span class="signal">display</span>(<span class="string">"PASS: sync_out = 1 after 2 cycles"</span>);
+        <span class="keyword">else</span>
+            $<span class="signal">display</span>(<span class="string">"FAIL: sync_out = %b (expected 1)"</span>, <span class="signal">sync_out</span>);
+
+        <span class="comment">// Test 2: Deassert at non-aligned time</span>
+        #<span class="number">13</span>;
+        <span class="signal">async_in</span> = <span class="number">0</span>;
+        $<span class="signal">display</span>(<span class="string">"\n--- async_in deasserted at t=%0t ---"</span>, $<span class="signal">time</span>);
+
+        @(<span class="keyword">posedge</span> <span class="signal">clk</span>);
+        @(<span class="keyword">posedge</span> <span class="signal">clk</span>);
+        #<span class="number">1</span>;
+        <span class="keyword">if</span> (<span class="signal">sync_out</span> === <span class="number">1'b0</span>)
+            $<span class="signal">display</span>(<span class="string">"PASS: sync_out = 0 after 2 cycles"</span>);
+        <span class="keyword">else</span>
+            $<span class="signal">display</span>(<span class="string">"FAIL: sync_out = %b (expected 0)"</span>, <span class="signal">sync_out</span>);
+
+        <span class="comment">// Test 3: Rapid toggles</span>
+        #<span class="number">3</span>;
+        <span class="signal">async_in</span> = <span class="number">1</span>;
+        #<span class="number">4</span>;
+        <span class="signal">async_in</span> = <span class="number">0</span>;  <span class="comment">// Pulse shorter than clock period</span>
+        #<span class="number">3</span>;
+        <span class="signal">async_in</span> = <span class="number">1</span>;
+        $<span class="signal">display</span>(<span class="string">"\n--- Rapid toggles at t=%0t ---"</span>, $<span class="signal">time</span>);
+
+        #<span class="number">50</span>;
+        $<span class="signal">display</span>(<span class="string">"\n=== Simulation complete ==="</span>);
+        $<span class="signal">finish</span>;
+    <span class="keyword">end</span>
+
+<span class="keyword">endmodule</span></pre>
+    </div>
+</div>
+
+<!-- Exercise 4 -->
+<div class="exercise-box">
+    <h2>Exercise 4: Edge Detector with Synchronizer</h2>
+    <p class="en">A common pattern: synchronize an asynchronous signal, then detect its rising edge. Build a module that outputs a single-cycle pulse when the synchronized signal transitions from 0 to 1.</p>
+    <p class="ko" style="display:none;">일반적인 패턴: 비동기 신호를 동기화한 다음 상승 에지를 감지합니다. 동기화된 신호가 0에서 1로 전환될 때 단일 사이클 펄스를 출력하는 모듈을 만드세요.</p>
+
+    <div class="concept-box">
+        <h3>📋 Requirements</h3>
+        <ul>
+            <li class="en">First: synchronize with 2-flop synchronizer</li>
+            <li class="ko" style="display:none;">먼저: 2-플립플롭 동기화기로 동기화</li>
+            <li class="en">Then: detect rising edge (compare current vs previous value)</li>
+            <li class="ko" style="display:none;">그 다음: 상승 에지 감지 (현재 값과 이전 값 비교)</li>
+            <li class="en">Output: <code>pulse_out</code> — high for exactly one clock cycle</li>
+            <li class="ko" style="display:none;">출력: <code>pulse_out</code> — 정확히 한 클록 사이클 동안 하이</li>
+            <li class="en">Total latency: 3 clock cycles (2 sync + 1 edge detect)</li>
+            <li class="ko" style="display:none;">총 지연: 3 클록 사이클 (2 동기화 + 1 에지 감지)</li>
+        </ul>
+    </div>
+
+    <div class="hint-box">
+        <strong>💡 Hint:</strong>
+        <span class="en">After the synchronizer, add a third flip-flop: <code>sync_delay <= sync_out;</code>. The rising edge is: <code>pulse_out = sync_out & ~sync_delay;</code></span>
+        <span class="ko" style="display:none;">동기화기 후에 세 번째 플립플롭을 추가하세요: <code>sync_delay <= sync_out;</code>. 상승 에지는: <code>pulse_out = sync_out & ~sync_delay;</code></span>
+    </div>
+
+    <button class="reveal-btn" onclick="reveal('sol4')">Show Solution</button>
+    <div class="solution" id="sol4">
+        <pre><span class="keyword">module</span> <span class="type">async_edge_detect</span> (
+    <span class="keyword">input</span>  <span class="type">logic</span> <span class="signal">clk</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span> <span class="signal">rst_n</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span> <span class="signal">async_in</span>,
+    <span class="keyword">output</span> <span class="type">logic</span> <span class="signal">pulse_out</span>    <span class="comment">// Single-cycle pulse on rising edge</span>
+);
+
+    <span class="type">logic</span> <span class="signal">meta</span>, <span class="signal">sync</span>, <span class="signal">sync_d</span>;
+
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span> <span class="keyword">or</span> <span class="keyword">negedge</span> <span class="signal">rst_n</span>) <span class="keyword">begin</span>
+        <span class="keyword">if</span> (!<span class="signal">rst_n</span>) <span class="keyword">begin</span>
+            <span class="signal">meta</span>   &lt;= <span class="number">1'b0</span>;
+            <span class="signal">sync</span>   &lt;= <span class="number">1'b0</span>;
+            <span class="signal">sync_d</span> &lt;= <span class="number">1'b0</span>;
+        <span class="keyword">end</span> <span class="keyword">else</span> <span class="keyword">begin</span>
+            <span class="signal">meta</span>   &lt;= <span class="signal">async_in</span>;   <span class="comment">// Stage 1: capture</span>
+            <span class="signal">sync</span>   &lt;= <span class="signal">meta</span>;       <span class="comment">// Stage 2: resolve</span>
+            <span class="signal">sync_d</span> &lt;= <span class="signal">sync</span>;       <span class="comment">// Stage 3: delay for edge detect</span>
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+
+    <span class="comment">// Rising edge: sync is high, previous was low</span>
+    <span class="keyword">assign</span> <span class="signal">pulse_out</span> = <span class="signal">sync</span> & ~<span class="signal">sync_d</span>;
+
+<span class="keyword">endmodule</span></pre>
+    </div>
+</div>
+
+<!-- Bonus Challenge -->
+<div class="exercise-box">
+    <h2>🌟 Bonus: MTBF Calculator</h2>
+    <p class="en">Calculate the MTBF for these scenarios (use the formula from the lesson):</p>
+    <p class="ko" style="display:none;">이 시나리오에 대한 MTBF를 계산하세요 (레슨의 공식 사용):</p>
+
+    <div class="concept-box">
+        <h3>Scenario A</h3>
+        <ul>
+            <li>τ = 25 ps, T<sub>w</sub> = 50 ps</li>
+            <li>f<sub>clk</sub> = 200 MHz, f<sub>data</sub> = 50 MHz</li>
+            <li class="en">2-flop synchronizer (t<sub>res</sub> = 1 clock period = 5 ns)</li>
+            <li class="ko" style="display:none;">2-플립플롭 동기화기 (t<sub>res</sub> = 1 클록 주기 = 5 ns)</li>
+        </ul>
+    </div>
+
+    <div class="concept-box">
+        <h3>Scenario B</h3>
+        <ul>
+            <li>τ = 25 ps, T<sub>w</sub> = 50 ps</li>
+            <li>f<sub>clk</sub> = 1 GHz, f<sub>data</sub> = 500 MHz</li>
+            <li class="en">2-flop synchronizer (t<sub>res</sub> = 1 ns)</li>
+            <li class="ko" style="display:none;">2-플립플롭 동기화기 (t<sub>res</sub> = 1 ns)</li>
+        </ul>
+    </div>
+
+    <button class="reveal-btn" onclick="reveal('sol5')">Show Answers</button>
+    <div class="solution" id="sol5">
+        <div class="concept-box">
+            <h3>Scenario A Answer</h3>
+            <pre style="font-size:14px;">MTBF = e<sup>(5000ps / 25ps)</sup> / (50e-12 × 200e6 × 50e6)
+     = e<sup><span class="number">200</span></sup> / (50e-12 × 1e16)
+     = e<sup><span class="number">200</span></sup> / 500000
+     ≈ <span class="number">7.2 × 10<sup>80</sup></span> seconds
+     ≈ <span class="number">2.3 × 10<sup>73</sup></span> years  <span class="comment">// Incomprehensibly long!</span></pre>
+        </div>
+        <div class="concept-box">
+            <h3>Scenario B Answer</h3>
+            <pre style="font-size:14px;">MTBF = e<sup>(1000ps / 25ps)</sup> / (50e-12 × 1e9 × 500e6)
+     = e<sup><span class="number">40</span></sup> / (50e-12 × 5e17)
+     = e<sup><span class="number">40</span></sup> / 25000000
+     ≈ <span class="number">2.35 × 10<sup>17</sup></span> / 2.5e7
+     ≈ <span class="number">9.4 × 10<sup>9</sup></span> seconds
+     ≈ <span class="number">~300 years</span>  <span class="comment">// Okay for some apps, but consider 3 stages!</span></pre>
+        </div>
+        <p class="en">Notice how Scenario B has much shorter MTBF! At 1 GHz with only 1ns resolution time, you should consider a 3-flop synchronizer to increase MTBF dramatically.</p>
+        <p class="ko" style="display:none;">시나리오 B의 MTBF가 훨씬 짧은 것에 주목하세요! 1 GHz에서 1ns 해결 시간만으로는 MTBF를 극적으로 증가시키기 위해 3-플립플롭 동기화기를 고려해야 합니다.</p>
+    </div>
+</div>
+
+<div class="tip-box">
+    <h3>🚀 Try It on EDA Playground</h3>
+    <p class="en">Copy the 2-flop synchronizer and its testbench into <a href="https://www.edaplayground.com" target="_blank" style="color:#588157;">EDA Playground</a>. Run the simulation and observe how <code>sync_out</code> follows <code>async_in</code> with a 2-cycle delay. Try changing the async input timing to see the effect!</p>
+    <p class="ko" style="display:none;">2-플립플롭 동기화기와 테스트벤치를 <a href="https://www.edaplayground.com" target="_blank" style="color:#588157;">EDA Playground</a>에 복사하세요. 시뮬레이션을 실행하고 <code>sync_out</code>이 2 사이클 지연으로 <code>async_in</code>을 따르는 것을 관찰하세요!</p>
+</div>
+
+<div class="nav-links">
+    <a href="day-16-lesson.html">📖 Review Lesson</a>
+    <a href="day-16-quiz.html">📝 Take Quiz</a>
+    <a href="day-15-lesson.html">← Day 15</a>
+</div>
+
+<script>
+let isKorean = false;
+function toggleLang() {
+    isKorean = !isKorean;
+    document.querySelectorAll('.en').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'none' : 'revert', 'important');
+    });
+    document.querySelectorAll('.ko').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'revert' : 'none', 'important');
+    });
+    document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+}
+function reveal(id) {
+    const el = document.getElementById(id);
+    el.style.display = el.style.display === 'none' || el.style.display === '' ? 'block' : 'none';
+}
+</script>
+
+</body>
+</html>
