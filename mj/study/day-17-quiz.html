@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 17 Quiz: 2-Flop Synchronizer | Digital Design Study</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: linear-gradient(135deg, #fefae0 0%, #faedcd 100%); color: #3d405b; line-height: 1.8; padding: 24px; max-width: 920px; margin: 0 auto; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+h1 { color: #5d4037; border-bottom: 3px solid #c4a77d; padding-bottom: 12px; margin: 24px 0 16px; font-size: 2em; }
+h2 { color: #588157; border-bottom: 2px solid #a3b18a; padding-bottom: 8px; margin: 28px 0 14px; }
+code { background: #e9f5db; color: #3d405b; padding: 2px 8px; border-radius: 4px; font-family: 'SF Mono','Monaco','Consolas',monospace; }
+.question { background: #fff; border: 2px solid #c4a77d; border-radius: 12px; padding: 20px; margin: 20px 0; }
+.question h3 { color: #5d4037; margin-bottom: 12px; }
+.options label { display: block; padding: 8px 12px; margin: 4px 0; border-radius: 8px; cursor: pointer; transition: background 0.2s; }
+.options label:hover { background: #e9f5db; }
+.options input[type="radio"] { margin-right: 8px; }
+.result { display: none; padding: 12px 16px; border-radius: 8px; margin-top: 12px; font-weight: 600; }
+.result.correct { background: #d4edda; color: #155724; border: 1px solid #a3b18a; }
+.result.incorrect { background: #fff8f0; color: #c53030; border: 1px solid #ef4444; }
+.explanation { display: none; background: #fff8f0; border-left: 4px solid #588157; padding: 12px 16px; margin-top: 8px; border-radius: 0 8px 8px 0; }
+.check-btn { background: linear-gradient(135deg, #588157, #3a5a40); color: #fff; border: none; padding: 10px 24px; border-radius: 24px; cursor: pointer; font-size: 14px; font-weight: 600; margin-top: 12px; }
+.check-btn:hover { opacity: 0.9; }
+.score-box { background: #fff8f0; border: 2px solid #c4a77d; border-radius: 12px; padding: 24px; margin: 24px 0; text-align: center; display: none; }
+.score-box h2 { border: none; }
+.nav-links { display: flex; justify-content: space-between; margin: 30px 0; flex-wrap: wrap; gap: 10px; }
+.nav-links a { background: linear-gradient(135deg, #588157, #3a5a40); color: #fff; padding: 10px 20px; border-radius: 24px; text-decoration: none; font-weight: 600; font-size: 14px; }
+.lang-toggle { position: fixed; top: 16px; right: 16px; background: #588157; border: none; border-radius: 24px; padding: 10px 20px; cursor: pointer; color: #fff; font-size: 14px; font-weight: 600; z-index: 1000; }
+.lang-toggle:hover { background: #3a5a40; }
+@media (max-width: 768px) { body { padding: 16px; } h1 { font-size: 1.8em; } .lang-toggle { padding: 8px 16px; font-size: 13px; } }
+</style>
+</head>
+<body>
+<button class="lang-toggle" onclick="toggleLang()">한국어</button>
+
+<h1>📝 Day 17 Quiz: 2-Flop Synchronizer</h1>
+
+<div class="question" id="q1">
+<h3>Q1. <span class="en">In a 2-flop synchronizer, which clock drives both flip-flops?</span><span class="ko" style="display:none;">2-플롭 동기화기에서 어떤 클록이 두 플립플롭을 구동합니까?</span></h3>
+<div class="options">
+<label><input type="radio" name="q1" value="a"> <span class="en">The sending domain clock</span><span class="ko" style="display:none;">송신 도메인 클록</span></label>
+<label><input type="radio" name="q1" value="b"> <span class="en">The receiving domain clock</span><span class="ko" style="display:none;">수신 도메인 클록</span></label>
+<label><input type="radio" name="q1" value="c"> <span class="en">One from each domain</span><span class="ko" style="display:none;">각 도메인에서 하나씩</span></label>
+<label><input type="radio" name="q1" value="d"> <span class="en">A third, faster clock</span><span class="ko" style="display:none;">세 번째 더 빠른 클록</span></label>
+</div>
+<button class="check-btn" onclick="check('q1','b')">Check Answer</button>
+<div class="result" id="q1-result"></div>
+<div class="explanation" id="q1-exp"><span class="en">Both flops are clocked by the <strong>receiving</strong> domain clock. The purpose is to give metastable signals time to resolve in the destination domain.</span><span class="ko" style="display:none;">두 플롭 모두 <strong>수신</strong> 도메인 클록으로 클로킹됩니다. 목적은 메타스테이블 신호가 목적지 도메인에서 안정될 시간을 주는 것입니다.</span></div>
+</div>
+
+<div class="question" id="q2">
+<h3>Q2. <span class="en">What is the purpose of the first flip-flop (FF1) in the synchronizer?</span><span class="ko" style="display:none;">동기화기에서 첫 번째 플립플롭(FF1)의 목적은 무엇입니까?</span></h3>
+<div class="options">
+<label><input type="radio" name="q2" value="a"> <span class="en">To filter glitches</span><span class="ko" style="display:none;">글리치를 필터링</span></label>
+<label><input type="radio" name="q2" value="b"> <span class="en">To capture the async signal (may go metastable)</span><span class="ko" style="display:none;">비동기 신호 캡처 (메타스테이블 가능)</span></label>
+<label><input type="radio" name="q2" value="c"> <span class="en">To provide the final clean output</span><span class="ko" style="display:none;">최종 깨끗한 출력 제공</span></label>
+<label><input type="radio" name="q2" value="d"> <span class="en">To delay the signal by one cycle</span><span class="ko" style="display:none;">신호를 한 사이클 지연</span></label>
+</div>
+<button class="check-btn" onclick="check('q2','b')">Check Answer</button>
+<div class="result" id="q2-result"></div>
+<div class="explanation" id="q2-exp"><span class="en">FF1 captures the asynchronous signal and may go metastable. It gets one full clock period to resolve before FF2 samples it.</span><span class="ko" style="display:none;">FF1은 비동기 신호를 캡처하며 메타스테이블 상태가 될 수 있습니다. FF2가 샘플링하기 전에 전체 클록 주기 동안 안정될 시간을 가집니다.</span></div>
+</div>
+
+<div class="question" id="q3">
+<h3>Q3. <span class="en">Why must there be NO combinational logic between FF1 and FF2?</span><span class="ko" style="display:none;">왜 FF1과 FF2 사이에 조합 로직이 없어야 합니까?</span></h3>
+<div class="options">
+<label><input type="radio" name="q3" value="a"> <span class="en">It would increase power consumption</span><span class="ko" style="display:none;">전력 소비 증가</span></label>
+<label><input type="radio" name="q3" value="b"> <span class="en">It would reduce the time available for metastability resolution</span><span class="ko" style="display:none;">메타스테이빌리티 해소에 사용 가능한 시간 감소</span></label>
+<label><input type="radio" name="q3" value="c"> <span class="en">It would change the clock frequency</span><span class="ko" style="display:none;">클록 주파수 변경</span></label>
+<label><input type="radio" name="q3" value="d"> <span class="en">It causes hold time violations</span><span class="ko" style="display:none;">홀드 타임 위반 발생</span></label>
+</div>
+<button class="check-btn" onclick="check('q3','b')">Check Answer</button>
+<div class="result" id="q3-result"></div>
+<div class="explanation" id="q3-exp"><span class="en">Logic between the flops adds propagation delay, eating into the resolution time. The metastable signal needs the full clock period to settle.</span><span class="ko" style="display:none;">플롭 사이의 로직은 전파 지연을 추가하여 해상 시간을 줄입니다. 메타스테이블 신호는 안정되기 위해 전체 클록 주기가 필요합니다.</span></div>
+</div>
+
+<div class="question" id="q4">
+<h3>Q4. <span class="en">How does MTBF relate to resolution time?</span><span class="ko" style="display:none;">MTBF는 해상 시간과 어떤 관계가 있습니까?</span></h3>
+<div class="options">
+<label><input type="radio" name="q4" value="a"> <span class="en">MTBF increases linearly with resolution time</span><span class="ko" style="display:none;">MTBF는 해상 시간에 따라 선형적으로 증가</span></label>
+<label><input type="radio" name="q4" value="b"> <span class="en">MTBF increases exponentially with resolution time</span><span class="ko" style="display:none;">MTBF는 해상 시간에 따라 기하급수적으로 증가</span></label>
+<label><input type="radio" name="q4" value="c"> <span class="en">MTBF decreases with resolution time</span><span class="ko" style="display:none;">MTBF는 해상 시간에 따라 감소</span></label>
+<label><input type="radio" name="q4" value="d"> <span class="en">MTBF is independent of resolution time</span><span class="ko" style="display:none;">MTBF는 해상 시간과 무관</span></label>
+</div>
+<button class="check-btn" onclick="check('q4','b')">Check Answer</button>
+<div class="result" id="q4-result"></div>
+<div class="explanation" id="q4-exp"><span class="en">MTBF grows <strong>exponentially</strong> with resolution time (it's in the exponent of the formula). This is why even a small increase in resolution time dramatically improves reliability.</span><span class="ko" style="display:none;">MTBF는 해상 시간에 따라 <strong>기하급수적으로</strong> 증가합니다 (공식의 지수에 있음). 해상 시간의 작은 증가도 신뢰성을 극적으로 향상시키는 이유입니다.</span></div>
+</div>
+
+<div class="question" id="q5">
+<h3>Q5. <span class="en">A 2-flop synchronizer is appropriate for which type of signal?</span><span class="ko" style="display:none;">2-플롭 동기화기는 어떤 유형의 신호에 적합합니까?</span></h3>
+<div class="options">
+<label><input type="radio" name="q5" value="a"> <span class="en">Multi-bit data bus</span><span class="ko" style="display:none;">멀티비트 데이터 버스</span></label>
+<label><input type="radio" name="q5" value="b"> <span class="en">Single-bit control signal</span><span class="ko" style="display:none;">단일 비트 제어 신호</span></label>
+<label><input type="radio" name="q5" value="c"> <span class="en">32-bit address</span><span class="ko" style="display:none;">32비트 주소</span></label>
+<label><input type="radio" name="q5" value="d"> <span class="en">Any signal crossing clock domains</span><span class="ko" style="display:none;">클록 도메인을 넘는 모든 신호</span></label>
+</div>
+<button class="check-btn" onclick="check('q5','b')">Check Answer</button>
+<div class="result" id="q5-result"></div>
+<div class="explanation" id="q5-exp"><span class="en">The 2-flop synchronizer only works for <strong>single-bit</strong> signals. Multi-bit signals require gray code encoding or handshake protocols because each bit may resolve differently.</span><span class="ko" style="display:none;">2-플롭 동기화기는 <strong>단일 비트</strong> 신호에만 작동합니다. 멀티비트 신호는 각 비트가 다르게 안정될 수 있으므로 그레이 코드 인코딩이나 핸드셰이크 프로토콜이 필요합니다.</span></div>
+</div>
+
+<div class="question" id="q6">
+<h3>Q6. <span class="en">What does the <code>ASYNC_REG</code> synthesis attribute do?</span><span class="ko" style="display:none;"><code>ASYNC_REG</code> 합성 속성은 무엇을 합니까?</span></h3>
+<div class="options">
+<label><input type="radio" name="q6" value="a"> <span class="en">Makes the flip-flop asynchronous</span><span class="ko" style="display:none;">플립플롭을 비동기로 만듦</span></label>
+<label><input type="radio" name="q6" value="b"> <span class="en">Tells the tool this register receives asynchronous input — don't optimize it</span><span class="ko" style="display:none;">도구에 이 레지스터가 비동기 입력을 받으니 최적화하지 말라고 알림</span></label>
+<label><input type="radio" name="q6" value="c"> <span class="en">Removes timing constraints</span><span class="ko" style="display:none;">타이밍 제약 제거</span></label>
+<label><input type="radio" name="q6" value="d"> <span class="en">Doubles the flip-flop automatically</span><span class="ko" style="display:none;">플립플롭 자동으로 두 배</span></label>
+</div>
+<button class="check-btn" onclick="check('q6','b')">Check Answer</button>
+<div class="result" id="q6-result"></div>
+<div class="explanation" id="q6-exp"><span class="en"><code>ASYNC_REG</code> tells the synthesis/P&R tool that this register is part of a synchronizer. The tool will keep the flops close together and won't merge or optimize them away.</span><span class="ko" style="display:none;"><code>ASYNC_REG</code>는 합성/배치 도구에 이 레지스터가 동기화기의 일부임을 알립니다. 도구는 플롭을 가까이 유지하고 병합하거나 최적화하지 않습니다.</span></div>
+</div>
+
+<div class="question" id="q7">
+<h3>Q7. <span class="en">In a parameterized N-stage synchronizer with <code>sync_pipe[STAGES-1:0]</code>, which bit is the output?</span><span class="ko" style="display:none;">매개변수화된 N단 동기화기에서 <code>sync_pipe[STAGES-1:0]</code>일 때, 어떤 비트가 출력입니까?</span></h3>
+<div class="options">
+<label><input type="radio" name="q7" value="a"> <span class="en"><code>sync_pipe[0]</code></span><span class="ko" style="display:none;"><code>sync_pipe[0]</code></span></label>
+<label><input type="radio" name="q7" value="b"> <span class="en"><code>sync_pipe[STAGES-1]</code></span><span class="ko" style="display:none;"><code>sync_pipe[STAGES-1]</code></span></label>
+<label><input type="radio" name="q7" value="c"> <span class="en"><code>sync_pipe[1]</code></span><span class="ko" style="display:none;"><code>sync_pipe[1]</code></span></label>
+<label><input type="radio" name="q7" value="d"> <span class="en"><code>sync_pipe[STAGES]</code></span><span class="ko" style="display:none;"><code>sync_pipe[STAGES]</code></span></label>
+</div>
+<button class="check-btn" onclick="check('q7','b')">Check Answer</button>
+<div class="result" id="q7-result"></div>
+<div class="explanation" id="q7-exp"><span class="en">The signal shifts from bit 0 toward the MSB. <code>sync_pipe[STAGES-1]</code> is the last stage — the fully resolved output.</span><span class="ko" style="display:none;">신호는 비트 0에서 MSB 방향으로 이동합니다. <code>sync_pipe[STAGES-1]</code>이 마지막 단계 — 완전히 안정된 출력입니다.</span></div>
+</div>
+
+<div class="question" id="q8">
+<h3>Q8. <span class="en">What latency (in clock cycles) does a 2-flop synchronizer add?</span><span class="ko" style="display:none;">2-플롭 동기화기는 몇 클록 사이클의 지연을 추가합니까?</span></h3>
+<div class="options">
+<label><input type="radio" name="q8" value="a"> <span class="en">0 cycles</span><span class="ko" style="display:none;">0 사이클</span></label>
+<label><input type="radio" name="q8" value="b"> <span class="en">1 cycle</span><span class="ko" style="display:none;">1 사이클</span></label>
+<label><input type="radio" name="q8" value="c"> <span class="en">2 cycles (of the receiving clock)</span><span class="ko" style="display:none;">2 사이클 (수신 클록 기준)</span></label>
+<label><input type="radio" name="q8" value="d"> <span class="en">Variable, depends on metastability</span><span class="ko" style="display:none;">가변적, 메타스테이빌리티에 따라 다름</span></label>
+</div>
+<button class="check-btn" onclick="check('q8','c')">Check Answer</button>
+<div class="result" id="q8-result"></div>
+<div class="explanation" id="q8-exp"><span class="en">Two flip-flops = 2 clock cycles of latency in the receiving domain. This is the inherent cost of synchronization.</span><span class="ko" style="display:none;">두 개의 플립플롭 = 수신 도메인에서 2 클록 사이클의 지연. 이것은 동기화의 본질적인 비용입니다.</span></div>
+</div>
+
+<div class="question" id="q9">
+<h3>Q9. <span class="en">When would you use a 3-flop synchronizer instead of 2?</span><span class="ko" style="display:none;">2 대신 3-플롭 동기화기를 사용하는 경우는?</span></h3>
+<div class="options">
+<label><input type="radio" name="q9" value="a"> <span class="en">When crossing between identical clock frequencies</span><span class="ko" style="display:none;">동일 클록 주파수 간 크로싱 시</span></label>
+<label><input type="radio" name="q9" value="b"> <span class="en">When very high frequencies or safety-critical applications need higher MTBF</span><span class="ko" style="display:none;">초고주파 또는 안전 최우선 애플리케이션에서 더 높은 MTBF가 필요할 때</span></label>
+<label><input type="radio" name="q9" value="c"> <span class="en">Always — 3 is the industry standard</span><span class="ko" style="display:none;">항상 — 3이 업계 표준</span></label>
+<label><input type="radio" name="q9" value="d"> <span class="en">When the signal is multi-bit</span><span class="ko" style="display:none;">신호가 멀티비트일 때</span></label>
+</div>
+<button class="check-btn" onclick="check('q9','b')">Check Answer</button>
+<div class="result" id="q9-result"></div>
+<div class="explanation" id="q9-exp"><span class="en">At very high frequencies (>1 GHz), the resolution time per stage shrinks, so a third flop provides additional resolution time. Safety-critical systems also use 3+ flops for extra margin.</span><span class="ko" style="display:none;">초고주파(>1 GHz)에서는 스테이지당 해상 시간이 줄어들어 세 번째 플롭이 추가 해상 시간을 제공합니다. 안전 최우선 시스템도 추가 여유를 위해 3개 이상의 플롭을 사용합니다.</span></div>
+</div>
+
+<div class="question" id="q10">
+<h3>Q10. <span class="en">What happens if you synchronize a 4-bit counter with four independent 2-flop synchronizers?</span><span class="ko" style="display:none;">4비트 카운터를 4개의 독립 2-플롭 동기화기로 동기화하면 어떻게 됩니까?</span></h3>
+<div class="options">
+<label><input type="radio" name="q10" value="a"> <span class="en">Works perfectly — each bit is synchronized</span><span class="ko" style="display:none;">완벽하게 작동 — 각 비트가 동기화됨</span></label>
+<label><input type="radio" name="q10" value="b"> <span class="en">Bits may resolve at different times, giving a corrupted value</span><span class="ko" style="display:none;">비트들이 다른 시점에 안정되어 손상된 값 발생 가능</span></label>
+<label><input type="radio" name="q10" value="c"> <span class="en">Only works if the counter uses gray code</span><span class="ko" style="display:none;">카운터가 그레이 코드를 사용할 때만 작동</span></label>
+<label><input type="radio" name="q10" value="d"> <span class="en">The synchronizers will cancel each other out</span><span class="ko" style="display:none;">동기화기들이 서로 상쇄됨</span></label>
+</div>
+<button class="check-btn" onclick="check('q10','b')">Check Answer</button>
+<div class="result" id="q10-result"></div>
+<div class="explanation" id="q10-exp"><span class="en">When multiple bits change simultaneously (e.g., 0111→1000), each synchronizer resolves independently. Some bits might update one cycle before others, creating values that never existed (e.g., 1111). This is why gray code is essential for multi-bit CDC!</span><span class="ko" style="display:none;">여러 비트가 동시에 변할 때 (예: 0111→1000), 각 동기화기가 독립적으로 안정됩니다. 일부 비트가 다른 비트보다 한 사이클 먼저 업데이트되어 존재하지 않는 값(예: 1111)이 생길 수 있습니다. 이것이 멀티비트 CDC에 그레이 코드가 필수적인 이유입니다!</span></div>
+</div>
+
+<div class="score-box" id="scoreBox">
+<h2>🏆 <span id="scoreText"></span></h2>
+</div>
+
+<div style="text-align:center; margin: 20px 0;">
+<button class="check-btn" onclick="showScore()" style="font-size:16px; padding: 12px 32px;">Show Score</button>
+</div>
+
+<div class="nav-links">
+<a href="day-17-lesson.html">← Back to Lesson</a>
+<a href="day-17-practice.html">Practice →</a>
+</div>
+
+<script>
+let isKorean = false;
+function toggleLang() {
+    isKorean = !isKorean;
+    document.querySelectorAll('.en').forEach(el => { el.style.setProperty('display', isKorean ? 'none' : 'revert', 'important'); });
+    document.querySelectorAll('.ko').forEach(el => { el.style.setProperty('display', isKorean ? 'revert' : 'none', 'important'); });
+    document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+}
+const answers = {};
+function check(qId, correct) {
+    const selected = document.querySelector(`input[name="${qId}"]:checked`);
+    if (!selected) return;
+    const result = document.getElementById(qId + '-result');
+    const exp = document.getElementById(qId + '-exp');
+    const isCorrect = selected.value === correct;
+    answers[qId] = isCorrect;
+    result.className = 'result ' + (isCorrect ? 'correct' : 'incorrect');
+    result.textContent = isCorrect ? '✅ Correct!' : '❌ Incorrect — see explanation below';
+    result.style.display = 'block';
+    exp.style.display = 'block';
+}
+function showScore() {
+    const total = 10;
+    const correct = Object.values(answers).filter(v => v).length;
+    const box = document.getElementById('scoreBox');
+    const text = document.getElementById('scoreText');
+    text.textContent = `${correct} / ${total} correct (${Math.round(correct/total*100)}%)`;
+    box.style.display = 'block';
+    box.scrollIntoView({ behavior: 'smooth' });
+}
+</script>
+</body>
+</html>

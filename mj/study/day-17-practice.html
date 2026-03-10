@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 17 Practice: 2-Flop Synchronizer | Digital Design Study</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: linear-gradient(135deg, #fefae0 0%, #faedcd 100%); color: #3d405b; line-height: 1.8; padding: 24px; max-width: 920px; margin: 0 auto; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+h1 { color: #5d4037; border-bottom: 3px solid #c4a77d; padding-bottom: 12px; margin: 24px 0 16px; font-size: 2em; }
+h2 { color: #588157; border-bottom: 2px solid #a3b18a; padding-bottom: 8px; margin: 28px 0 14px; }
+h3 { color: #5d4037; margin: 20px 0 10px; }
+p { margin: 10px 0; }
+ul, ol { margin: 10px 0 10px 24px; }
+li { margin: 4px 0; }
+code { background: #e9f5db; color: #3d405b; padding: 2px 8px; border-radius: 4px; font-family: 'SF Mono','Monaco','Consolas',monospace; }
+pre { background: #2d3436; padding: 24px; border-radius: 12px; margin: 24px 0; border: 3px solid #a3b18a; overflow-x: auto; font-family: 'SF Mono','Monaco','Consolas',monospace; font-size: 15px; line-height: 1.6; color: #f8f8f2; }
+.keyword { color: #ff79c6; font-weight: 600; }
+.type { color: #8be9fd; }
+.signal { color: #50fa7b; }
+.number { color: #ffb86c; }
+.comment { color: #6272a4; font-style: italic; }
+.string { color: #f1fa8c; }
+.concept-box { background: #fff8f0; border: 2px solid #c4a77d; border-radius: 12px; padding: 20px; margin: 20px 0; color: #3d405b; }
+.concept-box h3 { color: #5d4037; margin-bottom: 12px; }
+.warning-box { background: #fff8f0; border-radius: 12px; padding: 20px; margin: 20px 0; border-left: 4px solid #ef4444; color: #3d405b; }
+.warning-box h3 { color: #c53030; margin-bottom: 12px; }
+.tip-box { background: #fff8f0; border-radius: 12px; padding: 20px; margin: 20px 0; border-left: 4px solid #588157; color: #3d405b; }
+.tip-box h3 { color: #588157; margin-bottom: 12px; }
+.hint-box { background: #fff8f0; border-radius: 8px; padding: 15px; margin: 15px 0; border-left: 4px solid #5d4037; color: #3d405b; }
+.exercise { background: #fff; border: 2px solid #a3b18a; border-radius: 12px; padding: 24px; margin: 24px 0; }
+.exercise h3 { color: #588157; }
+details { margin: 12px 0; }
+details summary { cursor: pointer; color: #588157; font-weight: 600; padding: 8px 0; }
+.nav-links { display: flex; justify-content: space-between; margin: 30px 0; flex-wrap: wrap; gap: 10px; }
+.nav-links a { background: linear-gradient(135deg, #588157, #3a5a40); color: #fff; padding: 10px 20px; border-radius: 24px; text-decoration: none; font-weight: 600; font-size: 14px; }
+.lang-toggle { position: fixed; top: 16px; right: 16px; background: #588157; border: none; border-radius: 24px; padding: 10px 20px; cursor: pointer; color: #fff; font-size: 14px; font-weight: 600; z-index: 1000; }
+.lang-toggle:hover { background: #3a5a40; }
+@media (max-width: 768px) { body { padding: 16px; } h1 { font-size: 1.8em; } pre { font-size: 14px; padding: 16px; } .lang-toggle { padding: 8px 16px; font-size: 13px; } }
+</style>
+</head>
+<body>
+<button class="lang-toggle" onclick="toggleLang()">한국어</button>
+
+<h1>🛠️ Day 17 Practice: 2-Flop Synchronizer</h1>
+
+<h2>Exercise 1: Basic 2-Flop Synchronizer</h2>
+
+<div class="exercise">
+<h3>📋 Task</h3>
+<p class="en">Write a 2-flop synchronizer module from scratch. It should have:</p>
+<p class="ko" style="display:none;">처음부터 2-플롭 동기화기 모듈을 작성하세요:</p>
+<ul>
+<li class="en">Asynchronous active-low reset</li>
+<li class="en">Single-bit input <code>async_in</code> and output <code>sync_out</code></li>
+<li class="en">Both flops driven by <code>clk_dest</code></li>
+<li class="ko" style="display:none;">비동기 액티브 로우 리셋</li>
+<li class="ko" style="display:none;">단일 비트 입력 <code>async_in</code>과 출력 <code>sync_out</code></li>
+<li class="ko" style="display:none;">두 플롭 모두 <code>clk_dest</code>로 구동</li>
+</ul>
+
+<div class="hint-box">
+<strong>💡 Hint:</strong>
+<span class="en">Remember: no logic between the two flops. Use non-blocking assignments (<code>&lt;=</code>) for both.</span>
+<span class="ko" style="display:none;">기억: 두 플롭 사이에 로직 없음. 둘 다 논블로킹 할당(<code>&lt;=</code>)을 사용하세요.</span>
+</div>
+
+<p class="en">Try writing it yourself first, then check the solution:</p>
+<p class="ko" style="display:none;">먼저 직접 작성해 보고, 솔루션을 확인하세요:</p>
+
+<details>
+<summary>Show Solution</summary>
+<pre><span class="keyword">module</span> <span class="type">sync_2ff</span> (
+    <span class="keyword">input</span>  <span class="type">logic</span> <span class="signal">clk_dest</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span> <span class="signal">rst_n</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span> <span class="signal">async_in</span>,
+    <span class="keyword">output</span> <span class="type">logic</span> <span class="signal">sync_out</span>
+);
+
+    <span class="type">logic</span> <span class="signal">meta_ff</span>;
+
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk_dest</span> <span class="keyword">or</span> <span class="keyword">negedge</span> <span class="signal">rst_n</span>) <span class="keyword">begin</span>
+        <span class="keyword">if</span> (!<span class="signal">rst_n</span>) <span class="keyword">begin</span>
+            <span class="signal">meta_ff</span>  &lt;= <span class="number">1'b0</span>;
+            <span class="signal">sync_out</span> &lt;= <span class="number">1'b0</span>;
+        <span class="keyword">end else begin</span>
+            <span class="signal">meta_ff</span>  &lt;= <span class="signal">async_in</span>;
+            <span class="signal">sync_out</span> &lt;= <span class="signal">meta_ff</span>;
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+
+<span class="keyword">endmodule</span></pre>
+</details>
+</div>
+
+<h2>Exercise 2: Testbench with Two Clock Domains</h2>
+
+<div class="exercise">
+<h3>📋 Task</h3>
+<p class="en">Write a testbench that creates two independent clocks and verifies the synchronizer works. Requirements:</p>
+<p class="ko" style="display:none;">두 개의 독립 클록을 생성하고 동기화기가 작동하는지 검증하는 테스트벤치를 작성하세요:</p>
+<ul>
+<li class="en"><code>clk_src</code> at 100 MHz (10ns period)</li>
+<li class="en"><code>clk_dest</code> at 75 MHz (13.33ns period)</li>
+<li class="en">Toggle <code>async_in</code> from source domain</li>
+<li class="en">Observe <code>sync_out</code> in destination domain</li>
+<li class="ko" style="display:none;"><code>clk_src</code> 100 MHz (10ns 주기)</li>
+<li class="ko" style="display:none;"><code>clk_dest</code> 75 MHz (13.33ns 주기)</li>
+<li class="ko" style="display:none;">소스 도메인에서 <code>async_in</code> 토글</li>
+<li class="ko" style="display:none;">목적지 도메인에서 <code>sync_out</code> 관찰</li>
+</ul>
+
+<details>
+<summary>Show Solution</summary>
+<pre><span class="keyword">module</span> <span class="type">tb_sync_2ff</span>;
+
+    <span class="type">logic</span> <span class="signal">clk_src</span>, <span class="signal">clk_dest</span>, <span class="signal">rst_n</span>;
+    <span class="type">logic</span> <span class="signal">async_in</span>, <span class="signal">sync_out</span>;
+
+    <span class="comment">// Two independent clocks</span>
+    <span class="keyword">initial</span> <span class="signal">clk_src</span>  = <span class="number">0</span>;
+    <span class="keyword">initial</span> <span class="signal">clk_dest</span> = <span class="number">0</span>;
+    <span class="keyword">always</span> #<span class="number">5</span>     <span class="signal">clk_src</span>  = ~<span class="signal">clk_src</span>;   <span class="comment">// 100 MHz</span>
+    <span class="keyword">always</span> #<span class="number">6.667</span>  <span class="signal">clk_dest</span> = ~<span class="signal">clk_dest</span>;  <span class="comment">// 75 MHz</span>
+
+    <span class="comment">// DUT</span>
+    <span class="type">sync_2ff</span> <span class="signal">dut</span> (
+        .<span class="signal">clk_dest</span>(<span class="signal">clk_dest</span>),
+        .<span class="signal">rst_n</span>(<span class="signal">rst_n</span>),
+        .<span class="signal">async_in</span>(<span class="signal">async_in</span>),
+        .<span class="signal">sync_out</span>(<span class="signal">sync_out</span>)
+    );
+
+    <span class="keyword">initial begin</span>
+        <span class="signal">rst_n</span>    = <span class="number">0</span>;
+        <span class="signal">async_in</span> = <span class="number">0</span>;
+        #<span class="number">20</span>;
+        <span class="signal">rst_n</span> = <span class="number">1</span>;
+
+        <span class="comment">// Toggle in source domain</span>
+        @(<span class="keyword">posedge</span> <span class="signal">clk_src</span>);
+        <span class="signal">async_in</span> = <span class="number">1</span>;
+        $<span class="keyword">display</span>(<span class="string">"[%0t] async_in → 1"</span>, $<span class="keyword">time</span>);
+
+        <span class="comment">// Wait for sync_out to propagate (2 dest clk cycles)</span>
+        @(<span class="keyword">posedge</span> <span class="signal">clk_dest</span>);
+        @(<span class="keyword">posedge</span> <span class="signal">clk_dest</span>);
+        @(<span class="keyword">posedge</span> <span class="signal">clk_dest</span>);  <span class="comment">// Extra cycle for safety</span>
+        $<span class="keyword">display</span>(<span class="string">"[%0t] sync_out = %b"</span>, $<span class="keyword">time</span>, <span class="signal">sync_out</span>);
+
+        <span class="comment">// Toggle back to 0</span>
+        @(<span class="keyword">posedge</span> <span class="signal">clk_src</span>);
+        <span class="signal">async_in</span> = <span class="number">0</span>;
+        $<span class="keyword">display</span>(<span class="string">"[%0t] async_in → 0"</span>, $<span class="keyword">time</span>);
+
+        <span class="keyword">repeat</span>(<span class="number">4</span>) @(<span class="keyword">posedge</span> <span class="signal">clk_dest</span>);
+        $<span class="keyword">display</span>(<span class="string">"[%0t] sync_out = %b"</span>, $<span class="keyword">time</span>, <span class="signal">sync_out</span>);
+
+        #<span class="number">100</span>;
+        $<span class="keyword">finish</span>;
+    <span class="keyword">end</span>
+
+    <span class="comment">// Waveform dump</span>
+    <span class="keyword">initial begin</span>
+        $<span class="keyword">dumpfile</span>(<span class="string">"sync_2ff.vcd"</span>);
+        $<span class="keyword">dumpvars</span>(<span class="number">0</span>, <span class="type">tb_sync_2ff</span>);
+    <span class="keyword">end</span>
+
+<span class="keyword">endmodule</span></pre>
+</details>
+</div>
+
+<h2>Exercise 3: Reset Synchronizer</h2>
+
+<div class="exercise">
+<h3>📋 Task</h3>
+<p class="en">A common use of synchronizers is for <strong>reset signals</strong>. Design a reset synchronizer that:</p>
+<p class="ko" style="display:none;">동기화기의 일반적인 용도는 <strong>리셋 신호</strong>입니다. 다음 조건의 리셋 동기화기를 설계하세요:</p>
+<ul>
+<li class="en">Asserts reset <strong>asynchronously</strong> (immediately when reset goes active)</li>
+<li class="en">De-asserts reset <strong>synchronously</strong> (aligned to clock edge)</li>
+<li class="en">This is the industry-standard "async assert, sync de-assert" pattern</li>
+<li class="ko" style="display:none;">리셋 <strong>비동기적으로</strong> 활성화 (리셋이 활성화되면 즉시)</li>
+<li class="ko" style="display:none;">리셋 <strong>동기적으로</strong> 비활성화 (클록 에지에 맞춰)</li>
+<li class="ko" style="display:none;">이것은 업계 표준 "비동기 활성화, 동기 비활성화" 패턴</li>
+</ul>
+
+<div class="hint-box">
+<strong>💡 Hint:</strong>
+<span class="en">The async reset in the sensitivity list handles immediate assertion. The synchronizer chain handles clean de-assertion. Feed <code>1'b1</code> as the data input (since active-low reset wants to go high on de-assert).</span>
+<span class="ko" style="display:none;">감지 목록의 비동기 리셋이 즉시 활성화를 처리합니다. 동기화기 체인이 깨끗한 비활성화를 처리합니다. 데이터 입력으로 <code>1'b1</code>을 공급하세요 (액티브 로우 리셋이 비활성화 시 하이가 되어야 하므로).</span>
+</div>
+
+<details>
+<summary>Show Solution</summary>
+<pre><span class="keyword">module</span> <span class="type">reset_sync</span> (
+    <span class="keyword">input</span>  <span class="type">logic</span> <span class="signal">clk</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span> <span class="signal">async_rst_n</span>,  <span class="comment">// Raw async reset (active-low)</span>
+    <span class="keyword">output</span> <span class="type">logic</span> <span class="signal">sync_rst_n</span>   <span class="comment">// Clean sync reset (active-low)</span>
+);
+
+    <span class="type">logic</span> <span class="signal">meta_ff</span>;
+
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span> <span class="keyword">or</span> <span class="keyword">negedge</span> <span class="signal">async_rst_n</span>) <span class="keyword">begin</span>
+        <span class="keyword">if</span> (!<span class="signal">async_rst_n</span>) <span class="keyword">begin</span>
+            <span class="comment">// Async assert: immediately drive reset low</span>
+            <span class="signal">meta_ff</span>    &lt;= <span class="number">1'b0</span>;
+            <span class="signal">sync_rst_n</span> &lt;= <span class="number">1'b0</span>;
+        <span class="keyword">end else begin</span>
+            <span class="comment">// Sync de-assert: release reset cleanly</span>
+            <span class="signal">meta_ff</span>    &lt;= <span class="number">1'b1</span>;         <span class="comment">// Data = 1 (release)</span>
+            <span class="signal">sync_rst_n</span> &lt;= <span class="signal">meta_ff</span>;      <span class="comment">// 2-stage sync</span>
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+
+<span class="keyword">endmodule</span></pre>
+
+<div class="tip-box">
+<h3>💡 Why This Pattern?</h3>
+<p class="en"><strong>Async assert</strong> ensures the system resets immediately, even if the clock is dead. <strong>Sync de-assert</strong> ensures all flops in the design come out of reset on the same clock edge, preventing race conditions. This is one of the most important patterns in digital design!</p>
+<p class="ko" style="display:none;"><strong>비동기 활성화</strong>는 클록이 멈춰도 시스템이 즉시 리셋되도록 합니다. <strong>동기 비활성화</strong>는 설계의 모든 플롭이 같은 클록 에지에서 리셋에서 나오도록 하여 경쟁 조건을 방지합니다. 이것은 디지털 설계에서 가장 중요한 패턴 중 하나입니다!</p>
+</div>
+</details>
+</div>
+
+<h2>Exercise 4: Bug Hunt 🐛</h2>
+
+<div class="exercise">
+<h3>📋 Find the Bugs</h3>
+<p class="en">This synchronizer has <strong>three bugs</strong>. Find and fix them all:</p>
+<p class="ko" style="display:none;">이 동기화기에는 <strong>세 가지 버그</strong>가 있습니다. 모두 찾아서 수정하세요:</p>
+
+<pre><span class="keyword">module</span> <span class="type">bad_sync</span> (
+    <span class="keyword">input</span>  <span class="type">logic</span> <span class="signal">clk_a</span>,       <span class="comment">// Source clock</span>
+    <span class="keyword">input</span>  <span class="type">logic</span> <span class="signal">clk_b</span>,       <span class="comment">// Destination clock</span>
+    <span class="keyword">input</span>  <span class="type">logic</span> <span class="signal">rst_n</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span> <span class="signal">async_in</span>,
+    <span class="keyword">output</span> <span class="type">logic</span> <span class="signal">sync_out</span>
+);
+
+    <span class="type">logic</span> <span class="signal">meta_ff</span>;
+    <span class="type">logic</span> <span class="signal">filtered</span>;
+
+    <span class="comment">// Bug 1: Which clock?</span>
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk_a</span>) <span class="keyword">begin</span>  <span class="comment">// ← WRONG</span>
+        <span class="keyword">if</span> (!<span class="signal">rst_n</span>)
+            <span class="signal">meta_ff</span> &lt;= <span class="number">1'b0</span>;
+        <span class="keyword">else</span>
+            <span class="signal">meta_ff</span> &lt;= <span class="signal">async_in</span>;
+    <span class="keyword">end</span>
+
+    <span class="comment">// Bug 2: What's between the flops?</span>
+    <span class="keyword">assign</span> <span class="signal">filtered</span> = <span class="signal">meta_ff</span> & ~<span class="signal">rst_n</span>;  <span class="comment">// ← WRONG</span>
+
+    <span class="comment">// Bug 3: Missing reset</span>
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk_b</span>) <span class="keyword">begin</span>  <span class="comment">// ← WRONG</span>
+        <span class="signal">sync_out</span> &lt;= <span class="signal">filtered</span>;
+    <span class="keyword">end</span>
+
+<span class="keyword">endmodule</span></pre>
+
+<details>
+<summary>Show Bugs & Fixes</summary>
+<div class="warning-box">
+<h3>🐛 Bug 1: Wrong clock domain</h3>
+<p class="en"><code>meta_ff</code> is clocked by <code>clk_a</code> (source domain). Both flops MUST be clocked by <code>clk_b</code> (destination domain).</p>
+<p class="ko" style="display:none;"><code>meta_ff</code>가 <code>clk_a</code>(소스 도메인)로 클로킹됩니다. 두 플롭 모두 <code>clk_b</code>(목적지 도메인)로 클로킹되어야 합니다.</p>
+</div>
+<div class="warning-box">
+<h3>🐛 Bug 2: Logic between flops</h3>
+<p class="en">The <code>filtered</code> assignment adds combinational logic between FF1 and FF2. This eats into resolution time and defeats the purpose of the synchronizer. The wire must be direct!</p>
+<p class="ko" style="display:none;"><code>filtered</code> 할당이 FF1과 FF2 사이에 조합 로직을 추가합니다. 이것은 해상 시간을 줄이고 동기화기의 목적을 훼손합니다. 와이어는 직접 연결이어야 합니다!</p>
+</div>
+<div class="warning-box">
+<h3>🐛 Bug 3: No reset on FF2</h3>
+<p class="en"><code>sync_out</code> has no reset — it will power up in an unknown state. Both flops need reset to a known value.</p>
+<p class="ko" style="display:none;"><code>sync_out</code>에 리셋이 없습니다 — 알 수 없는 상태로 전원이 켜집니다. 두 플롭 모두 알려진 값으로 리셋이 필요합니다.</p>
+</div>
+
+<p class="en"><strong>Fixed version:</strong></p>
+<p class="ko" style="display:none;"><strong>수정된 버전:</strong></p>
+<pre><span class="keyword">module</span> <span class="type">good_sync</span> (
+    <span class="keyword">input</span>  <span class="type">logic</span> <span class="signal">clk_b</span>,       <span class="comment">// Only need dest clock</span>
+    <span class="keyword">input</span>  <span class="type">logic</span> <span class="signal">rst_n</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span> <span class="signal">async_in</span>,
+    <span class="keyword">output</span> <span class="type">logic</span> <span class="signal">sync_out</span>
+);
+
+    <span class="type">logic</span> <span class="signal">meta_ff</span>;
+
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk_b</span> <span class="keyword">or</span> <span class="keyword">negedge</span> <span class="signal">rst_n</span>) <span class="keyword">begin</span>
+        <span class="keyword">if</span> (!<span class="signal">rst_n</span>) <span class="keyword">begin</span>
+            <span class="signal">meta_ff</span>  &lt;= <span class="number">1'b0</span>;
+            <span class="signal">sync_out</span> &lt;= <span class="number">1'b0</span>;
+        <span class="keyword">end else begin</span>
+            <span class="signal">meta_ff</span>  &lt;= <span class="signal">async_in</span>;  <span class="comment">// Direct!</span>
+            <span class="signal">sync_out</span> &lt;= <span class="signal">meta_ff</span>;   <span class="comment">// Direct!</span>
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+
+<span class="keyword">endmodule</span></pre>
+</details>
+</div>
+
+<h2>Exercise 5: Edge Detector Across Clock Domains</h2>
+
+<div class="exercise">
+<h3>📋 Challenge Task</h3>
+<p class="en">Design a module that detects a <strong>rising edge</strong> on <code>async_in</code> (from CLK_A domain) and produces a <strong>single-cycle pulse</strong> in the CLK_B domain. This combines the synchronizer with an edge detector.</p>
+<p class="ko" style="display:none;">CLK_A 도메인의 <code>async_in</code>에서 <strong>상승 에지</strong>를 감지하고 CLK_B 도메인에서 <strong>단일 사이클 펄스</strong>를 생성하는 모듈을 설계하세요. 이것은 동기화기와 에지 감지기를 결합합니다.</p>
+
+<div class="hint-box">
+<strong>💡 Hint:</strong>
+<span class="en">First synchronize with 2 flops, then add a third flop to remember the previous value. Pulse = <code>sync_out & ~sync_out_prev</code></span>
+<span class="ko" style="display:none;">먼저 2개 플롭으로 동기화한 다음, 세 번째 플롭을 추가하여 이전 값을 기억합니다. 펄스 = <code>sync_out & ~sync_out_prev</code></span>
+</div>
+
+<details>
+<summary>Show Solution</summary>
+<pre><span class="keyword">module</span> <span class="type">sync_edge_detect</span> (
+    <span class="keyword">input</span>  <span class="type">logic</span> <span class="signal">clk_b</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span> <span class="signal">rst_n</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span> <span class="signal">async_in</span>,
+    <span class="keyword">output</span> <span class="type">logic</span> <span class="signal">pulse_out</span>   <span class="comment">// Single-cycle pulse</span>
+);
+
+    <span class="type">logic</span> <span class="signal">meta_ff</span>, <span class="signal">sync_ff</span>, <span class="signal">prev_ff</span>;
+
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk_b</span> <span class="keyword">or</span> <span class="keyword">negedge</span> <span class="signal">rst_n</span>) <span class="keyword">begin</span>
+        <span class="keyword">if</span> (!<span class="signal">rst_n</span>) <span class="keyword">begin</span>
+            <span class="signal">meta_ff</span> &lt;= <span class="number">1'b0</span>;
+            <span class="signal">sync_ff</span> &lt;= <span class="number">1'b0</span>;
+            <span class="signal">prev_ff</span> &lt;= <span class="number">1'b0</span>;
+        <span class="keyword">end else begin</span>
+            <span class="signal">meta_ff</span> &lt;= <span class="signal">async_in</span>;   <span class="comment">// Sync stage 1</span>
+            <span class="signal">sync_ff</span> &lt;= <span class="signal">meta_ff</span>;    <span class="comment">// Sync stage 2</span>
+            <span class="signal">prev_ff</span> &lt;= <span class="signal">sync_ff</span>;    <span class="comment">// Previous value</span>
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+
+    <span class="comment">// Rising edge = was 0, now 1</span>
+    <span class="keyword">assign</span> <span class="signal">pulse_out</span> = <span class="signal">sync_ff</span> & ~<span class="signal">prev_ff</span>;
+
+<span class="keyword">endmodule</span></pre>
+</details>
+</div>
+
+<div class="concept-box">
+<h3>🎯 Practice Summary</h3>
+<ul>
+<li class="en">Exercise 1: Basic synchronizer — the bread and butter of CDC</li>
+<li class="en">Exercise 2: Testbench with dual clocks — how to verify CDC in simulation</li>
+<li class="en">Exercise 3: Reset synchronizer — async assert, sync de-assert pattern</li>
+<li class="en">Exercise 4: Bug hunting — learn to spot common synchronizer mistakes</li>
+<li class="en">Exercise 5: Edge detector — combining synchronizer with pulse generation</li>
+<li class="ko" style="display:none;">연습 1: 기본 동기화기 — CDC의 기본</li>
+<li class="ko" style="display:none;">연습 2: 이중 클록 테스트벤치 — 시뮬레이션에서 CDC 검증 방법</li>
+<li class="ko" style="display:none;">연습 3: 리셋 동기화기 — 비동기 활성화, 동기 비활성화 패턴</li>
+<li class="ko" style="display:none;">연습 4: 버그 찾기 — 일반적인 동기화기 실수를 발견하는 법</li>
+<li class="ko" style="display:none;">연습 5: 에지 감지기 — 동기화기와 펄스 생성 결합</li>
+</ul>
+</div>
+
+<div class="tip-box">
+<h3>🔗 Try It Online</h3>
+<p class="en">Copy the code into <a href="https://www.edaplayground.com" target="_blank" style="color:#588157;">EDA Playground</a> — select SystemVerilog and Icarus Verilog to simulate. Check the waveforms to see the 2-cycle delay!</p>
+<p class="ko" style="display:none;"><a href="https://www.edaplayground.com" target="_blank" style="color:#588157;">EDA Playground</a>에 코드를 복사하세요 — SystemVerilog와 Icarus Verilog를 선택하여 시뮬레이션하세요. 파형을 확인하여 2사이클 지연을 확인하세요!</p>
+</div>
+
+<div class="nav-links">
+<a href="day-17-lesson.html">← Back to Lesson</a>
+<a href="day-17-quiz.html">Take the Quiz</a>
+</div>
+
+<script>
+let isKorean = false;
+function toggleLang() {
+    isKorean = !isKorean;
+    document.querySelectorAll('.en').forEach(el => { el.style.setProperty('display', isKorean ? 'none' : 'revert', 'important'); });
+    document.querySelectorAll('.ko').forEach(el => { el.style.setProperty('display', isKorean ? 'revert' : 'none', 'important'); });
+    document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+}
+</script>
+</body>
+</html>
