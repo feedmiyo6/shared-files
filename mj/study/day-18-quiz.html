@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 18 Quiz: Handshake Protocols | Digital Design Study</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    background: linear-gradient(135deg, #fefae0 0%, #faedcd 100%);
+    color: #3d405b;
+    line-height: 1.8;
+    padding: 24px;
+    max-width: 920px;
+    margin: 0 auto;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+h1 { color: #5d4037; border-bottom: 3px solid #c4a77d; padding-bottom: 12px; margin: 24px 0 16px; font-size: 2em; }
+h2 { color: #588157; border-bottom: 2px solid #a3b18a; padding-bottom: 8px; margin: 28px 0 16px; }
+h3 { color: #5d4037; margin: 20px 0 12px; }
+p { margin: 12px 0; }
+code {
+    background: #e9f5db;
+    color: #3d405b;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+}
+.nav-links { display: flex; gap: 12px; margin: 24px 0; flex-wrap: wrap; }
+.nav-links a {
+    background: linear-gradient(135deg, #588157, #3a5a40);
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 24px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14px;
+}
+.nav-links a:hover { opacity: 0.9; }
+.lang-toggle {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    background: #588157;
+    border: none;
+    border-radius: 24px;
+    padding: 10px 20px;
+    cursor: pointer;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    z-index: 1000;
+}
+.lang-toggle:hover { background: #3a5a40; }
+.ko { display: none; }
+.question {
+    background: #fff8f0;
+    border: 2px solid #c4a77d;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+}
+.question h3 { color: #5d4037; margin-bottom: 12px; }
+.options { list-style: none; padding: 0; }
+.options li {
+    padding: 10px 16px;
+    margin: 6px 0;
+    border-radius: 8px;
+    cursor: pointer;
+    border: 2px solid #c4a77d;
+    background: #fff;
+    transition: all 0.2s;
+}
+.options li:hover { background: #e9f5db; }
+.options li.correct { background: #d4edda; border-color: #588157; }
+.options li.incorrect { background: #f8d7da; border-color: #ef4444; }
+.explanation {
+    display: none;
+    margin-top: 12px;
+    padding: 12px;
+    background: #fff;
+    border-radius: 8px;
+    border-left: 4px solid #588157;
+}
+.score-box {
+    background: #fff8f0;
+    border: 2px solid #588157;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 24px 0;
+    text-align: center;
+    display: none;
+}
+.score-box h2 { border: none; }
+.btn {
+    background: linear-gradient(135deg, #588157, #3a5a40);
+    color: #fff;
+    border: none;
+    padding: 12px 28px;
+    border-radius: 24px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    margin: 16px 0;
+}
+.btn:hover { opacity: 0.9; }
+@media (max-width: 768px) {
+    body { padding: 16px; }
+    h1 { font-size: 1.8em; }
+    .lang-toggle { padding: 8px 16px; font-size: 13px; }
+}
+</style>
+</head>
+<body>
+
+<button class="lang-toggle" onclick="toggleLang()">한국어</button>
+
+<h1>📝 Day 18 Quiz: Handshake Protocols</h1>
+
+<div class="nav-links">
+    <a href="day-18-lesson.html">📖 Lesson</a>
+    <a href="day-18-practice.html">💻 Practice</a>
+</div>
+
+<div id="quiz">
+
+<div class="question" data-answer="2">
+    <h3>Q1. <span class="en">Why can't you just put a 2-flop synchronizer on each bit of a multi-bit bus?</span><span class="ko" style="display:none;">멀티비트 버스의 각 비트에 2-플립플롭 동기화기를 넣을 수 없는 이유는?</span></h3>
+    <ul class="options">
+        <li onclick="checkAnswer(this)"><span class="en">A) It uses too many flip-flops</span><span class="ko" style="display:none;">A) 플립플롭을 너무 많이 사용해서</span></li>
+        <li onclick="checkAnswer(this)"><span class="en">B) Different bits may resolve metastability at different times, corrupting data</span><span class="ko" style="display:none;">B) 다른 비트들이 다른 시점에 메타스터빌리티를 해결하여 데이터가 손상될 수 있음</span></li>
+        <li onclick="checkAnswer(this)"><span class="en">C) It only works for synchronous domains</span><span class="ko" style="display:none;">C) 동기 도메인에서만 작동해서</span></li>
+        <li onclick="checkAnswer(this)"><span class="en">D) The synthesis tool won't allow it</span><span class="ko" style="display:none;">D) 합성 도구가 허용하지 않아서</span></li>
+    </ul>
+    <div class="explanation">
+        <span class="en">✅ Each bit's synchronizer resolves independently, so bits can arrive at different clock edges, creating a corrupted intermediate value. For example, 0111→1000 might be read as 0000 or 1111.</span>
+        <span class="ko" style="display:none;">✅ 각 비트의 동기화기가 독립적으로 해결되므로, 비트들이 다른 클록 엣지에 도착하여 손상된 중간 값이 생성될 수 있습니다. 예: 0111→1000이 0000이나 1111로 읽힐 수 있습니다.</span>
+    </div>
+</div>
+
+<div class="question" data-answer="3">
+    <h3>Q2. <span class="en">In a 4-phase req/ack handshake, what is the correct sequence?</span><span class="ko" style="display:none;">4-phase req/ack 핸드셰이크에서 올바른 순서는?</span></h3>
+    <ul class="options">
+        <li onclick="checkAnswer(this)"><span class="en">A) req↑ → req↓ → ack↑ → ack↓</span><span class="ko" style="display:none;">A) req↑ → req↓ → ack↑ → ack↓</span></li>
+        <li onclick="checkAnswer(this)"><span class="en">B) ack↑ → req↑ → ack↓ → req↓</span><span class="ko" style="display:none;">B) ack↑ → req↑ → ack↓ → req↓</span></li>
+        <li onclick="checkAnswer(this)"><span class="en">C) req↑ → ack↑ → req↓ → ack↓</span><span class="ko" style="display:none;">C) req↑ → ack↑ → req↓ → ack↓</span></li>
+        <li onclick="checkAnswer(this)"><span class="en">D) req↑ → ack↑ → ack↓ → req↓</span><span class="ko" style="display:none;">D) req↑ → ack↑ → ack↓ → req↓</span></li>
+    </ul>
+    <div class="explanation">
+        <span class="en">✅ The 4-phase handshake: sender asserts req, receiver asserts ack, sender de-asserts req, receiver de-asserts ack. Each transition is separated by a synchronization delay.</span>
+        <span class="ko" style="display:none;">✅ 4-phase 핸드셰이크: 송신측이 req 어서트, 수신측이 ack 어서트, 송신측이 req 디어서트, 수신측이 ack 디어서트. 각 전환은 동기화 지연으로 분리됩니다.</span>
+    </div>
+</div>
+
+<div class="question" data-answer="2">
+    <h3>Q3. <span class="en">How many synchronization delays does a full 4-phase handshake require per transfer?</span><span class="ko" style="display:none;">4-phase 핸드셰이크는 전송당 몇 번의 동기화 지연이 필요합니까?</span></h3>
+    <ul class="options">
+        <li onclick="checkAnswer(this)"><span class="en">A) 2</span><span class="ko" style="display:none;">A) 2</span></li>
+        <li onclick="checkAnswer(this)"><span class="en">B) 4</span><span class="ko" style="display:none;">B) 4</span></li>
+        <li onclick="checkAnswer(this)"><span class="en">C) 6</span><span class="ko" style="display:none;">C) 6</span></li>
+        <li onclick="checkAnswer(this)"><span class="en">D) 8</span><span class="ko" style="display:none;">D) 8</span></li>
+    </ul>
+    <div class="explanation">
+        <span class="en">✅ Each of the 4 transitions (req↑, ack↑, req↓, ack↓) must pass through a 2-flop synchronizer, so 4 synchronization delays per complete transfer.</span>
+        <span class="ko" style="display:none;">✅ 4개의 전환(req↑, ack↑, req↓, ack↓) 각각이 2-플립플롭 동기화기를 통과해야 하므로, 완전한 전송당 4번의 동기화 지연이 필요합니다.</span>
+    </div>
+</div>
+
+<div class="question" data-answer="1">
+    <h3>Q4. <span class="en">What ensures the multi-bit data is safely captured in a handshake CDC?</span><span class="ko" style="display:none;">핸드셰이크 CDC에서 멀티비트 데이터가 안전하게 캡처되는 것을 보장하는 것은?</span></h3>
+    <ul class="options">
+        <li onclick="checkAnswer(this)"><span class="en">A) Data is held stable while only single-bit req/ack signals cross domains</span><span class="ko" style="display:none;">A) 단일 비트 req/ack 신호만 도메인을 넘는 동안 데이터가 안정적으로 유지</span></li>
+        <li onclick="checkAnswer(this)"><span class="en">B) Each data bit has its own synchronizer</span><span class="ko" style="display:none;">B) 각 데이터 비트마다 자체 동기화기가 있음</span></li>
+        <li onclick="checkAnswer(this)"><span class="en">C) Gray coding is used on the data bus</span><span class="ko" style="display:none;">C) 데이터 버스에 그레이 코딩이 사용됨</span></li>
+        <li onclick="checkAnswer(this)"><span class="en">D) The receiver uses a faster clock</span><span class="ko" style="display:none;">D) 수신측이 더 빠른 클록을 사용</span></li>
+    </ul>
+    <div class="explanation">
+        <span class="en">✅ The key principle: data is placed on the bus and held stable. Only the single-bit req signal crosses domains. The receiver samples data only after req is safely synchronized, guaranteeing stability.</span>
+        <span class="ko" style="display:none;">✅ 핵심 원칙: 데이터가 버스에 놓이고 안정적으로 유지됩니다. 단일 비트 req 신호만 도메인을 넘습니다. 수신측은 req가 안전하게 동기화된 후에만 데이터를 샘플링하여 안정성을 보장합니다.</span>
+    </div>
+</div>
+
+<div class="question" data-answer="3">
+    <h3>Q5. <span class="en">How does a pulse synchronizer work?</span><span class="ko" style="display:none;">펄스 동기화기는 어떻게 작동합니까?</span></h3>
+    <ul class="options">
+        <li onclick="checkAnswer(this)"><span class="en">A) Stretches the pulse to span multiple clock cycles</span><span class="ko" style="display:none;">A) 펄스를 여러 클록 사이클에 걸쳐 늘림</span></li>
+        <li onclick="checkAnswer(this)"><span class="en">B) Uses a FIFO to buffer pulses</span><span class="ko" style="display:none;">B) FIFO를 사용하여 펄스를 버퍼링</span></li>
+        <li onclick="checkAnswer(this)"><span class="en">C) Converts pulse to toggle, synchronizes the toggle, then detects edges</span><span class="ko" style="display:none;">C) 펄스를 토글로 변환하고, 토글을 동기화한 후, 엣지를 감지</span></li>
+        <li onclick="checkAnswer(this)"><span class="en">D) Directly passes the pulse through a 2-flop synchronizer</span><span class="ko" style="display:none;">D) 펄스를 2-플립플롭 동기화기를 통해 직접 전달</span></li>
+    </ul>
+    <div class="explanation">
+        <span class="en">✅ The toggle trick: each pulse toggles a level signal in domain A. This level is synchronized via 2-flop into domain B, where an XOR with the previous value detects the edge and regenerates the pulse.</span>
+        <span class="ko" style="display:none;">✅ 토글 트릭: 각 펄스가 도메인 A에서 레벨 신호를 토글합니다. 이 레벨이 2-플립플롭을 통해 도메인 B로 동기화되고, 이전 값과의 XOR로 엣지를 감지하여 펄스를 재생성합니다.</span>
+    </div>
+</div>
+
+<div class="question" data-answer="2">
+    <h3>Q6. <span class="en">What happens if you send back-to-back pulses through a pulse synchronizer when clk_a >> clk_b?</span><span class="ko" style="display:none;">clk_a >> clk_b일 때 펄스 동기화기를 통해 연속 펄스를 보내면 어떻게 됩니까?</span></h3>
+    <ul class="options">
+        <li onclick="checkAnswer(this)"><span class="en">A) They get queued and delivered in order</span><span class="ko" style="display:none;">A) 큐에 저장되어 순서대로 전달됨</span></li>
+        <li onclick="checkAnswer(this)"><span class="en">B) Pulses can be lost because the toggle doesn't have time to propagate</span><span class="ko" style="display:none;">B) 토글이 전파될 시간이 없어 펄스가 손실될 수 있음</span></li>
+        <li onclick="checkAnswer(this)"><span class="en">C) The synchronizer generates multiple pulses for each input</span><span class="ko" style="display:none;">C) 동기화기가 각 입력에 대해 여러 펄스를 생성</span></li>
+        <li onclick="checkAnswer(this)"><span class="en">D) Metastability occurs on the data bus</span><span class="ko" style="display:none;">D) 데이터 버스에서 메타스터빌리티가 발생</span></li>
+    </ul>
+    <div class="explanation">
+        <span class="en">✅ If two pulses arrive before the first toggle propagates to domain B, the second toggle cancels the first, and a pulse is lost. Minimum pulse spacing must be ≥ 2 × clk_b period + sync delay.</span>
+        <span class="ko" style="display:none;">✅ 첫 번째 토글이 도메인 B로 전파되기 전에 두 번째 펄스가 도착하면, 두 번째 토글이 첫 번째를 취소하여 펄스가 손실됩니다. 최소 펄스 간격은 ≥ 2 × clk_b 주기 + 동기화 지연이어야 합니다.</span>
+    </div>
+</div>
+
+<div class="question" data-answer="4">
+    <h3>Q7. <span class="en">In the sender FSM of a req/ack handshake, what states are needed?</span><span class="ko" style="display:none;">req/ack 핸드셰이크의 송신측 FSM에서 필요한 상태는?</span></h3>
+    <ul class="options">
+        <li onclick="checkAnswer(this)"><span class="en">A) IDLE, SEND</span><span class="ko" style="display:none;">A) IDLE, SEND</span></li>
+        <li onclick="checkAnswer(this)"><span class="en">B) IDLE, WAIT_ACK</span><span class="ko" style="display:none;">B) IDLE, WAIT_ACK</span></li>
+        <li onclick="checkAnswer(this)"><span class="en">C) IDLE, SEND, DONE</span><span class="ko" style="display:none;">C) IDLE, SEND, DONE</span></li>
+        <li onclick="checkAnswer(this)"><span class="en">D) IDLE, WAIT_ACK, WAIT_DEACK</span><span class="ko" style="display:none;">D) IDLE, WAIT_ACK, WAIT_DEACK</span></li>
+    </ul>
+    <div class="explanation">
+        <span class="en">✅ The sender needs: IDLE (ready for data), WAIT_ACK (req asserted, waiting for ack), and WAIT_DEACK (req de-asserted, waiting for ack to de-assert before accepting new data).</span>
+        <span class="ko" style="display:none;">✅ 송신측에 필요한 상태: IDLE (데이터 준비), WAIT_ACK (req 어서트됨, ack 대기), WAIT_DEACK (req 디어서트됨, 새 데이터 수용 전 ack 디어서트 대기).</span>
+    </div>
+</div>
+
+<div class="question" data-answer="2">
+    <h3>Q8. <span class="en">What advantage does a 2-phase handshake have over a 4-phase handshake?</span><span class="ko" style="display:none;">2-phase 핸드셰이크가 4-phase 핸드셰이크에 비해 가지는 장점은?</span></h3>
+    <ul class="options">
+        <li onclick="checkAnswer(this)"><span class="en">A) It's simpler to implement</span><span class="ko" style="display:none;">A) 구현이 더 간단함</span></li>
+        <li onclick="checkAnswer(this)"><span class="en">B) It has higher throughput (2 sync delays vs. 4)</span><span class="ko" style="display:none;">B) 더 높은 처리량 (2번 vs. 4번의 동기화 지연)</span></li>
+        <li onclick="checkAnswer(this)"><span class="en">C) It doesn't need synchronizers</span><span class="ko" style="display:none;">C) 동기화기가 필요 없음</span></li>
+        <li onclick="checkAnswer(this)"><span class="en">D) It supports wider data buses</span><span class="ko" style="display:none;">D) 더 넓은 데이터 버스를 지원</span></li>
+    </ul>
+    <div class="explanation">
+        <span class="en">✅ A 2-phase handshake treats each edge (toggle) as a transaction, so it only needs 2 synchronization delays per transfer instead of 4, doubling throughput. However, it's more complex to implement.</span>
+        <span class="ko" style="display:none;">✅ 2-phase 핸드셰이크는 각 엣지(토글)를 트랜잭션으로 취급하므로, 전송당 4번 대신 2번의 동기화 지연만 필요하여 처리량이 두 배가 됩니다. 하지만 구현이 더 복잡합니다.</span>
+    </div>
+</div>
+
+<div class="question" data-answer="1">
+    <h3>Q9. <span class="en">When should you choose a handshake over an async FIFO for CDC?</span><span class="ko" style="display:none;">CDC에서 비동기 FIFO 대신 핸드셰이크를 선택해야 할 때는?</span></h3>
+    <ul class="options">
+        <li onclick="checkAnswer(this)"><span class="en">A) When data transfers are infrequent and low throughput is acceptable</span><span class="ko" style="display:none;">A) 데이터 전송이 비빈번하고 낮은 처리량이 허용될 때</span></li>
+        <li onclick="checkAnswer(this)"><span class="en">B) When you need to stream continuous data</span><span class="ko" style="display:none;">B) 연속 데이터를 스트리밍해야 할 때</span></li>
+        <li onclick="checkAnswer(this)"><span class="en">C) When both clocks are the same frequency</span><span class="ko" style="display:none;">C) 두 클록이 같은 주파수일 때</span></li>
+        <li onclick="checkAnswer(this)"><span class="en">D) When you need zero latency</span><span class="ko" style="display:none;">D) 제로 레이턴시가 필요할 때</span></li>
+    </ul>
+    <div class="explanation">
+        <span class="en">✅ Handshakes are ideal for infrequent, low-bandwidth transfers (config registers, commands, status updates). For continuous streaming data, an async FIFO is more appropriate due to much higher throughput.</span>
+        <span class="ko" style="display:none;">✅ 핸드셰이크는 비빈번한 저대역폭 전송(설정 레지스터, 명령, 상태 업데이트)에 이상적입니다. 연속 스트리밍 데이터에는 훨씬 높은 처리량 때문에 비동기 FIFO가 더 적합합니다.</span>
+    </div>
+</div>
+
+<div class="question" data-answer="3">
+    <h3>Q10. <span class="en">In a pulse synchronizer, what logic gate is used to regenerate the pulse in the destination domain?</span><span class="ko" style="display:none;">펄스 동기화기에서 목적지 도메인에서 펄스를 재생성하는 데 사용되는 논리 게이트는?</span></h3>
+    <ul class="options">
+        <li onclick="checkAnswer(this)"><span class="en">A) AND</span><span class="ko" style="display:none;">A) AND</span></li>
+        <li onclick="checkAnswer(this)"><span class="en">B) OR</span><span class="ko" style="display:none;">B) OR</span></li>
+        <li onclick="checkAnswer(this)"><span class="en">C) XOR</span><span class="ko" style="display:none;">C) XOR</span></li>
+        <li onclick="checkAnswer(this)"><span class="en">D) NAND</span><span class="ko" style="display:none;">D) NAND</span></li>
+    </ul>
+    <div class="explanation">
+        <span class="en">✅ XOR between the current synchronized value and the previous value detects any edge (0→1 or 1→0), which corresponds to the original pulse. <code>pulse_out = sync_2 ^ sync_prev</code></span>
+        <span class="ko" style="display:none;">✅ 현재 동기화된 값과 이전 값 사이의 XOR이 모든 엣지(0→1 또는 1→0)를 감지하며, 이는 원래 펄스에 해당합니다. <code>pulse_out = sync_2 ^ sync_prev</code></span>
+    </div>
+</div>
+
+</div>
+
+<div class="score-box" id="scoreBox">
+    <h2 id="scoreText"></h2>
+    <p id="scoreMsg"></p>
+    <button class="btn" onclick="resetQuiz()">🔄 Try Again</button>
+</div>
+
+<button class="btn" id="submitBtn" onclick="showScore()">📊 Show Score</button>
+
+<div class="nav-links">
+    <a href="day-18-lesson.html">📖 Review Lesson</a>
+    <a href="day-18-practice.html">💻 Practice Exercise →</a>
+</div>
+
+<script>
+let isKorean = false;
+function toggleLang() {
+    isKorean = !isKorean;
+    document.querySelectorAll('.en').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'none' : 'revert', 'important');
+    });
+    document.querySelectorAll('.ko').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'revert' : 'none', 'important');
+    });
+    document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+}
+
+let answered = {};
+function checkAnswer(li) {
+    const question = li.closest('.question');
+    const qIdx = Array.from(document.querySelectorAll('.question')).indexOf(question);
+    if (answered[qIdx]) return;
+    answered[qIdx] = true;
+
+    const correct = parseInt(question.dataset.answer);
+    const options = question.querySelectorAll('.options li');
+    const selected = Array.from(options).indexOf(li) + 1;
+
+    if (selected === correct) {
+        li.classList.add('correct');
+    } else {
+        li.classList.add('incorrect');
+        options[correct - 1].classList.add('correct');
+    }
+    question.querySelector('.explanation').style.display = 'block';
+}
+
+function showScore() {
+    const total = document.querySelectorAll('.question').length;
+    const correct = document.querySelectorAll('.options li.correct').length -
+                    document.querySelectorAll('.options li.incorrect').length;
+    const answeredCount = Object.keys(answered).length;
+
+    if (answeredCount < total) {
+        alert(isKorean ? `모든 질문에 답해주세요! (${answeredCount}/${total})` : `Please answer all questions! (${answeredCount}/${total})`);
+        return;
+    }
+
+    const scoreBox = document.getElementById('scoreBox');
+    const scoreText = document.getElementById('scoreText');
+    const scoreMsg = document.getElementById('scoreMsg');
+    const pct = Math.round((correct / total) * 100);
+
+    scoreText.textContent = `${correct} / ${total} (${pct}%)`;
+    if (pct >= 90) scoreMsg.textContent = isKorean ? '🌟 완벽해요! CDC 핸드셰이크 마스터!' : '🌟 Excellent! CDC handshake master!';
+    else if (pct >= 70) scoreMsg.textContent = isKorean ? '👍 잘했어요! 몇 가지만 더 복습하세요.' : '👍 Good job! Review a few concepts.';
+    else scoreMsg.textContent = isKorean ? '📖 레슨을 다시 읽어보세요.' : '📖 Review the lesson and try again.';
+
+    scoreBox.style.display = 'block';
+    document.getElementById('submitBtn').style.display = 'none';
+}
+
+function resetQuiz() {
+    answered = {};
+    document.querySelectorAll('.options li').forEach(li => {
+        li.classList.remove('correct', 'incorrect');
+    });
+    document.querySelectorAll('.explanation').forEach(el => {
+        el.style.display = 'none';
+    });
+    document.getElementById('scoreBox').style.display = 'none';
+    document.getElementById('submitBtn').style.display = 'inline-block';
+}
+</script>
+
+</body>
+</html>

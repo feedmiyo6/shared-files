@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 18: Handshake Protocols | Digital Design Study</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    background: linear-gradient(135deg, #fefae0 0%, #faedcd 100%);
+    color: #3d405b;
+    line-height: 1.8;
+    padding: 24px;
+    max-width: 920px;
+    margin: 0 auto;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+h1 { color: #5d4037; border-bottom: 3px solid #c4a77d; padding-bottom: 12px; margin: 24px 0 16px; font-size: 2em; }
+h2 { color: #588157; border-bottom: 2px solid #a3b18a; padding-bottom: 8px; margin: 28px 0 16px; }
+h3 { color: #5d4037; margin: 20px 0 12px; }
+p { margin: 12px 0; }
+ul, ol { margin: 12px 0 12px 24px; }
+li { margin: 6px 0; }
+code {
+    background: #e9f5db;
+    color: #3d405b;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+}
+pre {
+    background: #2d3436;
+    padding: 24px;
+    border-radius: 12px;
+    margin: 24px 0;
+    border: 3px solid #a3b18a;
+    overflow-x: auto;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+    font-size: 15px;
+    line-height: 1.6;
+    color: #f8f8f2;
+}
+.keyword { color: #ff79c6; font-weight: 600; }
+.type { color: #8be9fd; }
+.signal { color: #50fa7b; }
+.number { color: #ffb86c; }
+.comment { color: #6272a4; font-style: italic; }
+.string { color: #f1fa8c; }
+.concept-box {
+    background: #fff8f0;
+    border: 2px solid #c4a77d;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    color: #3d405b;
+}
+.concept-box h3 { color: #5d4037; margin-bottom: 12px; }
+.warning-box {
+    background: #fff8f0;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    border-left: 4px solid #ef4444;
+    color: #3d405b;
+}
+.warning-box h3 { color: #c53030; margin-bottom: 12px; }
+.tip-box {
+    background: #fff8f0;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    border-left: 4px solid #588157;
+    color: #3d405b;
+}
+.comparison-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+.comparison-table th {
+    background: #588157;
+    color: white;
+    padding: 12px;
+    text-align: left;
+}
+.comparison-table td {
+    background: #fff;
+    border: 1px solid #c4a77d;
+    padding: 12px;
+    color: #3d405b;
+}
+.comparison-table tr:nth-child(even) td { background: #fff8f0; }
+.nav-links { display: flex; gap: 12px; margin: 24px 0; flex-wrap: wrap; }
+.nav-links a {
+    background: linear-gradient(135deg, #588157, #3a5a40);
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 24px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14px;
+}
+.nav-links a:hover { opacity: 0.9; }
+.lang-toggle {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    background: #588157;
+    border: none;
+    border-radius: 24px;
+    padding: 10px 20px;
+    cursor: pointer;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    z-index: 1000;
+}
+.lang-toggle:hover { background: #3a5a40; }
+.ko { display: none; }
+.diagram-box {
+    background: #fff;
+    border: 2px solid #a3b18a;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+    font-size: 14px;
+    line-height: 1.4;
+    overflow-x: auto;
+    white-space: pre;
+    color: #3d405b;
+}
+@media (max-width: 768px) {
+    body { padding: 16px; }
+    h1 { font-size: 1.8em; }
+    pre { font-size: 14px; padding: 16px; }
+    .lang-toggle { padding: 8px 16px; font-size: 13px; }
+}
+</style>
+</head>
+<body>
+
+<button class="lang-toggle" onclick="toggleLang()">한국어</button>
+
+<h1>📡 Day 18: Handshake Protocols</h1>
+<p class="en"><strong>Week 4, Day 3</strong> — Clock Domain Crossing series</p>
+<p class="ko" style="display:none;"><strong>4주차, 3일</strong> — 클록 도메인 크로싱 시리즈</p>
+
+<div class="nav-links">
+    <a href="day-18-quiz.html">📝 Quiz</a>
+    <a href="day-18-practice.html">💻 Practice</a>
+    <a href="day-17-lesson.html">← Day 17</a>
+</div>
+
+<h2>🎯 Today's Goals</h2>
+<ul>
+    <li class="en">Understand why handshake protocols are needed for CDC</li>
+    <li class="ko" style="display:none;">CDC에서 핸드셰이크 프로토콜이 필요한 이유 이해</li>
+    <li class="en">Learn the req/ack (request/acknowledge) handshake pattern</li>
+    <li class="ko" style="display:none;">req/ack (요청/확인) 핸드셰이크 패턴 학습</li>
+    <li class="en">Understand pulse synchronizers and their use cases</li>
+    <li class="ko" style="display:none;">펄스 동기화기와 사용 사례 이해</li>
+    <li class="en">Know the tradeoffs: throughput vs. safety</li>
+    <li class="ko" style="display:none;">트레이드오프 이해: 처리량 vs. 안전성</li>
+</ul>
+
+<h2>1. The Problem: Beyond Single-Bit CDC</h2>
+
+<p class="en">Yesterday we learned the 2-flop synchronizer for single-bit signals. But what if we need to safely pass <strong>multi-bit data</strong> (like an 8-bit value or a command packet) across clock domains?</p>
+<p class="ko" style="display:none;">어제 단일 비트 신호를 위한 2-플립플롭 동기화기를 배웠습니다. 그런데 <strong>멀티비트 데이터</strong>(예: 8비트 값이나 명령 패킷)를 클록 도메인 간에 안전하게 전달하려면 어떻게 할까요?</p>
+
+<div class="warning-box">
+    <h3>⚠️ Multi-Bit CDC Danger</h3>
+    <p class="en">You <strong>cannot</strong> simply put a 2-flop synchronizer on each bit of a multi-bit bus! Different bits may arrive at different times, causing <strong>data corruption</strong>.</p>
+    <p class="ko" style="display:none;">멀티비트 버스의 각 비트에 2-플립플롭 동기화기를 단순히 넣으면 <strong>안 됩니다</strong>! 다른 비트들이 다른 시간에 도착하여 <strong>데이터 손상</strong>을 일으킬 수 있습니다.</p>
+    <p class="en">Example: Sending <code>0111</code> → <code>1000</code>. If bits change at different rates, the receiver might see <code>0000</code>, <code>1111</code>, or any garbage value!</p>
+    <p class="ko" style="display:none;">예시: <code>0111</code> → <code>1000</code> 전송 시, 비트들이 다른 속도로 변하면 수신측이 <code>0000</code>, <code>1111</code> 또는 쓰레기 값을 볼 수 있습니다!</p>
+</div>
+
+<p class="en">Solutions for multi-bit CDC include:</p>
+<p class="ko" style="display:none;">멀티비트 CDC 해결책:</p>
+<ol>
+    <li class="en"><strong>Handshake protocols</strong> (today's topic) — low throughput, simple, reliable</li>
+    <li class="ko" style="display:none;"><strong>핸드셰이크 프로토콜</strong> (오늘의 주제) — 낮은 처리량, 단순, 신뢰성</li>
+    <li class="en"><strong>Gray code counters</strong> (Day 19) — for FIFO pointers</li>
+    <li class="ko" style="display:none;"><strong>그레이 코드 카운터</strong> (19일차) — FIFO 포인터용</li>
+    <li class="en"><strong>Async FIFOs</strong> (Day 20) — high throughput, more complex</li>
+    <li class="ko" style="display:none;"><strong>비동기 FIFO</strong> (20일차) — 높은 처리량, 더 복잡</li>
+</ol>
+
+<h2>2. Req/Ack Handshake Protocol</h2>
+
+<p class="en">The req/ack handshake is the simplest reliable way to pass multi-bit data across clock domains. Think of it like a conversation:</p>
+<p class="ko" style="display:none;">req/ack 핸드셰이크는 멀티비트 데이터를 클록 도메인 간에 전달하는 가장 간단하고 신뢰성 있는 방법입니다. 대화처럼 생각하세요:</p>
+
+<div class="concept-box">
+    <h3>🤝 The Handshake Conversation</h3>
+    <ol>
+        <li class="en"><strong>Sender</strong> places data on the bus, then asserts <code>req</code> (request)</li>
+        <li class="ko" style="display:none;"><strong>송신측</strong>이 버스에 데이터를 놓고 <code>req</code> (요청) 신호를 어서트</li>
+        <li class="en"><strong>Receiver</strong> synchronizes <code>req</code> (2-flop), captures data, then asserts <code>ack</code> (acknowledge)</li>
+        <li class="ko" style="display:none;"><strong>수신측</strong>이 <code>req</code>를 동기화(2-플립플롭)하고, 데이터를 캡처한 후, <code>ack</code> (확인) 신호를 어서트</li>
+        <li class="en"><strong>Sender</strong> synchronizes <code>ack</code> (2-flop), then de-asserts <code>req</code></li>
+        <li class="ko" style="display:none;"><strong>송신측</strong>이 <code>ack</code>를 동기화(2-플립플롭)하고, <code>req</code>를 디어서트</li>
+        <li class="en"><strong>Receiver</strong> sees <code>req</code> de-asserted, de-asserts <code>ack</code></li>
+        <li class="ko" style="display:none;"><strong>수신측</strong>이 <code>req</code> 디어서트를 감지하고, <code>ack</code>를 디어서트</li>
+        <li class="en">Now it's safe to send the <strong>next</strong> data!</li>
+        <li class="ko" style="display:none;">이제 <strong>다음</strong> 데이터를 보낼 수 있습니다!</li>
+    </ol>
+</div>
+
+<h3>Timing Diagram</h3>
+<div class="diagram-box">
+Sender Clock Domain          │    Receiver Clock Domain
+                              │
+data    ════╦════════════════╦═╪══════════════════════════
+            ║  VALID DATA    ║ │
+req     ────┘  ┌─────────────┘ │
+               │               │
+req_sync ──────┼───────────────┼──┐  (2-flop delay)
+               │               │  │
+data_cap ──────┼───────────────┼──┤  Receiver captures data
+               │               │  │
+ack     ───────┼───────────────┼──┘──────────┐
+               │               │             │
+ack_sync ──────┘  (2-flop)     │             │
+               │               │             │
+req     ───────┘ (de-assert)   │             │
+               │               │             │
+ack     ───────┼───────────────┼─────────────┘ (de-assert)
+               │               │
+         READY FOR NEXT TRANSFER</div>
+
+<p class="en">The key insight: <strong>data is held stable</strong> during the entire handshake. Only the single-bit <code>req</code> and <code>ack</code> signals cross domains (via 2-flop synchronizers). The multi-bit data is just sampled when it's guaranteed to be stable.</p>
+<p class="ko" style="display:none;">핵심 통찰: 전체 핸드셰이크 동안 <strong>데이터가 안정적으로 유지</strong>됩니다. 단일 비트 <code>req</code>와 <code>ack</code> 신호만 도메인을 넘어갑니다(2-플립플롭 동기화기를 통해). 멀티비트 데이터는 안정이 보장될 때만 샘플링됩니다.</p>
+
+<h3>RTL Implementation</h3>
+<pre>
+<span class="keyword">module</span> <span class="type">cdc_handshake</span> #(
+    <span class="keyword">parameter</span> <span class="type">DATA_W</span> = <span class="number">8</span>
+)(
+    <span class="comment">// Sender side (clk_a domain)</span>
+    <span class="keyword">input</span>  <span class="type">logic</span>              <span class="signal">clk_a</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span>              <span class="signal">rst_a_n</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span> [<span class="type">DATA_W</span>-<span class="number">1</span>:<span class="number">0</span>] <span class="signal">data_in</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span>              <span class="signal">valid_in</span>,
+    <span class="keyword">output</span> <span class="type">logic</span>              <span class="signal">ready_out</span>,
+
+    <span class="comment">// Receiver side (clk_b domain)</span>
+    <span class="keyword">input</span>  <span class="type">logic</span>              <span class="signal">clk_b</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span>              <span class="signal">rst_b_n</span>,
+    <span class="keyword">output</span> <span class="type">logic</span> [<span class="type">DATA_W</span>-<span class="number">1</span>:<span class="number">0</span>] <span class="signal">data_out</span>,
+    <span class="keyword">output</span> <span class="type">logic</span>              <span class="signal">valid_out</span>
+);
+
+    <span class="comment">// --- Sender side signals ---</span>
+    <span class="type">logic</span>              <span class="signal">req_a</span>;
+    <span class="type">logic</span> [<span class="type">DATA_W</span>-<span class="number">1</span>:<span class="number">0</span>] <span class="signal">data_reg</span>;
+    <span class="type">logic</span>              <span class="signal">ack_sync_1</span>, <span class="signal">ack_sync_2</span>;  <span class="comment">// 2-flop sync for ack</span>
+
+    <span class="comment">// --- Receiver side signals ---</span>
+    <span class="type">logic</span>              <span class="signal">req_sync_1</span>, <span class="signal">req_sync_2</span>;  <span class="comment">// 2-flop sync for req</span>
+    <span class="type">logic</span>              <span class="signal">req_sync_prev</span>;
+    <span class="type">logic</span>              <span class="signal">ack_b</span>;
+
+    <span class="comment">// ==========================================</span>
+    <span class="comment">// Sender Side (clk_a domain)</span>
+    <span class="comment">// ==========================================</span>
+
+    <span class="comment">// Synchronize ack from receiver into sender domain</span>
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk_a</span> <span class="keyword">or negedge</span> <span class="signal">rst_a_n</span>) <span class="keyword">begin</span>
+        <span class="keyword">if</span> (!<span class="signal">rst_a_n</span>) <span class="keyword">begin</span>
+            <span class="signal">ack_sync_1</span> <= <span class="number">1'b0</span>;
+            <span class="signal">ack_sync_2</span> <= <span class="number">1'b0</span>;
+        <span class="keyword">end else begin</span>
+            <span class="signal">ack_sync_1</span> <= <span class="signal">ack_b</span>;
+            <span class="signal">ack_sync_2</span> <= <span class="signal">ack_sync_1</span>;
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+
+    <span class="comment">// Sender state machine</span>
+    <span class="keyword">typedef enum logic</span> [<span class="number">1</span>:<span class="number">0</span>] {
+        <span class="type">S_IDLE</span>,        <span class="comment">// Ready for new data</span>
+        <span class="type">S_WAIT_ACK</span>,   <span class="comment">// Waiting for ack assertion</span>
+        <span class="type">S_WAIT_DEACK</span>  <span class="comment">// Waiting for ack de-assertion</span>
+    } <span class="type">sender_state_t</span>;
+
+    <span class="type">sender_state_t</span> <span class="signal">s_state</span>;
+
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk_a</span> <span class="keyword">or negedge</span> <span class="signal">rst_a_n</span>) <span class="keyword">begin</span>
+        <span class="keyword">if</span> (!<span class="signal">rst_a_n</span>) <span class="keyword">begin</span>
+            <span class="signal">s_state</span>   <= <span class="type">S_IDLE</span>;
+            <span class="signal">req_a</span>     <= <span class="number">1'b0</span>;
+            <span class="signal">data_reg</span>  <= <span class="string">'0</span>;
+        <span class="keyword">end else begin</span>
+            <span class="keyword">case</span> (<span class="signal">s_state</span>)
+                <span class="type">S_IDLE</span>: <span class="keyword">begin</span>
+                    <span class="keyword">if</span> (<span class="signal">valid_in</span>) <span class="keyword">begin</span>
+                        <span class="signal">data_reg</span> <= <span class="signal">data_in</span>;
+                        <span class="signal">req_a</span>    <= <span class="number">1'b1</span>;
+                        <span class="signal">s_state</span>  <= <span class="type">S_WAIT_ACK</span>;
+                    <span class="keyword">end</span>
+                <span class="keyword">end</span>
+                <span class="type">S_WAIT_ACK</span>: <span class="keyword">begin</span>
+                    <span class="keyword">if</span> (<span class="signal">ack_sync_2</span>) <span class="keyword">begin</span>
+                        <span class="signal">req_a</span>   <= <span class="number">1'b0</span>;
+                        <span class="signal">s_state</span> <= <span class="type">S_WAIT_DEACK</span>;
+                    <span class="keyword">end</span>
+                <span class="keyword">end</span>
+                <span class="type">S_WAIT_DEACK</span>: <span class="keyword">begin</span>
+                    <span class="keyword">if</span> (!<span class="signal">ack_sync_2</span>) <span class="keyword">begin</span>
+                        <span class="signal">s_state</span> <= <span class="type">S_IDLE</span>;
+                    <span class="keyword">end</span>
+                <span class="keyword">end</span>
+                <span class="keyword">default</span>: <span class="signal">s_state</span> <= <span class="type">S_IDLE</span>;
+            <span class="keyword">endcase</span>
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+
+    <span class="keyword">assign</span> <span class="signal">ready_out</span> = (<span class="signal">s_state</span> == <span class="type">S_IDLE</span>);
+
+    <span class="comment">// ==========================================</span>
+    <span class="comment">// Receiver Side (clk_b domain)</span>
+    <span class="comment">// ==========================================</span>
+
+    <span class="comment">// Synchronize req from sender into receiver domain</span>
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk_b</span> <span class="keyword">or negedge</span> <span class="signal">rst_b_n</span>) <span class="keyword">begin</span>
+        <span class="keyword">if</span> (!<span class="signal">rst_b_n</span>) <span class="keyword">begin</span>
+            <span class="signal">req_sync_1</span>    <= <span class="number">1'b0</span>;
+            <span class="signal">req_sync_2</span>    <= <span class="number">1'b0</span>;
+            <span class="signal">req_sync_prev</span> <= <span class="number">1'b0</span>;
+        <span class="keyword">end else begin</span>
+            <span class="signal">req_sync_1</span>    <= <span class="signal">req_a</span>;
+            <span class="signal">req_sync_2</span>    <= <span class="signal">req_sync_1</span>;
+            <span class="signal">req_sync_prev</span> <= <span class="signal">req_sync_2</span>;
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+
+    <span class="comment">// Detect rising edge of synchronized req</span>
+    <span class="type">logic</span> <span class="signal">req_rising</span>;
+    <span class="keyword">assign</span> <span class="signal">req_rising</span> = <span class="signal">req_sync_2</span> && !<span class="signal">req_sync_prev</span>;
+
+    <span class="comment">// Capture data and generate ack</span>
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk_b</span> <span class="keyword">or negedge</span> <span class="signal">rst_b_n</span>) <span class="keyword">begin</span>
+        <span class="keyword">if</span> (!<span class="signal">rst_b_n</span>) <span class="keyword">begin</span>
+            <span class="signal">data_out</span>  <= <span class="string">'0</span>;
+            <span class="signal">valid_out</span> <= <span class="number">1'b0</span>;
+            <span class="signal">ack_b</span>     <= <span class="number">1'b0</span>;
+        <span class="keyword">end else begin</span>
+            <span class="signal">valid_out</span> <= <span class="number">1'b0</span>;  <span class="comment">// Default: pulse</span>
+            <span class="keyword">if</span> (<span class="signal">req_rising</span>) <span class="keyword">begin</span>
+                <span class="signal">data_out</span>  <= <span class="signal">data_reg</span>;  <span class="comment">// Safe: data is stable!</span>
+                <span class="signal">valid_out</span> <= <span class="number">1'b1</span>;
+                <span class="signal">ack_b</span>     <= <span class="number">1'b1</span>;
+            <span class="keyword">end else if</span> (!<span class="signal">req_sync_2</span>) <span class="keyword">begin</span>
+                <span class="signal">ack_b</span>     <= <span class="number">1'b0</span>;
+            <span class="keyword">end</span>
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+
+<span class="keyword">endmodule</span>
+</pre>
+
+<h2>3. Pulse Synchronizer</h2>
+
+<p class="en">Sometimes you don't need to transfer data — you just need to send a <strong>pulse event</strong> (like "increment counter" or "clear flag") from one clock domain to another. A pulse synchronizer converts a single-cycle pulse in one domain to a single-cycle pulse in another.</p>
+<p class="ko" style="display:none;">때로는 데이터를 전달할 필요 없이 한 클록 도메인에서 다른 도메인으로 <strong>펄스 이벤트</strong>("카운터 증가" 또는 "플래그 클리어" 같은)만 보내면 됩니다. 펄스 동기화기는 한 도메인의 단일 사이클 펄스를 다른 도메인의 단일 사이클 펄스로 변환합니다.</p>
+
+<div class="concept-box">
+    <h3>💡 Pulse Sync: The Toggle Trick</h3>
+    <p class="en">The idea is elegant:</p>
+    <p class="ko" style="display:none;">아이디어가 우아합니다:</p>
+    <ol>
+        <li class="en">On each pulse in domain A, <strong>toggle</strong> a level signal (0→1 or 1→0)</li>
+        <li class="ko" style="display:none;">도메인 A에서 각 펄스마다 레벨 신호를 <strong>토글</strong> (0→1 또는 1→0)</li>
+        <li class="en">Synchronize the toggling level through a <strong>2-flop synchronizer</strong> into domain B</li>
+        <li class="ko" style="display:none;">토글하는 레벨 신호를 <strong>2-플립플롭 동기화기</strong>를 통해 도메인 B로 동기화</li>
+        <li class="en">In domain B, detect <strong>edges</strong> (XOR with previous value) → that's your pulse!</li>
+        <li class="ko" style="display:none;">도메인 B에서 <strong>엣지를 감지</strong> (이전 값과 XOR) → 그것이 펄스!</li>
+    </ol>
+</div>
+
+<pre>
+<span class="keyword">module</span> <span class="type">pulse_sync</span> (
+    <span class="keyword">input</span>  <span class="type">logic</span> <span class="signal">clk_a</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span> <span class="signal">rst_a_n</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span> <span class="signal">pulse_in</span>,    <span class="comment">// Single-cycle pulse in clk_a</span>
+
+    <span class="keyword">input</span>  <span class="type">logic</span> <span class="signal">clk_b</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span> <span class="signal">rst_b_n</span>,
+    <span class="keyword">output</span> <span class="type">logic</span> <span class="signal">pulse_out</span>   <span class="comment">// Single-cycle pulse in clk_b</span>
+);
+
+    <span class="comment">// Toggle in domain A</span>
+    <span class="type">logic</span> <span class="signal">toggle_a</span>;
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk_a</span> <span class="keyword">or negedge</span> <span class="signal">rst_a_n</span>) <span class="keyword">begin</span>
+        <span class="keyword">if</span> (!<span class="signal">rst_a_n</span>)
+            <span class="signal">toggle_a</span> <= <span class="number">1'b0</span>;
+        <span class="keyword">else if</span> (<span class="signal">pulse_in</span>)
+            <span class="signal">toggle_a</span> <= ~<span class="signal">toggle_a</span>;
+    <span class="keyword">end</span>
+
+    <span class="comment">// 2-flop synchronizer in domain B</span>
+    <span class="type">logic</span> <span class="signal">sync_1</span>, <span class="signal">sync_2</span>, <span class="signal">sync_prev</span>;
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk_b</span> <span class="keyword">or negedge</span> <span class="signal">rst_b_n</span>) <span class="keyword">begin</span>
+        <span class="keyword">if</span> (!<span class="signal">rst_b_n</span>) <span class="keyword">begin</span>
+            <span class="signal">sync_1</span>    <= <span class="number">1'b0</span>;
+            <span class="signal">sync_2</span>    <= <span class="number">1'b0</span>;
+            <span class="signal">sync_prev</span> <= <span class="number">1'b0</span>;
+        <span class="keyword">end else begin</span>
+            <span class="signal">sync_1</span>    <= <span class="signal">toggle_a</span>;
+            <span class="signal">sync_2</span>    <= <span class="signal">sync_1</span>;
+            <span class="signal">sync_prev</span> <= <span class="signal">sync_2</span>;
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+
+    <span class="comment">// Edge detect = pulse output</span>
+    <span class="keyword">assign</span> <span class="signal">pulse_out</span> = <span class="signal">sync_2</span> ^ <span class="signal">sync_prev</span>;
+
+<span class="keyword">endmodule</span>
+</pre>
+
+<div class="warning-box">
+    <h3>⚠️ Pulse Sync Limitation</h3>
+    <p class="en">The input pulse must be <strong>at least one clk_a cycle wide</strong>, and pulses must be spaced far enough apart that the toggle has time to propagate. If <code>clk_a</code> is much faster than <code>clk_b</code>, back-to-back pulses can be <strong>lost</strong>!</p>
+    <p class="ko" style="display:none;">입력 펄스는 <strong>최소 clk_a 한 사이클 폭</strong>이어야 하고, 토글이 전파될 시간이 있도록 펄스 간 충분한 간격이 필요합니다. <code>clk_a</code>가 <code>clk_b</code>보다 훨씬 빠르면 연속 펄스가 <strong>손실</strong>될 수 있습니다!</p>
+    <p class="en"><strong>Rule of thumb:</strong> Minimum spacing between pulses ≥ 2 × clk_b period + synchronizer delay.</p>
+    <p class="ko" style="display:none;"><strong>경험 법칙:</strong> 펄스 간 최소 간격 ≥ 2 × clk_b 주기 + 동기화기 지연.</p>
+</div>
+
+<h2>4. Comparison: Which CDC Method to Use?</h2>
+
+<table class="comparison-table">
+    <tr>
+        <th>Method</th>
+        <th class="en">Use Case</th>
+        <th class="ko" style="display:none;">사용 사례</th>
+        <th class="en">Throughput</th>
+        <th class="ko" style="display:none;">처리량</th>
+        <th class="en">Complexity</th>
+        <th class="ko" style="display:none;">복잡도</th>
+    </tr>
+    <tr>
+        <td>2-Flop Sync</td>
+        <td class="en">Single-bit level signals</td>
+        <td class="ko" style="display:none;">단일 비트 레벨 신호</td>
+        <td class="en">N/A (level)</td>
+        <td class="ko" style="display:none;">해당 없음 (레벨)</td>
+        <td class="en">Very Low</td>
+        <td class="ko" style="display:none;">매우 낮음</td>
+    </tr>
+    <tr>
+        <td>Pulse Sync</td>
+        <td class="en">Single-bit events/pulses</td>
+        <td class="ko" style="display:none;">단일 비트 이벤트/펄스</td>
+        <td class="en">Low</td>
+        <td class="ko" style="display:none;">낮음</td>
+        <td class="en">Low</td>
+        <td class="ko" style="display:none;">낮음</td>
+    </tr>
+    <tr>
+        <td>Req/Ack Handshake</td>
+        <td class="en">Multi-bit data, infrequent</td>
+        <td class="ko" style="display:none;">멀티비트 데이터, 비빈번</td>
+        <td class="en">Low</td>
+        <td class="ko" style="display:none;">낮음</td>
+        <td class="en">Medium</td>
+        <td class="ko" style="display:none;">중간</td>
+    </tr>
+    <tr>
+        <td>Async FIFO</td>
+        <td class="en">Multi-bit streaming data</td>
+        <td class="ko" style="display:none;">멀티비트 스트리밍 데이터</td>
+        <td class="en">High</td>
+        <td class="ko" style="display:none;">높음</td>
+        <td class="en">High</td>
+        <td class="ko" style="display:none;">높음</td>
+    </tr>
+</table>
+
+<div class="tip-box">
+    <h3>💡 Interview Tip</h3>
+    <p class="en">A very common interview question: <em>"How do you transfer multi-bit data across clock domains?"</em> Start with the handshake (simplest), then mention async FIFO for high-throughput scenarios. Always emphasize that the <strong>data must be stable</strong> when sampled.</p>
+    <p class="ko" style="display:none;">매우 흔한 면접 질문: <em>"클록 도메인 간에 멀티비트 데이터를 어떻게 전달하나요?"</em> 핸드셰이크(가장 단순)부터 시작하고, 높은 처리량이 필요한 경우 비동기 FIFO를 언급하세요. <strong>데이터가 샘플링될 때 안정적</strong>이어야 한다는 것을 항상 강조하세요.</p>
+</div>
+
+<h2>5. Full-Cycle vs. Half-Cycle Handshake</h2>
+
+<p class="en">What we described above is a <strong>full-cycle (4-phase)</strong> handshake: req goes high, ack goes high, req goes low, ack goes low. There's also a faster variant:</p>
+<p class="ko" style="display:none;">위에서 설명한 것은 <strong>풀 사이클 (4-phase)</strong> 핸드셰이크입니다: req 상승, ack 상승, req 하강, ack 하강. 더 빠른 변형도 있습니다:</p>
+
+<div class="concept-box">
+    <h3>⚡ Half-Cycle (2-Phase) Handshake</h3>
+    <p class="en">Instead of waiting for both req and ack to return to zero, treat each <strong>toggle</strong> (edge) as a new transaction. This doubles throughput but adds complexity.</p>
+    <p class="ko" style="display:none;">req와 ack가 모두 0으로 돌아오길 기다리는 대신, 각 <strong>토글</strong>(엣지)을 새로운 트랜잭션으로 취급합니다. 처리량이 두 배가 되지만 복잡도가 증가합니다.</p>
+    <ul>
+        <li class="en">4-phase: req↑ → ack↑ → req↓ → ack↓ (4 sync delays per transfer)</li>
+        <li class="ko" style="display:none;">4-phase: req↑ → ack↑ → req↓ → ack↓ (전송당 4번의 동기화 지연)</li>
+        <li class="en">2-phase: req toggle → ack toggle (2 sync delays per transfer)</li>
+        <li class="ko" style="display:none;">2-phase: req 토글 → ack 토글 (전송당 2번의 동기화 지연)</li>
+    </ul>
+</div>
+
+<h2>6. Key Takeaways</h2>
+
+<div class="concept-box">
+    <h3>📌 Summary</h3>
+    <ol>
+        <li class="en"><strong>Never</strong> synchronize multi-bit data bit-by-bit — use a handshake or FIFO</li>
+        <li class="ko" style="display:none;">멀티비트 데이터를 비트별로 동기화하지 <strong>절대 마세요</strong> — 핸드셰이크나 FIFO를 사용</li>
+        <li class="en">Req/ack handshake: simple, reliable, but low throughput (~4 sync delays per transfer)</li>
+        <li class="ko" style="display:none;">Req/ack 핸드셰이크: 간단하고 신뢰성 있지만 낮은 처리량 (~전송당 4번의 동기화 지연)</li>
+        <li class="en">Pulse synchronizer: converts a pulse event across domains using toggle + edge detect</li>
+        <li class="ko" style="display:none;">펄스 동기화기: 토글 + 엣지 감지를 사용하여 도메인 간 펄스 이벤트 변환</li>
+        <li class="en">Data stability is the core principle — hold data until the receiver confirms capture</li>
+        <li class="ko" style="display:none;">데이터 안정성이 핵심 원칙 — 수신측이 캡처를 확인할 때까지 데이터를 유지</li>
+        <li class="en">Choose complexity based on throughput needs: handshake → async FIFO</li>
+        <li class="ko" style="display:none;">처리량 요구사항에 따라 복잡도 선택: 핸드셰이크 → 비동기 FIFO</li>
+    </ol>
+</div>
+
+<div class="nav-links">
+    <a href="day-18-quiz.html">📝 Take the Quiz →</a>
+    <a href="day-18-practice.html">💻 Practice Exercise →</a>
+</div>
+
+<script>
+let isKorean = false;
+function toggleLang() {
+    isKorean = !isKorean;
+    document.querySelectorAll('.en').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'none' : 'revert', 'important');
+    });
+    document.querySelectorAll('.ko').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'revert' : 'none', 'important');
+    });
+    document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+}
+</script>
+
+</body>
+</html>

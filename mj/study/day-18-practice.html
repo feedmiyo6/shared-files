@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 18 Practice: Handshake Protocols | Digital Design Study</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    background: linear-gradient(135deg, #fefae0 0%, #faedcd 100%);
+    color: #3d405b;
+    line-height: 1.8;
+    padding: 24px;
+    max-width: 920px;
+    margin: 0 auto;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+h1 { color: #5d4037; border-bottom: 3px solid #c4a77d; padding-bottom: 12px; margin: 24px 0 16px; font-size: 2em; }
+h2 { color: #588157; border-bottom: 2px solid #a3b18a; padding-bottom: 8px; margin: 28px 0 16px; }
+h3 { color: #5d4037; margin: 20px 0 12px; }
+p { margin: 12px 0; }
+ul, ol { margin: 12px 0 12px 24px; }
+li { margin: 6px 0; }
+code {
+    background: #e9f5db;
+    color: #3d405b;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+}
+pre {
+    background: #2d3436;
+    padding: 24px;
+    border-radius: 12px;
+    margin: 24px 0;
+    border: 3px solid #a3b18a;
+    overflow-x: auto;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+    font-size: 15px;
+    line-height: 1.6;
+    color: #f8f8f2;
+}
+.keyword { color: #ff79c6; font-weight: 600; }
+.type { color: #8be9fd; }
+.signal { color: #50fa7b; }
+.number { color: #ffb86c; }
+.comment { color: #6272a4; font-style: italic; }
+.string { color: #f1fa8c; }
+.concept-box {
+    background: #fff8f0;
+    border: 2px solid #c4a77d;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    color: #3d405b;
+}
+.concept-box h3 { color: #5d4037; margin-bottom: 12px; }
+.warning-box {
+    background: #fff8f0;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    border-left: 4px solid #ef4444;
+    color: #3d405b;
+}
+.warning-box h3 { color: #c53030; margin-bottom: 12px; }
+.tip-box {
+    background: #fff8f0;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    border-left: 4px solid #588157;
+    color: #3d405b;
+}
+.hint-box {
+    background: #fff8f0;
+    border-radius: 8px;
+    padding: 15px;
+    margin: 15px 0;
+    border-left: 4px solid #5d4037;
+    color: #3d405b;
+}
+.nav-links { display: flex; gap: 12px; margin: 24px 0; flex-wrap: wrap; }
+.nav-links a {
+    background: linear-gradient(135deg, #588157, #3a5a40);
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 24px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14px;
+}
+.nav-links a:hover { opacity: 0.9; }
+.lang-toggle {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    background: #588157;
+    border: none;
+    border-radius: 24px;
+    padding: 10px 20px;
+    cursor: pointer;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    z-index: 1000;
+}
+.lang-toggle:hover { background: #3a5a40; }
+.ko { display: none; }
+.reveal-btn {
+    background: linear-gradient(135deg, #588157, #3a5a40);
+    color: #fff;
+    border: none;
+    padding: 10px 24px;
+    border-radius: 24px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    margin: 12px 0;
+}
+.reveal-btn:hover { opacity: 0.9; }
+.solution { display: none; }
+@media (max-width: 768px) {
+    body { padding: 16px; }
+    h1 { font-size: 1.8em; }
+    pre { font-size: 14px; padding: 16px; }
+    .lang-toggle { padding: 8px 16px; font-size: 13px; }
+}
+</style>
+</head>
+<body>
+
+<button class="lang-toggle" onclick="toggleLang()">한국어</button>
+
+<h1>💻 Day 18 Practice: Handshake Protocols</h1>
+
+<div class="nav-links">
+    <a href="day-18-lesson.html">📖 Lesson</a>
+    <a href="day-18-quiz.html">📝 Quiz</a>
+</div>
+
+<h2>Exercise 1: Pulse Synchronizer</h2>
+
+<div class="concept-box">
+    <h3>🎯 Task</h3>
+    <p class="en">Implement a pulse synchronizer module. Given a single-cycle pulse in <code>clk_a</code> domain, produce a single-cycle pulse in <code>clk_b</code> domain using the toggle-and-edge-detect technique.</p>
+    <p class="ko" style="display:none;"><code>clk_a</code> 도메인의 단일 사이클 펄스를 받아 토글-엣지 감지 기법으로 <code>clk_b</code> 도메인에서 단일 사이클 펄스를 생성하는 펄스 동기화기 모듈을 구현하세요.</p>
+</div>
+
+<p class="en"><strong>Requirements:</strong></p>
+<p class="ko" style="display:none;"><strong>요구사항:</strong></p>
+<ul>
+    <li class="en">Use a toggle flip-flop in domain A</li>
+    <li class="ko" style="display:none;">도메인 A에서 토글 플립플롭 사용</li>
+    <li class="en">Use a 2-flop synchronizer in domain B</li>
+    <li class="ko" style="display:none;">도메인 B에서 2-플립플롭 동기화기 사용</li>
+    <li class="en">Detect edges using XOR to regenerate the pulse</li>
+    <li class="ko" style="display:none;">XOR을 사용하여 엣지를 감지하고 펄스를 재생성</li>
+    <li class="en">Include async active-low reset for both domains</li>
+    <li class="ko" style="display:none;">두 도메인 모두에 비동기 active-low 리셋 포함</li>
+</ul>
+
+<p class="en"><strong>Start with this skeleton:</strong></p>
+<p class="ko" style="display:none;"><strong>이 스켈레톤으로 시작하세요:</strong></p>
+
+<pre>
+<span class="keyword">module</span> <span class="type">pulse_sync</span> (
+    <span class="keyword">input</span>  <span class="type">logic</span> <span class="signal">clk_a</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span> <span class="signal">rst_a_n</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span> <span class="signal">pulse_in</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span> <span class="signal">clk_b</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span> <span class="signal">rst_b_n</span>,
+    <span class="keyword">output</span> <span class="type">logic</span> <span class="signal">pulse_out</span>
+);
+
+    <span class="comment">// TODO: Declare internal signals</span>
+
+    <span class="comment">// TODO: Toggle in domain A</span>
+
+    <span class="comment">// TODO: 2-flop sync in domain B</span>
+
+    <span class="comment">// TODO: Edge detect for pulse output</span>
+
+<span class="keyword">endmodule</span>
+</pre>
+
+<div class="hint-box">
+    <strong>💡 Hint:</strong>
+    <span class="en">You need 4 internal signals: <code>toggle_a</code>, <code>sync_1</code>, <code>sync_2</code>, and <code>sync_prev</code>. The pulse output is <code>sync_2 ^ sync_prev</code>.</span>
+    <span class="ko" style="display:none;">4개의 내부 신호가 필요합니다: <code>toggle_a</code>, <code>sync_1</code>, <code>sync_2</code>, <code>sync_prev</code>. 펄스 출력은 <code>sync_2 ^ sync_prev</code>입니다.</span>
+</div>
+
+<button class="reveal-btn" onclick="this.nextElementSibling.style.display='block'; this.style.display='none';">Show Solution</button>
+<div class="solution">
+<pre>
+<span class="keyword">module</span> <span class="type">pulse_sync</span> (
+    <span class="keyword">input</span>  <span class="type">logic</span> <span class="signal">clk_a</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span> <span class="signal">rst_a_n</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span> <span class="signal">pulse_in</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span> <span class="signal">clk_b</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span> <span class="signal">rst_b_n</span>,
+    <span class="keyword">output</span> <span class="type">logic</span> <span class="signal">pulse_out</span>
+);
+
+    <span class="type">logic</span> <span class="signal">toggle_a</span>;
+    <span class="type">logic</span> <span class="signal">sync_1</span>, <span class="signal">sync_2</span>, <span class="signal">sync_prev</span>;
+
+    <span class="comment">// Toggle in domain A on each pulse</span>
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk_a</span> <span class="keyword">or negedge</span> <span class="signal">rst_a_n</span>) <span class="keyword">begin</span>
+        <span class="keyword">if</span> (!<span class="signal">rst_a_n</span>)
+            <span class="signal">toggle_a</span> <= <span class="number">1'b0</span>;
+        <span class="keyword">else if</span> (<span class="signal">pulse_in</span>)
+            <span class="signal">toggle_a</span> <= ~<span class="signal">toggle_a</span>;
+    <span class="keyword">end</span>
+
+    <span class="comment">// 2-flop synchronizer + previous value in domain B</span>
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk_b</span> <span class="keyword">or negedge</span> <span class="signal">rst_b_n</span>) <span class="keyword">begin</span>
+        <span class="keyword">if</span> (!<span class="signal">rst_b_n</span>) <span class="keyword">begin</span>
+            <span class="signal">sync_1</span>    <= <span class="number">1'b0</span>;
+            <span class="signal">sync_2</span>    <= <span class="number">1'b0</span>;
+            <span class="signal">sync_prev</span> <= <span class="number">1'b0</span>;
+        <span class="keyword">end else begin</span>
+            <span class="signal">sync_1</span>    <= <span class="signal">toggle_a</span>;
+            <span class="signal">sync_2</span>    <= <span class="signal">sync_1</span>;
+            <span class="signal">sync_prev</span> <= <span class="signal">sync_2</span>;
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+
+    <span class="comment">// XOR detects any edge = regenerated pulse</span>
+    <span class="keyword">assign</span> <span class="signal">pulse_out</span> = <span class="signal">sync_2</span> ^ <span class="signal">sync_prev</span>;
+
+<span class="keyword">endmodule</span>
+</pre>
+</div>
+
+<h2>Exercise 2: Req/Ack Handshake CDC</h2>
+
+<div class="concept-box">
+    <h3>🎯 Task</h3>
+    <p class="en">Implement a simplified req/ack handshake module that transfers an 8-bit command from a fast clock domain (100 MHz) to a slow clock domain (25 MHz). Focus on the <strong>receiver side</strong> — the sender side is provided.</p>
+    <p class="ko" style="display:none;">빠른 클록 도메인(100 MHz)에서 느린 클록 도메인(25 MHz)으로 8비트 명령을 전달하는 간소화된 req/ack 핸드셰이크 모듈을 구현하세요. <strong>수신측</strong>에 집중하세요 — 송신측은 제공됩니다.</p>
+</div>
+
+<p class="en"><strong>Complete the receiver logic:</strong></p>
+<p class="ko" style="display:none;"><strong>수신측 로직을 완성하세요:</strong></p>
+
+<pre>
+<span class="comment">// Receiver side - clk_slow domain</span>
+<span class="comment">// Given: req_sync_2 (synchronized req from sender)</span>
+<span class="comment">// Given: data_reg (stable data from sender)</span>
+<span class="comment">// Output: data_out, valid_out, ack_b</span>
+
+<span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk_slow</span> <span class="keyword">or negedge</span> <span class="signal">rst_n</span>) <span class="keyword">begin</span>
+    <span class="keyword">if</span> (!<span class="signal">rst_n</span>) <span class="keyword">begin</span>
+        <span class="comment">// TODO: Reset all outputs</span>
+    <span class="keyword">end else begin</span>
+        <span class="comment">// TODO: Default valid_out to 0</span>
+        <span class="comment">// TODO: On rising edge of req_sync_2:</span>
+        <span class="comment">//   - Capture data_reg into data_out</span>
+        <span class="comment">//   - Assert valid_out for one cycle</span>
+        <span class="comment">//   - Assert ack_b</span>
+        <span class="comment">// TODO: When req_sync_2 goes low:</span>
+        <span class="comment">//   - De-assert ack_b</span>
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+</pre>
+
+<div class="hint-box">
+    <strong>💡 Hint:</strong>
+    <span class="en">You need a <code>req_sync_prev</code> register to detect the rising edge of <code>req_sync_2</code>. Rising edge = <code>req_sync_2 && !req_sync_prev</code>.</span>
+    <span class="ko" style="display:none;"><code>req_sync_2</code>의 상승 엣지를 감지하기 위해 <code>req_sync_prev</code> 레지스터가 필요합니다. 상승 엣지 = <code>req_sync_2 && !req_sync_prev</code>.</span>
+</div>
+
+<button class="reveal-btn" onclick="this.nextElementSibling.style.display='block'; this.style.display='none';">Show Solution</button>
+<div class="solution">
+<pre>
+<span class="type">logic</span> <span class="signal">req_sync_prev</span>;
+
+<span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk_slow</span> <span class="keyword">or negedge</span> <span class="signal">rst_n</span>) <span class="keyword">begin</span>
+    <span class="keyword">if</span> (!<span class="signal">rst_n</span>) <span class="keyword">begin</span>
+        <span class="signal">data_out</span>      <= <span class="number">8'b0</span>;
+        <span class="signal">valid_out</span>     <= <span class="number">1'b0</span>;
+        <span class="signal">ack_b</span>         <= <span class="number">1'b0</span>;
+        <span class="signal">req_sync_prev</span> <= <span class="number">1'b0</span>;
+    <span class="keyword">end else begin</span>
+        <span class="signal">valid_out</span>     <= <span class="number">1'b0</span>;  <span class="comment">// Default: one-cycle pulse</span>
+        <span class="signal">req_sync_prev</span> <= <span class="signal">req_sync_2</span>;
+
+        <span class="comment">// Rising edge of synchronized req</span>
+        <span class="keyword">if</span> (<span class="signal">req_sync_2</span> && !<span class="signal">req_sync_prev</span>) <span class="keyword">begin</span>
+            <span class="signal">data_out</span>  <= <span class="signal">data_reg</span>;  <span class="comment">// Safe to sample!</span>
+            <span class="signal">valid_out</span> <= <span class="number">1'b1</span>;
+            <span class="signal">ack_b</span>     <= <span class="number">1'b1</span>;
+        <span class="keyword">end</span>
+
+        <span class="comment">// When req goes away, release ack</span>
+        <span class="keyword">if</span> (!<span class="signal">req_sync_2</span>) <span class="keyword">begin</span>
+            <span class="signal">ack_b</span> <= <span class="number">1'b0</span>;
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+</pre>
+</div>
+
+<h2>Exercise 3: Timing Analysis Challenge</h2>
+
+<div class="concept-box">
+    <h3>🎯 Scenario</h3>
+    <p class="en">You have a 4-phase handshake between a 200 MHz sender and a 50 MHz receiver. Each 2-flop synchronizer adds 2 clock cycles of latency in the destination domain. Calculate the <strong>minimum time for one complete transfer</strong> and the <strong>maximum throughput</strong>.</p>
+    <p class="ko" style="display:none;">200 MHz 송신측과 50 MHz 수신측 사이에 4-phase 핸드셰이크가 있습니다. 각 2-플립플롭 동기화기는 목적지 도메인에서 2 클록 사이클의 레이턴시를 추가합니다. <strong>한 번의 완전한 전송에 필요한 최소 시간</strong>과 <strong>최대 처리량</strong>을 계산하세요.</p>
+</div>
+
+<p class="en"><strong>Work through these steps:</strong></p>
+<p class="ko" style="display:none;"><strong>다음 단계를 풀어보세요:</strong></p>
+<ol>
+    <li class="en">What is the clock period of each domain?</li>
+    <li class="ko" style="display:none;">각 도메인의 클록 주기는?</li>
+    <li class="en">Phase 1 (req↑ sync): How long for req to sync into receiver domain?</li>
+    <li class="ko" style="display:none;">Phase 1 (req↑ 동기화): req가 수신측 도메인으로 동기화되는데 얼마나 걸리나요?</li>
+    <li class="en">Phase 2 (ack↑ sync): How long for ack to sync into sender domain?</li>
+    <li class="ko" style="display:none;">Phase 2 (ack↑ 동기화): ack가 송신측 도메인으로 동기화되는데 얼마나 걸리나요?</li>
+    <li class="en">Phase 3+4: Same again for de-assertion</li>
+    <li class="ko" style="display:none;">Phase 3+4: 디어서트에 대해 같은 과정</li>
+    <li class="en">Total time and throughput?</li>
+    <li class="ko" style="display:none;">총 시간과 처리량?</li>
+</ol>
+
+<button class="reveal-btn" onclick="this.nextElementSibling.style.display='block'; this.style.display='none';">Show Solution</button>
+<div class="solution">
+<div class="concept-box">
+    <h3>📝 Solution</h3>
+    <p class="en"><strong>Clock periods:</strong></p>
+    <p class="ko" style="display:none;"><strong>클록 주기:</strong></p>
+    <ul>
+        <li>Sender (200 MHz): T<sub>s</sub> = 5 ns</li>
+        <li>Receiver (50 MHz): T<sub>r</sub> = 20 ns</li>
+    </ul>
+
+    <p class="en"><strong>4-phase timing:</strong></p>
+    <p class="ko" style="display:none;"><strong>4-phase 타이밍:</strong></p>
+    <ol>
+        <li class="en">req↑ syncs into receiver: 2 × T<sub>r</sub> = 2 × 20 = <strong>40 ns</strong></li>
+        <li class="ko" style="display:none;">req↑ 수신측으로 동기화: 2 × T<sub>r</sub> = 2 × 20 = <strong>40 ns</strong></li>
+        <li class="en">ack↑ syncs into sender: 2 × T<sub>s</sub> = 2 × 5 = <strong>10 ns</strong></li>
+        <li class="ko" style="display:none;">ack↑ 송신측으로 동기화: 2 × T<sub>s</sub> = 2 × 5 = <strong>10 ns</strong></li>
+        <li class="en">req↓ syncs into receiver: 2 × T<sub>r</sub> = <strong>40 ns</strong></li>
+        <li class="ko" style="display:none;">req↓ 수신측으로 동기화: 2 × T<sub>r</sub> = <strong>40 ns</strong></li>
+        <li class="en">ack↓ syncs into sender: 2 × T<sub>s</sub> = <strong>10 ns</strong></li>
+        <li class="ko" style="display:none;">ack↓ 송신측으로 동기화: 2 × T<sub>s</sub> = <strong>10 ns</strong></li>
+    </ol>
+
+    <p class="en"><strong>Total: 40 + 10 + 40 + 10 = 100 ns per transfer</strong></p>
+    <p class="ko" style="display:none;"><strong>총합: 40 + 10 + 40 + 10 = 전송당 100 ns</strong></p>
+    <p class="en"><strong>Max throughput: 1 / 100 ns = 10 MHz = 10 million transfers/sec</strong></p>
+    <p class="ko" style="display:none;"><strong>최대 처리량: 1 / 100 ns = 10 MHz = 초당 1000만 전송</strong></p>
+
+    <p class="en">Note: This is much slower than either clock! That's the handshake tradeoff — safety over speed. For 8-bit data: 10M × 8 bits = 80 Mbps effective bandwidth.</p>
+    <p class="ko" style="display:none;">참고: 이는 어느 클록보다도 훨씬 느립니다! 이것이 핸드셰이크의 트레이드오프 — 속도보다 안전성. 8비트 데이터의 경우: 10M × 8 bits = 80 Mbps 유효 대역폭.</p>
+</div>
+</div>
+
+<div class="tip-box">
+    <h3>🔗 Try It on EDA Playground</h3>
+    <p class="en">Copy the pulse synchronizer code into <a href="https://www.edaplayground.com" target="_blank" style="color:#588157;">EDA Playground</a> and write a testbench with two clocks at different frequencies. Verify that each input pulse produces exactly one output pulse.</p>
+    <p class="ko" style="display:none;">펄스 동기화기 코드를 <a href="https://www.edaplayground.com" target="_blank" style="color:#588157;">EDA Playground</a>에 복사하고 다른 주파수의 두 클록으로 테스트벤치를 작성하세요. 각 입력 펄스가 정확히 하나의 출력 펄스를 생성하는지 확인하세요.</p>
+</div>
+
+<div class="nav-links">
+    <a href="day-18-lesson.html">📖 Review Lesson</a>
+    <a href="day-18-quiz.html">📝 Take the Quiz</a>
+</div>
+
+<script>
+let isKorean = false;
+function toggleLang() {
+    isKorean = !isKorean;
+    document.querySelectorAll('.en').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'none' : 'revert', 'important');
+    });
+    document.querySelectorAll('.ko').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'revert' : 'none', 'important');
+    });
+    document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+}
+</script>
+
+</body>
+</html>
