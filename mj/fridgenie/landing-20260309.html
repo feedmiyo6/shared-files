@@ -854,10 +854,10 @@ window.addEventListener('scroll', () => {
 const hamburger = document.getElementById('hamburgerBtn');
 const mobileMenu = document.getElementById('mobileMenu');
 const closeMenu = document.getElementById('closeMenu');
-hamburger.addEventListener('click', () => mobileMenu.classList.add('open'));
-closeMenu.addEventListener('click', () => mobileMenu.classList.remove('open'));
+hamburger.addEventListener('click', () => { mobileMenu.classList.add('open'); hamburger.style.display='none'; });
+closeMenu.addEventListener('click', () => { mobileMenu.classList.remove('open'); hamburger.style.display='flex'; });
 document.querySelectorAll('.mobile-link').forEach(a => {
-  a.addEventListener('click', () => mobileMenu.classList.remove('open'));
+  a.addEventListener('click', () => { mobileMenu.classList.remove('open'); hamburger.style.display='flex'; });
 });
 
 /* ── FAQ accordion ─────────────────────────── */
