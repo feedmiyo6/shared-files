@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 19 Practice: Gray Code Counters | Digital Design Study</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    background: linear-gradient(135deg, #fefae0 0%, #faedcd 100%);
+    color: #3d405b;
+    line-height: 1.8;
+    padding: 24px;
+    max-width: 920px;
+    margin: 0 auto;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+h1 { color: #5d4037; border-bottom: 3px solid #c4a77d; padding-bottom: 12px; margin-bottom: 24px; font-size: 2em; }
+h2 { color: #588157; border-bottom: 2px solid #a3b18a; padding-bottom: 8px; margin: 32px 0 16px; }
+h3 { color: #5d4037; margin: 20px 0 12px; }
+p { margin: 12px 0; }
+pre {
+    background: #2d3436;
+    padding: 24px;
+    border-radius: 12px;
+    margin: 24px 0;
+    border: 3px solid #a3b18a;
+    overflow-x: auto;
+    font-size: 15px;
+    line-height: 1.6;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+    color: #f8f8f2;
+}
+code {
+    background: #e9f5db;
+    color: #3d405b;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+}
+pre code { background: none; padding: 0; color: inherit; }
+.keyword { color: #ff79c6; font-weight: 600; }
+.type { color: #8be9fd; }
+.signal { color: #50fa7b; }
+.number { color: #ffb86c; }
+.comment { color: #6272a4; font-style: italic; }
+.string { color: #f1fa8c; }
+.concept-box {
+    background: #fff8f0;
+    border: 2px solid #c4a77d;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    color: #3d405b;
+}
+.concept-box h3 { color: #5d4037; margin-bottom: 12px; }
+.hint-box {
+    background: #fff8f0;
+    border-radius: 8px;
+    padding: 15px;
+    margin: 15px 0;
+    border-left: 4px solid #5d4037;
+    color: #3d405b;
+}
+.tip-box {
+    background: #fff8f0;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    border-left: 4px solid #588157;
+    color: #3d405b;
+}
+.lang-toggle {
+    position: fixed; top: 16px; right: 16px; background: #588157; border: none;
+    border-radius: 24px; padding: 10px 20px; cursor: pointer; color: #fff;
+    font-size: 14px; font-weight: 600; z-index: 1000;
+}
+.lang-toggle:hover { background: #3a5a40; }
+.ko { display: none; }
+.nav { display: flex; justify-content: space-between; margin: 32px 0 16px; }
+.nav a { color: #588157; text-decoration: none; font-weight: 600; }
+.nav a:hover { color: #3a5a40; }
+.toggle-btn {
+    background: linear-gradient(135deg, #588157, #3a5a40);
+    color: white; border: none; border-radius: 8px;
+    padding: 10px 20px; cursor: pointer; font-size: 14px; font-weight: 600;
+    margin: 10px 0;
+}
+.toggle-btn:hover { opacity: 0.9; }
+.solution { display: none; margin-top: 16px; }
+.exercise {
+    background: #fff;
+    border: 2px solid #a3b18a;
+    border-radius: 12px;
+    padding: 24px;
+    margin: 24px 0;
+}
+@media (max-width: 768px) {
+    body { padding: 16px; }
+    h1 { font-size: 1.8em; }
+    pre { font-size: 14px; padding: 16px; }
+    .lang-toggle { padding: 8px 16px; font-size: 13px; }
+}
+</style>
+</head>
+<body>
+<button class="lang-toggle" onclick="toggleLang()">한국어</button>
+
+<h1>🛠️ Day 19 Practice: Gray Code Counters</h1>
+<div class="nav">
+    <a href="day-19-lesson.html">← Lesson</a>
+    <a href="day-19-quiz.html">← Quiz</a>
+</div>
+
+<div class="tip-box">
+    <p class="en">💡 <strong>Try solving each exercise before looking at the solution!</strong> Use <a href="https://www.edaplayground.com/" target="_blank">EDA Playground</a> to test your code.</p>
+    <p class="ko" style="display:none;">💡 <strong>솔루션을 보기 전에 각 연습문제를 풀어보세요!</strong> <a href="https://www.edaplayground.com/" target="_blank">EDA Playground</a>에서 코드를 테스트하세요.</p>
+</div>
+
+<!-- Exercise 1 -->
+<div class="exercise">
+    <h2>Exercise 1: Binary ↔ Gray Converter Module</h2>
+    <p class="en">Implement a parameterized module that can convert between binary and Gray code in both directions.</p>
+    <p class="ko" style="display:none;">양방향으로 바이너리와 그레이 코드를 변환할 수 있는 파라미터화된 모듈을 구현하세요.</p>
+
+    <div class="concept-box">
+        <h3>Requirements</h3>
+        <ul>
+            <li class="en">Parameterized width (default 4)</li>
+            <li class="ko" style="display:none;">파라미터화된 폭 (기본 4)</li>
+            <li class="en">Input: binary value and Gray value</li>
+            <li class="ko" style="display:none;">입력: 바이너리 값과 그레이 값</li>
+            <li class="en">Output: Gray-encoded output and binary-decoded output</li>
+            <li class="ko" style="display:none;">출력: 그레이 인코딩 출력과 바이너리 디코딩 출력</li>
+            <li class="en">Pure combinational (no clock needed)</li>
+            <li class="ko" style="display:none;">순수 조합 논리 (클록 불필요)</li>
+        </ul>
+    </div>
+
+    <div class="hint-box">
+        <p class="en">🔍 <strong>Hint:</strong> bin2gray is one line: XOR with right-shift. gray2bin needs a loop from MSB down.</p>
+        <p class="ko" style="display:none;">🔍 <strong>힌트:</strong> bin2gray는 한 줄: 오른쪽 시프트와 XOR. gray2bin은 MSB에서 아래로 루프가 필요합니다.</p>
+    </div>
+
+    <button class="toggle-btn" onclick="toggleSolution('sol1')">Show Solution</button>
+    <div class="solution" id="sol1">
+<pre><code><span class="keyword">module</span> <span class="signal">gray_converter</span> #(
+    <span class="keyword">parameter</span> <span class="type">int</span> <span class="signal">WIDTH</span> = <span class="number">4</span>
+)(
+    <span class="comment">// Binary to Gray</span>
+    <span class="keyword">input</span>  <span class="type">logic</span> [<span class="signal">WIDTH</span>-<span class="number">1</span>:<span class="number">0</span>] <span class="signal">bin_in</span>,
+    <span class="keyword">output</span> <span class="type">logic</span> [<span class="signal">WIDTH</span>-<span class="number">1</span>:<span class="number">0</span>] <span class="signal">gray_out</span>,
+
+    <span class="comment">// Gray to Binary</span>
+    <span class="keyword">input</span>  <span class="type">logic</span> [<span class="signal">WIDTH</span>-<span class="number">1</span>:<span class="number">0</span>] <span class="signal">gray_in</span>,
+    <span class="keyword">output</span> <span class="type">logic</span> [<span class="signal">WIDTH</span>-<span class="number">1</span>:<span class="number">0</span>] <span class="signal">bin_out</span>
+);
+
+    <span class="comment">// Binary → Gray: XOR with right-shifted self</span>
+    <span class="keyword">assign</span> <span class="signal">gray_out</span> = <span class="signal">bin_in</span> ^ (<span class="signal">bin_in</span> >> <span class="number">1</span>);
+
+    <span class="comment">// Gray → Binary: cascading XOR from MSB</span>
+    <span class="keyword">always_comb</span> <span class="keyword">begin</span>
+        <span class="signal">bin_out</span>[<span class="signal">WIDTH</span>-<span class="number">1</span>] = <span class="signal">gray_in</span>[<span class="signal">WIDTH</span>-<span class="number">1</span>];
+        <span class="keyword">for</span> (<span class="type">int</span> <span class="signal">i</span> = <span class="signal">WIDTH</span>-<span class="number">2</span>; <span class="signal">i</span> >= <span class="number">0</span>; <span class="signal">i</span>--)
+            <span class="signal">bin_out</span>[<span class="signal">i</span>] = <span class="signal">bin_out</span>[<span class="signal">i</span>+<span class="number">1</span>] ^ <span class="signal">gray_in</span>[<span class="signal">i</span>];
+    <span class="keyword">end</span>
+
+<span class="keyword">endmodule</span></code></pre>
+    </div>
+</div>
+
+<!-- Exercise 2 -->
+<div class="exercise">
+    <h2>Exercise 2: Gray Code Counter with Enable</h2>
+    <p class="en">Design a 4-bit Gray code counter with synchronous reset, count enable, and both binary and Gray outputs.</p>
+    <p class="ko" style="display:none;">동기 리셋, 카운트 이네이블, 바이너리와 그레이 출력을 모두 갖는 4비트 그레이 코드 카운터를 설계하세요.</p>
+
+    <div class="concept-box">
+        <h3>Requirements</h3>
+        <ul>
+            <li class="en">5-bit counter (4 address bits + 1 wrap bit)</li>
+            <li class="ko" style="display:none;">5비트 카운터 (4 주소 비트 + 1 래핑 비트)</li>
+            <li class="en">Async active-low reset</li>
+            <li class="ko" style="display:none;">비동기 액티브-로우 리셋</li>
+            <li class="en">Count enable signal</li>
+            <li class="ko" style="display:none;">카운트 이네이블 신호</li>
+            <li class="en">Output both <code>gray_count</code> and <code>bin_count</code></li>
+            <li class="ko" style="display:none;"><code>gray_count</code>와 <code>bin_count</code> 모두 출력</li>
+        </ul>
+    </div>
+
+    <div class="hint-box">
+        <p class="en">🔍 <strong>Hint:</strong> Compute bin_next and gray_next combinationally, then register both on the clock edge. The Gray output must be registered (not combinational) for safe CDC.</p>
+        <p class="ko" style="display:none;">🔍 <strong>힌트:</strong> bin_next와 gray_next를 조합적으로 계산한 다음, 클록 엣지에서 둘 다 레지스터하세요. 안전한 CDC를 위해 그레이 출력은 반드시 레지스터되어야 합니다.</p>
+    </div>
+
+    <button class="toggle-btn" onclick="toggleSolution('sol2')">Show Solution</button>
+    <div class="solution" id="sol2">
+<pre><code><span class="keyword">module</span> <span class="signal">gray_counter</span> #(
+    <span class="keyword">parameter</span> <span class="type">int</span> <span class="signal">ADDR_WIDTH</span> = <span class="number">4</span>
+)(
+    <span class="keyword">input</span>  <span class="type">logic</span>                    <span class="signal">clk</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span>                    <span class="signal">rst_n</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span>                    <span class="signal">enable</span>,
+    <span class="keyword">output</span> <span class="type">logic</span> [<span class="signal">ADDR_WIDTH</span>:<span class="number">0</span>]    <span class="signal">gray_count</span>,
+    <span class="keyword">output</span> <span class="type">logic</span> [<span class="signal">ADDR_WIDTH</span>:<span class="number">0</span>]    <span class="signal">bin_count</span>
+);
+
+    <span class="type">logic</span> [<span class="signal">ADDR_WIDTH</span>:<span class="number">0</span>] <span class="signal">bin_next</span>, <span class="signal">gray_next</span>;
+
+    <span class="comment">// Next binary value</span>
+    <span class="keyword">assign</span> <span class="signal">bin_next</span> = <span class="signal">bin_count</span> + (<span class="signal">enable</span> ? <span class="number">1</span> : <span class="number">0</span>);
+
+    <span class="comment">// Convert next binary to Gray</span>
+    <span class="keyword">assign</span> <span class="signal">gray_next</span> = <span class="signal">bin_next</span> ^ (<span class="signal">bin_next</span> >> <span class="number">1</span>);
+
+    <span class="comment">// Register both outputs</span>
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span> <span class="keyword">or</span> <span class="keyword">negedge</span> <span class="signal">rst_n</span>) <span class="keyword">begin</span>
+        <span class="keyword">if</span> (!<span class="signal">rst_n</span>) <span class="keyword">begin</span>
+            <span class="signal">bin_count</span>  <= <span class="string">'0</span>;
+            <span class="signal">gray_count</span> <= <span class="string">'0</span>;
+        <span class="keyword">end</span> <span class="keyword">else</span> <span class="keyword">begin</span>
+            <span class="signal">bin_count</span>  <= <span class="signal">bin_next</span>;
+            <span class="signal">gray_count</span> <= <span class="signal">gray_next</span>;
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+
+<span class="keyword">endmodule</span></code></pre>
+    </div>
+</div>
+
+<!-- Exercise 3 -->
+<div class="exercise">
+    <h2>Exercise 3: Gray Counter + Synchronizer Testbench</h2>
+    <p class="en">Write a testbench that instantiates a Gray code counter in one clock domain, synchronizes it to another domain, and verifies the synchronized value is always a valid (past or current) counter value.</p>
+    <p class="ko" style="display:none;">하나의 클록 도메인에서 그레이 코드 카운터를 인스턴스화하고, 다른 도메인으로 동기화한 후, 동기화된 값이 항상 유효한 (과거 또는 현재) 카운터 값인지 검증하는 테스트벤치를 작성하세요.</p>
+
+    <div class="concept-box">
+        <h3>Requirements</h3>
+        <ul>
+            <li class="en">Two clock domains: 100MHz and 75MHz</li>
+            <li class="ko" style="display:none;">두 클록 도메인: 100MHz와 75MHz</li>
+            <li class="en">Gray counter running on clk_fast (100MHz)</li>
+            <li class="ko" style="display:none;">clk_fast (100MHz)에서 실행되는 그레이 카운터</li>
+            <li class="en">2-flop synchronizer bringing Gray pointer to clk_slow (75MHz)</li>
+            <li class="ko" style="display:none;">그레이 포인터를 clk_slow (75MHz)로 가져오는 2-플립플롭 동기화기</li>
+            <li class="en">Convert synchronized Gray back to binary and check validity</li>
+            <li class="ko" style="display:none;">동기화된 그레이를 바이너리로 역변환하고 유효성 검사</li>
+        </ul>
+    </div>
+
+    <div class="hint-box">
+        <p class="en">🔍 <strong>Hint:</strong> The synchronized value will always lag behind the actual counter. Verify that the synced binary value is ≤ the actual binary count and ≥ (actual count - max_latency). A margin of 3-4 cycles is typical.</p>
+        <p class="ko" style="display:none;">🔍 <strong>힌트:</strong> 동기화된 값은 항상 실제 카운터보다 뒤처집니다. 동기화된 바이너리 값이 실제 바이너리 카운트 이하이고 (실제 카운트 - 최대 레이턴시) 이상인지 확인하세요. 3-4 사이클의 마진이 일반적입니다.</p>
+    </div>
+
+    <button class="toggle-btn" onclick="toggleSolution('sol3')">Show Solution</button>
+    <div class="solution" id="sol3">
+<pre><code><span class="keyword">module</span> <span class="signal">tb_gray_cdc</span>;
+
+    <span class="keyword">parameter</span> <span class="type">int</span> <span class="signal">WIDTH</span> = <span class="number">4</span>;
+
+    <span class="comment">// Two independent clocks</span>
+    <span class="type">logic</span> <span class="signal">clk_fast</span>, <span class="signal">clk_slow</span>, <span class="signal">rst_n</span>;
+
+    <span class="comment">// 100 MHz fast clock</span>
+    <span class="keyword">initial</span> <span class="keyword">begin</span>
+        <span class="signal">clk_fast</span> = <span class="number">0</span>;
+        <span class="keyword">forever</span> #<span class="number">5</span> <span class="signal">clk_fast</span> = ~<span class="signal">clk_fast</span>;  <span class="comment">// 10ns period</span>
+    <span class="keyword">end</span>
+
+    <span class="comment">// 75 MHz slow clock</span>
+    <span class="keyword">initial</span> <span class="keyword">begin</span>
+        <span class="signal">clk_slow</span> = <span class="number">0</span>;
+        <span class="keyword">forever</span> #<span class="number">6.67</span> <span class="signal">clk_slow</span> = ~<span class="signal">clk_slow</span>;  <span class="comment">// ~13.3ns period</span>
+    <span class="keyword">end</span>
+
+    <span class="comment">// Gray counter outputs (fast domain)</span>
+    <span class="type">logic</span> [<span class="signal">WIDTH</span>:<span class="number">0</span>] <span class="signal">gray_count</span>, <span class="signal">bin_count</span>;
+
+    <span class="comment">// Synchronized outputs (slow domain)</span>
+    <span class="type">logic</span> [<span class="signal">WIDTH</span>:<span class="number">0</span>] <span class="signal">gray_sync</span>;
+    <span class="type">logic</span> [<span class="signal">WIDTH</span>:<span class="number">0</span>] <span class="signal">sync_ff1</span>, <span class="signal">sync_ff2</span>;
+    <span class="type">logic</span> [<span class="signal">WIDTH</span>:<span class="number">0</span>] <span class="signal">bin_synced</span>;
+
+    <span class="comment">// Instantiate Gray counter (fast domain)</span>
+    <span class="signal">gray_counter</span> #(.<span class="signal">ADDR_WIDTH</span>(<span class="signal">WIDTH</span>)) <span class="signal">u_counter</span> (
+        .<span class="signal">clk</span>(<span class="signal">clk_fast</span>),
+        .<span class="signal">rst_n</span>(<span class="signal">rst_n</span>),
+        .<span class="signal">enable</span>(<span class="number">1'b1</span>),
+        .<span class="signal">gray_count</span>(<span class="signal">gray_count</span>),
+        .<span class="signal">bin_count</span>(<span class="signal">bin_count</span>)
+    );
+
+    <span class="comment">// 2-flop synchronizer (slow domain)</span>
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk_slow</span> <span class="keyword">or</span> <span class="keyword">negedge</span> <span class="signal">rst_n</span>) <span class="keyword">begin</span>
+        <span class="keyword">if</span> (!<span class="signal">rst_n</span>) <span class="keyword">begin</span>
+            <span class="signal">sync_ff1</span> <= <span class="string">'0</span>;
+            <span class="signal">sync_ff2</span> <= <span class="string">'0</span>;
+        <span class="keyword">end</span> <span class="keyword">else</span> <span class="keyword">begin</span>
+            <span class="signal">sync_ff1</span> <= <span class="signal">gray_count</span>;
+            <span class="signal">sync_ff2</span> <= <span class="signal">sync_ff1</span>;
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+
+    <span class="keyword">assign</span> <span class="signal">gray_sync</span> = <span class="signal">sync_ff2</span>;
+
+    <span class="comment">// Gray to binary conversion (slow domain)</span>
+    <span class="keyword">always_comb</span> <span class="keyword">begin</span>
+        <span class="signal">bin_synced</span>[<span class="signal">WIDTH</span>] = <span class="signal">gray_sync</span>[<span class="signal">WIDTH</span>];
+        <span class="keyword">for</span> (<span class="type">int</span> <span class="signal">i</span> = <span class="signal">WIDTH</span>-<span class="number">1</span>; <span class="signal">i</span> >= <span class="number">0</span>; <span class="signal">i</span>--)
+            <span class="signal">bin_synced</span>[<span class="signal">i</span>] = <span class="signal">bin_synced</span>[<span class="signal">i</span>+<span class="number">1</span>] ^ <span class="signal">gray_sync</span>[<span class="signal">i</span>];
+    <span class="keyword">end</span>
+
+    <span class="comment">// Stimulus</span>
+    <span class="keyword">initial</span> <span class="keyword">begin</span>
+        <span class="signal">rst_n</span> = <span class="number">0</span>;
+        #<span class="number">50</span>;
+        <span class="signal">rst_n</span> = <span class="number">1</span>;
+
+        <span class="comment">// Let counter run for many cycles</span>
+        #<span class="number">5000</span>;
+
+        $<span class="signal">display</span>(<span class="string">"=== Test Passed ==="</span>);
+        $<span class="signal">finish</span>;
+    <span class="keyword">end</span>
+
+    <span class="comment">// Monitor: synced value should lag behind actual</span>
+    <span class="keyword">always</span> @(<span class="keyword">posedge</span> <span class="signal">clk_slow</span>) <span class="keyword">begin</span>
+        <span class="keyword">if</span> (<span class="signal">rst_n</span>) <span class="keyword">begin</span>
+            <span class="comment">// Synced value must be ≤ actual count</span>
+            <span class="keyword">if</span> (<span class="signal">bin_synced</span> > <span class="signal">bin_count</span>) <span class="keyword">begin</span>
+                $<span class="signal">error</span>(<span class="string">"Synced value %0d > actual %0d!"</span>,
+                       <span class="signal">bin_synced</span>, <span class="signal">bin_count</span>);
+            <span class="keyword">end</span>
+            $<span class="signal">display</span>(<span class="string">"[%0t] actual=%0d synced=%0d (lag=%0d)"</span>,
+                    $<span class="signal">time</span>, <span class="signal">bin_count</span>, <span class="signal">bin_synced</span>,
+                    <span class="signal">bin_count</span> - <span class="signal">bin_synced</span>);
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+
+<span class="keyword">endmodule</span></code></pre>
+    </div>
+</div>
+
+<!-- Exercise 4 (Bonus) -->
+<div class="exercise">
+    <h2>🌟 Bonus: Full/Empty Detection with Gray Pointers</h2>
+    <p class="en">Preview for Day 20! Given a write Gray pointer and a read Gray pointer (both N+1 bits), write combinational logic to detect FULL and EMPTY conditions.</p>
+    <p class="ko" style="display:none;">20일차 미리보기! 쓰기 그레이 포인터와 읽기 그레이 포인터 (둘 다 N+1 비트)가 주어졌을 때, FULL과 EMPTY 조건을 감지하는 조합 논리를 작성하세요.</p>
+
+    <div class="concept-box">
+        <h3>Key Insight</h3>
+        <p class="en"><strong>EMPTY:</strong> Write Gray pointer == Read Gray pointer (identical)<br>
+        <strong>FULL:</strong> The top 2 bits of write and read Gray pointers are <em>inverted</em>, and the remaining bits are <em>equal</em>.</p>
+        <p class="ko" style="display:none;"><strong>EMPTY:</strong> 쓰기 그레이 포인터 == 읽기 그레이 포인터 (동일)<br>
+        <strong>FULL:</strong> 쓰기와 읽기 그레이 포인터의 상위 2비트가 <em>반전</em>되고, 나머지 비트는 <em>동일</em>합니다.</p>
+    </div>
+
+    <div class="hint-box">
+        <p class="en">🔍 <strong>Hint:</strong> In Gray code, when write pointer is exactly one full cycle ahead of read pointer, the top 2 MSBs are complemented while the rest match. Think about why this is true by looking at the Gray code table!</p>
+        <p class="ko" style="display:none;">🔍 <strong>힌트:</strong> 그레이 코드에서 쓰기 포인터가 읽기 포인터보다 정확히 한 전체 사이클 앞서면, 상위 2개의 MSB가 보수되고 나머지는 일치합니다. 그레이 코드 테이블을 보면서 이것이 왜 그런지 생각해보세요!</p>
+    </div>
+
+    <button class="toggle-btn" onclick="toggleSolution('sol4')">Show Solution</button>
+    <div class="solution" id="sol4">
+<pre><code><span class="comment">// Full and Empty detection using Gray code pointers</span>
+<span class="comment">// wr_gray and rd_gray are (ADDR_WIDTH+1) bits</span>
+
+<span class="comment">// EMPTY: pointers are identical</span>
+<span class="keyword">assign</span> <span class="signal">empty</span> = (<span class="signal">wr_gray_sync</span> == <span class="signal">rd_gray</span>);
+
+<span class="comment">// FULL: top 2 bits inverted, rest equal</span>
+<span class="keyword">assign</span> <span class="signal">full</span> = (<span class="signal">wr_gray</span>[<span class="signal">ADDR_WIDTH</span>]     != <span class="signal">rd_gray_sync</span>[<span class="signal">ADDR_WIDTH</span>])     &&  <span class="comment">// MSB different</span>
+              (<span class="signal">wr_gray</span>[<span class="signal">ADDR_WIDTH</span>-<span class="number">1</span>]   != <span class="signal">rd_gray_sync</span>[<span class="signal">ADDR_WIDTH</span>-<span class="number">1</span>])   &&  <span class="comment">// 2nd MSB different</span>
+              (<span class="signal">wr_gray</span>[<span class="signal">ADDR_WIDTH</span>-<span class="number">2</span>:<span class="number">0</span>] == <span class="signal">rd_gray_sync</span>[<span class="signal">ADDR_WIDTH</span>-<span class="number">2</span>:<span class="number">0</span>]);  <span class="comment">// Rest equal</span>
+
+<span class="comment">// Note: empty uses wr_gray_sync (synchronized TO read domain)</span>
+<span class="comment">//       full  uses rd_gray_sync (synchronized TO write domain)</span>
+<span class="comment">// This is conservative: may report full/empty slightly early, never late!</span></code></pre>
+    </div>
+</div>
+
+<div class="tip-box">
+    <h3>🎯 What to Focus On</h3>
+    <ul>
+        <li class="en"><strong>Exercise 1:</strong> Make sure your gray2bin loop direction is correct (MSB down to LSB)</li>
+        <li class="ko" style="display:none;"><strong>연습 1:</strong> gray2bin 루프 방향이 올바른지 확인하세요 (MSB에서 LSB로)</li>
+        <li class="en"><strong>Exercise 2:</strong> Both outputs MUST be registered — combinational Gray output defeats the purpose</li>
+        <li class="ko" style="display:none;"><strong>연습 2:</strong> 두 출력 모두 반드시 레지스터되어야 합니다 — 조합 그레이 출력은 목적을 무효화합니다</li>
+        <li class="en"><strong>Exercise 3:</strong> Notice how the synced value always lags by 2-3 cycles — that's expected!</li>
+        <li class="ko" style="display:none;"><strong>연습 3:</strong> 동기화된 값이 항상 2-3 사이클 뒤처지는 것에 주목하세요 — 이것은 예상된 것입니다!</li>
+        <li class="en"><strong>Bonus:</strong> Understanding full/empty with Gray pointers is the key to async FIFOs (Day 20)</li>
+        <li class="ko" style="display:none;"><strong>보너스:</strong> 그레이 포인터로 full/empty를 이해하는 것이 비동기 FIFO의 핵심입니다 (20일차)</li>
+    </ul>
+</div>
+
+<div class="nav">
+    <a href="day-19-lesson.html">← Lesson</a>
+    <a href="day-19-quiz.html">← Quiz</a>
+</div>
+
+<script>
+let isKorean = false;
+function toggleLang() {
+    isKorean = !isKorean;
+    document.querySelectorAll('.en').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'none' : 'revert', 'important');
+    });
+    document.querySelectorAll('.ko').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'revert' : 'none', 'important');
+    });
+    document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+}
+function toggleSolution(id) {
+    const el = document.getElementById(id);
+    el.style.display = el.style.display === 'block' ? 'none' : 'block';
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 19 Quiz: Gray Code Counters | Digital Design Study</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    background: linear-gradient(135deg, #fefae0 0%, #faedcd 100%);
+    color: #3d405b;
+    line-height: 1.8;
+    padding: 24px;
+    max-width: 920px;
+    margin: 0 auto;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+h1 { color: #5d4037; border-bottom: 3px solid #c4a77d; padding-bottom: 12px; margin-bottom: 24px; font-size: 2em; }
+h2 { color: #588157; border-bottom: 2px solid #a3b18a; padding-bottom: 8px; margin: 32px 0 16px; }
+h3 { color: #5d4037; margin: 20px 0 12px; }
+p { margin: 12px 0; }
+code {
+    background: #e9f5db;
+    color: #3d405b;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+}
+.lang-toggle {
+    position: fixed; top: 16px; right: 16px; background: #588157; border: none;
+    border-radius: 24px; padding: 10px 20px; cursor: pointer; color: #fff;
+    font-size: 14px; font-weight: 600; z-index: 1000;
+}
+.lang-toggle:hover { background: #3a5a40; }
+.ko { display: none; }
+.question {
+    background: #fff8f0;
+    border: 2px solid #c4a77d;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+}
+.question h3 { color: #5d4037; margin-bottom: 12px; }
+.options { list-style: none; padding: 0; }
+.options li {
+    padding: 10px 16px;
+    margin: 6px 0;
+    border-radius: 8px;
+    cursor: pointer;
+    border: 2px solid #a3b18a;
+    background: #fff;
+    transition: all 0.2s;
+}
+.options li:hover { background: #e9f5db; }
+.options li.correct { background: #d4edda; border-color: #588157; }
+.options li.wrong { background: #f8d7da; border-color: #ef4444; }
+.options li.disabled { pointer-events: none; opacity: 0.7; }
+.explanation {
+    display: none;
+    margin-top: 12px;
+    padding: 12px;
+    background: #fff;
+    border-radius: 8px;
+    border-left: 4px solid #588157;
+}
+.score-bar {
+    background: #fff8f0;
+    border: 2px solid #c4a77d;
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin: 20px 0;
+    text-align: center;
+    font-size: 1.1em;
+    font-weight: 600;
+    color: #5d4037;
+}
+.nav { display: flex; justify-content: space-between; margin: 32px 0 16px; }
+.nav a { color: #588157; text-decoration: none; font-weight: 600; }
+.nav a:hover { color: #3a5a40; }
+@media (max-width: 768px) {
+    body { padding: 16px; }
+    h1 { font-size: 1.8em; }
+    .lang-toggle { padding: 8px 16px; font-size: 13px; }
+}
+</style>
+</head>
+<body>
+<button class="lang-toggle" onclick="toggleLang()">한국어</button>
+
+<h1>📝 Day 19 Quiz: Gray Code Counters</h1>
+<div class="nav">
+    <a href="day-19-lesson.html">← Lesson</a>
+    <a href="day-19-practice.html">Practice →</a>
+</div>
+
+<div class="score-bar" id="scoreBar">Score: 0 / 12</div>
+
+<!-- Q1 -->
+<div class="question" id="q1">
+    <h3>Q1. <span class="en">Why can't you synchronize a binary counter across clock domains by putting a 2-flop sync on each bit?</span><span class="ko" style="display:none;">왜 각 비트에 2-플립플롭 동기화기를 넣어 바이너리 카운터를 클록 도메인 간에 동기화할 수 없나요?</span></h3>
+    <ul class="options">
+        <li onclick="check(1,this,false)"><span class="en">Binary counters are too fast to synchronize</span><span class="ko" style="display:none;">바이너리 카운터가 동기화하기에 너무 빠르다</span></li>
+        <li onclick="check(1,this,true)"><span class="en">Multiple bits change simultaneously, so the receiving clock may capture a mix of old and new bits</span><span class="ko" style="display:none;">여러 비트가 동시에 변경되어 수신 클록이 이전과 새 비트의 혼합을 캡처할 수 있다</span></li>
+        <li onclick="check(1,this,false)"><span class="en">2-flop synchronizers only work with clock signals</span><span class="ko" style="display:none;">2-플립플롭 동기화기는 클록 신호에서만 작동한다</span></li>
+        <li onclick="check(1,this,false)"><span class="en">Binary counters consume too much power for CDC</span><span class="ko" style="display:none;">바이너리 카운터는 CDC에 너무 많은 전력을 소비한다</span></li>
+    </ul>
+    <div class="explanation" id="e1"><span class="en">When a binary counter goes from e.g. 0111→1000, all 4 bits change. Each bit may resolve to old or new independently, giving a completely wrong value.</span><span class="ko" style="display:none;">바이너리 카운터가 예를 들어 0111→1000으로 갈 때, 4비트 모두 변경됩니다. 각 비트가 독립적으로 이전 또는 새 값으로 해결되어 완전히 잘못된 값을 줄 수 있습니다.</span></div>
+</div>
+
+<!-- Q2 -->
+<div class="question" id="q2">
+    <h3>Q2. <span class="en">What is the key property of Gray code?</span><span class="ko" style="display:none;">그레이 코드의 핵심 속성은 무엇인가요?</span></h3>
+    <ul class="options">
+        <li onclick="check(2,this,false)"><span class="en">It uses fewer bits than binary</span><span class="ko" style="display:none;">바이너리보다 적은 비트를 사용한다</span></li>
+        <li onclick="check(2,this,false)"><span class="en">It is self-correcting for errors</span><span class="ko" style="display:none;">오류에 대해 자기 수정된다</span></li>
+        <li onclick="check(2,this,true)"><span class="en">Only one bit changes between consecutive values</span><span class="ko" style="display:none;">연속된 값 사이에서 하나의 비트만 변경된다</span></li>
+        <li onclick="check(2,this,false)"><span class="en">It encodes parity information in each bit</span><span class="ko" style="display:none;">각 비트에 패리티 정보를 인코딩한다</span></li>
+    </ul>
+    <div class="explanation" id="e2"><span class="en">Gray code's defining property: adjacent values differ in exactly one bit position, making it safe to synchronize across clock domains.</span><span class="ko" style="display:none;">그레이 코드의 정의 속성: 인접한 값은 정확히 하나의 비트 위치에서만 다르므로 클록 도메인 간 동기화에 안전합니다.</span></div>
+</div>
+
+<!-- Q3 -->
+<div class="question" id="q3">
+    <h3>Q3. <span class="en">What is the Gray code for binary <code>0110</code> (decimal 6)?</span><span class="ko" style="display:none;">바이너리 <code>0110</code> (십진수 6)의 그레이 코드는?</span></h3>
+    <ul class="options">
+        <li onclick="check(3,this,false)"><code>0110</code></li>
+        <li onclick="check(3,this,true)"><code>0101</code></li>
+        <li onclick="check(3,this,false)"><code>0100</code></li>
+        <li onclick="check(3,this,false)"><code>0111</code></li>
+    </ul>
+    <div class="explanation" id="e3"><span class="en">gray = bin ^ (bin >> 1) = 0110 ^ 0011 = 0101</span><span class="ko" style="display:none;">gray = bin ^ (bin >> 1) = 0110 ^ 0011 = 0101</span></div>
+</div>
+
+<!-- Q4 -->
+<div class="question" id="q4">
+    <h3>Q4. <span class="en">What is the formula for binary-to-Gray conversion?</span><span class="ko" style="display:none;">바이너리→그레이 변환 공식은?</span></h3>
+    <ul class="options">
+        <li onclick="check(4,this,false)"><code>gray = bin + (bin >> 1)</code></li>
+        <li onclick="check(4,this,true)"><code>gray = bin ^ (bin >> 1)</code></li>
+        <li onclick="check(4,this,false)"><code>gray = bin & (bin >> 1)</code></li>
+        <li onclick="check(4,this,false)"><code>gray = bin | (bin >> 1)</code></li>
+    </ul>
+    <div class="explanation" id="e4"><span class="en">XOR of binary with itself shifted right by 1. This is a single gate per bit in hardware!</span><span class="ko" style="display:none;">바이너리와 자체를 오른쪽으로 1만큼 시프트한 것의 XOR. 하드웨어에서 비트당 하나의 게이트입니다!</span></div>
+</div>
+
+<!-- Q5 -->
+<div class="question" id="q5">
+    <h3>Q5. <span class="en">In Gray-to-binary conversion, how is each binary bit calculated?</span><span class="ko" style="display:none;">그레이→바이너리 변환에서 각 바이너리 비트는 어떻게 계산되나요?</span></h3>
+    <ul class="options">
+        <li onclick="check(5,this,false)"><span class="en">XOR of current Gray bit with the Gray bit below</span><span class="ko" style="display:none;">현재 그레이 비트와 아래 그레이 비트의 XOR</span></li>
+        <li onclick="check(5,this,true)"><span class="en">XOR of all Gray bits from MSB down to the current position</span><span class="ko" style="display:none;">MSB에서 현재 위치까지 모든 그레이 비트의 XOR</span></li>
+        <li onclick="check(5,this,false)"><span class="en">AND of current Gray bit with the computed binary bit above</span><span class="ko" style="display:none;">현재 그레이 비트와 위의 계산된 바이너리 비트의 AND</span></li>
+        <li onclick="check(5,this,false)"><span class="en">Direct copy from Gray code</span><span class="ko" style="display:none;">그레이 코드에서 직접 복사</span></li>
+    </ul>
+    <div class="explanation" id="e5"><span class="en">bin[i] = gray[N] ^ gray[N-1] ^ ... ^ gray[i]. It's a cascading XOR from MSB down.</span><span class="ko" style="display:none;">bin[i] = gray[N] ^ gray[N-1] ^ ... ^ gray[i]. MSB에서 아래로의 연쇄 XOR입니다.</span></div>
+</div>
+
+<!-- Q6 -->
+<div class="question" id="q6">
+    <h3>Q6. <span class="en">How does a typical Gray code counter work internally?</span><span class="ko" style="display:none;">일반적인 그레이 코드 카운터는 내부적으로 어떻게 작동하나요?</span></h3>
+    <ul class="options">
+        <li onclick="check(6,this,false)"><span class="en">Directly increments in Gray code using special logic</span><span class="ko" style="display:none;">특별한 로직으로 그레이 코드에서 직접 증가</span></li>
+        <li onclick="check(6,this,false)"><span class="en">Uses a lookup table to find the next Gray value</span><span class="ko" style="display:none;">룩업 테이블로 다음 그레이 값을 찾는다</span></li>
+        <li onclick="check(6,this,true)"><span class="en">Maintains a binary counter and converts the output to Gray</span><span class="ko" style="display:none;">바이너리 카운터를 유지하고 출력을 그레이로 변환한다</span></li>
+        <li onclick="check(6,this,false)"><span class="en">Counts in one-hot encoding and converts to Gray</span><span class="ko" style="display:none;">원-핫 인코딩으로 카운트하고 그레이로 변환한다</span></li>
+    </ul>
+    <div class="explanation" id="e6"><span class="en">The standard pattern: binary counter + bin2gray conversion. Simpler and more reliable than trying to count directly in Gray code.</span><span class="ko" style="display:none;">표준 패턴: 바이너리 카운터 + bin2gray 변환. 그레이 코드에서 직접 카운트하는 것보다 간단하고 더 안정적입니다.</span></div>
+</div>
+
+<!-- Q7 -->
+<div class="question" id="q7">
+    <h3>Q7. <span class="en">Why do async FIFO pointers use N+1 bits for a 2<sup>N</sup>-deep FIFO?</span><span class="ko" style="display:none;">비동기 FIFO 포인터가 2<sup>N</sup> 깊이의 FIFO에 N+1 비트를 사용하는 이유는?</span></h3>
+    <ul class="options">
+        <li onclick="check(7,this,false)"><span class="en">To handle signed arithmetic</span><span class="ko" style="display:none;">부호 있는 연산을 처리하기 위해</span></li>
+        <li onclick="check(7,this,true)"><span class="en">To distinguish between full and empty conditions</span><span class="ko" style="display:none;">full과 empty 상태를 구분하기 위해</span></li>
+        <li onclick="check(7,this,false)"><span class="en">Gray code requires an extra bit for encoding</span><span class="ko" style="display:none;">그레이 코드가 인코딩에 추가 비트가 필요하기 때문</span></li>
+        <li onclick="check(7,this,false)"><span class="en">To provide error detection</span><span class="ko" style="display:none;">오류 감지를 제공하기 위해</span></li>
+    </ul>
+    <div class="explanation" id="e7"><span class="en">With N bits, full and empty both look like rd_ptr == wr_ptr. The extra MSB lets us detect when the write pointer has wrapped around — same lower bits but different MSB means FULL.</span><span class="ko" style="display:none;">N비트에서는 full과 empty 모두 rd_ptr == wr_ptr처럼 보입니다. 추가 MSB로 쓰기 포인터가 래핑되었는지 감지할 수 있습니다 — 같은 하위 비트지만 다른 MSB는 FULL을 의미합니다.</span></div>
+</div>
+
+<!-- Q8 -->
+<div class="question" id="q8">
+    <h3>Q8. <span class="en">When should Gray-to-binary conversion happen in a CDC path?</span><span class="ko" style="display:none;">CDC 경로에서 그레이→바이너리 변환은 언제 해야 하나요?</span></h3>
+    <ul class="options">
+        <li onclick="check(8,this,false)"><span class="en">Before the 2-flop synchronizer (in the source domain)</span><span class="ko" style="display:none;">2-플립플롭 동기화기 전 (소스 도메인에서)</span></li>
+        <li onclick="check(8,this,true)"><span class="en">After the 2-flop synchronizer (in the destination domain)</span><span class="ko" style="display:none;">2-플립플롭 동기화기 후 (목적지 도메인에서)</span></li>
+        <li onclick="check(8,this,false)"><span class="en">Between the two flops of the synchronizer</span><span class="ko" style="display:none;">동기화기의 두 플립플롭 사이에서</span></li>
+        <li onclick="check(8,this,false)"><span class="en">It doesn't matter where</span><span class="ko" style="display:none;">어디서든 상관없다</span></li>
+    </ul>
+    <div class="explanation" id="e8"><span class="en">The whole point is to synchronize the Gray value (only 1 bit changes). You convert back to binary AFTER synchronization, in the destination domain.</span><span class="ko" style="display:none;">핵심은 그레이 값을 동기화하는 것입니다 (1비트만 변경). 동기화 후 목적지 도메인에서 바이너리로 다시 변환합니다.</span></div>
+</div>
+
+<!-- Q9 -->
+<div class="question" id="q9">
+    <h3>Q9. <span class="en">What is the Gray code for binary <code>1010</code> (decimal 10)?</span><span class="ko" style="display:none;">바이너리 <code>1010</code> (십진수 10)의 그레이 코드는?</span></h3>
+    <ul class="options">
+        <li onclick="check(9,this,false)"><code>1010</code></li>
+        <li onclick="check(9,this,false)"><code>1100</code></li>
+        <li onclick="check(9,this,true)"><code>1111</code></li>
+        <li onclick="check(9,this,false)"><code>1001</code></li>
+    </ul>
+    <div class="explanation" id="e9"><span class="en">gray = 1010 ^ 0101 = 1111. All four bits are 1 in the Gray encoding of decimal 10!</span><span class="ko" style="display:none;">gray = 1010 ^ 0101 = 1111. 십진수 10의 그레이 인코딩에서 네 비트 모두 1입니다!</span></div>
+</div>
+
+<!-- Q10 -->
+<div class="question" id="q10">
+    <h3>Q10. <span class="en">Why does Gray code only work correctly for power-of-2 FIFO depths?</span><span class="ko" style="display:none;">그레이 코드가 2의 거듭제곱 FIFO 깊이에서만 올바르게 작동하는 이유는?</span></h3>
+    <ul class="options">
+        <li onclick="check(10,this,true)"><span class="en">Non-power-of-2 rollover breaks the single-bit-change guarantee</span><span class="ko" style="display:none;">2의 거듭제곱이 아닌 롤오버가 단일 비트 변경 보장을 깨뜨린다</span></li>
+        <li onclick="check(10,this,false)"><span class="en">Gray code can only represent power-of-2 numbers</span><span class="ko" style="display:none;">그레이 코드는 2의 거듭제곱 숫자만 표현할 수 있다</span></li>
+        <li onclick="check(10,this,false)"><span class="en">The XOR conversion only works for even numbers</span><span class="ko" style="display:none;">XOR 변환은 짝수에서만 작동한다</span></li>
+        <li onclick="check(10,this,false)"><span class="en">Hardware cannot implement non-power-of-2 counters</span><span class="ko" style="display:none;">하드웨어가 2의 거듭제곱이 아닌 카운터를 구현할 수 없다</span></li>
+    </ul>
+    <div class="explanation" id="e10"><span class="en">Gray code guarantees 1-bit change only when counting through the full 2<sup>N</sup> sequence. If you wrap at a non-power-of-2 value, the transition from max back to 0 may change multiple bits.</span><span class="ko" style="display:none;">그레이 코드는 전체 2<sup>N</sup> 시퀀스를 통해 카운트할 때만 1비트 변경을 보장합니다. 2의 거듭제곱이 아닌 값에서 래핑하면 최대값에서 0으로의 전환이 여러 비트를 변경할 수 있습니다.</span></div>
+</div>
+
+<!-- Q11 -->
+<div class="question" id="q11">
+    <h3>Q11. <span class="en">In the Gray code counter module, why is <code>gray_next</code> computed from <code>bin_next</code> (not <code>bin_count</code>)?</span><span class="ko" style="display:none;">그레이 코드 카운터 모듈에서 <code>gray_next</code>가 <code>bin_count</code>가 아닌 <code>bin_next</code>에서 계산되는 이유는?</span></h3>
+    <ul class="options">
+        <li onclick="check(11,this,false)"><span class="en">To reduce power consumption</span><span class="ko" style="display:none;">전력 소비를 줄이기 위해</span></li>
+        <li onclick="check(11,this,true)"><span class="en">So the Gray output is registered and aligned with the binary counter</span><span class="ko" style="display:none;">그레이 출력이 레지스터되고 바이너리 카운터와 정렬되도록</span></li>
+        <li onclick="check(11,this,false)"><span class="en">bin_count has timing violations</span><span class="ko" style="display:none;">bin_count에 타이밍 위반이 있다</span></li>
+        <li onclick="check(11,this,false)"><span class="en">It doesn't matter which is used</span><span class="ko" style="display:none;">어느 것을 사용하든 상관없다</span></li>
+    </ul>
+    <div class="explanation" id="e11"><span class="en">By converting bin_next to gray_next and registering it, the gray_count output is always one clean registered version — matching the binary counter's value on the same clock edge. This avoids combinational glitches on the output.</span><span class="ko" style="display:none;">bin_next를 gray_next로 변환하고 레지스터하면, gray_count 출력은 항상 하나의 깨끗한 레지스터된 버전입니다 — 같은 클록 엣지에서 바이너리 카운터의 값과 일치합니다.</span></div>
+</div>
+
+<!-- Q12 -->
+<div class="question" id="q12">
+    <h3>Q12. <span class="en">How many XOR gates are needed to convert an N-bit binary value to Gray code?</span><span class="ko" style="display:none;">N비트 바이너리 값을 그레이 코드로 변환하는 데 몇 개의 XOR 게이트가 필요한가요?</span></h3>
+    <ul class="options">
+        <li onclick="check(12,this,false)"><span class="en">N</span></li>
+        <li onclick="check(12,this,true)"><span class="en">N-1 (MSB passes through unchanged)</span><span class="ko" style="display:none;">N-1 (MSB는 변경 없이 통과)</span></li>
+        <li onclick="check(12,this,false)"><span class="en">2N</span></li>
+        <li onclick="check(12,this,false)"><span class="en">N²</span></li>
+    </ul>
+    <div class="explanation" id="e12"><span class="en">gray[N-1] = bin[N-1] (no gate needed), and gray[i] = bin[i+1] ^ bin[i] for i = 0 to N-2. That's N-1 XOR gates. Very cheap in hardware!</span><span class="ko" style="display:none;">gray[N-1] = bin[N-1] (게이트 불필요), gray[i] = bin[i+1] ^ bin[i] (i = 0 ~ N-2). 즉 N-1개의 XOR 게이트입니다. 하드웨어에서 매우 저렴합니다!</span></div>
+</div>
+
+<div class="score-bar" id="finalScore" style="display:none;"></div>
+
+<div class="nav">
+    <a href="day-19-lesson.html">← Lesson</a>
+    <a href="day-19-practice.html">Practice →</a>
+</div>
+
+<script>
+let isKorean = false;
+let score = 0;
+let answered = 0;
+const total = 12;
+
+function toggleLang() {
+    isKorean = !isKorean;
+    document.querySelectorAll('.en').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'none' : 'revert', 'important');
+    });
+    document.querySelectorAll('.ko').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'revert' : 'none', 'important');
+    });
+    document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+}
+
+function check(q, el, correct) {
+    if (el.classList.contains('disabled')) return;
+    const opts = el.parentElement.querySelectorAll('li');
+    opts.forEach(o => o.classList.add('disabled'));
+    if (correct) {
+        el.classList.add('correct');
+        score++;
+    } else {
+        el.classList.add('wrong');
+        opts.forEach(o => { if (!o.classList.contains('wrong')) { /* find correct */ } });
+    }
+    answered++;
+    document.getElementById('e' + q).style.display = 'block';
+    document.getElementById('scoreBar').textContent = `Score: ${score} / ${total}`;
+    if (answered === total) {
+        const pct = Math.round(score / total * 100);
+        const msg = pct >= 80 ? '🎉 Excellent!' : pct >= 60 ? '👍 Good job!' : '📚 Review the lesson!';
+        const f = document.getElementById('finalScore');
+        f.style.display = 'block';
+        f.innerHTML = `Final Score: ${score}/${total} (${pct}%) — ${msg}`;
+    }
+}
+</script>
+</body>
+</html>
