@@ -3,69 +3,106 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SnapDigest — Privacy Policy</title>
+<title>SnapDigest - Privacy Policy</title>
 <style>
-  body { font-family: -apple-system, sans-serif; max-width: 680px; margin: 0 auto; padding: 20px 16px; line-height: 1.7; color: #333; }
-  h1 { font-size: 24px; margin-bottom: 4px; }
-  h2 { font-size: 18px; margin-top: 24px; }
-  .date { color: #888; font-size: 14px; margin-bottom: 24px; }
-  p, li { font-size: 15px; }
-  ul { padding-left: 20px; }
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#faf8f5;color:#2d3436;line-height:1.7;padding:20px;max-width:800px;margin:0 auto}
+h1{font-size:28px;color:#1a1a2e;margin:30px 0 10px;font-weight:700}
+h2{font-size:20px;color:#1a1a2e;margin:28px 0 12px;font-weight:600;border-bottom:2px solid #e8e4df;padding-bottom:6px}
+h3{font-size:16px;margin:16px 0 8px}
+p,li{font-size:15px;margin-bottom:10px;color:#444}
+ul{padding-left:24px}
+.header{text-align:center;padding:30px 0;border-bottom:2px solid #e8e4df;margin-bottom:30px}
+.header .logo{font-size:48px;margin-bottom:8px}
+.header .subtitle{color:#888;font-size:14px}
+.effective{color:#888;font-size:13px;text-align:center;margin-top:4px}
+.footer{margin-top:40px;padding-top:20px;border-top:2px solid #e8e4df;text-align:center;color:#888;font-size:13px}
+a{color:#2d5be3;text-decoration:none}
+a:hover{text-decoration:underline}
 </style>
 </head>
 <body>
-<h1>🍃 SnapDigest — Privacy Policy</h1>
-<p class="date">Last updated: February 24, 2026</p>
 
-<h2>1. Information We Collect</h2>
-<p>SnapDigest collects the following information to provide our service:</p>
+<div class="header">
+<div class="logo">📰</div>
+<h1>SnapDigest Privacy Policy</h1>
+<p class="subtitle">Your privacy matters to us</p>
+<p class="effective">Effective Date: March 12, 2026</p>
+</div>
+
+<h2>1. Introduction</h2>
+<p>SnapDigest ("we," "our," or "the app") is an AI-powered daily news digest app. This privacy policy explains how we collect, use, and protect your information.</p>
+
+<h2>2. Information We Collect</h2>
+
+<h3>Account Information</h3>
 <ul>
-  <li><strong>Account Information:</strong> Email address and display name when you create an account (or name/email from Apple/Google Sign In).</li>
-  <li><strong>Reading Preferences:</strong> Your selected news categories, language preference, and notification settings.</li>
-  <li><strong>Saved Articles:</strong> Articles you choose to save for later reading.</li>
-  <li><strong>Device Tokens:</strong> Firebase Cloud Messaging tokens for push notifications (only if you enable notifications).</li>
-  <li><strong>Usage Data:</strong> Basic app interaction data to improve the service (no third-party tracking).</li>
+<li><strong>Email address</strong> — used for account creation and authentication</li>
+<li><strong>Display name</strong> — optional, used for personalization</li>
+<li>If you sign in with Apple or Google, we receive your name and email as provided by those services</li>
 </ul>
 
-<h2>2. How We Use Your Information</h2>
+<h3>Usage Data</h3>
 <ul>
-  <li>Personalize your news feed based on category preferences</li>
-  <li>Deliver push notifications at your preferred time</li>
-  <li>Provide AI-curated article summaries and translations</li>
-  <li>Save your reading preferences across devices</li>
+<li><strong>Reading history</strong> — which articles you read, like, or skip, to personalize your digest</li>
+<li><strong>Category preferences</strong> — your selected news categories</li>
+<li><strong>Saved articles</strong> — articles you bookmark</li>
+<li><strong>App settings</strong> — language, theme, notification preferences</li>
 </ul>
 
-<h2>3. Third-Party Services</h2>
-<p>We use the following third-party services:</p>
+<h3>Device Information</h3>
 <ul>
-  <li><strong>Supabase:</strong> Authentication and data storage (hosted in AWS)</li>
-  <li><strong>OpenAI:</strong> AI article curation, summarization, and translation (no personal data sent)</li>
-  <li><strong>Firebase Cloud Messaging:</strong> Push notification delivery</li>
-  <li><strong>Google AdMob:</strong> Advertising (subject to Google's privacy policy)</li>
-  <li><strong>Apple/Google Sign In:</strong> Authentication (subject to their respective privacy policies)</li>
+<li><strong>Push notification token</strong> — to send daily digest notifications (if you opt in)</li>
+<li><strong>Firebase Analytics</strong> — anonymous usage analytics to improve the app experience</li>
+</ul>
+
+<h2>3. How We Use Your Information</h2>
+<ul>
+<li>Provide and personalize your daily news digest</li>
+<li>Send push notifications about new digests (if enabled)</li>
+<li>Improve article curation and recommendations based on your reading patterns</li>
+<li>Maintain and improve app functionality</li>
 </ul>
 
 <h2>4. Data Storage & Security</h2>
-<p>Your data is stored securely on Supabase servers with row-level security (RLS) enabled. We use industry-standard encryption for data in transit (TLS) and at rest.</p>
+<p>Your data is stored securely using <strong>Supabase</strong> (hosted on AWS). We use industry-standard encryption for data in transit (TLS) and at rest. Authentication is handled via Supabase Auth with PKCE flow.</p>
 
-<h2>5. Data Retention</h2>
-<p>We retain your data for as long as your account is active. You can delete your account at any time from the Settings screen, which permanently removes all associated data.</p>
-
-<h2>6. Your Rights</h2>
+<h2>5. Third-Party Services</h2>
+<p>We use the following third-party services:</p>
 <ul>
-  <li><strong>Access:</strong> View your data in the app's Settings screen</li>
-  <li><strong>Deletion:</strong> Delete your account and all data from Settings → Delete Account</li>
-  <li><strong>Portability:</strong> Contact us to request a copy of your data</li>
+<li><strong>Supabase</strong> — Database, authentication, and serverless functions</li>
+<li><strong>Firebase</strong> — Push notifications and analytics</li>
+<li><strong>OpenAI</strong> — AI-powered article summarization and audio generation (processed server-side; no personal data is sent to OpenAI)</li>
+<li><strong>Sign in with Apple / Google Sign-In</strong> — Optional authentication providers</li>
 </ul>
 
-<h2>7. Children's Privacy</h2>
-<p>SnapDigest is not intended for children under 13. We do not knowingly collect personal information from children.</p>
+<h2>6. Data Sharing</h2>
+<p>We do <strong>not</strong> sell, trade, or share your personal information with third parties for marketing purposes. Data is only shared with the service providers listed above as necessary to operate the app.</p>
 
-<h2>8. Changes to This Policy</h2>
-<p>We may update this privacy policy from time to time. We will notify you of any changes by posting the new policy in the app.</p>
+<h2>7. Your Rights</h2>
+<ul>
+<li><strong>Access</strong> — You can view your data in the app's Settings</li>
+<li><strong>Deletion</strong> — You can delete your account and all associated data from Settings → Delete Account</li>
+<li><strong>Portability</strong> — Contact us to request an export of your data</li>
+<li><strong>Opt-out</strong> — You can disable push notifications at any time via your device settings</li>
+</ul>
 
-<h2>9. Contact Us</h2>
-<p>If you have questions about this privacy policy, contact us at: <strong>support@snapdigest.app</strong></p>
+<h2>8. Children's Privacy</h2>
+<p>SnapDigest is not intended for children under 13. We do not knowingly collect information from children under 13.</p>
+
+<h2>9. Data Retention</h2>
+<p>We retain your data as long as your account is active. When you delete your account, all personal data is permanently removed within 30 days.</p>
+
+<h2>10. Changes to This Policy</h2>
+<p>We may update this privacy policy from time to time. We will notify you of significant changes through the app or via email.</p>
+
+<h2>11. Contact Us</h2>
+<p>If you have questions about this privacy policy, please contact us at:</p>
+<p><strong>Email:</strong> <a href="mailto:rexbot1011@gmail.com">rexbot1011@gmail.com</a></p>
+
+<div class="footer">
+<p>© 2026 SnapDigest. All rights reserved.</p>
+</div>
 
 </body>
 </html>
