@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>10 Impact-Driven AI Projects</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&display=swap');
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Nunito',sans-serif;background:#faf8f0;color:#2d3436;line-height:1.7}
+.lang-toggle{position:fixed;top:14px;right:14px;z-index:100;background:#2d6a4f;color:#fff;border:none;padding:7px 14px;border-radius:20px;font-family:'Nunito';font-weight:700;cursor:pointer;font-size:13px;box-shadow:0 2px 8px rgba(0,0,0,.15)}
+.ko{display:none}.ko.show{display:inline !important}.en.hide{display:none !important}
+.hero{background:linear-gradient(135deg,#1b4332 0%,#2d6a4f 50%,#40916c 100%);color:#fff;padding:60px 24px 40px;text-align:center}
+.hero h1{font-family:'Fredoka';font-size:2.2em;margin-bottom:8px}
+.hero p{font-size:1.05em;opacity:.85;max-width:650px;margin:0 auto}
+.hero .subtitle{font-size:.85em;margin-top:12px;opacity:.6}
+.container{max-width:900px;margin:0 auto;padding:20px 16px}
+h2{font-family:'Fredoka';color:#2d6a4f;font-size:1.5em;margin:28px 0 14px;border-bottom:3px solid #b7e4c7;padding-bottom:6px}
+.idea-card{background:#fff;border-radius:16px;padding:24px;margin:20px 0;box-shadow:0 3px 15px rgba(0,0,0,.06);border-left:5px solid #2d6a4f;position:relative;overflow:hidden}
+.idea-card.ted{border-left-color:#e76f51;box-shadow:0 3px 20px rgba(231,111,81,.12)}
+.idea-card.ted::before{content:'🎤 TED TALK READY';position:absolute;top:12px;right:12px;background:linear-gradient(135deg,#e76f51,#f4a261);color:#fff;padding:4px 12px;border-radius:12px;font-size:.68em;font-weight:800;letter-spacing:.5px}
+.card-header{display:flex;align-items:center;gap:12px;margin-bottom:10px;flex-wrap:wrap}
+.card-emoji{font-size:2em}
+.card-title{font-family:'Fredoka';font-size:1.25em;color:#1b4332}
+.card-oneliner{font-style:italic;color:#666;font-size:.9em;margin-bottom:14px}
+.card-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:14px 0}
+@media(max-width:600px){.card-grid{grid-template-columns:1fr}}
+.card-section{background:#f0f7ee;border-radius:10px;padding:12px}
+.card-section h4{font-family:'Fredoka';font-size:.85em;color:#2d6a4f;margin-bottom:4px}
+.card-section p,.card-section ul{font-size:.88em;color:#444}
+.card-section ul{padding-left:18px}
+.card-section ul li{margin:2px 0}
+.metrics-row{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0}
+.metric-pill{display:flex;align-items:center;gap:6px;background:#f0f7ee;padding:5px 12px;border-radius:20px;font-size:.8em;font-weight:600}
+.metric-pill .label{color:#666}.metric-pill .value{color:#2d6a4f}
+.stars{color:#e76f51;letter-spacing:2px}
+.diff-badge{display:inline-block;padding:3px 10px;border-radius:12px;font-size:.75em;font-weight:700;color:#fff}
+.diff-hard{background:#e76f51}.diff-med{background:#f4a261}.diff-easy{background:#2d6a4f}
+.not-vibe{background:#1b4332;color:#fff;border-radius:10px;padding:12px;margin-top:14px;font-size:.85em}
+.not-vibe h4{color:#b7e4c7;font-family:'Fredoka';margin-bottom:4px;font-size:.95em}
+.ted-box{background:linear-gradient(135deg,#e76f51,#f4a261);color:#fff;border-radius:16px;padding:12px 16px;margin-top:14px;font-size:.85em}
+.ted-box h4{font-family:'Fredoka';margin-bottom:4px}
+.rec-box{background:linear-gradient(135deg,#1b4332,#2d6a4f);color:#fff;border-radius:16px;padding:28px;margin:24px 0}
+.rec-box h2{color:#b7e4c7;border-bottom-color:rgba(255,255,255,.2)}
+.rec-box p{opacity:.9;font-size:.95em;margin:8px 0}
+.rec-box .hl{color:#f4a261;font-weight:700}
+.rec-box ul{padding-left:20px;margin:10px 0}.rec-box li{margin:4px 0;opacity:.9;font-size:.9em}
+footer{text-align:center;padding:40px 16px;color:#aaa;font-size:.8em}
+.matrix-wrap{overflow-x:auto;margin:16px 0}
+.matrix{width:100%;border-collapse:collapse;font-size:.78em;min-width:700px}
+.matrix th{background:#1b4332;color:#b7e4c7;padding:8px 6px;font-family:'Fredoka';font-weight:500;text-align:center;position:sticky;top:0}
+.matrix th:first-child{text-align:left;min-width:150px}
+.matrix td{padding:7px 6px;border-bottom:1px solid #eee;text-align:center;vertical-align:middle}
+.matrix td:first-child{text-align:left;font-weight:700;font-size:.95em}
+.matrix tr:nth-child(even){background:#f7f7f0}
+.bar{display:inline-block;height:14px;border-radius:7px;vertical-align:middle}
+.bar-5{width:60px;background:linear-gradient(90deg,#2d6a4f,#40916c)}.bar-4{width:48px;background:linear-gradient(90deg,#40916c,#74c69d)}.bar-3{width:36px;background:#f4a261}.bar-2{width:24px;background:#e76f51}.bar-1{width:12px;background:#d62828}
+</style>
+</head>
+<body>
+<button class="lang-toggle" onclick="toggleLang()">한국어</button>
+
+<div class="hero">
+<h1>🌍 <span class="en">Build Something That Matters</span><span class="ko">의미 있는 것을 만들자</span></h1>
+<p class="en">10 impact-driven AI projects too technical for vibe coders, meaningful enough for a TED Talk. Save animals. Save the planet. Save lives.</p>
+<p class="ko">바이브 코더에게는 너무 기술적이고, TED Talk에 오를 만큼 의미 있는 10가지 임팩트 AI 프로젝트. 동물을 구하고. 지구를 구하고. 생명을 구하자.</p>
+<div class="subtitle"><span class="en">🎤 "The best way to predict the future is to build it." — Your future TED Talk starts here.</span><span class="ko">🎤 "미래를 예측하는 최고의 방법은 그것을 만드는 것이다." — 당신의 TED Talk은 여기서 시작.</span></div>
+</div>
+
+<div class="container">
+
+<h2>📊 <span class="en">Comparison Matrix</span><span class="ko">비교 매트릭스</span></h2>
+<div class="matrix-wrap">
+<table class="matrix">
+<tr>
+<th><span class="en">Project</span><span class="ko">프로젝트</span></th>
+<th>🌍 <span class="en">Impact</span><span class="ko">임팩트</span></th>
+<th>🧠 <span class="en">Tech Depth</span><span class="ko">기술 깊이</span></th>
+<th>💰 <span class="en">Revenue</span><span class="ko">수익</span></th>
+<th>🎤 <span class="en">TED Factor</span><span class="ko">TED 팩터</span></th>
+<th>⏱️ <span class="en">MVP Time</span><span class="ko">MVP 기간</span></th>
+</tr>
+<tr><td>🐾 PawSOS</td><td><span class="bar bar-5"></span></td><td><span class="bar bar-4"></span></td><td><span class="bar bar-3"></span></td><td><span class="bar bar-5"></span></td><td><span class="bar bar-3"></span></td></tr>
+<tr><td>🌊 OceanEar</td><td><span class="bar bar-5"></span></td><td><span class="bar bar-5"></span></td><td><span class="bar bar-3"></span></td><td><span class="bar bar-5"></span></td><td><span class="bar bar-2"></span></td></tr>
+<tr><td>🔥 FireSight</td><td><span class="bar bar-5"></span></td><td><span class="bar bar-5"></span></td><td><span class="bar bar-4"></span></td><td><span class="bar bar-5"></span></td><td><span class="bar bar-3"></span></td></tr>
+<tr><td>🐝 HiveGuard</td><td><span class="bar bar-5"></span></td><td><span class="bar bar-4"></span></td><td><span class="bar bar-3"></span></td><td><span class="bar bar-5"></span></td><td><span class="bar bar-3"></span></td></tr>
+<tr><td>🗑️ TrashNet</td><td><span class="bar bar-4"></span></td><td><span class="bar bar-4"></span></td><td><span class="bar bar-4"></span></td><td><span class="bar bar-4"></span></td><td><span class="bar bar-3"></span></td></tr>
+<tr><td>🌱 CropWhisper</td><td><span class="bar bar-5"></span></td><td><span class="bar bar-4"></span></td><td><span class="bar bar-4"></span></td><td><span class="bar bar-4"></span></td><td><span class="bar bar-3"></span></td></tr>
+<tr><td>🏥 VolunteerOS</td><td><span class="bar bar-4"></span></td><td><span class="bar bar-3"></span></td><td><span class="bar bar-3"></span></td><td><span class="bar bar-3"></span></td><td><span class="bar bar-4"></span></td></tr>
+<tr><td>🐋 SpeciesID</td><td><span class="bar bar-5"></span></td><td><span class="bar bar-5"></span></td><td><span class="bar bar-3"></span></td><td><span class="bar bar-5"></span></td><td><span class="bar bar-3"></span></td></tr>
+<tr><td>💧 AquaLens</td><td><span class="bar bar-5"></span></td><td><span class="bar bar-5"></span></td><td><span class="bar bar-4"></span></td><td><span class="bar bar-4"></span></td><td><span class="bar bar-2"></span></td></tr>
+<tr><td>🗣️ SignBridge</td><td><span class="bar bar-5"></span></td><td><span class="bar bar-5"></span></td><td><span class="bar bar-4"></span></td><td><span class="bar bar-5"></span></td><td><span class="bar bar-2"></span></td></tr>
+</table>
+</div>
+
+<!-- ============ IDEA 1 ============ -->
+<div class="idea-card ted">
+<div class="card-header"><span class="card-emoji">🐾</span><span class="card-title">PawSOS — <span class="en">AI Stray Animal Rescue Network</span><span class="ko">AI 유기동물 구조 네트워크</span></span></div>
+<p class="card-oneliner"><span class="en">"Every stray animal spotted becomes a rescue mission — automatically."</span><span class="ko">"목격된 모든 유기동물이 자동으로 구조 미션이 된다."</span></p>
+<div class="card-grid">
+<div class="card-section"><h4>🔍 <span class="en">What It Is</span><span class="ko">뭘 하는 건가</span></h4><p class="en">Phone app + AI platform: anyone spots a stray animal → snaps photo → AI identifies breed, estimates health condition (wounded? malnourished? pregnant?), auto-matches to nearest shelter with capacity, dispatches volunteer via optimized routing, tracks rescue to adoption. Computer vision + logistics optimization + volunteer coordination.</p><p class="ko">폰 앱 + AI 플랫폼: 유기동물 목격 → 사진 촬영 → AI가 품종 식별, 건강 상태 추정(부상? 영양실조? 임신?), 수용 가능한 가까운 쉼터 자동 매칭, 최적 경로로 봉사자 파견, 구조~입양 추적.</p></div>
+<div class="card-section"><h4>🧠 <span class="en">The Hard Tech</span><span class="ko">어려운 기술</span></h4>
+<ul class="en">
+<li><strong>Custom CV model:</strong> Fine-tuned on stray animal images (not AKC show dogs — dirty, injured, matted fur)</li>
+<li><strong>Health assessment AI:</strong> Triage from a single photo — wound detection, body condition scoring</li>
+<li><strong>Real-time logistics:</strong> Shelter capacity API, volunteer availability, route optimization (VRP solver)</li>
+<li><strong>De-duplication:</strong> Same animal spotted by 5 people? AI recognizes it's one rescue, not five</li>
+</ul>
+<ul class="ko">
+<li><strong>커스텀 CV 모델:</strong> 유기동물 이미지로 파인튜닝 (AKC 쇼독이 아닌 — 더럽고, 다치고, 엉킨 털)</li>
+<li><strong>건강 평가 AI:</strong> 사진 한 장으로 분류 — 상처 감지, 체형 점수</li>
+<li><strong>실시간 물류:</strong> 쉼터 수용력 API, 봉사자 가용성, 경로 최적화</li>
+<li><strong>중복 제거:</strong> 같은 동물을 5명이 목격? AI가 1건 구조로 인식</li>
+</ul>
+</div>
+</div>
+<div class="metrics-row">
+<span class="metric-pill"><span class="label"><span class="en">Difficulty:</span><span class="ko">난이도:</span></span><span class="diff-badge diff-hard"><span class="en">HARD</span><span class="ko">어려움</span></span></span>
+<span class="metric-pill"><span class="label">TED Factor:</span><span class="value stars">★★★★★</span></span>
+<span class="metric-pill"><span class="label"><span class="en">Revenue:</span><span class="ko">수익:</span></span><span class="value"><span class="en">Grants + shelter SaaS $99-499/mo</span><span class="ko">보조금 + 쉼터 SaaS $99-499/월</span></span></span>
+</div>
+<div class="ted-box"><h4>🎤 <span class="en">Your TED Talk</span><span class="ko">당신의 TED Talk</span></h4><p class="en">"Last year, 6.5 million animals entered US shelters. 920,000 were euthanized. What if every smartphone could be a rescue beacon? I built an AI that turns bystanders into lifesavers."</p><p class="ko">"작년 미국 쉼터에 650만 마리가 입소했고, 92만 마리가 안락사됐습니다. 모든 스마트폰이 구조 신호가 될 수 있다면? 방관자를 생명 구조자로 바꾸는 AI를 만들었습니다."</p></div>
+</div>
+
+<!-- ============ IDEA 2 ============ -->
+<div class="idea-card ted">
+<div class="card-header"><span class="card-emoji">🌊</span><span class="card-title">OceanEar — <span class="en">AI Underwater Acoustic Monitor</span><span class="ko">AI 수중 음향 모니터</span></span></div>
+<p class="card-oneliner"><span class="en">"Listen to the ocean. Hear the whales. Detect the illegal trawlers."</span><span class="ko">"바다의 소리를 듣고. 고래를 듣고. 불법 트롤어선을 감지하라."</span></p>
+<div class="card-grid">
+<div class="card-section"><h4>🔍 <span class="en">What It Is</span><span class="ko">뭘 하는 건가</span></h4><p class="en">AI that processes hydrophone (underwater microphone) audio streams to: identify marine species by their calls (whales, dolphins, fish), detect illegal fishing vessels by engine acoustics, monitor ocean noise pollution levels, and alert conservation teams in real-time. Partner with ocean research labs that already have hydrophones deployed.</p><p class="ko">수중 마이크(하이드로폰) 오디오 스트림을 처리하는 AI: 해양 생물 음성으로 종 식별(고래, 돌고래, 물고기), 엔진 음향으로 불법 어선 감지, 해양 소음 오염 수준 모니터링, 보전 팀에 실시간 알림.</p></div>
+<div class="card-section"><h4>🧠 <span class="en">The Hard Tech</span><span class="ko">어려운 기술</span></h4>
+<ul class="en">
+<li><strong>Audio ML at scale:</strong> Spectrogram analysis, mel-frequency cepstral coefficients, custom CNN/transformer for marine bioacoustics</li>
+<li><strong>Edge inference:</strong> Models must run on low-power buoy hardware with satellite uplink</li>
+<li><strong>Signal separation:</strong> Isolate whale calls from ship noise, waves, and rain — cocktail party problem underwater</li>
+<li><strong>Temporal patterns:</strong> Track migration routes over months from acoustic signatures</li>
+</ul>
+<ul class="ko">
+<li><strong>대규모 오디오 ML:</strong> 스펙트로그램 분석, MFCC, 해양 생물음향학용 커스텀 CNN/트랜스포머</li>
+<li><strong>엣지 추론:</strong> 위성 업링크가 있는 저전력 부표 하드웨어에서 모델 실행</li>
+<li><strong>신호 분리:</strong> 선박 소음, 파도, 비에서 고래 소리 분리 — 수중 칵테일 파티 문제</li>
+<li><strong>시간적 패턴:</strong> 음향 서명으로 수개월간 이동 경로 추적</li>
+</ul>
+</div>
+</div>
+<div class="metrics-row">
+<span class="metric-pill"><span class="label"><span class="en">Difficulty:</span><span class="ko">난이도:</span></span><span class="diff-badge diff-hard"><span class="en">HARD</span><span class="ko">어려움</span></span></span>
+<span class="metric-pill"><span class="label">TED Factor:</span><span class="value stars">★★★★★</span></span>
+<span class="metric-pill"><span class="label"><span class="en">Revenue:</span><span class="ko">수익:</span></span><span class="value"><span class="en">Research grants + gov contracts</span><span class="ko">연구 보조금 + 정부 계약</span></span></span>
+</div>
+<div class="ted-box"><h4>🎤 <span class="en">Your TED Talk</span><span class="ko">당신의 TED Talk</span></h4><p class="en">"The ocean has been screaming for help. We just weren't listening. I trained an AI to hear what we couldn't — and it found 47 endangered blue whales we didn't know existed in those waters."</p><p class="ko">"바다는 계속 도움을 외치고 있었습니다. 우리가 듣지 않았을 뿐. 우리가 듣지 못한 것을 듣는 AI를 훈련시켰고 — 그 바다에 있는지 몰랐던 멸종위기 대왕고래 47마리를 발견했습니다."</p></div>
+</div>
+
+<!-- ============ IDEA 3 ============ -->
+<div class="idea-card ted">
+<div class="card-header"><span class="card-emoji">🔥</span><span class="card-title">FireSight — <span class="en">AI Wildfire Prediction & Early Warning</span><span class="ko">AI 산불 예측 & 조기 경보</span></span></div>
+<p class="card-oneliner"><span class="en">"Predict wildfires 72 hours before they start. Save communities, not just trees."</span><span class="ko">"산불 시작 72시간 전에 예측. 나무뿐 아니라 마을을 구하자."</span></p>
+<div class="card-grid">
+<div class="card-section"><h4>🔍 <span class="en">What It Is</span><span class="ko">뭘 하는 건가</span></h4><p class="en">Multi-modal AI that fuses satellite imagery (Sentinel-2, GOES), weather data, soil moisture sensors, vegetation indices, power grid data, and historical burn patterns to predict wildfire ignition probability at 1km² resolution. Sends automated alerts to fire departments + evacuation systems. Think: weather forecasting but for fire.</p><p class="ko">위성 이미지(Sentinel-2, GOES), 기상 데이터, 토양 수분 센서, 식생 지수, 전력망 데이터, 과거 화재 패턴을 융합하는 멀티모달 AI. 1km² 해상도로 산불 발화 확률 예측. 소방서 + 대피 시스템에 자동 알림.</p></div>
+<div class="card-section"><h4>🧠 <span class="en">The Hard Tech</span><span class="ko">어려운 기술</span></h4>
+<ul class="en">
+<li><strong>Satellite image processing:</strong> NDVI, thermal bands, change detection at scale (petabytes of data)</li>
+<li><strong>Spatio-temporal modeling:</strong> Graph neural networks over geographic regions + time series weather</li>
+<li><strong>Multi-modal fusion:</strong> Combining 6+ data sources with different resolutions, cadences, and formats</li>
+<li><strong>Wildfire spread simulation:</strong> Physics-informed ML (Rothermel fire model + neural networks)</li>
+</ul>
+<ul class="ko">
+<li><strong>위성 이미지 처리:</strong> NDVI, 열적외선 밴드, 대규모 변화 감지 (페타바이트 데이터)</li>
+<li><strong>시공간 모델링:</strong> 지리 영역에 대한 그래프 신경망 + 시계열 기상</li>
+<li><strong>멀티모달 융합:</strong> 서로 다른 해상도, 주기, 형식의 6개+ 데이터 소스 결합</li>
+<li><strong>산불 확산 시뮬레이션:</strong> 물리 기반 ML (Rothermel 화재 모델 + 신경망)</li>
+</ul>
+</div>
+</div>
+<div class="metrics-row">
+<span class="metric-pill"><span class="label"><span class="en">Difficulty:</span><span class="ko">난이도:</span></span><span class="diff-badge diff-hard"><span class="en">VERY HARD</span><span class="ko">매우 어려움</span></span></span>
+<span class="metric-pill"><span class="label">TED Factor:</span><span class="value stars">★★★★★</span></span>
+<span class="metric-pill"><span class="label"><span class="en">Revenue:</span><span class="ko">수익:</span></span><span class="value"><span class="en">Gov + insurance $10K-100K/contract</span><span class="ko">정부+보험 $1만-10만/계약</span></span></span>
+</div>
+<div class="not-vibe"><h4><span class="en">Why a Vibe Coder Can't Touch This</span><span class="ko">왜 바이브 코더가 못 하는가</span></h4><p class="en">You're processing satellite raster data with GDAL, building spatio-temporal GNNs, implementing physics-informed neural networks, and deploying models that ingest real-time weather APIs + IoT sensor feeds. This is climate science + ML engineering + geospatial data engineering. Way beyond "import openai."</p><p class="ko">GDAL로 위성 래스터 데이터 처리, 시공간 GNN 구축, 물리 기반 신경망 구현, 실시간 기상 API + IoT 센서 피드를 수집하는 모델 배포. 기후 과학 + ML 엔지니어링 + 지리공간 데이터 엔지니어링. "import openai" 수준을 훨씬 넘어섬.</p></div>
+</div>
+
+<!-- ============ IDEA 4 ============ -->
+<div class="idea-card">
+<div class="card-header"><span class="card-emoji">🐝</span><span class="card-title">HiveGuard — <span class="en">AI Bee Colony Health Monitor</span><span class="ko">AI 꿀벌 군집 건강 모니터</span></span></div>
+<p class="card-oneliner"><span class="en">"Bees pollinate 75% of our food. This AI keeps them alive."</span><span class="ko">"꿀벌은 식량의 75%를 수분한다. 이 AI가 꿀벌을 살린다."</span></p>
+<div class="card-grid">
+<div class="card-section"><h4>🔍 <span class="en">What It Is</span><span class="ko">뭘 하는 건가</span></h4><p class="en">Low-cost sensor kit (mic + temp + weight + camera) on beehives, connected to AI that detects: queen loss, disease (varroa mites, foulbrood), swarming behavior, pesticide exposure, and colony collapse — all from sound patterns + vibration analysis. Alert beekeepers on their phone before it's too late.</p><p class="ko">벌통에 저가 센서 키트(마이크+온도+무게+카메라) 설치, AI가 감지: 여왕벌 상실, 질병(꿀벌응애, 부저병), 분봉 행동, 농약 노출, 군집 붕괴 — 모두 소리 패턴 + 진동 분석으로. 늦기 전에 양봉가 폰에 알림.</p></div>
+<div class="card-section"><h4>💰 <span class="en">Revenue Model</span><span class="ko">수익 모델</span></h4><p class="en">Hardware kit $149 + $9.99/mo monitoring. There are 2.7M beekeepers in the US alone. Colony collapse costs agriculture $15B/year. Even 5K subscribers = $600K ARR. Grants from USDA, EPA, and agricultural foundations are abundant.</p><p class="ko">하드웨어 키트 $149 + 모니터링 $9.99/월. 미국에만 270만 양봉가. 군집 붕괴는 농업에 연간 $150억 손실. 5천 구독자만 = $60만 ARR. USDA, EPA 보조금 풍부.</p></div>
+</div>
+<div class="metrics-row">
+<span class="metric-pill"><span class="label"><span class="en">Difficulty:</span><span class="ko">난이도:</span></span><span class="diff-badge diff-hard"><span class="en">HARD</span><span class="ko">어려움</span></span></span>
+<span class="metric-pill"><span class="label">TED Factor:</span><span class="value stars">★★★★★</span></span>
+<span class="metric-pill"><span class="label"><span class="en">MVP:</span><span class="ko">MVP:</span></span><span class="value"><span class="en">4-6 months</span><span class="ko">4-6개월</span></span></span>
+</div>
+<div class="ted-box"><h4>🎤 <span class="en">Your TED Talk</span><span class="ko">당신의 TED Talk</span></h4><p class="en">"Einstein supposedly said if bees disappear, humans have 4 years left. I built an AI that listens to 10,000 beehives and can predict a colony's death 2 weeks before it happens. We've saved 340,000 bees so far."</p><p class="ko">"아인슈타인이 말했죠, 꿀벌이 사라지면 인류에게 4년 남았다고. 만 개의 벌통을 듣고 군집의 죽음을 2주 전에 예측하는 AI를 만들었습니다. 지금까지 34만 마리의 꿀벌을 살렸습니다."</p></div>
+</div>
+
+<!-- ============ IDEA 5 ============ -->
+<div class="idea-card">
+<div class="card-header"><span class="card-emoji">🗑️</span><span class="card-title">TrashNet — <span class="en">AI Waste Sorting & Recycling Optimizer</span><span class="ko">AI 쓰레기 분류 & 재활용 최적화</span></span></div>
+<p class="card-oneliner"><span class="en">"Point your phone at trash. AI tells you exactly which bin — and shames the lazy ones."</span><span class="ko">"쓰레기에 폰을 대면 AI가 정확한 분리수거 통을 알려줌."</span></p>
+<div class="card-grid">
+<div class="card-section"><h4>🔍 <span class="en">What It Is</span><span class="ko">뭘 하는 건가</span></h4><p class="en">Two products: (1) Phone app for consumers — scan any item, get instant recycling instructions specific to YOUR city's rules. (2) Smart camera system for recycling facilities — real-time conveyor belt sorting with robotic arm integration. Contamination in recycling is 25% — meaning 1 in 4 items is wrong. This fixes it.</p><p class="ko">두 가지 제품: (1) 소비자용 폰 앱 — 아이템 스캔, 내 도시 규칙에 맞는 즉각 재활용 안내. (2) 재활용 시설용 스마트 카메라 — 로봇 팔 연동 실시간 컨베이어 벨트 분류. 재활용 오염률 25% — 4개 중 1개가 틀림. 이걸 고침.</p></div>
+<div class="card-section"><h4>💰 <span class="en">Revenue</span><span class="ko">수익</span></h4><p class="en">Consumer app: freemium $2.99/mo (gamification, impact tracking). Industrial: $2K-10K/month per facility. Municipalities: $5K-50K/year contracts. The US waste management market is $120B.</p><p class="ko">소비자 앱: 프리미엄 $2.99/월 (게이미피케이션, 임팩트 추적). 산업용: 시설당 $2K-10K/월. 지자체: $5K-50K/년 계약. 미국 폐기물 관리 시장 $1200억.</p></div>
+</div>
+<div class="metrics-row">
+<span class="metric-pill"><span class="label"><span class="en">Difficulty:</span><span class="ko">난이도:</span></span><span class="diff-badge diff-med"><span class="en">MEDIUM</span><span class="ko">보통</span></span></span>
+<span class="metric-pill"><span class="label">TED Factor:</span><span class="value stars">★★★★☆</span></span>
+<span class="metric-pill"><span class="label"><span class="en">MVP:</span><span class="ko">MVP:</span></span><span class="value"><span class="en">2-4 months (app), 6+ (industrial)</span><span class="ko">2-4개월 (앱), 6+ (산업용)</span></span></span>
+</div>
+</div>
+
+<!-- ============ IDEA 6 ============ -->
+<div class="idea-card">
+<div class="card-header"><span class="card-emoji">🌱</span><span class="card-title">CropWhisper — <span class="en">AI Crop Disease Detection for Small Farmers</span><span class="ko">소농을 위한 AI 작물 질병 감지</span></span></div>
+<p class="card-oneliner"><span class="en">"A farmer in Kenya photographs a sick leaf. AI diagnoses it in 3 seconds — offline."</span><span class="ko">"케냐 농부가 병든 잎 사진 찍으면 AI가 3초 만에 진단 — 오프라인으로."</span></p>
+<div class="card-grid">
+<div class="card-section"><h4>🔍 <span class="en">What It Is</span><span class="ko">뭘 하는 건가</span></h4><p class="en">Mobile-first AI that identifies 200+ crop diseases from photos, works OFFLINE (critical for rural areas with no internet), provides treatment recommendations in local languages. Targets small-hold farmers in Africa, SE Asia, South America — the people who lose 40% of crops to disease. Uses on-device ML (TFLite/CoreML) with models under 50MB.</p><p class="ko">사진으로 200+ 작물 질병 식별하는 모바일 우선 AI, 오프라인 작동(인터넷 없는 농촌 필수), 현지 언어로 치료 권장사항 제공. 질병으로 수확량 40% 손실하는 아프리카, 동남아, 남미 소농 타겟. 50MB 미만 온디바이스 ML.</p></div>
+<div class="card-section"><h4>💰 <span class="en">Revenue</span><span class="ko">수익</span></h4><p class="en">Free for farmers (impact-first). Revenue from: agricultural companies (data licensing), NGO/government contracts ($50K-500K), ag-input companies sponsoring disease-specific recommendations. Gates Foundation, USAID actively fund this space.</p><p class="ko">농민 무료 (임팩트 우선). 수익: 농업 회사(데이터 라이선싱), NGO/정부 계약 ($5만-50만), 질병별 추천 스폰서 농자재 회사. Gates Foundation, USAID가 이 분야에 적극 투자.</p></div>
+</div>
+<div class="metrics-row">
+<span class="metric-pill"><span class="label"><span class="en">Difficulty:</span><span class="ko">난이도:</span></span><span class="diff-badge diff-med"><span class="en">MEDIUM-HARD</span><span class="ko">중상</span></span></span>
+<span class="metric-pill"><span class="label">TED Factor:</span><span class="value stars">★★★★☆</span></span>
+<span class="metric-pill"><span class="label"><span class="en">MVP:</span><span class="ko">MVP:</span></span><span class="value"><span class="en">3-5 months</span><span class="ko">3-5개월</span></span></span>
+</div>
+<div class="not-vibe"><h4><span class="en">Why a Vibe Coder Can't Touch This</span><span class="ko">왜 바이브 코더가 못 하는가</span></h4><p class="en">Model quantization to run on $50 Android phones. Custom training data pipelines for leaf disease images. Knowledge distillation from large models to tiny on-device models. Multi-language output with agricultural terminology. This is edge ML engineering, not API calls.</p><p class="ko">$50 안드로이드 폰에서 실행하기 위한 모델 양자화. 잎 질병 이미지용 커스텀 학습 데이터 파이프라인. 대형 모델에서 소형 온디바이스 모델로 지식 증류. 농업 용어의 다국어 출력. 이건 엣지 ML 엔지니어링이지 API 호출이 아님.</p></div>
+</div>
+
+<!-- ============ IDEA 7 ============ -->
+<div class="idea-card">
+<div class="card-header"><span class="card-emoji">🏥</span><span class="card-title">VolunteerOS — <span class="en">AI-Powered Disaster Response Coordinator</span><span class="ko">AI 기반 재난 대응 코디네이터</span></span></div>
+<p class="card-oneliner"><span class="en">"When disaster strikes, chaos becomes coordination in 60 seconds."</span><span class="ko">"재난이 닥치면, 혼돈이 60초 만에 조율으로 변한다."</span></p>
+<div class="card-grid">
+<div class="card-section"><h4>🔍 <span class="en">What It Is</span><span class="ko">뭘 하는 건가</span></h4><p class="en">Platform for disaster relief orgs: AI ingests real-time damage reports (social media, 911 calls, satellite imagery), auto-creates task lists prioritized by urgency, matches volunteers to tasks by skill + location, optimizes supply chain (water, food, medical) routing, and generates situation reports for FEMA/Red Cross.</p><p class="ko">재난 구호 단체용 플랫폼: AI가 실시간 피해 보고(소셜미디어, 911, 위성 이미지) 수집, 긴급도별 작업 목록 자동 생성, 기술+위치별 봉사자 매칭, 물자(물, 식량, 의료) 경로 최적화, FEMA/적십자용 상황 보고서 생성.</p></div>
+<div class="card-section"><h4>💰 <span class="en">Revenue</span><span class="ko">수익</span></h4><p class="en">NGO/government SaaS: $500-5K/month. FEMA alone spends $30B/year on disaster response. Even capturing 0.001% = $300K. Red Cross, Salvation Army, local emergency management agencies are all potential customers.</p><p class="ko">NGO/정부 SaaS: $500-5K/월. FEMA만 재난 대응에 연간 $300억 지출. 0.001%만 차지해도 = $30만.</p></div>
+</div>
+<div class="metrics-row">
+<span class="metric-pill"><span class="label"><span class="en">Difficulty:</span><span class="ko">난이도:</span></span><span class="diff-badge diff-med"><span class="en">MEDIUM</span><span class="ko">보통</span></span></span>
+<span class="metric-pill"><span class="label">TED Factor:</span><span class="value stars">★★★☆☆</span></span>
+<span class="metric-pill"><span class="label"><span class="en">MVP:</span><span class="ko">MVP:</span></span><span class="value"><span class="en">2-3 months</span><span class="ko">2-3개월</span></span></span>
+</div>
+</div>
+
+<!-- ============ IDEA 8 ============ -->
+<div class="idea-card ted">
+<div class="card-header"><span class="card-emoji">🐋</span><span class="card-title">SpeciesID — <span class="en">Open-Source Wildlife AI for Camera Traps</span><span class="ko">카메라 트랩용 오픈소스 야생동물 AI</span></span></div>
+<p class="card-oneliner"><span class="en">"50 million camera trap images. Zero biologists to label them. Until now."</span><span class="ko">"5천만 장의 카메라 트랩 이미지. 라벨링할 생물학자 0명. 지금까지는."</span></p>
+<div class="card-grid">
+<div class="card-section"><h4>🔍 <span class="en">What It Is</span><span class="ko">뭘 하는 건가</span></h4><p class="en">Open-source computer vision platform that auto-identifies wildlife species in camera trap images, counts populations, tracks individual animals by unique markings (like facial recognition for leopards), and detects poaching activity. Conservation teams currently hand-label millions of images — this does it in minutes.</p><p class="ko">카메라 트랩 이미지에서 야생동물 종을 자동 식별하고, 개체수를 세고, 고유 무늬로 개별 동물을 추적하고(표범용 안면인식처럼), 밀렵 활동을 감지하는 오픈소스 컴퓨터 비전 플랫폼.</p></div>
+<div class="card-section"><h4>🧠 <span class="en">The Hard Tech</span><span class="ko">어려운 기술</span></h4>
+<ul class="en">
+<li><strong>Few-shot learning:</strong> Some species have only 20 images total. Your model must learn from almost nothing</li>
+<li><strong>Individual re-identification:</strong> Tell leopard #47 from leopard #48 by spot patterns — metric learning at its hardest</li>
+<li><strong>Infrared/night images:</strong> Most camera traps shoot in IR — very different from ImageNet training data</li>
+<li><strong>Edge deployment:</strong> Process images on-device in remote areas with no connectivity</li>
+</ul>
+<ul class="ko">
+<li><strong>퓨샷 학습:</strong> 일부 종은 총 이미지 20장뿐. 거의 없는 데이터로 학습해야 함</li>
+<li><strong>개체 재식별:</strong> 점 패턴으로 표범 #47과 #48 구분 — 가장 어려운 메트릭 학습</li>
+<li><strong>적외선/야간 이미지:</strong> 대부분 카메라 트랩은 IR 촬영 — ImageNet과 매우 다름</li>
+<li><strong>엣지 배포:</strong> 연결 없는 원격 지역에서 온디바이스 처리</li>
+</ul>
+</div>
+</div>
+<div class="metrics-row">
+<span class="metric-pill"><span class="label"><span class="en">Difficulty:</span><span class="ko">난이도:</span></span><span class="diff-badge diff-hard"><span class="en">HARD</span><span class="ko">어려움</span></span></span>
+<span class="metric-pill"><span class="label">TED Factor:</span><span class="value stars">★★★★★</span></span>
+<span class="metric-pill"><span class="label"><span class="en">Revenue:</span><span class="ko">수익:</span></span><span class="value"><span class="en">Open core + WWF/WCS grants</span><span class="ko">오픈 코어 + WWF/WCS 보조금</span></span></span>
+</div>
+</div>
+
+<!-- ============ IDEA 9 ============ -->
+<div class="idea-card">
+<div class="card-header"><span class="card-emoji">💧</span><span class="card-title">AquaLens — <span class="en">AI Water Quality Monitor from Smartphone</span><span class="ko">스마트폰으로 AI 수질 모니터링</span></span></div>
+<p class="card-oneliner"><span class="en">"2 billion people drink contaminated water. Your phone camera can detect it."</span><span class="ko">"20억 명이 오염된 물을 마신다. 당신의 폰 카메라가 감지할 수 있다."</span></p>
+<div class="card-grid">
+<div class="card-section"><h4>🔍 <span class="en">What It Is</span><span class="ko">뭘 하는 건가</span></h4><p class="en">Cheap colorimetric test strips + phone camera + AI = lab-grade water quality analysis for pennies. Detect: E. coli probability, heavy metals (lead, arsenic), pH, turbidity, chlorine levels. AI compensates for lighting conditions, phone camera variations, and strip batch differences. No lab needed.</p><p class="ko">저가 비색 시험지 + 폰 카메라 + AI = 동전 가격으로 실험실급 수질 분석. 감지: 대장균 확률, 중금속(납, 비소), pH, 탁도, 염소 수준. AI가 조명, 폰 카메라 차이, 시험지 배치 차이 보정.</p></div>
+<div class="card-section"><h4>💰 <span class="en">Revenue</span><span class="ko">수익</span></h4><p class="en">Test strip packs: $9.99/50 strips (consumable recurring revenue!). App: free. Data licensing to water utilities. Government/NGO contracts for developing countries. Clean water monitoring is a $5B+ market.</p><p class="ko">시험지 팩: 50장 $9.99 (소모품 반복 수익!). 앱: 무료. 수도 시설에 데이터 라이선싱. 개발도상국 정부/NGO 계약. 깨끗한 물 모니터링 $50억+ 시장.</p></div>
+</div>
+<div class="metrics-row">
+<span class="metric-pill"><span class="label"><span class="en">Difficulty:</span><span class="ko">난이도:</span></span><span class="diff-badge diff-hard"><span class="en">VERY HARD</span><span class="ko">매우 어려움</span></span></span>
+<span class="metric-pill"><span class="label">TED Factor:</span><span class="value stars">★★★★☆</span></span>
+<span class="metric-pill"><span class="label"><span class="en">MVP:</span><span class="ko">MVP:</span></span><span class="value"><span class="en">5-8 months</span><span class="ko">5-8개월</span></span></span>
+</div>
+</div>
+
+<!-- ============ IDEA 10 ============ -->
+<div class="idea-card ted">
+<div class="card-header"><span class="card-emoji">🗣️</span><span class="card-title">SignBridge — <span class="en">Real-Time Sign Language Translation</span><span class="ko">실시간 수어 번역</span></span></div>
+<p class="card-oneliner"><span class="en">"70 million deaf people. Most can't afford an interpreter. Your phone camera is the interpreter."</span><span class="ko">"7천만 청각장애인. 대부분 통역사를 감당 못 함. 당신의 폰 카메라가 통역사."</span></p>
+<div class="card-grid">
+<div class="card-section"><h4>🔍 <span class="en">What It Is</span><span class="ko">뭘 하는 건가</span></h4><p class="en">Real-time ASL/KSL (Korean Sign Language) to text/speech and vice versa using phone camera. Not just finger-spelling — full sentence-level sign language understanding with grammar, facial expressions, and spatial references. Two-way: hearing person speaks → text displays for deaf user. Deaf user signs → speech plays for hearing person.</p><p class="ko">폰 카메라로 실시간 ASL/KSL(한국수어)을 텍스트/음성으로, 그 반대도. 단순 지문자가 아닌 — 문법, 표정, 공간 참조를 포함한 문장 수준 수어 이해. 양방향: 청인이 말하면 → 농인에게 텍스트. 농인이 수어 → 청인에게 음성.</p></div>
+<div class="card-section"><h4>🧠 <span class="en">The Hard Tech</span><span class="ko">어려운 기술</span></h4>
+<ul class="en">
+<li><strong>Pose estimation:</strong> MediaPipe hands + face + body landmarks at 30fps on mobile</li>
+<li><strong>Temporal modeling:</strong> Signs are sequences, not static poses — need transformer/LSTM over pose sequences</li>
+<li><strong>Grammar translation:</strong> ASL grammar ≠ English grammar. This is machine translation, not transcription</li>
+<li><strong>Facial expression as syntax:</strong> In ASL, eyebrow raise = question. This must be captured and understood</li>
+</ul>
+<ul class="ko">
+<li><strong>자세 추정:</strong> 모바일에서 30fps로 MediaPipe 손+얼굴+몸 랜드마크</li>
+<li><strong>시간적 모델링:</strong> 수어는 정적 포즈가 아닌 시퀀스 — 포즈 시퀀스에 트랜스포머/LSTM 필요</li>
+<li><strong>문법 번역:</strong> ASL 문법 ≠ 영어 문법. 이건 전사가 아니라 기계 번역</li>
+<li><strong>구문으로서의 표정:</strong> ASL에서 눈썹 올림 = 의문문. 이걸 포착하고 이해해야 함</li>
+</ul>
+</div>
+</div>
+<div class="metrics-row">
+<span class="metric-pill"><span class="label"><span class="en">Difficulty:</span><span class="ko">난이도:</span></span><span class="diff-badge diff-hard"><span class="en">VERY HARD</span><span class="ko">매우 어려움</span></span></span>
+<span class="metric-pill"><span class="label">TED Factor:</span><span class="value stars">★★★★★</span></span>
+<span class="metric-pill"><span class="label"><span class="en">MVP:</span><span class="ko">MVP:</span></span><span class="value"><span class="en">6-10 months</span><span class="ko">6-10개월</span></span></span>
+</div>
+<div class="ted-box"><h4>🎤 <span class="en">Your TED Talk</span><span class="ko">당신의 TED Talk</span></h4><p class="en">"A deaf child walks into a hospital. She's in pain but can't explain where. Her mom doesn't know sign language well enough. This happens 70 million times around the world. I built an AI that fits in your pocket and translates sign language in real time. No interpreter needed. No appointment. No barrier."</p><p class="ko">"청각장애 아이가 병원에 들어갑니다. 아프지만 어디가 아픈지 설명을 못 합니다. 엄마도 수어를 충분히 잘 모릅니다. 전 세계 7천만 명에게 이런 일이 일어납니다. 주머니에 들어가는, 실시간으로 수어를 번역하는 AI를 만들었습니다. 통역사 불필요. 예약 불필요. 장벽 없음."</p></div>
+</div>
+
+<!-- ============ RECOMMENDATION ============ -->
+<div class="rec-box">
+<h2>🎤 <span class="en">The TED Talk Strategy</span><span class="ko">TED Talk 전략</span></h2>
+<p class="en" style="font-size:1.1em"><span class="hl">Here's the truth about getting on TED:</span></p>
+<p class="ko" style="font-size:1.1em"><span class="hl">TED에 서는 것에 대한 진실:</span></p>
+<ul class="en">
+<li>TED doesn't want "I built an app." They want <strong>"I solved a problem nobody thought could be solved, and here's the data to prove it."</strong></li>
+<li>You need: (1) A <strong>measurable impact story</strong> — "We saved X animals / predicted Y fires / helped Z farmers", (2) A <strong>surprising technical insight</strong> — "Turns out, you can detect bee colony collapse from SOUND", (3) <strong>Emotional resonance</strong> — "This deaf child couldn't tell her doctor where it hurts"</li>
+<li>The fastest path: Build something that gets <strong>real users with real impact data</strong>, write about it, speak at smaller conferences (TEDx first), get invited up</li>
+</ul>
+<ul class="ko">
+<li>TED는 "앱 만들었어요"를 원하지 않음. <strong>"아무도 풀 수 없다고 생각한 문제를 풀었고, 이를 증명하는 데이터가 있습니다"</strong>를 원함</li>
+<li>필요한 것: (1) <strong>측정 가능한 임팩트 스토리</strong>, (2) <strong>놀라운 기술적 통찰</strong>, (3) <strong>감정적 공감</strong></li>
+<li>가장 빠른 경로: <strong>실제 사용자와 실제 임팩트 데이터</strong>가 있는 것을 만들고, 글을 쓰고, 작은 컨퍼런스에서 발표하고 (TEDx 먼저), 초대받기</li>
+</ul>
+
+<p class="en" style="margin-top:16px"><span class="hl">My top 3 picks for YOUR TED Talk path:</span></p>
+<p class="ko" style="margin-top:16px"><span class="hl">당신의 TED Talk 경로 탑 3:</span></p>
+<ul class="en">
+<li><strong>🐝 HiveGuard</strong> — Most buildable. Incredible narrative. Clear metrics (bees saved). Hardware + AI = impressive. "The engineer who listened to bees."</li>
+<li><strong>🐾 PawSOS</strong> — Most relatable. Everyone loves animals. Quantifiable impact (animals rescued). Mobile app = mass adoption. Arizona has a huge stray animal problem — start local.</li>
+<li><strong>🗣️ SignBridge</strong> — Most ambitious. Hardest tech. Biggest emotional punch. Would take longer but would be the most powerful TED Talk of all 10.</li>
+</ul>
+<ul class="ko">
+<li><strong>🐝 HiveGuard</strong> — 가장 만들 수 있음. 놀라운 내러티브. 명확한 지표 (구한 꿀벌). "꿀벌의 소리를 들은 엔지니어."</li>
+<li><strong>🐾 PawSOS</strong> — 가장 공감됨. 모두가 동물을 사랑. 측정 가능한 임팩트. 모바일 앱 = 대중 채택. 애리조나는 유기동물 문제 심각 — 로컬부터 시작.</li>
+<li><strong>🗣️ SignBridge</strong> — 가장 야심찬. 가장 어려운 기술. 가장 큰 감정적 펀치. 더 오래 걸리지만 10개 중 가장 강력한 TED Talk.</li>
+</ul>
+
+<p class="en" style="margin-top:16px;font-size:1.1em"><span class="hl">10-year timeline to TED:</span> Build the thing (Year 1-2) → Get real impact data (Year 2-3) → Write about it, blog, podcast appearances (Year 3-5) → TEDx talk (Year 5-7) → Main stage TED (Year 8-10). You already have the technical skills. You just need the project and the story. Pick one. Start building. The clock starts now. ⏰🌳</p>
+<p class="ko" style="margin-top:16px;font-size:1.1em"><span class="hl">TED까지 10년 타임라인:</span> 만들기 (1-2년) → 실제 임팩트 데이터 (2-3년) → 글쓰기, 블로그, 팟캐스트 (3-5년) → TEDx 발표 (5-7년) → TED 메인 스테이지 (8-10년). 기술력은 이미 있음. 프로젝트와 스토리만 있으면 됨. 하나 골라. 만들기 시작해. 시계는 지금부터. ⏰🌳</p>
+</div>
+
+</div>
+
+<footer>
+<span class="en">🌍 Researched & built by Totoro 🌳 — March 2026<br>"The best time to plant a tree was 20 years ago. The second best time is now."</span>
+<span class="ko">🌍 Totoro 🌳 리서치 & 제작 — 2026년 3월<br>"나무를 심기 가장 좋은 때는 20년 전이었다. 두 번째로 좋은 때는 지금이다."</span>
+</footer>
+
+<script>
+let isKorean=false;
+function toggleLang(){
+isKorean=!isKorean;
+document.querySelectorAll('.en').forEach(el=>el.classList.toggle('hide',isKorean));
+document.querySelectorAll('.ko').forEach(el=>el.classList.toggle('show',isKorean));
+document.querySelector('.lang-toggle').textContent=isKorean?'English':'한국어';
+}
+</script>
+</body>
+</html>
