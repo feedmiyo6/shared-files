@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fridgenie Marketing Roadmap</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Nunito', sans-serif; background: #faf8f0; color: #2d3436; line-height: 1.6; }
+  .lang-toggle { position: fixed; top: 16px; right: 16px; z-index: 100; background: #4a7c59; color: #fff; border: none; padding: 8px 16px; border-radius: 20px; font-family: 'Nunito', sans-serif; font-weight: 600; cursor: pointer; font-size: 14px; }
+  .ko { display: none; }
+  .ko.show { display: inline !important; }
+  .en.hide { display: none !important; }
+  .hero { background: linear-gradient(135deg, #4a7c59 0%, #6ba368 50%, #8fc48b 100%); color: white; padding: 60px 24px 40px; text-align: center; }
+  .hero h1 { font-family: 'Fredoka', sans-serif; font-size: 2.2em; margin-bottom: 8px; }
+  .hero p { font-size: 1.1em; opacity: 0.9; max-width: 600px; margin: 0 auto; }
+  .container { max-width: 800px; margin: 0 auto; padding: 24px 16px; }
+  h2 { font-family: 'Fredoka', sans-serif; color: #4a7c59; font-size: 1.6em; margin: 32px 0 16px; border-bottom: 3px solid #d4e8d0; padding-bottom: 8px; }
+  h3 { font-family: 'Fredoka', sans-serif; color: #2d3436; font-size: 1.2em; margin: 20px 0 8px; }
+
+  /* Timeline */
+  .timeline { position: relative; padding-left: 32px; }
+  .timeline::before { content: ''; position: absolute; left: 12px; top: 0; bottom: 0; width: 3px; background: linear-gradient(to bottom, #4a7c59, #8fc48b, #f0c27f, #e74c3c); border-radius: 3px; }
+  .phase { position: relative; margin-bottom: 36px; background: white; border-radius: 16px; padding: 20px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+  .phase::before { content: ''; position: absolute; left: -26px; top: 24px; width: 14px; height: 14px; border-radius: 50%; border: 3px solid white; box-shadow: 0 0 0 2px #4a7c59; }
+  .phase.p1::before { background: #4a7c59; }
+  .phase.p2::before { background: #6ba368; }
+  .phase.p3::before { background: #f0c27f; }
+  .phase.p4::before { background: #e74c3c; }
+  .phase-label { display: inline-block; font-size: 0.75em; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; padding: 3px 10px; border-radius: 12px; margin-bottom: 8px; }
+  .p1 .phase-label { background: #d4e8d0; color: #4a7c59; }
+  .p2 .phase-label { background: #e8f5e3; color: #3a6b45; }
+  .p3 .phase-label { background: #fef3d5; color: #b8860b; }
+  .p4 .phase-label { background: #fde0e0; color: #c0392b; }
+  .phase h3 { margin-top: 4px; }
+  .checklist { list-style: none; padding: 0; margin: 12px 0; }
+  .checklist li { padding: 6px 0 6px 28px; position: relative; font-size: 0.95em; }
+  .checklist li::before { content: '☐'; position: absolute; left: 4px; color: #4a7c59; font-size: 1.1em; }
+
+  /* Copy bank */
+  .copy-card { background: #f0f7ee; border-left: 4px solid #4a7c59; padding: 14px 16px; border-radius: 0 12px 12px 0; margin: 10px 0; font-size: 0.95em; }
+  .copy-card .label { font-size: 0.75em; font-weight: 700; color: #4a7c59; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+  .copy-card .text { font-weight: 600; color: #2d3436; }
+  .copy-card .use { font-size: 0.8em; color: #777; margin-top: 4px; }
+
+  /* Channel cards */
+  .channel-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 14px; margin: 16px 0; }
+  .channel { background: white; border-radius: 14px; padding: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); text-align: center; }
+  .channel .icon { font-size: 2em; margin-bottom: 6px; }
+  .channel .name { font-family: 'Fredoka', sans-serif; font-weight: 600; }
+  .channel .desc { font-size: 0.85em; color: #666; margin-top: 4px; }
+
+  /* Metrics */
+  .metrics { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; margin: 16px 0; }
+  .metric { background: white; border-radius: 14px; padding: 16px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+  .metric .num { font-family: 'Fredoka', sans-serif; font-size: 1.8em; color: #4a7c59; }
+  .metric .lbl { font-size: 0.8em; color: #888; }
+
+  .tip { background: #fff8e1; border-radius: 12px; padding: 14px 16px; margin: 12px 0; font-size: 0.9em; }
+  .tip::before { content: '💡 '; }
+
+  .budget-table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 0.9em; }
+  .budget-table th { background: #4a7c59; color: white; padding: 10px; text-align: left; }
+  .budget-table td { padding: 10px; border-bottom: 1px solid #eee; }
+  .budget-table tr:nth-child(even) { background: #f7f7f0; }
+
+  footer { text-align: center; padding: 40px 16px; color: #aaa; font-size: 0.85em; }
+</style>
+</head>
+<body>
+
+<button class="lang-toggle" onclick="toggleLang()">한국어</button>
+
+<div class="hero">
+  <h1>🧞 <span class="en">Fridgenie Marketing Roadmap</span><span class="ko">Fridgenie 마케팅 로드맵</span></h1>
+  <p class="en">From beta signups to App Store domination — the complete playbook</p>
+  <p class="ko">베타 가입부터 앱스토어 정복까지 — 완벽한 마케팅 플레이북</p>
+</div>
+
+<div class="container">
+
+<!-- ==================== COPY BANK ==================== -->
+<h2>🎤 <span class="en">Your Copy Bank — Lines That Sell</span><span class="ko">카피 모음 — 팔리는 문구들</span></h2>
+<p class="en">Steal these. Mix them. Post them. These are your go-to marketing lines.</p>
+<p class="ko">가져다 쓰세요. 섞어 쓰세요. 바로 올리세요.</p>
+
+<div class="copy-card">
+  <div class="label"><span class="en">The Hook — Pain Point</span><span class="ko">후킹 — 공감형</span></div>
+  <div class="text">"Staring at your fridge like it owes you an answer? 🧐 Fridgenie tells you exactly what to cook."</div>
+  <div class="use"><span class="en">Use: TikTok/Reel opener, tweet</span><span class="ko">용도: 틱톡/릴스 오프닝, 트윗</span></div>
+</div>
+
+<div class="copy-card">
+  <div class="label"><span class="en">The Waste Guilt</span><span class="ko">음식 낭비 죄책감</span></div>
+  <div class="text">"Americans throw away $1,600 of food per year. 🗑️ What if an app could cut that in half?"</div>
+  <div class="use"><span class="en">Use: Instagram carousel first slide, blog intro</span><span class="ko">용도: 인스타 캐러셀 첫 슬라이드, 블로그 도입</span></div>
+</div>
+
+<div class="copy-card">
+  <div class="label"><span class="en">The Leftovers Line (Your Original!)</span><span class="ko">남은 음식 라인 (오리지널!)</span></div>
+  <div class="text">"Got leftovers? No idea what to cook? 🤷‍♂️ Just tell Fridgenie what's in your fridge — it'll handle the rest."</div>
+  <div class="use"><span class="en">Use: Casual social post, DM pitch, story</span><span class="ko">용도: 소셜 포스트, DM 홍보, 스토리</span></div>
+</div>
+
+<div class="copy-card">
+  <div class="label"><span class="en">The Flex</span><span class="ko">자랑형</span></div>
+  <div class="text">"I just said 'two avocados and milk' into my phone and my pantry updated itself. The future is here. 🥑"</div>
+  <div class="use"><span class="en">Use: Voice feature demo, TikTok, tweet</span><span class="ko">용도: 음성 기능 데모, 틱톡, 트윗</span></div>
+</div>
+
+<div class="copy-card">
+  <div class="label"><span class="en">The Receipt Magic</span><span class="ko">영수증 마법</span></div>
+  <div class="text">"Snap your receipt → entire grocery list added in 2 seconds. No typing. No scanning barcodes. Just magic. 🧾✨"</div>
+  <div class="use"><span class="en">Use: Feature highlight reel, Product Hunt</span><span class="ko">용도: 기능 하이라이트 릴, Product Hunt</span></div>
+</div>
+
+<div class="copy-card">
+  <div class="label"><span class="en">The Family Angle</span><span class="ko">가족 공감형</span></div>
+  <div class="text">"My wife bought milk. I bought milk. We now have 3 gallons of milk. 🥛🥛🥛 Fridgenie would've prevented this."</div>
+  <div class="use"><span class="en">Use: Relatable meme post, Reddit, Twitter</span><span class="ko">용도: 공감 밈 포스트, 레딧, 트위터</span></div>
+</div>
+
+<div class="copy-card">
+  <div class="label"><span class="en">The Humble Indie Dev</span><span class="ko">인디 개발자 감성</span></div>
+  <div class="text">"I built an AI kitchen app as a side project. It scans receipts, tracks expiry dates, and suggests recipes from what you already have. Looking for beta testers! 🙏"</div>
+  <div class="use"><span class="en">Use: Reddit r/sideproject, Hacker News, indie dev communities</span><span class="ko">용도: 레딧 r/sideproject, 해커뉴스, 인디 개발자 커뮤니티</span></div>
+</div>
+
+<div class="copy-card">
+  <div class="label"><span class="en">The Short Punchy</span><span class="ko">짧고 강렬한</span></div>
+  <div class="text">"Your fridge is smarter than you think. It just needs Fridgenie. 🧞"</div>
+  <div class="use"><span class="en">Use: App Store subtitle, bio tagline</span><span class="ko">용도: 앱스토어 부제, 바이오 태그라인</span></div>
+</div>
+
+<div class="copy-card">
+  <div class="label"><span class="en">The CTA (Call to Action)</span><span class="ko">행동 유도</span></div>
+  <div class="text">"Join 200+ home cooks who stopped wasting food → fridgenie.app 🧞‍♂️"</div>
+  <div class="use"><span class="en">Use: Bio link, end of every post (update number as it grows!)</span><span class="ko">용도: 바이오 링크, 모든 포스트 마무리 (숫자 업데이트!)</span></div>
+</div>
+
+<div class="copy-card">
+  <div class="label"><span class="en">Korean Community</span><span class="ko">한국 커뮤니티용</span></div>
+  <div class="text">"냉장고에 뭐 있는지 말하면 AI가 레시피 추천해줌 ㅋㅋ 남은 재료로 뭐 해먹을지 고민 끝 🧞"</div>
+  <div class="use"><span class="en">Use: Korean community posts, KakaoTalk shares</span><span class="ko">용도: 한인 커뮤니티, 카카오톡 공유</span></div>
+</div>
+
+<!-- ==================== ROADMAP ==================== -->
+<h2>🗺️ <span class="en">The 4-Phase Roadmap</span><span class="ko">4단계 로드맵</span></h2>
+
+<div class="timeline">
+
+<!-- PHASE 1 -->
+<div class="phase p1">
+  <div class="phase-label"><span class="en">Phase 1 — Now</span><span class="ko">1단계 — 지금</span></div>
+  <h3>🌱 <span class="en">Seed & Beta Growth (Weeks 1-3)</span><span class="ko">씨앗 뿌리기 & 베타 성장 (1-3주)</span></h3>
+  <p class="en">Goal: Get from friends & family → 100+ real beta testers</p>
+  <p class="ko">목표: 친구/가족 → 100명 이상 실제 베타 테스터</p>
+
+  <h3 style="font-size:1em; margin-top:16px;">🎯 <span class="en">Actions</span><span class="ko">실행 항목</span></h3>
+  <ul class="checklist">
+    <li><span class="en">Post on Reddit: r/sideproject, r/iOSProgramming, r/Cooking, r/MealPrepSunday, r/ZeroWaste</span><span class="ko">레딧 게시: r/sideproject, r/iOSProgramming, r/Cooking, r/MealPrepSunday, r/ZeroWaste</span></li>
+    <li><span class="en">Submit to Hacker News "Show HN" (weekend morning = best timing)</span><span class="ko">해커뉴스 "Show HN" 제출 (주말 아침이 최적)</span></li>
+    <li><span class="en">Post in indie hacker communities: IndieHackers.com, Twitter #buildinpublic</span><span class="ko">인디 해커 커뮤니티 게시: IndieHackers.com, 트위터 #buildinpublic</span></li>
+    <li><span class="en">Share in Korean communities: 미주 한인 맘카페, 한인 요리 그룹</span><span class="ko">한인 커뮤니티 공유: 미주 한인 맘카페, 한인 요리 그룹</span></li>
+    <li><span class="en">Ask every beta tester: "Know 2 friends who'd try this?" (referral loop)</span><span class="ko">모든 베타 테스터에게: "써볼 친구 2명 있어요?" (추천 루프)</span></li>
+    <li><span class="en">Set up a simple feedback form (Google Forms or Typeform)</span><span class="ko">간단한 피드백 폼 세팅 (Google Forms 또는 Typeform)</span></li>
+    <li><span class="en">Create Instagram account @fridgenie.app — post 3x/week</span><span class="ko">인스타그램 @fridgenie.app 계정 생성 — 주 3회 포스팅</span></li>
+    <li><span class="en">Record 2-3 short demo videos (15-30s each) showing voice input, receipt scan, recipe match</span><span class="ko">짧은 데모 영상 2-3개 촬영 (각 15-30초) — 음성 입력, 영수증 스캔, 레시피 매칭</span></li>
+  </ul>
+
+  <div class="tip"><span class="en"><b>The indie dev story sells.</b> People LOVE rooting for solo developers. Lead with "I built this" not "We're a startup."</span><span class="ko"><b>인디 개발자 스토리가 먹힌다.</b> 사람들은 1인 개발자를 응원함. "우리 스타트업" 말고 "제가 만들었습니다"로 시작.</span></div>
+</div>
+
+<!-- PHASE 2 -->
+<div class="phase p2">
+  <div class="phase-label"><span class="en">Phase 2 — Month 1-2</span><span class="ko">2단계 — 1-2개월차</span></div>
+  <h3>🌿 <span class="en">Content Engine & Community (Weeks 4-8)</span><span class="ko">콘텐츠 엔진 & 커뮤니티 (4-8주)</span></h3>
+  <p class="en">Goal: Build organic discovery engine → 500+ signups</p>
+  <p class="ko">목표: 자연 유입 엔진 구축 → 500+ 가입</p>
+
+  <ul class="checklist">
+    <li><span class="en">Launch TikTok/Reels series: "What's in my fridge?" — open fridge, Fridgenie suggests recipe, cook it</span><span class="ko">틱톡/릴스 시리즈: "냉장고 뭐 있지?" — 냉장고 열기, Fridgenie 레시피 추천, 요리하기</span></li>
+    <li><span class="en">Weekly "Fridge Challenge" — followers show their fridge, you show what Fridgenie suggests</span><span class="ko">주간 "냉장고 챌린지" — 팔로워 냉장고 공개, Fridgenie 추천 공개</span></li>
+    <li><span class="en">Write 3-5 SEO blog posts: "How to reduce food waste", "Best meal planning apps 2026", "AI kitchen tools"</span><span class="ko">SEO 블로그 3-5개: "음식 낭비 줄이는 법", "2026 최고의 식단 관리 앱", "AI 주방 도구"</span></li>
+    <li><span class="en">Submit to Product Hunt (prep a launch page + assets first!)</span><span class="ko">Product Hunt 제출 (런칭 페이지 + 에셋 먼저 준비!)</span></li>
+    <li><span class="en">Reach out to 10-20 food/lifestyle micro-influencers (10k-50k followers) — offer free lifetime access</span><span class="ko">푸드/라이프스타일 마이크로 인플루언서 10-20명 연락 — 평생 무료 접근 제안</span></li>
+    <li><span class="en">Partner with "zero waste" / sustainability accounts for cross-promotion</span><span class="ko">"제로 웨이스트" / 지속가능성 계정과 크로스 프로모션</span></li>
+    <li><span class="en">Start collecting testimonials + before/after stories from beta users</span><span class="ko">베타 유저의 후기 + before/after 스토리 수집 시작</span></li>
+    <li><span class="en">A/B test landing page copy (current vs new hooks from copy bank)</span><span class="ko">랜딩 페이지 카피 A/B 테스트 (현재 vs 카피 모음의 새 문구)</span></li>
+  </ul>
+
+  <div class="tip"><span class="en"><b>Content formula that works:</b> Problem → "I built an app for this" → Quick demo → CTA. Keep videos under 30 seconds.</span><span class="ko"><b>먹히는 콘텐츠 공식:</b> 문제 → "이거 해결하려고 앱 만듦" → 빠른 데모 → CTA. 영상 30초 이내.</span></div>
+</div>
+
+<!-- PHASE 3 -->
+<div class="phase p3">
+  <div class="phase-label"><span class="en">Phase 3 — Month 2-3</span><span class="ko">3단계 — 2-3개월차</span></div>
+  <h3>🌻 <span class="en">Public Launch & Press (Weeks 8-12)</span><span class="ko">퍼블릭 런칭 & 언론 (8-12주)</span></h3>
+  <p class="en">Goal: App Store launch → 2,000+ downloads in first month</p>
+  <p class="ko">목표: 앱스토어 런칭 → 첫 달 2,000+ 다운로드</p>
+
+  <ul class="checklist">
+    <li><span class="en">App Store Optimization: keyword-rich title, compelling screenshots, demo video</span><span class="ko">앱스토어 최적화: 키워드 제목, 매력적인 스크린샷, 데모 영상</span></li>
+    <li><span class="en">Press kit: one-pager, high-res screenshots, founder story, key stats</span><span class="ko">프레스 킷: 한 페이지 요약, 고화질 스크린샷, 창업자 스토리, 핵심 지표</span></li>
+    <li><span class="en">Pitch to tech blogs: TechCrunch, The Verge, 9to5Mac, Lifehacker</span><span class="ko">테크 블로그 피칭: TechCrunch, The Verge, 9to5Mac, Lifehacker</span></li>
+    <li><span class="en">Pitch to food/lifestyle media: Bon Appétit, Food52, Kitchn, Wirecutter</span><span class="ko">푸드/라이프스타일 매체 피칭: Bon Appétit, Food52, Kitchn, Wirecutter</span></li>
+    <li><span class="en">Run App Store Search Ads ($5-10/day budget to start)</span><span class="ko">앱스토어 검색 광고 ($5-10/일 예산으로 시작)</span></li>
+    <li><span class="en">Launch day blitz: all social channels + email list + Reddit + Product Hunt</span><span class="ko">런칭일 블리츠: 전 소셜 채널 + 이메일 리스트 + 레딧 + Product Hunt</span></li>
+    <li><span class="en">Ask all beta users to leave App Store reviews on launch day</span><span class="ko">런칭일에 모든 베타 유저에게 앱스토어 리뷰 요청</span></li>
+    <li><span class="en">"Fridgenie saved me $XX this month" — user story campaign</span><span class="ko">"Fridgenie 덕분에 이번 달 $XX 절약" — 유저 스토리 캠페인</span></li>
+  </ul>
+
+  <div class="tip"><span class="en"><b>Launch timing matters.</b> Tuesday-Thursday mornings (PST) get the most press coverage. Avoid Mondays and Fridays.</span><span class="ko"><b>런칭 타이밍이 중요.</b> 화-목 오전 (PST)이 가장 많은 언론 보도. 월/금 피하기.</span></div>
+</div>
+
+<!-- PHASE 4 -->
+<div class="phase p4">
+  <div class="phase-label"><span class="en">Phase 4 — Month 3+</span><span class="ko">4단계 — 3개월 이후</span></div>
+  <h3>🌳 <span class="en">Scale & Monetize (Ongoing)</span><span class="ko">스케일 & 수익화 (지속)</span></h3>
+  <p class="en">Goal: Sustainable growth loop → 10,000+ users, revenue stream</p>
+  <p class="ko">목표: 지속 성장 루프 → 10,000+ 유저, 수익 창출</p>
+
+  <ul class="checklist">
+    <li><span class="en">Introduce freemium: free tier (20 items) → Pro ($3.99/mo unlimited + advanced AI)</span><span class="ko">프리미엄 도입: 무료 (20개 아이템) → Pro ($3.99/월 무제한 + 고급 AI)</span></li>
+    <li><span class="en">Referral program: "Invite a friend, both get 1 month Pro free"</span><span class="ko">추천 프로그램: "친구 초대하면 둘 다 Pro 1개월 무료"</span></li>
+    <li><span class="en">Grocery store partnerships — affiliate deals with Instacart/Amazon Fresh</span><span class="ko">마트 파트너십 — Instacart/Amazon Fresh 제휴</span></li>
+    <li><span class="en">Expand to Android (Flutter makes this easy!)</span><span class="ko">안드로이드 확장 (Flutter라 쉬움!)</span></li>
+    <li><span class="en">Seasonal campaigns: "New Year meal prep", "Thanksgiving leftover challenge", "Back to school lunch planning"</span><span class="ko">시즌 캠페인: "새해 밀프렙", "추수감사절 남은 음식 챌린지", "개학 도시락 플래닝"</span></li>
+    <li><span class="en">User-generated content pipeline: repost the best "Fridgenie cooked this" posts</span><span class="ko">UGC 파이프라인: 베스트 "Fridgenie로 이거 만듦" 리포스트</span></li>
+    <li><span class="en">Explore newsletter sponsorships in food/sustainability space</span><span class="ko">푸드/지속가능성 뉴스레터 스폰서십 탐색</span></li>
+  </ul>
+</div>
+
+</div><!-- end timeline -->
+
+<!-- ==================== CHANNELS ==================== -->
+<h2>📣 <span class="en">Marketing Channels — Where to Be</span><span class="ko">마케팅 채널 — 어디에 있어야 하나</span></h2>
+
+<div class="channel-grid">
+  <div class="channel">
+    <div class="icon">📱</div>
+    <div class="name">TikTok / Reels</div>
+    <div class="desc"><span class="en">#1 priority. Short demos, fridge reveals, cooking results. Viral potential is MASSIVE.</span><span class="ko">최우선. 짧은 데모, 냉장고 공개, 요리 결과. 바이럴 잠재력 최대.</span></div>
+  </div>
+  <div class="channel">
+    <div class="icon">🤖</div>
+    <div class="name">Reddit</div>
+    <div class="desc"><span class="en">r/Cooking, r/MealPrepSunday, r/ZeroWaste, r/sideproject. Be genuine, not salesy.</span><span class="ko">요리/밀프렙/제로웨이스트/사이드프로젝트. 진정성 있게, 광고 느낌 X.</span></div>
+  </div>
+  <div class="channel">
+    <div class="icon">🐦</div>
+    <div class="name">Twitter/X</div>
+    <div class="desc"><span class="en">#buildinpublic journey. Share metrics, wins, struggles. Dev community loves this.</span><span class="ko">#buildinpublic 여정. 지표, 성과, 고군분투 공유. 개발자 커뮤니티 먹힘.</span></div>
+  </div>
+  <div class="channel">
+    <div class="icon">📸</div>
+    <div class="name">Instagram</div>
+    <div class="desc"><span class="en">Beautiful food + app screenshots. Carousel posts explaining features. Stories for daily updates.</span><span class="ko">예쁜 음식 + 앱 스크린샷. 캐러셀로 기능 설명. 스토리로 일상 업데이트.</span></div>
+  </div>
+  <div class="channel">
+    <div class="icon">🏹</div>
+    <div class="name">Product Hunt</div>
+    <div class="desc"><span class="en">One big launch day. Prep thoroughly — it's a one-shot cannon.</span><span class="ko">한 번의 대형 런칭일. 철저히 준비 — 일발필살.</span></div>
+  </div>
+  <div class="channel">
+    <div class="icon">🇰🇷</div>
+    <div class="name"><span class="en">Korean Communities</span><span class="ko">한인 커뮤니티</span></div>
+    <div class="desc"><span class="en">미주한인 groups, KakaoTalk shares. Bilingual = secret weapon. Huge untapped audience.</span><span class="ko">미주한인 그룹, 카카오톡 공유. 이중언어 = 비밀 무기. 미개척 시장.</span></div>
+  </div>
+</div>
+
+<!-- ==================== BUDGET ==================== -->
+<h2>💰 <span class="en">Suggested Budget (Lean Start)</span><span class="ko">추천 예산 (린 스타트)</span></h2>
+
+<table class="budget-table">
+  <tr><th><span class="en">Item</span><span class="ko">항목</span></th><th><span class="en">Monthly Cost</span><span class="ko">월 비용</span></th><th><span class="en">Notes</span><span class="ko">비고</span></th></tr>
+  <tr><td><span class="en">App Store Search Ads</span><span class="ko">앱스토어 검색 광고</span></td><td>$150-300</td><td><span class="en">Start at $5/day, scale what works</span><span class="ko">$5/일 시작, 효과 있으면 스케일</span></td></tr>
+  <tr><td><span class="en">Social media tools</span><span class="ko">소셜 미디어 도구</span></td><td>$0-30</td><td><span class="en">Canva free tier, Later free tier</span><span class="ko">Canva 무료, Later 무료</span></td></tr>
+  <tr><td><span class="en">Micro-influencer gifts</span><span class="ko">마이크로 인플루언서</span></td><td>$0</td><td><span class="en">Free lifetime Pro access = your currency</span><span class="ko">평생 Pro 무료 접근 = 당신의 화폐</span></td></tr>
+  <tr><td><span class="en">Domain + hosting</span><span class="ko">도메인 + 호스팅</span></td><td>$1</td><td><span class="en">Already have fridgenie.app + GitHub Pages</span><span class="ko">이미 fridgenie.app + GitHub Pages 있음</span></td></tr>
+  <tr><td style="font-weight:700;"><span class="en">Total</span><span class="ko">합계</span></td><td style="font-weight:700;">~$150-330/mo</td><td><span class="en">Scale only what shows ROI</span><span class="ko">ROI 보이는 것만 스케일</span></td></tr>
+</table>
+
+<div class="tip"><span class="en"><b>$0 marketing is your best friend right now.</b> Reddit, Twitter, TikTok organic posts cost nothing. Spend money only AFTER you know what messaging resonates.</span><span class="ko"><b>$0 마케팅이 지금 최고의 친구.</b> 레딧, 트위터, 틱톡 유기적 포스트는 무료. 어떤 메시지가 먹히는지 알고 나서만 돈 쓰기.</span></div>
+
+<!-- ==================== KPIs ==================== -->
+<h2>📊 <span class="en">Targets to Track</span><span class="ko">추적할 목표</span></h2>
+
+<div class="metrics">
+  <div class="metric"><div class="num">100</div><div class="lbl"><span class="en">Beta signups<br>Week 3</span><span class="ko">베타 가입<br>3주차</span></div></div>
+  <div class="metric"><div class="num">500</div><div class="lbl"><span class="en">Signups<br>Week 8</span><span class="ko">가입자<br>8주차</span></div></div>
+  <div class="metric"><div class="num">2K</div><div class="lbl"><span class="en">Downloads<br>Launch month</span><span class="ko">다운로드<br>런칭 달</span></div></div>
+  <div class="metric"><div class="num">10K</div><div class="lbl"><span class="en">Users<br>Month 6</span><span class="ko">유저<br>6개월차</span></div></div>
+</div>
+
+<!-- ==================== QUICK START ==================== -->
+<h2>⚡ <span class="en">This Weekend — Do These 5 Things</span><span class="ko">이번 주말 — 이 5가지만 하기</span></h2>
+
+<ul class="checklist">
+  <li><span class="en">Write your Reddit r/sideproject post (use the "Humble Indie Dev" copy above)</span><span class="ko">레딧 r/sideproject 게시글 작성 ("인디 개발자 감성" 카피 사용)</span></li>
+  <li><span class="en">Record ONE 15-second screen recording of the voice input feature</span><span class="ko">음성 입력 기능 15초 화면 녹화 하나</span></li>
+  <li><span class="en">Create @fridgenie.app Instagram account + post the first 3 posts</span><span class="ko">@fridgenie.app 인스타 계정 생성 + 첫 3개 포스트</span></li>
+  <li><span class="en">Text 5 friends: "Hey, I built an app — can you try it and give feedback?"</span><span class="ko">친구 5명에게: "야, 앱 만들었는데 써보고 피드백 줄 수 있어?"</span></li>
+  <li><span class="en">Set up Google Forms feedback form + add link to the app</span><span class="ko">Google Forms 피드백 폼 세팅 + 앱에 링크 추가</span></li>
+</ul>
+
+</div>
+
+<footer>
+  <span class="en">🧞 Fridgenie Marketing Roadmap — Built with love by Totoro 🌳 — March 2026</span>
+  <span class="ko">🧞 Fridgenie 마케팅 로드맵 — Totoro가 만듦 🌳 — 2026년 3월</span>
+</footer>
+
+<script>
+let isKorean = false;
+function toggleLang() {
+  isKorean = !isKorean;
+  document.querySelectorAll('.en').forEach(el => el.classList.toggle('hide', isKorean));
+  document.querySelectorAll('.ko').forEach(el => el.classList.toggle('show', isKorean));
+  document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+}
+</script>
+</body>
+</html>
