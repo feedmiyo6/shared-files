@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 20 Quiz: Async FIFO Concept</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    background: linear-gradient(135deg, #fefae0 0%, #faedcd 100%);
+    color: #3d405b;
+    line-height: 1.8;
+    padding: 24px;
+    max-width: 920px;
+    margin: 0 auto;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+h1 { color: #5d4037; border-bottom: 3px solid #c4a77d; padding-bottom: 12px; margin: 24px 0 16px; font-size: 2em; }
+h2 { color: #588157; border-bottom: 2px solid #a3b18a; padding-bottom: 8px; margin: 28px 0 14px; font-size: 1.5em; }
+h3 { color: #5d4037; margin: 20px 0 10px; }
+p { margin: 10px 0; }
+
+code {
+    background: #e9f5db;
+    color: #3d405b;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+}
+
+.question {
+    background: #fff8f0;
+    border: 2px solid #c4a77d;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    color: #3d405b;
+}
+.question h3 { color: #5d4037; margin-bottom: 12px; }
+
+.options label {
+    display: block;
+    padding: 10px 16px;
+    margin: 6px 0;
+    background: #fff;
+    border: 2px solid #a3b18a;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.options label:hover { background: #e9f5db; }
+.options input { margin-right: 10px; }
+
+.result {
+    display: none;
+    padding: 12px 16px;
+    border-radius: 8px;
+    margin-top: 12px;
+    font-weight: 600;
+}
+.result.correct { background: #d4edda; color: #155724; border: 1px solid #a3b18a; }
+.result.incorrect { background: #f8d7da; color: #721c24; border: 1px solid #ef4444; }
+
+.nav-links {
+    display: flex; gap: 12px; margin: 20px 0; flex-wrap: wrap;
+}
+.nav-links a {
+    background: linear-gradient(135deg, #588157, #3a5a40);
+    color: #fff; padding: 10px 20px; border-radius: 24px;
+    text-decoration: none; font-weight: 600; font-size: 14px;
+}
+
+.score-box {
+    background: #fff8f0;
+    border: 3px solid #588157;
+    border-radius: 12px;
+    padding: 24px;
+    margin: 24px 0;
+    text-align: center;
+    display: none;
+}
+.score-box h2 { border: none; }
+
+.check-btn {
+    background: linear-gradient(135deg, #588157, #3a5a40);
+    color: #fff; border: none; border-radius: 24px;
+    padding: 10px 24px; cursor: pointer; font-size: 14px; font-weight: 600;
+    margin-top: 10px;
+}
+.check-btn:hover { opacity: 0.9; }
+
+.submit-btn {
+    background: linear-gradient(135deg, #588157, #3a5a40);
+    color: #fff; border: none; border-radius: 24px;
+    padding: 14px 32px; cursor: pointer; font-size: 16px; font-weight: 600;
+    display: block; margin: 30px auto;
+}
+
+.lang-toggle {
+    position: fixed; top: 16px; right: 16px;
+    background: #588157; border: none; border-radius: 24px;
+    padding: 10px 20px; cursor: pointer; color: #fff;
+    font-size: 14px; font-weight: 600; z-index: 1000;
+}
+.lang-toggle:hover { background: #3a5a40; }
+.ko { display: none; }
+
+@media (max-width: 768px) {
+    body { padding: 16px; }
+    h1 { font-size: 1.8em; }
+    .lang-toggle { padding: 8px 16px; font-size: 13px; }
+}
+</style>
+</head>
+<body>
+
+<button class="lang-toggle" onclick="toggleLang()">한국어</button>
+
+<h1>📝 Day 20 Quiz: Async FIFO Concept</h1>
+
+<div class="nav-links">
+    <a href="day-20-lesson.html">📖 Lesson</a>
+    <a href="day-20-practice.html">💻 Practice</a>
+</div>
+
+<div id="quiz">
+
+<div class="question" data-answer="c">
+    <h3>Q1. <span class="en">What are the four main components of an async FIFO?</span><span class="ko" style="display:none;">비동기 FIFO의 네 가지 주요 구성 요소는?</span></h3>
+    <div class="options">
+        <label><input type="radio" name="q1" value="a"> <span class="en">Single-port RAM, binary counters, muxes, clock divider</span><span class="ko" style="display:none;">단일 포트 RAM, 이진 카운터, 먹스, 클럭 분배기</span></label>
+        <label><input type="radio" name="q1" value="b"> <span class="en">Dual-port RAM, binary pointers, 3-flop synchronizers, comparators</span><span class="ko" style="display:none;">듀얼 포트 RAM, 이진 포인터, 3-플립플롭 동기화기, 비교기</span></label>
+        <label><input type="radio" name="q1" value="c"> <span class="en">Dual-port RAM, Gray code pointers, 2-flop synchronizers, full/empty logic</span><span class="ko" style="display:none;">듀얼 포트 RAM, 그레이 코드 포인터, 2-플립플롭 동기화기, full/empty 로직</span></label>
+        <label><input type="radio" name="q1" value="d"> <span class="en">Register file, one-hot pointers, handshake protocol, arbiter</span><span class="ko" style="display:none;">레지스터 파일, 원-핫 포인터, 핸드셰이크 프로토콜, 중재기</span></label>
+    </div>
+    <div class="result"></div>
+</div>
+
+<div class="question" data-answer="b">
+    <h3>Q2. <span class="en">Why must async FIFO depth be a power of 2?</span><span class="ko" style="display:none;">비동기 FIFO 깊이가 2의 거듭제곱이어야 하는 이유는?</span></h3>
+    <div class="options">
+        <label><input type="radio" name="q2" value="a"> <span class="en">It simplifies the memory addressing hardware</span><span class="ko" style="display:none;">메모리 주소 지정 하드웨어를 단순화하기 위해</span></label>
+        <label><input type="radio" name="q2" value="b"> <span class="en">Gray code only maintains single-bit transitions when wrapping at powers of 2</span><span class="ko" style="display:none;">그레이 코드가 2의 거듭제곱에서 래핑할 때만 단일 비트 전환을 유지하므로</span></label>
+        <label><input type="radio" name="q2" value="c"> <span class="en">The synthesis tool requires it for dual-port RAM inference</span><span class="ko" style="display:none;">합성 도구가 듀얼 포트 RAM 추론을 위해 요구하므로</span></label>
+        <label><input type="radio" name="q2" value="d"> <span class="en">It reduces power consumption in the clock tree</span><span class="ko" style="display:none;">클럭 트리의 전력 소비를 줄이기 위해</span></label>
+    </div>
+    <div class="result"></div>
+</div>
+
+<div class="question" data-answer="a">
+    <h3>Q3. <span class="en">Where is the <code>full</code> flag generated?</span><span class="ko" style="display:none;"><code>full</code> 플래그는 어디서 생성되나요?</span></h3>
+    <div class="options">
+        <label><input type="radio" name="q3" value="a"> <span class="en">In the write clock domain</span><span class="ko" style="display:none;">쓰기 클럭 도메인에서</span></label>
+        <label><input type="radio" name="q3" value="b"> <span class="en">In the read clock domain</span><span class="ko" style="display:none;">읽기 클럭 도메인에서</span></label>
+        <label><input type="radio" name="q3" value="c"> <span class="en">In a shared third clock domain</span><span class="ko" style="display:none;">공유된 세 번째 클럭 도메인에서</span></label>
+        <label><input type="radio" name="q3" value="d"> <span class="en">Asynchronously (no clock)</span><span class="ko" style="display:none;">비동기적으로 (클럭 없이)</span></label>
+    </div>
+    <div class="result"></div>
+</div>
+
+<div class="question" data-answer="d">
+    <h3>Q4. <span class="en">How is the <code>empty</code> condition detected in Gray code?</span><span class="ko" style="display:none;">그레이 코드에서 <code>empty</code> 조건은 어떻게 감지되나요?</span></h3>
+    <div class="options">
+        <label><input type="radio" name="q4" value="a"> <span class="en">Write pointer - Read pointer == 0 (binary subtraction)</span><span class="ko" style="display:none;">쓰기 포인터 - 읽기 포인터 == 0 (이진 뺄셈)</span></label>
+        <label><input type="radio" name="q4" value="b"> <span class="en">Top 2 bits of pointers differ, rest match</span><span class="ko" style="display:none;">포인터의 상위 2비트가 다르고 나머지 일치</span></label>
+        <label><input type="radio" name="q4" value="c"> <span class="en">A dedicated counter reaches zero</span><span class="ko" style="display:none;">전용 카운터가 0에 도달</span></label>
+        <label><input type="radio" name="q4" value="d"> <span class="en">Read Gray pointer equals synchronized write Gray pointer</span><span class="ko" style="display:none;">읽기 그레이 포인터가 동기화된 쓰기 그레이 포인터와 같음</span></label>
+    </div>
+    <div class="result"></div>
+</div>
+
+<div class="question" data-answer="c">
+    <h3>Q5. <span class="en">How is the <code>full</code> condition detected in Gray code?</span><span class="ko" style="display:none;">그레이 코드에서 <code>full</code> 조건은 어떻게 감지되나요?</span></h3>
+    <div class="options">
+        <label><input type="radio" name="q5" value="a"> <span class="en">All pointer bits are identical</span><span class="ko" style="display:none;">모든 포인터 비트가 동일</span></label>
+        <label><input type="radio" name="q5" value="b"> <span class="en">Write pointer equals read pointer + DEPTH</span><span class="ko" style="display:none;">쓰기 포인터가 읽기 포인터 + DEPTH와 같음</span></label>
+        <label><input type="radio" name="q5" value="c"> <span class="en">Top 2 bits differ, remaining bits match</span><span class="ko" style="display:none;">상위 2비트가 다르고 나머지 비트 일치</span></label>
+        <label><input type="radio" name="q5" value="d"> <span class="en">MSB differs, all other bits differ</span><span class="ko" style="display:none;">MSB가 다르고 나머지 모든 비트 다름</span></label>
+    </div>
+    <div class="result"></div>
+</div>
+
+<div class="question" data-answer="b">
+    <h3>Q6. <span class="en">Why do pointers use N+1 bits for a 2<sup>N</sup>-deep FIFO?</span><span class="ko" style="display:none;">2<sup>N</sup> 깊이 FIFO에서 포인터가 N+1 비트를 사용하는 이유는?</span></h3>
+    <div class="options">
+        <label><input type="radio" name="q6" value="a"> <span class="en">To store the parity bit for error detection</span><span class="ko" style="display:none;">오류 감지를 위한 패리티 비트 저장</span></label>
+        <label><input type="radio" name="q6" value="b"> <span class="en">To distinguish between full and empty (both would look the same with N bits)</span><span class="ko" style="display:none;">full과 empty를 구분하기 위해 (N비트로는 둘 다 같아 보임)</span></label>
+        <label><input type="radio" name="q6" value="c"> <span class="en">To support non-power-of-2 depths</span><span class="ko" style="display:none;">2의 거듭제곱이 아닌 깊이를 지원하기 위해</span></label>
+        <label><input type="radio" name="q6" value="d"> <span class="en">To add overflow protection</span><span class="ko" style="display:none;">오버플로 보호를 추가하기 위해</span></label>
+    </div>
+    <div class="result"></div>
+</div>
+
+<div class="question" data-answer="a">
+    <h3>Q7. <span class="en">What does "conservative" mean for async FIFO flags?</span><span class="ko" style="display:none;">비동기 FIFO 플래그에서 "보수적"이란 무엇을 의미하나요?</span></h3>
+    <div class="options">
+        <label><input type="radio" name="q7" value="a"> <span class="en">Flags may report full/empty slightly early, but never miss a true condition</span><span class="ko" style="display:none;">플래그가 full/empty를 약간 일찍 보고할 수 있지만 진정한 조건을 절대 놓치지 않음</span></label>
+        <label><input type="radio" name="q7" value="b"> <span class="en">Flags update only on the slower clock</span><span class="ko" style="display:none;">플래그가 느린 클럭에서만 업데이트됨</span></label>
+        <label><input type="radio" name="q7" value="c"> <span class="en">Flags are delayed by exactly 2 cycles</span><span class="ko" style="display:none;">플래그가 정확히 2사이클 지연됨</span></label>
+        <label><input type="radio" name="q7" value="d"> <span class="en">Flags can sometimes miss full/empty but eventually catch up</span><span class="ko" style="display:none;">플래그가 때때로 full/empty를 놓칠 수 있지만 결국 따라잡음</span></label>
+    </div>
+    <div class="result"></div>
+</div>
+
+<div class="question" data-answer="c">
+    <h3>Q8. <span class="en">What is the binary-to-Gray conversion formula?</span><span class="ko" style="display:none;">이진-그레이 변환 공식은?</span></h3>
+    <div class="options">
+        <label><input type="radio" name="q8" value="a"> <span class="en"><code>gray = binary + 1</code></span><span class="ko" style="display:none;"><code>gray = binary + 1</code></span></label>
+        <label><input type="radio" name="q8" value="b"> <span class="en"><code>gray = binary & (binary >> 1)</code></span><span class="ko" style="display:none;"><code>gray = binary & (binary >> 1)</code></span></label>
+        <label><input type="radio" name="q8" value="c"> <span class="en"><code>gray = binary ^ (binary >> 1)</code></span><span class="ko" style="display:none;"><code>gray = binary ^ (binary >> 1)</code></span></label>
+        <label><input type="radio" name="q8" value="d"> <span class="en"><code>gray = ~binary</code></span><span class="ko" style="display:none;"><code>gray = ~binary</code></span></label>
+    </div>
+    <div class="result"></div>
+</div>
+
+<div class="question" data-answer="b">
+    <h3>Q9. <span class="en">What would happen if binary pointers (not Gray) were synchronized across clock domains?</span><span class="ko" style="display:none;">이진 포인터(그레이 아님)가 클럭 도메인 간에 동기화되면 어떻게 되나요?</span></h3>
+    <div class="options">
+        <label><input type="radio" name="q9" value="a"> <span class="en">Nothing — binary works fine with 2-flop synchronizers</span><span class="ko" style="display:none;">아무 문제 없음 — 이진이 2-플립플롭 동기화기와 잘 작동</span></label>
+        <label><input type="radio" name="q9" value="b"> <span class="en">Multi-bit transitions could cause synchronizer to capture invalid intermediate value</span><span class="ko" style="display:none;">멀티비트 전환으로 동기화기가 유효하지 않은 중간값을 캡처할 수 있음</span></label>
+        <label><input type="radio" name="q9" value="c"> <span class="en">It would work but use more power</span><span class="ko" style="display:none;">작동하지만 전력을 더 소비</span></label>
+        <label><input type="radio" name="q9" value="d"> <span class="en">The FIFO would be slower but still correct</span><span class="ko" style="display:none;">FIFO가 더 느리지만 여전히 정확</span></label>
+    </div>
+    <div class="result"></div>
+</div>
+
+<div class="question" data-answer="d">
+    <h3>Q10. <span class="en">In the async FIFO, the dual-port RAM allows:</span><span class="ko" style="display:none;">비동기 FIFO에서 듀얼 포트 RAM이 허용하는 것은:</span></h3>
+    <div class="options">
+        <label><input type="radio" name="q10" value="a"> <span class="en">Two writes simultaneously from different domains</span><span class="ko" style="display:none;">서로 다른 도메인에서 동시에 두 번 쓰기</span></label>
+        <label><input type="radio" name="q10" value="b"> <span class="en">Two reads simultaneously from different domains</span><span class="ko" style="display:none;">서로 다른 도메인에서 동시에 두 번 읽기</span></label>
+        <label><input type="radio" name="q10" value="c"> <span class="en">Only one operation at a time with arbitration</span><span class="ko" style="display:none;">중재로 한 번에 하나의 작업만</span></label>
+        <label><input type="radio" name="q10" value="d"> <span class="en">Simultaneous write (wr_clk) and read (rd_clk) on independent clocks</span><span class="ko" style="display:none;">독립 클럭으로 동시 쓰기(wr_clk)와 읽기(rd_clk)</span></label>
+    </div>
+    <div class="result"></div>
+</div>
+
+<div class="question" data-answer="a">
+    <h3>Q11. <span class="en">If a false-full is asserted, what is the impact?</span><span class="ko" style="display:none;">거짓 full이 어서트되면 영향은?</span></h3>
+    <div class="options">
+        <label><input type="radio" name="q11" value="a"> <span class="en">Writer pauses temporarily — safe but reduces throughput</span><span class="ko" style="display:none;">쓰기 측이 일시적으로 중단 — 안전하지만 처리량 감소</span></label>
+        <label><input type="radio" name="q11" value="b"> <span class="en">Data gets overwritten and corrupted</span><span class="ko" style="display:none;">데이터가 덮어쓰여 손상됨</span></label>
+        <label><input type="radio" name="q11" value="c"> <span class="en">The FIFO must be reset</span><span class="ko" style="display:none;">FIFO를 리셋해야 함</span></label>
+        <label><input type="radio" name="q11" value="d"> <span class="en">Reader gets invalid data</span><span class="ko" style="display:none;">읽기 측이 잘못된 데이터를 받음</span></label>
+    </div>
+    <div class="result"></div>
+</div>
+
+<div class="question" data-answer="c">
+    <h3>Q12. <span class="en">What is the synchronization latency for flag updates?</span><span class="ko" style="display:none;">플래그 업데이트의 동기화 지연은?</span></h3>
+    <div class="options">
+        <label><input type="radio" name="q12" value="a"> <span class="en">0 cycles — combinational</span><span class="ko" style="display:none;">0 사이클 — 조합 논리</span></label>
+        <label><input type="radio" name="q12" value="b"> <span class="en">1 cycle</span><span class="ko" style="display:none;">1 사이클</span></label>
+        <label><input type="radio" name="q12" value="c"> <span class="en">2-3 cycles of the destination clock</span><span class="ko" style="display:none;">대상 클럭의 2-3 사이클</span></label>
+        <label><input type="radio" name="q12" value="d"> <span class="en">Depends on FIFO depth</span><span class="ko" style="display:none;">FIFO 깊이에 따라 다름</span></label>
+    </div>
+    <div class="result"></div>
+</div>
+
+</div>
+
+<button class="submit-btn" onclick="gradeQuiz()">Submit Quiz</button>
+
+<div class="score-box" id="scoreBox">
+    <h2 id="scoreText"></h2>
+    <p id="scoreMsg"></p>
+</div>
+
+<div class="nav-links" style="margin-top: 30px;">
+    <a href="day-20-lesson.html">📖 Review Lesson</a>
+    <a href="day-20-practice.html">💻 Practice</a>
+</div>
+
+<script>
+let isKorean = false;
+function toggleLang() {
+    isKorean = !isKorean;
+    document.querySelectorAll('.en').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'none' : 'revert', 'important');
+    });
+    document.querySelectorAll('.ko').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'revert' : 'none', 'important');
+    });
+    document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+}
+
+function gradeQuiz() {
+    const questions = document.querySelectorAll('.question');
+    let score = 0;
+    questions.forEach((q, i) => {
+        const answer = q.dataset.answer;
+        const selected = q.querySelector(`input[name="q${i+1}"]:checked`);
+        const result = q.querySelector('.result');
+        if (selected && selected.value === answer) {
+            score++;
+            result.className = 'result correct';
+            result.textContent = '✅ Correct!';
+        } else {
+            result.className = 'result incorrect';
+            result.textContent = '❌ Incorrect — correct answer: ' + answer.toUpperCase();
+        }
+        result.style.display = 'block';
+    });
+    const box = document.getElementById('scoreBox');
+    const pct = Math.round(score / questions.length * 100);
+    document.getElementById('scoreText').textContent = `${score}/${questions.length} (${pct}%)`;
+    document.getElementById('scoreMsg').textContent = pct >= 80 ? '🎉 Great job! You understand async FIFOs well!' : pct >= 60 ? '📖 Good effort — review the lesson for missed concepts.' : '💪 Keep studying — async FIFOs are a key interview topic!';
+    box.style.display = 'block';
+    box.scrollIntoView({ behavior: 'smooth' });
+}
+</script>
+
+</body>
+</html>

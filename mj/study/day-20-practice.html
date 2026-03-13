@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 20 Practice: Async FIFO</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    background: linear-gradient(135deg, #fefae0 0%, #faedcd 100%);
+    color: #3d405b;
+    line-height: 1.8;
+    padding: 24px;
+    max-width: 920px;
+    margin: 0 auto;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+h1 { color: #5d4037; border-bottom: 3px solid #c4a77d; padding-bottom: 12px; margin: 24px 0 16px; font-size: 2em; }
+h2 { color: #588157; border-bottom: 2px solid #a3b18a; padding-bottom: 8px; margin: 28px 0 14px; font-size: 1.5em; }
+h3 { color: #5d4037; margin: 20px 0 10px; }
+p { margin: 10px 0; }
+ul, ol { margin: 10px 0 10px 24px; }
+li { margin: 4px 0; }
+
+pre {
+    background: #2d3436;
+    padding: 24px;
+    border-radius: 12px;
+    margin: 24px 0;
+    border: 3px solid #a3b18a;
+    overflow-x: auto;
+    font-size: 15px;
+    line-height: 1.6;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+    color: #f8f8f2;
+}
+.keyword { color: #ff79c6; font-weight: 600; }
+.type { color: #8be9fd; }
+.signal { color: #50fa7b; }
+.number { color: #ffb86c; }
+.comment { color: #6272a4; font-style: italic; }
+.string { color: #f1fa8c; }
+
+code {
+    background: #e9f5db;
+    color: #3d405b;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+}
+
+.concept-box {
+    background: #fff8f0;
+    border: 2px solid #c4a77d;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    color: #3d405b;
+}
+.concept-box h3 { color: #5d4037; margin-bottom: 12px; }
+
+.warning-box {
+    background: #fff8f0;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    border-left: 4px solid #ef4444;
+    color: #3d405b;
+}
+.warning-box h3 { color: #c53030; margin-bottom: 12px; }
+
+.hint-box {
+    background: #fff8f0;
+    border-radius: 8px;
+    padding: 15px;
+    margin: 15px 0;
+    border-left: 4px solid #5d4037;
+    color: #3d405b;
+}
+
+.tip-box {
+    background: #fff8f0;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    border-left: 4px solid #588157;
+    color: #3d405b;
+}
+
+.nav-links {
+    display: flex; gap: 12px; margin: 20px 0; flex-wrap: wrap;
+}
+.nav-links a {
+    background: linear-gradient(135deg, #588157, #3a5a40);
+    color: #fff; padding: 10px 20px; border-radius: 24px;
+    text-decoration: none; font-weight: 600; font-size: 14px;
+}
+.nav-links a:hover { opacity: 0.9; }
+
+.toggle-btn {
+    background: linear-gradient(135deg, #588157, #3a5a40);
+    color: #fff; border: none; border-radius: 24px;
+    padding: 8px 20px; cursor: pointer; font-size: 14px; font-weight: 600;
+    margin: 10px 0;
+}
+.toggle-btn:hover { opacity: 0.9; }
+
+.solution { display: none; margin-top: 12px; }
+
+.lang-toggle {
+    position: fixed; top: 16px; right: 16px;
+    background: #588157; border: none; border-radius: 24px;
+    padding: 10px 20px; cursor: pointer; color: #fff;
+    font-size: 14px; font-weight: 600; z-index: 1000;
+}
+.lang-toggle:hover { background: #3a5a40; }
+.ko { display: none; }
+
+@media (max-width: 768px) {
+    body { padding: 16px; }
+    h1 { font-size: 1.8em; }
+    pre { font-size: 14px; padding: 16px; }
+    .lang-toggle { padding: 8px 16px; font-size: 13px; }
+}
+</style>
+</head>
+<body>
+
+<button class="lang-toggle" onclick="toggleLang()">한국어</button>
+
+<h1>💻 Day 20 Practice: Async FIFO</h1>
+
+<div class="nav-links">
+    <a href="day-20-lesson.html">📖 Lesson</a>
+    <a href="day-20-quiz.html">📝 Quiz</a>
+</div>
+
+<h2>Exercise 1: Gray Code Converter Module</h2>
+
+<p class="en">Write a parameterized module that converts between binary and Gray code in both directions.</p>
+<p class="ko" style="display:none;">이진 코드와 그레이 코드 사이를 양방향으로 변환하는 매개변수화된 모듈을 작성하세요.</p>
+
+<div class="concept-box">
+    <h3>📋 Requirements</h3>
+    <ul class="en">
+        <li>Parameter <code>WIDTH</code> for bit width</li>
+        <li>Function <code>bin2gray</code>: binary → Gray</li>
+        <li>Function <code>gray2bin</code>: Gray → binary</li>
+        <li>Verify: <code>gray2bin(bin2gray(x)) == x</code> for all values</li>
+    </ul>
+    <ul class="ko" style="display:none;">
+        <li>비트 폭을 위한 매개변수 <code>WIDTH</code></li>
+        <li>함수 <code>bin2gray</code>: 이진 → 그레이</li>
+        <li>함수 <code>gray2bin</code>: 그레이 → 이진</li>
+        <li>검증: 모든 값에 대해 <code>gray2bin(bin2gray(x)) == x</code></li>
+    </ul>
+</div>
+
+<div class="hint-box">
+    <strong>💡 Hint:</strong>
+    <span class="en"><code>bin2gray = bin ^ (bin >> 1)</code>. For <code>gray2bin</code>, XOR each bit with all higher bits.</span>
+    <span class="ko" style="display:none;"><code>bin2gray = bin ^ (bin >> 1)</code>. <code>gray2bin</code>의 경우 각 비트를 모든 상위 비트와 XOR합니다.</span>
+</div>
+
+<button class="toggle-btn" onclick="toggleSolution('sol1')">Show Solution</button>
+<div class="solution" id="sol1">
+<pre><span class="keyword">module</span> <span class="type">gray_code_conv</span> #(
+    <span class="keyword">parameter</span> <span class="type">WIDTH</span> = <span class="number">5</span>
+)(
+    <span class="keyword">input</span>  <span class="type">logic</span> [<span class="type">WIDTH</span>-<span class="number">1</span>:<span class="number">0</span>] <span class="signal">bin_in</span>,
+    <span class="keyword">output</span> <span class="type">logic</span> [<span class="type">WIDTH</span>-<span class="number">1</span>:<span class="number">0</span>] <span class="signal">gray_out</span>,
+
+    <span class="keyword">input</span>  <span class="type">logic</span> [<span class="type">WIDTH</span>-<span class="number">1</span>:<span class="number">0</span>] <span class="signal">gray_in</span>,
+    <span class="keyword">output</span> <span class="type">logic</span> [<span class="type">WIDTH</span>-<span class="number">1</span>:<span class="number">0</span>] <span class="signal">bin_out</span>
+);
+
+    <span class="comment">// Binary to Gray: XOR with right-shifted self</span>
+    <span class="keyword">assign</span> <span class="signal">gray_out</span> = <span class="signal">bin_in</span> ^ (<span class="signal">bin_in</span> >> <span class="number">1</span>);
+
+    <span class="comment">// Gray to Binary: each bit = XOR of all higher Gray bits</span>
+    <span class="keyword">always_comb</span> <span class="keyword">begin</span>
+        <span class="signal">bin_out</span>[<span class="type">WIDTH</span>-<span class="number">1</span>] = <span class="signal">gray_in</span>[<span class="type">WIDTH</span>-<span class="number">1</span>];  <span class="comment">// MSB same</span>
+        <span class="keyword">for</span> (<span class="type">int</span> <span class="signal">i</span> = <span class="type">WIDTH</span>-<span class="number">2</span>; <span class="signal">i</span> >= <span class="number">0</span>; <span class="signal">i</span>--)
+            <span class="signal">bin_out</span>[<span class="signal">i</span>] = <span class="signal">bin_out</span>[<span class="signal">i</span>+<span class="number">1</span>] ^ <span class="signal">gray_in</span>[<span class="signal">i</span>];
+    <span class="keyword">end</span>
+
+<span class="keyword">endmodule</span></pre>
+</div>
+
+<h2>Exercise 2: 2-Flop Synchronizer (Parameterized)</h2>
+
+<p class="en">Write a parameterized multi-bit synchronizer that uses 2 flip-flop stages. This is used to pass Gray code pointers across clock domains.</p>
+<p class="ko" style="display:none;">2단 플립플롭을 사용하는 매개변수화된 멀티비트 동기화기를 작성하세요. 그레이 코드 포인터를 클럭 도메인 간에 전달하는 데 사용됩니다.</p>
+
+<div class="warning-box">
+    <h3>⚠️ Important</h3>
+    <p class="en">This synchronizer is ONLY safe for Gray-coded values (single-bit transitions). Do NOT use it for arbitrary binary values!</p>
+    <p class="ko" style="display:none;">이 동기화기는 그레이 코드 값(단일 비트 전환)에만 안전합니다. 임의의 이진 값에 사용하지 마세요!</p>
+</div>
+
+<button class="toggle-btn" onclick="toggleSolution('sol2')">Show Solution</button>
+<div class="solution" id="sol2">
+<pre><span class="keyword">module</span> <span class="type">sync_2ff</span> #(
+    <span class="keyword">parameter</span> <span class="type">WIDTH</span> = <span class="number">5</span>
+)(
+    <span class="keyword">input</span>  <span class="type">logic</span>                   <span class="signal">clk</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span>                   <span class="signal">rst_n</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span> [<span class="type">WIDTH</span>-<span class="number">1</span>:<span class="number">0</span>]      <span class="signal">data_in</span>,
+    <span class="keyword">output</span> <span class="type">logic</span> [<span class="type">WIDTH</span>-<span class="number">1</span>:<span class="number">0</span>]      <span class="signal">data_out</span>
+);
+
+    <span class="type">logic</span> [<span class="type">WIDTH</span>-<span class="number">1</span>:<span class="number">0</span>] <span class="signal">meta</span>;
+
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span> <span class="keyword">or</span> <span class="keyword">negedge</span> <span class="signal">rst_n</span>) <span class="keyword">begin</span>
+        <span class="keyword">if</span> (!<span class="signal">rst_n</span>) <span class="keyword">begin</span>
+            <span class="signal">meta</span>     <= <span class="number">'0</span>;
+            <span class="signal">data_out</span> <= <span class="number">'0</span>;
+        <span class="keyword">end</span> <span class="keyword">else</span> <span class="keyword">begin</span>
+            <span class="signal">meta</span>     <= <span class="signal">data_in</span>;   <span class="comment">// Stage 1: may go metastable</span>
+            <span class="signal">data_out</span> <= <span class="signal">meta</span>;      <span class="comment">// Stage 2: resolved</span>
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+
+<span class="keyword">endmodule</span></pre>
+</div>
+
+<h2>Exercise 3: Full/Empty Flag Logic</h2>
+
+<p class="en">Given Gray-coded write and read pointers (5 bits for a 16-deep FIFO), write the combinational logic for <code>full</code> and <code>empty</code> flags.</p>
+<p class="ko" style="display:none;">그레이 코드 쓰기/읽기 포인터(16 깊이 FIFO용 5비트)가 주어졌을 때, <code>full</code>과 <code>empty</code> 플래그의 조합 논리를 작성하세요.</p>
+
+<div class="concept-box">
+    <h3>📋 Remember</h3>
+    <ul class="en">
+        <li><strong>Empty</strong> (in rd_clk domain): rd_gray == wr_gray_sync</li>
+        <li><strong>Full</strong> (in wr_clk domain): top 2 bits differ, lower bits match</li>
+        <li>Pointers are 5 bits [4:0] for 16-entry FIFO</li>
+    </ul>
+    <ul class="ko" style="display:none;">
+        <li><strong>Empty</strong> (rd_clk 도메인): rd_gray == wr_gray_sync</li>
+        <li><strong>Full</strong> (wr_clk 도메인): 상위 2비트 다르고, 하위 비트 일치</li>
+        <li>16-엔트리 FIFO용 포인터는 5비트 [4:0]</li>
+    </ul>
+</div>
+
+<button class="toggle-btn" onclick="toggleSolution('sol3')">Show Solution</button>
+<div class="solution" id="sol3">
+<pre><span class="comment">// Empty: generated in READ clock domain</span>
+<span class="comment">// wr_gray_sync is the write pointer synchronized to rd_clk</span>
+<span class="keyword">assign</span> <span class="signal">empty</span> = (<span class="signal">rd_gray</span> == <span class="signal">wr_gray_sync</span>);
+
+<span class="comment">// Full: generated in WRITE clock domain</span>
+<span class="comment">// rd_gray_sync is the read pointer synchronized to wr_clk</span>
+<span class="comment">// In Gray code: full when top 2 MSBs differ, rest match</span>
+<span class="keyword">assign</span> <span class="signal">full</span> = (<span class="signal">wr_gray</span>[<span class="number">4</span>]   != <span class="signal">rd_gray_sync</span>[<span class="number">4</span>])   &&  <span class="comment">// MSB differs</span>
+              (<span class="signal">wr_gray</span>[<span class="number">3</span>]   != <span class="signal">rd_gray_sync</span>[<span class="number">3</span>])   &&  <span class="comment">// 2nd MSB differs</span>
+              (<span class="signal">wr_gray</span>[<span class="number">2</span>:<span class="number">0</span>] == <span class="signal">rd_gray_sync</span>[<span class="number">2</span>:<span class="number">0</span>]);  <span class="comment">// Rest match</span>
+
+<span class="comment">// WHY top 2 bits in Gray code?</span>
+<span class="comment">// In binary: full when wr_bin[4] != rd_bin[4] and wr_bin[3:0] == rd_bin[3:0]</span>
+<span class="comment">// In Gray: the binary MSB difference maps to top 2 Gray bits differing</span>
+<span class="comment">// because gray[4] = bin[4] ^ bin[3], gray[3] = bin[3] ^ bin[2]</span></pre>
+</div>
+
+<h2>Exercise 4: Complete Async FIFO Testbench</h2>
+
+<p class="en">Write a testbench that verifies the async FIFO with different write and read clocks. Test: fill to full, drain to empty, simultaneous read/write.</p>
+<p class="ko" style="display:none;">서로 다른 쓰기/읽기 클럭으로 비동기 FIFO를 검증하는 테스트벤치를 작성하세요. 테스트: 가득 찰 때까지 채우기, 비울 때까지 비우기, 동시 읽기/쓰기.</p>
+
+<button class="toggle-btn" onclick="toggleSolution('sol4')">Show Solution</button>
+<div class="solution" id="sol4">
+<pre><span class="keyword">module</span> <span class="type">tb_async_fifo</span>;
+
+    <span class="keyword">parameter</span> <span class="type">DATA_WIDTH</span> = <span class="number">8</span>;
+    <span class="keyword">parameter</span> <span class="type">ADDR_WIDTH</span> = <span class="number">3</span>;  <span class="comment">// 8-deep FIFO for quick testing</span>
+
+    <span class="type">logic</span> <span class="signal">wr_clk</span>, <span class="signal">rd_clk</span>, <span class="signal">wr_rst_n</span>, <span class="signal">rd_rst_n</span>;
+    <span class="type">logic</span> <span class="signal">wr_en</span>, <span class="signal">rd_en</span>;
+    <span class="type">logic</span> [<span class="type">DATA_WIDTH</span>-<span class="number">1</span>:<span class="number">0</span>] <span class="signal">wr_data</span>, <span class="signal">rd_data</span>;
+    <span class="type">logic</span> <span class="signal">full</span>, <span class="signal">empty</span>;
+
+    <span class="comment">// Instantiate DUT</span>
+    <span class="type">async_fifo</span> #(
+        .<span class="type">DATA_WIDTH</span>(<span class="type">DATA_WIDTH</span>),
+        .<span class="type">ADDR_WIDTH</span>(<span class="type">ADDR_WIDTH</span>)
+    ) <span class="signal">dut</span> (.*);
+
+    <span class="comment">// Different clock frequencies!</span>
+    <span class="keyword">initial</span> <span class="signal">wr_clk</span> = <span class="number">0</span>;
+    <span class="keyword">always</span> #<span class="number">5</span>  <span class="signal">wr_clk</span> = ~<span class="signal">wr_clk</span>;  <span class="comment">// 100 MHz write</span>
+
+    <span class="keyword">initial</span> <span class="signal">rd_clk</span> = <span class="number">0</span>;
+    <span class="keyword">always</span> #<span class="number">7</span>  <span class="signal">rd_clk</span> = ~<span class="signal">rd_clk</span>;  <span class="comment">// ~71 MHz read</span>
+
+    <span class="keyword">initial</span> <span class="keyword">begin</span>
+        <span class="comment">// Reset both domains</span>
+        <span class="signal">wr_rst_n</span> = <span class="number">0</span>; <span class="signal">rd_rst_n</span> = <span class="number">0</span>;
+        <span class="signal">wr_en</span> = <span class="number">0</span>; <span class="signal">rd_en</span> = <span class="number">0</span>; <span class="signal">wr_data</span> = <span class="number">0</span>;
+        #<span class="number">50</span>;
+        <span class="signal">wr_rst_n</span> = <span class="number">1</span>; <span class="signal">rd_rst_n</span> = <span class="number">1</span>;
+        #<span class="number">20</span>;
+
+        <span class="comment">// ── Test 1: Fill FIFO to full ──</span>
+        $<span class="signal">display</span>(<span class="string">"=== Test 1: Fill to Full ==="</span>);
+        <span class="keyword">for</span> (<span class="type">int</span> <span class="signal">i</span> = <span class="number">0</span>; <span class="signal">i</span> < <span class="number">8</span>; <span class="signal">i</span>++) <span class="keyword">begin</span>
+            @(<span class="keyword">posedge</span> <span class="signal">wr_clk</span>);
+            <span class="signal">wr_en</span> = <span class="number">1</span>; <span class="signal">wr_data</span> = <span class="signal">i</span> * <span class="number">10</span>;
+        <span class="keyword">end</span>
+        @(<span class="keyword">posedge</span> <span class="signal">wr_clk</span>); <span class="signal">wr_en</span> = <span class="number">0</span>;
+        #<span class="number">50</span>;  <span class="comment">// Wait for sync</span>
+        $<span class="signal">display</span>(<span class="string">"Full=%b (expect 1)"</span>, <span class="signal">full</span>);
+
+        <span class="comment">// ── Test 2: Drain FIFO to empty ──</span>
+        $<span class="signal">display</span>(<span class="string">"=== Test 2: Drain to Empty ==="</span>);
+        <span class="keyword">for</span> (<span class="type">int</span> <span class="signal">i</span> = <span class="number">0</span>; <span class="signal">i</span> < <span class="number">8</span>; <span class="signal">i</span>++) <span class="keyword">begin</span>
+            @(<span class="keyword">posedge</span> <span class="signal">rd_clk</span>);
+            <span class="signal">rd_en</span> = <span class="number">1</span>;
+            $<span class="signal">display</span>(<span class="string">"Read[%0d]: %0d"</span>, <span class="signal">i</span>, <span class="signal">rd_data</span>);
+        <span class="keyword">end</span>
+        @(<span class="keyword">posedge</span> <span class="signal">rd_clk</span>); <span class="signal">rd_en</span> = <span class="number">0</span>;
+        #<span class="number">50</span>;
+        $<span class="signal">display</span>(<span class="string">"Empty=%b (expect 1)"</span>, <span class="signal">empty</span>);
+
+        <span class="comment">// ── Test 3: Simultaneous R/W ──</span>
+        $<span class="signal">display</span>(<span class="string">"=== Test 3: Simultaneous R/W ==="</span>);
+        <span class="keyword">fork</span>
+            <span class="keyword">begin</span>  <span class="comment">// Writer</span>
+                <span class="keyword">for</span> (<span class="type">int</span> <span class="signal">i</span> = <span class="number">0</span>; <span class="signal">i</span> < <span class="number">20</span>; <span class="signal">i</span>++) <span class="keyword">begin</span>
+                    @(<span class="keyword">posedge</span> <span class="signal">wr_clk</span>);
+                    <span class="signal">wr_en</span> = !<span class="signal">full</span>; <span class="signal">wr_data</span> = <span class="signal">i</span>;
+                <span class="keyword">end</span>
+                <span class="signal">wr_en</span> = <span class="number">0</span>;
+            <span class="keyword">end</span>
+            <span class="keyword">begin</span>  <span class="comment">// Reader (start after small delay)</span>
+                #<span class="number">30</span>;
+                <span class="keyword">for</span> (<span class="type">int</span> <span class="signal">i</span> = <span class="number">0</span>; <span class="signal">i</span> < <span class="number">20</span>; <span class="signal">i</span>++) <span class="keyword">begin</span>
+                    @(<span class="keyword">posedge</span> <span class="signal">rd_clk</span>);
+                    <span class="signal">rd_en</span> = !<span class="signal">empty</span>;
+                    <span class="keyword">if</span> (<span class="signal">rd_en</span>) $<span class="signal">display</span>(<span class="string">"Read: %0d"</span>, <span class="signal">rd_data</span>);
+                <span class="keyword">end</span>
+                <span class="signal">rd_en</span> = <span class="number">0</span>;
+            <span class="keyword">end</span>
+        <span class="keyword">join</span>
+
+        #<span class="number">100</span>;
+        $<span class="signal">display</span>(<span class="string">"=== All Tests Complete ==="</span>);
+        $<span class="signal">finish</span>;
+    <span class="keyword">end</span>
+
+<span class="keyword">endmodule</span></pre>
+</div>
+
+<h2>Exercise 5: FIFO Depth Calculation</h2>
+
+<p class="en">Calculate the minimum FIFO depth for these scenarios (pen & paper exercise):</p>
+<p class="ko" style="display:none;">다음 시나리오에 대한 최소 FIFO 깊이를 계산하세요 (종이 연습):</p>
+
+<div class="concept-box">
+    <h3>📋 Scenarios</h3>
+    <ol class="en">
+        <li><strong>Write clock:</strong> 200 MHz, <strong>Read clock:</strong> 100 MHz, <strong>Burst length:</strong> 16 words. How deep?</li>
+        <li><strong>Write clock:</strong> 150 MHz, <strong>Read clock:</strong> 150 MHz, <strong>Burst:</strong> 8 words with gaps. Minimum depth?</li>
+        <li>Why do we round up to the next power of 2?</li>
+    </ol>
+    <ol class="ko" style="display:none;">
+        <li><strong>쓰기 클럭:</strong> 200 MHz, <strong>읽기 클럭:</strong> 100 MHz, <strong>버스트 길이:</strong> 16 워드. 깊이는?</li>
+        <li><strong>쓰기 클럭:</strong> 150 MHz, <strong>읽기 클럭:</strong> 150 MHz, <strong>버스트:</strong> 갭이 있는 8 워드. 최소 깊이?</li>
+        <li>왜 다음 2의 거듭제곱으로 올림하나요?</li>
+    </ol>
+</div>
+
+<button class="toggle-btn" onclick="toggleSolution('sol5')">Show Solution</button>
+<div class="solution" id="sol5">
+<div class="tip-box">
+    <p class="en"><strong>Scenario 1:</strong> Writer is 2× faster than reader. During a 16-word burst, reader can consume 8 words. Net accumulation = 16 - 8 = 8 words. Add 2-3 for sync latency → <strong>minimum 11, round to 16 (2⁴)</strong>.</p>
+    <p class="ko" style="display:none;"><strong>시나리오 1:</strong> 쓰기가 읽기보다 2배 빠름. 16 워드 버스트 동안 읽기가 8워드 소비. 순 축적 = 16 - 8 = 8 워드. 동기화 지연 2-3 추가 → <strong>최소 11, 16(2⁴)으로 올림</strong>.</p>
+    <p class="en"><strong>Scenario 2:</strong> Same frequency — theoretically depth=1 works. But burst of 8 with gaps means reader might not keep up during the burst. Need at least <strong>8 + 2-3 sync latency = ~11, round to 16</strong>.</p>
+    <p class="ko" style="display:none;"><strong>시나리오 2:</strong> 동일 주파수 — 이론적으로 깊이=1 작동. 하지만 갭이 있는 8 버스트는 버스트 중 읽기가 따라가지 못할 수 있음. 최소 <strong>8 + 동기화 지연 2-3 = ~11, 16으로 올림</strong>.</p>
+    <p class="en"><strong>Scenario 3:</strong> Power of 2 is required because Gray code only has single-bit transitions when wrapping at power-of-2 boundaries. Non-power-of-2 would break the Gray code property!</p>
+    <p class="ko" style="display:none;"><strong>시나리오 3:</strong> 2의 거듭제곱 필요 이유: 그레이 코드가 2의 거듭제곱 경계에서 래핑할 때만 단일 비트 전환을 가지기 때문. 2의 거듭제곱이 아니면 그레이 코드 속성이 깨짐!</p>
+</div>
+</div>
+
+<div class="tip-box">
+    <h3>🎯 Week 4 Complete!</h3>
+    <p class="en">Congratulations! You've completed the Clock Domain Crossing week. You now understand metastability, synchronizers, handshake protocols, Gray code, and async FIFOs — the complete CDC toolkit. Next week: <strong>Pipelining & Performance!</strong></p>
+    <p class="ko" style="display:none;">축하합니다! 클럭 도메인 크로싱 주간을 완료했습니다. 이제 메타스태빌리티, 동기화기, 핸드셰이크 프로토콜, 그레이 코드, 비동기 FIFO를 이해합니다 — 완전한 CDC 도구 키트. 다음 주: <strong>파이프라이닝 & 성능!</strong></p>
+</div>
+
+<div class="nav-links" style="margin-top: 30px;">
+    <a href="day-20-lesson.html">📖 Review Lesson</a>
+    <a href="day-20-quiz.html">📝 Take Quiz</a>
+    <a href="day-19-lesson.html">← Day 19</a>
+</div>
+
+<script>
+let isKorean = false;
+function toggleLang() {
+    isKorean = !isKorean;
+    document.querySelectorAll('.en').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'none' : 'revert', 'important');
+    });
+    document.querySelectorAll('.ko').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'revert' : 'none', 'important');
+    });
+    document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+}
+
+function toggleSolution(id) {
+    const el = document.getElementById(id);
+    const btn = el.previousElementSibling;
+    if (el.style.display === 'block') {
+        el.style.display = 'none';
+        btn.textContent = 'Show Solution';
+    } else {
+        el.style.display = 'block';
+        btn.textContent = 'Hide Solution';
+    }
+}
+</script>
+
+</body>
+</html>

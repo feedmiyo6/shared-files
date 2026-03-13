@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 20: Async FIFO Concept</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    background: linear-gradient(135deg, #fefae0 0%, #faedcd 100%);
+    color: #3d405b;
+    line-height: 1.8;
+    padding: 24px;
+    max-width: 920px;
+    margin: 0 auto;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+h1 { color: #5d4037; border-bottom: 3px solid #c4a77d; padding-bottom: 12px; margin: 24px 0 16px; font-size: 2em; }
+h2 { color: #588157; border-bottom: 2px solid #a3b18a; padding-bottom: 8px; margin: 28px 0 14px; font-size: 1.5em; }
+h3 { color: #5d4037; margin: 20px 0 10px; font-size: 1.2em; }
+p { margin: 10px 0; }
+ul, ol { margin: 10px 0 10px 24px; }
+li { margin: 4px 0; }
+
+pre {
+    background: #2d3436;
+    padding: 24px;
+    border-radius: 12px;
+    margin: 24px 0;
+    border: 3px solid #a3b18a;
+    overflow-x: auto;
+    font-size: 15px;
+    line-height: 1.6;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+    color: #f8f8f2;
+}
+.keyword { color: #ff79c6; font-weight: 600; }
+.type { color: #8be9fd; }
+.signal { color: #50fa7b; }
+.number { color: #ffb86c; }
+.comment { color: #6272a4; font-style: italic; }
+.string { color: #f1fa8c; }
+
+code {
+    background: #e9f5db;
+    color: #3d405b;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+}
+
+.concept-box {
+    background: #fff8f0;
+    border: 2px solid #c4a77d;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    color: #3d405b;
+}
+.concept-box h3 { color: #5d4037; margin-bottom: 12px; }
+
+.warning-box {
+    background: #fff8f0;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    border-left: 4px solid #ef4444;
+    color: #3d405b;
+}
+.warning-box h3 { color: #c53030; margin-bottom: 12px; }
+
+.tip-box {
+    background: #fff8f0;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    border-left: 4px solid #588157;
+    color: #3d405b;
+}
+
+.comparison-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+.comparison-table th {
+    background: #588157;
+    color: white;
+    padding: 12px;
+    text-align: left;
+}
+.comparison-table td {
+    background: #fff;
+    border: 1px solid #c4a77d;
+    padding: 12px;
+    color: #3d405b;
+}
+.comparison-table tr:nth-child(even) td { background: #fff8f0; }
+
+.nav-links {
+    display: flex;
+    gap: 12px;
+    margin: 20px 0;
+    flex-wrap: wrap;
+}
+.nav-links a {
+    background: linear-gradient(135deg, #588157, #3a5a40);
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 24px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14px;
+}
+.nav-links a:hover { opacity: 0.9; }
+
+.lang-toggle {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    background: #588157;
+    border: none;
+    border-radius: 24px;
+    padding: 10px 20px;
+    cursor: pointer;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    z-index: 1000;
+}
+.lang-toggle:hover { background: #3a5a40; }
+
+.ko { display: none; }
+
+.diagram-box {
+    background: #fff;
+    border: 2px solid #a3b18a;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    text-align: center;
+    font-family: 'SF Mono', monospace;
+    line-height: 1.4;
+    overflow-x: auto;
+    white-space: pre;
+    color: #3d405b;
+}
+
+@media (max-width: 768px) {
+    body { padding: 16px; }
+    h1 { font-size: 1.8em; }
+    pre { font-size: 14px; padding: 16px; }
+    .lang-toggle { padding: 8px 16px; font-size: 13px; }
+}
+</style>
+</head>
+<body>
+
+<button class="lang-toggle" onclick="toggleLang()">한국어</button>
+
+<h1>📅 Day 20: Async FIFO Concept</h1>
+<p class="en"><strong>Week 4, Day 5</strong> — The capstone of Clock Domain Crossing: building a safe multi-bit data transfer using asynchronous FIFOs.</p>
+<p class="ko" style="display:none;"><strong>4주차, 5일</strong> — 클럭 도메인 크로싱의 정점: 비동기 FIFO를 사용한 안전한 멀티비트 데이터 전송.</p>
+
+<div class="nav-links">
+    <a href="day-20-quiz.html">📝 Quiz</a>
+    <a href="day-20-practice.html">💻 Practice</a>
+    <a href="day-19-lesson.html">← Day 19</a>
+</div>
+
+<h2>1. Why Async FIFOs?</h2>
+
+<p class="en">In previous lessons, we learned about 2-flop synchronizers (single-bit), handshake protocols, and Gray code counters. But what if you need to transfer <strong>streams of multi-bit data</strong> between clock domains continuously? That's where the <strong>asynchronous FIFO</strong> comes in.</p>
+<p class="ko" style="display:none;">이전 수업에서 2-플립플롭 동기화기(단일 비트), 핸드셰이크 프로토콜, 그레이 코드 카운터를 배웠습니다. 하지만 클럭 도메인 간에 <strong>멀티비트 데이터 스트림</strong>을 지속적으로 전송해야 한다면? 그때 <strong>비동기 FIFO</strong>가 필요합니다.</p>
+
+<div class="concept-box">
+    <h3>🎯 Async FIFO = Dual-Port RAM + Gray Code Pointers + Synchronizers</h3>
+    <p class="en">An async FIFO is a buffer that safely transfers data between two independent clock domains. The writer pushes data using its clock, and the reader pops data using its own clock — with no shared clock required.</p>
+    <p class="ko" style="display:none;">비동기 FIFO는 두 개의 독립적인 클럭 도메인 사이에서 안전하게 데이터를 전송하는 버퍼입니다. 쓰기 측은 자체 클럭으로 데이터를 넣고, 읽기 측은 자체 클럭으로 데이터를 꺼냅니다 — 공유 클럭이 필요 없습니다.</p>
+</div>
+
+<h2>2. Architecture Overview</h2>
+
+<div class="diagram-box">
+  Write Clock Domain          │          Read Clock Domain
+  ─────────────────          │          ────────────────
+                              │
+  ┌─────────┐    wr_ptr      │      rd_ptr    ┌─────────┐
+  │  Write   │──(Gray)──────►│◄──(Gray)───────│  Read   │
+  │  Logic   │               │                │  Logic   │
+  └────┬─────┘               │                └────┬─────┘
+       │                     │                     │
+       │ wr_addr        ┌────┴────┐          rd_addr│
+       └────────────────►│Dual-Port│◄────────────────┘
+                         │  RAM    │
+                         └─────────┘
+       │                     │                     │
+  ┌────┴─────┐               │                ┌────┴─────┐
+  │  FULL    │   rd_ptr_sync │  wr_ptr_sync   │  EMPTY   │
+  │  Flag    │◄──(2-flop)────│────(2-flop)───►│  Flag    │
+  └──────────┘               │                └──────────┘
+</div>
+
+<p class="en">The architecture has four key components:</p>
+<p class="ko" style="display:none;">아키텍처에는 네 가지 핵심 구성 요소가 있습니다:</p>
+
+<table class="comparison-table">
+    <tr><th>Component</th><th class="en">Purpose</th><th class="ko" style="display:none;">목적</th></tr>
+    <tr>
+        <td><strong>Dual-Port RAM</strong></td>
+        <td class="en">Stores the data — one write port, one read port, independent clocks</td>
+        <td class="ko" style="display:none;">데이터 저장 — 하나의 쓰기 포트, 하나의 읽기 포트, 독립 클럭</td>
+    </tr>
+    <tr>
+        <td><strong>Write Pointer</strong></td>
+        <td class="en">Gray-coded counter in write clock domain — tracks where to write next</td>
+        <td class="ko" style="display:none;">쓰기 클럭 도메인의 그레이 코드 카운터 — 다음 쓰기 위치 추적</td>
+    </tr>
+    <tr>
+        <td><strong>Read Pointer</strong></td>
+        <td class="en">Gray-coded counter in read clock domain — tracks where to read next</td>
+        <td class="ko" style="display:none;">읽기 클럭 도메인의 그레이 코드 카운터 — 다음 읽기 위치 추적</td>
+    </tr>
+    <tr>
+        <td><strong>Synchronizers</strong></td>
+        <td class="en">2-flop synchronizers to safely pass Gray pointers across domains</td>
+        <td class="ko" style="display:none;">그레이 포인터를 도메인 간에 안전하게 전달하는 2-플립플롭 동기화기</td>
+    </tr>
+</table>
+
+<h2>3. Why Gray Code Pointers?</h2>
+
+<p class="en">This is the <strong>critical insight</strong> of async FIFO design. When a pointer crosses clock domains, it goes through a 2-flop synchronizer. If the pointer used binary encoding, multiple bits could change simultaneously, and the synchronizer might capture an inconsistent value.</p>
+<p class="ko" style="display:none;">이것이 비동기 FIFO 설계의 <strong>핵심 통찰</strong>입니다. 포인터가 클럭 도메인을 건널 때 2-플립플롭 동기화기를 거칩니다. 포인터가 이진 인코딩을 사용하면 여러 비트가 동시에 변경되어 동기화기가 불일치 값을 캡처할 수 있습니다.</p>
+
+<div class="concept-box">
+    <h3>Binary vs Gray Code Transition</h3>
+    <table class="comparison-table">
+        <tr><th>Decimal</th><th>Binary</th><th>Gray</th><th class="en">Bits Changed (Binary)</th><th class="ko" style="display:none;">변경된 비트 (이진)</th></tr>
+        <tr><td>3</td><td>011</td><td>010</td><td class="en">—</td><td class="ko" style="display:none;">—</td></tr>
+        <tr><td>4</td><td>100</td><td>110</td><td class="en">3 bits! ⚠️</td><td class="ko" style="display:none;">3비트! ⚠️</td></tr>
+        <tr><td>5</td><td>101</td><td>111</td><td class="en">2 bits</td><td class="ko" style="display:none;">2비트</td></tr>
+        <tr><td>6</td><td>110</td><td>101</td><td class="en">2 bits</td><td class="ko" style="display:none;">2비트</td></tr>
+        <tr><td>7</td><td>111</td><td>100</td><td class="en">1 bit</td><td class="ko" style="display:none;">1비트</td></tr>
+    </table>
+    <p class="en">Gray code guarantees <strong>only 1 bit changes per increment</strong>. If the synchronizer catches the old or new value, both are valid — no glitch values possible!</p>
+    <p class="ko" style="display:none;">그레이 코드는 <strong>증가당 1비트만 변경</strong>을 보장합니다. 동기화기가 이전 또는 새 값을 캡처하면 둘 다 유효합니다 — 글리치 값 불가능!</p>
+</div>
+
+<h3>Gray Code Conversion</h3>
+
+<pre><span class="comment">// Binary to Gray conversion</span>
+<span class="keyword">assign</span> <span class="signal">gray</span> = <span class="signal">binary</span> ^ (<span class="signal">binary</span> >> <span class="number">1</span>);
+
+<span class="comment">// Gray to Binary conversion (for address generation)</span>
+<span class="keyword">assign</span> <span class="signal">binary</span>[<span class="number">N</span>]   = <span class="signal">gray</span>[<span class="number">N</span>];        <span class="comment">// MSB is the same</span>
+<span class="keyword">assign</span> <span class="signal">binary</span>[<span class="number">N-1</span>] = <span class="signal">gray</span>[<span class="number">N</span>] ^ <span class="signal">gray</span>[<span class="number">N-1</span>];
+<span class="comment">// ... each bit = XOR of all higher Gray bits</span></pre>
+
+<h2>4. Full and Empty Flag Generation</h2>
+
+<p class="en">The most critical part of async FIFO design: correctly generating <code>full</code> and <code>empty</code> flags without metastability issues.</p>
+<p class="ko" style="display:none;">비동기 FIFO 설계에서 가장 중요한 부분: 메타스태빌리티 문제 없이 <code>full</code>과 <code>empty</code> 플래그를 올바르게 생성하는 것.</p>
+
+<div class="concept-box">
+    <h3>🔑 Key Principle: Pointers Use N+1 Bits</h3>
+    <p class="en">For a FIFO with 2<sup>N</sup> entries, we use <strong>N+1 bit</strong> pointers. The extra MSB distinguishes between full and empty:</p>
+    <p class="ko" style="display:none;">2<sup>N</sup> 항목의 FIFO에서 <strong>N+1 비트</strong> 포인터를 사용합니다. 추가 MSB가 풀과 엠프티를 구분합니다:</p>
+    <ul>
+        <li class="en"><strong>Empty:</strong> Write Gray pointer == Read Gray pointer (identical)</li>
+        <li class="ko" style="display:none;"><strong>Empty:</strong> 쓰기 그레이 포인터 == 읽기 그레이 포인터 (동일)</li>
+        <li class="en"><strong>Full:</strong> Write Gray pointer and Read Gray pointer differ in the <strong>top 2 bits</strong> but match in all lower bits</li>
+        <li class="ko" style="display:none;"><strong>Full:</strong> 쓰기 그레이 포인터와 읽기 그레이 포인터가 <strong>상위 2비트</strong>가 다르고 나머지 하위 비트는 동일</li>
+    </ul>
+</div>
+
+<pre><span class="comment">// EMPTY flag — generated in READ clock domain</span>
+<span class="comment">// Compare read pointer with synchronized write pointer</span>
+<span class="keyword">assign</span> <span class="signal">empty</span> = (<span class="signal">rd_gray_ptr</span> == <span class="signal">wr_gray_ptr_sync</span>);
+
+<span class="comment">// FULL flag — generated in WRITE clock domain</span>
+<span class="comment">// Compare write pointer with synchronized read pointer</span>
+<span class="comment">// Full when: top 2 bits differ, rest match (in Gray code)</span>
+<span class="keyword">assign</span> <span class="signal">full</span> = (<span class="signal">wr_gray_ptr</span>[<span class="number">N</span>]   != <span class="signal">rd_gray_ptr_sync</span>[<span class="number">N</span>]) &&
+              (<span class="signal">wr_gray_ptr</span>[<span class="number">N-1</span>] != <span class="signal">rd_gray_ptr_sync</span>[<span class="number">N-1</span>]) &&
+              (<span class="signal">wr_gray_ptr</span>[<span class="number">N-2</span>:<span class="number">0</span>] == <span class="signal">rd_gray_ptr_sync</span>[<span class="number">N-2</span>:<span class="number">0</span>]);</pre>
+
+<div class="warning-box">
+    <h3>⚠️ Conservative Flags</h3>
+    <p class="en">Because the synchronized pointers are always slightly <strong>stale</strong> (2 clock cycles behind), the flags are <strong>conservative</strong>:</p>
+    <p class="ko" style="display:none;">동기화된 포인터는 항상 약간 <strong>오래된</strong> 값(2 클럭 사이클 뒤처짐)이므로, 플래그는 <strong>보수적</strong>입니다:</p>
+    <ul>
+        <li class="en"><strong>Full may assert early</strong> — writer stops even if there's space → safe, just loses throughput</li>
+        <li class="ko" style="display:none;"><strong>Full이 일찍 표시될 수 있음</strong> — 공간이 있어도 쓰기 중단 → 안전, 처리량만 감소</li>
+        <li class="en"><strong>Empty may assert early</strong> — reader stops even if there's data → safe, just adds latency</li>
+        <li class="ko" style="display:none;"><strong>Empty가 일찍 표시될 수 있음</strong> — 데이터가 있어도 읽기 중단 → 안전, 지연만 추가</li>
+    </ul>
+    <p class="en">They will <strong>never</strong> miss a true full/empty condition → no data corruption!</p>
+    <p class="ko" style="display:none;">진정한 full/empty 상태를 <strong>절대</strong> 놓치지 않음 → 데이터 손상 없음!</p>
+</div>
+
+<h2>5. Complete Async FIFO Module</h2>
+
+<pre><span class="keyword">module</span> <span class="type">async_fifo</span> #(
+    <span class="keyword">parameter</span> <span class="type">DATA_WIDTH</span> = <span class="number">8</span>,
+    <span class="keyword">parameter</span> <span class="type">ADDR_WIDTH</span> = <span class="number">4</span>   <span class="comment">// 2^4 = 16 entries</span>
+)(
+    <span class="comment">// Write interface</span>
+    <span class="keyword">input</span>  <span class="type">logic</span>                    <span class="signal">wr_clk</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span>                    <span class="signal">wr_rst_n</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span>                    <span class="signal">wr_en</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span> [<span class="type">DATA_WIDTH</span>-<span class="number">1</span>:<span class="number">0</span>]  <span class="signal">wr_data</span>,
+    <span class="keyword">output</span> <span class="type">logic</span>                    <span class="signal">full</span>,
+
+    <span class="comment">// Read interface</span>
+    <span class="keyword">input</span>  <span class="type">logic</span>                    <span class="signal">rd_clk</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span>                    <span class="signal">rd_rst_n</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span>                    <span class="signal">rd_en</span>,
+    <span class="keyword">output</span> <span class="type">logic</span> [<span class="type">DATA_WIDTH</span>-<span class="number">1</span>:<span class="number">0</span>]  <span class="signal">rd_data</span>,
+    <span class="keyword">output</span> <span class="type">logic</span>                    <span class="signal">empty</span>
+);
+
+    <span class="keyword">localparam</span> <span class="type">DEPTH</span> = <span class="number">1</span> << <span class="type">ADDR_WIDTH</span>;
+
+    <span class="comment">// ── Memory ──</span>
+    <span class="type">logic</span> [<span class="type">DATA_WIDTH</span>-<span class="number">1</span>:<span class="number">0</span>] <span class="signal">mem</span> [<span class="type">DEPTH</span>];
+
+    <span class="comment">// ── Pointers (N+1 bits for full/empty detection) ──</span>
+    <span class="type">logic</span> [<span class="type">ADDR_WIDTH</span>:<span class="number">0</span>] <span class="signal">wr_bin</span>, <span class="signal">wr_gray</span>;
+    <span class="type">logic</span> [<span class="type">ADDR_WIDTH</span>:<span class="number">0</span>] <span class="signal">rd_bin</span>, <span class="signal">rd_gray</span>;
+
+    <span class="comment">// ── Synchronized pointers ──</span>
+    <span class="type">logic</span> [<span class="type">ADDR_WIDTH</span>:<span class="number">0</span>] <span class="signal">wr_gray_sync</span>;  <span class="comment">// wr_gray synced to rd_clk</span>
+    <span class="type">logic</span> [<span class="type">ADDR_WIDTH</span>:<span class="number">0</span>] <span class="signal">rd_gray_sync</span>;  <span class="comment">// rd_gray synced to wr_clk</span>
+
+    <span class="comment">// ── Write address (lower bits of binary pointer) ──</span>
+    <span class="type">logic</span> [<span class="type">ADDR_WIDTH</span>-<span class="number">1</span>:<span class="number">0</span>] <span class="signal">wr_addr</span>, <span class="signal">rd_addr</span>;
+    <span class="keyword">assign</span> <span class="signal">wr_addr</span> = <span class="signal">wr_bin</span>[<span class="type">ADDR_WIDTH</span>-<span class="number">1</span>:<span class="number">0</span>];
+    <span class="keyword">assign</span> <span class="signal">rd_addr</span> = <span class="signal">rd_bin</span>[<span class="type">ADDR_WIDTH</span>-<span class="number">1</span>:<span class="number">0</span>];
+
+    <span class="comment">// ═══════════════════════════════════</span>
+    <span class="comment">// Write Logic (wr_clk domain)</span>
+    <span class="comment">// ═══════════════════════════════════</span>
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">wr_clk</span> <span class="keyword">or</span> <span class="keyword">negedge</span> <span class="signal">wr_rst_n</span>) <span class="keyword">begin</span>
+        <span class="keyword">if</span> (!<span class="signal">wr_rst_n</span>) <span class="keyword">begin</span>
+            <span class="signal">wr_bin</span>  <= <span class="number">'0</span>;
+            <span class="signal">wr_gray</span> <= <span class="number">'0</span>;
+        <span class="keyword">end</span> <span class="keyword">else</span> <span class="keyword">if</span> (<span class="signal">wr_en</span> && !<span class="signal">full</span>) <span class="keyword">begin</span>
+            <span class="signal">mem</span>[<span class="signal">wr_addr</span>] <= <span class="signal">wr_data</span>;
+            <span class="signal">wr_bin</span>  <= <span class="signal">wr_bin</span> + <span class="number">1</span>;
+            <span class="signal">wr_gray</span> <= (<span class="signal">wr_bin</span> + <span class="number">1</span>) ^ ((<span class="signal">wr_bin</span> + <span class="number">1</span>) >> <span class="number">1</span>);
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+
+    <span class="comment">// ═══════════════════════════════════</span>
+    <span class="comment">// Read Logic (rd_clk domain)</span>
+    <span class="comment">// ═══════════════════════════════════</span>
+    <span class="keyword">assign</span> <span class="signal">rd_data</span> = <span class="signal">mem</span>[<span class="signal">rd_addr</span>];
+
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">rd_clk</span> <span class="keyword">or</span> <span class="keyword">negedge</span> <span class="signal">rd_rst_n</span>) <span class="keyword">begin</span>
+        <span class="keyword">if</span> (!<span class="signal">rd_rst_n</span>) <span class="keyword">begin</span>
+            <span class="signal">rd_bin</span>  <= <span class="number">'0</span>;
+            <span class="signal">rd_gray</span> <= <span class="number">'0</span>;
+        <span class="keyword">end</span> <span class="keyword">else</span> <span class="keyword">if</span> (<span class="signal">rd_en</span> && !<span class="signal">empty</span>) <span class="keyword">begin</span>
+            <span class="signal">rd_bin</span>  <= <span class="signal">rd_bin</span> + <span class="number">1</span>;
+            <span class="signal">rd_gray</span> <= (<span class="signal">rd_bin</span> + <span class="number">1</span>) ^ ((<span class="signal">rd_bin</span> + <span class="number">1</span>) >> <span class="number">1</span>);
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+
+    <span class="comment">// ═══════════════════════════════════</span>
+    <span class="comment">// 2-Flop Synchronizers</span>
+    <span class="comment">// ═══════════════════════════════════</span>
+    <span class="type">logic</span> [<span class="type">ADDR_WIDTH</span>:<span class="number">0</span>] <span class="signal">wr_gray_meta</span>, <span class="signal">rd_gray_meta</span>;
+
+    <span class="comment">// Sync wr_gray → rd_clk domain</span>
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">rd_clk</span> <span class="keyword">or</span> <span class="keyword">negedge</span> <span class="signal">rd_rst_n</span>) <span class="keyword">begin</span>
+        <span class="keyword">if</span> (!<span class="signal">rd_rst_n</span>) {<span class="signal">wr_gray_sync</span>, <span class="signal">wr_gray_meta</span>} <= <span class="number">'0</span>;
+        <span class="keyword">else</span>          {<span class="signal">wr_gray_sync</span>, <span class="signal">wr_gray_meta</span>} <= {<span class="signal">wr_gray_meta</span>, <span class="signal">wr_gray</span>};
+    <span class="keyword">end</span>
+
+    <span class="comment">// Sync rd_gray → wr_clk domain</span>
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">wr_clk</span> <span class="keyword">or</span> <span class="keyword">negedge</span> <span class="signal">wr_rst_n</span>) <span class="keyword">begin</span>
+        <span class="keyword">if</span> (!<span class="signal">wr_rst_n</span>) {<span class="signal">rd_gray_sync</span>, <span class="signal">rd_gray_meta</span>} <= <span class="number">'0</span>;
+        <span class="keyword">else</span>          {<span class="signal">rd_gray_sync</span>, <span class="signal">rd_gray_meta</span>} <= {<span class="signal">rd_gray_meta</span>, <span class="signal">rd_gray</span>};
+    <span class="keyword">end</span>
+
+    <span class="comment">// ═══════════════════════════════════</span>
+    <span class="comment">// Full & Empty Flags</span>
+    <span class="comment">// ═══════════════════════════════════</span>
+    <span class="keyword">assign</span> <span class="signal">empty</span> = (<span class="signal">rd_gray</span> == <span class="signal">wr_gray_sync</span>);
+
+    <span class="keyword">assign</span> <span class="signal">full</span>  = (<span class="signal">wr_gray</span>[<span class="type">ADDR_WIDTH</span>]     != <span class="signal">rd_gray_sync</span>[<span class="type">ADDR_WIDTH</span>])     &&
+                   (<span class="signal">wr_gray</span>[<span class="type">ADDR_WIDTH</span>-<span class="number">1</span>]   != <span class="signal">rd_gray_sync</span>[<span class="type">ADDR_WIDTH</span>-<span class="number">1</span>])   &&
+                   (<span class="signal">wr_gray</span>[<span class="type">ADDR_WIDTH</span>-<span class="number">2</span>:<span class="number">0</span>] == <span class="signal">rd_gray_sync</span>[<span class="type">ADDR_WIDTH</span>-<span class="number">2</span>:<span class="number">0</span>]);
+
+<span class="keyword">endmodule</span></pre>
+
+<h2>6. Data Flow Walkthrough</h2>
+
+<div class="concept-box">
+    <h3>📝 Step-by-Step: Writing Data</h3>
+    <ol class="en">
+        <li>Writer checks <code>full</code> flag — if not full, proceed</li>
+        <li>Data written to <code>mem[wr_addr]</code></li>
+        <li>Binary write pointer increments</li>
+        <li>New Gray code write pointer calculated</li>
+        <li>Gray write pointer passes through 2-flop synchronizer to read domain (takes 2 rd_clk cycles)</li>
+        <li>Read domain uses synced write pointer to update <code>empty</code> flag</li>
+    </ol>
+    <ol class="ko" style="display:none;">
+        <li>쓰기 측이 <code>full</code> 플래그 확인 — 가득 차지 않으면 진행</li>
+        <li>데이터가 <code>mem[wr_addr]</code>에 기록됨</li>
+        <li>이진 쓰기 포인터 증가</li>
+        <li>새 그레이 코드 쓰기 포인터 계산</li>
+        <li>그레이 쓰기 포인터가 2-플립플롭 동기화기를 통해 읽기 도메인으로 전달 (2 rd_clk 사이클 소요)</li>
+        <li>읽기 도메인이 동기화된 쓰기 포인터로 <code>empty</code> 플래그 업데이트</li>
+    </ol>
+</div>
+
+<h2>7. Design Considerations</h2>
+
+<table class="comparison-table">
+    <tr><th class="en">Consideration</th><th class="ko" style="display:none;">고려사항</th><th class="en">Details</th><th class="ko" style="display:none;">세부사항</th></tr>
+    <tr>
+        <td class="en">FIFO Depth</td><td class="ko" style="display:none;">FIFO 깊이</td>
+        <td class="en">Must be power of 2 (for Gray code wrapping to work correctly)</td>
+        <td class="ko" style="display:none;">2의 거듭제곱이어야 함 (그레이 코드 래핑이 올바르게 작동하려면)</td>
+    </tr>
+    <tr>
+        <td class="en">Reset</td><td class="ko" style="display:none;">리셋</td>
+        <td class="en">Both domains need async reset — must be coordinated to avoid pointer mismatch</td>
+        <td class="ko" style="display:none;">두 도메인 모두 비동기 리셋 필요 — 포인터 불일치를 방지하기 위해 조정 필수</td>
+    </tr>
+    <tr>
+        <td class="en">Sizing</td><td class="ko" style="display:none;">크기 조정</td>
+        <td class="en">Depth depends on clock ratio and burst length — must absorb worst-case burst</td>
+        <td class="ko" style="display:none;">깊이는 클럭 비율과 버스트 길이에 따라 결정 — 최악의 버스트를 흡수해야 함</td>
+    </tr>
+    <tr>
+        <td class="en">Latency</td><td class="ko" style="display:none;">지연</td>
+        <td class="en">2-3 clock cycles of synchronization latency for flag updates</td>
+        <td class="ko" style="display:none;">플래그 업데이트에 2-3 클럭 사이클의 동기화 지연</td>
+    </tr>
+</table>
+
+<div class="tip-box">
+    <h3>💡 Sizing Rule of Thumb</h3>
+    <p class="en">FIFO depth ≥ (burst_length × f_wr) / (f_rd - f_wr) for continuous streaming. In practice, add extra depth for the synchronization latency (2-3 cycles on each side).</p>
+    <p class="ko" style="display:none;">FIFO 깊이 ≥ (버스트_길이 × f_wr) / (f_rd - f_wr) 연속 스트리밍의 경우. 실제로 동기화 지연(양쪽 2-3 사이클)을 위한 추가 깊이를 더합니다.</p>
+</div>
+
+<h2>8. Common Interview Questions</h2>
+
+<div class="concept-box">
+    <h3>🎤 Questions You Should Be Ready For</h3>
+    <ol class="en">
+        <li><strong>Why must FIFO depth be a power of 2?</strong> — Gray code only has single-bit transitions when wrapping around powers of 2.</li>
+        <li><strong>Can flags give false full/empty?</strong> — Yes, but only conservatively (false full or false empty). Never a dangerous miss.</li>
+        <li><strong>Where is the full flag generated?</strong> — In the write clock domain (where the writer needs it).</li>
+        <li><strong>Where is the empty flag generated?</strong> — In the read clock domain (where the reader needs it).</li>
+        <li><strong>What happens if you use binary pointers instead of Gray?</strong> — Multi-bit transitions can cause the synchronizer to capture an invalid intermediate value, potentially corrupting full/empty detection.</li>
+    </ol>
+    <ol class="ko" style="display:none;">
+        <li><strong>FIFO 깊이가 2의 거듭제곱이어야 하는 이유?</strong> — 그레이 코드는 2의 거듭제곱에서 래핑할 때만 단일 비트 전환을 가집니다.</li>
+        <li><strong>플래그가 거짓 full/empty를 줄 수 있나?</strong> — 네, 하지만 보수적으로만 (거짓 full 또는 거짓 empty). 위험한 누락은 절대 없습니다.</li>
+        <li><strong>full 플래그는 어디서 생성되나?</strong> — 쓰기 클럭 도메인에서 (쓰기 측이 필요하므로).</li>
+        <li><strong>empty 플래그는 어디서 생성되나?</strong> — 읽기 클럭 도메인에서 (읽기 측이 필요하므로).</li>
+        <li><strong>그레이 대신 이진 포인터를 사용하면?</strong> — 다중 비트 전환으로 동기화기가 잘못된 중간값을 캡처하여 full/empty 감지가 손상될 수 있습니다.</li>
+    </ol>
+</div>
+
+<h2>9. Week 4 Summary: CDC Mastery</h2>
+
+<div class="concept-box">
+    <h3>🏆 What You've Learned This Week</h3>
+    <table class="comparison-table">
+        <tr><th>Day</th><th>Topic</th><th class="en">Key Takeaway</th><th class="ko" style="display:none;">핵심 요점</th></tr>
+        <tr><td>16</td><td>Metastability</td><td class="en">Flip-flops can enter undefined states at domain boundaries</td><td class="ko" style="display:none;">플립플롭이 도메인 경계에서 정의되지 않은 상태에 진입 가능</td></tr>
+        <tr><td>17</td><td>2-Flop Sync</td><td class="en">Two flip-flops reduce metastability probability to near zero</td><td class="ko" style="display:none;">두 플립플롭이 메타스태빌리티 확률을 거의 0으로 감소</td></tr>
+        <tr><td>18</td><td>Handshake</td><td class="en">Req/ack protocols for controlled single transfers</td><td class="ko" style="display:none;">제어된 단일 전송을 위한 요청/확인 프로토콜</td></tr>
+        <tr><td>19</td><td>Gray Code</td><td class="en">Single-bit transitions make multi-bit values safe to synchronize</td><td class="ko" style="display:none;">단일 비트 전환으로 멀티비트 값의 동기화가 안전</td></tr>
+        <tr><td>20</td><td>Async FIFO</td><td class="en">Combines everything: RAM + Gray pointers + synchronizers</td><td class="ko" style="display:none;">모든 것의 결합: RAM + 그레이 포인터 + 동기화기</td></tr>
+    </table>
+</div>
+
+<div class="nav-links">
+    <a href="day-20-quiz.html">📝 Take the Quiz</a>
+    <a href="day-20-practice.html">💻 Practice Exercise</a>
+    <a href="day-19-lesson.html">← Day 19</a>
+</div>
+
+<script>
+let isKorean = false;
+function toggleLang() {
+    isKorean = !isKorean;
+    document.querySelectorAll('.en').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'none' : 'revert', 'important');
+    });
+    document.querySelectorAll('.ko').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'revert' : 'none', 'important');
+    });
+    document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+}
+</script>
+
+</body>
+</html>
