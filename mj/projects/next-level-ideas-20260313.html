@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Next-Level AI Project Ideas</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&display=swap');
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Nunito',sans-serif;background:#faf8f0;color:#2d3436;line-height:1.7}
+.lang-toggle{position:fixed;top:14px;right:14px;z-index:100;background:#4a7c59;color:#fff;border:none;padding:7px 14px;border-radius:20px;font-family:'Nunito';font-weight:700;cursor:pointer;font-size:13px;box-shadow:0 2px 8px rgba(0,0,0,.15)}
+.ko{display:none}.ko.show{display:inline !important}.en.hide{display:none !important}
+.hero{background:linear-gradient(135deg,#1a1a2e 0%,#16213e 50%,#0f3460 100%);color:#fff;padding:60px 24px 40px;text-align:center}
+.hero h1{font-family:'Fredoka';font-size:2.2em;margin-bottom:8px;background:linear-gradient(90deg,#e2d810,#d5b33c,#e8a628);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero p{font-size:1.05em;opacity:.85;max-width:650px;margin:0 auto}
+.hero .subtitle{font-size:.85em;margin-top:12px;opacity:.6}
+.container{max-width:900px;margin:0 auto;padding:20px 16px}
+h2{font-family:'Fredoka';color:#4a7c59;font-size:1.5em;margin:28px 0 14px;border-bottom:3px solid #d4e8d0;padding-bottom:6px}
+/* Matrix */
+.matrix-wrap{overflow-x:auto;margin:16px 0}
+.matrix{width:100%;border-collapse:collapse;font-size:.78em;min-width:700px}
+.matrix th{background:#1a1a2e;color:#e2d810;padding:8px 6px;font-family:'Fredoka';font-weight:500;text-align:center;position:sticky;top:0}
+.matrix th:first-child{text-align:left;min-width:140px}
+.matrix td{padding:7px 6px;border-bottom:1px solid #eee;text-align:center;vertical-align:middle}
+.matrix td:first-child{text-align:left;font-weight:700;font-size:.95em}
+.matrix tr:nth-child(even){background:#f7f7f0}
+.matrix tr:first-child td{background:#f0f7ee;font-weight:800}
+.bar{display:inline-block;height:14px;border-radius:7px;vertical-align:middle}
+.bar-5{width:60px;background:linear-gradient(90deg,#27ae60,#2ecc71)}.bar-4{width:48px;background:linear-gradient(90deg,#2ecc71,#82e0aa)}.bar-3{width:36px;background:#f39c12}.bar-2{width:24px;background:#e67e22}.bar-1{width:12px;background:#e74c3c}
+/* Cards */
+.idea-card{background:#fff;border-radius:16px;padding:24px;margin:20px 0;box-shadow:0 3px 15px rgba(0,0,0,.06);border-left:5px solid #4a7c59;position:relative;overflow:hidden}
+.idea-card.pick{border-left-color:#e2d810;box-shadow:0 3px 20px rgba(226,216,16,.15)}
+.idea-card.pick::before{content:'⭐ #1 PICK';position:absolute;top:12px;right:12px;background:linear-gradient(135deg,#e2d810,#d5b33c);color:#1a1a2e;padding:4px 12px;border-radius:12px;font-size:.7em;font-weight:800;letter-spacing:1px}
+.card-header{display:flex;align-items:center;gap:12px;margin-bottom:12px;flex-wrap:wrap}
+.card-emoji{font-size:2em}
+.card-title{font-family:'Fredoka';font-size:1.3em;color:#1a1a2e}
+.card-oneliner{font-style:italic;color:#666;font-size:.9em;margin-bottom:14px}
+.card-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:14px 0}
+@media(max-width:600px){.card-grid{grid-template-columns:1fr}}
+.card-section{background:#faf8f0;border-radius:10px;padding:12px}
+.card-section h4{font-family:'Fredoka';font-size:.85em;color:#4a7c59;margin-bottom:4px}
+.card-section p,.card-section ul{font-size:.88em;color:#444}
+.card-section ul{padding-left:18px}
+.card-section ul li{margin:2px 0}
+.metrics-row{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0}
+.metric-pill{display:flex;align-items:center;gap:6px;background:#f0f7ee;padding:5px 12px;border-radius:20px;font-size:.8em;font-weight:600}
+.metric-pill .label{color:#666}.metric-pill .value{color:#4a7c59}
+.stars{color:#e2d810;letter-spacing:2px}
+.diff-badge{display:inline-block;padding:3px 10px;border-radius:12px;font-size:.75em;font-weight:700;color:#fff}
+.diff-hard{background:#e74c3c}.diff-med{background:#f39c12}.diff-easy{background:#27ae60}
+.not-vibe{background:#1a1a2e;color:#fff;border-radius:10px;padding:12px;margin-top:14px;font-size:.85em}
+.not-vibe h4{color:#e2d810;font-family:'Fredoka';margin-bottom:4px;font-size:.95em}
+/* Recommendation */
+.rec-box{background:linear-gradient(135deg,#1a1a2e,#0f3460);color:#fff;border-radius:16px;padding:28px;margin:24px 0}
+.rec-box h2{color:#e2d810;border-bottom-color:rgba(255,255,255,.2)}
+.rec-box p{opacity:.9;font-size:.95em;margin:8px 0}
+.rec-box .highlight{color:#e2d810;font-weight:700}
+.rec-box ul{padding-left:20px;margin:10px 0}.rec-box li{margin:4px 0;opacity:.9;font-size:.9em}
+footer{text-align:center;padding:40px 16px;color:#aaa;font-size:.8em}
+</style>
+</head>
+<body>
+<button class="lang-toggle" onclick="toggleLang()">한국어</button>
+
+<div class="hero">
+<h1>🔬 <span class="en">Beyond Vibe Coding</span><span class="ko">바이브 코딩을 넘어서</span></h1>
+<p class="en">10 serious AI project ideas that prove you can architect, not just prompt. Built for an engineer who wants to lead, not follow.</p>
+<p class="ko">단순 프롬프트가 아닌 아키텍처를 증명하는 10가지 진지한 AI 프로젝트. 따라가는 게 아니라 이끄는 엔지니어를 위해.</p>
+<div class="subtitle"><span class="en">Research-backed • Revenue-modeled • Tailored to your semiconductor + AI expertise</span><span class="ko">리서치 기반 • 수익 모델 포함 • 반도체 + AI 전문성에 맞춤</span></div>
+</div>
+
+<div class="container">
+
+<h2>📊 <span class="en">Comparison Matrix</span><span class="ko">비교 매트릭스</span></h2>
+<div class="matrix-wrap">
+<table class="matrix">
+<tr>
+<th><span class="en">Project</span><span class="ko">프로젝트</span></th>
+<th>💰 <span class="en">Revenue</span><span class="ko">수익</span></th>
+<th>🧠 <span class="en">Tech Depth</span><span class="ko">기술 깊이</span></th>
+<th>🎯 <span class="en">Your Edge</span><span class="ko">경쟁 우위</span></th>
+<th>⏱️ <span class="en">Time to MVP</span><span class="ko">MVP까지</span></th>
+<th>🏆 <span class="en">"I Built This"</span><span class="ko">"내가 만듦"</span></th>
+</tr>
+<tr><td>⭐ SiliconAgent</td><td><span class="bar bar-5"></span></td><td><span class="bar bar-5"></span></td><td><span class="bar bar-5"></span></td><td><span class="bar bar-2"></span></td><td><span class="bar bar-5"></span></td></tr>
+<tr><td>🧪 TestBenchAI</td><td><span class="bar bar-5"></span></td><td><span class="bar bar-5"></span></td><td><span class="bar bar-4"></span></td><td><span class="bar bar-2"></span></td><td><span class="bar bar-5"></span></td></tr>
+<tr><td>📡 WaveformGPT</td><td><span class="bar bar-4"></span></td><td><span class="bar bar-4"></span></td><td><span class="bar bar-5"></span></td><td><span class="bar bar-3"></span></td><td><span class="bar bar-5"></span></td></tr>
+<tr><td>🛡️ ComplianceAI</td><td><span class="bar bar-4"></span></td><td><span class="bar bar-3"></span></td><td><span class="bar bar-5"></span></td><td><span class="bar bar-3"></span></td><td><span class="bar bar-4"></span></td></tr>
+<tr><td>🔗 SpecSync</td><td><span class="bar bar-4"></span></td><td><span class="bar bar-3"></span></td><td><span class="bar bar-4"></span></td><td><span class="bar bar-3"></span></td><td><span class="bar bar-4"></span></td></tr>
+<tr><td>📄 DatasheetAI</td><td><span class="bar bar-4"></span></td><td><span class="bar bar-3"></span></td><td><span class="bar bar-3"></span></td><td><span class="bar bar-4"></span></td><td><span class="bar bar-3"></span></td></tr>
+<tr><td>🌐 EtherScope</td><td><span class="bar bar-3"></span></td><td><span class="bar bar-4"></span></td><td><span class="bar bar-5"></span></td><td><span class="bar bar-3"></span></td><td><span class="bar bar-4"></span></td></tr>
+<tr><td>🏭 ModelForge</td><td><span class="bar bar-5"></span></td><td><span class="bar bar-5"></span></td><td><span class="bar bar-2"></span></td><td><span class="bar bar-1"></span></td><td><span class="bar bar-5"></span></td></tr>
+<tr><td>🤖 AgentOS</td><td><span class="bar bar-4"></span></td><td><span class="bar bar-5"></span></td><td><span class="bar bar-4"></span></td><td><span class="bar bar-2"></span></td><td><span class="bar bar-5"></span></td></tr>
+<tr><td>🇰🇷 BridgeAI</td><td><span class="bar bar-3"></span></td><td><span class="bar bar-3"></span></td><td><span class="bar bar-5"></span></td><td><span class="bar bar-4"></span></td><td><span class="bar bar-3"></span></td></tr>
+</table>
+</div>
+<p style="font-size:.75em;color:#999;margin-top:4px"><span class="en">Longer bar = stronger. Green = excellent, Yellow = good, Orange = moderate, Red = challenging</span><span class="ko">바 길수록 = 강함. 초록 = 우수, 노랑 = 좋음, 주황 = 보통, 빨강 = 도전적</span></p>
+
+<!-- ============ IDEA 1 ============ -->
+<div class="idea-card pick">
+<div class="card-header"><span class="card-emoji">⭐</span><span class="card-title">SiliconAgent — <span class="en">AI Chip Validation Copilot</span><span class="ko">AI 칩 검증 코파일럿</span></span></div>
+<p class="card-oneliner"><span class="en">"The AI that debugs silicon failures before your coffee gets cold."</span><span class="ko">"커피 식기 전에 실리콘 장애를 디버깅하는 AI."</span></p>
+<div class="card-grid">
+<div class="card-section"><h4>🔍 <span class="en">What It Is</span><span class="ko">뭘 하는 건가</span></h4><p class="en">AI agent that ingests waveforms, regression logs, coverage reports, and silicon characterization data to auto-triage failures, suggest root causes, and generate debug sequences. Integrates with Jira/Confluence for ticket management. Think "senior validation engineer in a box."</p><p class="ko">파형, 리그레션 로그, 커버리지 리포트, 실리콘 특성 데이터를 분석하여 장애를 자동 분류하고 근본 원인을 제안하며 디버그 시퀀스를 생성하는 AI 에이전트. Jira/Confluence 통합. "시니어 검증 엔지니어를 박스에 담은 것."</p></div>
+<div class="card-section"><h4>🎯 <span class="en">Why YOU</span><span class="ko">왜 당신인가</span></h4><p class="en">You literally do this job every day at Microchip. You know the pain points — the 3am debug sessions, the signal integrity headaches, the "is this a silicon bug or a board issue?" questions. Domain expert + AI builder = unfair advantage nobody else has.</p><p class="ko">매일 Microchip에서 이 일을 하고 있음. 새벽 3시 디버그, 신호 무결성 문제, "이게 실리콘 버그야 보드 문제야?" — 이 고통을 직접 아는 사람. 도메인 전문가 + AI 빌더 = 아무도 없는 불공정한 우위.</p></div>
+<div class="card-section"><h4>💰 <span class="en">Market & Revenue</span><span class="ko">시장 & 수익</span></h4>
+<ul class="en"><li>AI semiconductor market: $1.9B → $10.1B by 2031 (39.7% CAGR)</li><li>Companies pay $200K+/yr per validation engineer</li><li>Tool saving 30% of their time = worth $50K/seat/year</li><li>B2B SaaS: $500-2,000/seat/month</li><li><strong>50 seats = $300K-$1.2M ARR</strong></li></ul>
+<ul class="ko"><li>AI 반도체 시장: 2026년 $19억 → 2031년 $101억 (CAGR 39.7%)</li><li>기업당 검증 엔지니어 연봉 $200K+</li><li>시간 30% 절약 도구 = 시트당 $50K/년 가치</li><li><strong>50시트 = $30만-$120만 ARR</strong></li></ul>
+</div>
+<div class="card-section"><h4>🛠️ <span class="en">Tech Stack</span><span class="ko">기술 스택</span></h4>
+<ul><li><span class="en">Fine-tuned LLM on silicon validation patterns</span><span class="ko">실리콘 검증 패턴으로 파인튜닝된 LLM</span></li><li><span class="en">VCD/FSDB waveform parser</span><span class="ko">VCD/FSDB 파형 파서</span></li><li><span class="en">Log analysis pipeline (regex + ML)</span><span class="ko">로그 분석 파이프라인 (regex + ML)</span></li><li><span class="en">RAG over internal docs & datasheets</span><span class="ko">내부 문서 & 데이터시트 RAG</span></li><li><span class="en">Jira/Confluence API integration</span><span class="ko">Jira/Confluence API 연동</span></li></ul>
+</div>
+</div>
+<div class="metrics-row">
+<span class="metric-pill"><span class="label"><span class="en">Difficulty:</span><span class="ko">난이도:</span></span><span class="diff-badge diff-hard"><span class="en">HARD</span><span class="ko">어려움</span></span></span>
+<span class="metric-pill"><span class="label">"I Built This":</span><span class="value stars">★★★★★</span></span>
+<span class="metric-pill"><span class="label"><span class="en">MVP:</span><span class="ko">MVP:</span></span><span class="value"><span class="en">4-6 months</span><span class="ko">4-6개월</span></span></span>
+<span class="metric-pill"><span class="label"><span class="en">Moat:</span><span class="ko">해자:</span></span><span class="value">🏰🏰🏰</span></span>
+</div>
+<div class="not-vibe"><h4><span class="en">Why This Isn't Vibe Coding</span><span class="ko">왜 이건 바이브 코딩이 아닌가</span></h4><p class="en">You're parsing binary waveform formats, building domain-specific ML models on silicon failure patterns, creating custom embeddings for hardware protocols, and integrating with enterprise EDA tool APIs. Nobody with just ChatGPT and Cursor can build this. It requires deep hardware knowledge + AI architecture + systems engineering.</p><p class="ko">바이너리 파형 포맷 파싱, 실리콘 장애 패턴에 대한 도메인 특화 ML 모델 구축, 하드웨어 프로토콜용 커스텀 임베딩 생성, 엔터프라이즈 EDA 도구 API 통합. ChatGPT와 Cursor만으로는 절대 불가능. 깊은 하드웨어 지식 + AI 아키텍처 + 시스템 엔지니어링이 필요.</p></div>
+</div>
+
+<!-- ============ IDEA 2 ============ -->
+<div class="idea-card">
+<div class="card-header"><span class="card-emoji">🧪</span><span class="card-title">TestBenchAI — <span class="en">AI Test Generator for SystemVerilog/UVM</span><span class="ko">SystemVerilog/UVM AI 테스트 생성기</span></span></div>
+<p class="card-oneliner"><span class="en">"Upload your RTL spec. Get production-quality UVM testbenches in minutes."</span><span class="ko">"RTL 스펙 업로드. 몇 분 만에 프로덕션 품질 UVM 테스트벤치."</span></p>
+<div class="card-grid">
+<div class="card-section"><h4>🔍 <span class="en">What It Is</span><span class="ko">뭘 하는 건가</span></h4><p class="en">Upload design specs → AI generates UVM testbenches, constrained random tests, functional coverage plans, and assertion libraries. Verification is 60-70% of chip development cost. This automates the most painful part.</p><p class="ko">설계 스펙 업로드 → AI가 UVM 테스트벤치, 제약 랜덤 테스트, 기능 커버리지 플랜, 어설션 라이브러리 생성. 검증은 칩 개발 비용의 60-70%. 가장 고통스러운 부분을 자동화.</p></div>
+<div class="card-section"><h4>💰 <span class="en">Revenue Model</span><span class="ko">수익 모델</span></h4><p class="en">$200-500/user/month for indie teams. Enterprise licensing $50K-200K/year for big semiconductor companies. Synopsys charges $100K+/license for their tools — huge room to undercut.</p><p class="ko">인디 팀용 $200-500/사용자/월. 대기업 라이센스 $5만-20만/년. Synopsys 라이센스 $10만+ — 가격 경쟁 여지 큼.</p></div>
+</div>
+<div class="metrics-row">
+<span class="metric-pill"><span class="label"><span class="en">Difficulty:</span><span class="ko">난이도:</span></span><span class="diff-badge diff-hard"><span class="en">HARD</span><span class="ko">어려움</span></span></span>
+<span class="metric-pill"><span class="label">"I Built This":</span><span class="value stars">★★★★★</span></span>
+<span class="metric-pill"><span class="label"><span class="en">MVP:</span><span class="ko">MVP:</span></span><span class="value"><span class="en">5-7 months</span><span class="ko">5-7개월</span></span></span>
+</div>
+<div class="not-vibe"><h4><span class="en">Why This Isn't Vibe Coding</span><span class="ko">왜 바이브 코딩이 아닌가</span></h4><p class="en">Fine-tuning code models on SystemVerilog corpus, building AST parsers for RTL, creating UVM-aware code generation with correct class hierarchies. This is compiler engineering meets AI.</p><p class="ko">SystemVerilog 코퍼스로 코드 모델 파인튜닝, RTL AST 파서 구축, 올바른 클래스 계층 구조의 UVM 인식 코드 생성. 컴파일러 엔지니어링 + AI.</p></div>
+</div>
+
+<!-- ============ IDEA 3 ============ -->
+<div class="idea-card">
+<div class="card-header"><span class="card-emoji">📡</span><span class="card-title">WaveformGPT — <span class="en">Natural Language Waveform Analysis</span><span class="ko">자연어 파형 분석</span></span></div>
+<p class="card-oneliner"><span class="en">"Ask 'Why did the AXI handshake fail at cycle 45032?' and get an answer."</span><span class="ko">"'사이클 45032에서 AXI 핸드쉐이크가 왜 실패했어?' 물어보면 답이 나옴."</span></p>
+<div class="card-grid">
+<div class="card-section"><h4>🔍 <span class="en">What It Is</span><span class="ko">뭘 하는 건가</span></h4><p class="en">Upload VCD/FSDB waveforms, ask questions in plain English. AI navigates millions of signal transitions, understands protocol state machines (AXI, Ethernet, PCIe, USB), and explains what went wrong. Like ChatGPT for hardware debug.</p><p class="ko">VCD/FSDB 파형 업로드, 일반 영어로 질문. AI가 수백만 신호 전환을 탐색하고 프로토콜 상태 머신(AXI, Ethernet, PCIe, USB)을 이해하며 문제를 설명.</p></div>
+<div class="card-section"><h4>💰 <span class="en">Revenue</span><span class="ko">수익</span></h4><p class="en">Freemium: $29/mo personal → $199/mo team → $999/mo enterprise. Every chip design team spends hours staring at waveforms. Even a small time-save is worth paying for.</p><p class="ko">프리미엄: 개인 $29/월 → 팀 $199/월 → 기업 $999/월. 모든 칩 설계 팀이 파형 보며 시간 소비. 작은 시간 절약도 돈 가치.</p></div>
+</div>
+<div class="metrics-row">
+<span class="metric-pill"><span class="label"><span class="en">Difficulty:</span><span class="ko">난이도:</span></span><span class="diff-badge diff-med"><span class="en">MEDIUM</span><span class="ko">보통</span></span></span>
+<span class="metric-pill"><span class="label">"I Built This":</span><span class="value stars">★★★★★</span></span>
+<span class="metric-pill"><span class="label"><span class="en">MVP:</span><span class="ko">MVP:</span></span><span class="value"><span class="en">3-4 months</span><span class="ko">3-4개월</span></span></span>
+</div>
+</div>
+
+<!-- ============ IDEA 4 ============ -->
+<div class="idea-card">
+<div class="card-header"><span class="card-emoji">🛡️</span><span class="card-title">ComplianceAI — <span class="en">Automotive Standards Compliance Engine</span><span class="ko">자동차 표준 컴플라이언스 엔진</span></span></div>
+<p class="card-oneliner"><span class="en">"Auto-check your chip design against IEEE 802.3, ISO 26262, AEC-Q100."</span><span class="ko">"칩 설계를 IEEE 802.3, ISO 26262, AEC-Q100에 자동 체크."</span></p>
+<div class="card-grid">
+<div class="card-section"><h4>🔍 <span class="en">What It Is</span><span class="ko">뭘 하는 건가</span></h4><p class="en">AI reads chip design docs and auto-checks compliance against automotive/industrial standards. Generates compliance matrices, flags gaps, suggests fixes. Currently this is manual, expensive, and error-prone. You work on automotive Ethernet — you know these standards.</p><p class="ko">AI가 칩 설계 문서를 읽고 자동차/산업 표준 준수를 자동 확인. 컴플라이언스 매트릭스 생성, 갭 플래그, 수정 제안. 현재 수동이고 비싸고 오류 발생 잦음.</p></div>
+<div class="card-section"><h4>💰 <span class="en">Revenue</span><span class="ko">수익</span></h4><p class="en">$1,000-5,000/month per project. Automotive companies have DEEP budgets for compliance. A failed audit can delay a chip launch by months (=$millions). Even 20 customers = $240K-$1.2M ARR.</p><p class="ko">프로젝트당 $1,000-5,000/월. 자동차 회사는 컴플라이언스에 큰 예산. 감사 실패 = 칩 런칭 수개월 지연 (=수백만 달러). 20개 고객만 = $24만-$120만 ARR.</p></div>
+</div>
+<div class="metrics-row">
+<span class="metric-pill"><span class="label"><span class="en">Difficulty:</span><span class="ko">난이도:</span></span><span class="diff-badge diff-med"><span class="en">MEDIUM</span><span class="ko">보통</span></span></span>
+<span class="metric-pill"><span class="label">"I Built This":</span><span class="value stars">★★★★☆</span></span>
+<span class="metric-pill"><span class="label"><span class="en">MVP:</span><span class="ko">MVP:</span></span><span class="value"><span class="en">3-5 months</span><span class="ko">3-5개월</span></span></span>
+</div>
+</div>
+
+<!-- ============ IDEA 5 ============ -->
+<div class="idea-card">
+<div class="card-header"><span class="card-emoji">🔗</span><span class="card-title">SpecSync — <span class="en">AI Requirements Traceability</span><span class="ko">AI 요구사항 추적성</span></span></div>
+<p class="card-oneliner"><span class="en">"Never lose track of spec → RTL → test → coverage again."</span><span class="ko">"스펙 → RTL → 테스트 → 커버리지 추적을 절대 놓치지 마."</span></p>
+<div class="card-grid">
+<div class="card-section"><h4>🔍 <span class="en">What It Is</span><span class="ko">뭘 하는 건가</span></h4><p class="en">Connects chip specs ↔ RTL ↔ testplans ↔ coverage ↔ Jira tickets with AI-maintained traceability. Catches gaps automatically: "Section 4.2 of the spec has no corresponding test." Hardware teams do this in spreadsheets — it's audit-critical and painful.</p><p class="ko">칩 스펙 ↔ RTL ↔ 테스트플랜 ↔ 커버리지 ↔ Jira 티켓을 AI가 추적성 유지. 갭 자동 감지: "스펙 섹션 4.2에 해당 테스트 없음." 하드웨어 팀은 스프레드시트로 이걸 함 — 감사에 필수이고 고통스러움.</p></div>
+<div class="card-section"><h4>💰 <span class="en">Revenue</span><span class="ko">수익</span></h4><p class="en">$500-2,000/month/team. Safety-critical industries (automotive, medical, aerospace) MUST have traceability for audits. It's not optional — it's regulatory.</p><p class="ko">팀당 $500-2,000/월. 안전 필수 산업(자동차, 의료, 항공우주)은 감사를 위해 추적성이 필수. 선택이 아닌 규제 사항.</p></div>
+</div>
+<div class="metrics-row">
+<span class="metric-pill"><span class="label"><span class="en">Difficulty:</span><span class="ko">난이도:</span></span><span class="diff-badge diff-med"><span class="en">MEDIUM</span><span class="ko">보통</span></span></span>
+<span class="metric-pill"><span class="label">"I Built This":</span><span class="value stars">★★★★☆</span></span>
+<span class="metric-pill"><span class="label"><span class="en">MVP:</span><span class="ko">MVP:</span></span><span class="value"><span class="en">3-4 months</span><span class="ko">3-4개월</span></span></span>
+</div>
+</div>
+
+<!-- ============ IDEA 6 ============ -->
+<div class="idea-card">
+<div class="card-header"><span class="card-emoji">📄</span><span class="card-title">DatasheetAI — <span class="en">Intelligent Datasheet Q&A</span><span class="ko">지능형 데이터시트 Q&A</span></span></div>
+<p class="card-oneliner"><span class="en">"Stop Ctrl+F through 500-page datasheets. Just ask."</span><span class="ko">"500페이지 데이터시트에서 Ctrl+F 그만. 그냥 물어봐."</span></p>
+<div class="card-grid">
+<div class="card-section"><h4>🔍 <span class="en">What It Is</span><span class="ko">뭘 하는 건가</span></h4><p class="en">Upload any chip datasheet PDF. Ask: "What's the max junction temperature?" "Show me SPI timing requirements." "Compare the power consumption of mode A vs mode B." AI extracts tables, cross-references sections, and gives precise answers with page citations.</p><p class="ko">칩 데이터시트 PDF 업로드. 질문: "최대 접합 온도가 뭐야?" "SPI 타이밍 요구사항 보여줘." AI가 테이블 추출, 섹션 교차 참조, 페이지 인용과 함께 정확한 답변.</p></div>
+<div class="card-section"><h4>💰 <span class="en">Revenue</span><span class="ko">수익</span></h4><p class="en">Freemium → $19/mo pro. Volume play: millions of hardware engineers worldwide. 10K users × $19 = $190K/mo. Easier to build, but less moat. Good "warm-up" project.</p><p class="ko">프리미엄 → 프로 $19/월. 볼륨 플레이: 전 세계 수백만 하드웨어 엔지니어. 1만 유저 × $19 = $19만/월. 만들기 쉽지만 해자 적음. 좋은 "워밍업" 프로젝트.</p></div>
+</div>
+<div class="metrics-row">
+<span class="metric-pill"><span class="label"><span class="en">Difficulty:</span><span class="ko">난이도:</span></span><span class="diff-badge diff-easy"><span class="en">EASIER</span><span class="ko">비교적 쉬움</span></span></span>
+<span class="metric-pill"><span class="label">"I Built This":</span><span class="value stars">★★★☆☆</span></span>
+<span class="metric-pill"><span class="label"><span class="en">MVP:</span><span class="ko">MVP:</span></span><span class="value"><span class="en">2-3 months</span><span class="ko">2-3개월</span></span></span>
+</div>
+</div>
+
+<!-- ============ IDEA 7 ============ -->
+<div class="idea-card">
+<div class="card-header"><span class="card-emoji">🌐</span><span class="card-title">EtherScope — <span class="en">AI Network Protocol Analyzer</span><span class="ko">AI 네트워크 프로토콜 분석기</span></span></div>
+<p class="card-oneliner"><span class="en">"Wireshark meets GPT — protocol analysis that explains itself."</span><span class="ko">"Wireshark + GPT — 스스로 설명하는 프로토콜 분석."</span></p>
+<div class="card-grid">
+<div class="card-section"><h4>🔍 <span class="en">What It Is</span><span class="ko">뭘 하는 건가</span></h4><p class="en">AI-powered Ethernet/network analyzer that goes beyond Wireshark. Detects compliance violations against IEEE 802.3 specs, explains anomalies in plain English, predicts failure patterns, and auto-generates debug reports. Your automotive Ethernet expertise makes this natural.</p><p class="ko">Wireshark를 넘어서는 AI 기반 이더넷/네트워크 분석기. IEEE 802.3 스펙 위반 감지, 이상 현상 설명, 장애 패턴 예측, 디버그 리포트 자동 생성.</p></div>
+<div class="card-section"><h4>💰 <span class="en">Revenue</span><span class="ko">수익</span></h4><p class="en">$49-199/month. Target: automotive Ethernet teams, network engineers, IoT developers. Niche but very sticky — once engineers rely on it, they don't switch.</p><p class="ko">$49-199/월. 타겟: 자동차 이더넷 팀, 네트워크 엔지니어, IoT 개발자. 니치하지만 끈끈함 — 엔지니어가 의존하면 안 바꿈.</p></div>
+</div>
+<div class="metrics-row">
+<span class="metric-pill"><span class="label"><span class="en">Difficulty:</span><span class="ko">난이도:</span></span><span class="diff-badge diff-med"><span class="en">MEDIUM</span><span class="ko">보통</span></span></span>
+<span class="metric-pill"><span class="label">"I Built This":</span><span class="value stars">★★★★☆</span></span>
+<span class="metric-pill"><span class="label"><span class="en">MVP:</span><span class="ko">MVP:</span></span><span class="value"><span class="en">3-4 months</span><span class="ko">3-4개월</span></span></span>
+</div>
+</div>
+
+<!-- ============ IDEA 8 ============ -->
+<div class="idea-card">
+<div class="card-header"><span class="card-emoji">🏭</span><span class="card-title">ModelForge — <span class="en">No-Code Fine-Tuning Platform</span><span class="ko">노코드 파인튜닝 플랫폼</span></span></div>
+<p class="card-oneliner"><span class="en">"Fine-tune AI models on your company's data without hiring ML engineers."</span><span class="ko">"ML 엔지니어 채용 없이 회사 데이터로 AI 모델 파인튜닝."</span></p>
+<div class="card-grid">
+<div class="card-section"><h4>🔍 <span class="en">What It Is</span><span class="ko">뭘 하는 건가</span></h4><p class="en">Platform where SMBs upload their private data (docs, code, logs) and get a fine-tuned LLM with built-in evaluation, A/B testing, versioning, and one-click deployment. Every company wants custom AI but can't afford ML teams.</p><p class="ko">SMB가 비공개 데이터(문서, 코드, 로그) 업로드하면 파인튜닝된 LLM + 평가, A/B 테스트, 버전 관리, 원클릭 배포를 제공하는 플랫폼.</p></div>
+<div class="card-section"><h4>💰 <span class="en">Revenue</span><span class="ko">수익</span></h4><p class="en">Usage-based: $0.10-1.00/training run + $99-499/mo platform fee. $4.7B fine-tuning market by 2028. Massive TAM but also massive competition (Together AI, Predibase, etc.)</p><p class="ko">사용량 기반: 트레이닝 런당 $0.10-1.00 + 플랫폼 요금 $99-499/월. 2028년 파인튜닝 시장 $47억. 큰 TAM이지만 경쟁도 큼.</p></div>
+</div>
+<div class="metrics-row">
+<span class="metric-pill"><span class="label"><span class="en">Difficulty:</span><span class="ko">난이도:</span></span><span class="diff-badge diff-hard"><span class="en">HARD</span><span class="ko">어려움</span></span></span>
+<span class="metric-pill"><span class="label">"I Built This":</span><span class="value stars">★★★★★</span></span>
+<span class="metric-pill"><span class="label"><span class="en">MVP:</span><span class="ko">MVP:</span></span><span class="value"><span class="en">6-8 months</span><span class="ko">6-8개월</span></span></span>
+</div>
+</div>
+
+<!-- ============ IDEA 9 ============ -->
+<div class="idea-card">
+<div class="card-header"><span class="card-emoji">🤖</span><span class="card-title">AgentOS — <span class="en">Open-Source Multi-Agent Framework for HW Verification</span><span class="ko">HW 검증용 오픈소스 멀티에이전트 프레임워크</span></span></div>
+<p class="card-oneliner"><span class="en">"CrewAI for chip verification. Open source, semiconductor-native."</span><span class="ko">"칩 검증용 CrewAI. 오픈소스, 반도체 네이티브."</span></p>
+<div class="card-grid">
+<div class="card-section"><h4>🔍 <span class="en">What It Is</span><span class="ko">뭘 하는 건가</span></h4><p class="en">Open-source framework for building AI agent teams that collaborate on chip verification. ChipAgents.ai just launched at DVCon 2026 but is closed-source. An open alternative would get massive community adoption. Agent types: RTL analyzer, test generator, coverage optimizer, bug triager.</p><p class="ko">칩 검증을 위한 AI 에이전트 팀 구축 오픈소스 프레임워크. ChipAgents.ai가 DVCon 2026에서 런칭했지만 클로즈드 소스. 오픈 대안은 대규모 커뮤니티 채택 가능.</p></div>
+<div class="card-section"><h4>💰 <span class="en">Revenue</span><span class="ko">수익</span></h4><p class="en">Open core: free framework → paid enterprise features/support ($5K-50K/year). Build community first, monetize later. This is the "I'm a thought leader" move that gets you speaking at DVCon, DAC, invited to Synopsys/Cadence.</p><p class="ko">오픈 코어: 무료 프레임워크 → 유료 엔터프라이즈 기능/지원 ($5K-50K/년). 커뮤니티 먼저, 수익화는 나중에. DVCon, DAC 발표 초대받는 "사고 리더" 움직임.</p></div>
+</div>
+<div class="metrics-row">
+<span class="metric-pill"><span class="label"><span class="en">Difficulty:</span><span class="ko">난이도:</span></span><span class="diff-badge diff-hard"><span class="en">HARD</span><span class="ko">어려움</span></span></span>
+<span class="metric-pill"><span class="label">"I Built This":</span><span class="value stars">★★★★★</span></span>
+<span class="metric-pill"><span class="label"><span class="en">MVP:</span><span class="ko">MVP:</span></span><span class="value"><span class="en">4-6 months</span><span class="ko">4-6개월</span></span></span>
+</div>
+<div class="not-vibe"><h4><span class="en">Why This Isn't Vibe Coding</span><span class="ko">왜 바이브 코딩이 아닌가</span></h4><p class="en">You're designing an agent orchestration system with tool-calling APIs for EDA tools (VCS, Verdi, Questa), verification IP libraries, and multi-agent coordination protocols. This is distributed systems + AI + semiconductor engineering. The intersection is tiny — and you're standing right in it.</p><p class="ko">EDA 도구(VCS, Verdi, Questa)용 도구 호출 API, 검증 IP 라이브러리, 멀티에이전트 조정 프로토콜을 가진 에이전트 오케스트레이션 시스템 설계. 분산 시스템 + AI + 반도체 엔지니어링. 이 교차점은 극소 — 그리고 당신이 바로 거기 서 있음.</p></div>
+</div>
+
+<!-- ============ IDEA 10 ============ -->
+<div class="idea-card">
+<div class="card-header"><span class="card-emoji">🇰🇷</span><span class="card-title">BridgeAI — <span class="en">Semiconductor-Native KR↔EN Translation</span><span class="ko">반도체 특화 한↔영 번역</span></span></div>
+<p class="card-oneliner"><span class="en">"Not Google Translate — actually understands 'clock domain crossing' in Korean."</span><span class="ko">"구글 번역이 아님 — '클럭 도메인 크로싱'을 진짜로 이해하는 번역."</span></p>
+<div class="card-grid">
+<div class="card-section"><h4>🔍 <span class="en">What It Is</span><span class="ko">뭘 하는 건가</span></h4><p class="en">AI translation engine fine-tuned on semiconductor/engineering terminology. Samsung (50K+ engineers), SK Hynix, and the entire Korean semiconductor ecosystem needs this. General translators botch technical docs — this one doesn't.</p><p class="ko">반도체/엔지니어링 용어에 파인튜닝된 AI 번역 엔진. 삼성(5만+ 엔지니어), SK하이닉스, 한국 반도체 생태계 전체가 필요. 일반 번역기는 기술 문서를 망침 — 이건 안 그럼.</p></div>
+<div class="card-section"><h4>💰 <span class="en">Revenue</span><span class="ko">수익</span></h4><p class="en">$29-99/user/month for teams. Enterprise deals with Samsung/SK Hynix could be $50K-500K/year. Korean semiconductor industry is $150B+ — even a tiny slice is massive.</p><p class="ko">팀용 $29-99/사용자/월. 삼성/SK하이닉스 엔터프라이즈 딜 $5만-50만/년. 한국 반도체 산업 $1500억+ — 작은 조각도 거대함.</p></div>
+</div>
+<div class="metrics-row">
+<span class="metric-pill"><span class="label"><span class="en">Difficulty:</span><span class="ko">난이도:</span></span><span class="diff-badge diff-med"><span class="en">MEDIUM</span><span class="ko">보통</span></span></span>
+<span class="metric-pill"><span class="label">"I Built This":</span><span class="value stars">★★★☆☆</span></span>
+<span class="metric-pill"><span class="label"><span class="en">MVP:</span><span class="ko">MVP:</span></span><span class="value"><span class="en">2-3 months</span><span class="ko">2-3개월</span></span></span>
+</div>
+</div>
+
+<!-- ============ RECOMMENDATION ============ -->
+<div class="rec-box">
+<h2>🎯 <span class="en">My Recommendation</span><span class="ko">내 추천</span></h2>
+<p class="en"><span class="highlight">Start with SiliconAgent (#1)</span>, but build <span class="highlight">DatasheetAI (#6)</span> first as your warm-up project.</p>
+<p class="ko"><span class="highlight">SiliconAgent (#1)을 목표로</span>, 하지만 <span class="highlight">DatasheetAI (#6)를 워밍업</span>으로 먼저 만들어라.</p>
+<p class="en" style="margin-top:12px"><strong>Here's why this sequencing works:</strong></p>
+<p class="ko" style="margin-top:12px"><strong>이 순서가 효과적인 이유:</strong></p>
+<ul class="en">
+<li><strong>Month 1-2:</strong> Build DatasheetAI. It's simpler (PDF parsing + RAG), ships fast, and gets you paying customers + credibility in the hardware AI space</li>
+<li><strong>Month 3-6:</strong> Use DatasheetAI revenue + learnings to fund and build SiliconAgent. You'll already have domain data, customer relationships, and technical infrastructure</li>
+<li><strong>The story you tell:</strong> "I built an AI that reads datasheets, then I built one that debugs silicon. I'm a semiconductor engineer who also architects AI systems."</li>
+<li><strong>This is not a productivity app.</strong> This is enterprise AI for a $10.1B market. When you say "I built this," it shows you understand domain-specific AI, not just API wrappers</li>
+</ul>
+<ul class="ko">
+<li><strong>1-2개월:</strong> DatasheetAI 만들기. 더 단순하고(PDF 파싱 + RAG) 빠르게 출시 가능. 유료 고객 + 하드웨어 AI 분야 신뢰도 확보</li>
+<li><strong>3-6개월:</strong> DatasheetAI 수익 + 배움으로 SiliconAgent 개발. 이미 도메인 데이터, 고객 관계, 기술 인프라 보유</li>
+<li><strong>당신의 스토리:</strong> "데이터시트 읽는 AI 만들고, 실리콘 디버깅하는 AI 만들었습니다. 저는 AI 시스템도 설계하는 반도체 엔지니어입니다."</li>
+<li><strong>이건 생산성 앱이 아님.</strong> $101억 시장의 엔터프라이즈 AI. "제가 만들었습니다" 하면 API 래퍼가 아닌 도메인 특화 AI를 이해한다는 걸 보여줌</li>
+</ul>
+<p class="en" style="margin-top:16px;font-size:1.1em"><span class="highlight">The bottom line:</span> You're not just a guy who can vibe code a recipe app. You're an engineer who can train models on silicon failure patterns, parse binary waveform data, and build AI systems that semiconductor companies will pay $50K/year for. That's a completely different league. 🏆</p>
+<p class="ko" style="margin-top:16px;font-size:1.1em"><span class="highlight">핵심:</span> 당신은 레시피 앱을 바이브 코딩하는 사람이 아님. 실리콘 장애 패턴으로 모델을 훈련하고, 바이너리 파형 데이터를 파싱하고, 반도체 회사가 연간 $5만 내고 쓸 AI 시스템을 만들 수 있는 엔지니어. 완전히 다른 리그. 🏆</p>
+</div>
+
+</div>
+
+<footer>
+<span class="en">🔬 Researched & built by Totoro 🌳 — March 2026<br>Market data from Deloitte, IEEE, DVCon 2026, industry reports</span>
+<span class="ko">🔬 Totoro 🌳 리서치 & 제작 — 2026년 3월<br>시장 데이터: Deloitte, IEEE, DVCon 2026, 산업 리포트</span>
+</footer>
+
+<script>
+let isKorean=false;
+function toggleLang(){
+isKorean=!isKorean;
+document.querySelectorAll('.en').forEach(el=>el.classList.toggle('hide',isKorean));
+document.querySelectorAll('.ko').forEach(el=>el.classList.toggle('show',isKorean));
+document.querySelector('.lang-toggle').textContent=isKorean?'English':'한국어';
+}
+</script>
+</body>
+</html>
