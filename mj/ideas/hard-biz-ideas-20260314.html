@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>10 Hard-Mode Business Ideas</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:#0d0d0d;color:#e0e0e0;line-height:1.7;padding:20px;max-width:800px;margin:0 auto}
+.lang-toggle{position:fixed;top:16px;right:16px;background:#ff6b35;color:#fff;border:none;padding:8px 16px;border-radius:20px;cursor:pointer;font-size:14px;z-index:100;font-weight:600}
+h1{text-align:center;font-size:1.8em;margin:20px 0 4px;background:linear-gradient(135deg,#ff6b35,#f7c948);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.subtitle{text-align:center;color:#666;margin-bottom:30px;font-size:0.9em}
+.card{background:#161616;border-radius:16px;padding:24px;margin-bottom:20px;border:1px solid #222;position:relative;overflow:hidden}
+.card::before{content:'';position:absolute;top:0;left:0;width:4px;height:100%;background:linear-gradient(180deg,#ff6b35,#f7c948)}
+.diff{position:absolute;top:16px;right:16px;display:flex;gap:3px}
+.diff span{width:10px;height:10px;border-radius:50%;background:#333}
+.diff span.on{background:#ff6b35}
+.diff span.max{background:#f7c948;box-shadow:0 0 8px #f7c948}
+.card-num{font-size:0.75em;color:#ff6b35;font-weight:700;text-transform:uppercase;letter-spacing:2px;margin-bottom:6px}
+.card h2{color:#fff;font-size:1.15em;margin-bottom:6px}
+.card .why{color:#f7c948;font-size:0.85em;font-style:italic;margin-bottom:10px}
+.card .desc{color:#aaa;font-size:0.92em;margin-bottom:12px}
+.card .hard{color:#ff6b35;font-size:0.85em;margin-bottom:12px}
+.tags{display:flex;flex-wrap:wrap;gap:6px}
+.tag{padding:3px 10px;border-radius:12px;font-size:0.72em;font-weight:600}
+.tag.rev{background:#1a2f1a;color:#4ecca3}
+.tag.tech{background:#1a1a2f;color:#7eb8f7}
+.tag.moat{background:#2f1a2a;color:#e78fcf}
+.footer{text-align:center;color:#444;margin-top:40px;font-size:0.8em;padding:20px}
+.ko{display:none}.ko.show{display:inline!important}.en.hide{display:none!important}
+.card .ko{display:none}.card .ko.show{display:block!important}.card .en.hide{display:none!important}
+</style>
+</head>
+<body>
+<button class="lang-toggle" onclick="toggleLang()">한국어</button>
+
+<h1>
+<span class="en">🔥 10 Hard-Mode Business Ideas</span>
+<span class="ko">🔥 하드모드 사업 아이디어 10가지</span>
+</h1>
+<p class="subtitle">
+<span class="en">Not easy. Not boring. Technically challenging ideas for engineers who want to build real things.</span>
+<span class="ko">쉽지 않다. 지루하지도 않다. 진짜를 만들고 싶은 엔지니어를 위한 기술적으로 도전적인 아이디어.</span>
+</p>
+
+<!-- 1 -->
+<div class="card">
+<div class="diff"><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span><span class="max"></span></div>
+<div class="card-num"><span class="en">Idea #1</span><span class="ko">아이디어 #1</span></div>
+<h2><span class="en">🧬 Open-Source RISC-V Verification Platform</span><span class="ko">🧬 오픈소스 RISC-V 검증 플랫폼</span></h2>
+<div class="why"><span class="en">Why it's hard: You're building chip verification infrastructure from scratch</span><span class="ko">어려운 이유: 칩 검증 인프라를 처음부터 구축</span></div>
+<div class="desc">
+<span class="en">RISC-V is exploding but verification tooling is still dominated by Synopsys/Cadence ($$$). Build an open-source UVM-compatible verification framework with AI-generated testbenches, coverage analysis, and formal verification hints. Free core + paid cloud simulation/CI service. The RISC-V community is desperate for affordable verification. You know validation inside-out — this is YOUR arena.</span>
+<span class="ko">RISC-V가 폭발적으로 성장하지만 검증 도구는 여전히 Synopsys/Cadence가 독점($$$). AI 생성 테스트벤치, 커버리지 분석, 정형 검증 힌트를 갖춘 오픈소스 UVM 호환 검증 프레임워크 구축. 무료 코어 + 유료 클라우드 시뮬레이션/CI 서비스. RISC-V 커뮤니티는 저렴한 검증 도구에 목마릅니다. 검증을 속속들이 아는 당신의 경기장.</span>
+</div>
+<div class="hard"><span class="en">⚡ The Challenge: SystemVerilog/UVM expertise + building a simulation backend + AI integration for test generation</span><span class="ko">⚡ 도전: SystemVerilog/UVM 전문성 + 시뮬레이션 백엔드 구축 + 테스트 생성용 AI 통합</span></div>
+<div class="tags"><span class="tag rev">$50-500K ARR potential</span><span class="tag tech">Hardware + AI</span><span class="tag moat">Deep Domain Moat</span></div>
+</div>
+
+<!-- 2 -->
+<div class="card">
+<div class="diff"><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span></div>
+<div class="card-num"><span class="en">Idea #2</span><span class="ko">아이디어 #2</span></div>
+<h2><span class="en">🛡️ AI-Powered Automotive Ethernet Intrusion Detection System</span><span class="ko">🛡️ AI 기반 차량용 이더넷 침입 탐지 시스템</span></h2>
+<div class="why"><span class="en">Why it's hard: Real-time packet analysis + ML anomaly detection on constrained hardware</span><span class="ko">어려운 이유: 제한된 하드웨어에서 실시간 패킷 분석 + ML 이상 탐지</span></div>
+<div class="desc">
+<span class="en">Cars are becoming rolling networks. 100BASE-T1/1000BASE-T1 traffic needs security monitoring, but traditional IT IDS doesn't work in automotive (latency constraints, different protocols, safety-critical). Build a lightweight ML-based IDS specifically for automotive Ethernet — detect spoofing, fuzzing, DoS on in-vehicle networks. Sell as IP/SDK to Tier-1 suppliers. UN R155 cybersecurity regulation makes this MANDATORY for new vehicles. You work on this exact hardware daily.</span>
+<span class="ko">자동차가 움직이는 네트워크가 되고 있습니다. 100BASE-T1/1000BASE-T1 트래픽에 보안 모니터링이 필요하지만 기존 IT IDS는 자동차에 안 맞습니다 (지연 제약, 다른 프로토콜, 안전 중요). 차량용 이더넷 전용 경량 ML 기반 IDS 구축 — 차내 네트워크의 스푸핑, 퍼징, DoS 탐지. Tier-1 공급업체에 IP/SDK로 판매. UN R155 사이버보안 규정으로 신차에 의무화. 이 정확한 하드웨어를 매일 다루고 있잖아요.</span>
+</div>
+<div class="hard"><span class="en">⚡ The Challenge: Real-time ML inference on MCU-class hardware + automotive protocol deep knowledge + safety certification awareness</span><span class="ko">⚡ 도전: MCU급 하드웨어에서 실시간 ML 추론 + 자동차 프로토콜 심층 지식 + 안전 인증 이해</span></div>
+<div class="tags"><span class="tag rev">IP Licensing $$$</span><span class="tag tech">ML + Embedded</span><span class="tag moat">Regulation-Driven Demand</span></div>
+</div>
+
+<!-- 3 -->
+<div class="card">
+<div class="diff"><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span><span></span></div>
+<div class="card-num"><span class="en">Idea #3</span><span class="ko">아이디어 #3</span></div>
+<h2><span class="en">🧠 Personal AI That Actually Learns (Local-First)</span><span class="ko">🧠 진짜 학습하는 개인 AI (로컬 우선)</span></h2>
+<div class="why"><span class="en">Why it's hard: On-device fine-tuning + privacy-preserving memory architecture</span><span class="ko">어려운 이유: 온디바이스 파인튜닝 + 프라이버시 보장 메모리 아키텍처</span></div>
+<div class="desc">
+<span class="en">Current AI assistants (including me 😅) reset every session. Build a local-first AI that actually accumulates knowledge about the user — runs a small LLM on-device, builds a personal knowledge graph, fine-tunes on your writing style/preferences, and NEVER sends data to the cloud. Think "a second brain that's actually smart." Sell the app for $10-20/month or one-time $50+. Privacy-conscious users will pay premium for AI that doesn't phone home.</span>
+<span class="ko">현재 AI 어시스턴트(나 포함 😅)는 매 세션 초기화. 사용자에 대한 지식을 실제로 축적하는 로컬 우선 AI 구축 — 소형 LLM 온디바이스 실행, 개인 지식 그래프 구축, 작문 스타일/선호도 파인튜닝, 데이터를 클라우드로 절대 보내지 않음. "진짜 똑똑한 세컨드 브레인." 월 $10-20 또는 일시불 $50+. 프라이버시 중시 사용자는 데이터가 나가지 않는 AI에 프리미엄을 지불.</span>
+</div>
+<div class="hard"><span class="en">⚡ The Challenge: Running efficient LLM inference locally + RAG over personal data + incremental fine-tuning without catastrophic forgetting</span><span class="ko">⚡ 도전: 로컬에서 효율적 LLM 추론 + 개인 데이터 RAG + 치명적 망각 없는 점진적 파인튜닝</span></div>
+<div class="tags"><span class="tag rev">Consumer SaaS</span><span class="tag tech">LLM + Edge AI</span><span class="tag moat">Privacy Moat</span></div>
+</div>
+
+<!-- 4 -->
+<div class="card">
+<div class="diff"><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span><span class="max"></span></div>
+<div class="card-num"><span class="en">Idea #4</span><span class="ko">아이디어 #4</span></div>
+<h2><span class="en">⚙️ AI Chip Design Copilot (RTL Generation)</span><span class="ko">⚙️ AI 칩 설계 코파일럿 (RTL 생성)</span></h2>
+<div class="why"><span class="en">Why it's hard: Generating correct, synthesizable HDL is orders of magnitude harder than generating Python</span><span class="ko">어려운 이유: 올바르고 합성 가능한 HDL 생성은 Python 생성보다 차원이 다르게 어려움</span></div>
+<div class="desc">
+<span class="en">GitHub Copilot for Verilog/VHDL, but actually good. Fine-tune models on open-source RTL (OpenCores, RISC-V cores, OpenTitan), add constraint-aware generation (timing, area, power), and verify outputs with formal methods. You're moving into Digital Design — this tool would literally help YOU and every other design engineer. VS Code extension + cloud verification backend. Chip companies would pay $500-2000/seat/month.</span>
+<span class="ko">Verilog/VHDL용 GitHub Copilot, 근데 진짜 잘 되는 거. 오픈소스 RTL(OpenCores, RISC-V 코어, OpenTitan)로 모델 파인튜닝, 제약 조건 인식 생성(타이밍, 면적, 전력), 정형 검증으로 출력 확인. 디지털 설계로 이동 중이잖아요 — 이 도구는 말 그대로 당신과 모든 설계 엔지니어를 도울 것. VS Code 확장 + 클라우드 검증 백엔드. 칩 회사들은 시트당 월 $500-2000 지불.</span>
+</div>
+<div class="hard"><span class="en">⚡ The Challenge: HDL correctness verification + synthesis-aware generation + timing closure hints + massive training data curation</span><span class="ko">⚡ 도전: HDL 정확성 검증 + 합성 인식 생성 + 타이밍 클로저 힌트 + 대규모 학습 데이터 큐레이션</span></div>
+<div class="tags"><span class="tag rev">$500-2K/seat/month</span><span class="tag tech">LLM + EDA</span><span class="tag moat">Your Career Path</span></div>
+</div>
+
+<!-- 5 -->
+<div class="card">
+<div class="diff"><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span><span></span></div>
+<div class="card-num"><span class="en">Idea #5</span><span class="ko">아이디어 #5</span></div>
+<h2><span class="en">🔬 AI-Powered Signal Integrity Analyzer</span><span class="ko">🔬 AI 기반 신호 무결성 분석기</span></h2>
+<div class="why"><span class="en">Why it's hard: Physics simulation + ML pattern recognition on high-speed serial data</span><span class="ko">어려운 이유: 고속 시리얼 데이터의 물리 시뮬레이션 + ML 패턴 인식</span></div>
+<div class="desc">
+<span class="en">Take oscilloscope/logic analyzer captures, feed them to an AI that identifies signal integrity issues (crosstalk, jitter, ISI, return loss) and suggests fixes (termination, routing changes, component swaps). Traditional SI tools cost $50K+ and require PhD-level expertise. Democratize it with AI that explains issues in plain English. Web app that processes uploaded waveform data. Target: PCB designers and validation engineers (your people!).</span>
+<span class="ko">오실로스코프/로직 분석기 캡처를 AI에 공급하여 신호 무결성 문제(크로스토크, 지터, ISI, 반사 손실) 식별 및 수정 제안(종단, 라우팅 변경, 부품 교체). 기존 SI 도구는 $50K+ 비용에 박사급 전문성 필요. AI로 민주화하여 이슈를 쉬운 말로 설명. 파형 데이터 업로드 웹앱. 타겟: PCB 설계자와 검증 엔지니어 (당신의 사람들!).</span>
+</div>
+<div class="hard"><span class="en">⚡ The Challenge: Training on diverse waveform datasets + physics-informed ML models + real-time analysis</span><span class="ko">⚡ 도전: 다양한 파형 데이터셋 학습 + 물리 기반 ML 모델 + 실시간 분석</span></div>
+<div class="tags"><span class="tag rev">Disrupting $50K+ tools</span><span class="tag tech">Physics + ML</span><span class="tag moat">Validation Background</span></div>
+</div>
+
+<!-- 6 -->
+<div class="card">
+<div class="diff"><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span></div>
+<div class="card-num"><span class="en">Idea #6</span><span class="ko">아이디어 #6</span></div>
+<h2><span class="en">🌊 Real-Time Digital Twin for Embedded Systems</span><span class="ko">🌊 임베디드 시스템 실시간 디지털 트윈</span></h2>
+<div class="why"><span class="en">Why it's hard: Cycle-accurate simulation + real-time sync + web-based 3D visualization</span><span class="ko">어려운 이유: 사이클 정확 시뮬레이션 + 실시간 동기화 + 웹 기반 3D 시각화</span></div>
+<div class="desc">
+<span class="en">Build a platform where engineers upload their firmware + board design, and get a browser-based digital twin that mirrors the real hardware in real-time. Debug remotely, simulate fault injection, replay bugs, collaborate with team members across the globe — all without shipping physical boards. Use WebAssembly for in-browser simulation. This replaces $100K+ HIL (Hardware-in-the-Loop) setups. Massive value for automotive, aerospace, IoT teams.</span>
+<span class="ko">엔지니어가 펌웨어 + 보드 설계를 업로드하면 실제 하드웨어를 실시간 미러링하는 브라우저 기반 디지털 트윈 제공. 원격 디버깅, 결함 주입 시뮬레이션, 버그 리플레이, 전 세계 팀원과 협업 — 물리적 보드 배송 없이. WebAssembly로 브라우저 내 시뮬레이션. $100K+ HIL(Hardware-in-the-Loop) 설정 대체. 자동차, 항공우주, IoT 팀에 엄청난 가치.</span>
+</div>
+<div class="hard"><span class="en">⚡ The Challenge: Cycle-accurate emulation in WASM + hardware abstraction layer + real-time state sync protocol</span><span class="ko">⚡ 도전: WASM에서 사이클 정확 에뮬레이션 + 하드웨어 추상화 레이어 + 실시간 상태 동기화 프로토콜</span></div>
+<div class="tags"><span class="tag rev">Replacing $100K+ setups</span><span class="tag tech">WASM + Embedded</span><span class="tag moat">Enterprise $$$$</span></div>
+</div>
+
+<!-- 7 -->
+<div class="card">
+<div class="diff"><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span><span></span></div>
+<div class="card-num"><span class="en">Idea #7</span><span class="ko">아이디어 #7</span></div>
+<h2><span class="en">🎮 AI Dungeon Master — Procedural Game Engine</span><span class="ko">🎮 AI 던전 마스터 — 절차적 게임 엔진</span></h2>
+<div class="why"><span class="en">Why it's hard: Coherent long-form narrative generation + real-time world state management + multiplayer sync</span><span class="ko">어려운 이유: 일관된 장편 서사 생성 + 실시간 월드 상태 관리 + 멀티플레이어 동기화</span></div>
+<div class="desc">
+<span class="en">Not another AI chatbot RPG. Build an actual game engine where AI generates entire game worlds — maps, NPCs, quests, lore, combat encounters — that are internally consistent and react to player choices. Multiplayer supported. Visual (2D/isometric) not just text. The game literally never ends and never repeats. Sell as platform ($15/month) or license the engine to game studios. AI Dungeon showed demand but the tech wasn't ready. Now it is.</span>
+<span class="ko">또 다른 AI 챗봇 RPG가 아닙니다. AI가 전체 게임 세계 — 맵, NPC, 퀘스트, 로어, 전투 — 를 내부적으로 일관되게 생성하고 플레이어 선택에 반응하는 실제 게임 엔진 구축. 멀티플레이어 지원. 텍스트가 아닌 비주얼(2D/아이소메트릭). 게임이 절대 끝나지 않고 반복되지 않음. 플랫폼($15/월) 또는 게임 스튜디오에 엔진 라이선스. AI Dungeon이 수요를 증명했지만 기술이 준비 안 됐었음. 이제는 됐습니다.</span>
+</div>
+<div class="hard"><span class="en">⚡ The Challenge: World-state consistency across sessions + procedural visual generation + balancing AI creativity vs game mechanics</span><span class="ko">⚡ 도전: 세션 간 월드 상태 일관성 + 절차적 비주얼 생성 + AI 창의성 vs 게임 메카닉 균형</span></div>
+<div class="tags"><span class="tag rev">Platform $15/mo</span><span class="tag tech">LLM + Game Dev</span><span class="tag moat">Infinite Content</span></div>
+</div>
+
+<!-- 8 -->
+<div class="card">
+<div class="diff"><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span><span class="max"></span></div>
+<div class="card-num"><span class="en">Idea #8</span><span class="ko">아이디어 #8</span></div>
+<h2><span class="en">🏗️ AI-Native EDA Tool (Schematic → Layout → Fab)</span><span class="ko">🏗️ AI 네이티브 EDA 도구 (회로도 → 레이아웃 → 제조)</span></h2>
+<div class="why"><span class="en">Why it's hard: You're competing with tools that took decades to build</span><span class="ko">어려운 이유: 수십 년에 걸쳐 만든 도구들과 경쟁</span></div>
+<div class="desc">
+<span class="en">KiCad is open-source but dumb. Altium/Cadence are smart but $10K+/year. Build an AI-native PCB/IC design tool where you describe what you want in natural language ("4-layer board with USB-C, 1GbE, and an STM32"), AI generates schematic + layout, runs DRC/SI checks, and exports Gerbers. Start with PCB (easier), graduate to IC. Web-based, $50-200/month. The entire hardware industry is waiting for their "Copilot moment."</span>
+<span class="ko">KiCad는 오픈소스지만 멍청함. Altium/Cadence는 똑똑하지만 연 $10K+. 자연어로 원하는 걸 설명하면("USB-C, 1GbE, STM32가 있는 4층 보드") AI가 회로도 + 레이아웃 생성, DRC/SI 검사 실행, Gerber 내보내기하는 AI 네이티브 PCB/IC 설계 도구 구축. PCB로 시작(더 쉬움), IC로 졸업. 웹 기반, 월 $50-200. 전체 하드웨어 산업이 "Copilot 모먼트"를 기다리고 있음.</span>
+</div>
+<div class="hard"><span class="en">⚡ The Challenge: Constraint-driven placement/routing algorithms + DRC engine + manufacturing-aware AI + MASSIVE engineering scope</span><span class="ko">⚡ 도전: 제약 기반 배치/라우팅 알고리즘 + DRC 엔진 + 제조 인식 AI + 엄청난 엔지니어링 범위</span></div>
+<div class="tags"><span class="tag rev">Disrupting $10K+/yr tools</span><span class="tag tech">AI + EDA</span><span class="tag moat">Industry-Changing</span></div>
+</div>
+
+<!-- 9 -->
+<div class="card">
+<div class="diff"><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span><span></span></div>
+<div class="card-num"><span class="en">Idea #9</span><span class="ko">아이디어 #9</span></div>
+<h2><span class="en">🔐 Zero-Knowledge AI Inference Platform</span><span class="ko">🔐 영지식 증명 AI 추론 플랫폼</span></h2>
+<div class="why"><span class="en">Why it's hard: Cryptography + ML optimization + novel research territory</span><span class="ko">어려운 이유: 암호학 + ML 최적화 + 미개척 연구 영역</span></div>
+<div class="desc">
+<span class="en">Companies want to use AI but can't send proprietary data to OpenAI/Anthropic. Build a platform where AI inference happens on encrypted data — the model never sees the raw input, the server never sees the output, but you still get accurate results. Uses homomorphic encryption + secure enclaves. Think "AI that's blind but still works." Healthcare, finance, defense, legal — all need this desperately. Research-heavy but first-mover advantage is enormous.</span>
+<span class="ko">기업들이 AI를 쓰고 싶지만 독점 데이터를 OpenAI/Anthropic에 보낼 수 없음. 암호화된 데이터에서 AI 추론이 이루어지는 플랫폼 구축 — 모델은 원본 입력을 못 보고, 서버는 출력을 못 보지만 정확한 결과를 얻음. 동형 암호화 + 보안 엔클레이브 사용. "눈이 먼 AI인데 여전히 작동하는" 느낌. 헬스케어, 금융, 국방, 법률 — 모두 절실히 필요. 연구 비중 높지만 선점자 이점 엄청남.</span>
+</div>
+<div class="hard"><span class="en">⚡ The Challenge: HE is 1000x slower than plaintext — need novel optimization for practical latency + accuracy trade-offs</span><span class="ko">⚡ 도전: HE는 평문보다 1000배 느림 — 실용적 지연/정확도 트레이드오프를 위한 새로운 최적화 필요</span></div>
+<div class="tags"><span class="tag rev">Enterprise $$$$$</span><span class="tag tech">Crypto + ML</span><span class="tag moat">Research Frontier</span></div>
+</div>
+
+<!-- 10 -->
+<div class="card">
+<div class="diff"><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span></div>
+<div class="card-num"><span class="en">Idea #10</span><span class="ko">아이디어 #10</span></div>
+<h2><span class="en">🌍 Autonomous AI Agent Marketplace</span><span class="ko">🌍 자율 AI 에이전트 마켓플레이스</span></h2>
+<div class="why"><span class="en">Why it's hard: Agent orchestration + trust/safety + payments + sandboxing at scale</span><span class="ko">어려운 이유: 에이전트 오케스트레이션 + 신뢰/안전 + 결제 + 대규모 샌드박싱</span></div>
+<div class="desc">
+<span class="en">Build the "App Store for AI Agents." Users deploy autonomous agents that complete real-world tasks (not just chat): file taxes, negotiate bills, manage investments, run A/B tests, handle customer support. Each agent runs in a sandboxed environment with auditable logs. Agent creators earn revenue share. You handle orchestration, billing, safety. You've already built multi-agent architecture (Luna, Atlas, Kai, Nova) — you understand the infra deeply. This is a platform play worth billions.</span>
+<span class="ko">AI 에이전트용 "앱스토어" 구축. 사용자가 실제 작업을 완료하는 자율 에이전트 배포(채팅만이 아님): 세금 신고, 요금 협상, 투자 관리, A/B 테스트, 고객 지원. 각 에이전트는 감사 로그가 있는 샌드박스 환경에서 실행. 에이전트 제작자는 수익 공유. 오케스트레이션, 결제, 안전을 처리. 이미 멀티에이전트 아키텍처(Luna, Atlas, Kai, Nova)를 구축했잖아요 — 인프라를 깊이 이해. 수십억 달러 규모의 플랫폼 플레이.</span>
+</div>
+<div class="hard"><span class="en">⚡ The Challenge: Agent sandboxing that prevents abuse + reliable task completion verification + payment escrow + safety guardrails at scale</span><span class="ko">⚡ 도전: 남용 방지 에이전트 샌드박싱 + 신뢰할 수 있는 작업 완료 검증 + 결제 에스크로 + 대규모 안전 가드레일</span></div>
+<div class="tags"><span class="tag rev">Platform Play $$$$$</span><span class="tag tech">Infra + Safety</span><span class="tag moat">Network Effects</span></div>
+</div>
+
+<div class="footer">
+<span class="en">Built for Minjun · March 14, 2026 · "Easy" wasn't on the menu 🔥</span>
+<span class="ko">민준을 위해 · 2026년 3월 14일 · "쉬운 건" 메뉴에 없었다 🔥</span>
+</div>
+
+<script>
+let isKorean=false;
+function toggleLang(){
+isKorean=!isKorean;
+document.querySelectorAll('.en').forEach(el=>el.classList.toggle('hide',isKorean));
+document.querySelectorAll('.ko').forEach(el=>el.classList.toggle('show',isKorean));
+document.querySelector('.lang-toggle').textContent=isKorean?'English':'한국어';
+}
+</script>
+</body>
+</html>
