@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 21 Quiz: Latency vs Throughput</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    background: linear-gradient(135deg, #fefae0 0%, #faedcd 100%);
+    color: #3d405b;
+    line-height: 1.8;
+    padding: 24px;
+    max-width: 920px;
+    margin: 0 auto;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+h1 { color: #5d4037; border-bottom: 3px solid #c4a77d; padding-bottom: 12px; margin-bottom: 24px; font-size: 2em; }
+h2 { color: #588157; border-bottom: 2px solid #a3b18a; padding-bottom: 8px; margin: 32px 0 16px; }
+.lang-toggle { position: fixed; top: 16px; right: 16px; background: #588157; border: none; border-radius: 24px; padding: 10px 20px; cursor: pointer; color: #fff; font-size: 14px; font-weight: 600; z-index: 1000; }
+.lang-toggle:hover { background: #3a5a40; }
+.ko { display: none; }
+.nav-links { display: flex; justify-content: center; gap: 12px; margin: 24px 0; flex-wrap: wrap; }
+.nav-links a { background: linear-gradient(135deg, #588157, #3a5a40); color: #fff; text-decoration: none; padding: 10px 20px; border-radius: 24px; font-weight: 600; font-size: 14px; }
+.question {
+    background: #fff8f0;
+    border: 2px solid #c4a77d;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+}
+.question h3 { color: #5d4037; margin-bottom: 12px; }
+.options label {
+    display: block;
+    padding: 10px 16px;
+    margin: 6px 0;
+    border-radius: 8px;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: all 0.2s;
+}
+.options label:hover { background: #e9f5db; }
+.options input[type="radio"] { margin-right: 10px; }
+.feedback { display: none; padding: 12px; border-radius: 8px; margin-top: 12px; }
+.feedback.correct { background: #e9f5db; border-left: 4px solid #588157; }
+.feedback.incorrect { background: #fff8f0; border-left: 4px solid #ef4444; }
+.check-btn {
+    background: linear-gradient(135deg, #588157, #3a5a40);
+    color: #fff; border: none; border-radius: 24px;
+    padding: 10px 24px; cursor: pointer; font-weight: 600; margin-top: 12px;
+}
+.check-btn:hover { opacity: 0.9; }
+.score-box {
+    background: #fff8f0; border: 2px solid #c4a77d;
+    border-radius: 12px; padding: 24px; text-align: center; margin: 24px 0;
+}
+.score-box h2 { border: none; }
+code { background: #e9f5db; color: #3d405b; padding: 2px 8px; border-radius: 4px; font-family: 'SF Mono', monospace; }
+@media (max-width: 768px) { body { padding: 16px; } h1 { font-size: 1.8em; } .lang-toggle { padding: 8px 16px; font-size: 13px; } }
+</style>
+</head>
+<body>
+<button class="lang-toggle" onclick="toggleLang()">한국어</button>
+
+<h1>📝 Day 21 Quiz: Latency vs Throughput</h1>
+
+<div class="nav-links">
+    <a href="day-21-lesson.html">📖 Lesson</a>
+    <a href="day-21-practice.html">💻 Practice</a>
+</div>
+
+<div class="question" id="q1">
+    <h3 class="en">Q1. What does latency measure?</h3>
+    <h3 class="ko" style="display:none;">Q1. 레이턴시는 무엇을 측정하나요?</h3>
+    <div class="options">
+        <label><input type="radio" name="q1" value="a"> <span class="en">Number of operations per second</span><span class="ko" style="display:none;">초당 연산 수</span></label>
+        <label><input type="radio" name="q1" value="b"> <span class="en">Time for one operation from input to output</span><span class="ko" style="display:none;">입력에서 출력까지 하나의 연산 시간</span></label>
+        <label><input type="radio" name="q1" value="c"> <span class="en">Clock frequency of the design</span><span class="ko" style="display:none;">설계의 클럭 주파수</span></label>
+        <label><input type="radio" name="q1" value="d"> <span class="en">Number of pipeline stages</span><span class="ko" style="display:none;">파이프라인 단계 수</span></label>
+    </div>
+    <button class="check-btn" onclick="check('q1','b')">Check Answer</button>
+    <div class="feedback correct" id="q1-correct"><span class="en">✅ Correct! Latency is the time for a single operation to complete.</span><span class="ko" style="display:none;">✅ 정답! 레이턴시는 단일 연산이 완료되는 시간입니다.</span></div>
+    <div class="feedback incorrect" id="q1-incorrect"><span class="en">❌ Latency = time for ONE piece of data from input to output.</span><span class="ko" style="display:none;">❌ 레이턴시 = 하나의 데이터가 입력에서 출력까지 걸리는 시간.</span></div>
+</div>
+
+<div class="question" id="q2">
+    <h3 class="en">Q2. A 3-stage pipeline runs at 300 MHz. What is the latency in nanoseconds?</h3>
+    <h3 class="ko" style="display:none;">Q2. 3단계 파이프라인이 300 MHz로 동작합니다. 레이턴시는 몇 나노초인가요?</h3>
+    <div class="options">
+        <label><input type="radio" name="q2" value="a"> 3.3 ns</label>
+        <label><input type="radio" name="q2" value="b"> 10 ns</label>
+        <label><input type="radio" name="q2" value="c"> 1 ns</label>
+        <label><input type="radio" name="q2" value="d"> 30 ns</label>
+    </div>
+    <button class="check-btn" onclick="check('q2','b')">Check Answer</button>
+    <div class="feedback correct" id="q2-correct"><span class="en">✅ Correct! 3 cycles × (1/300MHz) = 3 × 3.33ns = 10ns.</span><span class="ko" style="display:none;">✅ 정답! 3 사이클 × (1/300MHz) = 3 × 3.33ns = 10ns.</span></div>
+    <div class="feedback incorrect" id="q2-incorrect"><span class="en">❌ Latency = cycles × period = 3 × (1/300M) = 10ns.</span><span class="ko" style="display:none;">❌ 레이턴시 = 사이클 × 주기 = 3 × (1/300M) = 10ns.</span></div>
+</div>
+
+<div class="question" id="q3">
+    <h3 class="en">Q3. What does pipelining primarily improve?</h3>
+    <h3 class="ko" style="display:none;">Q3. 파이프라이닝은 주로 무엇을 개선하나요?</h3>
+    <div class="options">
+        <label><input type="radio" name="q3" value="a"> <span class="en">Latency of individual operations</span><span class="ko" style="display:none;">개별 연산의 레이턴시</span></label>
+        <label><input type="radio" name="q3" value="b"> <span class="en">Throughput of the system</span><span class="ko" style="display:none;">시스템의 처리량</span></label>
+        <label><input type="radio" name="q3" value="c"> <span class="en">Power consumption</span><span class="ko" style="display:none;">전력 소비</span></label>
+        <label><input type="radio" name="q3" value="d"> <span class="en">Silicon area</span><span class="ko" style="display:none;">실리콘 면적</span></label>
+    </div>
+    <button class="check-btn" onclick="check('q3','b')">Check Answer</button>
+    <div class="feedback correct" id="q3-correct"><span class="en">✅ Correct! Pipelining improves throughput by overlapping operations.</span><span class="ko" style="display:none;">✅ 정답! 파이프라이닝은 연산을 겹쳐 처리량을 향상시킵니다.</span></div>
+    <div class="feedback incorrect" id="q3-incorrect"><span class="en">❌ Pipelining increases throughput, not reduces latency.</span><span class="ko" style="display:none;">❌ 파이프라이닝은 처리량을 증가시키지, 레이턴시를 줄이지 않습니다.</span></div>
+</div>
+
+<div class="question" id="q4">
+    <h3 class="en">Q4. Little's Law states L = λ × W. What does L represent?</h3>
+    <h3 class="ko" style="display:none;">Q4. Little's Law에서 L = λ × W. L은 무엇을 나타내나요?</h3>
+    <div class="options">
+        <label><input type="radio" name="q4" value="a"> <span class="en">Latency</span><span class="ko" style="display:none;">레이턴시</span></label>
+        <label><input type="radio" name="q4" value="b"> <span class="en">Average items in the system</span><span class="ko" style="display:none;">시스템 내 평균 항목 수</span></label>
+        <label><input type="radio" name="q4" value="c"> <span class="en">Clock frequency</span><span class="ko" style="display:none;">클럭 주파수</span></label>
+        <label><input type="radio" name="q4" value="d"> <span class="en">Pipeline depth</span><span class="ko" style="display:none;">파이프라인 깊이</span></label>
+    </div>
+    <button class="check-btn" onclick="check('q4','b')">Check Answer</button>
+    <div class="feedback correct" id="q4-correct"><span class="en">✅ Correct! L = average number of items in the system (in-flight).</span><span class="ko" style="display:none;">✅ 정답! L = 시스템 내 평균 항목 수 (전송 중).</span></div>
+    <div class="feedback incorrect" id="q4-incorrect"><span class="en">❌ L = average items in system. λ = throughput. W = latency.</span><span class="ko" style="display:none;">❌ L = 시스템 내 평균 항목. λ = 처리량. W = 레이턴시.</span></div>
+</div>
+
+<div class="question" id="q5">
+    <h3 class="en">Q5. A system has throughput of 1 Gops/s and latency of 20 ns. How many operations are in-flight?</h3>
+    <h3 class="ko" style="display:none;">Q5. 시스템의 처리량이 1 Gops/s이고 레이턴시가 20ns일 때, 전송 중인 연산은 몇 개인가요?</h3>
+    <div class="options">
+        <label><input type="radio" name="q5" value="a"> 5</label>
+        <label><input type="radio" name="q5" value="b"> 10</label>
+        <label><input type="radio" name="q5" value="c"> 20</label>
+        <label><input type="radio" name="q5" value="d"> 50</label>
+    </div>
+    <button class="check-btn" onclick="check('q5','c')">Check Answer</button>
+    <div class="feedback correct" id="q5-correct"><span class="en">✅ Correct! 1G × 20ns = 1×10⁹ × 20×10⁻⁹ = 20 operations.</span><span class="ko" style="display:none;">✅ 정답! 1G × 20ns = 1×10⁹ × 20×10⁻⁹ = 20개 연산.</span></div>
+    <div class="feedback incorrect" id="q5-incorrect"><span class="en">❌ In-flight = throughput × latency = 1G × 20ns = 20.</span><span class="ko" style="display:none;">❌ 전송 중 = 처리량 × 레이턴시 = 1G × 20ns = 20.</span></div>
+</div>
+
+<div class="question" id="q6">
+    <h3 class="en">Q6. Which application would prioritize latency over throughput?</h3>
+    <h3 class="ko" style="display:none;">Q6. 어떤 응용이 처리량보다 레이턴시를 우선시하나요?</h3>
+    <div class="options">
+        <label><input type="radio" name="q6" value="a"> <span class="en">GPU pixel shading</span><span class="ko" style="display:none;">GPU 픽셀 셰이딩</span></label>
+        <label><input type="radio" name="q6" value="b"> <span class="en">Network router</span><span class="ko" style="display:none;">네트워크 라우터</span></label>
+        <label><input type="radio" name="q6" value="c"> <span class="en">Interrupt handler</span><span class="ko" style="display:none;">인터럽트 핸들러</span></label>
+        <label><input type="radio" name="q6" value="d"> <span class="en">Video encoder</span><span class="ko" style="display:none;">비디오 인코더</span></label>
+    </div>
+    <button class="check-btn" onclick="check('q6','c')">Check Answer</button>
+    <div class="feedback correct" id="q6-correct"><span class="en">✅ Correct! Interrupt handlers must respond quickly — latency is critical.</span><span class="ko" style="display:none;">✅ 정답! 인터럽트 핸들러는 빠르게 응답해야 합니다 — 레이턴시가 중요합니다.</span></div>
+    <div class="feedback incorrect" id="q6-incorrect"><span class="en">❌ Interrupt handlers need fast response time → latency-sensitive.</span><span class="ko" style="display:none;">❌ 인터럽트 핸들러는 빠른 응답 시간이 필요 → 레이턴시 민감.</span></div>
+</div>
+
+<div class="question" id="q7">
+    <h3 class="en">Q7. Adding pipeline stages increases _____ (in cycles) but can improve _____.</h3>
+    <h3 class="ko" style="display:none;">Q7. 파이프라인 단계를 추가하면 _____(사이클)이 증가하지만 _____을 개선할 수 있습니다.</h3>
+    <div class="options">
+        <label><input type="radio" name="q7" value="a"> <span class="en">throughput; latency</span><span class="ko" style="display:none;">처리량; 레이턴시</span></label>
+        <label><input type="radio" name="q7" value="b"> <span class="en">latency; throughput</span><span class="ko" style="display:none;">레이턴시; 처리량</span></label>
+        <label><input type="radio" name="q7" value="c"> <span class="en">area; latency</span><span class="ko" style="display:none;">면적; 레이턴시</span></label>
+        <label><input type="radio" name="q7" value="d"> <span class="en">power; area</span><span class="ko" style="display:none;">전력; 면적</span></label>
+    </div>
+    <button class="check-btn" onclick="check('q7','b')">Check Answer</button>
+    <div class="feedback correct" id="q7-correct"><span class="en">✅ Correct! More stages → more cycles (latency) but faster clock (throughput).</span><span class="ko" style="display:none;">✅ 정답! 더 많은 단계 → 더 많은 사이클(레이턴시) 하지만 더 빠른 클럭(처리량).</span></div>
+    <div class="feedback incorrect" id="q7-incorrect"><span class="en">❌ Pipeline stages increase latency (cycles) but improve throughput.</span><span class="ko" style="display:none;">❌ 파이프라인 단계는 레이턴시(사이클)를 증가시키지만 처리량을 개선합니다.</span></div>
+</div>
+
+<div class="question" id="q8">
+    <h3 class="en">Q8. What is a key reason NOT to add more pipeline stages?</h3>
+    <h3 class="ko" style="display:none;">Q8. 파이프라인 단계를 더 추가하지 않는 핵심 이유는?</h3>
+    <div class="options">
+        <label><input type="radio" name="q8" value="a"> <span class="en">It always reduces throughput</span><span class="ko" style="display:none;">항상 처리량을 줄인다</span></label>
+        <label><input type="radio" name="q8" value="b"> <span class="en">Register overhead limits clock speed gains</span><span class="ko" style="display:none;">레지스터 오버헤드가 클럭 속도 향상을 제한한다</span></label>
+        <label><input type="radio" name="q8" value="c"> <span class="en">It eliminates hazards</span><span class="ko" style="display:none;">해저드를 제거한다</span></label>
+        <label><input type="radio" name="q8" value="d"> <span class="en">It reduces silicon area</span><span class="ko" style="display:none;">실리콘 면적을 줄인다</span></label>
+    </div>
+    <button class="check-btn" onclick="check('q8','b')">Check Answer</button>
+    <div class="feedback correct" id="q8-correct"><span class="en">✅ Correct! Each register adds setup time + clk-to-q delay, limiting diminishing returns.</span><span class="ko" style="display:none;">✅ 정답! 각 레지스터가 셋업 타임 + clk-to-q 지연을 추가하여 수확체감을 초래합니다.</span></div>
+    <div class="feedback incorrect" id="q8-incorrect"><span class="en">❌ Register overhead (setup/hold + clk-to-q) limits how much pipelining helps.</span><span class="ko" style="display:none;">❌ 레지스터 오버헤드(셋업/홀드 + clk-to-q)가 파이프라이닝의 효과를 제한합니다.</span></div>
+</div>
+
+<div class="question" id="q9">
+    <h3 class="en">Q9. A non-pipelined design runs at 100 MHz. After adding 4 pipeline stages, it runs at 350 MHz. What's the throughput improvement?</h3>
+    <h3 class="ko" style="display:none;">Q9. 파이프라인 없는 설계가 100 MHz로 동작합니다. 4개 파이프라인 단계 추가 후 350 MHz로 동작합니다. 처리량 개선은?</h3>
+    <div class="options">
+        <label><input type="radio" name="q9" value="a"> 2×</label>
+        <label><input type="radio" name="q9" value="b"> 3.5×</label>
+        <label><input type="radio" name="q9" value="c"> 4×</label>
+        <label><input type="radio" name="q9" value="d"> 1.5×</label>
+    </div>
+    <button class="check-btn" onclick="check('q9','b')">Check Answer</button>
+    <div class="feedback correct" id="q9-correct"><span class="en">✅ Correct! 350M/100M = 3.5× throughput. Not 4× due to register overhead!</span><span class="ko" style="display:none;">✅ 정답! 350M/100M = 3.5× 처리량. 레지스터 오버헤드로 4×가 아닙니다!</span></div>
+    <div class="feedback incorrect" id="q9-incorrect"><span class="en">❌ Throughput = new freq / old freq = 350/100 = 3.5×.</span><span class="ko" style="display:none;">❌ 처리량 = 새 주파수 / 이전 주파수 = 350/100 = 3.5×.</span></div>
+</div>
+
+<div class="question" id="q10">
+    <h3 class="en">Q10. How do you calculate minimum FIFO depth for a CDC crossing?</h3>
+    <h3 class="ko" style="display:none;">Q10. CDC 크로싱을 위한 최소 FIFO 깊이는 어떻게 계산하나요?</h3>
+    <div class="options">
+        <label><input type="radio" name="q10" value="a"> <span class="en">Clock frequency / data width</span><span class="ko" style="display:none;">클럭 주파수 / 데이터 폭</span></label>
+        <label><input type="radio" name="q10" value="b"> <span class="en">Throughput × Latency (Little's Law)</span><span class="ko" style="display:none;">처리량 × 레이턴시 (Little's Law)</span></label>
+        <label><input type="radio" name="q10" value="c"> <span class="en">Pipeline stages × 2</span><span class="ko" style="display:none;">파이프라인 단계 × 2</span></label>
+        <label><input type="radio" name="q10" value="d"> <span class="en">Always use 16 entries</span><span class="ko" style="display:none;">항상 16 엔트리 사용</span></label>
+    </div>
+    <button class="check-btn" onclick="check('q10','b')">Check Answer</button>
+    <div class="feedback correct" id="q10-correct"><span class="en">✅ Correct! Little's Law: FIFO depth ≥ throughput × synchronization latency.</span><span class="ko" style="display:none;">✅ 정답! Little's Law: FIFO 깊이 ≥ 처리량 × 동기화 레이턴시.</span></div>
+    <div class="feedback incorrect" id="q10-incorrect"><span class="en">❌ Use Little's Law: depth = throughput × latency to avoid overflow.</span><span class="ko" style="display:none;">❌ Little's Law 사용: 깊이 = 처리량 × 레이턴시로 오버플로 방지.</span></div>
+</div>
+
+<div class="score-box" id="score-box" style="display:none;">
+    <h2 class="en">🎯 Your Score</h2>
+    <h2 class="ko" style="display:none;">🎯 당신의 점수</h2>
+    <p id="score-text" style="font-size: 1.5em; font-weight: bold;"></p>
+</div>
+
+<div class="nav-links">
+    <a href="day-21-lesson.html">📖 Review Lesson</a>
+    <a href="day-21-practice.html">💻 Practice</a>
+</div>
+
+<script>
+let isKorean = false;
+let score = 0;
+let answered = 0;
+const total = 10;
+
+function toggleLang() {
+    isKorean = !isKorean;
+    document.querySelectorAll('.en').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'none' : 'revert', 'important');
+    });
+    document.querySelectorAll('.ko').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'revert' : 'none', 'important');
+    });
+    document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+}
+
+function check(qId, correct) {
+    const selected = document.querySelector(`input[name="${qId}"]:checked`);
+    if (!selected) return;
+    const btn = document.querySelector(`#${qId} .check-btn`);
+    btn.disabled = true;
+    btn.style.opacity = '0.5';
+    const inputs = document.querySelectorAll(`input[name="${qId}"]`);
+    inputs.forEach(i => i.disabled = true);
+    answered++;
+    if (selected.value === correct) {
+        score++;
+        document.getElementById(`${qId}-correct`).style.display = 'block';
+    } else {
+        document.getElementById(`${qId}-incorrect`).style.display = 'block';
+    }
+    if (answered === total) {
+        const box = document.getElementById('score-box');
+        box.style.display = 'block';
+        document.getElementById('score-text').textContent = `${score} / ${total}`;
+        box.scrollIntoView({ behavior: 'smooth' });
+    }
+}
+</script>
+</body>
+</html>

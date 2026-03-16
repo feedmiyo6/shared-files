@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 21: Latency vs Throughput</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    background: linear-gradient(135deg, #fefae0 0%, #faedcd 100%);
+    color: #3d405b;
+    line-height: 1.8;
+    padding: 24px;
+    max-width: 920px;
+    margin: 0 auto;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+h1 {
+    color: #5d4037;
+    border-bottom: 3px solid #c4a77d;
+    padding-bottom: 12px;
+    margin-bottom: 24px;
+    font-size: 2em;
+}
+h2 {
+    color: #588157;
+    border-bottom: 2px solid #a3b18a;
+    padding-bottom: 8px;
+    margin: 32px 0 16px;
+}
+h3 {
+    color: #5d4037;
+    margin: 20px 0 12px;
+}
+p { margin: 12px 0; }
+code {
+    background: #e9f5db;
+    color: #3d405b;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+}
+pre {
+    background: #2d3436;
+    padding: 24px;
+    border-radius: 12px;
+    margin: 24px 0;
+    border: 3px solid #a3b18a;
+    overflow-x: auto;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+    font-size: 15px;
+    line-height: 1.6;
+    color: #f8f8f2;
+}
+.keyword { color: #ff79c6; font-weight: 600; }
+.type { color: #8be9fd; }
+.signal { color: #50fa7b; }
+.number { color: #ffb86c; }
+.comment { color: #6272a4; font-style: italic; }
+.string { color: #f1fa8c; }
+.concept-box {
+    background: #fff8f0;
+    border: 2px solid #c4a77d;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    color: #3d405b;
+}
+.concept-box h3 { color: #5d4037; margin-bottom: 12px; }
+.warning-box {
+    background: #fff8f0;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    border-left: 4px solid #ef4444;
+    color: #3d405b;
+}
+.warning-box h3 { color: #c53030; margin-bottom: 12px; }
+.tip-box {
+    background: #fff8f0;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    border-left: 4px solid #588157;
+    color: #3d405b;
+}
+.comparison-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+.comparison-table th {
+    background: #588157;
+    color: white;
+    padding: 12px;
+    text-align: left;
+}
+.comparison-table td {
+    background: #fff;
+    border: 1px solid #c4a77d;
+    padding: 12px;
+    color: #3d405b;
+}
+.comparison-table tr:nth-child(even) td { background: #fff8f0; }
+.lang-toggle {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    background: #588157;
+    border: none;
+    border-radius: 24px;
+    padding: 10px 20px;
+    cursor: pointer;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    z-index: 1000;
+}
+.lang-toggle:hover { background: #3a5a40; }
+.ko { display: none; }
+.nav-links { display: flex; justify-content: center; gap: 12px; margin: 24px 0; flex-wrap: wrap; }
+.nav-links a {
+    background: linear-gradient(135deg, #588157, #3a5a40);
+    color: #fff;
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 24px;
+    font-weight: 600;
+    font-size: 14px;
+}
+.nav-links a:hover { opacity: 0.9; }
+.diagram-box {
+    background: #fff;
+    border: 2px solid #a3b18a;
+    border-radius: 12px;
+    padding: 24px;
+    margin: 20px 0;
+    text-align: center;
+    font-family: 'SF Mono', monospace;
+    line-height: 1.4;
+    overflow-x: auto;
+    white-space: pre;
+    color: #3d405b;
+}
+@media (max-width: 768px) {
+    body { padding: 16px; }
+    h1 { font-size: 1.8em; }
+    pre { font-size: 14px; padding: 16px; }
+    .lang-toggle { padding: 8px 16px; font-size: 13px; }
+}
+</style>
+</head>
+<body>
+<button class="lang-toggle" onclick="toggleLang()">한국어</button>
+
+<h1>📐 Day 21: Latency vs Throughput</h1>
+<p class="en"><strong>Week 5, Day 1</strong> — Welcome to the Pipelining & Performance week! Today we explore the two fundamental performance metrics in digital design.</p>
+<p class="ko" style="display:none;"><strong>5주차 1일</strong> — 파이프라이닝 & 성능 주간에 오신 것을 환영합니다! 오늘은 디지털 설계의 두 가지 기본 성능 지표를 탐구합니다.</p>
+
+<div class="nav-links">
+    <a href="day-21-quiz.html">📝 Quiz</a>
+    <a href="day-21-practice.html">💻 Practice</a>
+    <a href="day-20-lesson.html">← Day 20</a>
+</div>
+
+<h2>1. What Are Latency and Throughput?</h2>
+
+<div class="concept-box">
+    <h3>🎯 Key Definitions</h3>
+    <p class="en"><strong>Latency</strong> = the time it takes for ONE piece of data to travel from input to output. Think of it as the delay for a single transaction.</p>
+    <p class="ko" style="display:none;"><strong>레이턴시(Latency)</strong> = 하나의 데이터가 입력에서 출력까지 이동하는 데 걸리는 시간. 단일 트랜잭션의 지연 시간이라고 생각하세요.</p>
+    <p class="en"><strong>Throughput</strong> = the number of results produced per unit time. Think of it as the rate of output.</p>
+    <p class="ko" style="display:none;"><strong>처리량(Throughput)</strong> = 단위 시간당 생산되는 결과의 수. 출력 속도라고 생각하세요.</p>
+</div>
+
+<h3>The Restaurant Analogy</h3>
+<p class="en">Imagine a restaurant kitchen:</p>
+<p class="ko" style="display:none;">레스토랑 주방을 상상해 보세요:</p>
+<ul>
+    <li class="en"><strong>Latency</strong> = How long from ordering to getting YOUR meal (e.g., 30 minutes)</li>
+    <li class="ko" style="display:none;"><strong>레이턴시</strong> = 주문부터 본인의 음식을 받기까지의 시간 (예: 30분)</li>
+    <li class="en"><strong>Throughput</strong> = How many meals the kitchen serves per hour (e.g., 60 meals/hour)</li>
+    <li class="ko" style="display:none;"><strong>처리량</strong> = 주방이 시간당 제공하는 식사 수 (예: 시간당 60끼)</li>
+</ul>
+<p class="en">A kitchen can serve many meals per hour even if each meal takes 30 minutes — because multiple meals are being prepared <strong>simultaneously</strong> (pipelining!).</p>
+<p class="ko" style="display:none;">주방은 각 식사가 30분이 걸리더라도 시간당 많은 식사를 제공할 수 있습니다 — 여러 식사가 <strong>동시에</strong> 준비되기 때문입니다 (파이프라이닝!).</p>
+
+<h2>2. Measuring in Hardware</h2>
+
+<div class="concept-box">
+    <h3>📏 Formal Definitions</h3>
+    <table class="comparison-table">
+        <tr>
+            <th>Metric</th>
+            <th class="en">Formula</th>
+            <th class="ko" style="display:none;">공식</th>
+            <th class="en">Unit</th>
+            <th class="ko" style="display:none;">단위</th>
+        </tr>
+        <tr>
+            <td><strong>Latency</strong></td>
+            <td class="en">Number of clock cycles × Clock period</td>
+            <td class="ko" style="display:none;">클럭 사이클 수 × 클럭 주기</td>
+            <td>ns, μs</td>
+        </tr>
+        <tr>
+            <td><strong>Throughput</strong></td>
+            <td class="en">Results per clock cycle × Clock frequency</td>
+            <td class="ko" style="display:none;">클럭 사이클당 결과 × 클럭 주파수</td>
+            <td>ops/sec, GB/s</td>
+        </tr>
+    </table>
+</div>
+
+<h3>Example: A Simple Multiplier</h3>
+<p class="en">Consider an 8×8 multiplier running at 100 MHz (10 ns clock period):</p>
+<p class="ko" style="display:none;">100 MHz(10ns 클럭 주기)로 동작하는 8×8 곱셈기를 생각해 보세요:</p>
+
+<pre>
+<span class="comment">// Non-pipelined: result in 1 cycle</span>
+<span class="comment">// Latency = 1 cycle = 10 ns</span>
+<span class="comment">// Throughput = 1 result/cycle = 100M results/sec</span>
+
+<span class="keyword">module</span> <span class="type">multiplier_simple</span> (
+    <span class="keyword">input</span>  <span class="keyword">logic</span> [<span class="number">7</span>:<span class="number">0</span>] <span class="signal">a</span>, <span class="signal">b</span>,
+    <span class="keyword">input</span>  <span class="keyword">logic</span>        <span class="signal">clk</span>,
+    <span class="keyword">output</span> <span class="keyword">logic</span> [<span class="number">15</span>:<span class="number">0</span>] <span class="signal">result</span>
+);
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span>)
+        <span class="signal">result</span> &lt;= <span class="signal">a</span> * <span class="signal">b</span>;
+<span class="keyword">endmodule</span>
+</pre>
+
+<p class="en">But what if the combinational path is too long and limits clock speed to 50 MHz?</p>
+<p class="ko" style="display:none;">하지만 조합 경로가 너무 길어서 클럭 속도가 50 MHz로 제한된다면?</p>
+
+<h2>3. The Pipelining Tradeoff</h2>
+
+<p class="en">Pipelining increases latency (more cycles) but can dramatically improve throughput (faster clock).</p>
+<p class="ko" style="display:none;">파이프라이닝은 레이턴시를 증가시키지만(더 많은 사이클), 처리량을 극적으로 향상시킬 수 있습니다(더 빠른 클럭).</p>
+
+<div class="diagram-box">
+<strong>Non-Pipelined (50 MHz)</strong>
+────────────────────────────────────────
+│  A*B compute (20ns)  │  C*D compute (20ns)  │
+────────────────────────────────────────
+Latency: 1 cycle = 20ns
+Throughput: 50M ops/sec
+
+<strong>2-Stage Pipeline (100 MHz)</strong>
+──────────────────────────────────────────────
+│ A*B stage1 │ A*B stage2 │              │
+│             │ C*D stage1 │ C*D stage2   │
+──────────────────────────────────────────────
+Latency: 2 cycles = 20ns
+Throughput: 100M ops/sec  ← 2× better!
+</div>
+
+<div class="concept-box">
+    <h3>🔑 Key Insight</h3>
+    <p class="en">Pipelining does NOT reduce latency for a single operation. It improves throughput by allowing overlapping execution of multiple operations.</p>
+    <p class="ko" style="display:none;">파이프라이닝은 단일 연산의 레이턴시를 줄이지 않습니다. 여러 연산의 겹침 실행을 허용하여 처리량을 향상시킵니다.</p>
+</div>
+
+<h3>2-Stage Pipelined Multiplier</h3>
+
+<pre>
+<span class="keyword">module</span> <span class="type">multiplier_pipelined</span> (
+    <span class="keyword">input</span>  <span class="keyword">logic</span>        <span class="signal">clk</span>, <span class="signal">rst_n</span>,
+    <span class="keyword">input</span>  <span class="keyword">logic</span> [<span class="number">7</span>:<span class="number">0</span>]  <span class="signal">a</span>, <span class="signal">b</span>,
+    <span class="keyword">output</span> <span class="keyword">logic</span> [<span class="number">15</span>:<span class="number">0</span>] <span class="signal">result</span>
+);
+    <span class="comment">// Stage 1: Partial products</span>
+    <span class="keyword">logic</span> [<span class="number">15</span>:<span class="number">0</span>] <span class="signal">partial_low</span>, <span class="signal">partial_high</span>;
+
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span> <span class="keyword">or negedge</span> <span class="signal">rst_n</span>) <span class="keyword">begin</span>
+        <span class="keyword">if</span> (!<span class="signal">rst_n</span>) <span class="keyword">begin</span>
+            <span class="signal">partial_low</span>  &lt;= <span class="number">'0</span>;
+            <span class="signal">partial_high</span> &lt;= <span class="number">'0</span>;
+        <span class="keyword">end else begin</span>
+            <span class="signal">partial_low</span>  &lt;= <span class="signal">a</span>[<span class="number">3</span>:<span class="number">0</span>] * <span class="signal">b</span>;  <span class="comment">// Lower nibble × b</span>
+            <span class="signal">partial_high</span> &lt;= <span class="signal">a</span>[<span class="number">7</span>:<span class="number">4</span>] * <span class="signal">b</span>;  <span class="comment">// Upper nibble × b</span>
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+
+    <span class="comment">// Stage 2: Combine partial products</span>
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span> <span class="keyword">or negedge</span> <span class="signal">rst_n</span>) <span class="keyword">begin</span>
+        <span class="keyword">if</span> (!<span class="signal">rst_n</span>)
+            <span class="signal">result</span> &lt;= <span class="number">'0</span>;
+        <span class="keyword">else</span>
+            <span class="signal">result</span> &lt;= <span class="signal">partial_low</span> + (<span class="signal">partial_high</span> &lt;&lt; <span class="number">4</span>);
+    <span class="keyword">end</span>
+<span class="keyword">endmodule</span>
+</pre>
+
+<h2>4. Quantifying the Tradeoff</h2>
+
+<table class="comparison-table">
+    <tr>
+        <th class="en">Design</th>
+        <th class="ko" style="display:none;">설계</th>
+        <th class="en">Clock Freq</th>
+        <th class="ko" style="display:none;">클럭 주파수</th>
+        <th class="en">Latency (cycles)</th>
+        <th class="ko" style="display:none;">레이턴시(사이클)</th>
+        <th class="en">Latency (time)</th>
+        <th class="ko" style="display:none;">레이턴시(시간)</th>
+        <th class="en">Throughput</th>
+        <th class="ko" style="display:none;">처리량</th>
+    </tr>
+    <tr>
+        <td class="en">No pipeline</td>
+        <td class="ko" style="display:none;">파이프라인 없음</td>
+        <td>50 MHz</td>
+        <td>1</td>
+        <td>20 ns</td>
+        <td>50 Mops/s</td>
+    </tr>
+    <tr>
+        <td class="en">2-stage</td>
+        <td class="ko" style="display:none;">2단계</td>
+        <td>100 MHz</td>
+        <td>2</td>
+        <td>20 ns</td>
+        <td>100 Mops/s</td>
+    </tr>
+    <tr>
+        <td class="en">4-stage</td>
+        <td class="ko" style="display:none;">4단계</td>
+        <td>200 MHz</td>
+        <td>4</td>
+        <td>20 ns</td>
+        <td>200 Mops/s</td>
+    </tr>
+</table>
+
+<div class="tip-box">
+    <h3>💡 Notice the Pattern</h3>
+    <p class="en">In an ideal pipeline, total latency stays the same (pipeline register overhead aside), but throughput scales with the number of stages! In reality, register overhead adds a small delay per stage.</p>
+    <p class="ko" style="display:none;">이상적인 파이프라인에서 총 레이턴시는 동일하게 유지되지만(파이프라인 레지스터 오버헤드 제외), 처리량은 단계 수에 비례하여 확장됩니다! 실제로는 레지스터 오버헤드가 단계당 약간의 지연을 추가합니다.</p>
+</div>
+
+<h2>5. When to Prioritize Which?</h2>
+
+<table class="comparison-table">
+    <tr>
+        <th class="en">Application</th>
+        <th class="ko" style="display:none;">응용</th>
+        <th class="en">Priority</th>
+        <th class="ko" style="display:none;">우선순위</th>
+        <th class="en">Why</th>
+        <th class="ko" style="display:none;">이유</th>
+    </tr>
+    <tr>
+        <td class="en">Network packet processing</td>
+        <td class="ko" style="display:none;">네트워크 패킷 처리</td>
+        <td class="en">Throughput</td>
+        <td class="ko" style="display:none;">처리량</td>
+        <td class="en">Must handle line rate (billions of packets)</td>
+        <td class="ko" style="display:none;">라인 속도 처리 필요 (수십억 패킷)</td>
+    </tr>
+    <tr>
+        <td class="en">Memory controller</td>
+        <td class="ko" style="display:none;">메모리 컨트롤러</td>
+        <td class="en">Latency</td>
+        <td class="ko" style="display:none;">레이턴시</td>
+        <td class="en">CPU stalls waiting for data</td>
+        <td class="ko" style="display:none;">CPU가 데이터를 기다리며 중단</td>
+    </tr>
+    <tr>
+        <td class="en">GPU shader</td>
+        <td class="ko" style="display:none;">GPU 셰이더</td>
+        <td class="en">Throughput</td>
+        <td class="ko" style="display:none;">처리량</td>
+        <td class="en">Millions of pixels in parallel</td>
+        <td class="ko" style="display:none;">수백만 픽셀 병렬 처리</td>
+    </tr>
+    <tr>
+        <td class="en">Interrupt handler</td>
+        <td class="ko" style="display:none;">인터럽트 핸들러</td>
+        <td class="en">Latency</td>
+        <td class="ko" style="display:none;">레이턴시</td>
+        <td class="en">Must respond quickly to events</td>
+        <td class="ko" style="display:none;">이벤트에 빠르게 응답해야 함</td>
+    </tr>
+    <tr>
+        <td class="en">Video encoder</td>
+        <td class="ko" style="display:none;">비디오 인코더</td>
+        <td class="en">Both</td>
+        <td class="ko" style="display:none;">둘 다</td>
+        <td class="en">Real-time frames at target FPS</td>
+        <td class="ko" style="display:none;">목표 FPS로 실시간 프레임</td>
+    </tr>
+</table>
+
+<h2>6. Bandwidth × Latency = "In-Flight" Data</h2>
+
+<div class="concept-box">
+    <h3>📦 The Bandwidth-Delay Product</h3>
+    <p class="en">The amount of data "in flight" at any time equals:</p>
+    <p class="ko" style="display:none;">어느 시점에서든 "전송 중인" 데이터의 양은 다음과 같습니다:</p>
+    <p><strong>In-Flight Data = Throughput × Latency</strong></p>
+    <p class="en">This tells you how much buffering you need. A high-throughput, high-latency system needs large buffers (like a deep pipeline or FIFO).</p>
+    <p class="ko" style="display:none;">이것은 얼마나 많은 버퍼링이 필요한지 알려줍니다. 높은 처리량과 높은 레이턴시의 시스템은 큰 버퍼가 필요합니다(깊은 파이프라인이나 FIFO처럼).</p>
+</div>
+
+<h3>Example Calculation</h3>
+<pre>
+<span class="comment">// System: 200 MHz, 10-stage pipeline</span>
+<span class="comment">// Throughput = 200M results/sec (1 per cycle)</span>
+<span class="comment">// Latency = 10 cycles = 50 ns</span>
+<span class="comment">//</span>
+<span class="comment">// In-flight data = 10 operations at any given time</span>
+<span class="comment">// → Need storage for 10 intermediate results</span>
+<span class="comment">// → Each pipeline register holds one partial result</span>
+</pre>
+
+<h2>7. Little's Law in Hardware</h2>
+
+<div class="concept-box">
+    <h3>📐 Little's Law</h3>
+    <p><strong>L = λ × W</strong></p>
+    <p class="en">Where: <strong>L</strong> = average items in system, <strong>λ</strong> = throughput (arrival rate), <strong>W</strong> = average latency</p>
+    <p class="ko" style="display:none;">여기서: <strong>L</strong> = 시스템 내 평균 항목 수, <strong>λ</strong> = 처리량(도착률), <strong>W</strong> = 평균 레이턴시</p>
+    <p class="en">This applies to FIFOs, pipelines, networks, caches — any queuing system!</p>
+    <p class="ko" style="display:none;">이것은 FIFO, 파이프라인, 네트워크, 캐시 — 모든 큐잉 시스템에 적용됩니다!</p>
+</div>
+
+<div class="tip-box">
+    <h3>💡 Interview Tip</h3>
+    <p class="en">If an interviewer asks "how deep should your FIFO be?" — Little's Law is your go-to tool. Throughput × latency = minimum FIFO depth.</p>
+    <p class="ko" style="display:none;">면접관이 "FIFO의 깊이는 얼마나 되어야 하나요?"라고 물으면 — Little's Law가 핵심 도구입니다. 처리량 × 레이턴시 = 최소 FIFO 깊이.</p>
+</div>
+
+<h2>8. Real-World Tradeoffs</h2>
+
+<div class="warning-box">
+    <h3>⚠️ Diminishing Returns</h3>
+    <p class="en">More pipeline stages don't always help:</p>
+    <p class="ko" style="display:none;">파이프라인 단계를 늘린다고 항상 좋은 것은 아닙니다:</p>
+    <ul>
+        <li class="en"><strong>Register overhead:</strong> Each stage adds setup/hold time + clock-to-q delay (~50-100ps per stage)</li>
+        <li class="ko" style="display:none;"><strong>레지스터 오버헤드:</strong> 각 단계가 셋업/홀드 타임 + clock-to-q 지연을 추가 (단계당 ~50-100ps)</li>
+        <li class="en"><strong>Area cost:</strong> More registers = more silicon area and power</li>
+        <li class="ko" style="display:none;"><strong>면적 비용:</strong> 레지스터가 많을수록 = 더 많은 실리콘 면적과 전력</li>
+        <li class="en"><strong>Hazard complexity:</strong> Deep pipelines create more forwarding/stalling challenges</li>
+        <li class="ko" style="display:none;"><strong>해저드 복잡성:</strong> 깊은 파이프라인은 더 많은 포워딩/스톨 문제를 야기</li>
+    </ul>
+</div>
+
+<h2>9. Summary</h2>
+
+<div class="concept-box">
+    <h3>📝 Key Takeaways</h3>
+    <ul>
+        <li class="en"><strong>Latency</strong> = time for one operation (input → output)</li>
+        <li class="ko" style="display:none;"><strong>레이턴시</strong> = 하나의 연산 시간 (입력 → 출력)</li>
+        <li class="en"><strong>Throughput</strong> = operations per unit time</li>
+        <li class="ko" style="display:none;"><strong>처리량</strong> = 단위 시간당 연산 수</li>
+        <li class="en">Pipelining trades latency (in cycles) for throughput (faster clock)</li>
+        <li class="ko" style="display:none;">파이프라이닝은 레이턴시(사이클)를 처리량(빠른 클럭)과 교환</li>
+        <li class="en">In-flight data = throughput × latency (determines buffer sizing)</li>
+        <li class="ko" style="display:none;">전송 중 데이터 = 처리량 × 레이턴시 (버퍼 크기 결정)</li>
+        <li class="en">Little's Law (L = λW) governs all queuing systems</li>
+        <li class="ko" style="display:none;">Little's Law (L = λW)는 모든 큐잉 시스템을 지배</li>
+        <li class="en">Choose based on application: latency-sensitive vs throughput-critical</li>
+        <li class="ko" style="display:none;">응용에 따라 선택: 레이턴시 민감 vs 처리량 중요</li>
+    </ul>
+</div>
+
+<div class="nav-links">
+    <a href="day-21-quiz.html">📝 Take the Quiz</a>
+    <a href="day-21-practice.html">💻 Practice</a>
+    <a href="day-20-lesson.html">← Day 20</a>
+</div>
+
+<script>
+let isKorean = false;
+function toggleLang() {
+    isKorean = !isKorean;
+    document.querySelectorAll('.en').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'none' : 'revert', 'important');
+    });
+    document.querySelectorAll('.ko').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'revert' : 'none', 'important');
+    });
+    document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+}
+</script>
+</body>
+</html>
