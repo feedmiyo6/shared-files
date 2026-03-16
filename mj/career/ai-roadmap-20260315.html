@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Minjun's AI/ML Career Roadmap — From Vibe Coder to AI Architect</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Nunito', sans-serif; background: #0f1923; color: #e0e6ed; line-height: 1.75; }
+  .lang-toggle { position: fixed; top: 16px; right: 16px; z-index: 100; background: #00b894; color: #fff; border: none; padding: 8px 18px; border-radius: 20px; font-family: 'Nunito', sans-serif; font-size: 14px; font-weight: 700; cursor: pointer; box-shadow: 0 2px 12px rgba(0,184,148,0.3); transition: all 0.2s; }
+  .lang-toggle:hover { background: #00a381; transform: scale(1.05); }
+  .ko { display: none; }
+  .ko.show { display: inline !important; }
+  .en.hide { display: none !important; }
+  .container { max-width: 860px; margin: 0 auto; padding: 24px 20px 80px; }
+
+  /* Header */
+  .header { text-align: center; padding: 50px 0 30px; }
+  .header h1 { font-family: 'Fredoka', sans-serif; font-size: 32px; color: #00b894; margin-bottom: 8px; }
+  .header .sub { color: #74b9ff; font-size: 16px; font-weight: 600; }
+  .header .meta { color: #636e72; font-size: 13px; margin-top: 12px; }
+
+  /* Identity box */
+  .identity { background: linear-gradient(135deg, #0a3d62, #1e3c72); border-radius: 16px; padding: 28px; margin: 24px 0 36px; border: 1px solid #2d5f8a; }
+  .identity h2 { font-family: 'Fredoka', sans-serif; color: #74b9ff; font-size: 20px; margin-bottom: 12px; }
+  .identity .now { color: #fab1a0; font-weight: 700; }
+  .identity .future { color: #00b894; font-weight: 700; }
+  .identity p { margin-bottom: 8px; font-size: 15px; }
+  .identity .arrow { text-align: center; font-size: 28px; margin: 12px 0; color: #ffeaa7; }
+
+  /* Timeline */
+  .timeline { position: relative; margin: 40px 0; padding-left: 40px; }
+  .timeline::before { content: ''; position: absolute; left: 16px; top: 0; bottom: 0; width: 3px; background: linear-gradient(to bottom, #00b894, #74b9ff, #a29bfe, #fd79a8); border-radius: 3px; }
+
+  .phase { position: relative; margin-bottom: 40px; }
+  .phase::before { content: ''; position: absolute; left: -30px; top: 6px; width: 14px; height: 14px; border-radius: 50%; border: 3px solid; }
+  .phase-1::before { border-color: #00b894; background: #0f1923; }
+  .phase-2::before { border-color: #74b9ff; background: #0f1923; }
+  .phase-3::before { border-color: #a29bfe; background: #0f1923; }
+  .phase-4::before { border-color: #fd79a8; background: #0f1923; }
+
+  .phase-label { font-family: 'Fredoka', sans-serif; font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 4px; }
+  .phase-1 .phase-label { color: #00b894; }
+  .phase-2 .phase-label { color: #74b9ff; }
+  .phase-3 .phase-label { color: #a29bfe; }
+  .phase-4 .phase-label { color: #fd79a8; }
+
+  .phase h2 { font-family: 'Fredoka', sans-serif; font-size: 22px; color: #fff; margin-bottom: 6px; }
+  .phase .duration { color: #636e72; font-size: 13px; margin-bottom: 16px; }
+
+  /* Cards inside phases */
+  .skill-card { background: #182633; border-radius: 12px; padding: 20px; margin-bottom: 16px; border-left: 4px solid #2d5f8a; }
+  .skill-card h3 { font-family: 'Fredoka', sans-serif; font-size: 17px; color: #dfe6e9; margin-bottom: 8px; }
+  .skill-card ul { padding-left: 18px; }
+  .skill-card li { margin-bottom: 6px; font-size: 14px; color: #b2bec3; }
+  .skill-card li strong { color: #dfe6e9; }
+  .skill-card .tools { margin-top: 10px; }
+  .tool-tag { display: inline-block; background: #2d3436; color: #74b9ff; padding: 3px 10px; border-radius: 10px; font-size: 12px; font-weight: 600; margin: 3px 4px 3px 0; }
+  .tool-tag.green { color: #00b894; }
+  .tool-tag.purple { color: #a29bfe; }
+  .tool-tag.pink { color: #fd79a8; }
+  .tool-tag.yellow { color: #ffeaa7; }
+
+  /* Distinction box */
+  .distinction { background: #1e272e; border-radius: 14px; padding: 24px; margin: 30px 0; border: 2px solid #ffeaa7; }
+  .distinction h2 { font-family: 'Fredoka', sans-serif; color: #ffeaa7; font-size: 20px; margin-bottom: 14px; }
+  .compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .compare-box { background: #2d3436; border-radius: 10px; padding: 16px; }
+  .compare-box.bad { border-top: 3px solid #e17055; }
+  .compare-box.good { border-top: 3px solid #00b894; }
+  .compare-box h4 { font-family: 'Fredoka', sans-serif; font-size: 15px; margin-bottom: 8px; }
+  .compare-box.bad h4 { color: #e17055; }
+  .compare-box.good h4 { color: #00b894; }
+  .compare-box ul { padding-left: 16px; font-size: 13px; }
+  .compare-box li { margin-bottom: 4px; color: #b2bec3; }
+
+  /* Project cards */
+  .project { background: linear-gradient(135deg, #182633, #1e3c50); border-radius: 12px; padding: 20px; margin-bottom: 16px; border: 1px solid #2d5f8a; }
+  .project h3 { font-family: 'Fredoka', sans-serif; color: #ffeaa7; font-size: 16px; margin-bottom: 6px; }
+  .project .impact { color: #00b894; font-size: 13px; font-weight: 700; margin-bottom: 8px; }
+  .project p { font-size: 14px; color: #b2bec3; }
+
+  /* Comp table */
+  .comp-section { background: #182633; border-radius: 14px; padding: 24px; margin: 30px 0; }
+  .comp-section h2 { font-family: 'Fredoka', sans-serif; color: #00b894; font-size: 20px; margin-bottom: 16px; }
+  .comp-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  .comp-table th { background: #2d3436; color: #74b9ff; padding: 10px 12px; text-align: left; font-family: 'Fredoka', sans-serif; }
+  .comp-table td { padding: 10px 12px; border-bottom: 1px solid #2d3436; color: #dfe6e9; }
+  .comp-table tr:hover { background: #1e3c50; }
+
+  /* Learning stack */
+  .stack-section { margin: 30px 0; }
+  .stack-section h2 { font-family: 'Fredoka', sans-serif; color: #a29bfe; font-size: 20px; margin-bottom: 16px; }
+  .stack-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .stack-item { background: #182633; border-radius: 12px; padding: 18px; }
+  .stack-item h4 { font-family: 'Fredoka', sans-serif; font-size: 15px; color: #dfe6e9; margin-bottom: 6px; }
+  .stack-item .type { font-size: 12px; font-weight: 700; margin-bottom: 6px; }
+  .stack-item p { font-size: 13px; color: #b2bec3; }
+  .stack-item.course .type { color: #74b9ff; }
+  .stack-item.tool .type { color: #00b894; }
+  .stack-item.book .type { color: #ffeaa7; }
+  .stack-item.project .type { color: #fd79a8; }
+
+  /* Verdict */
+  .verdict { background: linear-gradient(135deg, #00b894, #0a3d62); border-radius: 16px; padding: 32px; margin-top: 40px; }
+  .verdict h2 { font-family: 'Fredoka', sans-serif; color: #fff; font-size: 22px; margin-bottom: 14px; }
+  .verdict p { color: #e8e8e8; font-size: 15px; margin-bottom: 10px; }
+  .verdict strong { color: #ffeaa7; }
+
+  /* Visual timeline bar */
+  .timeline-bar { background: #182633; border-radius: 14px; padding: 24px; margin: 30px 0; overflow-x: auto; }
+  .timeline-bar h2 { font-family: 'Fredoka', sans-serif; color: #74b9ff; font-size: 18px; margin-bottom: 16px; text-align: center; }
+  .bar-container { display: flex; gap: 0; min-width: 600px; }
+  .bar-segment { padding: 14px 12px; text-align: center; border-radius: 0; }
+  .bar-segment:first-child { border-radius: 10px 0 0 10px; }
+  .bar-segment:last-child { border-radius: 0 10px 10px 0; }
+  .bar-segment h4 { font-family: 'Fredoka', sans-serif; font-size: 13px; margin-bottom: 4px; }
+  .bar-segment p { font-size: 11px; }
+  .bar-s1 { background: #00b894; color: #0f1923; flex: 2; }
+  .bar-s2 { background: #74b9ff; color: #0f1923; flex: 2; }
+  .bar-s3 { background: #a29bfe; color: #0f1923; flex: 3; }
+  .bar-s4 { background: #fd79a8; color: #0f1923; flex: 3; }
+
+  @media (max-width: 600px) {
+    .container { padding: 16px 14px 50px; }
+    .header h1 { font-size: 26px; }
+    .phase h2 { font-size: 19px; }
+    .compare-grid { grid-template-columns: 1fr; }
+    .stack-grid { grid-template-columns: 1fr; }
+    .comp-table { font-size: 12px; }
+    .comp-table th, .comp-table td { padding: 8px 6px; }
+    .bar-container { min-width: 500px; }
+  }
+</style>
+</head>
+<body>
+<button class="lang-toggle" onclick="toggleLang()">한국어</button>
+<div class="container">
+
+<!-- HEADER -->
+<div class="header">
+  <h1>
+    <span class="en">🚀 From Vibe Coder to AI/ML Architect</span>
+    <span class="ko">🚀 바이브 코더에서 AI/ML 아키텍트로</span>
+  </h1>
+  <p class="sub">
+    <span class="en">Minjun's 3-Year Career Roadmap</span>
+    <span class="ko">민준의 3년 커리어 로드맵</span>
+  </p>
+  <p class="meta">
+    <span class="en">Prepared by Totoro 🌳 · March 15, 2026</span>
+    <span class="ko">토토로 🌳 작성 · 2026년 3월 15일</span>
+  </p>
+</div>
+
+<!-- IDENTITY SHIFT -->
+<div class="identity">
+  <h2>
+    <span class="en">🪞 The Identity Shift</span>
+    <span class="ko">🪞 정체성 전환</span>
+  </h2>
+  <p>
+    <span class="en"><span class="now">NOW:</span> "I'm a validation engineer who vibe-codes apps on the side"</span>
+    <span class="ko"><span class="now">현재:</span> "사이드로 앱을 바이브 코딩하는 검증 엔지니어"</span>
+  </p>
+  <p class="arrow">⬇️</p>
+  <p>
+    <span class="en"><span class="future">3 YEARS:</span> "I'm an AI/ML engineer who builds and trains domain-specific AI agents for semiconductor design — and I've shipped production tools that prove it"</span>
+    <span class="ko"><span class="future">3년 후:</span> "반도체 설계용 도메인 특화 AI 에이전트를 구축하고 학습시키는 AI/ML 엔지니어 — 실제 프로덕션 도구를 만들어 증명했다"</span>
+  </p>
+</div>
+
+<!-- THE DISTINCTION -->
+<div class="distinction">
+  <h2>
+    <span class="en">⚡ Why This Matters: Vibe Coder vs. AI Engineer</span>
+    <span class="ko">⚡ 왜 중요한가: 바이브 코더 vs. AI 엔지니어</span>
+  </h2>
+  <div class="compare-grid">
+    <div class="compare-box bad">
+      <h4>
+        <span class="en">❌ Vibe Coder (Where most people stop)</span>
+        <span class="ko">❌ 바이브 코더 (대부분 여기서 멈춤)</span>
+      </h4>
+      <ul>
+        <li><span class="en">Uses ChatGPT/Claude to generate code</span><span class="ko">ChatGPT/Claude로 코드 생성</span></li>
+        <li><span class="en">Calls OpenAI APIs as a black box</span><span class="ko">OpenAI API를 블랙박스로 호출</span></li>
+        <li><span class="en">Can't explain why the model works</span><span class="ko">모델이 왜 작동하는지 설명 못 함</span></li>
+        <li><span class="en">Replaceable — anyone can call an API</span><span class="ko">대체 가능 — API 호출은 누구나 가능</span></li>
+        <li><span class="en">Builds apps, not intelligence</span><span class="ko">앱을 만들지, 지능을 만들지 않음</span></li>
+      </ul>
+    </div>
+    <div class="compare-box good">
+      <h4>
+        <span class="en">✅ AI/ML Engineer (Your target)</span>
+        <span class="ko">✅ AI/ML 엔지니어 (당신의 목표)</span>
+      </h4>
+      <ul>
+        <li><span class="en">Understands transformer architecture & attention</span><span class="ko">트랜스포머 아키텍처와 어텐션 이해</span></li>
+        <li><span class="en">Can fine-tune/train models on domain data</span><span class="ko">도메인 데이터로 모델 파인튜닝/학습 가능</span></li>
+        <li><span class="en">Designs evaluation frameworks & metrics</span><span class="ko">평가 프레임워크와 메트릭 설계</span></li>
+        <li><span class="en">Builds agentic systems with real reasoning</span><span class="ko">실제 추론 능력을 가진 에이전트 시스템 구축</span></li>
+        <li><span class="en">Irreplaceable — domain + ML is ultra-rare</span><span class="ko">대체 불가 — 도메인 + ML은 매우 희소</span></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- VISUAL TIMELINE BAR -->
+<div class="timeline-bar">
+  <h2>
+    <span class="en">📅 The 3-Year Arc</span>
+    <span class="ko">📅 3년 여정</span>
+  </h2>
+  <div class="bar-container">
+    <div class="bar-segment bar-s1">
+      <h4><span class="en">Phase 1</span><span class="ko">1단계</span></h4>
+      <p><span class="en">Foundation<br>0-6 mo</span><span class="ko">기초<br>0-6개월</span></p>
+    </div>
+    <div class="bar-segment bar-s2">
+      <h4><span class="en">Phase 2</span><span class="ko">2단계</span></h4>
+      <p><span class="en">Build & Ship<br>6-12 mo</span><span class="ko">개발 & 배포<br>6-12개월</span></p>
+    </div>
+    <div class="bar-segment bar-s3">
+      <h4><span class="en">Phase 3</span><span class="ko">3단계</span></h4>
+      <p><span class="en">Specialize<br>Year 2</span><span class="ko">전문화<br>2년차</span></p>
+    </div>
+    <div class="bar-segment bar-s4">
+      <h4><span class="en">Phase 4</span><span class="ko">4단계</span></h4>
+      <p><span class="en">Harvest<br>Year 3</span><span class="ko">수확<br>3년차</span></p>
+    </div>
+  </div>
+</div>
+
+<!-- PHASE 1 -->
+<div class="timeline">
+
+<div class="phase phase-1">
+  <p class="phase-label">
+    <span class="en">Phase 1 — Foundation</span>
+    <span class="ko">1단계 — 기초 다지기</span>
+  </p>
+  <h2>
+    <span class="en">🧠 Learn How AI Actually Works</span>
+    <span class="ko">🧠 AI가 실제로 어떻게 작동하는지 배우기</span>
+  </h2>
+  <p class="duration">
+    <span class="en">Months 0-6 · Evenings & Weekends · While ramping into Digital Design</span>
+    <span class="ko">0-6개월 · 저녁 & 주말 · 디지털 설계 전환과 병행</span>
+  </p>
+
+  <div class="skill-card">
+    <h3>
+      <span class="en">1. ML/DL Fundamentals (The "Why" Behind the Magic)</span>
+      <span class="ko">1. ML/DL 기초 (마법 뒤의 "왜")</span>
+    </h3>
+    <ul>
+      <li><span class="en"><strong>Neural networks from scratch</strong> — backpropagation, gradient descent, loss functions. You need to feel these in your bones, not just know the words</span><span class="ko"><strong>뉴럴 네트워크를 처음부터</strong> — 역전파, 경사 하강법, 손실 함수. 단어만 아는 게 아니라 체감해야 함</span></li>
+      <li><span class="en"><strong>Transformer architecture deep-dive</strong> — self-attention, positional encoding, multi-head attention. This is THE architecture powering everything</span><span class="ko"><strong>트랜스포머 아키텍처 심층 학습</strong> — 셀프 어텐션, 위치 인코딩, 멀티헤드 어텐션. 모든 것을 구동하는 THE 아키텍처</span></li>
+      <li><span class="en"><strong>Tokenization & embeddings</strong> — how text/code becomes vectors. Critical for understanding domain-specific models</span><span class="ko"><strong>토큰화 & 임베딩</strong> — 텍스트/코드가 벡터로 변환되는 방식. 도메인 특화 모델 이해에 필수</span></li>
+    </ul>
+    <div class="tools">
+      <span class="tool-tag">Andrej Karpathy's Neural Networks: Zero to Hero</span>
+      <span class="tool-tag green">3Blue1Brown Neural Network series</span>
+      <span class="tool-tag purple">fast.ai Practical Deep Learning</span>
+    </div>
+  </div>
+
+  <div class="skill-card">
+    <h3>
+      <span class="en">2. Python ML Stack (Your New Power Tools)</span>
+      <span class="ko">2. Python ML 스택 (새로운 파워 도구)</span>
+    </h3>
+    <ul>
+      <li><span class="en"><strong>PyTorch</strong> — the industry standard. Learn tensors, autograd, nn.Module, DataLoader. Skip TensorFlow.</span><span class="ko"><strong>PyTorch</strong> — 산업 표준. 텐서, autograd, nn.Module, DataLoader 학습. TensorFlow는 스킵.</span></li>
+      <li><span class="en"><strong>Hugging Face Transformers</strong> — load, fine-tune, and deploy pre-trained models. This is your daily driver.</span><span class="ko"><strong>Hugging Face Transformers</strong> — 사전 학습 모델 로드, 파인튜닝, 배포. 매일 쓰는 도구가 될 것.</span></li>
+      <li><span class="en"><strong>Weights & Biases (W&B)</strong> — experiment tracking, model versioning. Makes you look professional.</span><span class="ko"><strong>Weights & Biases (W&B)</strong> — 실험 추적, 모델 버전 관리. 프로답게 보이게 해줌.</span></li>
+    </ul>
+    <div class="tools">
+      <span class="tool-tag">PyTorch</span>
+      <span class="tool-tag green">HuggingFace 🤗</span>
+      <span class="tool-tag purple">W&B</span>
+      <span class="tool-tag yellow">Jupyter/Colab</span>
+    </div>
+  </div>
+
+  <div class="skill-card">
+    <h3>
+      <span class="en">3. Digital Design Fundamentals (Your Domain Edge)</span>
+      <span class="ko">3. 디지털 설계 기초 (당신의 도메인 우위)</span>
+    </h3>
+    <ul>
+      <li><span class="en"><strong>RTL design</strong> — Verilog/SystemVerilog for synthesis. Understand the design flow you'll be building AI for.</span><span class="ko"><strong>RTL 설계</strong> — 합성을 위한 Verilog/SystemVerilog. AI를 만들 설계 흐름을 이해.</span></li>
+      <li><span class="en"><strong>EDA tool flows</strong> — synthesis (Design Compiler/Genus), P&R (ICC2/Innovus), timing analysis (PrimeTime). Know the tools your AI will augment.</span><span class="ko"><strong>EDA 도구 흐름</strong> — 합성(DC/Genus), P&R(ICC2/Innovus), 타이밍 분석(PrimeTime). AI가 보강할 도구를 파악.</span></li>
+      <li><span class="en"><strong>Common pain points</strong> — timing closure, congestion, power optimization. These become your AI targets.</span><span class="ko"><strong>주요 페인포인트</strong> — 타이밍 클로저, 혼잡도, 전력 최적화. 이것들이 AI 타겟이 됨.</span></li>
+    </ul>
+    <div class="tools">
+      <span class="tool-tag">SystemVerilog</span>
+      <span class="tool-tag green">Synopsys DC</span>
+      <span class="tool-tag purple">Cadence Innovus</span>
+      <span class="tool-tag yellow">NotebookLM for docs</span>
+    </div>
+  </div>
+
+  <div class="project">
+    <h3>
+      <span class="en">🎯 Phase 1 Milestone Project</span>
+      <span class="ko">🎯 1단계 마일스톤 프로젝트</span>
+    </h3>
+    <p class="impact">
+      <span class="en">Resume bullet: "Built a neural network from scratch that classifies RTL coding style violations"</span>
+      <span class="ko">이력서: "RTL 코딩 스타일 위반을 분류하는 신경망을 처음부터 구축"</span>
+    </p>
+    <p>
+      <span class="en">Take open-source Verilog code → build a classifier that detects common coding violations (latch inference, incomplete sensitivity lists, race conditions). Simple project, but proves you understand BOTH ML and digital design.</span>
+      <span class="ko">오픈소스 Verilog 코드 → 일반적인 코딩 위반(래치 추론, 불완전한 sensitivity 목록, 경쟁 조건) 감지 분류기 구축. 간단한 프로젝트지만 ML과 디지털 설계 둘 다 이해함을 증명.</span>
+    </p>
+  </div>
+</div>
+
+<!-- PHASE 2 -->
+<div class="phase phase-2">
+  <p class="phase-label">
+    <span class="en">Phase 2 — Build & Ship</span>
+    <span class="ko">2단계 — 개발 & 배포</span>
+  </p>
+  <h2>
+    <span class="en">⚙️ Fine-Tuning, RAG, and Agentic Systems</span>
+    <span class="ko">⚙️ 파인튜닝, RAG, 에이전트 시스템</span>
+  </h2>
+  <p class="duration">
+    <span class="en">Months 6-12 · Apply at work + personal projects</span>
+    <span class="ko">6-12개월 · 업무 적용 + 개인 프로젝트</span>
+  </p>
+
+  <div class="skill-card">
+    <h3>
+      <span class="en">1. Fine-Tuning LLMs (This Is Where You Level Up)</span>
+      <span class="ko">1. LLM 파인튜닝 (여기서 레벨업)</span>
+    </h3>
+    <ul>
+      <li><span class="en"><strong>LoRA / QLoRA</strong> — fine-tune large models on consumer hardware. This is how you train a "Digital Design Agent" without $100K in GPU costs</span><span class="ko"><strong>LoRA / QLoRA</strong> — 소비자 하드웨어에서 대형 모델 파인튜닝. $100K GPU 비용 없이 "디지털 설계 에이전트" 학습 방법</span></li>
+      <li><span class="en"><strong>Dataset curation</strong> — the REAL skill. Collecting, cleaning, and structuring training data from EDA logs, design specs, and Verilog code</span><span class="ko"><strong>데이터셋 큐레이션</strong> — 진짜 스킬. EDA 로그, 설계 스펙, Verilog 코드에서 학습 데이터 수집, 정제, 구조화</span></li>
+      <li><span class="en"><strong>Evaluation & benchmarking</strong> — how do you measure if your fine-tuned model is actually better? Build custom eval suites</span><span class="ko"><strong>평가 & 벤치마킹</strong> — 파인튜닝된 모델이 실제로 나은지 어떻게 측정? 커스텀 평가 스위트 구축</span></li>
+      <li><span class="en"><strong>RLHF / DPO basics</strong> — understand how models are aligned. You'll need this for domain-specific behavior tuning</span><span class="ko"><strong>RLHF / DPO 기초</strong> — 모델 정렬 방법 이해. 도메인 특화 동작 튜닝에 필요</span></li>
+    </ul>
+    <div class="tools">
+      <span class="tool-tag">Axolotl</span>
+      <span class="tool-tag green">Unsloth</span>
+      <span class="tool-tag purple">HuggingFace TRL</span>
+      <span class="tool-tag yellow">LM Studio (local testing)</span>
+    </div>
+  </div>
+
+  <div class="skill-card">
+    <h3>
+      <span class="en">2. RAG Systems (Making AI Useful With Your Data)</span>
+      <span class="ko">2. RAG 시스템 (당신의 데이터로 AI 유용하게 만들기)</span>
+    </h3>
+    <ul>
+      <li><span class="en"><strong>Vector databases</strong> — Pinecone, Weaviate, pgvector. Store and retrieve domain knowledge</span><span class="ko"><strong>벡터 데이터베이스</strong> — Pinecone, Weaviate, pgvector. 도메인 지식 저장 및 검색</span></li>
+      <li><span class="en"><strong>Chunking strategies</strong> — how to split EDA documentation, design specs, and code into effective retrieval units</span><span class="ko"><strong>청킹 전략</strong> — EDA 문서, 설계 스펙, 코드를 효과적인 검색 단위로 분할하는 방법</span></li>
+      <li><span class="en"><strong>Hybrid search</strong> — combining vector similarity with keyword search for technical content</span><span class="ko"><strong>하이브리드 검색</strong> — 기술 콘텐츠를 위한 벡터 유사도 + 키워드 검색 결합</span></li>
+      <li><span class="en"><strong>Evaluation</strong> — retrieval precision, answer faithfulness, hallucination detection. Critical for engineering tools where wrong answers = silicon bugs</span><span class="ko"><strong>평가</strong> — 검색 정밀도, 답변 충실도, 환각 감지. 잘못된 답변 = 실리콘 버그인 엔지니어링 도구에 필수</span></li>
+    </ul>
+    <div class="tools">
+      <span class="tool-tag">LangChain/LlamaIndex</span>
+      <span class="tool-tag green">pgvector</span>
+      <span class="tool-tag purple">RAGAS (eval)</span>
+    </div>
+  </div>
+
+  <div class="skill-card">
+    <h3>
+      <span class="en">3. Agentic AI Architecture (Beyond Chatbots)</span>
+      <span class="ko">3. 에이전틱 AI 아키텍처 (챗봇을 넘어서)</span>
+    </h3>
+    <ul>
+      <li><span class="en"><strong>Tool-use & function calling</strong> — teach AI to run EDA tools, parse logs, execute TCL scripts</span><span class="ko"><strong>도구 사용 & 함수 호출</strong> — AI에게 EDA 도구 실행, 로그 파싱, TCL 스크립트 실행을 가르침</span></li>
+      <li><span class="en"><strong>Multi-agent orchestration</strong> — you already do this with Totoro! Now formalize it for engineering workflows</span><span class="ko"><strong>멀티 에이전트 오케스트레이션</strong> — 이미 토토로로 하고 있음! 이제 엔지니어링 워크플로우에 정식화</span></li>
+      <li><span class="en"><strong>Planning & reasoning</strong> — chain-of-thought, ReAct, tree-of-thought. How agents decide what to do next</span><span class="ko"><strong>계획 & 추론</strong> — chain-of-thought, ReAct, tree-of-thought. 에이전트가 다음 행동을 결정하는 방법</span></li>
+      <li><span class="en"><strong>Memory & state</strong> — long-running agents that remember context across design iterations</span><span class="ko"><strong>메모리 & 상태</strong> — 설계 반복 간 컨텍스트를 기억하는 장기 실행 에이전트</span></li>
+    </ul>
+    <div class="tools">
+      <span class="tool-tag">CrewAI</span>
+      <span class="tool-tag green">AutoGen</span>
+      <span class="tool-tag purple">LangGraph</span>
+      <span class="tool-tag yellow">OpenAI Assistants API</span>
+    </div>
+  </div>
+
+  <div class="project">
+    <h3>
+      <span class="en">🎯 Phase 2 Milestone Project</span>
+      <span class="ko">🎯 2단계 마일스톤 프로젝트</span>
+    </h3>
+    <p class="impact">
+      <span class="en">Resume bullet: "Built a RAG-powered design assistant that reduced timing closure debug time by 40%"</span>
+      <span class="ko">이력서: "타이밍 클로저 디버그 시간을 40% 단축하는 RAG 기반 설계 어시스턴트 구축"</span>
+    </p>
+    <p>
+      <span class="en">Build an internal tool at Microchip: ingest design documentation + past bug reports + EDA tool manuals into a RAG system. Engineers ask natural language questions → get answers with citations. This is your FOLIO v2 for digital design.</span>
+      <span class="ko">Microchip 내부 도구 구축: 설계 문서 + 과거 버그 리포트 + EDA 도구 매뉴얼을 RAG 시스템에 수집. 엔지니어가 자연어로 질문 → 인용과 함께 답변. 디지털 설계용 FOLIO v2.</span>
+    </p>
+  </div>
+</div>
+
+<!-- PHASE 3 -->
+<div class="phase phase-3">
+  <p class="phase-label">
+    <span class="en">Phase 3 — Specialize & Differentiate</span>
+    <span class="ko">3단계 — 전문화 & 차별화</span>
+  </p>
+  <h2>
+    <span class="en">🔬 Training Domain-Specific Models</span>
+    <span class="ko">🔬 도메인 특화 모델 학습</span>
+  </h2>
+  <p class="duration">
+    <span class="en">Year 2 · This is where you become rare</span>
+    <span class="ko">2년차 · 여기서 희소한 인재가 됨</span>
+  </p>
+
+  <div class="skill-card">
+    <h3>
+      <span class="en">1. Pre-training & Domain Adaptation (The Hard Stuff)</span>
+      <span class="ko">1. 사전 학습 & 도메인 적응 (어려운 것들)</span>
+    </h3>
+    <ul>
+      <li><span class="en"><strong>Continued pre-training</strong> — take a base model and continue training on semiconductor domain corpus (Verilog, VHDL, design specs, EDA manuals)</span><span class="ko"><strong>계속 사전 학습</strong> — 기본 모델을 가져와 반도체 도메인 코퍼스(Verilog, VHDL, 설계 스펙, EDA 매뉴얼)로 학습 계속</span></li>
+      <li><span class="en"><strong>Custom tokenizer</strong> — standard tokenizers butcher Verilog syntax. Build one that understands HDL primitives</span><span class="ko"><strong>커스텀 토크나이저</strong> — 표준 토크나이저는 Verilog 문법을 망침. HDL 프리미티브를 이해하는 것을 구축</span></li>
+      <li><span class="en"><strong>Synthetic data generation</strong> — use existing LLMs to generate training data (Verilog examples, design Q&A pairs). This is the force multiplier</span><span class="ko"><strong>합성 데이터 생성</strong> — 기존 LLM으로 학습 데이터 생성 (Verilog 예제, 설계 Q&A 쌍). 이것이 힘의 배수</span></li>
+      <li><span class="en"><strong>Distributed training basics</strong> — DeepSpeed, FSDP. For when your models get bigger</span><span class="ko"><strong>분산 학습 기초</strong> — DeepSpeed, FSDP. 모델이 커질 때를 위해</span></li>
+    </ul>
+    <div class="tools">
+      <span class="tool-tag">DeepSpeed</span>
+      <span class="tool-tag green">FSDP</span>
+      <span class="tool-tag purple">Modal/Lambda (GPU cloud)</span>
+      <span class="tool-tag yellow">RunPod</span>
+    </div>
+  </div>
+
+  <div class="skill-card">
+    <h3>
+      <span class="en">2. Code Generation for Hardware (The Holy Grail)</span>
+      <span class="ko">2. 하드웨어 코드 생성 (궁극의 목표)</span>
+    </h3>
+    <ul>
+      <li><span class="en"><strong>Verilog/VHDL code generation</strong> — fine-tune models to generate synthesizable RTL from natural language specs</span><span class="ko"><strong>Verilog/VHDL 코드 생성</strong> — 자연어 스펙에서 합성 가능한 RTL을 생성하도록 모델 파인튜닝</span></li>
+      <li><span class="en"><strong>Formal verification integration</strong> — AI generates properties/assertions, formal tools verify them. Human in the loop.</span><span class="ko"><strong>형식 검증 통합</strong> — AI가 속성/어설션 생성, 형식 도구가 검증. 사람은 루프에 존재.</span></li>
+      <li><span class="en"><strong>Design space exploration</strong> — AI suggests architectural trade-offs (area vs. power vs. timing) based on constraints</span><span class="ko"><strong>설계 공간 탐색</strong> — 제약 조건에 따라 AI가 아키텍처 트레이드오프 (면적 vs. 전력 vs. 타이밍) 제안</span></li>
+    </ul>
+    <div class="tools">
+      <span class="tool-tag">VeriGen (research)</span>
+      <span class="tool-tag green">RTLLM benchmark</span>
+      <span class="tool-tag purple">ChipChat papers</span>
+    </div>
+  </div>
+
+  <div class="skill-card">
+    <h3>
+      <span class="en">3. MLOps & Production ML (Making It Real)</span>
+      <span class="ko">3. MLOps & 프로덕션 ML (실제로 만들기)</span>
+    </h3>
+    <ul>
+      <li><span class="en"><strong>Model serving</strong> — vLLM, TGI, TensorRT-LLM. Deploy models efficiently</span><span class="ko"><strong>모델 서빙</strong> — vLLM, TGI, TensorRT-LLM. 모델을 효율적으로 배포</span></li>
+      <li><span class="en"><strong>Monitoring & observability</strong> — track model drift, latency, cost in production</span><span class="ko"><strong>모니터링 & 관찰 가능성</strong> — 프로덕션에서 모델 드리프트, 지연, 비용 추적</span></li>
+      <li><span class="en"><strong>CI/CD for ML</strong> — automated training pipelines, model registry, A/B testing</span><span class="ko"><strong>ML용 CI/CD</strong> — 자동화된 학습 파이프라인, 모델 레지스트리, A/B 테스트</span></li>
+    </ul>
+    <div class="tools">
+      <span class="tool-tag">vLLM</span>
+      <span class="tool-tag green">MLflow</span>
+      <span class="tool-tag purple">Docker/K8s</span>
+      <span class="tool-tag yellow">GitHub Actions</span>
+    </div>
+  </div>
+
+  <div class="project">
+    <h3>
+      <span class="en">🎯 Phase 3 Milestone Project</span>
+      <span class="ko">🎯 3단계 마일스톤 프로젝트</span>
+    </h3>
+    <p class="impact">
+      <span class="en">Resume bullet: "Fine-tuned and deployed a domain-specific LLM for RTL code generation, achieving 85%+ syntactically correct output on internal benchmarks"</span>
+      <span class="ko">이력서: "RTL 코드 생성을 위한 도메인 특화 LLM을 파인튜닝 및 배포, 내부 벤치마크에서 85%+ 구문적으로 올바른 출력 달성"</span>
+    </p>
+    <p>
+      <span class="en">Fine-tune an open-source model (CodeLlama, DeepSeek-Coder, StarCoder) on Verilog/SystemVerilog corpus. Build an eval suite. Deploy internally. Publish results (blog or paper). This is your signature piece.</span>
+      <span class="ko">오픈소스 모델(CodeLlama, DeepSeek-Coder, StarCoder)을 Verilog/SystemVerilog 코퍼스로 파인튜닝. 평가 스위트 구축. 내부 배포. 결과 발표 (블로그 또는 논문). 이것이 당신의 시그니처 작품.</span>
+    </p>
+  </div>
+</div>
+
+<!-- PHASE 4 -->
+<div class="phase phase-4">
+  <p class="phase-label">
+    <span class="en">Phase 4 — Harvest</span>
+    <span class="ko">4단계 — 수확</span>
+  </p>
+  <h2>
+    <span class="en">🎯 Land Big Tech + Position for Future</span>
+    <span class="ko">🎯 빅테크 입사 + 미래 포지셔닝</span>
+  </h2>
+  <p class="duration">
+    <span class="en">Year 3 · Cash in on everything you've built</span>
+    <span class="ko">3년차 · 지금까지 쌓은 모든 것을 현금화</span>
+  </p>
+
+  <div class="skill-card">
+    <h3>
+      <span class="en">1. Target Companies & Roles</span>
+      <span class="ko">1. 타겟 회사 & 직무</span>
+    </h3>
+    <ul>
+      <li><span class="en"><strong>Broadcom</strong> — AI-Enhanced Design Engineer, ML for EDA. They're investing heavily in AI for chip design</span><span class="ko"><strong>Broadcom</strong> — AI 강화 설계 엔지니어, EDA용 ML. 칩 설계용 AI에 대대적 투자 중</span></li>
+      <li><span class="en"><strong>NVIDIA</strong> — AI/ML for EDA, VLSI + ML. Their cuLitho (computational lithography) team is a goldmine</span><span class="ko"><strong>NVIDIA</strong> — EDA용 AI/ML, VLSI + ML. cuLitho(전산 리소그래피) 팀이 금광</span></li>
+      <li><span class="en"><strong>Google (TPU team)</strong> — ML for chip design. They published the famous "chip floorplanning with RL" paper</span><span class="ko"><strong>Google (TPU 팀)</strong> — 칩 설계용 ML. 유명한 "RL로 칩 플로어플래닝" 논문 발표</span></li>
+      <li><span class="en"><strong>Synopsys/Cadence</strong> — AI R&D teams. DSO.ai (Synopsys) and Cerebrus (Cadence) need people like you</span><span class="ko"><strong>Synopsys/Cadence</strong> — AI R&D 팀. DSO.ai(Synopsys)와 Cerebrus(Cadence)에 당신 같은 인재 필요</span></li>
+      <li><span class="en"><strong>AMD, Intel, Qualcomm</strong> — all building internal AI for design automation</span><span class="ko"><strong>AMD, Intel, Qualcomm</strong> — 모두 설계 자동화를 위한 내부 AI 구축 중</span></li>
+    </ul>
+  </div>
+
+  <div class="skill-card">
+    <h3>
+      <span class="en">2. Interview Prep (ML + Hardware Hybrid)</span>
+      <span class="ko">2. 면접 준비 (ML + 하드웨어 하이브리드)</span>
+    </h3>
+    <ul>
+      <li><span class="en"><strong>ML system design</strong> — "Design a model that predicts timing violations from RTL" type questions</span><span class="ko"><strong>ML 시스템 설계</strong> — "RTL에서 타이밍 위반을 예측하는 모델을 설계하라" 유형 질문</span></li>
+      <li><span class="en"><strong>Coding interviews</strong> — LeetCode medium-hard in Python. Big tech still requires this unfortunately</span><span class="ko"><strong>코딩 인터뷰</strong> — Python으로 LeetCode 중-상. 빅테크는 아직 이걸 요구함 안타깝게도</span></li>
+      <li><span class="en"><strong>Portfolio</strong> — GitHub repos, blog posts, maybe a paper. Your milestone projects ARE your portfolio</span><span class="ko"><strong>포트폴리오</strong> — GitHub 레포, 블로그 포스트, 논문. 마일스톤 프로젝트가 곧 포트폴리오</span></li>
+      <li><span class="en"><strong>Networking</strong> — DAC (Design Automation Conference), Hot Chips, ISSCC. One conference/year = enough</span><span class="ko"><strong>네트워킹</strong> — DAC, Hot Chips, ISSCC. 연 1회 컨퍼런스 = 충분</span></li>
+    </ul>
+  </div>
+
+  <div class="skill-card">
+    <h3>
+      <span class="en">3. The "After Big Tech" Setup</span>
+      <span class="ko">3. "빅테크 이후" 설정</span>
+    </h3>
+    <ul>
+      <li><span class="en"><strong>While at Broadcom/NVIDIA</strong> — build network, save $300K+, learn at scale, get the "ex-FAANG" brand</span><span class="ko"><strong>Broadcom/NVIDIA 재직 중</strong> — 네트워크 구축, $300K+ 저축, 대규모 학습, "ex-FAANG" 브랜드 획득</span></li>
+      <li><span class="en"><strong>2-3 years in</strong> — launch the hardware validation AI startup with clean IP, credibility, and runway</span><span class="ko"><strong>2-3년 후</strong> — 클린 IP, 신뢰성, 자금으로 하드웨어 검증 AI 스타트업 런칭</span></li>
+      <li><span class="en"><strong>Or stay</strong> — principal/staff engineer at $400K-$600K+ is a great life too</span><span class="ko"><strong>또는 유지</strong> — $400K-$600K+ 프린시플/스태프 엔지니어도 훌륭한 삶</span></li>
+    </ul>
+  </div>
+</div>
+
+</div><!-- end timeline -->
+
+<!-- COMPENSATION TABLE -->
+<div class="comp-section">
+  <h2>
+    <span class="en">💰 Target Compensation (Year 3 — Big Tech)</span>
+    <span class="ko">💰 목표 보상 (3년차 — 빅테크)</span>
+  </h2>
+  <table class="comp-table">
+    <tr>
+      <th><span class="en">Company</span><span class="ko">회사</span></th>
+      <th><span class="en">Role</span><span class="ko">직무</span></th>
+      <th><span class="en">Base</span><span class="ko">기본급</span></th>
+      <th><span class="en">RSU/Bonus</span><span class="ko">RSU/보너스</span></th>
+      <th><span class="en">Total</span><span class="ko">총합</span></th>
+    </tr>
+    <tr>
+      <td>Broadcom</td>
+      <td><span class="en">Staff Design Eng</span><span class="ko">스태프 설계 엔지니어</span></td>
+      <td>$200-250K</td>
+      <td>$100-200K</td>
+      <td><strong>$300-450K</strong></td>
+    </tr>
+    <tr>
+      <td>NVIDIA</td>
+      <td><span class="en">Senior ML/EDA Eng</span><span class="ko">시니어 ML/EDA 엔지니어</span></td>
+      <td>$220-280K</td>
+      <td>$150-300K</td>
+      <td><strong>$370-580K</strong></td>
+    </tr>
+    <tr>
+      <td>Google</td>
+      <td><span class="en">L5 ML Eng (TPU)</span><span class="ko">L5 ML 엔지니어 (TPU)</span></td>
+      <td>$200-250K</td>
+      <td>$150-250K</td>
+      <td><strong>$350-500K</strong></td>
+    </tr>
+    <tr>
+      <td>Synopsys</td>
+      <td><span class="en">AI R&D Engineer</span><span class="ko">AI R&D 엔지니어</span></td>
+      <td>$180-230K</td>
+      <td>$80-150K</td>
+      <td><strong>$260-380K</strong></td>
+    </tr>
+    <tr>
+      <td>AMD</td>
+      <td><span class="en">ML for Design Eng</span><span class="ko">설계용 ML 엔지니어</span></td>
+      <td>$190-240K</td>
+      <td>$80-160K</td>
+      <td><strong>$270-400K</strong></td>
+    </tr>
+  </table>
+</div>
+
+<!-- LEARNING RESOURCES -->
+<div class="stack-section">
+  <h2>
+    <span class="en">📚 Learning Stack (AI-First, Your Style)</span>
+    <span class="ko">📚 학습 스택 (AI 우선, 당신의 스타일)</span>
+  </h2>
+  <div class="stack-grid">
+    <div class="stack-item course">
+      <p class="type"><span class="en">FREE COURSE</span><span class="ko">무료 강의</span></p>
+      <h4>Andrej Karpathy — Neural Networks: Zero to Hero</h4>
+      <p><span class="en">YouTube. The single best resource for understanding ML from scratch. Start here. Non-negotiable.</span><span class="ko">YouTube. ML을 처음부터 이해하기 위한 최고의 리소스. 여기서 시작. 비협상.</span></p>
+    </div>
+    <div class="stack-item course">
+      <p class="type"><span class="en">FREE COURSE</span><span class="ko">무료 강의</span></p>
+      <h4>fast.ai — Practical Deep Learning</h4>
+      <p><span class="en">Top-down approach. Build things first, understand theory after. Perfect for your learning style.</span><span class="ko">탑다운 접근. 먼저 만들고, 이론은 나중에. 당신의 학습 스타일에 완벽.</span></p>
+    </div>
+    <div class="stack-item tool">
+      <p class="type"><span class="en">DAILY TOOL</span><span class="ko">일일 도구</span></p>
+      <h4>NotebookLM</h4>
+      <p><span class="en">Feed it ML papers, EDA docs, design specs. Have conversations. This is your study partner — you already love it.</span><span class="ko">ML 논문, EDA 문서, 설계 스펙을 입력. 대화. 당신의 학습 파트너 — 이미 좋아하는 도구.</span></p>
+    </div>
+    <div class="stack-item tool">
+      <p class="type"><span class="en">DAILY TOOL</span><span class="ko">일일 도구</span></p>
+      <h4>Claude / ChatGPT (as tutor)</h4>
+      <p><span class="en">"Explain attention mechanism like I understand Verilog but not ML." Use AI to learn AI. Meta but effective.</span><span class="ko">"Verilog은 이해하지만 ML은 모르는 사람에게 어텐션 메커니즘을 설명해줘." AI로 AI를 배움. 메타지만 효과적.</span></p>
+    </div>
+    <div class="stack-item book">
+      <p class="type"><span class="en">BOOK</span><span class="ko">책</span></p>
+      <h4>Designing Machine Learning Systems — Chip Huyen</h4>
+      <p><span class="en">Production ML from someone who's done it. Read this in Phase 2. Practical, not academic.</span><span class="ko">실제로 해본 사람의 프로덕션 ML. 2단계에서 읽기. 실용적, 학문적이 아닌.</span></p>
+    </div>
+    <div class="stack-item project">
+      <p class="type"><span class="en">PRACTICE</span><span class="ko">실습</span></p>
+      <h4>Kaggle + HuggingFace Hub</h4>
+      <p><span class="en">Kaggle for structured competitions. HF Hub to publish your fine-tuned models. Public portfolio that speaks louder than a resume.</span><span class="ko">Kaggle은 구조화된 경쟁. HF Hub에 파인튜닝 모델 발표. 이력서보다 강력한 공개 포트폴리오.</span></p>
+    </div>
+    <div class="stack-item course">
+      <p class="type"><span class="en">RESEARCH</span><span class="ko">연구</span></p>
+      <h4>Key Papers to Read</h4>
+      <p><span class="en">"Attention Is All You Need" · "LoRA" · "RLHF" (InstructGPT) · "ChipChat" · Google's "ML for Chip Floorplanning" · "VeriGen"</span><span class="ko">"Attention Is All You Need" · "LoRA" · "RLHF" (InstructGPT) · "ChipChat" · Google의 "ML for Chip Floorplanning" · "VeriGen"</span></p>
+    </div>
+    <div class="stack-item tool">
+      <p class="type"><span class="en">GPU ACCESS</span><span class="ko">GPU 접근</span></p>
+      <h4>Google Colab Pro / Lambda Cloud / RunPod</h4>
+      <p><span class="en">Colab Pro ($10/mo) for learning. Lambda/RunPod for serious training. Budget $50-100/mo for GPU time.</span><span class="ko">Colab Pro ($10/월) 학습용. Lambda/RunPod 본격 학습용. GPU 시간에 $50-100/월 예산.</span></p>
+    </div>
+  </div>
+</div>
+
+<!-- YOUR WEEKLY SCHEDULE -->
+<div class="distinction">
+  <h2>
+    <span class="en">📅 Suggested Weekly Learning Schedule</span>
+    <span class="ko">📅 주간 학습 일정 제안</span>
+  </h2>
+  <div class="skill-card" style="border-left-color: #ffeaa7;">
+    <ul>
+      <li><span class="en"><strong>Mon-Fri (30-60 min/day):</strong> Watch one Karpathy/fast.ai lecture OR read one paper section via NotebookLM. Small consistent bites.</span><span class="ko"><strong>월-금 (30-60분/일):</strong> Karpathy/fast.ai 강의 하나 시청 또는 NotebookLM으로 논문 섹션 하나 읽기. 작고 꾸준한 단위.</span></li>
+      <li><span class="en"><strong>Saturday (2-4 hrs):</strong> Hands-on coding. Build, fine-tune, break things. This is where real learning happens.</span><span class="ko"><strong>토요일 (2-4시간):</strong> 실습 코딩. 만들고, 파인튜닝하고, 부수기. 진짜 학습이 일어나는 곳.</span></li>
+      <li><span class="en"><strong>Sunday (1-2 hrs):</strong> Review, write notes, update your portfolio/blog. Reflection solidifies learning.</span><span class="ko"><strong>일요일 (1-2시간):</strong> 복습, 노트 작성, 포트폴리오/블로그 업데이트. 회고가 학습을 강화.</span></li>
+      <li><span class="en"><strong>At work:</strong> Look for every opportunity to apply AI to your design tasks. Even small automations count as portfolio evidence.</span><span class="ko"><strong>업무 중:</strong> 설계 작업에 AI를 적용할 모든 기회를 찾기. 작은 자동화도 포트폴리오 증거가 됨.</span></li>
+    </ul>
+  </div>
+</div>
+
+<!-- VERDICT -->
+<div class="verdict">
+  <h2>
+    <span class="en">🌳 The Big Picture</span>
+    <span class="ko">🌳 큰 그림</span>
+  </h2>
+  <p>
+    <span class="en"><strong>Your unfair advantage:</strong> In 3 years, there will be millions of people who can call AI APIs and millions who understand chip design. The number who can <em>train domain-specific AI models for semiconductor design</em>? Maybe a few hundred worldwide. That's you.</span>
+    <span class="ko"><strong>당신의 불공정한 이점:</strong> 3년 후, AI API를 호출할 수 있는 사람은 수백만, 칩 설계를 이해하는 사람도 수백만. 하지만 <em>반도체 설계를 위한 도메인 특화 AI 모델을 학습시킬 수 있는</em> 사람? 전 세계적으로 수백 명. 그것이 당신.</span>
+  </p>
+  <p>
+    <span class="en"><strong>The path is clear:</strong> ML fundamentals → fine-tuning → domain-specific training → big tech at $350-500K+ → then decide: stay comfortable or launch the startup with credibility, savings, and clean IP.</span>
+    <span class="ko"><strong>경로는 명확:</strong> ML 기초 → 파인튜닝 → 도메인 특화 학습 → 빅테크 $350-500K+ → 그 후 결정: 편안하게 머물거나, 신뢰성·저축·클린 IP로 스타트업 런칭.</span>
+  </p>
+  <p>
+    <span class="en"><strong>Start tomorrow:</strong> Open Karpathy's first video. Watch 30 minutes. That's all. The compound effect over 3 years will be massive. You've already proven with Fridgenie and SnapDigest that you can ship. Now learn the science behind the magic. 🚀</span>
+    <span class="ko"><strong>내일 시작:</strong> Karpathy의 첫 번째 영상을 열기. 30분 시청. 그게 전부. 3년 동안의 복리 효과는 엄청날 것. Fridgenie와 SnapDigest로 이미 만들 수 있음을 증명했음. 이제 마법 뒤의 과학을 배워라. 🚀</span>
+  </p>
+</div>
+
+</div><!-- end container -->
+
+<script>
+let isKorean = false;
+function toggleLang() {
+  isKorean = !isKorean;
+  document.querySelectorAll('.en').forEach(el => el.classList.toggle('hide', isKorean));
+  document.querySelectorAll('.ko').forEach(el => el.classList.toggle('show', isKorean));
+  document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+}
+</script>
+</body>
+</html>
