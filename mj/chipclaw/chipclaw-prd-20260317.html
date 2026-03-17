@@ -175,43 +175,46 @@
 
   /* Architecture */
   .arch-diagram {
-    background: var(--gray-900);
+    background: #fff;
     border-radius: var(--radius);
     padding: 40px 32px;
     margin: 24px 0;
-    box-shadow: var(--shadow-lg);
+    border: 1px solid var(--gray-200);
     position: relative;
-    overflow: hidden;
-  }
-  .arch-diagram::before {
-    content: 'MICROCHIP CORPORATE NETWORK';
-    position: absolute; top: 12px; right: 16px;
-    font-size: 10px; font-weight: 700; letter-spacing: 1.5px; color: #475569; text-transform: uppercase;
   }
   .arch-boundary {
-    border: 2px dashed #334155; border-radius: 16px; padding: 32px 24px 24px; position: relative;
+    border: 1.5px solid var(--gray-300);
+    border-radius: 12px;
+    padding: 36px 24px 24px;
+    position: relative;
+    background: var(--gray-50);
   }
   .arch-boundary::before {
-    content: attr(data-label); position: absolute; top: -10px; left: 20px;
-    background: var(--gray-900); padding: 0 10px;
-    font-size: 11px; font-weight: 700; letter-spacing: 1px; color: #64748b; text-transform: uppercase;
+    content: attr(data-label);
+    position: absolute; top: -10px; left: 20px;
+    background: var(--gray-50); padding: 0 10px;
+    font-size: 10px; font-weight: 700; letter-spacing: 1px; color: var(--gray-400); text-transform: uppercase;
   }
-  .arch-flow { display: flex; flex-direction: column; gap: 16px; align-items: center; }
-  .arch-row { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; width: 100%; }
-  .arch-node { border-radius: 10px; padding: 14px 20px; text-align: center; font-size: 13px; font-weight: 600; min-width: 140px; }
-  .arch-node.users { background: #1e3a5f; border: 1px solid #2563eb; color: #93c5fd; flex: 1; }
-  .arch-node.portal { background: #164e63; border: 1px solid #0891b2; color: #67e8f9; min-width: 100%; max-width: 520px; }
-  .arch-node.gateway { background: #14532d; border: 1px solid #059669; color: #6ee7b7; min-width: 100%; max-width: 520px; }
-  .arch-node.guardrails { background: #451a03; border: 1px solid #d97706; color: #fcd34d; min-width: 100%; max-width: 520px; }
-  .arch-node.llm { background: #3b0764; border: 1px solid #a855f7; color: #d8b4fe; min-width: 100%; max-width: 520px; }
-  .arch-node.tool { background: #1e293b; border: 1px solid #475569; color: #94a3b8; flex: 1; min-width: 120px; }
-  .arch-node.repo { background: #1c1917; border: 1px solid #78716c; color: #d6d3d1; min-width: 100%; max-width: 520px; }
-  .arch-node-label { font-size: 10px; font-weight: 400; color: inherit; opacity: 0.7; display: block; margin-top: 4px; }
-  .arch-node-sub { display: flex; gap: 8px; margin-top: 8px; justify-content: center; flex-wrap: wrap; }
-  .arch-node-sub span { background: rgba(255,255,255,0.1); padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: 500; }
-  .arch-arrow { display: flex; align-items: center; justify-content: center; color: #475569; height: 24px; }
-  .arch-arrow::before { content: '▼'; font-size: 10px; color: #475569; }
-  .arch-arrow-label { font-size: 10px; color: #64748b; text-align: center; margin-top: -2px; }
+  .arch-flow { display: flex; flex-direction: column; gap: 14px; align-items: center; }
+  .arch-row { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; width: 100%; }
+  .arch-node {
+    border-radius: 8px; padding: 12px 18px; text-align: center;
+    font-size: 13px; font-weight: 600; min-width: 140px;
+    background: #fff; border: 1px solid var(--gray-200); color: var(--gray-700);
+  }
+  .arch-node.users { border-left: 3px solid var(--accent); flex: 1; }
+  .arch-node.portal { border-left: 3px solid #0891b2; min-width: 100%; max-width: 540px; }
+  .arch-node.gateway { border-left: 3px solid var(--success); min-width: 100%; max-width: 540px; }
+  .arch-node.guardrails { border-left: 3px solid var(--warn); min-width: 100%; max-width: 540px; }
+  .arch-node.llm { border-left: 3px solid #7c3aed; min-width: 100%; max-width: 540px; }
+  .arch-node.tool { flex: 1; min-width: 110px; border-left: 3px solid var(--gray-300); }
+  .arch-node.repo { min-width: 100%; max-width: 540px; border-left: 3px solid var(--gray-400); background: var(--gray-50); }
+  .arch-node-label { font-size: 10px; font-weight: 400; color: var(--gray-400); display: block; margin-top: 4px; }
+  .arch-node-sub { display: flex; gap: 6px; margin-top: 8px; justify-content: center; flex-wrap: wrap; }
+  .arch-node-sub span { background: var(--gray-100); padding: 3px 9px; border-radius: 5px; font-size: 11px; font-weight: 500; color: var(--gray-600); }
+  .arch-arrow { display: flex; align-items: center; justify-content: center; height: 20px; }
+  .arch-arrow::before { content: '↓'; font-size: 14px; color: var(--gray-300); font-weight: 300; }
+  .arch-arrow-label { font-size: 10px; color: var(--gray-400); text-align: center; margin-top: -2px; }
 
   .table-wrap { overflow-x: auto; margin: 24px 0; border-radius: var(--radius); border: 1px solid var(--gray-200); }
   table { width: 100%; border-collapse: collapse; font-size: 14px; }
@@ -510,7 +513,7 @@
 
         <div class="arch-row">
           <div class="arch-node repo">
-            📦 Bitbucket: <code style="color:#d6d3d1; background:rgba(255,255,255,0.1);">microchip/chipclaw</code>
+            📦 Bitbucket: <code>microchip/chipclaw</code>
             <span class="arch-node-label"><span class="en">Version-locked fork · IT-audited · Controlled release cycle · Internal distribution</span><span class="ko">버전 고정 포크 · IT 감사 완료 · 통제된 릴리스 주기 · 내부 배포</span></span>
           </div>
         </div>
