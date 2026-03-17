@@ -1,0 +1,1269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ChipClaw — AI Engineering Assistant Platform | Project Proposal</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+
+  :root {
+    --primary: #0f172a;
+    --accent: #2563eb;
+    --accent-light: #3b82f6;
+    --accent-bg: #eff6ff;
+    --success: #059669;
+    --success-bg: #ecfdf5;
+    --warn: #d97706;
+    --warn-bg: #fffbeb;
+    --danger: #dc2626;
+    --gray-50: #f8fafc;
+    --gray-100: #f1f5f9;
+    --gray-200: #e2e8f0;
+    --gray-300: #cbd5e1;
+    --gray-400: #94a3b8;
+    --gray-500: #64748b;
+    --gray-600: #475569;
+    --gray-700: #334155;
+    --gray-800: #1e293b;
+    --gray-900: #0f172a;
+    --radius: 12px;
+    --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.06);
+    --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.08), 0 2px 4px -2px rgba(0,0,0,0.06);
+    --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.08), 0 4px 6px -4px rgba(0,0,0,0.06);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    color: var(--gray-800);
+    background: #fff;
+    line-height: 1.7;
+    font-size: 15px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Language toggle */
+  .lang-toggle {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+    background: var(--primary);
+    color: #fff;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: var(--shadow-md);
+  }
+  .lang-toggle:hover { background: var(--accent); }
+  .ko { display: none; }
+  .ko.show { display: inline !important; }
+  .en.hide { display: none !important; }
+  .ko-block { display: none; }
+  .ko-block.show { display: block !important; }
+  .en-block.hide { display: none !important; }
+
+  /* Cover page */
+  .cover {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 50%, #0f172a 100%);
+    color: #fff;
+    text-align: center;
+    padding: 60px 24px;
+    position: relative;
+    overflow: hidden;
+  }
+  .cover::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle at 30% 40%, rgba(37,99,235,0.15) 0%, transparent 50%),
+                radial-gradient(circle at 70% 60%, rgba(5,150,105,0.1) 0%, transparent 50%);
+    animation: float 20s ease-in-out infinite;
+  }
+  @keyframes float {
+    0%, 100% { transform: translate(0, 0); }
+    50% { transform: translate(-20px, -20px); }
+  }
+  .cover > * { position: relative; z-index: 1; }
+  .cover-badge {
+    display: inline-block;
+    background: rgba(37,99,235,0.2);
+    border: 1px solid rgba(37,99,235,0.3);
+    color: #93c5fd;
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 32px;
+  }
+  .cover h1 {
+    font-size: clamp(48px, 8vw, 80px);
+    font-weight: 800;
+    letter-spacing: -2px;
+    line-height: 1.1;
+    margin-bottom: 8px;
+  }
+  .cover h1 span { color: var(--accent-light); }
+  .cover-subtitle {
+    font-size: clamp(18px, 3vw, 24px);
+    font-weight: 300;
+    color: #94a3b8;
+    margin-bottom: 48px;
+    max-width: 600px;
+  }
+  .cover-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 32px;
+    justify-content: center;
+    font-size: 13px;
+    color: #94a3b8;
+  }
+  .cover-meta strong { color: #e2e8f0; font-weight: 600; }
+
+  /* Main content */
+  .content {
+    max-width: 880px;
+    margin: 0 auto;
+    padding: 80px 24px;
+  }
+
+  /* Section headers */
+  .section-num {
+    display: inline-block;
+    background: var(--accent);
+    color: #fff;
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    text-align: center;
+    line-height: 36px;
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 12px;
+  }
+  h2 {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: 8px;
+    letter-spacing: -0.5px;
+  }
+  h3 {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--gray-700);
+    margin: 32px 0 12px;
+  }
+  h4 {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--gray-700);
+    margin: 24px 0 8px;
+  }
+  .section-desc {
+    color: var(--gray-500);
+    font-size: 15px;
+    margin-bottom: 32px;
+  }
+  .divider {
+    height: 1px;
+    background: var(--gray-200);
+    margin: 64px 0;
+  }
+
+  p { margin-bottom: 16px; color: var(--gray-700); }
+  ul, ol { margin: 0 0 16px 20px; color: var(--gray-700); }
+  li { margin-bottom: 6px; }
+  strong { font-weight: 600; color: var(--gray-800); }
+
+  /* Cards */
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
+    margin: 24px 0;
+  }
+  .card {
+    background: var(--gray-50);
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius);
+    padding: 24px;
+    transition: all 0.2s;
+  }
+  .card:hover { box-shadow: var(--shadow-md); border-color: var(--gray-300); }
+  .card-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    margin-bottom: 14px;
+  }
+  .card-icon.blue { background: var(--accent-bg); }
+  .card-icon.green { background: var(--success-bg); }
+  .card-icon.amber { background: var(--warn-bg); }
+  .card-icon.purple { background: #f3e8ff; }
+  .card h4 { margin: 0 0 6px; font-size: 15px; }
+  .card p { font-size: 13px; color: var(--gray-500); margin: 0; }
+
+  /* Stat cards */
+  .stat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px;
+    margin: 24px 0;
+  }
+  .stat-card {
+    background: var(--gray-50);
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius);
+    padding: 20px;
+    text-align: center;
+  }
+  .stat-num {
+    font-size: 32px;
+    font-weight: 800;
+    color: var(--accent);
+    line-height: 1.2;
+  }
+  .stat-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--gray-500);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: 4px;
+  }
+
+  /* Architecture diagram */
+  .arch-box {
+    background: var(--gray-900);
+    color: #e2e8f0;
+    border-radius: var(--radius);
+    padding: 32px;
+    margin: 24px 0;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    line-height: 1.8;
+    overflow-x: auto;
+    box-shadow: var(--shadow-lg);
+  }
+  .arch-box .comment { color: #64748b; }
+  .arch-box .highlight { color: #60a5fa; }
+  .arch-box .green { color: #34d399; }
+  .arch-box .amber { color: #fbbf24; }
+  .arch-box .pink { color: #f472b6; }
+
+  /* Tables */
+  .table-wrap {
+    overflow-x: auto;
+    margin: 24px 0;
+    border-radius: var(--radius);
+    border: 1px solid var(--gray-200);
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+  }
+  th {
+    background: var(--gray-50);
+    font-weight: 600;
+    text-align: left;
+    padding: 12px 16px;
+    border-bottom: 2px solid var(--gray-200);
+    color: var(--gray-600);
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  td {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--gray-100);
+    color: var(--gray-700);
+  }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: var(--gray-50); }
+
+  /* Timeline */
+  .timeline {
+    position: relative;
+    padding-left: 32px;
+    margin: 24px 0;
+  }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 11px;
+    top: 8px;
+    bottom: 8px;
+    width: 2px;
+    background: var(--gray-200);
+  }
+  .timeline-item {
+    position: relative;
+    margin-bottom: 28px;
+  }
+  .timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -25px;
+    top: 8px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--accent);
+    border: 2px solid #fff;
+    box-shadow: 0 0 0 2px var(--accent);
+  }
+  .timeline-phase {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .timeline-title {
+    font-weight: 600;
+    color: var(--gray-800);
+    margin: 2px 0 4px;
+  }
+  .timeline-desc {
+    font-size: 13px;
+    color: var(--gray-500);
+  }
+
+  /* Callout */
+  .callout {
+    border-radius: var(--radius);
+    padding: 20px 24px;
+    margin: 24px 0;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+  }
+  .callout.info { background: var(--accent-bg); border: 1px solid #bfdbfe; }
+  .callout.success { background: var(--success-bg); border: 1px solid #a7f3d0; }
+  .callout.warn { background: var(--warn-bg); border: 1px solid #fde68a; }
+  .callout-icon { font-size: 20px; flex-shrink: 0; margin-top: 2px; }
+  .callout-text { font-size: 14px; color: var(--gray-700); }
+  .callout-text strong { display: block; margin-bottom: 4px; }
+
+  /* Tag */
+  .tag {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+  .tag.blue { background: var(--accent-bg); color: var(--accent); }
+  .tag.green { background: var(--success-bg); color: var(--success); }
+  .tag.amber { background: var(--warn-bg); color: var(--warn); }
+
+  /* Comparison */
+  .compare-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 24px 0;
+  }
+  .compare-col {
+    border-radius: var(--radius);
+    padding: 24px;
+    border: 1px solid var(--gray-200);
+  }
+  .compare-col.before { background: #fef2f2; border-color: #fecaca; }
+  .compare-col.after { background: #ecfdf5; border-color: #a7f3d0; }
+  .compare-col h4 { margin-top: 0; }
+  .compare-col ul { margin-bottom: 0; }
+
+  /* Footer */
+  .footer {
+    text-align: center;
+    padding: 48px 24px;
+    color: var(--gray-400);
+    font-size: 12px;
+    border-top: 1px solid var(--gray-100);
+  }
+
+  /* Print */
+  @media print {
+    .lang-toggle { display: none; }
+    .cover { min-height: auto; padding: 48px; page-break-after: always; }
+    .content { padding: 24px; }
+    .divider { page-break-before: always; margin: 24px 0; }
+  }
+
+  @media (max-width: 640px) {
+    .compare-grid { grid-template-columns: 1fr; }
+    .cover h1 { font-size: 36px; }
+    .content { padding: 40px 16px; }
+    .arch-box { padding: 16px; font-size: 11px; }
+  }
+</style>
+</head>
+<body>
+
+<button class="lang-toggle" onclick="toggleLang()">한국어</button>
+
+<!-- ==================== COVER ==================== -->
+<div class="cover">
+  <div class="cover-badge">
+    <span class="en">Project Proposal — Confidential</span>
+    <span class="ko">프로젝트 제안서 — 대외비</span>
+  </div>
+  <h1>Chip<span>Claw</span></h1>
+  <p class="cover-subtitle">
+    <span class="en">AI-Powered Engineering Assistant Platform for Semiconductor Validation &amp; Design Teams</span>
+    <span class="ko">반도체 검증 및 설계 팀을 위한 AI 기반 엔지니어링 어시스턴트 플랫폼</span>
+  </p>
+  <div class="cover-meta">
+    <div><strong>
+      <span class="en">Prepared by</span>
+      <span class="ko">작성자</span>
+    </strong><br>Minjun Kim<br>
+      <span class="en">Validation Engineer, Ethernet/Networking</span>
+      <span class="ko">검증 엔지니어, Ethernet/Networking</span>
+    </div>
+    <div><strong>
+      <span class="en">Organization</span>
+      <span class="ko">부서</span>
+    </strong><br>Microchip Technology Inc.<br>
+      <span class="en">Ethernet &amp; Networking Group</span>
+      <span class="ko">이더넷 &amp; 네트워킹 그룹</span>
+    </div>
+    <div><strong>
+      <span class="en">Date</span>
+      <span class="ko">날짜</span>
+    </strong><br>March 2026<br>
+      <span class="en">Version 1.0</span>
+      <span class="ko">버전 1.0</span>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== CONTENT ==================== -->
+<div class="content">
+
+  <!-- EXEC SUMMARY -->
+  <div class="section-num">1</div>
+  <h2>
+    <span class="en">Executive Summary</span>
+    <span class="ko">경영진 요약</span>
+  </h2>
+  <p class="section-desc">
+    <span class="en">A concise overview of the ChipClaw initiative and its strategic value.</span>
+    <span class="ko">ChipClaw 이니셔티브와 전략적 가치에 대한 간결한 개요.</span>
+  </p>
+
+  <p>
+    <span class="en"><strong>ChipClaw</strong> is a proposed self-hosted AI engineering assistant platform purpose-built for Microchip's Ethernet &amp; Networking validation and digital design teams. It combines <strong>OpenClaw</strong> (an open-source, multi-channel AI gateway) with <strong>NVIDIA NeMo Guardrails</strong> (an open-source AI safety toolkit) to deliver a secure, corporate-compliant, multi-user AI assistant that accelerates engineering workflows while keeping all proprietary data on-premises.</span>
+    <span class="ko"><strong>ChipClaw</strong>은 Microchip의 이더넷 &amp; 네트워킹 검증 및 디지털 설계 팀을 위해 구축된 자체 호스팅 AI 엔지니어링 어시스턴트 플랫폼입니다. <strong>OpenClaw</strong>(오픈소스 멀티채널 AI 게이트웨이)와 <strong>NVIDIA NeMo Guardrails</strong>(오픈소스 AI 안전 툴킷)을 결합하여 모든 독점 데이터를 사내에 유지하면서 엔지니어링 워크플로우를 가속화하는 안전하고 기업 규정 준수 가능한 멀티유저 AI 어시스턴트를 제공합니다.</span>
+  </p>
+
+  <div class="stat-grid">
+    <div class="stat-card">
+      <div class="stat-num">40%</div>
+      <div class="stat-label">
+        <span class="en">Estimated Time Savings</span>
+        <span class="ko">예상 시간 절감</span>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">$0</div>
+      <div class="stat-label">
+        <span class="en">Licensing Cost (OSS)</span>
+        <span class="ko">라이선스 비용 (오픈소스)</span>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">100%</div>
+      <div class="stat-label">
+        <span class="en">On-Premises Data Control</span>
+        <span class="ko">사내 데이터 통제</span>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">20+</div>
+      <div class="stat-label">
+        <span class="en">Concurrent Engineers</span>
+        <span class="ko">동시 사용 엔지니어</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- PROBLEM -->
+  <div class="section-num">2</div>
+  <h2>
+    <span class="en">Problem Statement</span>
+    <span class="ko">문제 정의</span>
+  </h2>
+  <p class="section-desc">
+    <span class="en">The engineering challenges ChipClaw addresses.</span>
+    <span class="ko">ChipClaw이 해결하는 엔지니어링 과제.</span>
+  </p>
+
+  <div class="compare-grid">
+    <div class="compare-col before">
+      <h4>❌ <span class="en">Current State</span><span class="ko">현재 상태</span></h4>
+      <ul>
+        <li><span class="en">Engineers manually search Jira/Confluence for test results, regression data, and debug history</span><span class="ko">엔지니어가 테스트 결과, 회귀 데이터, 디버그 이력을 Jira/Confluence에서 수동으로 검색</span></li>
+        <li><span class="en">Repetitive scripting for test automation, waveform analysis, and log parsing</span><span class="ko">테스트 자동화, 파형 분석, 로그 파싱에 대한 반복적인 스크립팅</span></li>
+        <li><span class="en">Knowledge silos — tribal knowledge leaves when people leave</span><span class="ko">지식 사일로 — 사람이 떠나면 암묵적 지식도 사라짐</span></li>
+        <li><span class="en">Using personal ChatGPT/Claude with risk of proprietary data leakage</span><span class="ko">개인 ChatGPT/Claude 사용으로 독점 데이터 유출 위험</span></li>
+        <li><span class="en">No standardized AI tooling approved by IT/Security</span><span class="ko">IT/보안팀이 승인한 표준화된 AI 도구 부재</span></li>
+      </ul>
+    </div>
+    <div class="compare-col after">
+      <h4>✅ <span class="en">With ChipClaw</span><span class="ko">ChipClaw 도입 후</span></h4>
+      <ul>
+        <li><span class="en">AI-powered search across Jira, Confluence, and internal wikis via natural language</span><span class="ko">자연어를 통한 Jira, Confluence, 사내 위키 AI 검색</span></li>
+        <li><span class="en">Auto-generated scripts, report summaries, and debug assistance</span><span class="ko">자동 생성 스크립트, 보고서 요약, 디버그 지원</span></li>
+        <li><span class="en">Persistent team knowledge base that grows with every interaction</span><span class="ko">모든 상호작용에서 성장하는 지속적 팀 지식 베이스</span></li>
+        <li><span class="en">100% on-premises — zero data leaves the corporate network</span><span class="ko">100% 사내 운영 — 기업 네트워크 외부로 데이터 유출 없음</span></li>
+        <li><span class="en">NVIDIA-backed guardrails enforce IP protection and compliance</span><span class="ko">NVIDIA 지원 가드레일로 IP 보호 및 규정 준수 강화</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- SOLUTION -->
+  <div class="section-num">3</div>
+  <h2>
+    <span class="en">Proposed Solution</span>
+    <span class="ko">제안 솔루션</span>
+  </h2>
+  <p class="section-desc">
+    <span class="en">Three open-source pillars forming ChipClaw.</span>
+    <span class="ko">ChipClaw을 구성하는 세 가지 오픈소스 축.</span>
+  </p>
+
+  <div class="card-grid">
+    <div class="card">
+      <div class="card-icon blue">🦞</div>
+      <h4>OpenClaw</h4>
+      <p>
+        <span class="en">Self-hosted AI gateway. Multi-agent routing, session isolation, tool use, sandboxed execution. Connects to Slack, Teams, or any internal chat. Apache-like license, fully auditable.</span>
+        <span class="ko">자체 호스팅 AI 게이트웨이. 멀티 에이전트 라우팅, 세션 격리, 도구 사용, 샌드박스 실행. Slack, Teams 등 내부 채팅 연결. Apache 유사 라이선스, 전체 감사 가능.</span>
+      </p>
+    </div>
+    <div class="card">
+      <div class="card-icon green">🛡️</div>
+      <h4>NeMo Guardrails</h4>
+      <p>
+        <span class="en">NVIDIA's open-source AI safety toolkit (Apache 2.0). Programmable output filtering, topic boundaries, jailbreak prevention. Ensures AI stays within approved engineering scope.</span>
+        <span class="ko">NVIDIA의 오픈소스 AI 안전 툴킷 (Apache 2.0). 프로그래밍 가능한 출력 필터링, 주제 경계, 탈옥 방지. AI가 승인된 엔지니어링 범위 내에서 동작하도록 보장.</span>
+      </p>
+    </div>
+    <div class="card">
+      <div class="card-icon amber">🧠</div>
+      <h4>
+        <span class="en">Local LLM (Optional)</span>
+        <span class="ko">로컬 LLM (선택)</span>
+      </h4>
+      <p>
+        <span class="en">Run models fully on-premises via Ollama or LM Studio. Zero cloud dependency for maximum data sovereignty. Hybrid mode available for cost optimization.</span>
+        <span class="ko">Ollama 또는 LM Studio를 통해 완전 사내 모델 운영. 최대 데이터 주권을 위한 제로 클라우드 의존성. 비용 최적화를 위한 하이브리드 모드 가능.</span>
+      </p>
+    </div>
+  </div>
+
+  <div class="callout info">
+    <div class="callout-icon">💡</div>
+    <div class="callout-text">
+      <strong>
+        <span class="en">Why Open Source Matters</span>
+        <span class="ko">오픈소스가 중요한 이유</span>
+      </strong>
+      <span class="en">All three components are open-source and free to use. Microchip's security team can audit every line of code. No vendor lock-in, no per-seat licensing, no recurring SaaS fees. Total cost of ownership is limited to infrastructure and optional API usage.</span>
+      <span class="ko">세 가지 구성 요소 모두 오픈소스이며 무료로 사용 가능합니다. Microchip 보안팀이 모든 코드를 감사할 수 있습니다. 벤더 종속 없음, 사용자당 라이선스 없음, 반복 SaaS 비용 없음. 총 소유 비용은 인프라 및 선택적 API 사용에 한정됩니다.</span>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ARCHITECTURE -->
+  <div class="section-num">4</div>
+  <h2>
+    <span class="en">System Architecture</span>
+    <span class="ko">시스템 아키텍처</span>
+  </h2>
+  <p class="section-desc">
+    <span class="en">How ChipClaw components interact within the corporate network.</span>
+    <span class="ko">기업 네트워크 내에서 ChipClaw 구성 요소가 상호작용하는 방식.</span>
+  </p>
+
+  <div class="arch-box">
+<span class="comment">┌─────────────────────────────────────────────────────────────┐</span>
+<span class="comment">│              MICROCHIP CORPORATE NETWORK                     │</span>
+<span class="comment">│                                                              │</span>
+<span class="comment">│  ┌─────────────┐    ┌──────────────────────────────────┐    │</span>
+<span class="comment">│  │</span> <span class="highlight">  Engineers   </span><span class="comment">│    │</span> <span class="green">    ChipClaw Server (VM)          </span><span class="comment">│    │</span>
+<span class="comment">│  │</span>              <span class="comment">│    │                                  │    │</span>
+<span class="comment">│  │</span>  <span class="highlight">Slack/Teams</span> <span class="comment">│───▶│  ┌────────────────────────────┐  │    │</span>
+<span class="comment">│  │</span>  <span class="highlight">  Clients</span>   <span class="comment">│    │  │</span> <span class="green"> OpenClaw Gateway           </span><span class="comment">│  │    │</span>
+<span class="comment">│  │</span>              <span class="comment">│    │  │  ├─ Agent: Validation</span>      <span class="comment">│  │    │</span>
+<span class="comment">│  └─────────────┘    │  │  ├─ Agent: Design</span>           <span class="comment">│  │    │</span>
+<span class="comment">│                      │  │  └─ Agent: DevOps</span>           <span class="comment">│  │    │</span>
+<span class="comment">│                      │  └─────────┬──────────────────┘  │    │</span>
+<span class="comment">│                      │            │                      │    │</span>
+<span class="comment">│                      │  ┌─────────▼──────────────────┐  │    │</span>
+<span class="comment">│                      │  │</span> <span class="amber"> NeMo Guardrails Layer      </span><span class="comment">│  │    │</span>
+<span class="comment">│                      │  │  ├─ IP leakage prevention</span>  <span class="comment">│  │    │</span>
+<span class="comment">│                      │  │  ├─ Topic boundaries</span>       <span class="comment">│  │    │</span>
+<span class="comment">│                      │  │  └─ Output compliance</span>       <span class="comment">│  │    │</span>
+<span class="comment">│                      │  └─────────┬──────────────────┘  │    │</span>
+<span class="comment">│                      │            │                      │    │</span>
+<span class="comment">│                      │  ┌─────────▼──────────────────┐  │    │</span>
+<span class="comment">│                      │  │</span> <span class="pink"> LLM Engine                 </span><span class="comment">│  │    │</span>
+<span class="comment">│                      │  │  Option A: Local (Ollama)   │  │    │</span>
+<span class="comment">│                      │  │  Option B: Hybrid (API+Local)│  │    │</span>
+<span class="comment">│                      │  │  Option C: Cloud API Only</span>   <span class="comment">│  │    │</span>
+<span class="comment">│                      │  └────────────────────────────┘  │    │</span>
+<span class="comment">│                      └──────────────────────────────────┘    │</span>
+<span class="comment">│                                                              │</span>
+<span class="comment">│  ┌────────────┐  ┌────────────┐  ┌─────────────────────┐    │</span>
+<span class="comment">│  │</span> <span class="highlight">Jira/Conflu.</span><span class="comment">│  │</span> <span class="highlight">Git Repos</span>   <span class="comment">│  │</span> <span class="highlight">Internal Wikis/Docs</span> <span class="comment">│    │</span>
+<span class="comment">│  └────────────┘  └────────────┘  └─────────────────────┘    │</span>
+<span class="comment">└─────────────────────────────────────────────────────────────┘</span>
+  </div>
+
+  <h3>
+    <span class="en">Multi-Agent Design</span>
+    <span class="ko">멀티 에이전트 설계</span>
+  </h3>
+  <p>
+    <span class="en">OpenClaw's native multi-agent routing allows us to deploy <strong>specialized agents per team function</strong>. Each agent has isolated workspaces, sessions, and tool access — so the Validation agent never sees Design's files and vice versa.</span>
+    <span class="ko">OpenClaw의 네이티브 멀티 에이전트 라우팅을 통해 <strong>팀 기능별 전문 에이전트</strong>를 배포할 수 있습니다. 각 에이전트는 격리된 워크스페이스, 세션, 도구 접근 권한을 가지므로 검증 에이전트는 설계 파일을 볼 수 없고 그 반대도 마찬가지입니다.</span>
+  </p>
+
+  <div class="card-grid">
+    <div class="card">
+      <div class="card-icon blue">🔬</div>
+      <h4>
+        <span class="en">Validation Agent</span>
+        <span class="ko">검증 에이전트</span>
+      </h4>
+      <p>
+        <span class="en">Test automation scripts, regression analysis, Jira ticket management, debug log parsing, compliance report generation</span>
+        <span class="ko">테스트 자동화 스크립트, 회귀 분석, Jira 티켓 관리, 디버그 로그 파싱, 규정 준수 보고서 생성</span>
+      </p>
+    </div>
+    <div class="card">
+      <div class="card-icon purple">⚡</div>
+      <h4>
+        <span class="en">Design Agent</span>
+        <span class="ko">설계 에이전트</span>
+      </h4>
+      <p>
+        <span class="en">RTL code review, timing analysis, synthesis report summaries, design documentation, spec interpretation</span>
+        <span class="ko">RTL 코드 리뷰, 타이밍 분석, 합성 보고서 요약, 설계 문서화, 스펙 해석</span>
+      </p>
+    </div>
+    <div class="card">
+      <div class="card-icon green">🔧</div>
+      <h4>
+        <span class="en">DevOps Agent</span>
+        <span class="ko">DevOps 에이전트</span>
+      </h4>
+      <p>
+        <span class="en">CI/CD pipeline management, build system troubleshooting, environment setup, tool chain configuration</span>
+        <span class="ko">CI/CD 파이프라인 관리, 빌드 시스템 문제 해결, 환경 설정, 툴체인 구성</span>
+      </p>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- SECURITY -->
+  <div class="section-num">5</div>
+  <h2>
+    <span class="en">Security Framework</span>
+    <span class="ko">보안 프레임워크</span>
+  </h2>
+  <p class="section-desc">
+    <span class="en">Defense-in-depth: four layers protecting corporate IP.</span>
+    <span class="ko">심층 방어: 기업 IP를 보호하는 네 가지 계층.</span>
+  </p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th><span class="en">Layer</span><span class="ko">계층</span></th>
+          <th><span class="en">Technology</span><span class="ko">기술</span></th>
+          <th><span class="en">Protection</span><span class="ko">보호 기능</span></th>
+          <th><span class="en">License</span><span class="ko">라이선스</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="tag blue"><span class="en">AI Output</span><span class="ko">AI 출력</span></span></td>
+          <td>NeMo Guardrails</td>
+          <td><span class="en">Topic rails, PII/IP filtering, jailbreak prevention, output compliance</span><span class="ko">주제 레일, PII/IP 필터링, 탈옥 방지, 출력 규정 준수</span></td>
+          <td>Apache 2.0</td>
+        </tr>
+        <tr>
+          <td><span class="tag green"><span class="en">Execution</span><span class="ko">실행</span></span></td>
+          <td>OpenClaw Sandbox</td>
+          <td><span class="en">File system isolation, command allowlists, agent workspace boundaries</span><span class="ko">파일 시스템 격리, 명령어 허용 목록, 에이전트 워크스페이스 경계</span></td>
+          <td>Open Source</td>
+        </tr>
+        <tr>
+          <td><span class="tag amber"><span class="en">Data Privacy</span><span class="ko">데이터 프라이버시</span></span></td>
+          <td>
+            <span class="en">Local LLM / VPN-Only API</span>
+            <span class="ko">로컬 LLM / VPN 전용 API</span>
+          </td>
+          <td><span class="en">Zero external data transmission, or encrypted API calls through corporate VPN only</span><span class="ko">외부 데이터 전송 없음, 또는 기업 VPN을 통한 암호화된 API 호출만</span></td>
+          <td>N/A</td>
+        </tr>
+        <tr>
+          <td><span class="tag blue"><span class="en">Access Control</span><span class="ko">접근 제어</span></span></td>
+          <td>
+            <span class="en">Multi-Agent Routing</span>
+            <span class="ko">멀티 에이전트 라우팅</span>
+          </td>
+          <td><span class="en">Per-team agent isolation, channel-based access, session-level data separation</span><span class="ko">팀별 에이전트 격리, 채널 기반 접근, 세션 수준 데이터 분리</span></td>
+          <td>Open Source</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout warn">
+    <div class="callout-icon">⚠️</div>
+    <div class="callout-text">
+      <strong>
+        <span class="en">NeMo Guardrails — Custom Rails for Microchip</span>
+        <span class="ko">NeMo Guardrails — Microchip 맞춤 레일</span>
+      </strong>
+      <span class="en">We will define custom Colang rules specific to our domain: block any output containing chip register maps, proprietary protocol details, or customer names. Rails are version-controlled and auditable by the security team.</span>
+      <span class="ko">우리 도메인에 특화된 맞춤 Colang 규칙을 정의합니다: 칩 레지스터 맵, 독점 프로토콜 세부 정보, 고객 이름이 포함된 출력을 차단합니다. 레일은 버전 관리되며 보안팀이 감사할 수 있습니다.</span>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- USE CASES -->
+  <div class="section-num">6</div>
+  <h2>
+    <span class="en">Key Use Cases</span>
+    <span class="ko">주요 활용 사례</span>
+  </h2>
+  <p class="section-desc">
+    <span class="en">Immediate value for the engineering team.</span>
+    <span class="ko">엔지니어링 팀을 위한 즉각적 가치.</span>
+  </p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th><span class="en">Use Case</span><span class="ko">활용 사례</span></th>
+          <th><span class="en">Today</span><span class="ko">현재</span></th>
+          <th><span class="en">With ChipClaw</span><span class="ko">ChipClaw 도입 후</span></th>
+          <th><span class="en">Time Saved</span><span class="ko">절감 시간</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong><span class="en">Debug Log Analysis</span><span class="ko">디버그 로그 분석</span></strong></td>
+          <td><span class="en">Manual grep + spreadsheet, 2-4 hrs</span><span class="ko">수동 grep + 스프레드시트, 2-4시간</span></td>
+          <td><span class="en">"Analyze this log for PHY link failures" → instant summary</span><span class="ko">"이 로그에서 PHY 링크 실패 분석해줘" → 즉시 요약</span></td>
+          <td>~70%</td>
+        </tr>
+        <tr>
+          <td><strong><span class="en">Test Script Generation</span><span class="ko">테스트 스크립트 생성</span></strong></td>
+          <td><span class="en">Write from scratch or copy-paste, 1-2 hrs</span><span class="ko">처음부터 작성 또는 복붙, 1-2시간</span></td>
+          <td><span class="en">"Generate T1 compliance test for 100BASE-T1" → working script</span><span class="ko">"100BASE-T1 규정 준수 테스트 생성해줘" → 작동하는 스크립트</span></td>
+          <td>~60%</td>
+        </tr>
+        <tr>
+          <td><strong><span class="en">Jira/Confluence Search</span><span class="ko">Jira/Confluence 검색</span></strong></td>
+          <td><span class="en">JQL queries + manual browsing, 30-60 min</span><span class="ko">JQL 쿼리 + 수동 브라우징, 30-60분</span></td>
+          <td><span class="en">"What were the regression failures on Switch v2.3?" → linked results</span><span class="ko">"Switch v2.3 회귀 실패 내역은?" → 링크된 결과</span></td>
+          <td>~80%</td>
+        </tr>
+        <tr>
+          <td><strong><span class="en">Report Writing</span><span class="ko">보고서 작성</span></strong></td>
+          <td><span class="en">Manual drafting + formatting, 2-3 hrs</span><span class="ko">수동 작성 + 포맷팅, 2-3시간</span></td>
+          <td><span class="en">"Draft validation summary for PHY tape-out review" → formatted report</span><span class="ko">"PHY 테이프아웃 리뷰용 검증 요약 작성해줘" → 포맷된 보고서</span></td>
+          <td>~50%</td>
+        </tr>
+        <tr>
+          <td><strong><span class="en">Onboarding New Engineers</span><span class="ko">신규 엔지니어 온보딩</span></strong></td>
+          <td><span class="en">Senior engineer mentoring, weeks</span><span class="ko">선배 엔지니어 멘토링, 수 주</span></td>
+          <td><span class="en">"Explain our 1000BASE-T1 validation flow" → step-by-step with links</span><span class="ko">"1000BASE-T1 검증 플로우 설명해줘" → 링크 포함 단계별 설명</span></td>
+          <td>~40%</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- DEPLOYMENT OPTIONS -->
+  <div class="section-num">7</div>
+  <h2>
+    <span class="en">Deployment Options</span>
+    <span class="ko">배포 옵션</span>
+  </h2>
+  <p class="section-desc">
+    <span class="en">Flexible options from minimal to full-scale.</span>
+    <span class="ko">최소 규모에서 전체 규모까지 유연한 옵션.</span>
+  </p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th></th>
+          <th><span class="en">Option A: Cloud API</span><span class="ko">옵션 A: 클라우드 API</span></th>
+          <th><span class="en">Option B: Hybrid</span><span class="ko">옵션 B: 하이브리드</span></th>
+          <th><span class="en">Option C: Fully Local</span><span class="ko">옵션 C: 완전 로컬</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>LLM</strong></td>
+          <td>Claude / GPT API</td>
+          <td>
+            <span class="en">Local primary + API fallback</span>
+            <span class="ko">로컬 주력 + API 폴백</span>
+          </td>
+          <td>
+            <span class="en">Ollama / LM Studio only</span>
+            <span class="ko">Ollama / LM Studio 전용</span>
+          </td>
+        </tr>
+        <tr>
+          <td><strong><span class="en">Hardware</span><span class="ko">하드웨어</span></strong></td>
+          <td>
+            <span class="en">Any VM (4 core, 16GB)</span>
+            <span class="ko">모든 VM (4코어, 16GB)</span>
+          </td>
+          <td>
+            <span class="en">GPU server + VM</span>
+            <span class="ko">GPU 서버 + VM</span>
+          </td>
+          <td>
+            <span class="en">High-end GPU server (≥80GB VRAM)</span>
+            <span class="ko">고성능 GPU 서버 (≥80GB VRAM)</span>
+          </td>
+        </tr>
+        <tr>
+          <td><strong><span class="en">Monthly Cost</span><span class="ko">월 비용</span></strong></td>
+          <td>$100–400</td>
+          <td>$50–150 + <span class="en">hardware</span><span class="ko">하드웨어</span></td>
+          <td>
+            <span class="en">Hardware only (~$15-30K upfront)</span>
+            <span class="ko">하드웨어만 (~$15-30K 초기)</span>
+          </td>
+        </tr>
+        <tr>
+          <td><strong><span class="en">Data Privacy</span><span class="ko">데이터 프라이버시</span></strong></td>
+          <td>
+            <span class="en">⚠️ API calls leave network</span>
+            <span class="ko">⚠️ API 호출이 네트워크 외부로</span>
+          </td>
+          <td>
+            <span class="en">✅ Sensitive = local only</span>
+            <span class="ko">✅ 민감 데이터 = 로컬만</span>
+          </td>
+          <td>
+            <span class="en">✅ 100% air-gapped capable</span>
+            <span class="ko">✅ 100% 에어갭 가능</span>
+          </td>
+        </tr>
+        <tr>
+          <td><strong><span class="en">Quality</span><span class="ko">품질</span></strong></td>
+          <td>⭐⭐⭐⭐⭐</td>
+          <td>⭐⭐⭐⭐</td>
+          <td>⭐⭐⭐</td>
+        </tr>
+        <tr>
+          <td><strong><span class="en">Recommended For</span><span class="ko">추천 대상</span></strong></td>
+          <td>
+            <span class="en">Fast pilot, non-sensitive tasks</span>
+            <span class="ko">빠른 파일럿, 비민감 작업</span>
+          </td>
+          <td>
+            <span class="en">✅ Best balance (recommended)</span>
+            <span class="ko">✅ 최적 균형 (추천)</span>
+          </td>
+          <td>
+            <span class="en">Max security, budget available</span>
+            <span class="ko">최대 보안, 예산 확보 시</span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout success">
+    <div class="callout-icon">✅</div>
+    <div class="callout-text">
+      <strong>
+        <span class="en">Recommendation: Start with Option A, migrate to Option B</span>
+        <span class="ko">추천: 옵션 A로 시작, 옵션 B로 전환</span>
+      </strong>
+      <span class="en">Begin with cloud API behind corporate VPN for fastest time-to-value. As the team validates ROI, invest in a GPU server for local inference on sensitive workloads. OpenClaw's hybrid model config makes this migration seamless — just add a local provider and set fallback priorities.</span>
+      <span class="ko">가장 빠른 가치 실현을 위해 기업 VPN 뒤의 클라우드 API로 시작합니다. 팀이 ROI를 검증하면, 민감한 워크로드를 위한 로컬 추론용 GPU 서버에 투자합니다. OpenClaw의 하이브리드 모델 구성으로 이 마이그레이션이 원활하게 이루어집니다 — 로컬 프로바이더를 추가하고 폴백 우선순위를 설정하기만 하면 됩니다.</span>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- REQUIREMENTS -->
+  <div class="section-num">8</div>
+  <h2>
+    <span class="en">Technical Requirements</span>
+    <span class="ko">기술 요구사항</span>
+  </h2>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th><span class="en">Component</span><span class="ko">구성 요소</span></th>
+          <th><span class="en">Requirement</span><span class="ko">요구사항</span></th>
+          <th><span class="en">Notes</span><span class="ko">비고</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong><span class="en">Server OS</span><span class="ko">서버 OS</span></strong></td>
+          <td>Linux (Ubuntu 22.04+ / RHEL 8+) <span class="en">or macOS</span><span class="ko">또는 macOS</span></td>
+          <td><span class="en">Windows supported via WSL2</span><span class="ko">Windows는 WSL2로 지원</span></td>
+        </tr>
+        <tr>
+          <td><strong>Node.js</strong></td>
+          <td>v24 (<span class="en">recommended</span><span class="ko">추천</span>) / v22 LTS</td>
+          <td><span class="en">Single dependency for OpenClaw</span><span class="ko">OpenClaw의 유일한 의존성</span></td>
+        </tr>
+        <tr>
+          <td><strong>Python</strong></td>
+          <td>3.10–3.13</td>
+          <td><span class="en">Required for NeMo Guardrails</span><span class="ko">NeMo Guardrails에 필요</span></td>
+        </tr>
+        <tr>
+          <td><strong><span class="en">RAM (Gateway only)</span><span class="ko">RAM (게이트웨이만)</span></strong></td>
+          <td>16 GB+</td>
+          <td><span class="en">Handles 20+ concurrent sessions</span><span class="ko">20+ 동시 세션 처리</span></td>
+        </tr>
+        <tr>
+          <td><strong><span class="en">RAM (with local LLM)</span><span class="ko">RAM (로컬 LLM 포함)</span></strong></td>
+          <td>64–128 GB</td>
+          <td><span class="en">Depends on model size</span><span class="ko">모델 크기에 따라 다름</span></td>
+        </tr>
+        <tr>
+          <td><strong>GPU (<span class="en">for local LLM</span><span class="ko">로컬 LLM용</span>)</strong></td>
+          <td>≥80 GB VRAM (A100/H100)</td>
+          <td><span class="en">Or 2× Mac Studio with M4 Ultra</span><span class="ko">또는 M4 Ultra Mac Studio 2대</span></td>
+        </tr>
+        <tr>
+          <td><strong><span class="en">Network</span><span class="ko">네트워크</span></strong></td>
+          <td><span class="en">Internal network access only</span><span class="ko">내부 네트워크 접근만</span></td>
+          <td><span class="en">+ Outbound HTTPS for API (Option A/B)</span><span class="ko">+ API용 아웃바운드 HTTPS (옵션 A/B)</span></td>
+        </tr>
+        <tr>
+          <td><strong><span class="en">Chat Integration</span><span class="ko">채팅 연동</span></strong></td>
+          <td>Slack / MS Teams / Mattermost</td>
+          <td><span class="en">Bot token from IT</span><span class="ko">IT로부터 봇 토큰</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- IMPLEMENTATION -->
+  <div class="section-num">9</div>
+  <h2>
+    <span class="en">Implementation Roadmap</span>
+    <span class="ko">구현 로드맵</span>
+  </h2>
+  <p class="section-desc">
+    <span class="en">Phased rollout minimizing risk and maximizing learning.</span>
+    <span class="ko">위험을 최소화하고 학습을 극대화하는 단계적 롤아웃.</span>
+  </p>
+
+  <div class="timeline">
+    <div class="timeline-item">
+      <div class="timeline-phase">
+        <span class="en">Phase 1 — Weeks 1-2</span>
+        <span class="ko">1단계 — 1-2주차</span>
+      </div>
+      <div class="timeline-title">
+        <span class="en">Proof of Concept (Single User)</span>
+        <span class="ko">개념 증명 (단일 사용자)</span>
+      </div>
+      <div class="timeline-desc">
+        <span class="en">Install OpenClaw on a corporate VM. Configure with cloud API (Anthropic/OpenAI). Set up NeMo Guardrails with basic IP protection rails. Single engineer testing with Slack integration. Validate security with IT team review.</span>
+        <span class="ko">기업 VM에 OpenClaw 설치. 클라우드 API (Anthropic/OpenAI) 구성. 기본 IP 보호 레일이 포함된 NeMo Guardrails 설정. Slack 연동으로 단일 엔지니어 테스트. IT 팀 리뷰로 보안 검증.</span>
+      </div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-phase">
+        <span class="en">Phase 2 — Weeks 3-4</span>
+        <span class="ko">2단계 — 3-4주차</span>
+      </div>
+      <div class="timeline-title">
+        <span class="en">Team Pilot (5-10 Engineers)</span>
+        <span class="ko">팀 파일럿 (5-10명 엔지니어)</span>
+      </div>
+      <div class="timeline-desc">
+        <span class="en">Deploy multi-agent routing (Validation + Design agents). Onboard pilot group from Ethernet team. Build custom skills for Jira/Confluence integration. Refine NeMo guardrail rules based on real usage. Collect feedback and measure time savings.</span>
+        <span class="ko">멀티 에이전트 라우팅 배포 (검증 + 설계 에이전트). 이더넷 팀에서 파일럿 그룹 온보딩. Jira/Confluence 연동을 위한 맞춤 스킬 구축. 실제 사용 기반으로 NeMo 가드레일 규칙 개선. 피드백 수집 및 시간 절감 측정.</span>
+      </div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-phase">
+        <span class="en">Phase 3 — Weeks 5-8</span>
+        <span class="ko">3단계 — 5-8주차</span>
+      </div>
+      <div class="timeline-title">
+        <span class="en">Full Deployment (20+ Engineers)</span>
+        <span class="ko">전체 배포 (20+ 엔지니어)</span>
+      </div>
+      <div class="timeline-desc">
+        <span class="en">Scale to full Ethernet/Networking group. Add specialized agents per sub-team. Evaluate local LLM for hybrid deployment (Option B). Establish monitoring, usage tracking, and governance policies. Cross-team knowledge base accumulation.</span>
+        <span class="ko">전체 이더넷/네트워킹 그룹으로 확장. 하위 팀별 전문 에이전트 추가. 하이브리드 배포(옵션 B)를 위한 로컬 LLM 평가. 모니터링, 사용 추적, 거버넌스 정책 수립. 교차 팀 지식 베이스 축적.</span>
+      </div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-phase">
+        <span class="en">Phase 4 — Months 3-6</span>
+        <span class="ko">4단계 — 3-6개월</span>
+      </div>
+      <div class="timeline-title">
+        <span class="en">Enterprise Expansion</span>
+        <span class="ko">엔터프라이즈 확장</span>
+      </div>
+      <div class="timeline-desc">
+        <span class="en">Extend to other business units (USB, WiFi, etc.). Deploy on-premises GPU infrastructure for full data sovereignty. Build org-wide skill library. Publish internal case study for executive review.</span>
+        <span class="ko">다른 사업부(USB, WiFi 등)로 확장. 전체 데이터 주권을 위한 사내 GPU 인프라 배포. 조직 전체 스킬 라이브러리 구축. 경영진 리뷰를 위한 내부 사례 연구 발표.</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ROI -->
+  <div class="section-num">10</div>
+  <h2>
+    <span class="en">Return on Investment</span>
+    <span class="ko">투자 수익률</span>
+  </h2>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th><span class="en">Metric</span><span class="ko">지표</span></th>
+          <th><span class="en">Conservative Est.</span><span class="ko">보수적 추정</span></th>
+          <th><span class="en">Basis</span><span class="ko">근거</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong><span class="en">Engineer hours saved / week</span><span class="ko">엔지니어 절감 시간 / 주</span></strong></td>
+          <td>4–8 hrs / person</td>
+          <td><span class="en">Log analysis, scripting, search, reporting</span><span class="ko">로그 분석, 스크립팅, 검색, 보고</span></td>
+        </tr>
+        <tr>
+          <td><strong><span class="en">Team of 20 engineers</span><span class="ko">20명 엔지니어 팀</span></strong></td>
+          <td>80–160 hrs / week</td>
+          <td><span class="en">= 2–4 FTE equivalent</span><span class="ko">= 2-4 FTE 상당</span></td>
+        </tr>
+        <tr>
+          <td><strong><span class="en">Annual labor value</span><span class="ko">연간 인건비 가치</span></strong></td>
+          <td>$200K–$500K</td>
+          <td><span class="en">At avg $120K/yr engineer salary</span><span class="ko">평균 연봉 $120K 기준</span></td>
+        </tr>
+        <tr>
+          <td><strong><span class="en">Platform cost (Year 1)</span><span class="ko">플랫폼 비용 (1년차)</span></strong></td>
+          <td>$5K–$10K</td>
+          <td><span class="en">API usage + VM + engineer setup time</span><span class="ko">API 사용 + VM + 엔지니어 설정 시간</span></td>
+        </tr>
+        <tr>
+          <td><strong>ROI</strong></td>
+          <td>20×–50×</td>
+          <td><span class="en">Conservative first-year estimate</span><span class="ko">보수적 1년차 추정</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout info">
+    <div class="callout-icon">📊</div>
+    <div class="callout-text">
+      <strong>
+        <span class="en">Beyond Time Savings</span>
+        <span class="ko">시간 절감 그 이상</span>
+      </strong>
+      <span class="en">Additional unquantified benefits include: faster new-hire ramp-up, reduced knowledge loss from attrition, fewer escaped defects (AI-assisted review), and improved documentation quality across the org.</span>
+      <span class="ko">추가 정량화되지 않은 이점: 신규 입사자 적응 시간 단축, 이직으로 인한 지식 손실 감소, 탈출 결함 감소 (AI 지원 리뷰), 조직 전체 문서 품질 향상.</span>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- RISKS -->
+  <div class="section-num">11</div>
+  <h2>
+    <span class="en">Risks &amp; Mitigations</span>
+    <span class="ko">위험 요소 및 완화 방안</span>
+  </h2>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th><span class="en">Risk</span><span class="ko">위험</span></th>
+          <th><span class="en">Impact</span><span class="ko">영향</span></th>
+          <th><span class="en">Mitigation</span><span class="ko">완화 방안</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="en">IP leakage via AI output</span><span class="ko">AI 출력을 통한 IP 유출</span></td>
+          <td><span class="tag amber">High</span></td>
+          <td><span class="en">NeMo Guardrails with custom Colang rules; local LLM option eliminates cloud risk entirely</span><span class="ko">맞춤 Colang 규칙이 포함된 NeMo Guardrails; 로컬 LLM 옵션으로 클라우드 위험 완전 제거</span></td>
+        </tr>
+        <tr>
+          <td><span class="en">IT/Security approval delays</span><span class="ko">IT/보안 승인 지연</span></td>
+          <td><span class="tag amber">Medium</span></td>
+          <td><span class="en">Open source = full audit capability; start PoC on isolated VM; involve IT from Phase 1</span><span class="ko">오픈소스 = 전체 감사 가능; 격리된 VM에서 PoC 시작; 1단계부터 IT 참여</span></td>
+        </tr>
+        <tr>
+          <td><span class="en">AI hallucination / inaccuracy</span><span class="ko">AI 환각 / 부정확성</span></td>
+          <td><span class="tag blue">Medium</span></td>
+          <td><span class="en">Human-in-the-loop for critical outputs; guardrails flag low-confidence answers; team training</span><span class="ko">중요 출력에 대한 인간 참여; 가드레일로 낮은 신뢰도 답변 표시; 팀 교육</span></td>
+        </tr>
+        <tr>
+          <td><span class="en">Adoption resistance</span><span class="ko">도입 저항</span></td>
+          <td><span class="tag blue">Low</span></td>
+          <td><span class="en">Start with volunteers; demonstrate wins; Slack-native UX = zero learning curve</span><span class="ko">자원자로 시작; 성과 시연; Slack 네이티브 UX = 학습 곡선 없음</span></td>
+        </tr>
+        <tr>
+          <td><span class="en">Maintenance burden</span><span class="ko">유지보수 부담</span></td>
+          <td><span class="tag blue">Low</span></td>
+          <td><span class="en">OpenClaw auto-update available; minimal config; community-supported</span><span class="ko">OpenClaw 자동 업데이트 가능; 최소 구성; 커뮤니티 지원</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ASK -->
+  <div class="section-num">12</div>
+  <h2>
+    <span class="en">The Ask</span>
+    <span class="ko">요청 사항</span>
+  </h2>
+  <p class="section-desc">
+    <span class="en">What we need to move forward.</span>
+    <span class="ko">진행을 위해 필요한 것.</span>
+  </p>
+
+  <div class="card-grid">
+    <div class="card">
+      <div class="card-icon blue">1️⃣</div>
+      <h4><span class="en">VM Allocation</span><span class="ko">VM 할당</span></h4>
+      <p><span class="en">One corporate VM (4 cores, 16GB RAM, 100GB disk) for Phase 1 PoC. Estimated cost: $0–50/mo from existing infrastructure.</span><span class="ko">1단계 PoC를 위한 기업 VM 1대 (4코어, 16GB RAM, 100GB 디스크). 예상 비용: 기존 인프라에서 $0-50/월.</span></p>
+    </div>
+    <div class="card">
+      <div class="card-icon green">2️⃣</div>
+      <h4><span class="en">IT Approval</span><span class="ko">IT 승인</span></h4>
+      <p><span class="en">Security review of OpenClaw + NeMo Guardrails source code. Approval for Node.js + Python runtime on corporate VM. Slack bot token issuance.</span><span class="ko">OpenClaw + NeMo Guardrails 소스 코드 보안 리뷰. 기업 VM에서 Node.js + Python 런타임 승인. Slack 봇 토큰 발급.</span></p>
+    </div>
+    <div class="card">
+      <div class="card-icon amber">3️⃣</div>
+      <h4><span class="en">API Budget</span><span class="ko">API 예산</span></h4>
+      <p><span class="en">$200/month API budget for Phase 1–2 (Claude/GPT). Decreases as we add local inference. Full local = $0/mo ongoing.</span><span class="ko">1-2단계 API 예산 $200/월 (Claude/GPT). 로컬 추론 추가 시 감소. 완전 로컬 = 월 $0.</span></p>
+    </div>
+    <div class="card">
+      <div class="card-icon purple">4️⃣</div>
+      <h4><span class="en">2 Weeks Setup Time</span><span class="ko">2주 설정 시간</span></h4>
+      <p><span class="en">Partial allocation of one engineer (proposer) for initial setup, configuration, and pilot coordination. No dedicated headcount needed.</span><span class="ko">초기 설정, 구성, 파일럿 조정을 위한 엔지니어 1명(제안자)의 부분 할당. 전담 인력 불필요.</span></p>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- CONCLUSION -->
+  <div class="section-num">✦</div>
+  <h2>
+    <span class="en">Conclusion</span>
+    <span class="ko">결론</span>
+  </h2>
+
+  <p>
+    <span class="en"><strong>ChipClaw</strong> represents a low-risk, high-reward opportunity to bring enterprise AI capabilities to our engineering teams using entirely open-source, auditable technology. With zero licensing costs, defense-in-depth security via NVIDIA NeMo Guardrails, and native multi-user support through OpenClaw's multi-agent architecture, we can deploy a production-ready AI assistant platform that keeps all proprietary data on-premises while delivering measurable productivity gains.</span>
+    <span class="ko"><strong>ChipClaw</strong>은 완전히 오픈소스이고 감사 가능한 기술을 사용하여 엔지니어링 팀에 엔터프라이즈 AI 역량을 도입할 수 있는 저위험, 고수익 기회입니다. 라이선스 비용 없이, NVIDIA NeMo Guardrails를 통한 심층 방어 보안, OpenClaw의 멀티 에이전트 아키텍처를 통한 네이티브 멀티유저 지원으로, 모든 독점 데이터를 사내에 유지하면서 측정 가능한 생산성 향상을 제공하는 프로덕션 준비 AI 어시스턴트 플랫폼을 배포할 수 있습니다.</span>
+  </p>
+  <p>
+    <span class="en">The phased approach ensures we validate value before scaling investment. Phase 1 requires nothing more than a VM and a $200/month API budget — a negligible cost against the potential of saving 2–4 FTE worth of engineering hours annually.</span>
+    <span class="ko">단계적 접근 방식은 투자를 확대하기 전에 가치를 검증하도록 합니다. 1단계에는 VM과 월 $200 API 예산만 필요합니다 — 연간 2-4 FTE 상당의 엔지니어링 시간을 절감할 수 있는 잠재력에 비하면 무시할 만한 비용입니다.</span>
+  </p>
+
+  <div class="callout success" style="margin-top: 32px;">
+    <div class="callout-icon">🚀</div>
+    <div class="callout-text">
+      <strong>
+        <span class="en">Ready to Start</span>
+        <span class="ko">시작 준비 완료</span>
+      </strong>
+      <span class="en">With VP approval, we can have a working PoC within 2 weeks and a team pilot within 4 weeks. The entire stack is open-source, reversible, and zero-commitment — if it doesn't deliver, we simply decommission the VM.</span>
+      <span class="ko">VP 승인 시, 2주 이내에 작동하는 PoC를, 4주 이내에 팀 파일럿을 준비할 수 있습니다. 전체 스택은 오픈소스이고, 되돌릴 수 있으며, 약정이 없습니다 — 성과가 없으면 VM을 해제하면 됩니다.</span>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  <span class="en">ChipClaw Project Proposal v1.0 — Microchip Technology Inc. — March 2026 — Confidential</span>
+  <span class="ko">ChipClaw 프로젝트 제안서 v1.0 — Microchip Technology Inc. — 2026년 3월 — 대외비</span>
+</div>
+
+<script>
+  let isKorean = false;
+  function toggleLang() {
+    isKorean = !isKorean;
+    document.querySelectorAll('.en').forEach(el => el.classList.toggle('hide', isKorean));
+    document.querySelectorAll('.ko').forEach(el => el.classList.toggle('show', isKorean));
+    document.querySelectorAll('.en-block').forEach(el => el.classList.toggle('hide', isKorean));
+    document.querySelectorAll('.ko-block').forEach(el => el.classList.toggle('show', isKorean));
+    document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+  }
+</script>
+
+</body>
+</html>
