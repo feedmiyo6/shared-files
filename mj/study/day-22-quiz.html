@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 22 Quiz: Pipeline Stages</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    background: linear-gradient(135deg, #fefae0 0%, #faedcd 100%);
+    color: #3d405b;
+    line-height: 1.8;
+    padding: 24px;
+    max-width: 920px;
+    margin: 0 auto;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+h1 { color: #5d4037; border-bottom: 3px solid #c4a77d; padding-bottom: 12px; margin-bottom: 24px; }
+h2 { color: #588157; border-bottom: 2px solid #a3b18a; padding-bottom: 8px; margin: 32px 0 16px; }
+code {
+    background: #e9f5db;
+    color: #3d405b;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+}
+.question {
+    background: #fff8f0;
+    border: 2px solid #c4a77d;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    color: #3d405b;
+}
+.question h3 { color: #5d4037; margin-bottom: 12px; }
+.options { list-style: none; padding: 0; }
+.options li {
+    padding: 10px 16px;
+    margin: 8px 0;
+    border-radius: 8px;
+    cursor: pointer;
+    border: 2px solid #a3b18a;
+    background: #fff;
+    transition: all 0.2s;
+}
+.options li:hover { background: #e9f5db; }
+.options li.correct { background: #d4edda; border-color: #588157; }
+.options li.wrong { background: #f8d7da; border-color: #ef4444; }
+.explanation {
+    display: none;
+    margin-top: 12px;
+    padding: 12px;
+    background: #fff;
+    border-radius: 8px;
+    border-left: 4px solid #588157;
+    color: #3d405b;
+}
+.score-box {
+    background: #fff8f0;
+    border: 2px solid #588157;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    text-align: center;
+    display: none;
+}
+.score-box h2 { border: none; }
+.nav-links { display: flex; gap: 12px; margin: 24px 0; flex-wrap: wrap; }
+.nav-links a {
+    background: linear-gradient(135deg, #588157, #3a5a40);
+    color: #fff;
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 24px;
+    font-weight: 600;
+    font-size: 14px;
+}
+.btn-score {
+    background: linear-gradient(135deg, #588157, #3a5a40);
+    color: #fff;
+    border: none;
+    border-radius: 24px;
+    padding: 12px 32px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    margin: 24px auto;
+    display: block;
+}
+.lang-toggle {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    background: #588157;
+    border: none;
+    border-radius: 24px;
+    padding: 10px 20px;
+    cursor: pointer;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    z-index: 1000;
+}
+.lang-toggle:hover { background: #3a5a40; }
+.ko { display: none; }
+@media (max-width: 768px) {
+    body { padding: 16px; }
+    h1 { font-size: 1.6em; }
+    .lang-toggle { padding: 8px 16px; font-size: 13px; }
+}
+</style>
+</head>
+<body>
+
+<button class="lang-toggle" onclick="toggleLang()">한국어</button>
+
+<h1>📝 Day 22 Quiz: Pipeline Stages</h1>
+
+<div class="nav-links">
+    <a href="day-22-lesson.html">📖 Lesson</a>
+    <a href="day-22-practice.html">💻 Practice</a>
+</div>
+
+<div class="question" id="q1">
+<h3>Q1. <span class="en">What is the primary purpose of inserting pipeline registers?</span><span class="ko" style="display:none;">파이프라인 레지스터를 삽입하는 주요 목적은?</span></h3>
+<ul class="options">
+<li onclick="answer(1,this,false)"><span class="en">A) Reduce total latency</span><span class="ko" style="display:none;">A) 총 레이턴시 감소</span></li>
+<li onclick="answer(1,this,true)"><span class="en">B) Increase clock frequency / throughput</span><span class="ko" style="display:none;">B) 클럭 주파수 / 처리량 증가</span></li>
+<li onclick="answer(1,this,false)"><span class="en">C) Reduce area</span><span class="ko" style="display:none;">C) 면적 감소</span></li>
+<li onclick="answer(1,this,false)"><span class="en">D) Eliminate glitches in outputs</span><span class="ko" style="display:none;">D) 출력 글리치 제거</span></li>
+</ul>
+<div class="explanation" id="e1"><span class="en">Pipeline registers break long combinational paths, allowing a higher clock frequency. Latency actually <em>increases</em>.</span><span class="ko" style="display:none;">파이프라인 레지스터는 긴 조합 경로를 나누어 더 높은 클럭 주파수를 가능하게 합니다. 레이턴시는 실제로 <em>증가</em>합니다.</span></div>
+</div>
+
+<div class="question" id="q2">
+<h3>Q2. <span class="en">A 20ns combinational path is split into 4 equal pipeline stages. What is the approximate new f<sub>max</sub>?</span><span class="ko" style="display:none;">20ns 조합 경로를 4개의 동일한 파이프라인 스테이지로 나누면 대략적인 새 f<sub>max</sub>는?</span></h3>
+<ul class="options">
+<li onclick="answer(2,this,false)">A) 50 MHz</li>
+<li onclick="answer(2,this,false)">B) 100 MHz</li>
+<li onclick="answer(2,this,true)">C) 200 MHz</li>
+<li onclick="answer(2,this,false)">D) 400 MHz</li>
+</ul>
+<div class="explanation" id="e2"><span class="en">20ns ÷ 4 stages = 5ns per stage → 1/5ns = 200 MHz. (Ignoring register overhead for simplicity.)</span><span class="ko" style="display:none;">20ns ÷ 4 스테이지 = 스테이지당 5ns → 1/5ns = 200 MHz. (레지스터 오버헤드 무시.)</span></div>
+</div>
+
+<div class="question" id="q3">
+<h3>Q3. <span class="en">What is a "pass-through register" in pipelining?</span><span class="ko" style="display:none;">파이프라이닝에서 "패스스루 레지스터"란?</span></h3>
+<ul class="options">
+<li onclick="answer(3,this,false)"><span class="en">A) A register that bypasses a stage entirely</span><span class="ko" style="display:none;">A) 스테이지를 완전히 우회하는 레지스터</span></li>
+<li onclick="answer(3,this,true)"><span class="en">B) A register that forwards a signal through a stage without processing it</span><span class="ko" style="display:none;">B) 처리하지 않고 신호를 스테이지를 통해 전달하는 레지스터</span></li>
+<li onclick="answer(3,this,false)"><span class="en">C) A transparent latch used between stages</span><span class="ko" style="display:none;">C) 스테이지 사이에 사용되는 투명 래치</span></li>
+<li onclick="answer(3,this,false)"><span class="en">D) A register that only updates on valid data</span><span class="ko" style="display:none;">D) 유효한 데이터에서만 업데이트되는 레지스터</span></li>
+</ul>
+<div class="explanation" id="e3"><span class="en">Pass-through registers keep signals aligned across stages even when they're not used in that particular stage.</span><span class="ko" style="display:none;">패스스루 레지스터는 해당 스테이지에서 사용되지 않더라도 신호의 정렬을 유지합니다.</span></div>
+</div>
+
+<div class="question" id="q4">
+<h3>Q4. <span class="en">A 3-stage pipeline processes inputs A, B, C in consecutive cycles. When does C's result appear?</span><span class="ko" style="display:none;">3단계 파이프라인이 연속 사이클에서 입력 A, B, C를 처리합니다. C의 결과는 언제 나타나나요?</span></h3>
+<ul class="options">
+<li onclick="answer(4,this,false)"><span class="en">A) Cycle 3</span><span class="ko" style="display:none;">A) 사이클 3</span></li>
+<li onclick="answer(4,this,false)"><span class="en">B) Cycle 4</span><span class="ko" style="display:none;">B) 사이클 4</span></li>
+<li onclick="answer(4,this,true)"><span class="en">C) Cycle 5</span><span class="ko" style="display:none;">C) 사이클 5</span></li>
+<li onclick="answer(4,this,false)"><span class="en">D) Cycle 6</span><span class="ko" style="display:none;">D) 사이클 6</span></li>
+</ul>
+<div class="explanation" id="e4"><span class="en">C enters at cycle 3, takes 3 cycles through the pipeline → result at cycle 5. (A→cycle 3, B→cycle 4, C→cycle 5)</span><span class="ko" style="display:none;">C는 사이클 3에 들어가고, 파이프라인을 통과하는 데 3 사이클 → 사이클 5에 결과. (A→사이클 3, B→사이클 4, C→사이클 5)</span></div>
+</div>
+
+<div class="question" id="q5">
+<h3>Q5. <span class="en">What limits the maximum clock frequency in a pipelined design?</span><span class="ko" style="display:none;">파이프라인 디자인에서 최대 클럭 주파수를 제한하는 것은?</span></h3>
+<ul class="options">
+<li onclick="answer(5,this,false)"><span class="en">A) The total combinational delay</span><span class="ko" style="display:none;">A) 총 조합 지연</span></li>
+<li onclick="answer(5,this,true)"><span class="en">B) The slowest pipeline stage</span><span class="ko" style="display:none;">B) 가장 느린 파이프라인 스테이지</span></li>
+<li onclick="answer(5,this,false)"><span class="en">C) The number of pipeline registers</span><span class="ko" style="display:none;">C) 파이프라인 레지스터의 수</span></li>
+<li onclick="answer(5,this,false)"><span class="en">D) The fastest pipeline stage</span><span class="ko" style="display:none;">D) 가장 빠른 파이프라인 스테이지</span></li>
+</ul>
+<div class="explanation" id="e5"><span class="en">The clock period must accommodate the slowest stage. This is why balancing stage delays is important.</span><span class="ko" style="display:none;">클럭 주기는 가장 느린 스테이지를 수용해야 합니다. 이것이 스테이지 지연 균형이 중요한 이유입니다.</span></div>
+</div>
+
+<div class="question" id="q6">
+<h3>Q6. <span class="en">What is the overhead added by each pipeline register?</span><span class="ko" style="display:none;">각 파이프라인 레지스터가 추가하는 오버헤드는?</span></h3>
+<ul class="options">
+<li onclick="answer(6,this,false)"><span class="en">A) Only setup time</span><span class="ko" style="display:none;">A) 셋업 타임만</span></li>
+<li onclick="answer(6,this,false)"><span class="en">B) Only clock-to-q delay</span><span class="ko" style="display:none;">B) 클럭-투-Q 지연만</span></li>
+<li onclick="answer(6,this,true)"><span class="en">C) Setup time + clock-to-q delay</span><span class="ko" style="display:none;">C) 셋업 타임 + 클럭-투-Q 지연</span></li>
+<li onclick="answer(6,this,false)"><span class="en">D) Hold time + propagation delay</span><span class="ko" style="display:none;">D) 홀드 타임 + 전파 지연</span></li>
+</ul>
+<div class="explanation" id="e6"><span class="en">Each register eats into the timing budget with t<sub>setup</sub> (before clock edge) + t<sub>clk-to-q</sub> (after clock edge). This is why infinite pipelining doesn't work.</span><span class="ko" style="display:none;">각 레지스터는 t<sub>setup</sub>(클럭 엣지 전) + t<sub>clk-to-q</sub>(클럭 엣지 후)로 타이밍 예산을 소모합니다.</span></div>
+</div>
+
+<div class="question" id="q7">
+<h3>Q7. <span class="en">In a 3-stage pipeline, a signal needed only in Stage 3 requires how many pass-through registers?</span><span class="ko" style="display:none;">3단계 파이프라인에서 Stage 3에서만 필요한 신호는 몇 개의 패스스루 레지스터가 필요한가요?</span></h3>
+<ul class="options">
+<li onclick="answer(7,this,false)">A) 0</li>
+<li onclick="answer(7,this,false)">B) 1</li>
+<li onclick="answer(7,this,true)">C) 2</li>
+<li onclick="answer(7,this,false)">D) 3</li>
+</ul>
+<div class="explanation" id="e7"><span class="en">The signal must pass through Stage 1 → register → Stage 2 → register → Stage 3. That's 2 pass-through registers to stay aligned.</span><span class="ko" style="display:none;">신호는 Stage 1 → 레지스터 → Stage 2 → 레지스터 → Stage 3을 통과해야 합니다. 정렬을 유지하기 위해 2개의 패스스루 레지스터가 필요합니다.</span></div>
+</div>
+
+<div class="question" id="q8">
+<h3>Q8. <span class="en">What is the purpose of a pipeline valid signal?</span><span class="ko" style="display:none;">파이프라인 valid 신호의 목적은?</span></h3>
+<ul class="options">
+<li onclick="answer(8,this,false)"><span class="en">A) To reset the pipeline</span><span class="ko" style="display:none;">A) 파이프라인 리셋</span></li>
+<li onclick="answer(8,this,true)"><span class="en">B) To indicate which stages contain real data vs. bubbles</span><span class="ko" style="display:none;">B) 어떤 스테이지가 실제 데이터를 가지고 있는지 표시</span></li>
+<li onclick="answer(8,this,false)"><span class="en">C) To control clock gating</span><span class="ko" style="display:none;">C) 클럭 게이팅 제어</span></li>
+<li onclick="answer(8,this,false)"><span class="en">D) To measure pipeline depth</span><span class="ko" style="display:none;">D) 파이프라인 깊이 측정</span></li>
+</ul>
+<div class="explanation" id="e8"><span class="en">The valid signal travels alongside data through the pipeline. Only when valid=1 should downstream logic treat the output as meaningful.</span><span class="ko" style="display:none;">valid 신호는 파이프라인을 통해 데이터와 함께 이동합니다. valid=1일 때만 하위 로직이 출력을 의미있게 처리해야 합니다.</span></div>
+</div>
+
+<div class="question" id="q9">
+<h3>Q9. <span class="en">Stages have delays: S1=15ns, S2=5ns. What's the best improvement?</span><span class="ko" style="display:none;">스테이지 지연: S1=15ns, S2=5ns. 최선의 개선 방법은?</span></h3>
+<ul class="options">
+<li onclick="answer(9,this,false)"><span class="en">A) Add more pipeline stages after S2</span><span class="ko" style="display:none;">A) S2 뒤에 더 많은 파이프라인 스테이지 추가</span></li>
+<li onclick="answer(9,this,true)"><span class="en">B) Move some logic from S1 to S2 to balance delays</span><span class="ko" style="display:none;">B) S1에서 S2로 일부 로직을 이동하여 지연 균형</span></li>
+<li onclick="answer(9,this,false)"><span class="en">C) Remove S2 since it's underutilized</span><span class="ko" style="display:none;">C) S2가 활용도가 낮으므로 제거</span></li>
+<li onclick="answer(9,this,false)"><span class="en">D) Double the clock frequency</span><span class="ko" style="display:none;">D) 클럭 주파수를 두 배로</span></li>
+</ul>
+<div class="explanation" id="e9"><span class="en">Balancing: move logic so both are ~10ns → f<sub>max</sub> goes from 67MHz (limited by 15ns) to 100MHz. A 49% improvement!</span><span class="ko" style="display:none;">균형 조정: 로직을 이동하여 둘 다 ~10ns → f<sub>max</sub>가 67MHz(15ns 제한)에서 100MHz로. 49% 개선!</span></div>
+</div>
+
+<div class="question" id="q10">
+<h3>Q10. <span class="en">Which naming convention is recommended for pipeline registers?</span><span class="ko" style="display:none;">파이프라인 레지스터에 권장되는 명명 규칙은?</span></h3>
+<ul class="options">
+<li onclick="answer(10,this,false)"><span class="en">A) <code>pipe_reg_1</code>, <code>pipe_reg_2</code></span></li>
+<li onclick="answer(10,this,true)"><span class="en">B) <code>s1_signal</code>, <code>s2_signal</code></span></li>
+<li onclick="answer(10,this,false)"><span class="en">C) <code>signal_d1</code>, <code>signal_d2</code></span></li>
+<li onclick="answer(10,this,false)"><span class="en">D) Any consistent scheme works equally well</span></li>
+</ul>
+<div class="explanation" id="e10"><span class="en">Stage-prefixed naming (<code>s1_</code>, <code>s2_</code>) instantly shows which pipeline stage a signal belongs to, making the design much easier to read and debug.</span><span class="ko" style="display:none;">스테이지 접두사 명명(<code>s1_</code>, <code>s2_</code>)은 신호가 어떤 파이프라인 스테이지에 속하는지 즉시 보여줍니다.</span></div>
+</div>
+
+<button class="btn-score" onclick="showScore()"><span class="en">Show Score</span><span class="ko" style="display:none;">점수 확인</span></button>
+
+<div class="score-box" id="scoreBox">
+    <h2 id="scoreText"></h2>
+</div>
+
+<script>
+let answered = {};
+let score = 0;
+let total = 10;
+
+function answer(q, el, correct) {
+    if (answered[q]) return;
+    answered[q] = true;
+    if (correct) { el.classList.add('correct'); score++; }
+    else { el.classList.add('wrong'); el.parentElement.querySelectorAll('li').forEach(li => { if (li !== el && li.onclick.toString().includes('true')) li.classList.add('correct'); }); }
+    document.getElementById('e' + q).style.display = 'block';
+}
+
+function showScore() {
+    const box = document.getElementById('scoreBox');
+    const pct = Math.round(score / total * 100);
+    let msg = pct >= 80 ? '🎉 Excellent!' : pct >= 60 ? '👍 Good job!' : '📚 Review the lesson!';
+    document.getElementById('scoreText').textContent = `${score}/${total} (${pct}%) — ${msg}`;
+    box.style.display = 'block';
+    box.scrollIntoView({ behavior: 'smooth' });
+}
+
+let isKorean = false;
+function toggleLang() {
+    isKorean = !isKorean;
+    document.querySelectorAll('.en').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'none' : 'revert', 'important');
+    });
+    document.querySelectorAll('.ko').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'revert' : 'none', 'important');
+    });
+    document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+}
+</script>
+
+</body>
+</html>

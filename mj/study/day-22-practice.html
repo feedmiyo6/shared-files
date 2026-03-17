@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 22 Practice: Pipeline Stages</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    background: linear-gradient(135deg, #fefae0 0%, #faedcd 100%);
+    color: #3d405b;
+    line-height: 1.8;
+    padding: 24px;
+    max-width: 920px;
+    margin: 0 auto;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+h1 { color: #5d4037; border-bottom: 3px solid #c4a77d; padding-bottom: 12px; margin-bottom: 24px; }
+h2 { color: #588157; border-bottom: 2px solid #a3b18a; padding-bottom: 8px; margin: 32px 0 16px; }
+h3 { color: #5d4037; margin: 20px 0 12px; }
+p { margin: 12px 0; }
+code {
+    background: #e9f5db;
+    color: #3d405b;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+}
+pre {
+    background: #2d3436;
+    padding: 24px;
+    border-radius: 12px;
+    margin: 24px 0;
+    border: 3px solid #a3b18a;
+    overflow-x: auto;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+    font-size: 15px;
+    line-height: 1.6;
+    color: #f8f8f2;
+}
+.keyword { color: #ff79c6; font-weight: 600; }
+.type { color: #8be9fd; }
+.signal { color: #50fa7b; }
+.number { color: #ffb86c; }
+.comment { color: #6272a4; font-style: italic; }
+.concept-box {
+    background: #fff8f0;
+    border: 2px solid #c4a77d;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    color: #3d405b;
+}
+.concept-box h3 { color: #5d4037; margin-bottom: 12px; }
+.warning-box {
+    background: #fff8f0;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    border-left: 4px solid #ef4444;
+    color: #3d405b;
+}
+.warning-box h3 { color: #c53030; margin-bottom: 12px; }
+.hint-box {
+    background: #fff8f0;
+    border-radius: 8px;
+    padding: 15px;
+    margin: 15px 0;
+    border-left: 4px solid #5d4037;
+    color: #3d405b;
+}
+.tip-box {
+    background: #fff8f0;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    border-left: 4px solid #588157;
+    color: #3d405b;
+}
+.exercise {
+    background: #fff;
+    border: 2px solid #a3b18a;
+    border-radius: 12px;
+    padding: 24px;
+    margin: 24px 0;
+}
+.exercise h3 { color: #588157; }
+details {
+    margin: 16px 0;
+}
+details summary {
+    cursor: pointer;
+    color: #588157;
+    font-weight: 600;
+    padding: 8px 0;
+}
+.nav-links { display: flex; gap: 12px; margin: 24px 0; flex-wrap: wrap; }
+.nav-links a {
+    background: linear-gradient(135deg, #588157, #3a5a40);
+    color: #fff;
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 24px;
+    font-weight: 600;
+    font-size: 14px;
+}
+.lang-toggle {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    background: #588157;
+    border: none;
+    border-radius: 24px;
+    padding: 10px 20px;
+    cursor: pointer;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    z-index: 1000;
+}
+.lang-toggle:hover { background: #3a5a40; }
+.ko { display: none; }
+@media (max-width: 768px) {
+    body { padding: 16px; }
+    h1 { font-size: 1.6em; }
+    pre { font-size: 14px; padding: 16px; }
+    .lang-toggle { padding: 8px 16px; font-size: 13px; }
+}
+</style>
+</head>
+<body>
+
+<button class="lang-toggle" onclick="toggleLang()">한국어</button>
+
+<h1>💻 Day 22 Practice: Pipeline Stages</h1>
+
+<div class="nav-links">
+    <a href="day-22-lesson.html">📖 Lesson</a>
+    <a href="day-22-quiz.html">📝 Quiz</a>
+</div>
+
+<div class="tip-box">
+    <p class="en">💡 Try these on <a href="https://www.edaplayground.com/" target="_blank" style="color:#588157;">EDA Playground</a> — select "SystemVerilog" and simulator "Icarus Verilog 12.0".</p>
+    <p class="ko" style="display:none;">💡 <a href="https://www.edaplayground.com/" target="_blank" style="color:#588157;">EDA Playground</a>에서 시도해보세요 — "SystemVerilog"와 시뮬레이터 "Icarus Verilog 12.0"을 선택하세요.</p>
+</div>
+
+<!-- Exercise 1 -->
+<div class="exercise">
+    <h3>Exercise 1: Pipeline a 2-Operation Datapath</h3>
+    <p class="en">Take this unpipelined module and convert it to a <strong>2-stage pipeline</strong>. Stage 1 does the multiply, Stage 2 does the XOR. Don't forget pass-through registers!</p>
+    <p class="ko" style="display:none;">이 파이프라인 없는 모듈을 <strong>2단계 파이프라인</strong>으로 변환하세요. Stage 1은 곱셈, Stage 2는 XOR을 수행합니다. 패스스루 레지스터를 잊지 마세요!</p>
+
+<pre><span class="comment">// UNPIPELINED — convert this to 2-stage pipeline</span>
+<span class="keyword">module</span> <span class="type">compute</span> (
+    <span class="keyword">input</span>  <span class="keyword">logic</span>        <span class="keyword">clk</span>, <span class="keyword">rst_n</span>,
+    <span class="keyword">input</span>  <span class="keyword">logic</span> [<span class="number">7</span>:<span class="number">0</span>]  <span class="signal">a</span>, <span class="signal">b</span>,
+    <span class="keyword">input</span>  <span class="keyword">logic</span> [<span class="number">15</span>:<span class="number">0</span>] <span class="signal">mask</span>,
+    <span class="keyword">output</span> <span class="keyword">logic</span> [<span class="number">15</span>:<span class="number">0</span>] <span class="signal">result</span>
+);
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="keyword">clk</span> <span class="keyword">or</span> <span class="keyword">negedge</span> <span class="keyword">rst_n</span>)
+        <span class="keyword">if</span> (!<span class="keyword">rst_n</span>) <span class="signal">result</span> &lt;= <span class="number">'0</span>;
+        <span class="keyword">else</span>        <span class="signal">result</span> &lt;= (<span class="signal">a</span> * <span class="signal">b</span>) ^ <span class="signal">mask</span>;
+<span class="keyword">endmodule</span></pre>
+
+    <div class="hint-box">
+        <strong>Hints:</strong>
+        <ul>
+            <li class="en">Stage 1: compute <code>a * b</code>, store in <code>s1_product</code></li>
+            <li class="ko" style="display:none;">Stage 1: <code>a * b</code>를 계산하여 <code>s1_product</code>에 저장</li>
+            <li class="en">Which signal needs a pass-through register? <code>mask</code> — it's used in Stage 2!</li>
+            <li class="ko" style="display:none;">어떤 신호에 패스스루 레지스터가 필요한가요? <code>mask</code> — Stage 2에서 사용됩니다!</li>
+        </ul>
+    </div>
+
+    <details>
+        <summary>📖 Show Solution</summary>
+<pre><span class="keyword">module</span> <span class="type">compute_pipelined</span> (
+    <span class="keyword">input</span>  <span class="keyword">logic</span>        <span class="keyword">clk</span>, <span class="keyword">rst_n</span>,
+    <span class="keyword">input</span>  <span class="keyword">logic</span> [<span class="number">7</span>:<span class="number">0</span>]  <span class="signal">a</span>, <span class="signal">b</span>,
+    <span class="keyword">input</span>  <span class="keyword">logic</span> [<span class="number">15</span>:<span class="number">0</span>] <span class="signal">mask</span>,
+    <span class="keyword">output</span> <span class="keyword">logic</span> [<span class="number">15</span>:<span class="number">0</span>] <span class="signal">result</span>
+);
+
+    <span class="comment">// Stage 1 registers</span>
+    <span class="keyword">logic</span> [<span class="number">15</span>:<span class="number">0</span>] <span class="signal">s1_product</span>;
+    <span class="keyword">logic</span> [<span class="number">15</span>:<span class="number">0</span>] <span class="signal">s1_mask</span>;    <span class="comment">// pass-through!</span>
+
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="keyword">clk</span> <span class="keyword">or</span> <span class="keyword">negedge</span> <span class="keyword">rst_n</span>)
+        <span class="keyword">if</span> (!<span class="keyword">rst_n</span>) <span class="keyword">begin</span>
+            <span class="signal">s1_product</span> &lt;= <span class="number">'0</span>;
+            <span class="signal">s1_mask</span>    &lt;= <span class="number">'0</span>;
+        <span class="keyword">end</span> <span class="keyword">else</span> <span class="keyword">begin</span>
+            <span class="signal">s1_product</span> &lt;= <span class="signal">a</span> * <span class="signal">b</span>;
+            <span class="signal">s1_mask</span>    &lt;= <span class="signal">mask</span>;
+        <span class="keyword">end</span>
+
+    <span class="comment">// Stage 2</span>
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="keyword">clk</span> <span class="keyword">or</span> <span class="keyword">negedge</span> <span class="keyword">rst_n</span>)
+        <span class="keyword">if</span> (!<span class="keyword">rst_n</span>) <span class="signal">result</span> &lt;= <span class="number">'0</span>;
+        <span class="keyword">else</span>        <span class="signal">result</span> &lt;= <span class="signal">s1_product</span> ^ <span class="signal">s1_mask</span>;
+
+<span class="keyword">endmodule</span></pre>
+    </details>
+</div>
+
+<!-- Exercise 2 -->
+<div class="exercise">
+    <h3>Exercise 2: Add Valid Signal to Pipeline</h3>
+    <p class="en">Take the solution from Exercise 1 and add a <code>valid</code> signal that flows through the pipeline. The input has <code>input_valid</code>, and the output should produce <code>output_valid</code>.</p>
+    <p class="ko" style="display:none;">연습 1의 솔루션에 파이프라인을 통해 흐르는 <code>valid</code> 신호를 추가하세요. 입력에 <code>input_valid</code>가 있고, 출력은 <code>output_valid</code>를 생성해야 합니다.</p>
+
+    <div class="hint-box">
+        <strong>Hints:</strong>
+        <ul>
+            <li class="en">Add <code>s1_valid</code> and treat it like any other pass-through register</li>
+            <li class="ko" style="display:none;"><code>s1_valid</code>를 추가하고 다른 패스스루 레지스터처럼 처리하세요</li>
+            <li class="en">On reset, all valid signals should be <code>0</code></li>
+            <li class="ko" style="display:none;">리셋 시 모든 valid 신호는 <code>0</code>이어야 합니다</li>
+        </ul>
+    </div>
+
+    <details>
+        <summary>📖 Show Solution</summary>
+<pre><span class="keyword">module</span> <span class="type">compute_pipelined_v</span> (
+    <span class="keyword">input</span>  <span class="keyword">logic</span>        <span class="keyword">clk</span>, <span class="keyword">rst_n</span>,
+    <span class="keyword">input</span>  <span class="keyword">logic</span>        <span class="signal">input_valid</span>,
+    <span class="keyword">input</span>  <span class="keyword">logic</span> [<span class="number">7</span>:<span class="number">0</span>]  <span class="signal">a</span>, <span class="signal">b</span>,
+    <span class="keyword">input</span>  <span class="keyword">logic</span> [<span class="number">15</span>:<span class="number">0</span>] <span class="signal">mask</span>,
+    <span class="keyword">output</span> <span class="keyword">logic</span> [<span class="number">15</span>:<span class="number">0</span>] <span class="signal">result</span>,
+    <span class="keyword">output</span> <span class="keyword">logic</span>        <span class="signal">output_valid</span>
+);
+
+    <span class="comment">// Stage 1 registers</span>
+    <span class="keyword">logic</span> [<span class="number">15</span>:<span class="number">0</span>] <span class="signal">s1_product</span>;
+    <span class="keyword">logic</span> [<span class="number">15</span>:<span class="number">0</span>] <span class="signal">s1_mask</span>;
+    <span class="keyword">logic</span>        <span class="signal">s1_valid</span>;
+
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="keyword">clk</span> <span class="keyword">or</span> <span class="keyword">negedge</span> <span class="keyword">rst_n</span>)
+        <span class="keyword">if</span> (!<span class="keyword">rst_n</span>) <span class="keyword">begin</span>
+            <span class="signal">s1_product</span> &lt;= <span class="number">'0</span>;
+            <span class="signal">s1_mask</span>    &lt;= <span class="number">'0</span>;
+            <span class="signal">s1_valid</span>   &lt;= <span class="number">1'b0</span>;
+        <span class="keyword">end</span> <span class="keyword">else</span> <span class="keyword">begin</span>
+            <span class="signal">s1_product</span> &lt;= <span class="signal">a</span> * <span class="signal">b</span>;
+            <span class="signal">s1_mask</span>    &lt;= <span class="signal">mask</span>;
+            <span class="signal">s1_valid</span>   &lt;= <span class="signal">input_valid</span>;
+        <span class="keyword">end</span>
+
+    <span class="comment">// Stage 2</span>
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="keyword">clk</span> <span class="keyword">or</span> <span class="keyword">negedge</span> <span class="keyword">rst_n</span>)
+        <span class="keyword">if</span> (!<span class="keyword">rst_n</span>) <span class="keyword">begin</span>
+            <span class="signal">result</span>       &lt;= <span class="number">'0</span>;
+            <span class="signal">output_valid</span> &lt;= <span class="number">1'b0</span>;
+        <span class="keyword">end</span> <span class="keyword">else</span> <span class="keyword">begin</span>
+            <span class="signal">result</span>       &lt;= <span class="signal">s1_product</span> ^ <span class="signal">s1_mask</span>;
+            <span class="signal">output_valid</span> &lt;= <span class="signal">s1_valid</span>;
+        <span class="keyword">end</span>
+
+<span class="keyword">endmodule</span></pre>
+    </details>
+</div>
+
+<!-- Exercise 3 -->
+<div class="exercise">
+    <h3>Exercise 3: Pipeline Timing Analysis</h3>
+    <p class="en">Given this unpipelined path with known delays, determine the optimal pipeline cut points:</p>
+    <p class="ko" style="display:none;">알려진 지연이 있는 이 파이프라인 없는 경로에서 최적의 파이프라인 분할 지점을 결정하세요:</p>
+
+<pre><span class="comment">// Operation chain with delays:</span>
+<span class="comment">// Multiply: 8ns → Add: 4ns → Compare: 3ns → Mux: 2ns → Shift: 5ns</span>
+<span class="comment">// Total: 22ns → f_max = 45 MHz</span>
+<span class="comment">//</span>
+<span class="comment">// Task: Split into 2 stages for best balance.</span>
+<span class="comment">// Where do you place the pipeline register?</span></pre>
+
+    <div class="hint-box">
+        <strong>Hints:</strong>
+        <ul>
+            <li class="en">Total = 22ns. Ideal split = 11ns per stage</li>
+            <li class="ko" style="display:none;">합계 = 22ns. 이상적인 분할 = 스테이지당 11ns</li>
+            <li class="en">Try different cut points: after Mult (8|14), after Add (12|10), after Compare (15|7)</li>
+            <li class="ko" style="display:none;">다양한 분할 지점을 시도: 곱셈 후 (8|14), 덧셈 후 (12|10), 비교 후 (15|7)</li>
+        </ul>
+    </div>
+
+    <details>
+        <summary>📖 Show Solution</summary>
+        <div class="concept-box">
+            <h3>Analysis</h3>
+            <p class="en">
+                <strong>Option A:</strong> Cut after Multiply → S1: 8ns, S2: 14ns → f<sub>max</sub> = 71 MHz<br>
+                <strong>Option B:</strong> Cut after Add → S1: 12ns, S2: 10ns → f<sub>max</sub> = 83 MHz ✅ Best!<br>
+                <strong>Option C:</strong> Cut after Compare → S1: 15ns, S2: 7ns → f<sub>max</sub> = 67 MHz<br><br>
+                <strong>Answer:</strong> Place the register after the Add operation. The bottleneck stage is 12ns → f<sub>max</sub> ≈ 83 MHz (1.84× improvement over unpipelined).
+            </p>
+            <p class="ko" style="display:none;">
+                <strong>옵션 A:</strong> 곱셈 후 분할 → S1: 8ns, S2: 14ns → f<sub>max</sub> = 71 MHz<br>
+                <strong>옵션 B:</strong> 덧셈 후 분할 → S1: 12ns, S2: 10ns → f<sub>max</sub> = 83 MHz ✅ 최적!<br>
+                <strong>옵션 C:</strong> 비교 후 분할 → S1: 15ns, S2: 7ns → f<sub>max</sub> = 67 MHz<br><br>
+                <strong>답:</strong> Add 연산 후에 레지스터를 배치합니다. 병목 스테이지는 12ns → f<sub>max</sub> ≈ 83 MHz (파이프라인 없는 것보다 1.84배 개선).
+            </p>
+        </div>
+    </details>
+</div>
+
+<!-- Exercise 4 (Challenge) -->
+<div class="exercise">
+    <h3>🏆 Challenge: 3-Stage Pipeline with Valid</h3>
+    <p class="en">Design a 3-stage pipelined ALU that performs: <code>result = ((a + b) * c) >> shift_amt</code>. Include valid signals and proper pass-through registers. Use the <code>s1_</code>/<code>s2_</code> naming convention.</p>
+    <p class="ko" style="display:none;">다음을 수행하는 3단계 파이프라인 ALU를 설계하세요: <code>result = ((a + b) * c) >> shift_amt</code>. valid 신호와 적절한 패스스루 레지스터를 포함하세요. <code>s1_</code>/<code>s2_</code> 명명 규칙을 사용하세요.</p>
+
+    <div class="hint-box">
+        <strong>Stage Plan:</strong>
+        <ul>
+            <li class="en">Stage 1: Add (a + b) — pass-through: c, shift_amt</li>
+            <li class="ko" style="display:none;">Stage 1: 덧셈 (a + b) — 패스스루: c, shift_amt</li>
+            <li class="en">Stage 2: Multiply (sum * c) — pass-through: shift_amt</li>
+            <li class="ko" style="display:none;">Stage 2: 곱셈 (sum * c) — 패스스루: shift_amt</li>
+            <li class="en">Stage 3: Shift (product >> shift_amt)</li>
+            <li class="ko" style="display:none;">Stage 3: 시프트 (product >> shift_amt)</li>
+        </ul>
+    </div>
+
+    <details>
+        <summary>📖 Show Solution</summary>
+<pre><span class="keyword">module</span> <span class="type">pipe3_alu</span> (
+    <span class="keyword">input</span>  <span class="keyword">logic</span>        <span class="keyword">clk</span>, <span class="keyword">rst_n</span>,
+    <span class="keyword">input</span>  <span class="keyword">logic</span>        <span class="signal">in_valid</span>,
+    <span class="keyword">input</span>  <span class="keyword">logic</span> [<span class="number">7</span>:<span class="number">0</span>]  <span class="signal">a</span>, <span class="signal">b</span>, <span class="signal">c</span>,
+    <span class="keyword">input</span>  <span class="keyword">logic</span> [<span class="number">2</span>:<span class="number">0</span>]  <span class="signal">shift_amt</span>,
+    <span class="keyword">output</span> <span class="keyword">logic</span> [<span class="number">15</span>:<span class="number">0</span>] <span class="signal">result</span>,
+    <span class="keyword">output</span> <span class="keyword">logic</span>        <span class="signal">out_valid</span>
+);
+
+    <span class="comment">// ===== Stage 1: Add =====</span>
+    <span class="keyword">logic</span> [<span class="number">8</span>:<span class="number">0</span>]  <span class="signal">s1_sum</span>;
+    <span class="keyword">logic</span> [<span class="number">7</span>:<span class="number">0</span>]  <span class="signal">s1_c</span>;           <span class="comment">// pass-through</span>
+    <span class="keyword">logic</span> [<span class="number">2</span>:<span class="number">0</span>]  <span class="signal">s1_shift_amt</span>;   <span class="comment">// pass-through</span>
+    <span class="keyword">logic</span>        <span class="signal">s1_valid</span>;
+
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="keyword">clk</span> <span class="keyword">or</span> <span class="keyword">negedge</span> <span class="keyword">rst_n</span>)
+        <span class="keyword">if</span> (!<span class="keyword">rst_n</span>) <span class="keyword">begin</span>
+            <span class="signal">s1_sum</span>       &lt;= <span class="number">'0</span>;
+            <span class="signal">s1_c</span>         &lt;= <span class="number">'0</span>;
+            <span class="signal">s1_shift_amt</span> &lt;= <span class="number">'0</span>;
+            <span class="signal">s1_valid</span>     &lt;= <span class="number">1'b0</span>;
+        <span class="keyword">end</span> <span class="keyword">else</span> <span class="keyword">begin</span>
+            <span class="signal">s1_sum</span>       &lt;= <span class="signal">a</span> + <span class="signal">b</span>;
+            <span class="signal">s1_c</span>         &lt;= <span class="signal">c</span>;
+            <span class="signal">s1_shift_amt</span> &lt;= <span class="signal">shift_amt</span>;
+            <span class="signal">s1_valid</span>     &lt;= <span class="signal">in_valid</span>;
+        <span class="keyword">end</span>
+
+    <span class="comment">// ===== Stage 2: Multiply =====</span>
+    <span class="keyword">logic</span> [<span class="number">16</span>:<span class="number">0</span>] <span class="signal">s2_product</span>;
+    <span class="keyword">logic</span> [<span class="number">2</span>:<span class="number">0</span>]  <span class="signal">s2_shift_amt</span>;  <span class="comment">// pass-through</span>
+    <span class="keyword">logic</span>        <span class="signal">s2_valid</span>;
+
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="keyword">clk</span> <span class="keyword">or</span> <span class="keyword">negedge</span> <span class="keyword">rst_n</span>)
+        <span class="keyword">if</span> (!<span class="keyword">rst_n</span>) <span class="keyword">begin</span>
+            <span class="signal">s2_product</span>   &lt;= <span class="number">'0</span>;
+            <span class="signal">s2_shift_amt</span> &lt;= <span class="number">'0</span>;
+            <span class="signal">s2_valid</span>     &lt;= <span class="number">1'b0</span>;
+        <span class="keyword">end</span> <span class="keyword">else</span> <span class="keyword">begin</span>
+            <span class="signal">s2_product</span>   &lt;= <span class="signal">s1_sum</span> * <span class="signal">s1_c</span>;
+            <span class="signal">s2_shift_amt</span> &lt;= <span class="signal">s1_shift_amt</span>;
+            <span class="signal">s2_valid</span>     &lt;= <span class="signal">s1_valid</span>;
+        <span class="keyword">end</span>
+
+    <span class="comment">// ===== Stage 3: Shift =====</span>
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="keyword">clk</span> <span class="keyword">or</span> <span class="keyword">negedge</span> <span class="keyword">rst_n</span>)
+        <span class="keyword">if</span> (!<span class="keyword">rst_n</span>) <span class="keyword">begin</span>
+            <span class="signal">result</span>    &lt;= <span class="number">'0</span>;
+            <span class="signal">out_valid</span> &lt;= <span class="number">1'b0</span>;
+        <span class="keyword">end</span> <span class="keyword">else</span> <span class="keyword">begin</span>
+            <span class="signal">result</span>    &lt;= <span class="signal">s2_product</span>[<span class="number">15</span>:<span class="number">0</span>] >> <span class="signal">s2_shift_amt</span>;
+            <span class="signal">out_valid</span> &lt;= <span class="signal">s2_valid</span>;
+        <span class="keyword">end</span>
+
+<span class="keyword">endmodule</span></pre>
+    </details>
+</div>
+
+<div class="concept-box">
+    <h3 class="en">✅ Practice Checklist</h3>
+    <h3 class="ko" style="display:none;">✅ 연습 체크리스트</h3>
+    <ul>
+        <li class="en">☐ Can identify where to cut a combinational path</li>
+        <li class="ko" style="display:none;">☐ 조합 경로를 어디서 분할할지 식별할 수 있다</li>
+        <li class="en">☐ Can add pass-through registers for all signals crossing stage boundaries</li>
+        <li class="ko" style="display:none;">☐ 스테이지 경계를 넘는 모든 신호에 패스스루 레지스터를 추가할 수 있다</li>
+        <li class="en">☐ Can implement valid signals flowing through the pipeline</li>
+        <li class="ko" style="display:none;">☐ 파이프라인을 통해 흐르는 valid 신호를 구현할 수 있다</li>
+        <li class="en">☐ Can analyze timing to choose optimal cut points</li>
+        <li class="ko" style="display:none;">☐ 타이밍을 분석하여 최적의 분할 지점을 선택할 수 있다</li>
+    </ul>
+</div>
+
+<script>
+let isKorean = false;
+function toggleLang() {
+    isKorean = !isKorean;
+    document.querySelectorAll('.en').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'none' : 'revert', 'important');
+    });
+    document.querySelectorAll('.ko').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'revert' : 'none', 'important');
+    });
+    document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+}
+</script>
+
+</body>
+</html>
