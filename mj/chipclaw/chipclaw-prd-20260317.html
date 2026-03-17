@@ -255,24 +255,150 @@
     margin-top: 4px;
   }
 
-  /* Architecture diagram */
-  .arch-box {
+  /* Architecture diagram - CSS visual */
+  .arch-diagram {
     background: var(--gray-900);
-    color: #e2e8f0;
     border-radius: var(--radius);
-    padding: 32px;
+    padding: 40px 32px;
     margin: 24px 0;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 13px;
-    line-height: 1.8;
-    overflow-x: auto;
     box-shadow: var(--shadow-lg);
+    position: relative;
+    overflow: hidden;
   }
-  .arch-box .comment { color: #64748b; }
-  .arch-box .highlight { color: #60a5fa; }
-  .arch-box .green { color: #34d399; }
-  .arch-box .amber { color: #fbbf24; }
-  .arch-box .pink { color: #f472b6; }
+  .arch-diagram::before {
+    content: 'MICROCHIP CORPORATE NETWORK';
+    position: absolute;
+    top: 12px;
+    right: 16px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    color: #475569;
+    text-transform: uppercase;
+  }
+  .arch-boundary {
+    border: 2px dashed #334155;
+    border-radius: 16px;
+    padding: 32px 24px 24px;
+    position: relative;
+  }
+  .arch-boundary::before {
+    content: attr(data-label);
+    position: absolute;
+    top: -10px;
+    left: 20px;
+    background: var(--gray-900);
+    padding: 0 10px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: #64748b;
+    text-transform: uppercase;
+  }
+  .arch-flow {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+  }
+  .arch-row {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+    width: 100%;
+  }
+  .arch-node {
+    border-radius: 10px;
+    padding: 14px 20px;
+    text-align: center;
+    font-size: 13px;
+    font-weight: 600;
+    min-width: 140px;
+    position: relative;
+  }
+  .arch-node.engineers {
+    background: #1e3a5f;
+    border: 1px solid #2563eb;
+    color: #93c5fd;
+  }
+  .arch-node.gateway {
+    background: #14532d;
+    border: 1px solid #059669;
+    color: #6ee7b7;
+    min-width: 100%;
+    max-width: 520px;
+  }
+  .arch-node.guardrails {
+    background: #451a03;
+    border: 1px solid #d97706;
+    color: #fcd34d;
+    min-width: 100%;
+    max-width: 520px;
+  }
+  .arch-node.llm {
+    background: #3b0764;
+    border: 1px solid #a855f7;
+    color: #d8b4fe;
+    min-width: 100%;
+    max-width: 520px;
+  }
+  .arch-node.tool {
+    background: #1e293b;
+    border: 1px solid #475569;
+    color: #94a3b8;
+    flex: 1;
+    min-width: 120px;
+  }
+  .arch-node-label {
+    font-size: 10px;
+    font-weight: 400;
+    color: inherit;
+    opacity: 0.7;
+    display: block;
+    margin-top: 4px;
+  }
+  .arch-node-sub {
+    display: flex;
+    gap: 8px;
+    margin-top: 8px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .arch-node-sub span {
+    background: rgba(255,255,255,0.1);
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 500;
+  }
+  .arch-arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #475569;
+    font-size: 20px;
+    height: 28px;
+  }
+  .arch-arrow::before {
+    content: '';
+    display: block;
+    width: 2px;
+    height: 20px;
+    background: #475569;
+    margin: 0 auto;
+  }
+  .arch-arrow-label {
+    font-size: 10px;
+    color: #64748b;
+    text-align: center;
+    margin-top: -4px;
+  }
+  @media (max-width: 640px) {
+    .arch-diagram { padding: 24px 16px; }
+    .arch-node { min-width: 100px; padding: 10px 12px; font-size: 12px; }
+    .arch-node.gateway, .arch-node.guardrails, .arch-node.llm { min-width: auto; }
+  }
 
   /* Tables */
   .table-wrap {
@@ -617,39 +743,85 @@
     <span class="ko">기업 네트워크 내에서 ChipClaw 구성 요소가 상호작용하는 방식.</span>
   </p>
 
-  <div class="arch-box">
-<span class="comment">┌─────────────────────────────────────────────────────────────┐</span>
-<span class="comment">│              MICROCHIP CORPORATE NETWORK                     │</span>
-<span class="comment">│                                                              │</span>
-<span class="comment">│  ┌─────────────┐    ┌──────────────────────────────────┐    │</span>
-<span class="comment">│  │</span> <span class="highlight">  Engineers   </span><span class="comment">│    │</span> <span class="green">    ChipClaw Server (VM)          </span><span class="comment">│    │</span>
-<span class="comment">│  │</span>              <span class="comment">│    │                                  │    │</span>
-<span class="comment">│  │</span>  <span class="highlight">Slack/Teams</span> <span class="comment">│───▶│  ┌────────────────────────────┐  │    │</span>
-<span class="comment">│  │</span>  <span class="highlight">  Clients</span>   <span class="comment">│    │  │</span> <span class="green"> OpenClaw Gateway           </span><span class="comment">│  │    │</span>
-<span class="comment">│  │</span>              <span class="comment">│    │  │  ├─ Agent: Validation</span>      <span class="comment">│  │    │</span>
-<span class="comment">│  └─────────────┘    │  │  ├─ Agent: Design</span>           <span class="comment">│  │    │</span>
-<span class="comment">│                      │  │  └─ Agent: DevOps</span>           <span class="comment">│  │    │</span>
-<span class="comment">│                      │  └─────────┬──────────────────┘  │    │</span>
-<span class="comment">│                      │            │                      │    │</span>
-<span class="comment">│                      │  ┌─────────▼──────────────────┐  │    │</span>
-<span class="comment">│                      │  │</span> <span class="amber"> NeMo Guardrails Layer      </span><span class="comment">│  │    │</span>
-<span class="comment">│                      │  │  ├─ IP leakage prevention</span>  <span class="comment">│  │    │</span>
-<span class="comment">│                      │  │  ├─ Topic boundaries</span>       <span class="comment">│  │    │</span>
-<span class="comment">│                      │  │  └─ Output compliance</span>       <span class="comment">│  │    │</span>
-<span class="comment">│                      │  └─────────┬──────────────────┘  │    │</span>
-<span class="comment">│                      │            │                      │    │</span>
-<span class="comment">│                      │  ┌─────────▼──────────────────┐  │    │</span>
-<span class="comment">│                      │  │</span> <span class="pink"> LLM Engine                 </span><span class="comment">│  │    │</span>
-<span class="comment">│                      │  │  Option A: Local (Ollama)   │  │    │</span>
-<span class="comment">│                      │  │  Option B: Hybrid (API+Local)│  │    │</span>
-<span class="comment">│                      │  │  Option C: Cloud API Only</span>   <span class="comment">│  │    │</span>
-<span class="comment">│                      │  └────────────────────────────┘  │    │</span>
-<span class="comment">│                      └──────────────────────────────────┘    │</span>
-<span class="comment">│                                                              │</span>
-<span class="comment">│  ┌────────────┐  ┌────────────┐  ┌─────────────────────┐    │</span>
-<span class="comment">│  │</span> <span class="highlight">Jira/Conflu.</span><span class="comment">│  │</span> <span class="highlight">Git Repos</span>   <span class="comment">│  │</span> <span class="highlight">Internal Wikis/Docs</span> <span class="comment">│    │</span>
-<span class="comment">│  └────────────┘  └────────────┘  └─────────────────────┘    │</span>
-<span class="comment">└─────────────────────────────────────────────────────────────┘</span>
+  <div class="arch-diagram">
+    <div class="arch-boundary" data-label="Corporate Network Boundary">
+      <div class="arch-flow">
+        <!-- Engineers -->
+        <div class="arch-row">
+          <div class="arch-node engineers">
+            👩‍💻 <span class="en">Engineers</span><span class="ko">엔지니어</span>
+            <span class="arch-node-label">Slack / MS Teams / Web UI</span>
+          </div>
+        </div>
+
+        <div class="arch-arrow"></div>
+        <div class="arch-arrow-label">
+          <span class="en">Encrypted internal traffic</span>
+          <span class="ko">암호화된 내부 트래픽</span>
+        </div>
+
+        <!-- OpenClaw Gateway -->
+        <div class="arch-row">
+          <div class="arch-node gateway">
+            🦞 OpenClaw Gateway
+            <span class="arch-node-label">
+              <span class="en">Multi-agent routing · Session isolation · Tool sandboxing</span>
+              <span class="ko">멀티 에이전트 라우팅 · 세션 격리 · 도구 샌드박싱</span>
+            </span>
+            <div class="arch-node-sub">
+              <span>🔬 <span class="en">Validation Agent</span><span class="ko">검증 에이전트</span></span>
+              <span>⚡ <span class="en">Design Agent</span><span class="ko">설계 에이전트</span></span>
+              <span>🔧 DevOps Agent</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="arch-arrow"></div>
+
+        <!-- NeMo Guardrails -->
+        <div class="arch-row">
+          <div class="arch-node guardrails">
+            🛡️ NeMo Guardrails
+            <span class="arch-node-label">
+              <span class="en">IP leak prevention · Topic boundaries · Output compliance · Jailbreak defense</span>
+              <span class="ko">IP 유출 방지 · 주제 경계 · 출력 규정 준수 · 탈옥 방어</span>
+            </span>
+          </div>
+        </div>
+
+        <div class="arch-arrow"></div>
+
+        <!-- LLM Engine -->
+        <div class="arch-row">
+          <div class="arch-node llm">
+            🧠 <span class="en">Corporate AI Models</span><span class="ko">기업 AI 모델</span>
+            <span class="arch-node-label">
+              <span class="en">Pre-approved, secured by corporate IT</span>
+              <span class="ko">사전 승인, 기업 IT에 의해 보안</span>
+            </span>
+            <div class="arch-node-sub">
+              <span>OpenAI GPT-4o/4.1</span>
+              <span>Claude Opus/Sonnet</span>
+              <span><span class="en">+ Local fallback (optional)</span><span class="ko">+ 로컬 폴백 (선택)</span></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="arch-arrow"></div>
+        <div class="arch-arrow-label">
+          <span class="en">Tool integrations</span>
+          <span class="ko">도구 연동</span>
+        </div>
+
+        <!-- Tools -->
+        <div class="arch-row">
+          <div class="arch-node tool">📋 Jira / Confluence</div>
+          <div class="arch-node tool">🗂️ Git Repos</div>
+          <div class="arch-node tool">📚 <span class="en">Internal Docs</span><span class="ko">내부 문서</span></div>
+          <div class="arch-node tool">🔬 <span class="en">EDA Tools</span><span class="ko">EDA 도구</span></div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <h3>
@@ -838,109 +1010,202 @@
     <span class="ko">최소 규모에서 전체 규모까지 유연한 옵션.</span>
   </p>
 
+  <div class="callout success">
+    <div class="callout-icon">✅</div>
+    <div class="callout-text">
+      <strong>
+        <span class="en">Key Advantage: Corporate AI Models Already Available</span>
+        <span class="ko">핵심 이점: 기업 AI 모델 이미 사용 가능</span>
+      </strong>
+      <span class="en">Microchip already provides secured, IT-approved access to the latest OpenAI (GPT-4o, GPT-4.1) and Anthropic (Claude Opus, Sonnet) models. This eliminates the biggest deployment hurdle — no new vendor agreements, no API key procurement, no security review of external model providers. ChipClaw simply connects to these existing corporate AI endpoints.</span>
+      <span class="ko">Microchip은 이미 최신 OpenAI (GPT-4o, GPT-4.1) 및 Anthropic (Claude Opus, Sonnet) 모델에 대한 보안 승인된 IT 접근을 제공합니다. 이는 가장 큰 배포 장벽을 제거합니다 — 새로운 벤더 계약 불필요, API 키 조달 불필요, 외부 모델 프로바이더 보안 심사 불필요. ChipClaw은 이 기존 기업 AI 엔드포인트에 연결하기만 하면 됩니다.</span>
+    </div>
+  </div>
+
   <div class="table-wrap">
     <table>
       <thead>
         <tr>
           <th></th>
-          <th><span class="en">Option A: Cloud API</span><span class="ko">옵션 A: 클라우드 API</span></th>
-          <th><span class="en">Option B: Hybrid</span><span class="ko">옵션 B: 하이브리드</span></th>
-          <th><span class="en">Option C: Fully Local</span><span class="ko">옵션 C: 완전 로컬</span></th>
+          <th>✅ <span class="en">Recommended: Corporate API</span><span class="ko">추천: 기업 API</span></th>
+          <th><span class="en">Future: Hybrid</span><span class="ko">향후: 하이브리드</span></th>
         </tr>
       </thead>
       <tbody>
         <tr>
           <td><strong>LLM</strong></td>
-          <td>Claude / GPT API</td>
           <td>
-            <span class="en">Local primary + API fallback</span>
-            <span class="ko">로컬 주력 + API 폴백</span>
+            <span class="en">Corporate OpenAI + Anthropic (already approved)</span>
+            <span class="ko">기업 OpenAI + Anthropic (이미 승인됨)</span>
           </td>
           <td>
-            <span class="en">Ollama / LM Studio only</span>
-            <span class="ko">Ollama / LM Studio 전용</span>
+            <span class="en">Corporate API + Local LLM for air-gapped tasks</span>
+            <span class="ko">기업 API + 에어갭 작업용 로컬 LLM</span>
           </td>
         </tr>
         <tr>
           <td><strong><span class="en">Hardware</span><span class="ko">하드웨어</span></strong></td>
           <td>
-            <span class="en">Any VM (4 core, 16GB)</span>
-            <span class="ko">모든 VM (4코어, 16GB)</span>
+            <span class="en">Any corporate VM (4 core, 16GB RAM)</span>
+            <span class="ko">모든 기업 VM (4코어, 16GB RAM)</span>
           </td>
           <td>
-            <span class="en">GPU server + VM</span>
-            <span class="ko">GPU 서버 + VM</span>
-          </td>
-          <td>
-            <span class="en">High-end GPU server (≥80GB VRAM)</span>
-            <span class="ko">고성능 GPU 서버 (≥80GB VRAM)</span>
+            <span class="en">VM + GPU server (for local inference)</span>
+            <span class="ko">VM + GPU 서버 (로컬 추론용)</span>
           </td>
         </tr>
         <tr>
-          <td><strong><span class="en">Monthly Cost</span><span class="ko">월 비용</span></strong></td>
-          <td>$100–400</td>
-          <td>$50–150 + <span class="en">hardware</span><span class="ko">하드웨어</span></td>
+          <td><strong><span class="en">New Cost</span><span class="ko">신규 비용</span></strong></td>
           <td>
-            <span class="en">Hardware only (~$15-30K upfront)</span>
-            <span class="ko">하드웨어만 (~$15-30K 초기)</span>
+            <span class="en">~$0 (VM from existing infra, models already paid)</span>
+            <span class="ko">~$0 (기존 인프라 VM, 모델 비용 지불 완료)</span>
+          </td>
+          <td>
+            <span class="en">GPU hardware investment ($15-30K)</span>
+            <span class="ko">GPU 하드웨어 투자 ($15-30K)</span>
           </td>
         </tr>
         <tr>
           <td><strong><span class="en">Data Privacy</span><span class="ko">데이터 프라이버시</span></strong></td>
           <td>
-            <span class="en">⚠️ API calls leave network</span>
-            <span class="ko">⚠️ API 호출이 네트워크 외부로</span>
+            <span class="en">✅ Routed through corporate-secured endpoints</span>
+            <span class="ko">✅ 기업 보안 엔드포인트를 통해 라우팅</span>
           </td>
           <td>
-            <span class="en">✅ Sensitive = local only</span>
-            <span class="ko">✅ 민감 데이터 = 로컬만</span>
-          </td>
-          <td>
-            <span class="en">✅ 100% air-gapped capable</span>
-            <span class="ko">✅ 100% 에어갭 가능</span>
+            <span class="en">✅ Sensitive data stays fully local</span>
+            <span class="ko">✅ 민감 데이터 완전 로컬 유지</span>
           </td>
         </tr>
         <tr>
           <td><strong><span class="en">Quality</span><span class="ko">품질</span></strong></td>
           <td>⭐⭐⭐⭐⭐</td>
-          <td>⭐⭐⭐⭐</td>
-          <td>⭐⭐⭐</td>
+          <td>⭐⭐⭐⭐⭐</td>
         </tr>
         <tr>
-          <td><strong><span class="en">Recommended For</span><span class="ko">추천 대상</span></strong></td>
+          <td><strong><span class="en">Setup Time</span><span class="ko">설정 시간</span></strong></td>
           <td>
-            <span class="en">Fast pilot, non-sensitive tasks</span>
-            <span class="ko">빠른 파일럿, 비민감 작업</span>
+            <span class="en">1-2 weeks</span>
+            <span class="ko">1-2주</span>
           </td>
           <td>
-            <span class="en">✅ Best balance (recommended)</span>
-            <span class="ko">✅ 최적 균형 (추천)</span>
-          </td>
-          <td>
-            <span class="en">Max security, budget available</span>
-            <span class="ko">최대 보안, 예산 확보 시</span>
+            <span class="en">4-6 weeks (hardware procurement)</span>
+            <span class="ko">4-6주 (하드웨어 조달)</span>
           </td>
         </tr>
       </tbody>
     </table>
   </div>
 
-  <div class="callout success">
-    <div class="callout-icon">✅</div>
+  <div class="callout info">
+    <div class="callout-icon">💡</div>
     <div class="callout-text">
       <strong>
-        <span class="en">Recommendation: Start with Option A, migrate to Option B</span>
-        <span class="ko">추천: 옵션 A로 시작, 옵션 B로 전환</span>
+        <span class="en">Recommendation: Start with Corporate API, expand as needed</span>
+        <span class="ko">추천: 기업 API로 시작, 필요시 확장</span>
       </strong>
-      <span class="en">Begin with cloud API behind corporate VPN for fastest time-to-value. As the team validates ROI, invest in a GPU server for local inference on sensitive workloads. OpenClaw's hybrid model config makes this migration seamless — just add a local provider and set fallback priorities.</span>
-      <span class="ko">가장 빠른 가치 실현을 위해 기업 VPN 뒤의 클라우드 API로 시작합니다. 팀이 ROI를 검증하면, 민감한 워크로드를 위한 로컬 추론용 GPU 서버에 투자합니다. OpenClaw의 하이브리드 모델 구성으로 이 마이그레이션이 원활하게 이루어집니다 — 로컬 프로바이더를 추가하고 폴백 우선순위를 설정하기만 하면 됩니다.</span>
+      <span class="en">Since our corporate AI models are already secured and approved, we can be operational within days — not months. The OpenClaw gateway simply points to the existing corporate API endpoints. No new vendor contracts required. Local LLM can be added later for specialized air-gapped workloads if needed.</span>
+      <span class="ko">기업 AI 모델이 이미 보안 승인되어 있으므로, 몇 달이 아닌 며칠 내에 운영을 시작할 수 있습니다. OpenClaw 게이트웨이는 기존 기업 API 엔드포인트를 가리키기만 하면 됩니다. 새로운 벤더 계약 불필요. 필요시 나중에 특수 에어갭 워크로드를 위한 로컬 LLM을 추가할 수 있습니다.</span>
     </div>
   </div>
 
   <div class="divider"></div>
 
-  <!-- REQUIREMENTS -->
+  <!-- FEASIBILITY -->
   <div class="section-num">8</div>
+  <h2>
+    <span class="en">Feasibility &amp; Implementation Readiness</span>
+    <span class="ko">실현 가능성 및 구현 준비 상태</span>
+  </h2>
+  <p class="section-desc">
+    <span class="en">Why this can be built quickly with existing resources.</span>
+    <span class="ko">기존 리소스로 빠르게 구축할 수 있는 이유.</span>
+  </p>
+
+  <div class="callout success">
+    <div class="callout-icon">🎯</div>
+    <div class="callout-text">
+      <strong>
+        <span class="en">This is configuration, not development</span>
+        <span class="ko">이것은 개발이 아닌 구성입니다</span>
+      </strong>
+      <span class="en">ChipClaw is <strong>not</strong> building software from scratch. It is deploying and configuring existing open-source tools. OpenClaw installs with a single command (<code>curl -fsSL https://openclaw.ai/install.sh | bash</code>), NeMo Guardrails installs via <code>pip install nemoguardrails</code>. The core work is writing configuration files and custom guardrail rules — not application development.</span>
+      <span class="ko">ChipClaw은 소프트웨어를 처음부터 구축하는 것이 <strong>아닙니다</strong>. 기존 오픈소스 도구를 배포하고 구성하는 것입니다. OpenClaw은 단일 명령으로 설치되고 (<code>curl -fsSL https://openclaw.ai/install.sh | bash</code>), NeMo Guardrails는 <code>pip install nemoguardrails</code>로 설치됩니다. 핵심 작업은 구성 파일과 맞춤 가드레일 규칙을 작성하는 것이지 애플리케이션 개발이 아닙니다.</span>
+    </div>
+  </div>
+
+  <h3><span class="en">What We Already Have</span><span class="ko">이미 갖추고 있는 것</span></h3>
+  <div class="card-grid">
+    <div class="card">
+      <div class="card-icon green">✅</div>
+      <h4><span class="en">Corporate AI Models</span><span class="ko">기업 AI 모델</span></h4>
+      <p><span class="en">IT-approved OpenAI &amp; Anthropic API access already available. No vendor procurement needed.</span><span class="ko">IT 승인된 OpenAI &amp; Anthropic API 접근이 이미 가능. 벤더 조달 불필요.</span></p>
+    </div>
+    <div class="card">
+      <div class="card-icon green">✅</div>
+      <h4><span class="en">Virtual Server Infrastructure</span><span class="ko">가상 서버 인프라</span></h4>
+      <p><span class="en">Corporate VM infrastructure exists. Only need one VM allocation for the gateway.</span><span class="ko">기업 VM 인프라 존재. 게이트웨이용 VM 하나만 할당 필요.</span></p>
+    </div>
+    <div class="card">
+      <div class="card-icon green">✅</div>
+      <h4><span class="en">Domain Expertise</span><span class="ko">도메인 전문성</span></h4>
+      <p><span class="en">Proposer has hands-on experience running OpenClaw in production, plus full-stack JS/TS/Python proficiency.</span><span class="ko">제안자는 OpenClaw 운영 경험과 풀스택 JS/TS/Python 역량을 보유.</span></p>
+    </div>
+    <div class="card">
+      <div class="card-icon green">✅</div>
+      <h4><span class="en">Chat Integration (Slack/Teams)</span><span class="ko">채팅 연동 (Slack/Teams)</span></h4>
+      <p><span class="en">OpenClaw has native Slack &amp; MS Teams plugins. Configuration is straightforward with a bot token.</span><span class="ko">OpenClaw은 네이티브 Slack &amp; MS Teams 플러그인을 보유. 봇 토큰으로 간단히 구성.</span></p>
+    </div>
+  </div>
+
+  <h3><span class="en">Skill Match</span><span class="ko">기술 역량 매칭</span></h3>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th><span class="en">Required Skill</span><span class="ko">필요 기술</span></th>
+          <th><span class="en">Status</span><span class="ko">상태</span></th>
+          <th><span class="en">Notes</span><span class="ko">비고</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Node.js / TypeScript</td>
+          <td><span class="tag green">✅ <span class="en">Proficient</span><span class="ko">숙련</span></span></td>
+          <td><span class="en">OpenClaw is Node-based; full-stack JS/TS experience</span><span class="ko">OpenClaw은 Node 기반; 풀스택 JS/TS 경험</span></td>
+        </tr>
+        <tr>
+          <td>Python</td>
+          <td><span class="tag green">✅ <span class="en">Proficient</span><span class="ko">숙련</span></span></td>
+          <td><span class="en">NeMo Guardrails is Python; automation scripting background</span><span class="ko">NeMo Guardrails는 Python; 자동화 스크립팅 배경</span></td>
+        </tr>
+        <tr>
+          <td>OpenClaw</td>
+          <td><span class="tag green">✅ <span class="en">Production Experience</span><span class="ko">운영 경험</span></span></td>
+          <td><span class="en">Running OpenClaw in personal production with multi-channel setup</span><span class="ko">멀티채널 설정으로 개인 프로덕션에서 OpenClaw 운영 중</span></td>
+        </tr>
+        <tr>
+          <td>Linux / VM Admin</td>
+          <td><span class="tag green">✅ <span class="en">Capable</span><span class="ko">가능</span></span></td>
+          <td><span class="en">Server deployment, systemd services, basic DevOps</span><span class="ko">서버 배포, systemd 서비스, 기본 DevOps</span></td>
+        </tr>
+        <tr>
+          <td>NeMo Guardrails</td>
+          <td><span class="tag amber">📖 <span class="en">Learning (1-2 days)</span><span class="ko">학습 중 (1-2일)</span></span></td>
+          <td><span class="en">Well-documented; Colang is a simple DSL. Quick ramp-up.</span><span class="ko">문서화 잘 됨; Colang은 간단한 DSL. 빠른 습득.</span></td>
+        </tr>
+        <tr>
+          <td><span class="en">Semiconductor Domain</span><span class="ko">반도체 도메인</span></td>
+          <td><span class="tag green">✅ <span class="en">Expert</span><span class="ko">전문가</span></span></td>
+          <td><span class="en">Validation engineer on T1 PHY/Switch — knows exactly what the team needs</span><span class="ko">T1 PHY/Switch 검증 엔지니어 — 팀에 필요한 것을 정확히 파악</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- REQUIREMENTS -->
+  <div class="section-num">9</div>
   <h2>
     <span class="en">Technical Requirements</span>
     <span class="ko">기술 요구사항</span>
@@ -1003,7 +1268,7 @@
   <div class="divider"></div>
 
   <!-- IMPLEMENTATION -->
-  <div class="section-num">9</div>
+  <div class="section-num">10</div>
   <h2>
     <span class="en">Implementation Roadmap</span>
     <span class="ko">구현 로드맵</span>
@@ -1075,7 +1340,7 @@
   <div class="divider"></div>
 
   <!-- ROI -->
-  <div class="section-num">10</div>
+  <div class="section-num">11</div>
   <h2>
     <span class="en">Return on Investment</span>
     <span class="ko">투자 수익률</span>
@@ -1107,14 +1372,14 @@
           <td><span class="en">At avg $120K/yr engineer salary</span><span class="ko">평균 연봉 $120K 기준</span></td>
         </tr>
         <tr>
-          <td><strong><span class="en">Platform cost (Year 1)</span><span class="ko">플랫폼 비용 (1년차)</span></strong></td>
-          <td>$5K–$10K</td>
-          <td><span class="en">API usage + VM + engineer setup time</span><span class="ko">API 사용 + VM + 엔지니어 설정 시간</span></td>
+          <td><strong><span class="en">Incremental platform cost (Year 1)</span><span class="ko">추가 플랫폼 비용 (1년차)</span></strong></td>
+          <td>~$1K–$3K</td>
+          <td><span class="en">VM allocation + engineer setup time (AI models already covered)</span><span class="ko">VM 할당 + 엔지니어 설정 시간 (AI 모델 비용 이미 포함)</span></td>
         </tr>
         <tr>
           <td><strong>ROI</strong></td>
-          <td>20×–50×</td>
-          <td><span class="en">Conservative first-year estimate</span><span class="ko">보수적 1년차 추정</span></td>
+          <td>70×–150×</td>
+          <td><span class="en">Conservative first-year estimate (near-zero incremental cost)</span><span class="ko">보수적 1년차 추정 (거의 제로 추가 비용)</span></td>
         </tr>
       </tbody>
     </table>
@@ -1135,7 +1400,7 @@
   <div class="divider"></div>
 
   <!-- RISKS -->
-  <div class="section-num">11</div>
+  <div class="section-num">12</div>
   <h2>
     <span class="en">Risks &amp; Mitigations</span>
     <span class="ko">위험 요소 및 완화 방안</span>
@@ -1183,7 +1448,7 @@
   <div class="divider"></div>
 
   <!-- ASK -->
-  <div class="section-num">12</div>
+  <div class="section-num">13</div>
   <h2>
     <span class="en">The Ask</span>
     <span class="ko">요청 사항</span>
@@ -1206,8 +1471,8 @@
     </div>
     <div class="card">
       <div class="card-icon amber">3️⃣</div>
-      <h4><span class="en">API Budget</span><span class="ko">API 예산</span></h4>
-      <p><span class="en">$200/month API budget for Phase 1–2 (Claude/GPT). Decreases as we add local inference. Full local = $0/mo ongoing.</span><span class="ko">1-2단계 API 예산 $200/월 (Claude/GPT). 로컬 추론 추가 시 감소. 완전 로컬 = 월 $0.</span></p>
+      <h4><span class="en">AI Model Access</span><span class="ko">AI 모델 접근</span></h4>
+      <p><span class="en">Allocation of usage quota on existing corporate OpenAI/Anthropic endpoints. No new vendor contracts — models are already approved and available.</span><span class="ko">기존 기업 OpenAI/Anthropic 엔드포인트의 사용 할당량 배정. 새로운 벤더 계약 불필요 — 모델은 이미 승인되어 사용 가능.</span></p>
     </div>
     <div class="card">
       <div class="card-icon purple">4️⃣</div>
