@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Daily Tech Briefing — Mar 18, 2026</title>
+<style>
+  :root {
+    --bg: #0d1117; --card: #161b22; --border: #30363d;
+    --text: #c9d1d9; --heading: #e6edf3; --accent: #58a6ff;
+    --tag-ai: #7ee787; --tag-mkt: #f0883e; --tag-semi: #bc8cff; --tag-wild: #ff7b72;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; padding: 16px; max-width: 720px; margin: 0 auto; }
+  header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
+  h1 { color: var(--heading); font-size: 1.4rem; }
+  .date { color: #8b949e; font-size: 0.85rem; margin-top: 4px; }
+  .lang-toggle { background: var(--card); color: var(--accent); border: 1px solid var(--border); padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: 0.85rem; white-space: nowrap; }
+  .section-title { font-size: 1.1rem; color: var(--heading); margin: 24px 0 12px; display: flex; align-items: center; gap: 8px; }
+  .tag { font-size: 0.7rem; padding: 2px 8px; border-radius: 12px; font-weight: 600; text-transform: uppercase; }
+  .tag-ai { background: rgba(126,231,135,0.15); color: var(--tag-ai); }
+  .tag-mkt { background: rgba(240,136,62,0.15); color: var(--tag-mkt); }
+  .tag-semi { background: rgba(188,140,255,0.15); color: var(--tag-semi); }
+  .tag-wild { background: rgba(255,123,114,0.15); color: var(--tag-wild); }
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 16px; margin-bottom: 12px; }
+  .card h3 { color: var(--heading); font-size: 1rem; margin-bottom: 4px; }
+  .card .source { color: #8b949e; font-size: 0.8rem; margin-bottom: 8px; }
+  .card p { font-size: 0.9rem; }
+  .card a { color: var(--accent); text-decoration: none; font-size: 0.85rem; }
+  .card a:hover { text-decoration: underline; }
+  footer { text-align: center; color: #484f58; font-size: 0.75rem; margin-top: 32px; padding-top: 16px; border-top: 1px solid var(--border); }
+  .ko { display: none; }
+  .ko.show { display: inline !important; }
+  .en.hide { display: none !important; }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>🌳 <span class="en">Daily Tech Briefing</span><span class="ko">일일 테크 브리핑</span></h1>
+    <div class="date"><span class="en">Wednesday, March 18, 2026</span><span class="ko">2026년 3월 18일 수요일</span></div>
+  </div>
+  <button class="lang-toggle" onclick="toggleLang()">한국어</button>
+</header>
+
+<!-- AI & TECH -->
+<div class="section-title"><span class="tag tag-ai">AI & Tech</span></div>
+
+<div class="card">
+  <h3><span class="en">Mistral AI Launches "Forge" — Custom Enterprise AI Training</span><span class="ko">Mistral AI, 기업 맞춤형 AI 학습 플랫폼 "Forge" 출시</span></h3>
+  <div class="source">Mistral AI</div>
+  <p><span class="en">Mistral AI unveiled Forge, a platform that lets enterprises train frontier-grade AI models on their own proprietary data — codebases, compliance docs, internal processes. Partners include ASML, Ericsson, and the European Space Agency. Forge supports pre-training, post-training, and reinforcement learning to build domain-specific agents that go beyond generic LLM behavior.</span><span class="ko">Mistral AI가 기업이 자체 데이터(코드베이스, 규정 문서, 내부 프로세스)로 최첨단 AI 모델을 훈련할 수 있는 플랫폼 Forge를 공개했습니다. ASML, Ericsson, 유럽우주국 등이 파트너로 참여하며, 사전훈련부터 강화학습까지 지원하여 도메인 특화 에이전트를 구축할 수 있습니다.</span></p>
+  <a href="https://mistral.ai/news/forge" target="_blank"><span class="en">Read more →</span><span class="ko">더 보기 →</span></a>
+</div>
+
+<div class="card">
+  <h3><span class="en">Stripe Launches Machine Payments Protocol — AI Agents Can Now Pay</span><span class="ko">Stripe, 머신 결제 프로토콜 출시 — AI 에이전트 자체 결제 가능</span></h3>
+  <div class="source">Stripe</div>
+  <p><span class="en">Stripe and Tempo co-authored MPP, an open standard enabling AI agents to make purchases programmatically — microtransactions, subscriptions, even ordering sandwiches. Already live: agents can spin up headless browsers, send physical mail, and contribute to climate initiatives, all without human checkout flows.</span><span class="ko">Stripe와 Tempo가 AI 에이전트가 프로그래밍 방식으로 결제할 수 있는 개방형 표준 MPP를 공동 발표했습니다. 이미 헤드리스 브라우저 구동, 실물 우편 발송, 기후 이니셔티브 기부 등이 에이전트를 통해 가능합니다.</span></p>
+  <a href="https://stripe.com/blog/machine-payments-protocol" target="_blank"><span class="en">Read more →</span><span class="ko">더 보기 →</span></a>
+</div>
+
+<div class="card">
+  <h3><span class="en">Sony Building "Protective AI" to Fight Ghibli-Style AI Slop</span><span class="ko">Sony, 지브리 스타일 AI 도용 방지용 "보호 AI" 개발 중</span></h3>
+  <div class="source">The Verge</div>
+  <p><span class="en">Sony's R&D division is training its own AI model on Studio Ghibli films to eventually detect and block AI-generated imitations of protected content. With Ghibli-style AI art flooding the internet, Sony is taking a defensive approach to intellectual property protection using the very technology it aims to counter.</span><span class="ko">Sony R&D 부서가 지브리 영화를 학습한 자체 AI 모델을 개발하여 보호 대상 콘텐츠의 AI 모방을 감지·차단하려 합니다. 지브리 스타일 AI 아트가 범람하는 가운데, 기술로 기술에 대응하는 지적재산 보호 전략입니다.</span></p>
+  <a href="https://www.theverge.com/tech" target="_blank"><span class="en">Read more →</span><span class="ko">더 보기 →</span></a>
+</div>
+
+<!-- MARKETS -->
+<div class="section-title"><span class="tag tag-mkt">Markets</span></div>
+
+<div class="card">
+  <h3><span class="en">Meta Shuts Down VR Horizon Worlds — Goes All-In on Mobile</span><span class="ko">Meta, VR 호라이즌 월드 종료 — 모바일 올인 전략</span></h3>
+  <div class="source">Engadget / The Verge</div>
+  <p><span class="en">Meta will shut down the VR version of its Horizon Worlds metaverse on June 15, pivoting entirely to mobile. The company is abandoning its original VR-first vision that defined the "metaverse era," signaling a major strategic retreat after years of heavy investment in virtual reality social experiences.</span><span class="ko">Meta가 6월 15일부로 VR 메타버스 호라이즌 월드를 종료하고 모바일로 완전 전환합니다. 수년간 VR 소셜 경험에 막대한 투자를 한 후 메타버스 전략의 대대적 후퇴를 의미합니다.</span></p>
+  <a href="https://www.engadget.com/ar-vr/meta-will-shut-down-vr-horizon-worlds-access-in-june-222028919.html" target="_blank"><span class="en">Read more →</span><span class="ko">더 보기 →</span></a>
+</div>
+
+<div class="card">
+  <h3><span class="en">Samsung Discontinues Galaxy Z TriFold After Just Months</span><span class="ko">삼성, Galaxy Z TriFold 수개월 만에 단종</span></h3>
+  <div class="source">The Verge</div>
+  <p><span class="en">Samsung's ambitious tri-fold phone experiment is over. The Galaxy Z TriFold has been discontinued after reportedly only a few thousand units were ever manufactured. The short-lived device highlights the ongoing challenges of ultra-premium foldable form factors finding mainstream demand.</span><span class="ko">삼성의 야심찬 트라이폴드 폰 실험이 끝났습니다. Galaxy Z TriFold가 수천 대만 생산된 것으로 알려진 가운데 단종되었습니다. 초프리미엄 폴더블 폼팩터의 대중화가 여전히 어렵다는 것을 보여줍니다.</span></p>
+  <a href="https://www.theverge.com/tech" target="_blank"><span class="en">Read more →</span><span class="ko">더 보기 →</span></a>
+</div>
+
+<!-- SEMICONDUCTORS -->
+<div class="section-title"><span class="tag tag-semi">Semiconductors</span></div>
+
+<div class="card">
+  <h3><span class="en">Jensen Huang: Gamers "Completely Wrong" About DLSS 5</span><span class="ko">젠슨 황: DLSS 5 비판하는 게이머들 "완전히 틀렸다"</span></h3>
+  <div class="source">Tom's Hardware</div>
+  <p><span class="en">Nvidia CEO Jensen Huang doubled down on DLSS 5, telling critics they're "completely wrong." He explained that DLSS 5 fuses geometry/texture controllability with generative AI, allowing developers to fine-tune the output. The backlash centers on concerns about AI-generated artifacts replacing native rendering quality.</span><span class="ko">엔비디아 CEO 젠슨 황이 DLSS 5 비판에 대해 "완전히 틀렸다"며 반박했습니다. DLSS 5는 지오메트리/텍스처 제어와 생성형 AI를 융합하여 개발자가 결과물을 미세 조정할 수 있다고 설명했습니다. 비판의 핵심은 AI 생성 아티팩트가 네이티브 렌더링을 대체하는 것에 대한 우려입니다.</span></p>
+  <a href="https://www.tomshardware.com/pc-components/gpus/jensen-huang-says-gamers-are-completely-wrong-about-dlss-5-nvidia-ceo-responds-to-dlss-5-backlash" target="_blank"><span class="en">Read more →</span><span class="ko">더 보기 →</span></a>
+</div>
+
+<!-- WILD CARD -->
+<div class="section-title"><span class="tag tag-wild">Wild Card</span></div>
+
+<div class="card">
+  <h3><span class="en">"DarkSword" iPhone Hack Puts Hundreds of Millions at Risk</span><span class="ko">"다크소드" 아이폰 해킹 — 수억 대 위험에 노출</span></h3>
+  <div class="source">WIRED</div>
+  <p><span class="en">Google, iVerify, and Lookout revealed "DarkSword," a sophisticated iPhone hacking technique found on infected websites that silently compromises any device running iOS 18. Linked to Russian hackers, it affects nearly a quarter of all active iPhones. Users on the latest iOS are safe, but hundreds of millions who haven't updated remain vulnerable.</span><span class="ko">Google, iVerify, Lookout가 감염된 웹사이트에서 발견된 정교한 아이폰 해킹 기술 "다크소드"를 공개했습니다. iOS 18을 실행하는 모든 기기를 자동으로 해킹하며, 러시아 해커와 연관됩니다. 최신 iOS 사용자는 안전하지만 업데이트하지 않은 수억 명이 취약합니다.</span></p>
+  <a href="https://www.wired.com/story/hundreds-of-millions-of-iphones-can-be-hacked-with-a-new-tool-found-in-the-wild/" target="_blank"><span class="en">Read more →</span><span class="ko">더 보기 →</span></a>
+</div>
+
+<footer>
+  <span class="en">Curated by Totoro 🌳 • Generated Mar 18, 2026 9:00 AM MST</span>
+  <span class="ko">토토로 🌳 큐레이션 • 2026년 3월 18일 오전 9:00 MST 생성</span>
+</footer>
+
+<script>
+  let isKorean = false;
+  function toggleLang() {
+    isKorean = !isKorean;
+    document.querySelectorAll('.en').forEach(el => el.classList.toggle('hide', isKorean));
+    document.querySelectorAll('.ko').forEach(el => el.classList.toggle('show', isKorean));
+    document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+  }
+</script>
+
+</body>
+</html>
