@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 23 Quiz: Pipeline Hazards — Digital Design Study</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    background: linear-gradient(135deg, #fefae0 0%, #faedcd 100%);
+    color: #3d405b;
+    line-height: 1.8;
+    padding: 24px;
+    max-width: 920px;
+    margin: 0 auto;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+h1 { color: #5d4037; border-bottom: 3px solid #c4a77d; padding-bottom: 12px; margin-bottom: 24px; font-size: 2em; }
+h2 { color: #588157; border-bottom: 2px solid #a3b18a; padding-bottom: 8px; margin: 32px 0 16px; }
+h3 { color: #5d4037; margin: 20px 0 12px; }
+p { margin: 12px 0; }
+code {
+    background: #e9f5db;
+    color: #3d405b;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+}
+pre {
+    background: #2d3436;
+    padding: 24px;
+    border-radius: 12px;
+    margin: 24px 0;
+    border: 3px solid #a3b18a;
+    overflow-x: auto;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+    font-size: 15px;
+    line-height: 1.6;
+    color: #f8f8f2;
+}
+pre .keyword { color: #ff79c6; font-weight: 600; }
+pre .type { color: #8be9fd; }
+pre .signal { color: #50fa7b; }
+pre .number { color: #ffb86c; }
+pre .comment { color: #6272a4; font-style: italic; }
+.section { background: #fff; border-radius: 12px; padding: 24px; margin: 24px 0; border: 1px solid #c4a77d; }
+.lang-toggle {
+    position: fixed; top: 16px; right: 16px; background: #588157; border: none;
+    border-radius: 24px; padding: 10px 20px; cursor: pointer; color: #fff;
+    font-size: 14px; font-weight: 600; z-index: 1000;
+}
+.lang-toggle:hover { background: #3a5a40; }
+.nav-links { display: flex; gap: 12px; margin: 24px 0; flex-wrap: wrap; }
+.nav-links a {
+    background: linear-gradient(135deg, #588157, #3a5a40); color: #fff;
+    text-decoration: none; padding: 10px 20px; border-radius: 8px;
+    font-weight: 600; font-size: 14px;
+}
+.nav-links a:hover { opacity: 0.9; }
+.question {
+    background: #fff8f0;
+    border: 2px solid #c4a77d;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+}
+.question h3 { color: #5d4037; margin-bottom: 12px; }
+.options { list-style: none; padding: 0; }
+.options li {
+    padding: 10px 16px;
+    margin: 8px 0;
+    border-radius: 8px;
+    cursor: pointer;
+    border: 2px solid #c4a77d;
+    background: #fff;
+    transition: all 0.2s;
+}
+.options li:hover { border-color: #588157; background: #e9f5db; }
+.options li.correct { background: #d4edda; border-color: #10b981; }
+.options li.incorrect { background: #fce4ec; border-color: #ef4444; }
+.explanation {
+    display: none;
+    background: #fff8f0;
+    border-left: 4px solid #588157;
+    padding: 15px;
+    margin-top: 12px;
+    border-radius: 0 8px 8px 0;
+    color: #3d405b;
+}
+.score-box {
+    background: #fff8f0;
+    border: 2px solid #588157;
+    border-radius: 12px;
+    padding: 24px;
+    margin: 24px 0;
+    text-align: center;
+}
+.score-box h2 { border: none; color: #588157; }
+.score-display { font-size: 2.5em; color: #5d4037; font-weight: bold; margin: 12px 0; }
+.ko { display: none; }
+@media (max-width: 768px) {
+    body { padding: 16px; }
+    h1 { font-size: 1.8em; }
+    pre { font-size: 14px; padding: 16px; }
+    .lang-toggle { padding: 8px 16px; font-size: 13px; }
+}
+</style>
+</head>
+<body>
+
+<button class="lang-toggle" onclick="toggleLang()">한국어</button>
+
+<h1>📝 Day 23 Quiz: Pipeline Hazards</h1>
+
+<div class="nav-links">
+    <a href="day-23-lesson.html">📖 Lesson</a>
+    <a href="day-23-practice.html">🔧 Practice</a>
+</div>
+
+<div id="score-box" class="score-box" style="display:none;">
+    <h2>Quiz Complete!</h2>
+    <div class="score-display" id="score-display"></div>
+    <p id="score-msg"></p>
+</div>
+
+<!-- Q1 -->
+<div class="question" id="q1">
+<h3>Q1. <span class="en">Which type of hazard occurs when an instruction reads a register before a previous instruction has written its result?</span><span class="ko" style="display:none;">이전 명령이 결과를 쓰기 전에 다음 명령이 레지스터를 읽을 때 어떤 유형의 해저드가 발생하는가?</span></h3>
+<ul class="options" data-correct="1">
+<li onclick="pick(this)">A) <span class="en">Structural hazard</span><span class="ko" style="display:none;">구조적 해저드</span></li>
+<li onclick="pick(this)">B) <span class="en">Data hazard (RAW)</span><span class="ko" style="display:none;">데이터 해저드 (RAW)</span></li>
+<li onclick="pick(this)">C) <span class="en">Control hazard</span><span class="ko" style="display:none;">제어 해저드</span></li>
+<li onclick="pick(this)">D) <span class="en">Data hazard (WAR)</span><span class="ko" style="display:none;">데이터 해저드 (WAR)</span></li>
+</ul>
+<div class="explanation"><span class="en">✅ <strong>RAW (Read-After-Write)</strong> is the classic data hazard: instruction B reads a value that instruction A hasn't finished writing yet. This is the most common and most important hazard type.</span><span class="ko" style="display:none;">✅ <strong>RAW (쓰기 후 읽기)</strong>는 고전적인 데이터 해저드입니다: 명령 B가 명령 A가 아직 쓰기를 완료하지 않은 값을 읽습니다. 가장 흔하고 중요한 해저드 유형입니다.</span></div>
+</div>
+
+<!-- Q2 -->
+<div class="question" id="q2">
+<h3>Q2. <span class="en">What is the primary purpose of data forwarding (bypassing)?</span><span class="ko" style="display:none;">데이터 포워딩(바이패싱)의 주요 목적은?</span></h3>
+<ul class="options" data-correct="2">
+<li onclick="pick(this)">A) <span class="en">Increase clock frequency</span><span class="ko" style="display:none;">클록 주파수 증가</span></li>
+<li onclick="pick(this)">B) <span class="en">Reduce pipeline depth</span><span class="ko" style="display:none;">파이프라인 깊이 감소</span></li>
+<li onclick="pick(this)">C) <span class="en">Reduce stalls from data hazards by sending results directly to where they're needed</span><span class="ko" style="display:none;">결과를 필요한 곳으로 직접 전달하여 데이터 해저드 스톨 감소</span></li>
+<li onclick="pick(this)">D) <span class="en">Eliminate all branch penalties</span><span class="ko" style="display:none;">모든 분기 패널티 제거</span></li>
+</ul>
+<div class="explanation"><span class="en">✅ Forwarding sends computed results directly from one pipeline stage to an earlier stage's input, bypassing the register file write-back. This eliminates most data hazard stalls without adding extra cycles.</span><span class="ko" style="display:none;">✅ 포워딩은 계산된 결과를 한 파이프라인 스테이지에서 이전 스테이지의 입력으로 직접 전달하여 레지스터 파일 쓰기를 우회합니다. 추가 사이클 없이 대부분의 데이터 해저드 스톨을 제거합니다.</span></div>
+</div>
+
+<!-- Q3 -->
+<div class="question" id="q3">
+<h3>Q3. <span class="en">In a 5-stage pipeline, a load instruction is immediately followed by an instruction that uses the loaded value. With forwarding, how many stall cycles are needed?</span><span class="ko" style="display:none;">5단계 파이프라인에서 로드 명령 바로 다음에 로드된 값을 사용하는 명령이 옵니다. 포워딩이 있을 때 몇 사이클의 스톨이 필요한가?</span></h3>
+<ul class="options" data-correct="1">
+<li onclick="pick(this)">A) <span class="en">0 — forwarding handles it completely</span><span class="ko" style="display:none;">0 — 포워딩이 완전히 처리</span></li>
+<li onclick="pick(this)">B) <span class="en">1 — data isn't available until end of MEM stage</span><span class="ko" style="display:none;">1 — MEM 스테이지 끝까지 데이터 사용 불가</span></li>
+<li onclick="pick(this)">C) <span class="en">2 — same as without forwarding</span><span class="ko" style="display:none;">2 — 포워딩 없을 때와 동일</span></li>
+<li onclick="pick(this)">D) <span class="en">3 — loads always need 3 stalls</span><span class="ko" style="display:none;">3 — 로드는 항상 3 스톨 필요</span></li>
+</ul>
+<div class="explanation"><span class="en">✅ This is the <strong>load-use hazard</strong>. The load data isn't available until the end of MEM, but the dependent instruction needs it at the start of EX. Even with forwarding, we need exactly <strong>1 stall cycle</strong> — then we forward from MEM→EX.</span><span class="ko" style="display:none;">✅ 이것이 <strong>load-use 해저드</strong>입니다. 로드 데이터는 MEM 끝까지 사용 불가하지만, 의존 명령은 EX 시작에서 필요합니다. 포워딩이 있어도 정확히 <strong>1 스톨 사이클</strong>이 필요하고, 그 후 MEM→EX 포워딩합니다.</span></div>
+</div>
+
+<!-- Q4 -->
+<div class="question" id="q4">
+<h3>Q4. <span class="en">What causes a control hazard?</span><span class="ko" style="display:none;">제어 해저드의 원인은?</span></h3>
+<ul class="options" data-correct="0">
+<li onclick="pick(this)">A) <span class="en">The pipeline doesn't know the next instruction address because a branch hasn't been resolved</span><span class="ko" style="display:none;">분기가 해결되지 않아 다음 명령 주소를 알 수 없음</span></li>
+<li onclick="pick(this)">B) <span class="en">Two instructions compete for the same ALU</span><span class="ko" style="display:none;">두 명령이 같은 ALU를 놓고 경쟁</span></li>
+<li onclick="pick(this)">C) <span class="en">A register is written after being read</span><span class="ko" style="display:none;">레지스터가 읽힌 후 쓰여짐</span></li>
+<li onclick="pick(this)">D) <span class="en">The clock frequency is too high</span><span class="ko" style="display:none;">클록 주파수가 너무 높음</span></li>
+</ul>
+<div class="explanation"><span class="en">✅ Control hazards arise because branch instructions change the flow of execution, but the pipeline has already fetched subsequent instructions that may be wrong. The branch decision typically isn't known until the EX stage.</span><span class="ko" style="display:none;">✅ 제어 해저드는 분기 명령이 실행 흐름을 변경하지만, 파이프라인이 이미 잘못된 후속 명령을 페치했기 때문에 발생합니다. 분기 결정은 보통 EX 스테이지까지 알 수 없습니다.</span></div>
+</div>
+
+<!-- Q5 -->
+<div class="question" id="q5">
+<h3>Q5. <span class="en">In a 2-bit saturating branch predictor, what does the 2-bit counter value <code>10</code> represent?</span><span class="ko" style="display:none;">2비트 포화 분기 예측기에서 2비트 카운터 값 <code>10</code>은 무엇을 나타내는가?</span></h3>
+<ul class="options" data-correct="2">
+<li onclick="pick(this)">A) <span class="en">Strongly not taken</span><span class="ko" style="display:none;">강하게 취해지지 않음</span></li>
+<li onclick="pick(this)">B) <span class="en">Weakly not taken</span><span class="ko" style="display:none;">약하게 취해지지 않음</span></li>
+<li onclick="pick(this)">C) <span class="en">Weakly taken</span><span class="ko" style="display:none;">약하게 취해짐</span></li>
+<li onclick="pick(this)">D) <span class="en">Strongly taken</span><span class="ko" style="display:none;">강하게 취해짐</span></li>
+</ul>
+<div class="explanation"><span class="en">✅ The 2-bit counter states: 00=strongly not taken, 01=weakly not taken, <strong>10=weakly taken</strong>, 11=strongly taken. The MSB (bit 1) determines the prediction: 1x → predict taken, 0x → predict not taken.</span><span class="ko" style="display:none;">✅ 2비트 카운터 상태: 00=강하게 미취, 01=약하게 미취, <strong>10=약하게 취</strong>, 11=강하게 취. MSB(비트 1)가 예측을 결정: 1x → 취해짐 예측, 0x → 미취 예측.</span></div>
+</div>
+
+<!-- Q6 -->
+<div class="question" id="q6">
+<h3>Q6. <span class="en">What happens during a pipeline flush?</span><span class="ko" style="display:none;">파이프라인 플러시 중 무엇이 일어나는가?</span></h3>
+<ul class="options" data-correct="1">
+<li onclick="pick(this)">A) <span class="en">All pipeline stages are paused for one cycle</span><span class="ko" style="display:none;">모든 파이프라인 스테이지가 한 사이클 동안 일시 정지</span></li>
+<li onclick="pick(this)">B) <span class="en">Incorrectly fetched instructions are replaced with NOPs and the PC is redirected</span><span class="ko" style="display:none;">잘못 페치된 명령이 NOP으로 대체되고 PC가 리디렉션됨</span></li>
+<li onclick="pick(this)">C) <span class="en">The entire pipeline is emptied and restarted from scratch</span><span class="ko" style="display:none;">전체 파이프라인이 비워지고 처음부터 재시작</span></li>
+<li onclick="pick(this)">D) <span class="en">Data is forwarded to all stages simultaneously</span><span class="ko" style="display:none;">데이터가 모든 스테이지에 동시에 포워딩됨</span></li>
+</ul>
+<div class="explanation"><span class="en">✅ A flush replaces the incorrectly speculated instructions (in IF/ID and ID/EX registers) with NOPs, effectively canceling them. The PC is then redirected to the correct branch target. Instructions already past the branch point continue normally.</span><span class="ko" style="display:none;">✅ 플러시는 잘못 추측된 명령(IF/ID 및 ID/EX 레지스터)을 NOP으로 대체하여 효과적으로 취소합니다. PC는 올바른 분기 대상으로 리디렉션됩니다. 분기 지점을 이미 지난 명령은 정상 계속됩니다.</span></div>
+</div>
+
+<!-- Q7 -->
+<div class="question" id="q7">
+<h3>Q7. <span class="en">Which of the following is a structural hazard?</span><span class="ko" style="display:none;">다음 중 구조적 해저드는?</span></h3>
+<ul class="options" data-correct="2">
+<li onclick="pick(this)">A) <span class="en">An ADD instruction writes to R3, then SUB reads R3</span><span class="ko" style="display:none;">ADD 명령이 R3에 쓰고, SUB가 R3을 읽음</span></li>
+<li onclick="pick(this)">B) <span class="en">A branch instruction changes the PC</span><span class="ko" style="display:none;">분기 명령이 PC를 변경</span></li>
+<li onclick="pick(this)">C) <span class="en">IF and MEM stages both need single-port memory in the same cycle</span><span class="ko" style="display:none;">IF와 MEM 스테이지가 같은 사이클에 단일 포트 메모리를 모두 필요</span></li>
+<li onclick="pick(this)">D) <span class="en">Two branches appear back-to-back</span><span class="ko" style="display:none;">두 분기가 연속으로 나타남</span></li>
+</ul>
+<div class="explanation"><span class="en">✅ A structural hazard is when two stages need the same hardware resource simultaneously. IF needs memory to fetch the next instruction, while MEM needs it for a load/store. Solution: separate instruction and data caches (Harvard architecture).</span><span class="ko" style="display:none;">✅ 구조적 해저드는 두 스테이지가 동시에 같은 하드웨어 자원을 필요로 할 때입니다. IF는 다음 명령 페치를 위해, MEM은 로드/스토어를 위해 메모리가 필요합니다. 해결: 별도의 명령/데이터 캐시 (하버드 아키텍처).</span></div>
+</div>
+
+<!-- Q8 -->
+<div class="question" id="q8">
+<h3>Q8. <span class="en">In the forwarding unit, why does EX/MEM forwarding have higher priority than MEM/WB forwarding?</span><span class="ko" style="display:none;">포워딩 유닛에서 EX/MEM 포워딩이 MEM/WB 포워딩보다 우선순위가 높은 이유는?</span></h3>
+<ul class="options" data-correct="3">
+<li onclick="pick(this)">A) <span class="en">EX/MEM is faster to access</span><span class="ko" style="display:none;">EX/MEM이 접근이 더 빠름</span></li>
+<li onclick="pick(this)">B) <span class="en">MEM/WB data may be corrupt</span><span class="ko" style="display:none;">MEM/WB 데이터가 손상될 수 있음</span></li>
+<li onclick="pick(this)">C) <span class="en">EX/MEM uses less power</span><span class="ko" style="display:none;">EX/MEM이 전력을 덜 사용</span></li>
+<li onclick="pick(this)">D) <span class="en">EX/MEM has the most recent result — if both write the same register, we want the latest value</span><span class="ko" style="display:none;">EX/MEM이 가장 최근 결과를 가짐 — 둘 다 같은 레지스터에 쓰면 최신 값을 원함</span></li>
+</ul>
+<div class="explanation"><span class="en">✅ If two instructions in-flight both write the same register (e.g., ADD R1,... then SUB R1,...), EX/MEM holds the more recent instruction's result. We must forward the <strong>latest</strong> value to ensure correctness.</span><span class="ko" style="display:none;">✅ 비행 중인 두 명령이 같은 레지스터에 쓰면 (예: ADD R1,... 후 SUB R1,...), EX/MEM이 더 최근 명령의 결과를 보유합니다. 정확성을 위해 <strong>최신</strong> 값을 포워딩해야 합니다.</span></div>
+</div>
+
+<!-- Q9 -->
+<div class="question" id="q9">
+<h3>Q9. <span class="en">Why is the 2-bit saturating predictor better than a 1-bit predictor for loops?</span><span class="ko" style="display:none;">루프에서 2비트 포화 예측기가 1비트 예측기보다 나은 이유는?</span></h3>
+<ul class="options" data-correct="1">
+<li onclick="pick(this)">A) <span class="en">It uses less hardware</span><span class="ko" style="display:none;">하드웨어를 덜 사용</span></li>
+<li onclick="pick(this)">B) <span class="en">It tolerates one wrong outcome before changing prediction, avoiding mispredicts at loop entry/exit</span><span class="ko" style="display:none;">예측 변경 전에 한 번의 오류를 허용하여 루프 진입/종료 시 오예측 방지</span></li>
+<li onclick="pick(this)">C) <span class="en">It predicts both taken and not-taken simultaneously</span><span class="ko" style="display:none;">취해짐과 미취를 동시에 예측</span></li>
+<li onclick="pick(this)">D) <span class="en">It can predict indirect branches</span><span class="ko" style="display:none;">간접 분기를 예측할 수 있음</span></li>
+</ul>
+<div class="explanation"><span class="en">✅ A 1-bit predictor flips after every misprediction — in a loop, it mispredicts twice (once at loop exit, once at loop re-entry). The 2-bit counter requires two consecutive mispredictions to flip, so it only mispredicts <strong>once</strong> at loop exit.</span><span class="ko" style="display:none;">✅ 1비트 예측기는 매번 오예측 후 뒤집힘 — 루프에서 두 번 오예측 (루프 종료와 재진입). 2비트 카운터는 뒤집히려면 연속 두 번의 오예측이 필요하여, 루프 종료 시 <strong>한 번만</strong> 오예측합니다.</span></div>
+</div>
+
+<!-- Q10 -->
+<div class="question" id="q10">
+<h3>Q10. <span class="en">Consider this instruction sequence in a 5-stage pipeline with forwarding:</span><span class="ko" style="display:none;">포워딩이 있는 5단계 파이프라인에서 다음 명령 시퀀스를 고려하세요:</span></h3>
+<pre>
+<span class="signal">LW</span>   <span class="signal">R1</span>, <span class="number">0</span>(<span class="signal">R2</span>)     <span class="comment">// Load word into R1</span>
+<span class="signal">ADD</span>  <span class="signal">R3</span>, <span class="signal">R1</span>, <span class="signal">R4</span>    <span class="comment">// Uses R1 immediately</span>
+<span class="signal">SUB</span>  <span class="signal">R5</span>, <span class="signal">R1</span>, <span class="signal">R6</span>    <span class="comment">// Uses R1 one cycle later</span>
+</pre>
+<p class="en">How many total stall cycles are needed?</p>
+<p class="ko" style="display:none;">총 몇 스톨 사이클이 필요한가?</p>
+<ul class="options" data-correct="0">
+<li onclick="pick(this)">A) <span class="en">1 — only the ADD needs a stall (load-use); SUB gets R1 via forwarding</span><span class="ko" style="display:none;">1 — ADD만 스톨 필요 (load-use); SUB는 포워딩으로 R1을 받음</span></li>
+<li onclick="pick(this)">B) <span class="en">2 — both ADD and SUB need stalls</span><span class="ko" style="display:none;">2 — ADD와 SUB 모두 스톨 필요</span></li>
+<li onclick="pick(this)">C) <span class="en">0 — forwarding handles everything</span><span class="ko" style="display:none;">0 — 포워딩이 모두 처리</span></li>
+<li onclick="pick(this)">D) <span class="en">3 — loads always need 3 stalls</span><span class="ko" style="display:none;">3 — 로드는 항상 3 스톨 필요</span></li>
+</ul>
+<div class="explanation"><span class="en">✅ The ADD immediately after the load creates a <strong>load-use hazard</strong> requiring 1 stall cycle. After that stall, the load data is available from MEM and can be forwarded. The SUB (now 2 cycles after the load) gets R1 via normal MEM/WB forwarding with no additional stall.</span><span class="ko" style="display:none;">✅ 로드 바로 다음의 ADD가 <strong>load-use 해저드</strong>를 생성하여 1 스톨 사이클이 필요합니다. 스톨 후 로드 데이터가 MEM에서 사용 가능하여 포워딩됩니다. SUB (로드 후 2 사이클)는 추가 스톨 없이 MEM/WB 포워딩으로 R1을 받습니다.</span></div>
+</div>
+
+<!-- Q11 -->
+<div class="question" id="q11">
+<h3>Q11. <span class="en">What is a "bubble" in pipeline terminology?</span><span class="ko" style="display:none;">파이프라인 용어에서 "버블"이란?</span></h3>
+<ul class="options" data-correct="2">
+<li onclick="pick(this)">A) <span class="en">An extra pipeline stage added for performance</span><span class="ko" style="display:none;">성능을 위해 추가된 여분의 파이프라인 스테이지</span></li>
+<li onclick="pick(this)">B) <span class="en">A forwarded data value</span><span class="ko" style="display:none;">포워딩된 데이터 값</span></li>
+<li onclick="pick(this)">C) <span class="en">A NOP inserted into the pipeline to resolve a hazard (wasted cycle)</span><span class="ko" style="display:none;">해저드 해결을 위해 파이프라인에 삽입된 NOP (낭비된 사이클)</span></li>
+<li onclick="pick(this)">D) <span class="en">The first instruction in a pipeline</span><span class="ko" style="display:none;">파이프라인의 첫 번째 명령</span></li>
+</ul>
+<div class="explanation"><span class="en">✅ A "bubble" (or "pipeline bubble") is a NOP that's inserted when a stall occurs. No useful work happens during a bubble cycle — the pipeline stage effectively does nothing while waiting for the hazard to clear.</span><span class="ko" style="display:none;">✅ "버블"(또는 "파이프라인 버블")은 스톨 발생 시 삽입되는 NOP입니다. 버블 사이클 동안 유용한 작업이 없으며 — 해저드가 해소될 때까지 파이프라인 스테이지가 사실상 아무것도 하지 않습니다.</span></div>
+</div>
+
+<!-- Q12 -->
+<div class="question" id="q12">
+<h3>Q12. <span class="en">A "predict not taken" strategy in a 5-stage pipeline (branch resolved in EX) has what penalty when the branch IS taken?</span><span class="ko" style="display:none;">5단계 파이프라인(EX에서 분기 해결)에서 "미취 예측" 전략은 분기가 실제로 취해질 때 어떤 패널티를 가지는가?</span></h3>
+<ul class="options" data-correct="1">
+<li onclick="pick(this)">A) <span class="en">0 cycles — no penalty</span><span class="ko" style="display:none;">0 사이클 — 패널티 없음</span></li>
+<li onclick="pick(this)">B) <span class="en">2 cycles — must flush IF and ID stages</span><span class="ko" style="display:none;">2 사이클 — IF와 ID 스테이지를 플러시해야 함</span></li>
+<li onclick="pick(this)">C) <span class="en">1 cycle — only flush IF stage</span><span class="ko" style="display:none;">1 사이클 — IF 스테이지만 플러시</span></li>
+<li onclick="pick(this)">D) <span class="en">5 cycles — must flush entire pipeline</span><span class="ko" style="display:none;">5 사이클 — 전체 파이프라인 플러시</span></li>
+</ul>
+<div class="explanation"><span class="en">✅ When predicting "not taken" but the branch IS taken, the two instructions fetched after the branch (in IF and ID stages) are wrong and must be flushed — a <strong>2-cycle penalty</strong>. When the prediction is correct (branch not taken), there's zero penalty.</span><span class="ko" style="display:none;">✅ "미취"로 예측했지만 분기가 실제 취해지면, 분기 후 페치된 두 명령(IF와 ID 스테이지)이 잘못되어 플러시해야 합니다 — <strong>2 사이클 패널티</strong>. 예측이 맞으면 패널티 없습니다.</span></div>
+</div>
+
+<div id="summary" style="display:none; margin-top: 32px;">
+<div class="nav-links">
+    <a href="day-23-lesson.html">📖 Review Lesson</a>
+    <a href="day-23-practice.html">🔧 Practice Exercises →</a>
+</div>
+</div>
+
+<script>
+let answered = 0;
+const total = 12;
+let correct = 0;
+
+function pick(li) {
+    const ul = li.parentElement;
+    if (ul.dataset.answered) return;
+    ul.dataset.answered = 'true';
+    answered++;
+
+    const items = ul.querySelectorAll('li');
+    const correctIdx = parseInt(ul.dataset.correct);
+    const clickedIdx = Array.from(items).indexOf(li);
+
+    if (clickedIdx === correctIdx) {
+        li.classList.add('correct');
+        correct++;
+    } else {
+        li.classList.add('incorrect');
+        items[correctIdx].classList.add('correct');
+    }
+
+    const expl = ul.parentElement.querySelector('.explanation');
+    expl.style.display = 'block';
+
+    if (answered === total) {
+        const pct = Math.round((correct / total) * 100);
+        document.getElementById('score-display').textContent = correct + ' / ' + total + ' (' + pct + '%)';
+        const msg = pct >= 90 ? '🌟 Outstanding! Pipeline hazards mastered!' :
+                    pct >= 70 ? '👍 Good job! Review the ones you missed.' :
+                    '📖 Review the lesson and try again!';
+        document.getElementById('score-msg').textContent = msg;
+        document.getElementById('score-box').style.display = 'block';
+        document.getElementById('score-box').scrollIntoView({behavior: 'smooth'});
+        document.getElementById('summary').style.display = 'block';
+    }
+}
+
+let isKorean = false;
+function toggleLang() {
+    isKorean = !isKorean;
+    document.querySelectorAll('.en').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'none' : 'revert', 'important');
+    });
+    document.querySelectorAll('.ko').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'revert' : 'none', 'important');
+    });
+    document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 23: Pipeline Hazards — Digital Design Study</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    background: linear-gradient(135deg, #fefae0 0%, #faedcd 100%);
+    color: #3d405b;
+    line-height: 1.8;
+    padding: 24px;
+    max-width: 920px;
+    margin: 0 auto;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+h1 {
+    color: #5d4037;
+    border-bottom: 3px solid #c4a77d;
+    padding-bottom: 12px;
+    margin-bottom: 24px;
+    font-size: 2em;
+}
+h2 {
+    color: #588157;
+    border-bottom: 2px solid #a3b18a;
+    padding-bottom: 8px;
+    margin: 32px 0 16px;
+}
+h3 {
+    color: #5d4037;
+    margin: 20px 0 12px;
+}
+p { margin: 12px 0; }
+ul, ol { margin: 12px 0 12px 24px; }
+li { margin: 6px 0; }
+code {
+    background: #e9f5db;
+    color: #3d405b;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+}
+pre {
+    background: #2d3436;
+    padding: 24px;
+    border-radius: 12px;
+    margin: 24px 0;
+    border: 3px solid #a3b18a;
+    overflow-x: auto;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+    font-size: 15px;
+    line-height: 1.6;
+    color: #f8f8f2;
+}
+pre .keyword { color: #ff79c6; font-weight: 600; }
+pre .type { color: #8be9fd; }
+pre .signal { color: #50fa7b; }
+pre .number { color: #ffb86c; }
+pre .comment { color: #6272a4; font-style: italic; }
+pre .string { color: #f1fa8c; }
+.concept-box {
+    background: #fff8f0;
+    border: 2px solid #c4a77d;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    color: #3d405b;
+}
+.concept-box h3 { color: #5d4037; margin-bottom: 12px; }
+.warning-box {
+    background: #fff8f0;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    border-left: 4px solid #ef4444;
+    color: #3d405b;
+}
+.warning-box h3 { color: #c53030; margin-bottom: 12px; }
+.tip-box {
+    background: #fff8f0;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    border-left: 4px solid #588157;
+    color: #3d405b;
+}
+.comparison-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+.comparison-table th {
+    background: #588157;
+    color: white;
+    padding: 12px;
+    text-align: left;
+}
+.comparison-table td {
+    background: #fff;
+    border: 1px solid #c4a77d;
+    padding: 12px;
+    color: #3d405b;
+}
+.comparison-table tr:nth-child(even) td { background: #fff8f0; }
+.section {
+    background: #fff;
+    border-radius: 12px;
+    padding: 24px;
+    margin: 24px 0;
+    border: 1px solid #c4a77d;
+}
+.lang-toggle {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    background: #588157;
+    border: none;
+    border-radius: 24px;
+    padding: 10px 20px;
+    cursor: pointer;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    z-index: 1000;
+}
+.lang-toggle:hover { background: #3a5a40; }
+.ko { display: none; }
+.nav-links {
+    display: flex;
+    gap: 12px;
+    margin: 24px 0;
+    flex-wrap: wrap;
+}
+.nav-links a {
+    background: linear-gradient(135deg, #588157, #3a5a40);
+    color: #fff;
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 14px;
+}
+.nav-links a:hover { opacity: 0.9; }
+.diagram-box {
+    background: #fff;
+    border: 2px solid #a3b18a;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    text-align: center;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+    font-size: 14px;
+    line-height: 1.4;
+    overflow-x: auto;
+    white-space: pre;
+    color: #3d405b;
+}
+@media (max-width: 768px) {
+    body { padding: 16px; }
+    h1 { font-size: 1.8em; }
+    pre { font-size: 14px; padding: 16px; }
+    .lang-toggle { padding: 8px 16px; font-size: 13px; }
+}
+</style>
+</head>
+<body>
+
+<button class="lang-toggle" onclick="toggleLang()">한국어</button>
+
+<h1>🚧 Day 23: Pipeline Hazards</h1>
+
+<div class="nav-links">
+    <a href="day-23-quiz.html">📝 Quiz</a>
+    <a href="day-23-practice.html">🔧 Practice</a>
+</div>
+
+<p class="en">Yesterday we learned how to add pipeline stages to improve throughput. Today we tackle the hard part: <strong>what happens when pipeline stages depend on each other?</strong> These conflicts are called <strong>hazards</strong>, and handling them correctly is essential for correct pipeline operation.</p>
+<p class="ko" style="display:none;">어제는 파이프라인 스테이지를 추가하여 처리량을 개선하는 방법을 배웠습니다. 오늘은 어려운 부분을 다룹니다: <strong>파이프라인 스테이지가 서로 의존할 때 무슨 일이 일어나는가?</strong> 이러한 충돌을 <strong>해저드(hazard)</strong>라고 하며, 올바르게 처리하는 것이 파이프라인의 정확한 동작에 필수적입니다.</p>
+
+<!-- Section 1: What Are Pipeline Hazards? -->
+<div class="section">
+<h2>1. What Are Pipeline Hazards?</h2>
+
+<p class="en">A <strong>pipeline hazard</strong> occurs when the next instruction in the pipeline cannot execute in its designated clock cycle. The pipeline must either <strong>stall</strong> (insert bubbles) or use special techniques to resolve the conflict.</p>
+<p class="ko" style="display:none;"><strong>파이프라인 해저드</strong>는 파이프라인의 다음 명령이 지정된 클록 사이클에서 실행될 수 없을 때 발생합니다. 파이프라인은 <strong>스톨</strong>(버블 삽입)하거나 특별한 기법을 사용하여 충돌을 해결해야 합니다.</p>
+
+<div class="concept-box">
+<h3>🎯 Three Types of Hazards</h3>
+<table class="comparison-table">
+<tr><th>Type</th><th class="en">Description</th><th class="ko" style="display:none;">설명</th><th class="en">Example</th><th class="ko" style="display:none;">예시</th></tr>
+<tr><td><strong>Data Hazard</strong></td><td class="en">An instruction needs data that isn't ready yet</td><td class="ko" style="display:none;">명령이 아직 준비되지 않은 데이터를 필요로 함</td><td class="en">Read-after-write (RAW)</td><td class="ko" style="display:none;">쓰기 후 읽기 (RAW)</td></tr>
+<tr><td><strong>Control Hazard</strong></td><td class="en">Branch decision not yet known</td><td class="ko" style="display:none;">분기 결정이 아직 알려지지 않음</td><td class="en">Conditional jump</td><td class="ko" style="display:none;">조건부 점프</td></tr>
+<tr><td><strong>Structural Hazard</strong></td><td class="en">Two instructions need the same hardware resource</td><td class="ko" style="display:none;">두 명령이 같은 하드웨어 자원을 필요로 함</td><td class="en">Single-port memory</td><td class="ko" style="display:none;">단일 포트 메모리</td></tr>
+</table>
+</div>
+</div>
+
+<!-- Section 2: Data Hazards -->
+<div class="section">
+<h2>2. Data Hazards (RAW, WAR, WAW)</h2>
+
+<p class="en">Data hazards are the most common. They occur when instructions have data dependencies. The most critical type is <strong>Read-After-Write (RAW)</strong>.</p>
+<p class="ko" style="display:none;">데이터 해저드가 가장 흔합니다. 명령들 사이에 데이터 의존성이 있을 때 발생합니다. 가장 중요한 유형은 <strong>쓰기 후 읽기 (RAW)</strong>입니다.</p>
+
+<h3>RAW (Read-After-Write) — True Dependency</h3>
+
+<p class="en">Instruction B reads a value that Instruction A writes. If A hasn't finished writing, B reads stale data.</p>
+<p class="ko" style="display:none;">명령 B가 명령 A가 쓰는 값을 읽습니다. A가 쓰기를 완료하지 않았다면, B는 오래된 데이터를 읽습니다.</p>
+
+<div class="diagram-box">
+Cycle:    1     2     3     4     5     6     7
+         ┌─────┬─────┬─────┬─────┬─────┐
+  ADD:   │ IF  │ ID  │ EX  │ MEM │ WB  │         ← writes result at WB
+         └─────┴─────┴─────┴─────┴─────┘
+               ┌─────┬─────┬─────┬─────┬─────┐
+  SUB:         │ IF  │ ID  │ EX  │ MEM │ WB  │   ← reads at ID (cycle 3)
+               └─────┴─────┴─────┴─────┴─────┘
+                      ↑                  ↑
+                  B reads here      A writes here
+                  (cycle 3)          (cycle 5)
+                  
+              ⚠️ B reads BEFORE A writes = HAZARD!
+</div>
+
+<div class="concept-box">
+<h3>📋 All Data Hazard Types</h3>
+<table class="comparison-table">
+<tr><th>Type</th><th class="en">Pattern</th><th class="ko" style="display:none;">패턴</th><th class="en">Severity</th><th class="ko" style="display:none;">심각성</th><th class="en">Solution</th><th class="ko" style="display:none;">해결책</th></tr>
+<tr><td><strong>RAW</strong></td><td class="en">Read-After-Write</td><td class="ko" style="display:none;">쓰기 후 읽기</td><td class="en">Most common, must fix</td><td class="ko" style="display:none;">가장 흔함, 반드시 해결</td><td class="en">Forwarding / stall</td><td class="ko" style="display:none;">포워딩 / 스톨</td></tr>
+<tr><td><strong>WAR</strong></td><td class="en">Write-After-Read</td><td class="ko" style="display:none;">읽기 후 쓰기</td><td class="en">Rare in simple pipelines</td><td class="ko" style="display:none;">단순 파이프라인에서 드묾</td><td class="en">Register renaming</td><td class="ko" style="display:none;">레지스터 리네이밍</td></tr>
+<tr><td><strong>WAW</strong></td><td class="en">Write-After-Write</td><td class="ko" style="display:none;">쓰기 후 쓰기</td><td class="en">Rare in simple pipelines</td><td class="ko" style="display:none;">단순 파이프라인에서 드묾</td><td class="en">Register renaming</td><td class="ko" style="display:none;">레지스터 리네이밍</td></tr>
+</table>
+</div>
+</div>
+
+<!-- Section 3: Solving Data Hazards -->
+<div class="section">
+<h2>3. Solving Data Hazards</h2>
+
+<h3>Solution 1: Stalling (Bubble Insertion)</h3>
+
+<p class="en">The simplest solution: <strong>freeze the pipeline</strong> until the data is ready. Insert "bubble" cycles (NOPs) where no useful work happens. Simple but costly — every stall wastes a cycle of throughput.</p>
+<p class="ko" style="display:none;">가장 간단한 해결책: 데이터가 준비될 때까지 <strong>파이프라인을 정지</strong>합니다. 유용한 작업이 없는 "버블" 사이클(NOP)을 삽입합니다. 간단하지만 비용이 큽니다 — 스톨마다 처리량 한 사이클을 낭비합니다.</p>
+
+<div class="diagram-box">
+Without stall (WRONG):        With 2-cycle stall (CORRECT):
+
+C1  C2  C3  C4  C5             C1  C2  C3  C4  C5  C6  C7
+IF  ID  EX  MEM WB   ADD      IF  ID  EX  MEM WB         ADD
+    IF  ID  EX  MEM  SUB          IF  💤  💤  ID  EX  MEM  SUB
+        ↑ reads old data              ↑ waits  ↑ now reads correct data
+</div>
+
+<pre>
+<span class="comment">// Hazard detection unit — detect RAW dependency</span>
+<span class="keyword">module</span> <span class="type">hazard_detector</span> (
+    <span class="keyword">input</span>  <span class="type">logic</span> [<span class="number">4</span>:<span class="number">0</span>] <span class="signal">id_rs1</span>, <span class="signal">id_rs2</span>,      <span class="comment">// source regs in decode</span>
+    <span class="keyword">input</span>  <span class="type">logic</span> [<span class="number">4</span>:<span class="number">0</span>] <span class="signal">ex_rd</span>,                <span class="comment">// dest reg in execute</span>
+    <span class="keyword">input</span>  <span class="type">logic</span>        <span class="signal">ex_reg_write</span>,         <span class="comment">// execute writes a reg?</span>
+    <span class="keyword">input</span>  <span class="type">logic</span> [<span class="number">4</span>:<span class="number">0</span>] <span class="signal">mem_rd</span>,               <span class="comment">// dest reg in memory</span>
+    <span class="keyword">input</span>  <span class="type">logic</span>        <span class="signal">mem_reg_write</span>,        <span class="comment">// memory writes a reg?</span>
+    <span class="keyword">output</span> <span class="type">logic</span>        <span class="signal">stall</span>                <span class="comment">// stall the pipeline?</span>
+);
+
+    <span class="keyword">always_comb</span> <span class="keyword">begin</span>
+        <span class="signal">stall</span> = <span class="number">1'b0</span>;
+        
+        <span class="comment">// Check if decode sources match execute destination</span>
+        <span class="keyword">if</span> (<span class="signal">ex_reg_write</span> && <span class="signal">ex_rd</span> != <span class="number">5'd0</span>) <span class="keyword">begin</span>
+            <span class="keyword">if</span> (<span class="signal">ex_rd</span> == <span class="signal">id_rs1</span> || <span class="signal">ex_rd</span> == <span class="signal">id_rs2</span>)
+                <span class="signal">stall</span> = <span class="number">1'b1</span>;
+        <span class="keyword">end</span>
+        
+        <span class="comment">// Check if decode sources match memory destination</span>
+        <span class="keyword">if</span> (<span class="signal">mem_reg_write</span> && <span class="signal">mem_rd</span> != <span class="number">5'd0</span>) <span class="keyword">begin</span>
+            <span class="keyword">if</span> (<span class="signal">mem_rd</span> == <span class="signal">id_rs1</span> || <span class="signal">mem_rd</span> == <span class="signal">id_rs2</span>)
+                <span class="signal">stall</span> = <span class="number">1'b1</span>;
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+
+<span class="keyword">endmodule</span>
+</pre>
+
+<h3>Solution 2: Data Forwarding (Bypassing)</h3>
+
+<p class="en"><strong>Forwarding</strong> (also called bypassing) is the key optimization: instead of waiting for the result to be written back, we <strong>forward it directly</strong> from where it's computed to where it's needed. This eliminates most stalls!</p>
+<p class="ko" style="display:none;"><strong>포워딩</strong>(바이패싱이라고도 함)은 핵심 최적화입니다: 결과가 다시 쓰여질 때까지 기다리는 대신, 계산된 곳에서 필요한 곳으로 <strong>직접 전달</strong>합니다. 이로써 대부분의 스톨을 제거합니다!</p>
+
+<div class="diagram-box">
+                  ┌──────────────────────────────────┐
+                  │         FORWARDING PATH           │
+                  │                                    │
+                  ▼                                    │
+  ┌────┐  ┌────┐  ┌────┐  ┌─────┐  ┌────┐            │
+  │ IF │→│ ID │→│ EX │→│ MEM │→│ WB │            │
+  └────┘  └────┘  └────┘  └─────┘  └────┘            │
+                  ↑    │      │                        │
+                  │    └──────┘  EX→EX forward         │
+                  │              (1 cycle old result)   │
+                  │                                    │
+                  └────────────  MEM→EX forward        │
+                                 (2 cycle old result)  │
+</div>
+
+<pre>
+<span class="comment">// Forwarding MUX — select between normal and forwarded data</span>
+<span class="keyword">module</span> <span class="type">forwarding_unit</span> (
+    <span class="keyword">input</span>  <span class="type">logic</span> [<span class="number">4</span>:<span class="number">0</span>] <span class="signal">id_ex_rs1</span>, <span class="signal">id_ex_rs2</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span> [<span class="number">4</span>:<span class="number">0</span>] <span class="signal">ex_mem_rd</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span>        <span class="signal">ex_mem_reg_write</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span> [<span class="number">4</span>:<span class="number">0</span>] <span class="signal">mem_wb_rd</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span>        <span class="signal">mem_wb_reg_write</span>,
+    <span class="keyword">output</span> <span class="type">logic</span> [<span class="number">1</span>:<span class="number">0</span>] <span class="signal">forward_a</span>, <span class="signal">forward_b</span>
+);
+
+    <span class="comment">// forward_a/b encoding:</span>
+    <span class="comment">// 2'b00 = no forwarding (use register file)</span>
+    <span class="comment">// 2'b01 = forward from MEM/WB stage</span>
+    <span class="comment">// 2'b10 = forward from EX/MEM stage</span>
+
+    <span class="keyword">always_comb</span> <span class="keyword">begin</span>
+        <span class="signal">forward_a</span> = <span class="number">2'b00</span>;
+        <span class="signal">forward_b</span> = <span class="number">2'b00</span>;
+        
+        <span class="comment">// EX/MEM forwarding (highest priority — most recent)</span>
+        <span class="keyword">if</span> (<span class="signal">ex_mem_reg_write</span> && <span class="signal">ex_mem_rd</span> != <span class="number">5'd0</span>) <span class="keyword">begin</span>
+            <span class="keyword">if</span> (<span class="signal">ex_mem_rd</span> == <span class="signal">id_ex_rs1</span>) <span class="signal">forward_a</span> = <span class="number">2'b10</span>;
+            <span class="keyword">if</span> (<span class="signal">ex_mem_rd</span> == <span class="signal">id_ex_rs2</span>) <span class="signal">forward_b</span> = <span class="number">2'b10</span>;
+        <span class="keyword">end</span>
+        
+        <span class="comment">// MEM/WB forwarding (lower priority)</span>
+        <span class="keyword">if</span> (<span class="signal">mem_wb_reg_write</span> && <span class="signal">mem_wb_rd</span> != <span class="number">5'd0</span>) <span class="keyword">begin</span>
+            <span class="keyword">if</span> (<span class="signal">mem_wb_rd</span> == <span class="signal">id_ex_rs1</span> && <span class="signal">forward_a</span> == <span class="number">2'b00</span>)
+                <span class="signal">forward_a</span> = <span class="number">2'b01</span>;
+            <span class="keyword">if</span> (<span class="signal">mem_wb_rd</span> == <span class="signal">id_ex_rs2</span> && <span class="signal">forward_b</span> == <span class="number">2'b00</span>)
+                <span class="signal">forward_b</span> = <span class="number">2'b01</span>;
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+
+<span class="keyword">endmodule</span>
+</pre>
+
+<div class="warning-box">
+<h3>⚠️ Load-Use Hazard — Forwarding Can't Fix Everything!</h3>
+<p class="en">When a <strong>load instruction</strong> (memory read) is followed by an instruction that uses the loaded data, forwarding alone isn't enough. The data isn't available until the end of the MEM stage — one cycle too late for EX→EX forwarding. You <strong>must stall for 1 cycle</strong> even with forwarding.</p>
+<p class="ko" style="display:none;"><strong>로드 명령</strong>(메모리 읽기) 다음에 로드된 데이터를 사용하는 명령이 오면, 포워딩만으로는 부족합니다. MEM 스테이지 끝까지 데이터가 사용 불가능하여 EX→EX 포워딩에 한 사이클 늦습니다. 포워딩이 있어도 <strong>반드시 1 사이클 스톨</strong>해야 합니다.</p>
+</div>
+
+<pre>
+<span class="comment">// Load-use hazard detection</span>
+<span class="keyword">always_comb</span> <span class="keyword">begin</span>
+    <span class="signal">load_use_stall</span> = <span class="number">1'b0</span>;
+    
+    <span class="comment">// If EX stage has a load AND decode reads from that register</span>
+    <span class="keyword">if</span> (<span class="signal">id_ex_mem_read</span> &&                       <span class="comment">// EX stage is a load</span>
+        ((<span class="signal">id_ex_rd</span> == <span class="signal">if_id_rs1</span>) ||               <span class="comment">// decode source 1 matches</span>
+         (<span class="signal">id_ex_rd</span> == <span class="signal">if_id_rs2</span>))) <span class="keyword">begin</span>          <span class="comment">// decode source 2 matches</span>
+        <span class="signal">load_use_stall</span> = <span class="number">1'b1</span>;                    <span class="comment">// must stall 1 cycle</span>
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+</pre>
+</div>
+
+<!-- Section 4: Control Hazards -->
+<div class="section">
+<h2>4. Control Hazards</h2>
+
+<p class="en">Control hazards occur when the pipeline doesn't know <strong>which instruction to fetch next</strong> because a branch hasn't been resolved yet. By the time a branch is decided (often in the EX stage), we've already fetched instructions after it that might be wrong!</p>
+<p class="ko" style="display:none;">제어 해저드는 분기가 아직 해결되지 않아 파이프라인이 <strong>다음에 어떤 명령을 페치해야 할지 모를 때</strong> 발생합니다. 분기가 결정될 때쯤(보통 EX 스테이지), 이미 틀릴 수 있는 다음 명령들을 페치해 버렸습니다!</p>
+
+<div class="diagram-box">
+Cycle:     1     2     3     4     5     6     7
+          ┌─────┬─────┬─────┬─────┬─────┐
+  BEQ:    │ IF  │ ID  │ EX  │ MEM │ WB  │
+          └─────┴─────┴─────┴─────┴─────┘
+                            ↑
+                    Branch resolved here (cycle 3)
+                            
+                ┌─────┬─────┐
+  NEXT+1:       │ IF  │ ID  │ ← Already fetched! May be WRONG
+                └─────┴─────┘
+                      ┌─────┐
+  NEXT+2:             │ IF  │ ← Also fetched! May be WRONG
+                      └─────┘
+                      
+  If branch taken → flush these 2 instructions (2-cycle penalty)
+</div>
+
+<h3>Solution 1: Always Stall (Simple but Slow)</h3>
+
+<p class="en">Stall the pipeline whenever a branch is detected. Wait until the branch is resolved, then fetch the correct instruction. This wastes 2+ cycles per branch.</p>
+<p class="ko" style="display:none;">분기가 감지될 때마다 파이프라인을 정지합니다. 분기가 해결될 때까지 기다린 후 올바른 명령을 페치합니다. 분기마다 2+ 사이클을 낭비합니다.</p>
+
+<h3>Solution 2: Branch Prediction</h3>
+
+<p class="en"><strong>Predict</strong> whether the branch will be taken or not, and fetch instructions based on that prediction. If wrong, <strong>flush</strong> the incorrect instructions.</p>
+<p class="ko" style="display:none;">분기가 취해질지 아닐지 <strong>예측</strong>하고, 그 예측에 기반하여 명령을 페치합니다. 틀리면 잘못된 명령을 <strong>플러시</strong>합니다.</p>
+
+<div class="concept-box">
+<h3>🔮 Branch Prediction Strategies</h3>
+<table class="comparison-table">
+<tr><th>Strategy</th><th class="en">How It Works</th><th class="ko" style="display:none;">작동 방식</th><th class="en">Accuracy</th><th class="ko" style="display:none;">정확도</th></tr>
+<tr><td><strong>Predict Not Taken</strong></td><td class="en">Always assume branch is not taken</td><td class="ko" style="display:none;">항상 분기가 취해지지 않는다고 가정</td><td class="en">~50-60%</td><td class="ko" style="display:none;">~50-60%</td></tr>
+<tr><td><strong>Predict Taken</strong></td><td class="en">Always assume branch is taken</td><td class="ko" style="display:none;">항상 분기가 취해진다고 가정</td><td class="en">~60-70%</td><td class="ko" style="display:none;">~60-70%</td></tr>
+<tr><td><strong>1-bit Predictor</strong></td><td class="en">Remember last outcome</td><td class="ko" style="display:none;">마지막 결과를 기억</td><td class="en">~80-85%</td><td class="ko" style="display:none;">~80-85%</td></tr>
+<tr><td><strong>2-bit Saturating</strong></td><td class="en">Need 2 wrong predictions to flip</td><td class="ko" style="display:none;">2번 잘못 예측해야 전환</td><td class="en">~90-95%</td><td class="ko" style="display:none;">~90-95%</td></tr>
+</table>
+</div>
+
+<pre>
+<span class="comment">// Simple 2-bit saturating branch predictor</span>
+<span class="keyword">module</span> <span class="type">branch_predictor</span> #(
+    <span class="keyword">parameter</span> <span class="type">int</span> <span class="signal">TABLE_SIZE</span> = <span class="number">256</span>
+)(
+    <span class="keyword">input</span>  <span class="type">logic</span>        <span class="signal">clk</span>, <span class="signal">rst_n</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span> [<span class="number">7</span>:<span class="number">0</span>] <span class="signal">pc_index</span>,          <span class="comment">// lower bits of PC</span>
+    <span class="keyword">input</span>  <span class="type">logic</span>        <span class="signal">branch_taken</span>,      <span class="comment">// actual outcome</span>
+    <span class="keyword">input</span>  <span class="type">logic</span>        <span class="signal">update_en</span>,         <span class="comment">// update the predictor</span>
+    <span class="keyword">output</span> <span class="type">logic</span>        <span class="signal">predict_taken</span>      <span class="comment">// prediction output</span>
+);
+
+    <span class="comment">// 2-bit counter per entry: 00=strong NT, 01=weak NT, 10=weak T, 11=strong T</span>
+    <span class="type">logic</span> [<span class="number">1</span>:<span class="number">0</span>] <span class="signal">counter_table</span> [<span class="signal">TABLE_SIZE</span>];
+
+    <span class="comment">// Predict: MSB of counter determines prediction</span>
+    <span class="keyword">assign</span> <span class="signal">predict_taken</span> = <span class="signal">counter_table</span>[<span class="signal">pc_index</span>][<span class="number">1</span>];
+
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span> <span class="keyword">or</span> <span class="keyword">negedge</span> <span class="signal">rst_n</span>) <span class="keyword">begin</span>
+        <span class="keyword">if</span> (!<span class="signal">rst_n</span>) <span class="keyword">begin</span>
+            <span class="keyword">for</span> (<span class="type">int</span> <span class="signal">i</span> = <span class="number">0</span>; <span class="signal">i</span> < <span class="signal">TABLE_SIZE</span>; <span class="signal">i</span>++)
+                <span class="signal">counter_table</span>[<span class="signal">i</span>] <= <span class="number">2'b01</span>;  <span class="comment">// weakly not-taken</span>
+        <span class="keyword">end</span> <span class="keyword">else</span> <span class="keyword">if</span> (<span class="signal">update_en</span>) <span class="keyword">begin</span>
+            <span class="keyword">if</span> (<span class="signal">branch_taken</span> && <span class="signal">counter_table</span>[<span class="signal">pc_index</span>] < <span class="number">2'b11</span>)
+                <span class="signal">counter_table</span>[<span class="signal">pc_index</span>] <= <span class="signal">counter_table</span>[<span class="signal">pc_index</span>] + <span class="number">1</span>;
+            <span class="keyword">else</span> <span class="keyword">if</span> (!<span class="signal">branch_taken</span> && <span class="signal">counter_table</span>[<span class="signal">pc_index</span>] > <span class="number">2'b00</span>)
+                <span class="signal">counter_table</span>[<span class="signal">pc_index</span>] <= <span class="signal">counter_table</span>[<span class="signal">pc_index</span>] - <span class="number">1</span>;
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+
+<span class="keyword">endmodule</span>
+</pre>
+
+<h3>Solution 3: Pipeline Flush</h3>
+
+<p class="en">When a branch misprediction is detected, <strong>flush</strong> (cancel) all instructions that entered the pipeline after the branch. Reset those pipeline registers to NOP values.</p>
+<p class="ko" style="display:none;">분기 오예측이 감지되면, 분기 이후 파이프라인에 들어온 모든 명령을 <strong>플러시</strong>(취소)합니다. 해당 파이프라인 레지스터를 NOP 값으로 리셋합니다.</p>
+
+<pre>
+<span class="comment">// Pipeline flush on branch misprediction</span>
+<span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span>) <span class="keyword">begin</span>
+    <span class="keyword">if</span> (<span class="signal">branch_mispredict</span>) <span class="keyword">begin</span>
+        <span class="comment">// Flush IF/ID and ID/EX pipeline registers</span>
+        <span class="signal">if_id_instruction</span> <= <span class="number">32'h00000013</span>;  <span class="comment">// NOP (addi x0, x0, 0)</span>
+        <span class="signal">id_ex_instruction</span> <= <span class="number">32'h00000013</span>;  <span class="comment">// NOP</span>
+        <span class="signal">id_ex_reg_write</span>   <= <span class="number">1'b0</span>;
+        <span class="signal">id_ex_mem_read</span>    <= <span class="number">1'b0</span>;
+        <span class="signal">id_ex_mem_write</span>   <= <span class="number">1'b0</span>;
+        <span class="signal">id_ex_branch</span>      <= <span class="number">1'b0</span>;
+        
+        <span class="comment">// Redirect fetch to correct address</span>
+        <span class="signal">pc</span> <= <span class="signal">branch_target</span>;
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+</pre>
+</div>
+
+<!-- Section 5: Structural Hazards -->
+<div class="section">
+<h2>5. Structural Hazards</h2>
+
+<p class="en">Structural hazards occur when two pipeline stages need the <strong>same hardware resource</strong> at the same time. The classic example: a single-port memory used for both instruction fetch (IF) and data access (MEM).</p>
+<p class="ko" style="display:none;">구조적 해저드는 두 파이프라인 스테이지가 동시에 <strong>같은 하드웨어 자원</strong>을 필요로 할 때 발생합니다. 고전적인 예: 명령 페치(IF)와 데이터 접근(MEM) 모두에 사용되는 단일 포트 메모리.</p>
+
+<div class="concept-box">
+<h3>🔧 Common Solutions</h3>
+<ul>
+<li class="en"><strong>Duplicate the resource:</strong> Use separate instruction and data memories (Harvard architecture)</li>
+<li class="ko" style="display:none;"><strong>자원 복제:</strong> 별도의 명령 메모리와 데이터 메모리 사용 (하버드 아키텍처)</li>
+<li class="en"><strong>Pipeline the resource:</strong> Allow memory to handle two accesses in one cycle</li>
+<li class="ko" style="display:none;"><strong>자원 파이프라인화:</strong> 메모리가 한 사이클에 두 접근을 처리하도록 허용</li>
+<li class="en"><strong>Stall:</strong> If neither option is feasible, stall one stage</li>
+<li class="ko" style="display:none;"><strong>스톨:</strong> 두 옵션 모두 불가능하면 한 스테이지를 정지</li>
+</ul>
+</div>
+</div>
+
+<!-- Section 6: Putting It All Together -->
+<div class="section">
+<h2>6. Hazard Summary & Design Impact</h2>
+
+<div class="concept-box">
+<h3>📊 Performance Impact</h3>
+<p class="en">In a typical program, about <strong>30% of instructions are loads/stores</strong> and <strong>20% are branches</strong>. Without hazard handling, a 5-stage pipeline would stall almost every other cycle. With forwarding and branch prediction:</p>
+<p class="ko" style="display:none;">일반적인 프로그램에서 약 <strong>30%의 명령이 로드/스토어</strong>이고 <strong>20%가 분기</strong>입니다. 해저드 처리 없이는 5단계 파이프라인이 거의 매 사이클마다 스톨합니다. 포워딩과 분기 예측을 사용하면:</p>
+
+<table class="comparison-table">
+<tr><th class="en">Technique</th><th class="ko" style="display:none;">기법</th><th class="en">Stall Reduction</th><th class="ko" style="display:none;">스톨 감소</th><th class="en">Hardware Cost</th><th class="ko" style="display:none;">하드웨어 비용</th></tr>
+<tr><td class="en">No handling</td><td class="ko" style="display:none;">처리 없음</td><td class="en">0% (stall everything)</td><td class="ko" style="display:none;">0% (전부 스톨)</td><td class="en">None</td><td class="ko" style="display:none;">없음</td></tr>
+<tr><td class="en">Forwarding only</td><td class="ko" style="display:none;">포워딩만</td><td class="en">~80% of data hazards</td><td class="ko" style="display:none;">데이터 해저드의 ~80%</td><td class="en">MUXes + comparators</td><td class="ko" style="display:none;">MUX + 비교기</td></tr>
+<tr><td class="en">+ Branch prediction</td><td class="ko" style="display:none;">+ 분기 예측</td><td class="en">~90% of control hazards</td><td class="ko" style="display:none;">제어 해저드의 ~90%</td><td class="en">Prediction table</td><td class="ko" style="display:none;">예측 테이블</td></tr>
+</table>
+</div>
+
+<div class="tip-box">
+<h3>💡 Interview Connection</h3>
+<p class="en">Pipeline hazards are a <strong>top digital design interview topic</strong>. Be ready to:
+1) Explain all three hazard types with examples, 
+2) Draw forwarding paths, 
+3) Explain why load-use needs a stall even with forwarding, 
+4) Describe branch prediction and flush mechanics.</p>
+<p class="ko" style="display:none;">파이프라인 해저드는 <strong>디지털 설계 면접의 최다 빈출 주제</strong>입니다. 준비할 것:
+1) 세 가지 해저드 유형을 예시와 함께 설명, 
+2) 포워딩 경로 그리기, 
+3) 포워딩이 있어도 load-use에 스톨이 필요한 이유 설명, 
+4) 분기 예측과 플러시 메커니즘 설명.</p>
+</div>
+</div>
+
+<div class="nav-links" style="margin-top: 32px;">
+    <a href="day-23-quiz.html">📝 Take the Quiz →</a>
+    <a href="day-23-practice.html">🔧 Practice Exercises →</a>
+    <a href="day-22-lesson.html">← Day 22: Pipeline Stages</a>
+</div>
+
+<script>
+let isKorean = false;
+function toggleLang() {
+    isKorean = !isKorean;
+    document.querySelectorAll('.en').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'none' : 'revert', 'important');
+    });
+    document.querySelectorAll('.ko').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'revert' : 'none', 'important');
+    });
+    document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+}
+</script>
+
+</body>
+</html>

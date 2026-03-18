@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 23 Practice: Pipeline Hazards — Digital Design Study</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    background: linear-gradient(135deg, #fefae0 0%, #faedcd 100%);
+    color: #3d405b;
+    line-height: 1.8;
+    padding: 24px;
+    max-width: 920px;
+    margin: 0 auto;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+h1 { color: #5d4037; border-bottom: 3px solid #c4a77d; padding-bottom: 12px; margin-bottom: 24px; font-size: 2em; }
+h2 { color: #588157; border-bottom: 2px solid #a3b18a; padding-bottom: 8px; margin: 32px 0 16px; }
+h3 { color: #5d4037; margin: 20px 0 12px; }
+p { margin: 12px 0; }
+ul, ol { margin: 12px 0 12px 24px; }
+li { margin: 6px 0; }
+code {
+    background: #e9f5db;
+    color: #3d405b;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+}
+pre {
+    background: #2d3436;
+    padding: 24px;
+    border-radius: 12px;
+    margin: 24px 0;
+    border: 3px solid #a3b18a;
+    overflow-x: auto;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+    font-size: 15px;
+    line-height: 1.6;
+    color: #f8f8f2;
+}
+pre .keyword { color: #ff79c6; font-weight: 600; }
+pre .type { color: #8be9fd; }
+pre .signal { color: #50fa7b; }
+pre .number { color: #ffb86c; }
+pre .comment { color: #6272a4; font-style: italic; }
+pre .string { color: #f1fa8c; }
+.section { background: #fff; border-radius: 12px; padding: 24px; margin: 24px 0; border: 1px solid #c4a77d; }
+.concept-box { background: #fff8f0; border: 2px solid #c4a77d; border-radius: 12px; padding: 20px; margin: 20px 0; color: #3d405b; }
+.concept-box h3 { color: #5d4037; margin-bottom: 12px; }
+.warning-box { background: #fff8f0; border-radius: 12px; padding: 20px; margin: 20px 0; border-left: 4px solid #ef4444; color: #3d405b; }
+.warning-box h3 { color: #c53030; margin-bottom: 12px; }
+.tip-box { background: #fff8f0; border-radius: 12px; padding: 20px; margin: 20px 0; border-left: 4px solid #588157; color: #3d405b; }
+.hint-box { background: #fff8f0; border-radius: 8px; padding: 15px; margin: 15px 0; border-left: 4px solid #5d4037; color: #3d405b; }
+.lang-toggle {
+    position: fixed; top: 16px; right: 16px; background: #588157; border: none;
+    border-radius: 24px; padding: 10px 20px; cursor: pointer; color: #fff;
+    font-size: 14px; font-weight: 600; z-index: 1000;
+}
+.lang-toggle:hover { background: #3a5a40; }
+.nav-links { display: flex; gap: 12px; margin: 24px 0; flex-wrap: wrap; }
+.nav-links a {
+    background: linear-gradient(135deg, #588157, #3a5a40); color: #fff;
+    text-decoration: none; padding: 10px 20px; border-radius: 8px;
+    font-weight: 600; font-size: 14px;
+}
+.nav-links a:hover { opacity: 0.9; }
+.reveal-btn {
+    background: linear-gradient(135deg, #588157, #3a5a40);
+    color: #fff; border: none; border-radius: 8px;
+    padding: 10px 20px; cursor: pointer; font-size: 14px;
+    font-weight: 600; margin: 12px 0;
+}
+.reveal-btn:hover { opacity: 0.9; }
+.solution { display: none; margin-top: 16px; }
+.ko { display: none; }
+.comparison-table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+.comparison-table th { background: #588157; color: white; padding: 12px; text-align: left; }
+.comparison-table td { background: #fff; border: 1px solid #c4a77d; padding: 12px; color: #3d405b; }
+.comparison-table tr:nth-child(even) td { background: #fff8f0; }
+@media (max-width: 768px) {
+    body { padding: 16px; }
+    h1 { font-size: 1.8em; }
+    pre { font-size: 14px; padding: 16px; }
+    .lang-toggle { padding: 8px 16px; font-size: 13px; }
+}
+</style>
+</head>
+<body>
+
+<button class="lang-toggle" onclick="toggleLang()">한국어</button>
+
+<h1>🔧 Day 23 Practice: Pipeline Hazards</h1>
+
+<div class="nav-links">
+    <a href="day-23-lesson.html">📖 Lesson</a>
+    <a href="day-23-quiz.html">📝 Quiz</a>
+</div>
+
+<p class="en">These exercises will solidify your understanding of data hazards, forwarding, and control hazards. Try to solve each one before revealing the solution!</p>
+<p class="ko" style="display:none;">이 연습들은 데이터 해저드, 포워딩, 제어 해저드에 대한 이해를 확고히 합니다. 해답을 보기 전에 각 문제를 풀어보세요!</p>
+
+<!-- Exercise 1 -->
+<div class="section">
+<h2>Exercise 1: Identify the Hazards</h2>
+
+<p class="en">For the following instruction sequence, identify <strong>every hazard</strong> (type + which instructions) in a 5-stage pipeline <strong>without</strong> forwarding:</p>
+<p class="ko" style="display:none;">다음 명령 시퀀스에서 포워딩 <strong>없는</strong> 5단계 파이프라인의 <strong>모든 해저드</strong>(유형 + 관련 명령)를 식별하세요:</p>
+
+<pre>
+<span class="signal">I1:</span>  <span class="keyword">ADD</span>  <span class="signal">R1</span>, <span class="signal">R2</span>, <span class="signal">R3</span>     <span class="comment">// R1 = R2 + R3</span>
+<span class="signal">I2:</span>  <span class="keyword">SUB</span>  <span class="signal">R4</span>, <span class="signal">R1</span>, <span class="signal">R5</span>     <span class="comment">// R4 = R1 - R5</span>
+<span class="signal">I3:</span>  <span class="keyword">AND</span>  <span class="signal">R6</span>, <span class="signal">R1</span>, <span class="signal">R7</span>     <span class="comment">// R6 = R1 & R7</span>
+<span class="signal">I4:</span>  <span class="keyword">OR</span>   <span class="signal">R8</span>, <span class="signal">R1</span>, <span class="signal">R9</span>     <span class="comment">// R8 = R1 | R9</span>
+<span class="signal">I5:</span>  <span class="keyword">XOR</span>  <span class="signal">R10</span>, <span class="signal">R4</span>, <span class="signal">R6</span>    <span class="comment">// R10 = R4 ^ R6</span>
+</pre>
+
+<div class="hint-box">
+<strong>💡 Hint:</strong> <span class="en">Without forwarding, a result written in WB (cycle 5 of the producing instruction) isn't available until the cycle after. Check which instructions read a register before its producer reaches WB.</span><span class="ko" style="display:none;">포워딩 없이, WB에서 쓰인 결과(생산 명령의 사이클 5)는 그 다음 사이클까지 사용 불가합니다. 어떤 명령이 생산자가 WB에 도달하기 전에 레지스터를 읽는지 확인하세요.</span>
+</div>
+
+<button class="reveal-btn" onclick="this.nextElementSibling.style.display='block'; this.style.display='none';">Show Solution</button>
+<div class="solution">
+<div class="concept-box">
+<h3>✅ Solution</h3>
+
+<p class="en"><strong>Hazards involving R1 (written by I1):</strong></p>
+<p class="ko" style="display:none;"><strong>R1 관련 해저드 (I1에서 쓰임):</strong></p>
+<ul>
+<li class="en"><strong>I1 → I2 (RAW):</strong> I2 reads R1 at ID (cycle 3). I1 writes R1 at WB (cycle 5). I2 reads <strong>2 cycles too early</strong>. Need 2 stall cycles.</li>
+<li class="ko" style="display:none;"><strong>I1 → I2 (RAW):</strong> I2는 ID(사이클 3)에서 R1을 읽음. I1은 WB(사이클 5)에서 R1을 씀. I2가 <strong>2 사이클 너무 일찍</strong> 읽음. 2 스톨 사이클 필요.</li>
+<li class="en"><strong>I1 → I3 (RAW):</strong> I3 reads R1 at ID (cycle 4). I1 writes at WB (cycle 5). I3 reads <strong>1 cycle too early</strong>. Need 1 stall cycle.</li>
+<li class="ko" style="display:none;"><strong>I1 → I3 (RAW):</strong> I3는 ID(사이클 4)에서 R1을 읽음. I1은 WB(사이클 5)에서 씀. I3가 <strong>1 사이클 너무 일찍</strong> 읽음. 1 스톨 사이클 필요.</li>
+<li class="en"><strong>I1 → I4:</strong> I4 reads R1 at ID (cycle 5). I1 writes at WB (cycle 5). <strong>No hazard</strong> — assuming register file write-before-read in same cycle (common design).</li>
+<li class="ko" style="display:none;"><strong>I1 → I4:</strong> I4는 ID(사이클 5)에서 R1을 읽음. I1은 WB(사이클 5)에서 씀. <strong>해저드 없음</strong> — 같은 사이클 내 쓰기 후 읽기 가정 (일반적 설계).</li>
+</ul>
+
+<p class="en"><strong>Hazards involving R4 (written by I2) and R6 (written by I3):</strong></p>
+<p class="ko" style="display:none;"><strong>R4 관련 해저드 (I2에서 쓰임) 및 R6 (I3에서 쓰임):</strong></p>
+<ul>
+<li class="en"><strong>I2 → I5 (RAW on R4):</strong> Depends on stall resolution. After I1→I2 stalls are resolved, check if I5's read of R4 still conflicts.</li>
+<li class="ko" style="display:none;"><strong>I2 → I5 (R4 RAW):</strong> 스톨 해결에 따라 다름. I1→I2 스톨이 해결된 후 I5의 R4 읽기가 여전히 충돌하는지 확인.</li>
+<li class="en"><strong>I3 → I5 (RAW on R6):</strong> Similar analysis required after stalls propagate.</li>
+<li class="ko" style="display:none;"><strong>I3 → I5 (R6 RAW):</strong> 스톨 전파 후 유사한 분석 필요.</li>
+</ul>
+
+<p class="en"><strong>Key takeaway:</strong> Without forwarding, this 5-instruction sequence has multiple RAW hazards and would need several stall cycles, severely impacting throughput.</p>
+<p class="ko" style="display:none;"><strong>핵심 요점:</strong> 포워딩 없이, 이 5개 명령 시퀀스에는 여러 RAW 해저드가 있어 다수의 스톨 사이클이 필요하며, 처리량에 심각한 영향을 줍니다.</p>
+</div>
+</div>
+</div>
+
+<!-- Exercise 2 -->
+<div class="section">
+<h2>Exercise 2: Build a Hazard Detection Unit</h2>
+
+<p class="en">Write a SystemVerilog hazard detection unit that detects <strong>load-use hazards</strong> and generates a stall signal. The unit should:</p>
+<p class="ko" style="display:none;"><strong>load-use 해저드</strong>를 감지하고 스톨 신호를 생성하는 SystemVerilog 해저드 감지 유닛을 작성하세요. 유닛은:</p>
+<ul>
+<li class="en">Input: EX stage control signals (<code>id_ex_mem_read</code>, <code>id_ex_rd</code>) and ID stage source registers (<code>if_id_rs1</code>, <code>if_id_rs2</code>)</li>
+<li class="ko" style="display:none;">입력: EX 스테이지 제어 신호 (<code>id_ex_mem_read</code>, <code>id_ex_rd</code>) 및 ID 스테이지 소스 레지스터 (<code>if_id_rs1</code>, <code>if_id_rs2</code>)</li>
+<li class="en">Output: <code>stall</code> and <code>flush</code> signals</li>
+<li class="ko" style="display:none;">출력: <code>stall</code> 및 <code>flush</code> 신호</li>
+<li class="en">When stall is asserted: PC and IF/ID register should hold, ID/EX should be flushed to NOP</li>
+<li class="ko" style="display:none;">스톨이 어설트될 때: PC와 IF/ID 레지스터 유지, ID/EX를 NOP으로 플러시</li>
+</ul>
+
+<button class="reveal-btn" onclick="this.nextElementSibling.style.display='block'; this.style.display='none';">Show Solution</button>
+<div class="solution">
+<pre>
+<span class="keyword">module</span> <span class="type">load_use_hazard_unit</span> (
+    <span class="comment">// EX stage signals</span>
+    <span class="keyword">input</span>  <span class="type">logic</span>        <span class="signal">id_ex_mem_read</span>,    <span class="comment">// Is EX stage a load?</span>
+    <span class="keyword">input</span>  <span class="type">logic</span> [<span class="number">4</span>:<span class="number">0</span>] <span class="signal">id_ex_rd</span>,          <span class="comment">// EX destination register</span>
+    
+    <span class="comment">// ID stage signals</span>
+    <span class="keyword">input</span>  <span class="type">logic</span> [<span class="number">4</span>:<span class="number">0</span>] <span class="signal">if_id_rs1</span>,         <span class="comment">// ID source register 1</span>
+    <span class="keyword">input</span>  <span class="type">logic</span> [<span class="number">4</span>:<span class="number">0</span>] <span class="signal">if_id_rs2</span>,         <span class="comment">// ID source register 2</span>
+    
+    <span class="comment">// Control outputs</span>
+    <span class="keyword">output</span> <span class="type">logic</span>        <span class="signal">pc_hold</span>,           <span class="comment">// Hold PC (don't advance)</span>
+    <span class="keyword">output</span> <span class="type">logic</span>        <span class="signal">if_id_hold</span>,        <span class="comment">// Hold IF/ID register</span>
+    <span class="keyword">output</span> <span class="type">logic</span>        <span class="signal">id_ex_flush</span>        <span class="comment">// Flush ID/EX to NOP</span>
+);
+
+    <span class="type">logic</span> <span class="signal">load_use_detected</span>;
+
+    <span class="keyword">always_comb</span> <span class="keyword">begin</span>
+        <span class="signal">load_use_detected</span> = <span class="number">1'b0</span>;
+        
+        <span class="comment">// Detect: EX stage is a load AND ID stage uses the loaded reg</span>
+        <span class="keyword">if</span> (<span class="signal">id_ex_mem_read</span> && (<span class="signal">id_ex_rd</span> != <span class="number">5'd0</span>)) <span class="keyword">begin</span>
+            <span class="keyword">if</span> ((<span class="signal">id_ex_rd</span> == <span class="signal">if_id_rs1</span>) || (<span class="signal">id_ex_rd</span> == <span class="signal">if_id_rs2</span>))
+                <span class="signal">load_use_detected</span> = <span class="number">1'b1</span>;
+        <span class="keyword">end</span>
+        
+        <span class="comment">// On load-use: freeze front-end, bubble the EX stage</span>
+        <span class="signal">pc_hold</span>     = <span class="signal">load_use_detected</span>;
+        <span class="signal">if_id_hold</span>  = <span class="signal">load_use_detected</span>;
+        <span class="signal">id_ex_flush</span> = <span class="signal">load_use_detected</span>;
+    <span class="keyword">end</span>
+
+<span class="keyword">endmodule</span>
+</pre>
+
+<div class="tip-box">
+<h3>💡 How it works in the pipeline</h3>
+<p class="en">When <code>load_use_detected</code> is high:<br>
+• <strong>PC holds</strong> — re-fetches the same instruction next cycle<br>
+• <strong>IF/ID holds</strong> — keeps the dependent instruction waiting<br>
+• <strong>ID/EX flushes</strong> — inserts a bubble (NOP) in place of the stalled instruction<br>
+After 1 cycle, the load data is available from MEM stage and gets forwarded.</p>
+<p class="ko" style="display:none;"><code>load_use_detected</code>가 하이일 때:<br>
+• <strong>PC 유지</strong> — 다음 사이클에 같은 명령 재페치<br>
+• <strong>IF/ID 유지</strong> — 의존 명령을 대기 상태로 유지<br>
+• <strong>ID/EX 플러시</strong> — 스톨된 명령 대신 버블(NOP) 삽입<br>
+1 사이클 후, MEM 스테이지에서 로드 데이터가 사용 가능하고 포워딩됩니다.</p>
+</div>
+</div>
+</div>
+
+<!-- Exercise 3 -->
+<div class="section">
+<h2>Exercise 3: Complete Forwarding Unit</h2>
+
+<p class="en">Implement a full forwarding unit with the MUX that selects between register file data and forwarded data. The MUX should handle three cases:</p>
+<p class="ko" style="display:none;">레지스터 파일 데이터와 포워딩된 데이터 중 선택하는 MUX가 포함된 완전한 포워딩 유닛을 구현하세요. MUX는 세 가지 경우를 처리해야 합니다:</p>
+
+<table class="comparison-table">
+<tr><th>forward_sel</th><th class="en">Source</th><th class="ko" style="display:none;">소스</th></tr>
+<tr><td><code>2'b00</code></td><td class="en">Register file (no forwarding)</td><td class="ko" style="display:none;">레지스터 파일 (포워딩 없음)</td></tr>
+<tr><td><code>2'b01</code></td><td class="en">MEM/WB stage result</td><td class="ko" style="display:none;">MEM/WB 스테이지 결과</td></tr>
+<tr><td><code>2'b10</code></td><td class="en">EX/MEM stage result</td><td class="ko" style="display:none;">EX/MEM 스테이지 결과</td></tr>
+</table>
+
+<button class="reveal-btn" onclick="this.nextElementSibling.style.display='block'; this.style.display='none';">Show Solution</button>
+<div class="solution">
+<pre>
+<span class="keyword">module</span> <span class="type">forwarding_mux</span> (
+    <span class="comment">// Data inputs</span>
+    <span class="keyword">input</span>  <span class="type">logic</span> [<span class="number">31</span>:<span class="number">0</span>] <span class="signal">reg_data</span>,         <span class="comment">// From register file</span>
+    <span class="keyword">input</span>  <span class="type">logic</span> [<span class="number">31</span>:<span class="number">0</span>] <span class="signal">ex_mem_result</span>,    <span class="comment">// From EX/MEM pipeline reg</span>
+    <span class="keyword">input</span>  <span class="type">logic</span> [<span class="number">31</span>:<span class="number">0</span>] <span class="signal">mem_wb_result</span>,    <span class="comment">// From MEM/WB pipeline reg</span>
+    
+    <span class="comment">// Select</span>
+    <span class="keyword">input</span>  <span class="type">logic</span> [<span class="number">1</span>:<span class="number">0</span>]  <span class="signal">forward_sel</span>,
+    
+    <span class="comment">// Output</span>
+    <span class="keyword">output</span> <span class="type">logic</span> [<span class="number">31</span>:<span class="number">0</span>] <span class="signal">alu_operand</span>
+);
+
+    <span class="keyword">always_comb</span> <span class="keyword">begin</span>
+        <span class="keyword">case</span> (<span class="signal">forward_sel</span>)
+            <span class="number">2'b00</span>:   <span class="signal">alu_operand</span> = <span class="signal">reg_data</span>;        <span class="comment">// Normal — no hazard</span>
+            <span class="number">2'b01</span>:   <span class="signal">alu_operand</span> = <span class="signal">mem_wb_result</span>;   <span class="comment">// Forward from WB</span>
+            <span class="number">2'b10</span>:   <span class="signal">alu_operand</span> = <span class="signal">ex_mem_result</span>;   <span class="comment">// Forward from MEM</span>
+            <span class="keyword">default</span>: <span class="signal">alu_operand</span> = <span class="signal">reg_data</span>;        <span class="comment">// Safe default</span>
+        <span class="keyword">endcase</span>
+    <span class="keyword">end</span>
+
+<span class="keyword">endmodule</span>
+
+
+<span class="comment">// Top-level: Connecting forwarding unit + MUXes</span>
+<span class="keyword">module</span> <span class="type">pipeline_with_forwarding</span> (
+    <span class="keyword">input</span>  <span class="type">logic</span>        <span class="signal">clk</span>, <span class="signal">rst_n</span>,
+    <span class="comment">// ... other pipeline signals ...</span>
+);
+
+    <span class="type">logic</span> [<span class="number">1</span>:<span class="number">0</span>] <span class="signal">forward_a</span>, <span class="signal">forward_b</span>;
+    <span class="type">logic</span> [<span class="number">31</span>:<span class="number">0</span>] <span class="signal">alu_src_a</span>, <span class="signal">alu_src_b</span>;
+
+    <span class="comment">// Forwarding detection</span>
+    <span class="type">forwarding_unit</span> <span class="signal">u_fwd</span> (
+        .<span class="signal">id_ex_rs1</span>          (<span class="signal">id_ex_rs1</span>),
+        .<span class="signal">id_ex_rs2</span>          (<span class="signal">id_ex_rs2</span>),
+        .<span class="signal">ex_mem_rd</span>          (<span class="signal">ex_mem_rd</span>),
+        .<span class="signal">ex_mem_reg_write</span>   (<span class="signal">ex_mem_reg_write</span>),
+        .<span class="signal">mem_wb_rd</span>          (<span class="signal">mem_wb_rd</span>),
+        .<span class="signal">mem_wb_reg_write</span>   (<span class="signal">mem_wb_reg_write</span>),
+        .<span class="signal">forward_a</span>          (<span class="signal">forward_a</span>),
+        .<span class="signal">forward_b</span>          (<span class="signal">forward_b</span>)
+    );
+
+    <span class="comment">// Operand A MUX</span>
+    <span class="type">forwarding_mux</span> <span class="signal">u_mux_a</span> (
+        .<span class="signal">reg_data</span>       (<span class="signal">id_ex_reg_data1</span>),
+        .<span class="signal">ex_mem_result</span>  (<span class="signal">ex_mem_alu_result</span>),
+        .<span class="signal">mem_wb_result</span>  (<span class="signal">mem_wb_result</span>),
+        .<span class="signal">forward_sel</span>    (<span class="signal">forward_a</span>),
+        .<span class="signal">alu_operand</span>    (<span class="signal">alu_src_a</span>)
+    );
+
+    <span class="comment">// Operand B MUX</span>
+    <span class="type">forwarding_mux</span> <span class="signal">u_mux_b</span> (
+        .<span class="signal">reg_data</span>       (<span class="signal">id_ex_reg_data2</span>),
+        .<span class="signal">ex_mem_result</span>  (<span class="signal">ex_mem_alu_result</span>),
+        .<span class="signal">mem_wb_result</span>  (<span class="signal">mem_wb_result</span>),
+        .<span class="signal">forward_sel</span>    (<span class="signal">forward_b</span>),
+        .<span class="signal">alu_operand</span>    (<span class="signal">alu_src_b</span>)
+    );
+
+<span class="keyword">endmodule</span>
+</pre>
+</div>
+</div>
+
+<!-- Exercise 4 -->
+<div class="section">
+<h2>Exercise 4: Branch Prediction Accuracy Analysis</h2>
+
+<p class="en">A loop executes <strong>100 times</strong>. Calculate the branch prediction accuracy for each strategy at the loop-back branch (which is taken 99 times, not taken 1 time):</p>
+<p class="ko" style="display:none;">루프가 <strong>100번</strong> 실행됩니다. 루프 복귀 분기(99번 취해짐, 1번 미취)에 대해 각 전략의 분기 예측 정확도를 계산하세요:</p>
+
+<ol>
+<li class="en">Always predict "not taken"</li>
+<li class="ko" style="display:none;">항상 "미취" 예측</li>
+<li class="en">Always predict "taken"</li>
+<li class="ko" style="display:none;">항상 "취" 예측</li>
+<li class="en">1-bit predictor (starts as "not taken")</li>
+<li class="ko" style="display:none;">1비트 예측기 (시작: "미취")</li>
+<li class="en">2-bit saturating counter (starts at "weakly not taken" = 01)</li>
+<li class="ko" style="display:none;">2비트 포화 카운터 (시작: "약하게 미취" = 01)</li>
+</ol>
+
+<button class="reveal-btn" onclick="this.nextElementSibling.style.display='block'; this.style.display='none';">Show Solution</button>
+<div class="solution">
+<div class="concept-box">
+<h3>✅ Solution</h3>
+
+<p class="en"><strong>1. Always "not taken":</strong></p>
+<p class="ko" style="display:none;"><strong>1. 항상 "미취":</strong></p>
+<ul>
+<li class="en">Predicts not-taken all 100 times. Correct only on the last iteration (exit). <strong>1/100 = 1%</strong></li>
+<li class="ko" style="display:none;">100번 모두 미취 예측. 마지막 반복(종료)에서만 정확. <strong>1/100 = 1%</strong></li>
+</ul>
+
+<p class="en"><strong>2. Always "taken":</strong></p>
+<p class="ko" style="display:none;"><strong>2. 항상 "취":</strong></p>
+<ul>
+<li class="en">Predicts taken all 100 times. Correct for 99 iterations, wrong on exit. <strong>99/100 = 99%</strong></li>
+<li class="ko" style="display:none;">100번 모두 취 예측. 99번 정확, 종료 시 오류. <strong>99/100 = 99%</strong></li>
+</ul>
+
+<p class="en"><strong>3. 1-bit predictor (starts "not taken"):</strong></p>
+<p class="ko" style="display:none;"><strong>3. 1비트 예측기 (시작 "미취"):</strong></p>
+<ul>
+<li class="en">Iteration 1: predicts NT, actual T → WRONG → flips to T</li>
+<li class="ko" style="display:none;">반복 1: 미취 예측, 실제 취 → 오류 → 취로 전환</li>
+<li class="en">Iterations 2-99: predicts T, actual T → CORRECT (98 correct)</li>
+<li class="ko" style="display:none;">반복 2-99: 취 예측, 실제 취 → 정확 (98개 정확)</li>
+<li class="en">Iteration 100: predicts T, actual NT → WRONG → flips to NT</li>
+<li class="ko" style="display:none;">반복 100: 취 예측, 실제 미취 → 오류 → 미취로 전환</li>
+<li class="en"><strong>98/100 = 98%</strong></li>
+</ul>
+
+<p class="en"><strong>4. 2-bit saturating (starts 01 "weakly NT"):</strong></p>
+<p class="ko" style="display:none;"><strong>4. 2비트 포화 (시작 01 "약하게 미취"):</strong></p>
+<ul>
+<li class="en">Iter 1: state=01 → predict NT, actual T → WRONG → state becomes 10</li>
+<li class="ko" style="display:none;">반복 1: 상태=01 → 미취 예측, 실제 취 → 오류 → 상태 10</li>
+<li class="en">Iter 2: state=10 → predict T, actual T → CORRECT → state becomes 11</li>
+<li class="ko" style="display:none;">반복 2: 상태=10 → 취 예측, 실제 취 → 정확 → 상태 11</li>
+<li class="en">Iter 3-99: state=11 → predict T, actual T → CORRECT (97 correct)</li>
+<li class="ko" style="display:none;">반복 3-99: 상태=11 → 취 예측, 실제 취 → 정확 (97개 정확)</li>
+<li class="en">Iter 100: state=11 → predict T, actual NT → WRONG → state becomes 10</li>
+<li class="ko" style="display:none;">반복 100: 상태=11 → 취 예측, 실제 미취 → 오류 → 상태 10</li>
+<li class="en"><strong>98/100 = 98%</strong> (same as 1-bit for single loop!)</li>
+<li class="ko" style="display:none;"><strong>98/100 = 98%</strong> (단일 루프에서는 1비트와 동일!)</li>
+</ul>
+
+<div class="tip-box">
+<h3>💡 Key Insight</h3>
+<p class="en">The 2-bit predictor's advantage shows when the <strong>same loop runs multiple times</strong>. The 1-bit predictor mispredicts twice per loop execution (entry + exit), while the 2-bit only mispredicts once (exit). Over many runs of the same loop, 2-bit wins.</p>
+<p class="ko" style="display:none;">2비트 예측기의 장점은 <strong>같은 루프가 여러 번 실행</strong>될 때 나타납니다. 1비트 예측기는 루프 실행마다 두 번 오예측(진입 + 종료)하지만, 2비트는 한 번만 오예측(종료)합니다.</p>
+</div>
+</div>
+</div>
+</div>
+
+<!-- Exercise 5 -->
+<div class="section">
+<h2>Exercise 5: Pipeline Timing Diagram</h2>
+
+<p class="en">Draw the pipeline execution (cycle-by-cycle) for this sequence in a 5-stage pipeline <strong>with forwarding</strong>. Mark any stalls with "💤":</p>
+<p class="ko" style="display:none;"><strong>포워딩이 있는</strong> 5단계 파이프라인에서 이 시퀀스의 파이프라인 실행(사이클별)을 그리세요. 스톨은 "💤"로 표시:</p>
+
+<pre>
+<span class="signal">LW</span>   <span class="signal">R1</span>, <span class="number">0</span>(<span class="signal">R10</span>)       <span class="comment">// Load into R1</span>
+<span class="signal">ADD</span>  <span class="signal">R2</span>, <span class="signal">R1</span>, <span class="signal">R3</span>      <span class="comment">// Uses R1 (load-use!)</span>
+<span class="signal">SUB</span>  <span class="signal">R4</span>, <span class="signal">R2</span>, <span class="signal">R5</span>      <span class="comment">// Uses R2</span>
+<span class="signal">BEQ</span>  <span class="signal">R4</span>, <span class="signal">R0</span>, <span class="signal">label</span>   <span class="comment">// Branch on R4</span>
+<span class="signal">AND</span>  <span class="signal">R6</span>, <span class="signal">R7</span>, <span class="signal">R8</span>      <span class="comment">// After branch (may flush)</span>
+</pre>
+
+<button class="reveal-btn" onclick="this.nextElementSibling.style.display='block'; this.style.display='none';">Show Solution</button>
+<div class="solution">
+<div class="concept-box">
+<h3>✅ Pipeline Timing (with forwarding)</h3>
+<pre>
+<span class="comment">Cycle:  1    2    3    4    5    6    7    8    9    10</span>
+
+<span class="signal">LW</span>     IF   ID   EX   MEM  WB
+                        ↓fwd(MEM→EX)
+<span class="signal">ADD</span>         IF   ID   <span class="string">💤</span>   EX   MEM  WB
+                                ↓fwd(EX→EX)
+<span class="signal">SUB</span>              IF   <span class="string">💤</span>   ID   EX   MEM  WB
+                                     ↓fwd(EX→EX)
+<span class="signal">BEQ</span>                   IF   <span class="string">💤</span>  ID   EX   MEM  WB
+                                          ↑ branch resolved
+<span class="signal">AND</span>                        IF   IF   ID   ...
+                                     ↑ refetch if taken (flush)
+</pre>
+
+<p class="en"><strong>Analysis:</strong></p>
+<p class="ko" style="display:none;"><strong>분석:</strong></p>
+<ul>
+<li class="en"><strong>LW → ADD:</strong> Load-use hazard! 1 stall cycle. After stall, LW data forwards from MEM stage.</li>
+<li class="ko" style="display:none;"><strong>LW → ADD:</strong> Load-use 해저드! 1 스톨 사이클. 스톨 후 LW 데이터가 MEM 스테이지에서 포워딩.</li>
+<li class="en"><strong>ADD → SUB:</strong> R2 dependency. No stall — EX/MEM forwarding handles it.</li>
+<li class="ko" style="display:none;"><strong>ADD → SUB:</strong> R2 의존성. 스톨 없음 — EX/MEM 포워딩으로 처리.</li>
+<li class="en"><strong>SUB → BEQ:</strong> R4 dependency. No stall — EX/MEM forwarding handles it.</li>
+<li class="ko" style="display:none;"><strong>SUB → BEQ:</strong> R4 의존성. 스톨 없음 — EX/MEM 포워딩으로 처리.</li>
+<li class="en"><strong>BEQ:</strong> Control hazard. If taken, AND instruction gets flushed (2-cycle penalty).</li>
+<li class="ko" style="display:none;"><strong>BEQ:</strong> 제어 해저드. 취해지면, AND 명령이 플러시됨 (2 사이클 패널티).</li>
+</ul>
+<p class="en"><strong>Total overhead:</strong> 1 stall (load-use) + potentially 2 cycles (branch penalty) = 1-3 wasted cycles.</p>
+<p class="ko" style="display:none;"><strong>총 오버헤드:</strong> 1 스톨 (load-use) + 잠재적 2 사이클 (분기 패널티) = 1-3 낭비 사이클.</p>
+</div>
+</div>
+</div>
+
+<div class="section">
+<h2>🎯 Challenge: Schedule to Eliminate the Stall</h2>
+
+<p class="en">Can you <strong>reorder</strong> the instructions from Exercise 5 to eliminate the load-use stall while preserving program correctness? This is called <strong>instruction scheduling</strong> — a compiler optimization technique.</p>
+<p class="ko" style="display:none;">프로그램 정확성을 유지하면서 연습 5의 명령을 <strong>재배열</strong>하여 load-use 스톨을 제거할 수 있나요? 이것을 <strong>명령 스케줄링</strong>이라 하며 — 컴파일러 최적화 기법입니다.</p>
+
+<div class="hint-box">
+<strong>💡 Hint:</strong> <span class="en">Is there an instruction that doesn't depend on R1 that could be moved between the LW and ADD?</span><span class="ko" style="display:none;">R1에 의존하지 않는 명령을 LW와 ADD 사이로 이동할 수 있나요?</span>
+</div>
+
+<button class="reveal-btn" onclick="this.nextElementSibling.style.display='block'; this.style.display='none';">Show Solution</button>
+<div class="solution">
+<div class="concept-box">
+<h3>✅ Trick Question!</h3>
+<p class="en">In this specific sequence, we <strong>can't easily reorder</strong> because every subsequent instruction depends on the previous one's result (R1→R2→R4). In real programs, the compiler might find an independent instruction from before the LW to move into the "delay slot." This is why compilers with hazard-awareness are valuable!</p>
+<p class="ko" style="display:none;">이 특정 시퀀스에서는 모든 후속 명령이 이전 결과에 의존(R1→R2→R4)하므로 <strong>쉽게 재배열할 수 없습니다</strong>. 실제 프로그램에서 컴파일러는 LW 이전의 독립적인 명령을 "딜레이 슬롯"으로 이동시킬 수 있습니다. 이것이 해저드 인식 컴파일러가 가치 있는 이유입니다!</p>
+</div>
+</div>
+</div>
+
+<div class="nav-links" style="margin-top: 32px;">
+    <a href="day-23-lesson.html">📖 Review Lesson</a>
+    <a href="day-23-quiz.html">📝 Take the Quiz</a>
+    <a href="day-22-lesson.html">← Day 22</a>
+</div>
+
+<script>
+let isKorean = false;
+function toggleLang() {
+    isKorean = !isKorean;
+    document.querySelectorAll('.en').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'none' : 'revert', 'important');
+    });
+    document.querySelectorAll('.ko').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'revert' : 'none', 'important');
+    });
+    document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+}
+</script>
+
+</body>
+</html>
