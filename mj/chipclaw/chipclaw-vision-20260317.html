@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ChipClaw Vision — Bottom-Up AI for Digital Design | Strategic Proposal</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+
+  :root {
+    --primary: #0f172a;
+    --accent: #2563eb;
+    --accent-light: #3b82f6;
+    --accent-bg: #eff6ff;
+    --success: #059669;
+    --success-bg: #ecfdf5;
+    --warn: #d97706;
+    --warn-bg: #fffbeb;
+    --danger: #dc2626;
+    --danger-bg: #fef2f2;
+    --purple: #7c3aed;
+    --purple-bg: #f5f3ff;
+    --gray-50: #f8fafc; --gray-100: #f1f5f9; --gray-200: #e2e8f0;
+    --gray-300: #cbd5e1; --gray-400: #94a3b8; --gray-500: #64748b;
+    --gray-600: #475569; --gray-700: #334155; --gray-800: #1e293b; --gray-900: #0f172a;
+    --radius: 12px;
+    --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.08), 0 2px 4px -2px rgba(0,0,0,0.06);
+    --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.08), 0 4px 6px -4px rgba(0,0,0,0.06);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Inter', -apple-system, sans-serif; color: var(--gray-800); background: #fff; line-height: 1.7; font-size: 15px; -webkit-font-smoothing: antialiased; }
+
+  .lang-toggle { position: fixed; top: 20px; right: 20px; z-index: 1000; background: var(--primary); color: #fff; border: none; padding: 8px 16px; border-radius: 8px; font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.2s; box-shadow: var(--shadow-md); }
+  .lang-toggle:hover { background: var(--accent); }
+  .ko { display: none; }
+  .ko.show { display: inline !important; }
+  .en.hide { display: none !important; }
+
+  /* Cover */
+  .cover { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; background: linear-gradient(160deg, #0f172a 0%, #1e293b 100%); color: #fff; text-align: center; padding: 60px 24px; }
+  .cover-badge { display: inline-block; background: rgba(37,99,235,0.15); border: 1px solid rgba(37,99,235,0.25); color: #93c5fd; padding: 6px 16px; border-radius: 20px; font-size: 12px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 32px; }
+  .cover h1 { font-size: clamp(40px, 7vw, 72px); font-weight: 800; letter-spacing: -2px; line-height: 1.1; margin-bottom: 16px; }
+  .cover h1 span { color: var(--accent-light); }
+  .cover-subtitle { font-size: clamp(16px, 2.5vw, 22px); font-weight: 300; color: #94a3b8; margin-bottom: 48px; max-width: 700px; line-height: 1.6; }
+  .cover-meta { display: flex; flex-wrap: wrap; gap: 32px; justify-content: center; font-size: 13px; color: #94a3b8; }
+  .cover-meta strong { color: #e2e8f0; font-weight: 600; }
+
+  .content { max-width: 900px; margin: 0 auto; padding: 80px 24px; }
+
+  .section-num { display: inline-block; background: var(--accent); color: #fff; width: 36px; height: 36px; border-radius: 10px; text-align: center; line-height: 36px; font-size: 14px; font-weight: 700; margin-bottom: 12px; }
+  h2 { font-size: 28px; font-weight: 700; color: var(--primary); margin-bottom: 8px; letter-spacing: -0.5px; }
+  h3 { font-size: 20px; font-weight: 600; color: var(--gray-700); margin: 32px 0 12px; }
+  h4 { font-size: 16px; font-weight: 600; color: var(--gray-700); margin: 24px 0 8px; }
+  .section-desc { color: var(--gray-500); font-size: 15px; margin-bottom: 32px; }
+  .divider { height: 1px; background: var(--gray-200); margin: 64px 0; }
+  p { margin-bottom: 16px; color: var(--gray-700); }
+  ul, ol { margin: 0 0 16px 20px; color: var(--gray-700); }
+  li { margin-bottom: 6px; }
+  strong { font-weight: 600; color: var(--gray-800); }
+  code { background: var(--gray-100); padding: 2px 6px; border-radius: 4px; font-family: 'JetBrains Mono', monospace; font-size: 13px; }
+  em { color: var(--gray-500); font-style: italic; }
+
+  .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin: 24px 0; }
+  .card-grid-3 { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+  .card { background: var(--gray-50); border: 1px solid var(--gray-200); border-radius: var(--radius); padding: 24px; transition: all 0.2s; }
+  .card:hover { box-shadow: var(--shadow-md); border-color: var(--gray-300); }
+  .card-icon { width: 44px; height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 22px; margin-bottom: 14px; }
+  .card-icon.blue { background: var(--accent-bg); }
+  .card-icon.green { background: var(--success-bg); }
+  .card-icon.amber { background: var(--warn-bg); }
+  .card-icon.purple { background: var(--purple-bg); }
+  .card-icon.red { background: var(--danger-bg); }
+  .card h4 { margin: 0 0 6px; font-size: 15px; }
+  .card p { font-size: 13px; color: var(--gray-500); margin: 0; }
+
+  .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 16px; margin: 24px 0; }
+  .stat-card { background: var(--gray-50); border: 1px solid var(--gray-200); border-radius: var(--radius); padding: 20px; text-align: center; }
+  .stat-num { font-size: 28px; font-weight: 800; color: var(--accent); line-height: 1.2; }
+  .stat-label { font-size: 11px; font-weight: 600; color: var(--gray-500); text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px; }
+
+  .table-wrap { overflow-x: auto; margin: 24px 0; border-radius: var(--radius); border: 1px solid var(--gray-200); }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  th { background: var(--gray-50); font-weight: 600; text-align: left; padding: 12px 16px; border-bottom: 2px solid var(--gray-200); color: var(--gray-600); font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+  td { padding: 12px 16px; border-bottom: 1px solid var(--gray-100); color: var(--gray-700); }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: var(--gray-50); }
+
+  .callout { border-radius: var(--radius); padding: 20px 24px; margin: 24px 0; display: flex; gap: 14px; align-items: flex-start; }
+  .callout.info { background: var(--accent-bg); border: 1px solid #bfdbfe; }
+  .callout.success { background: var(--success-bg); border: 1px solid #a7f3d0; }
+  .callout.warn { background: var(--warn-bg); border: 1px solid #fde68a; }
+  .callout.danger { background: var(--danger-bg); border: 1px solid #fecaca; }
+  .callout.purple { background: var(--purple-bg); border: 1px solid #c4b5fd; }
+  .callout-icon { font-size: 20px; flex-shrink: 0; margin-top: 2px; }
+  .callout-text { font-size: 14px; color: var(--gray-700); }
+  .callout-text strong { display: block; margin-bottom: 4px; }
+
+  .tag { display: inline-block; padding: 3px 10px; border-radius: 6px; font-size: 12px; font-weight: 600; }
+  .tag.blue { background: var(--accent-bg); color: var(--accent); }
+  .tag.green { background: var(--success-bg); color: var(--success); }
+  .tag.amber { background: var(--warn-bg); color: var(--warn); }
+  .tag.red { background: var(--danger-bg); color: var(--danger); }
+  .tag.purple { background: var(--purple-bg); color: var(--purple); }
+
+  /* Comparison layout */
+  .vs-container { display: grid; grid-template-columns: 1fr auto 1fr; gap: 0; margin: 24px 0; align-items: stretch; }
+  .vs-col { border-radius: var(--radius); padding: 24px; border: 1px solid var(--gray-200); }
+  .vs-col.left { background: var(--danger-bg); border-color: #fecaca; border-right: none; border-radius: var(--radius) 0 0 var(--radius); }
+  .vs-col.right { background: var(--success-bg); border-color: #a7f3d0; border-left: none; border-radius: 0 var(--radius) var(--radius) 0; }
+  .vs-divider { display: flex; align-items: center; justify-content: center; background: var(--gray-100); border-top: 1px solid var(--gray-200); border-bottom: 1px solid var(--gray-200); padding: 0 12px; font-size: 18px; font-weight: 800; color: var(--gray-400); }
+  .vs-col h4 { margin-top: 0; margin-bottom: 12px; }
+  .vs-col ul { margin-bottom: 0; font-size: 13px; }
+  .vs-col li { margin-bottom: 8px; }
+
+  /* Timeline */
+  .timeline { position: relative; padding-left: 32px; margin: 24px 0; }
+  .timeline::before { content: ''; position: absolute; left: 11px; top: 8px; bottom: 8px; width: 2px; background: var(--gray-200); }
+  .timeline-item { position: relative; margin-bottom: 32px; }
+  .timeline-item::before { content: ''; position: absolute; left: -25px; top: 8px; width: 10px; height: 10px; border-radius: 50%; background: var(--accent); border: 2px solid #fff; box-shadow: 0 0 0 2px var(--accent); }
+  .timeline-phase { font-size: 11px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 1px; }
+  .timeline-title { font-weight: 600; color: var(--gray-800); margin: 2px 0 6px; font-size: 16px; }
+  .timeline-desc { font-size: 13px; color: var(--gray-500); line-height: 1.7; }
+
+  /* Flow diagram */
+  .flow-diagram { background: var(--gray-50); border: 1px solid var(--gray-200); border-radius: var(--radius); padding: 32px 24px; margin: 24px 0; }
+  .flow-row { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-bottom: 8px; }
+  .flow-node { border-radius: 8px; padding: 12px 18px; text-align: center; font-size: 13px; font-weight: 600; background: #fff; border: 1px solid var(--gray-200); color: var(--gray-700); min-width: 130px; }
+  .flow-node.highlight { border-left: 3px solid var(--accent); }
+  .flow-node.green-l { border-left: 3px solid var(--success); }
+  .flow-node.purple-l { border-left: 3px solid var(--purple); }
+  .flow-node.amber-l { border-left: 3px solid var(--warn); }
+  .flow-node.wide { min-width: 100%; max-width: 560px; }
+  .flow-node-label { font-size: 10px; font-weight: 400; color: var(--gray-400); display: block; margin-top: 3px; }
+  .flow-node-sub { display: flex; gap: 6px; margin-top: 6px; justify-content: center; flex-wrap: wrap; }
+  .flow-node-sub span { background: var(--gray-100); padding: 3px 9px; border-radius: 5px; font-size: 11px; font-weight: 500; color: var(--gray-600); }
+  .flow-arrow { text-align: center; color: var(--gray-300); font-size: 14px; margin: 4px 0; }
+  .flow-arrow-label { text-align: center; font-size: 10px; color: var(--gray-400); margin-bottom: 4px; }
+
+  .footer { text-align: center; padding: 48px 24px; color: var(--gray-400); font-size: 12px; border-top: 1px solid var(--gray-100); }
+
+  @media print {
+    .lang-toggle { display: none; }
+    .cover { min-height: auto; padding: 48px; page-break-after: always; }
+    .content { padding: 24px; }
+  }
+  @media (max-width: 768px) {
+    .vs-container { grid-template-columns: 1fr; }
+    .vs-col.left, .vs-col.right { border-radius: var(--radius); border: 1px solid var(--gray-200); }
+    .vs-col.left { margin-bottom: 0; }
+    .vs-divider { padding: 8px; border: none; }
+    .cover h1 { font-size: 36px; }
+    .content { padding: 40px 16px; }
+  }
+</style>
+</head>
+<body>
+
+<button class="lang-toggle" onclick="toggleLang()">한국어</button>
+
+<!-- COVER -->
+<div class="cover">
+  <div class="cover-badge"><span class="en">Strategic Vision — Confidential</span><span class="ko">전략 비전 — 대외비</span></div>
+  <h1>Chip<span>Claw</span></h1>
+  <p class="cover-subtitle">
+    <span class="en">Bottom-Up AI for Digital Design — Why Building on Our Own Data Beats Any Off-the-Shelf Tool</span>
+    <span class="ko">디지털 설계를 위한 상향식 AI — 자체 데이터 기반 구축이 기성 도구를 넘어서는 이유</span>
+  </p>
+  <p class="cover-subtitle" style="font-size: 14px; margin-bottom: 32px; color: #64748b;">
+    <span class="en">A comparative analysis of ChipAgents.ai (top-down) vs. ChipClaw (bottom-up), and a long-term vision for Microchip-owned AI design intelligence</span>
+    <span class="ko">ChipAgents.ai(하향식) vs. ChipClaw(상향식) 비교 분석 및 Microchip 자체 AI 설계 지능 장기 비전</span>
+  </p>
+  <div class="cover-meta">
+    <div><strong><span class="en">Prepared by</span><span class="ko">작성자</span></strong><br>Minjun Kim<br><span class="en">Validation → Digital Design Engineer</span><span class="ko">검증 → 디지털 설계 엔지니어</span></div>
+    <div><strong><span class="en">Organization</span><span class="ko">부서</span></strong><br>Microchip Technology Inc.<br><span class="en">MCU8 Division (target)</span><span class="ko">MCU8 사업부 (대상)</span></div>
+    <div><strong><span class="en">Date</span><span class="ko">날짜</span></strong><br>March 2026<br><span class="en">Version 1.0</span><span class="ko">버전 1.0</span></div>
+  </div>
+</div>
+
+<!-- CONTENT -->
+<div class="content">
+
+  <!-- 1. EXEC SUMMARY -->
+  <div class="section-num">1</div>
+  <h2><span class="en">Executive Summary</span><span class="ko">경영진 요약</span></h2>
+  <p class="section-desc"><span class="en">Two approaches to AI in chip design — and why both have a role.</span><span class="ko">칩 설계 AI의 두 가지 접근 방식 — 그리고 왜 둘 다 역할이 있는지.</span></p>
+
+  <p>
+    <span class="en">Microchip is currently evaluating <strong>ChipAgents.ai</strong>, an enterprise SaaS platform from Alpha Design AI (Santa Barbara, founded 2024) that promises 10× productivity gains in RTL design and verification through AI agents. It's a powerful tool — but it follows a <strong>top-down, generic approach</strong>: it generates code and verification environments from scratch using its own models, largely ignoring decades of Microchip's legacy designs, proven IP blocks, and institutional knowledge.</span>
+    <span class="ko">Microchip은 현재 <strong>ChipAgents.ai</strong>를 평가 중입니다. Alpha Design AI(산타바바라, 2024년 설립)의 엔터프라이즈 SaaS 플랫폼으로, AI 에이전트를 통해 RTL 설계 및 검증에서 10배 생산성 향상을 약속합니다. 강력한 도구이지만 <strong>하향식, 범용 접근 방식</strong>을 따릅니다: 자체 모델을 사용하여 처음부터 코드와 검증 환경을 생성하며, Microchip의 수십 년간의 레거시 설계, 검증된 IP 블록, 제도적 지식을 대부분 무시합니다.</span>
+  </p>
+  <p>
+    <span class="en">This proposal presents <strong>ChipClaw</strong> as a complementary — and ultimately superior — <strong>bottom-up approach</strong>. Instead of generating designs from nothing, ChipClaw builds AI intelligence on top of what Microchip already has: our RTL libraries, verification testbenches, Jira histories, datasheets, functional safety documents, and decades of tribal knowledge. The result is an AI that doesn't just write code — it writes <em>our</em> code, in <em>our</em> style, referencing <em>our</em> actual data.</span>
+    <span class="ko">이 제안서는 <strong>ChipClaw</strong>을 보완적이고 궁극적으로 우월한 <strong>상향식 접근 방식</strong>으로 제시합니다. 아무것도 없는 상태에서 설계를 생성하는 대신, ChipClaw은 Microchip이 이미 보유한 것 위에 AI 지능을 구축합니다: RTL 라이브러리, 검증 테스트벤치, Jira 이력, 데이터시트, 기능 안전 문서, 수십 년간의 암묵적 지식. 결과는 단순히 코드를 작성하는 것이 아닌 — <em>우리의</em> 코드를, <em>우리의</em> 스타일로, <em>우리의</em> 실제 데이터를 참조하여 작성하는 AI입니다.</span>
+  </p>
+
+  <div class="stat-grid">
+    <div class="stat-card">
+      <div class="stat-num" style="font-size: 22px;"><span class="en">Bottom-Up</span><span class="ko">상향식</span></div>
+      <div class="stat-label"><span class="en">Our Data → Our AI</span><span class="ko">우리 데이터 → 우리 AI</span></div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">RAG</div>
+      <div class="stat-label"><span class="en">Knowledge Retrieval</span><span class="ko">지식 검색</span></div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">MCU8</div>
+      <div class="stat-label"><span class="en">Start Here, Scale Everywhere</span><span class="ko">여기서 시작, 어디든 확장</span></div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">2-3yr</div>
+      <div class="stat-label"><span class="en">Strategic Vision</span><span class="ko">전략적 비전</span></div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- 2. WHAT IS CHIPAGENTS -->
+  <div class="section-num">2</div>
+  <h2><span class="en">What ChipAgents.ai Does</span><span class="ko">ChipAgents.ai가 하는 것</span></h2>
+  <p class="section-desc"><span class="en">Understanding the tool Microchip is currently evaluating.</span><span class="ko">Microchip이 현재 평가 중인 도구의 이해.</span></p>
+
+  <p>
+    <span class="en"><strong>ChipAgents</strong> (by Alpha Design AI) is an agentic AI platform purpose-built for semiconductor design and verification. Founded in 2024, based in Santa Barbara, CA, with 11-50 employees. They've won customers like Andes Technology (RISC-V IP) and are active at industry conferences (DVCon, GOMACTech, Embedded World). Their pitch: "10× RTL design and verification productivity."</span>
+    <span class="ko"><strong>ChipAgents</strong>(Alpha Design AI)는 반도체 설계 및 검증을 위해 구축된 에이전틱 AI 플랫폼입니다. 2024년 설립, 산타바바라 소재, 직원 11-50명. Andes Technology(RISC-V IP) 같은 고객을 확보하고 업계 컨퍼런스(DVCon, GOMACTech, Embedded World)에서 활발히 활동합니다. 핵심 메시지: "RTL 설계 및 검증 생산성 10배 향상."</span>
+  </p>
+
+  <h3><span class="en">What ChipAgents Offers</span><span class="ko">ChipAgents가 제공하는 것</span></h3>
+  <div class="card-grid card-grid-3">
+    <div class="card">
+      <div class="card-icon blue">🤖</div>
+      <h4><span class="en">AI Agents for RTL</span><span class="ko">RTL용 AI 에이전트</span></h4>
+      <p><span class="en">Multi-agent system that reads specs, generates RTL code, and creates verification environments from natural language descriptions.</span><span class="ko">스펙을 읽고, RTL 코드를 생성하고, 자연어 설명에서 검증 환경을 만드는 멀티 에이전트 시스템.</span></p>
+    </div>
+    <div class="card">
+      <div class="card-icon green">✅</div>
+      <h4><span class="en">Verification Generation</span><span class="ko">검증 생성</span></h4>
+      <p><span class="en">Generates UVM testbenches, formal verification setups, and debugging assistance from RTL + spec analysis.</span><span class="ko">RTL + 스펙 분석에서 UVM 테스트벤치, 형식 검증 설정, 디버깅 지원을 생성.</span></p>
+    </div>
+    <div class="card">
+      <div class="card-icon purple">📖</div>
+      <h4><span class="en">Spec Interpretation</span><span class="ko">스펙 해석</span></h4>
+      <p><span class="en">Reads design specifications and helps engineers reason through complex RTL systems and standards.</span><span class="ko">설계 스펙을 읽고 엔지니어가 복잡한 RTL 시스템과 표준을 추론하도록 지원.</span></p>
+    </div>
+  </div>
+
+  <div class="callout warn">
+    <div class="callout-icon">⚠️</div>
+    <div class="callout-text">
+      <strong><span class="en">The Top-Down Problem (per MCU group feedback)</span><span class="ko">하향식 문제점 (MCU 그룹 피드백)</span></strong>
+      <span class="en">Colleagues in the MCU division who've evaluated ChipAgents report a fundamental concern: <strong>it generates everything from scratch</strong>. It doesn't know Microchip's coding standards, doesn't reference our existing IP libraries, doesn't understand our verification methodologies, and doesn't leverage our 30+ years of proven design data. It's like hiring a brilliant new grad who's never seen our codebase — impressive in a vacuum, but needs massive guidance to produce production-quality output that fits our ecosystem.</span>
+      <span class="ko">ChipAgents를 평가한 MCU 사업부 동료들의 근본적 우려: <strong>모든 것을 처음부터 생성합니다</strong>. Microchip의 코딩 표준을 모르고, 기존 IP 라이브러리를 참조하지 않고, 검증 방법론을 이해하지 못하며, 30년 이상의 검증된 설계 데이터를 활용하지 않습니다. 마치 코드베이스를 한 번도 본 적 없는 뛰어난 신입사원을 고용한 것과 같습니다 — 진공 상태에서는 인상적이지만, 우리 생태계에 맞는 프로덕션 품질 출력을 위해 막대한 가이드가 필요합니다.</span>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- 3. TWO APPROACHES -->
+  <div class="section-num">3</div>
+  <h2><span class="en">Top-Down vs. Bottom-Up: A Critical Comparison</span><span class="ko">하향식 vs. 상향식: 핵심 비교</span></h2>
+  <p class="section-desc"><span class="en">Why the direction of AI integration matters more than the AI itself.</span><span class="ko">AI 통합의 방향이 AI 자체보다 중요한 이유.</span></p>
+
+  <div class="vs-container">
+    <div class="vs-col left">
+      <h4>🔻 <span class="en">Top-Down (ChipAgents)</span><span class="ko">하향식 (ChipAgents)</span></h4>
+      <ul>
+        <li><span class="en"><strong>Starts from zero</strong> — generates RTL/verification from generic AI models</span><span class="ko"><strong>제로에서 시작</strong> — 범용 AI 모델에서 RTL/검증 생성</span></li>
+        <li><span class="en">No awareness of Microchip's legacy IP, coding standards, or design patterns</span><span class="ko">Microchip의 레거시 IP, 코딩 표준, 설계 패턴 인식 없음</span></li>
+        <li><span class="en">Vendor-owned — Microchip is a customer, not an owner</span><span class="ko">벤더 소유 — Microchip은 고객이지 소유자가 아님</span></li>
+        <li><span class="en">Enterprise license = recurring cost per seat</span><span class="ko">엔터프라이즈 라이선스 = 사용자당 반복 비용</span></li>
+        <li><span class="en">Black box — can't audit or customize the AI models</span><span class="ko">블랙박스 — AI 모델 감사 또는 커스터마이징 불가</span></li>
+        <li><span class="en">Good for greenfield designs or rapid prototyping</span><span class="ko">그린필드 설계 또는 빠른 프로토타이핑에 적합</span></li>
+      </ul>
+    </div>
+    <div class="vs-divider">vs</div>
+    <div class="vs-col right">
+      <h4>🔺 <span class="en">Bottom-Up (ChipClaw)</span><span class="ko">상향식 (ChipClaw)</span></h4>
+      <ul>
+        <li><span class="en"><strong>Starts from our data</strong> — builds AI intelligence on Microchip's actual designs, docs, and history</span><span class="ko"><strong>우리 데이터에서 시작</strong> — Microchip의 실제 설계, 문서, 이력 위에 AI 지능 구축</span></li>
+        <li><span class="en">Trained on our RTL, our testbenches, our Jira tickets, our datasheets</span><span class="ko">우리 RTL, 테스트벤치, Jira 티켓, 데이터시트로 학습</span></li>
+        <li><span class="en">Microchip-owned — forked, customized, on our Bitbucket</span><span class="ko">Microchip 소유 — 포크, 커스터마이징, 우리 Bitbucket에</span></li>
+        <li><span class="en">Zero licensing cost (open source + corporate AI models)</span><span class="ko">라이선스 비용 없음 (오픈소스 + 기업 AI 모델)</span></li>
+        <li><span class="en">Fully transparent and auditable</span><span class="ko">완전 투명 및 감사 가능</span></li>
+        <li><span class="en">Gets smarter with every interaction — compound learning effect</span><span class="ko">매 상호작용마다 더 똑똑해짐 — 복리 학습 효과</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="callout info">
+    <div class="callout-icon">💡</div>
+    <div class="callout-text">
+      <strong><span class="en">They're Not Mutually Exclusive</span><span class="ko">상호 배타적이지 않습니다</span></strong>
+      <span class="en">ChipAgents can be useful for rapid prototyping of new architectures. ChipClaw excels at working within our existing ecosystem. The best strategy: <strong>use ChipAgents for exploration, use ChipClaw for production</strong>. But long-term, ChipClaw's bottom-up advantage compounds — the more data we feed it, the better it gets, while ChipAgents stays generic.</span>
+      <span class="ko">ChipAgents는 새 아키텍처의 빠른 프로토타이핑에 유용할 수 있습니다. ChipClaw은 기존 생태계 내 작업에 탁월합니다. 최선의 전략: <strong>탐색에는 ChipAgents, 프로덕션에는 ChipClaw</strong>. 하지만 장기적으로 ChipClaw의 상향식 이점은 복리로 증가합니다 — 더 많은 데이터를 제공할수록 더 나아지지만, ChipAgents는 범용으로 남습니다.</span>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- 4. THE BOTTOM-UP VISION -->
+  <div class="section-num">4</div>
+  <h2><span class="en">The Bottom-Up Architecture: How ChipClaw Learns</span><span class="ko">상향식 아키텍처: ChipClaw이 학습하는 방법</span></h2>
+  <p class="section-desc"><span class="en">Input → Knowledge → Retrieval → Generation → Feedback → Repeat.</span><span class="ko">입력 → 지식 → 검색 → 생성 → 피드백 → 반복.</span></p>
+
+  <p>
+    <span class="en">The core insight is simple: <strong>AI is fundamentally about input, output, and feedback loops</strong>. The quality of AI output is directly proportional to the quality and relevance of the input data. By building a RAG (Retrieval-Augmented Generation) knowledge base from Microchip's own design artifacts, ChipClaw's outputs will inherently match our standards, patterns, and domain context — something no external tool can replicate.</span>
+    <span class="ko">핵심 통찰은 간단합니다: <strong>AI는 근본적으로 입력, 출력, 피드백 루프</strong>에 관한 것입니다. AI 출력의 품질은 입력 데이터의 품질과 관련성에 정비례합니다. Microchip의 자체 설계 아티팩트로 RAG(검색 증강 생성) 지식 베이스를 구축함으로써, ChipClaw의 출력은 본질적으로 우리의 표준, 패턴, 도메인 컨텍스트와 일치합니다 — 외부 도구가 복제할 수 없는 것입니다.</span>
+  </p>
+
+  <div class="flow-diagram">
+    <div class="flow-row">
+      <div class="flow-node highlight" style="flex:1;">📋 <span class="en">Design Specs</span><span class="ko">설계 스펙</span></div>
+      <div class="flow-node highlight" style="flex:1;">📐 <span class="en">Legacy RTL</span><span class="ko">레거시 RTL</span></div>
+      <div class="flow-node highlight" style="flex:1;">🧪 <span class="en">Testbenches</span><span class="ko">테스트벤치</span></div>
+      <div class="flow-node highlight" style="flex:1;">📖 <span class="en">Datasheets</span><span class="ko">데이터시트</span></div>
+    </div>
+    <div class="flow-row">
+      <div class="flow-node highlight" style="flex:1;">📋 Jira / Confluence</div>
+      <div class="flow-node highlight" style="flex:1;">🔒 <span class="en">Functional Safety</span><span class="ko">기능 안전</span></div>
+      <div class="flow-node highlight" style="flex:1;">📝 <span class="en">Code Reviews</span><span class="ko">코드 리뷰</span></div>
+      <div class="flow-node highlight" style="flex:1;">🐛 <span class="en">Bug Histories</span><span class="ko">버그 이력</span></div>
+    </div>
+    <div class="flow-arrow">↓</div>
+    <div class="flow-arrow-label"><span class="en">Ingest, chunk, embed</span><span class="ko">수집, 분할, 임베딩</span></div>
+    <div class="flow-row">
+      <div class="flow-node green-l wide">
+        🗄️ <span class="en">Vector Knowledge Base (RAG)</span><span class="ko">벡터 지식 베이스 (RAG)</span>
+        <span class="flow-node-label"><span class="en">Embeddings of ALL Microchip design artifacts — searchable by semantic meaning</span><span class="ko">모든 Microchip 설계 아티팩트의 임베딩 — 의미 기반 검색 가능</span></span>
+      </div>
+    </div>
+    <div class="flow-arrow">↓</div>
+    <div class="flow-arrow-label"><span class="en">Context-aware retrieval</span><span class="ko">컨텍스트 인식 검색</span></div>
+    <div class="flow-row">
+      <div class="flow-node purple-l wide">
+        🧠 <span class="en">ChipClaw AI Agent (LLM + RAG)</span><span class="ko">ChipClaw AI 에이전트 (LLM + RAG)</span>
+        <span class="flow-node-label"><span class="en">Corporate AI models enriched with Microchip-specific context at inference time</span><span class="ko">추론 시 Microchip 특화 컨텍스트로 강화된 기업 AI 모델</span></span>
+      </div>
+    </div>
+    <div class="flow-arrow">↓</div>
+    <div class="flow-row">
+      <div class="flow-node amber-l" style="flex:1;"><span class="en">RTL in our style</span><span class="ko">우리 스타일의 RTL</span></div>
+      <div class="flow-node amber-l" style="flex:1;"><span class="en">Testbenches using our libs</span><span class="ko">우리 라이브러리 사용 테스트벤치</span></div>
+      <div class="flow-node amber-l" style="flex:1;"><span class="en">Reports with our context</span><span class="ko">우리 컨텍스트의 보고서</span></div>
+    </div>
+    <div class="flow-arrow">↓</div>
+    <div class="flow-arrow-label">🔄 <span class="en">Engineer reviews → feedback → knowledge base grows → AI improves</span><span class="ko">엔지니어 리뷰 → 피드백 → 지식 베이스 성장 → AI 개선</span></div>
+  </div>
+
+  <div class="callout purple">
+    <div class="callout-icon">🔄</div>
+    <div class="callout-text">
+      <strong><span class="en">The Compound Learning Effect</span><span class="ko">복리 학습 효과</span></strong>
+      <span class="en">Every time an engineer uses ChipClaw — every code review, every debug session, every generated testbench that gets accepted or corrected — the knowledge base grows. After 6 months, ChipClaw knows more about MCU8 design patterns than any single engineer. After 2 years, it's an institutional brain that never forgets and never leaves the company. This is the strategic advantage no vendor tool can replicate.</span>
+      <span class="ko">엔지니어가 ChipClaw을 사용할 때마다 — 모든 코드 리뷰, 모든 디버그 세션, 수락되거나 수정된 모든 생성 테스트벤치 — 지식 베이스가 성장합니다. 6개월 후, ChipClaw은 어떤 단일 엔지니어보다 MCU8 설계 패턴을 더 잘 압니다. 2년 후, 절대 잊지 않고 절대 퇴사하지 않는 제도적 두뇌가 됩니다. 이것이 어떤 벤더 도구도 복제할 수 없는 전략적 이점입니다.</span>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- 5. KNOWLEDGE BASE -->
+  <div class="section-num">5</div>
+  <h2><span class="en">What Goes Into the Knowledge Base</span><span class="ko">지식 베이스에 들어가는 것</span></h2>
+  <p class="section-desc"><span class="en">The raw material that makes ChipClaw uniquely Microchip.</span><span class="ko">ChipClaw을 고유하게 Microchip답게 만드는 원재료.</span></p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th><span class="en">Data Source</span><span class="ko">데이터 소스</span></th>
+          <th><span class="en">What It Teaches the AI</span><span class="ko">AI에게 가르치는 것</span></th>
+          <th><span class="en">Priority</span><span class="ko">우선순위</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong><span class="en">Legacy RTL code</span><span class="ko">레거시 RTL 코드</span></strong></td>
+          <td><span class="en">Our coding style, naming conventions, module structure, reusable patterns</span><span class="ko">우리의 코딩 스타일, 명명 규칙, 모듈 구조, 재사용 가능한 패턴</span></td>
+          <td><span class="tag green">P0</span></td>
+        </tr>
+        <tr>
+          <td><strong><span class="en">Verification testbenches</span><span class="ko">검증 테스트벤치</span></strong></td>
+          <td><span class="en">Our UVM methodology, coverage strategies, assertion patterns</span><span class="ko">우리의 UVM 방법론, 커버리지 전략, 어서션 패턴</span></td>
+          <td><span class="tag green">P0</span></td>
+        </tr>
+        <tr>
+          <td><strong><span class="en">Datasheets & specs</span><span class="ko">데이터시트 & 스펙</span></strong></td>
+          <td><span class="en">Product requirements, register maps, timing constraints, interface protocols</span><span class="ko">제품 요구사항, 레지스터 맵, 타이밍 제약, 인터페이스 프로토콜</span></td>
+          <td><span class="tag green">P0</span></td>
+        </tr>
+        <tr>
+          <td><strong><span class="en">Jira / Confluence</span><span class="ko">Jira / Confluence</span></strong></td>
+          <td><span class="en">Bug patterns, root cause analyses, design decisions, review feedback</span><span class="ko">버그 패턴, 근본 원인 분석, 설계 결정, 리뷰 피드백</span></td>
+          <td><span class="tag blue">P1</span></td>
+        </tr>
+        <tr>
+          <td><strong><span class="en">Functional safety docs</span><span class="ko">기능 안전 문서</span></strong></td>
+          <td><span class="en">ISO 26262 compliance patterns, FMEA data, safety mechanisms</span><span class="ko">ISO 26262 준수 패턴, FMEA 데이터, 안전 메커니즘</span></td>
+          <td><span class="tag blue">P1</span></td>
+        </tr>
+        <tr>
+          <td><strong><span class="en">Code review history</span><span class="ko">코드 리뷰 이력</span></strong></td>
+          <td><span class="en">What senior engineers approve/reject — implicit quality standards</span><span class="ko">시니어 엔지니어가 승인/거부하는 것 — 암묵적 품질 표준</span></td>
+          <td><span class="tag amber">P2</span></td>
+        </tr>
+        <tr>
+          <td><strong><span class="en">Synthesis/timing reports</span><span class="ko">합성/타이밍 보고서</span></strong></td>
+          <td><span class="en">Area/timing tradeoffs, clock domain patterns, critical paths</span><span class="ko">면적/타이밍 트레이드오프, 클록 도메인 패턴, 크리티컬 패스</span></td>
+          <td><span class="tag amber">P2</span></td>
+        </tr>
+        <tr>
+          <td><strong><span class="en">IEEE standards (public)</span><span class="ko">IEEE 표준 (공개)</span></strong></td>
+          <td><span class="en">Protocol specifications (Ethernet, USB, SPI, I2C, etc.)</span><span class="ko">프로토콜 사양 (Ethernet, USB, SPI, I2C 등)</span></td>
+          <td><span class="tag amber">P2</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- 6. MULTI-DIVISION STRATEGY -->
+  <div class="section-num">6</div>
+  <h2><span class="en">Start in MCU8, Scale to Every Division</span><span class="ko">MCU8에서 시작, 모든 사업부로 확장</span></h2>
+  <p class="section-desc"><span class="en">Build once, fork everywhere.</span><span class="ko">한 번 구축, 어디서든 포크.</span></p>
+
+  <p>
+    <span class="en">ChipClaw is designed from day one to be <strong>forkable per business unit</strong>. The MCU8 division builds the core platform and the first knowledge base. Other divisions fork it, plug in their own design data, and instantly get an AI assistant that speaks their language.</span>
+    <span class="ko">ChipClaw은 처음부터 <strong>사업부별 포크 가능</strong>하도록 설계됩니다. MCU8 사업부가 핵심 플랫폼과 첫 번째 지식 베이스를 구축합니다. 다른 사업부가 이를 포크하고, 자체 설계 데이터를 연결하면, 즉시 그들의 언어를 말하는 AI 어시스턴트를 얻습니다.</span>
+  </p>
+
+  <div class="flow-diagram">
+    <div class="flow-row">
+      <div class="flow-node green-l wide">
+        🏗️ ChipClaw Core Platform
+        <span class="flow-node-label"><span class="en">Gateway + RAG engine + Guardrails + Skill framework — maintained by MCU8</span><span class="ko">게이트웨이 + RAG 엔진 + 가드레일 + 스킬 프레임워크 — MCU8이 유지보수</span></span>
+      </div>
+    </div>
+    <div class="flow-arrow">↓ <span style="font-size:10px; color:var(--gray-400);"><span class="en">fork</span><span class="ko">포크</span></span></div>
+    <div class="flow-row">
+      <div class="flow-node highlight" style="flex:1;">
+        🔲 MCU8
+        <span class="flow-node-label"><span class="en">PIC® MCU designs, 8-bit RTL</span><span class="ko">PIC® MCU 설계, 8비트 RTL</span></span>
+      </div>
+      <div class="flow-node highlight" style="flex:1;">
+        🔲 MCU16/32
+        <span class="flow-node-label"><span class="en">dsPIC®, SAM, ARM cores</span><span class="ko">dsPIC®, SAM, ARM 코어</span></span>
+      </div>
+      <div class="flow-node highlight" style="flex:1;">
+        🔲 <span class="en">Ethernet/Net</span><span class="ko">이더넷/네트</span>
+        <span class="flow-node-label"><span class="en">T1 PHY, Switch, SerDes</span><span class="ko">T1 PHY, 스위치, SerDes</span></span>
+      </div>
+      <div class="flow-node highlight" style="flex:1;">
+        🔲 <span class="en">WiFi / USB</span><span class="ko">WiFi / USB</span>
+        <span class="flow-node-label"><span class="en">Wireless, connectivity</span><span class="ko">무선, 연결성</span></span>
+      </div>
+    </div>
+    <div class="flow-arrow-label" style="margin-top:8px;"><span class="en">Each division: same platform core, different knowledge base, different domain skills</span><span class="ko">각 사업부: 동일한 플랫폼 코어, 다른 지식 베이스, 다른 도메인 스킬</span></div>
+  </div>
+
+  <div class="callout success">
+    <div class="callout-icon">🌱</div>
+    <div class="callout-text">
+      <strong><span class="en">Why MCU8 First?</span><span class="ko">왜 MCU8이 먼저인가?</span></strong>
+      <span class="en">MCU8 designs are well-scoped (8-bit architectures, mature IP blocks, well-documented), making them ideal training data. Success here creates a proven template that larger, more complex divisions can adopt with confidence. Start small, prove the model, then scale.</span>
+      <span class="ko">MCU8 설계는 범위가 잘 정의되어 있어(8비트 아키텍처, 성숙한 IP 블록, 잘 문서화됨) 이상적인 학습 데이터입니다. 여기서의 성공은 더 크고 복잡한 사업부가 자신있게 채택할 수 있는 검증된 템플릿을 만듭니다. 작게 시작, 모델 증명, 그 후 확장.</span>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- 7. TECHNICAL APPROACH -->
+  <div class="section-num">7</div>
+  <h2><span class="en">Technical Implementation</span><span class="ko">기술 구현</span></h2>
+  <p class="section-desc"><span class="en">The building blocks of the bottom-up approach.</span><span class="ko">상향식 접근의 구성 요소.</span></p>
+
+  <h3><span class="en">RAG Knowledge Pipeline</span><span class="ko">RAG 지식 파이프라인</span></h3>
+  <div class="card-grid">
+    <div class="card">
+      <div class="card-icon blue">1️⃣</div>
+      <h4><span class="en">Ingest & Chunk</span><span class="ko">수집 & 분할</span></h4>
+      <p><span class="en">Scan Bitbucket repos, Confluence spaces, Jira projects, shared drives. Break documents into semantic chunks (code blocks, spec sections, bug reports).</span><span class="ko">Bitbucket 리포, Confluence 스페이스, Jira 프로젝트, 공유 드라이브 스캔. 문서를 의미 청크로 분할 (코드 블록, 스펙 섹션, 버그 보고서).</span></p>
+    </div>
+    <div class="card">
+      <div class="card-icon green">2️⃣</div>
+      <h4><span class="en">Embed & Index</span><span class="ko">임베딩 & 인덱싱</span></h4>
+      <p><span class="en">Convert chunks into vector embeddings using corporate AI models. Store in a vector database (Qdrant, Weaviate, or pgvector on existing Postgres).</span><span class="ko">기업 AI 모델로 청크를 벡터 임베딩으로 변환. 벡터 데이터베이스에 저장 (Qdrant, Weaviate, 또는 기존 Postgres의 pgvector).</span></p>
+    </div>
+    <div class="card">
+      <div class="card-icon purple">3️⃣</div>
+      <h4><span class="en">Retrieve & Augment</span><span class="ko">검색 & 증강</span></h4>
+      <p><span class="en">When an engineer asks a question, retrieve the most relevant chunks from the knowledge base and inject them into the AI prompt as context — before generation.</span><span class="ko">엔지니어가 질문하면, 지식 베이스에서 가장 관련 있는 청크를 검색하고 생성 전에 AI 프롬프트에 컨텍스트로 주입.</span></p>
+    </div>
+    <div class="card">
+      <div class="card-icon amber">4️⃣</div>
+      <h4><span class="en">Generate & Learn</span><span class="ko">생성 & 학습</span></h4>
+      <p><span class="en">AI generates output grounded in Microchip's actual data. Engineer feedback (accept/reject/edit) feeds back into the knowledge base, creating a continuous improvement loop.</span><span class="ko">AI가 Microchip의 실제 데이터에 기반한 출력 생성. 엔지니어 피드백(수락/거부/편집)이 지식 베이스로 환류되어 지속적 개선 루프 생성.</span></p>
+    </div>
+  </div>
+
+  <h3><span class="en">Technology Stack</span><span class="ko">기술 스택</span></h3>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th><span class="en">Layer</span><span class="ko">계층</span></th>
+          <th><span class="en">Technology</span><span class="ko">기술</span></th>
+          <th><span class="en">Role</span><span class="ko">역할</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td><strong><span class="en">Gateway</span><span class="ko">게이트웨이</span></strong></td><td>OpenClaw (fork)</td><td><span class="en">Multi-agent routing, session mgmt, tool execution, Slack/Teams integration</span><span class="ko">멀티 에이전트 라우팅, 세션 관리, 도구 실행, Slack/Teams 연동</span></td></tr>
+        <tr><td><strong><span class="en">Safety</span><span class="ko">안전</span></strong></td><td>NeMo Guardrails</td><td><span class="en">IP protection, output filtering, compliance enforcement</span><span class="ko">IP 보호, 출력 필터링, 규정 준수 시행</span></td></tr>
+        <tr><td><strong><span class="en">Knowledge</span><span class="ko">지식</span></strong></td><td>Vector DB + RAG pipeline</td><td><span class="en">Semantic search over all Microchip design artifacts</span><span class="ko">모든 Microchip 설계 아티팩트의 의미 검색</span></td></tr>
+        <tr><td><strong>LLM</strong></td><td><span class="en">Corporate OpenAI / Anthropic</span><span class="ko">기업 OpenAI / Anthropic</span></td><td><span class="en">Inference (pre-approved, already available)</span><span class="ko">추론 (사전 승인, 이미 사용 가능)</span></td></tr>
+        <tr><td><strong><span class="en">Skills</span><span class="ko">스킬</span></strong></td><td><span class="en">Custom plugins</span><span class="ko">맞춤 플러그인</span></td><td><span class="en">Jira, Bitbucket, EDA tool wrappers, simulation runners</span><span class="ko">Jira, Bitbucket, EDA 도구 래퍼, 시뮬레이션 러너</span></td></tr>
+        <tr><td><strong><span class="en">Feedback</span><span class="ko">피드백</span></strong></td><td><span class="en">Thumbs up/down + correction capture</span><span class="ko">좋아요/싫어요 + 수정 캡처</span></td><td><span class="en">Continuous knowledge base refinement</span><span class="ko">지속적 지식 베이스 개선</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- 8. ROADMAP -->
+  <div class="section-num">8</div>
+  <h2><span class="en">Multi-Year Roadmap</span><span class="ko">다년 로드맵</span></h2>
+  <p class="section-desc"><span class="en">A 2-3 year vision, starting from MCU8 Division.</span><span class="ko">MCU8 사업부에서 시작하는 2-3년 비전.</span></p>
+
+  <div class="timeline">
+    <div class="timeline-item">
+      <div class="timeline-phase"><span class="en">Year 1, H1 — Foundation</span><span class="ko">1년차, 상반기 — 기반</span></div>
+      <div class="timeline-title"><span class="en">Fork, Deploy, First Knowledge Base</span><span class="ko">포크, 배포, 첫 지식 베이스</span></div>
+      <div class="timeline-desc">
+        <span class="en">Fork OpenClaw to Bitbucket. Deploy on corporate VM. Integrate NeMo Guardrails. Build initial RAG pipeline: ingest MCU8 RTL repos, key datasheets, and Jira project history. Connect to corporate AI models. Pilot with 3-5 MCU8 digital design engineers. Build first custom skills (RTL style checker, testbench generator). Collect feedback, measure adoption.</span>
+        <span class="ko">OpenClaw을 Bitbucket으로 포크. 기업 VM에 배포. NeMo Guardrails 통합. 초기 RAG 파이프라인 구축: MCU8 RTL 리포, 주요 데이터시트, Jira 프로젝트 이력 수집. 기업 AI 모델 연결. MCU8 디지털 설계 엔지니어 3-5명과 파일럿. 첫 맞춤 스킬 구축 (RTL 스타일 체커, 테스트벤치 생성기). 피드백 수집, 도입률 측정.</span>
+      </div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-phase"><span class="en">Year 1, H2 — Depth</span><span class="ko">1년차, 하반기 — 심화</span></div>
+      <div class="timeline-title"><span class="en">Deep MCU8 Integration & Self-Service</span><span class="ko">MCU8 심화 통합 & 셀프서비스</span></div>
+      <div class="timeline-desc">
+        <span class="en">Expand knowledge base: all MCU8 repos, functional safety docs, synthesis reports. Build web dashboard for self-service onboarding. Full MCU8 division rollout (all engineers). Advanced skills: timing analysis helper, IP block recommender, design review assistant. Establish feedback loop for continuous learning. First internal case study with metrics.</span>
+        <span class="ko">지식 베이스 확장: 모든 MCU8 리포, 기능 안전 문서, 합성 보고서. 셀프서비스 온보딩을 위한 웹 대시보드 구축. 전체 MCU8 사업부 롤아웃 (모든 엔지니어). 고급 스킬: 타이밍 분석 도우미, IP 블록 추천기, 설계 리뷰 어시스턴트. 지속적 학습을 위한 피드백 루프 구축. 메트릭이 포함된 첫 내부 사례 연구.</span>
+      </div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-phase"><span class="en">Year 2 — Breadth</span><span class="ko">2년차 — 확장</span></div>
+      <div class="timeline-title"><span class="en">Cross-Division Forks</span><span class="ko">교차 사업부 포크</span></div>
+      <div class="timeline-desc">
+        <span class="en">Create fork template for other BUs. First external fork: MCU16/32 or Ethernet division. Each fork builds their own knowledge base on the shared core platform. Shared skill marketplace across divisions. Cross-pollination: patterns discovered in MCU8 benefit other divisions via shared platform updates. Evaluate fine-tuning on Microchip-specific data (beyond RAG).</span>
+        <span class="ko">다른 BU를 위한 포크 템플릿 생성. 첫 외부 포크: MCU16/32 또는 이더넷 사업부. 각 포크가 공유 코어 플랫폼에서 자체 지식 베이스 구축. 사업부 간 공유 스킬 마켓플레이스. 교차 수분: MCU8에서 발견된 패턴이 공유 플랫폼 업데이트를 통해 다른 사업부에 혜택. Microchip 특화 데이터에 대한 파인튜닝 평가 (RAG 넘어).</span>
+      </div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-phase"><span class="en">Year 3+ — Institutional Intelligence</span><span class="ko">3년차+ — 제도적 지능</span></div>
+      <div class="timeline-title"><span class="en">Microchip's AI Design Brain</span><span class="ko">Microchip의 AI 설계 두뇌</span></div>
+      <div class="timeline-desc">
+        <span class="en">ChipClaw becomes Microchip's institutional memory for digital design. New hires onboard with an AI mentor that knows every product line. Design reviews augmented with AI that references 30 years of decisions. Predictive: "Based on past projects, this timing path will likely fail at these corners." Potentially: fine-tuned model that IS Microchip's design intelligence — a true competitive moat.</span>
+        <span class="ko">ChipClaw이 디지털 설계를 위한 Microchip의 제도적 메모리가 됨. 신입 사원이 모든 제품 라인을 아는 AI 멘토와 함께 온보딩. 30년간의 결정을 참조하는 AI로 설계 리뷰 강화. 예측 기능: "과거 프로젝트 기반으로, 이 타이밍 패스는 이 코너에서 실패할 가능성이 높습니다." 잠재적으로: Microchip의 설계 지능 자체인 파인튜닝 모델 — 진정한 경쟁 우위.</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- 9. CHIPCLAW VS CHIPAGENTS MATRIX -->
+  <div class="section-num">9</div>
+  <h2><span class="en">Decision Matrix: ChipAgents vs. ChipClaw</span><span class="ko">의사결정 매트릭스: ChipAgents vs. ChipClaw</span></h2>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th><span class="en">Dimension</span><span class="ko">차원</span></th>
+          <th>ChipAgents.ai</th>
+          <th>ChipClaw</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td><strong><span class="en">Approach</span><span class="ko">접근</span></strong></td><td><span class="en">Top-down: generate from scratch</span><span class="ko">하향식: 처음부터 생성</span></td><td><span class="en">Bottom-up: build on our data</span><span class="ko">상향식: 우리 데이터 위에 구축</span></td></tr>
+        <tr><td><strong><span class="en">Knows our codebase?</span><span class="ko">우리 코드베이스 인식?</span></strong></td><td><span class="tag red">No</span></td><td><span class="tag green">Yes (RAG)</span></td></tr>
+        <tr><td><strong><span class="en">Ownership</span><span class="ko">소유권</span></strong></td><td><span class="en">Vendor SaaS</span><span class="ko">벤더 SaaS</span></td><td><span class="en">Microchip-owned (Bitbucket fork)</span><span class="ko">Microchip 소유 (Bitbucket 포크)</span></td></tr>
+        <tr><td><strong><span class="en">Cost model</span><span class="ko">비용 모델</span></strong></td><td><span class="en">Enterprise license ($$$/yr)</span><span class="ko">엔터프라이즈 라이선스 ($$$/년)</span></td><td><span class="en">Zero licensing (OSS + existing AI quota)</span><span class="ko">라이선스 없음 (오픈소스 + 기존 AI 할당량)</span></td></tr>
+        <tr><td><strong><span class="en">Learns over time?</span><span class="ko">시간이 지나면 학습?</span></strong></td><td><span class="en">Only if vendor updates model</span><span class="ko">벤더가 모델 업데이트할 때만</span></td><td><span class="en">✅ Continuously, from our usage</span><span class="ko">✅ 우리 사용으로부터 지속적으로</span></td></tr>
+        <tr><td><strong><span class="en">IP risk</span><span class="ko">IP 위험</span></strong></td><td><span class="en">Our designs go to 3rd party servers</span><span class="ko">우리 설계가 제3자 서버로</span></td><td><span class="en">Everything stays on-premises</span><span class="ko">모든 것이 사내에 유지</span></td></tr>
+        <tr><td><strong><span class="en">Cross-BU scalability</span><span class="ko">교차 BU 확장성</span></strong></td><td><span class="en">Pay per seat per division</span><span class="ko">사업부당 사용자당 비용</span></td><td><span class="en">Fork and deploy — zero marginal cost</span><span class="ko">포크 후 배포 — 한계 비용 제로</span></td></tr>
+        <tr><td><strong><span class="en">Best for</span><span class="ko">최적 대상</span></strong></td><td><span class="en">Greenfield prototyping, new architectures</span><span class="ko">그린필드 프로토타이핑, 새 아키텍처</span></td><td><span class="en">Production design, verification, knowledge retention</span><span class="ko">프로덕션 설계, 검증, 지식 유지</span></td></tr>
+        <tr><td><strong><span class="en">2-3 year strategic value</span><span class="ko">2-3년 전략적 가치</span></strong></td><td><span class="en">Static (depends on vendor roadmap)</span><span class="ko">정적 (벤더 로드맵에 의존)</span></td><td><span class="en">Compounds (institutional intelligence grows)</span><span class="ko">복리 (제도적 지능 성장)</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- 10. THE ASK -->
+  <div class="section-num">10</div>
+  <h2><span class="en">The Ask</span><span class="ko">요청 사항</span></h2>
+  <p class="section-desc"><span class="en">What we need for Year 1, H1.</span><span class="ko">1년차 상반기에 필요한 것.</span></p>
+
+  <div class="card-grid">
+    <div class="card">
+      <div class="card-icon blue">1️⃣</div>
+      <h4><span class="en">VM + Vector DB Host</span><span class="ko">VM + 벡터 DB 호스트</span></h4>
+      <p><span class="en">One corporate VM (8 cores, 32GB RAM, 500GB SSD) for gateway + vector database. Larger than a basic gateway because we're hosting the knowledge base too.</span><span class="ko">게이트웨이 + 벡터 데이터베이스용 기업 VM 1대 (8코어, 32GB RAM, 500GB SSD). 지식 베이스도 호스팅하므로 기본 게이트웨이보다 큼.</span></p>
+    </div>
+    <div class="card">
+      <div class="card-icon green">2️⃣</div>
+      <h4><span class="en">Data Access</span><span class="ko">데이터 접근</span></h4>
+      <p><span class="en">Read access to MCU8 Bitbucket repos, Confluence spaces, and Jira projects for knowledge base ingestion. No write access needed.</span><span class="ko">지식 베이스 수집을 위한 MCU8 Bitbucket 리포, Confluence 스페이스, Jira 프로젝트 읽기 접근. 쓰기 접근 불필요.</span></p>
+    </div>
+    <div class="card">
+      <div class="card-icon amber">3️⃣</div>
+      <h4><span class="en">AI Model Quota</span><span class="ko">AI 모델 할당량</span></h4>
+      <p><span class="en">Allocation on existing corporate OpenAI/Anthropic endpoints — for both inference and embedding generation. No new vendors.</span><span class="ko">기존 기업 OpenAI/Anthropic 엔드포인트 할당량 — 추론 및 임베딩 생성 모두. 새 벤더 없음.</span></p>
+    </div>
+    <div class="card">
+      <div class="card-icon purple">4️⃣</div>
+      <h4><span class="en">Engineering Time</span><span class="ko">엔지니어링 시간</span></h4>
+      <p><span class="en">~20% allocation of proposer for Year 1 H1. This grows as the platform proves value and other team members contribute. A 2-3 year initiative, paced sustainably.</span><span class="ko">1년차 상반기 동안 제안자의 ~20% 시간 할당. 플랫폼이 가치를 증명하고 다른 팀원이 기여함에 따라 성장. 지속 가능한 속도의 2-3년 이니셔티브.</span></p>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- CONCLUSION -->
+  <div class="section-num">✦</div>
+  <h2><span class="en">Conclusion</span><span class="ko">결론</span></h2>
+
+  <p>
+    <span class="en">ChipAgents.ai and ChipClaw solve different problems. ChipAgents is a powerful tool for generating new designs from scratch — useful for exploration and rapid prototyping. But it doesn't know Microchip. It never will.</span>
+    <span class="ko">ChipAgents.ai와 ChipClaw은 다른 문제를 해결합니다. ChipAgents는 처음부터 새 설계를 생성하는 강력한 도구입니다 — 탐색과 빠른 프로토타이핑에 유용합니다. 하지만 Microchip을 모릅니다. 영원히 모를 것입니다.</span>
+  </p>
+  <p>
+    <span class="en"><strong>ChipClaw is the long game.</strong> It's Microchip's own AI design intelligence — built on our data, owned by us, getting smarter every day. In 2-3 years, it becomes something no vendor can sell us: an institutional brain that knows every product line, every design pattern, every bug we've ever fixed. That's not a tool. That's a competitive moat.</span>
+    <span class="ko"><strong>ChipClaw은 장기 게임입니다.</strong> Microchip 자체의 AI 설계 지능입니다 — 우리 데이터로 구축, 우리가 소유, 매일 더 똑똑해짐. 2-3년 후, 어떤 벤더도 우리에게 팔 수 없는 것이 됩니다: 모든 제품 라인, 모든 설계 패턴, 우리가 고친 모든 버그를 아는 제도적 두뇌. 이것은 도구가 아닙니다. 경쟁 우위입니다.</span>
+  </p>
+  <p>
+    <span class="en">The initial investment is minimal — a VM, existing AI model quota, and part-time effort from one engineer. The potential return is an AI platform that serves every division in the company for years to come.</span>
+    <span class="ko">초기 투자는 최소입니다 — VM 하나, 기존 AI 모델 할당량, 엔지니어 1명의 파트타임 노력. 잠재적 수익은 앞으로 수년간 회사의 모든 사업부에 서비스하는 AI 플랫폼입니다.</span>
+  </p>
+
+  <div class="callout success" style="margin-top: 32px;">
+    <div class="callout-icon">🏗️</div>
+    <div class="callout-text">
+      <strong><span class="en">Let's Build Microchip's AI Brain</span><span class="ko">Microchip의 AI 두뇌를 구축합시다</span></strong>
+      <span class="en">Start in MCU8. Prove the model. Fork to every division. In 3 years, every Microchip engineer has an AI assistant that speaks our language, knows our code, and remembers what we've learned. The question isn't whether to build this — it's whether we start now or let someone else define how AI works in our designs.</span>
+      <span class="ko">MCU8에서 시작. 모델 증명. 모든 사업부로 포크. 3년 후, 모든 Microchip 엔지니어가 우리의 언어를 말하고, 우리의 코드를 알고, 우리가 배운 것을 기억하는 AI 어시스턴트를 갖습니다. 문제는 이것을 구축할지 여부가 아닙니다 — 지금 시작할지, 아니면 다른 누군가가 우리 설계에서 AI가 어떻게 작동하는지 정의하게 할지입니다.</span>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  <span class="en">ChipClaw Strategic Vision v1.0 — Microchip Technology Inc. — March 2026 — Confidential</span>
+  <span class="ko">ChipClaw 전략 비전 v1.0 — Microchip Technology Inc. — 2026년 3월 — 대외비</span>
+</div>
+
+<script>
+  let isKorean = false;
+  function toggleLang() {
+    isKorean = !isKorean;
+    document.querySelectorAll('.en').forEach(el => el.classList.toggle('hide', isKorean));
+    document.querySelectorAll('.ko').forEach(el => el.classList.toggle('show', isKorean));
+    document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+  }
+</script>
+
+</body>
+</html>
