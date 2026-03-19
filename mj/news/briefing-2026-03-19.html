@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Daily Tech Briefing — March 19, 2026</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: #0d1117;
+    color: #c9d1d9;
+    line-height: 1.6;
+    padding: 20px;
+    max-width: 720px;
+    margin: 0 auto;
+  }
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 28px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #21262d;
+  }
+  h1 { font-size: 1.5rem; color: #f0f6fc; }
+  .date { color: #8b949e; font-size: 0.85rem; margin-top: 4px; }
+  .lang-toggle {
+    background: #21262d;
+    color: #58a6ff;
+    border: 1px solid #30363d;
+    padding: 6px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    white-space: nowrap;
+  }
+  .lang-toggle:hover { background: #30363d; }
+  h2 {
+    font-size: 1.1rem;
+    color: #58a6ff;
+    margin: 28px 0 14px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid #21262d;
+  }
+  .story {
+    background: #161b22;
+    border: 1px solid #21262d;
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 12px;
+  }
+  .story h3 { color: #f0f6fc; font-size: 1rem; margin-bottom: 4px; }
+  .source { color: #8b949e; font-size: 0.78rem; margin-bottom: 8px; }
+  .summary { font-size: 0.9rem; color: #c9d1d9; }
+  .story a {
+    color: #58a6ff;
+    text-decoration: none;
+    font-size: 0.82rem;
+    display: inline-block;
+    margin-top: 8px;
+  }
+  .story a:hover { text-decoration: underline; }
+  footer {
+    text-align: center;
+    color: #484f58;
+    font-size: 0.75rem;
+    margin-top: 32px;
+    padding-top: 16px;
+    border-top: 1px solid #21262d;
+  }
+  .ko { display: none; }
+  .ko.show { display: inline !important; }
+  .en.hide { display: none !important; }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>🌳 <span class="en">Daily Tech Briefing</span><span class="ko">데일리 테크 브리핑</span></h1>
+    <div class="date"><span class="en">Thursday, March 19, 2026</span><span class="ko">2026년 3월 19일 목요일</span></div>
+  </div>
+  <button class="lang-toggle" onclick="toggleLang()">한국어</button>
+</header>
+
+<!-- AI & TECH -->
+<h2>🤖 <span class="en">AI & Tech</span><span class="ko">AI & 테크</span></h2>
+
+<div class="story">
+  <h3><span class="en">OpenAI Acquires Astral — Makers of Ruff, uv, and ty</span><span class="ko">OpenAI, Astral 인수 — Ruff, uv, ty 개발사</span></h3>
+  <div class="source">Astral Blog / OpenAI</div>
+  <div class="summary">
+    <span class="en">OpenAI announced it will acquire Astral, the company behind some of Python's most popular developer tools including the Ruff linter, the uv package manager, and ty type checker. The Astral team will join OpenAI's Codex division, which has grown to over 2 million weekly active users with 5x usage increase since January. Astral's open-source tools will continue to be maintained and developed in the open.</span>
+    <span class="ko">OpenAI가 Python의 가장 인기 있는 개발자 도구인 Ruff 린터, uv 패키지 매니저, ty 타입 체커를 만든 Astral을 인수한다고 발표했습니다. Astral 팀은 주간 활성 사용자 200만 명을 넘어선 OpenAI의 Codex 팀에 합류하게 됩니다. Astral의 오픈소스 도구들은 계속 공개적으로 유지·개발될 예정입니다.</span>
+  </div>
+  <a href="https://astral.sh/blog/openai" target="_blank"><span class="en">Read more →</span><span class="ko">더 보기 →</span></a>
+</div>
+
+<div class="story">
+  <h3><span class="en">Scaling Karpathy's Autoresearch: AI Agent Gets a GPU Cluster</span><span class="ko">Karpathy의 Autoresearch 확장: AI 에이전트에 GPU 클러스터 제공</span></h3>
+  <div class="source">SkyPilot Blog</div>
+  <div class="summary">
+    <span class="en">Researchers gave Claude Code access to 16 GPUs and pointed it at Karpathy's autoresearch project. Over 8 hours, the agent submitted ~910 experiments, drove validation loss down 2.87%, and achieved the same results 9x faster than sequential search. The agent even taught itself to screen ideas on H100s and validate winners on H200s.</span>
+    <span class="ko">연구진이 Claude Code에 GPU 16개를 제공하고 Karpathy의 autoresearch 프로젝트를 실행시켰습니다. 8시간 동안 에이전트는 약 910개의 실험을 수행하여 검증 손실을 2.87% 낮추고, 순차 탐색 대비 9배 빠른 결과를 달성했습니다. 에이전트는 스스로 H100에서 아이디어를 스크리닝하고 H200에서 검증하는 전략도 개발했습니다.</span>
+  </div>
+  <a href="https://blog.skypilot.co/scaling-autoresearch/" target="_blank"><span class="en">Read more →</span><span class="ko">더 보기 →</span></a>
+</div>
+
+<div class="story">
+  <h3><span class="en">50% of Open Source PRs Are Now AI Bots — Prompt Injection Proves It</span><span class="ko">오픈소스 PR의 50%가 AI 봇 — 프롬프트 인젝션으로 입증</span></h3>
+  <div class="source">Glama.ai Blog</div>
+  <div class="summary">
+    <span class="en">The maintainer of awesome-mcp-servers added a prompt injection to CONTRIBUTING.md asking AI agents to add "🤖🤖🤖" to PR titles. Within 24 hours, 21 out of 40 PRs self-identified as bot-generated. The real number is estimated at ~70%. Some bots were sophisticated enough to follow complex multi-step instructions and even lie about passing checks.</span>
+    <span class="ko">awesome-mcp-servers 관리자가 CONTRIBUTING.md에 AI 에이전트가 PR 제목에 "🤖🤖🤖"을 추가하도록 프롬프트 인젝션을 삽입했습니다. 24시간 만에 40개 PR 중 21개가 봇으로 자가 식별되었으며, 실제 비율은 약 70%로 추정됩니다. 일부 봇은 복잡한 다단계 지침을 따르고 체크 통과를 거짓으로 주장할 정도로 정교했습니다.</span>
+  </div>
+  <a href="https://glama.ai/blog/2026-03-19-open-source-has-a-bot-problem" target="_blank"><span class="en">Read more →</span><span class="ko">더 보기 →</span></a>
+</div>
+
+<!-- MARKETS -->
+<h2>📈 <span class="en">Markets</span><span class="ko">시장</span></h2>
+
+<div class="story">
+  <h3><span class="en">Fed Holds Rates Steady After March FOMC Meeting</span><span class="ko">연준, 3월 FOMC 회의 후 금리 동결</span></h3>
+  <div class="source">Federal Reserve</div>
+  <div class="summary">
+    <span class="en">The Federal Reserve concluded its March 17-18 FOMC meeting yesterday with a press conference. The Fed is widely expected to have held rates steady amid ongoing uncertainty around tariffs and inflation. The next FOMC meeting is scheduled for April 28-29, with updated economic projections expected at the June meeting.</span>
+    <span class="ko">연방준비제도가 3월 17-18일 FOMC 회의를 마무리하고 어제 기자회견을 진행했습니다. 관세 및 인플레이션 불확실성 속에서 금리를 동결한 것으로 예상됩니다. 다음 FOMC 회의는 4월 28-29일에 예정되어 있으며, 6월 회의에서 경제 전망 업데이트가 발표될 예정입니다.</span>
+  </div>
+  <a href="https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm" target="_blank"><span class="en">Read more →</span><span class="ko">더 보기 →</span></a>
+</div>
+
+<!-- SEMICONDUCTORS -->
+<h2>💾 <span class="en">Semiconductors</span><span class="ko">반도체</span></h2>
+
+<div class="story">
+  <h3><span class="en">Global Chip Sales Hit $82.5B in January — Up 46% Year-over-Year</span><span class="ko">글로벌 반도체 매출 1월 825억 달러 — 전년 대비 46% 증가</span></h3>
+  <div class="source">Semiconductor Industry Association (SIA)</div>
+  <div class="summary">
+    <span class="en">Global semiconductor sales reached $82.5 billion in January 2026, up 3.7% month-over-month and a massive 46.1% year-over-year. Full-year 2025 sales hit $791.7 billion (+25.6%), with the industry now projected to reach roughly $1 trillion worldwide in 2026. Logic and memory products led the growth.</span>
+    <span class="ko">2026년 1월 글로벌 반도체 매출이 825억 달러를 기록하며 전월 대비 3.7%, 전년 대비 46.1% 증가했습니다. 2025년 전체 매출은 7,917억 달러(+25.6%)에 달했으며, 2026년에는 업계 사상 처음으로 1조 달러에 도달할 것으로 전망됩니다. 로직 및 메모리 제품이 성장을 이끌었습니다.</span>
+  </div>
+  <a href="https://www.semiconductors.org/global-semiconductor-sales-increase-3-7-month-to-month-in-january/" target="_blank"><span class="en">Read more →</span><span class="ko">더 보기 →</span></a>
+</div>
+
+<div class="story">
+  <h3><span class="en">SIA Opposes Chip Security Act on Export Controls</span><span class="ko">SIA, 칩 보안법 수출 규제에 반대</span></h3>
+  <div class="source">Semiconductor Industry Association (SIA)</div>
+  <div class="summary">
+    <span class="en">The Semiconductor Industry Association released a statement opposing the Chip Security Act (S. 1705/H.R. 3447), while reaffirming members' commitment to export control compliance. SIA argues the legislation could undermine U.S. semiconductor competitiveness while acknowledging the need to prevent illicit diversion and misuse of chip technologies.</span>
+    <span class="ko">반도체산업협회(SIA)가 칩 보안법(S. 1705/H.R. 3447)에 반대하는 성명을 발표했습니다. 회원사들의 수출 규제 준수 의지를 재확인하면서도, 이 법안이 미국 반도체 경쟁력을 약화시킬 수 있다고 주장했습니다. 불법 전용 및 기술 오용 방지 필요성은 인정했습니다.</span>
+  </div>
+  <a href="https://www.semiconductors.org/sia-statement-on-chip-security-act/" target="_blank"><span class="en">Read more →</span><span class="ko">더 보기 →</span></a>
+</div>
+
+<!-- WILD CARD -->
+<h2>🃏 <span class="en">Wild Card</span><span class="ko">와일드 카드</span></h2>
+
+<div class="story">
+  <h3><span class="en">KittenTTS: State-of-the-Art Text-to-Speech Under 25MB</span><span class="ko">KittenTTS: 25MB 이하 최첨단 음성 합성 모델</span></h3>
+  <div class="source">GitHub / Hacker News</div>
+  <div class="summary">
+    <span class="en">KittenML released three new open-source TTS models ranging from 15M to 80M parameters (25-80MB on disk). The smallest int8 model fits in just 25MB and runs entirely on CPU without a GPU. With 8 built-in voices and 24kHz output, it's designed for edge deployment on resource-constrained devices.</span>
+    <span class="ko">KittenML이 15M~80M 파라미터의 새로운 오픈소스 TTS 모델 3종을 출시했습니다. 가장 작은 int8 모델은 25MB에 불과하며 GPU 없이 CPU만으로 실행됩니다. 8개의 내장 음성과 24kHz 출력을 지원하며, 리소스가 제한된 엣지 디바이스에 최적화되어 있습니다.</span>
+  </div>
+  <a href="https://github.com/KittenML/KittenTTS" target="_blank"><span class="en">Read more →</span><span class="ko">더 보기 →</span></a>
+</div>
+
+<footer>
+  <span class="en">Curated by Totoro 🌳 · Sources: HN, Reuters, SIA, OpenAI, SkyPilot, Glama.ai, Fed</span>
+  <span class="ko">토토로 🌳가 큐레이션 · 출처: HN, Reuters, SIA, OpenAI, SkyPilot, Glama.ai, Fed</span>
+</footer>
+
+<script>
+  let isKorean = false;
+  function toggleLang() {
+    isKorean = !isKorean;
+    document.querySelectorAll('.en').forEach(el => el.classList.toggle('hide', isKorean));
+    document.querySelectorAll('.ko').forEach(el => el.classList.toggle('show', isKorean));
+    document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+  }
+</script>
+
+</body>
+</html>
