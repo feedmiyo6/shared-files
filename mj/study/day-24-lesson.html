@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 24: Backpressure — Stall Signals & Bubbles</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    background: linear-gradient(135deg, #fefae0 0%, #faedcd 100%);
+    color: #3d405b;
+    line-height: 1.8;
+    padding: 24px;
+    max-width: 920px;
+    margin: 0 auto;
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    font-size: 17px;
+}
+h1 {
+    color: #5d4037;
+    border-bottom: 3px solid #c4a77d;
+    padding-bottom: 12px;
+    margin-bottom: 24px;
+    font-size: 2em;
+}
+h2 {
+    color: #588157;
+    border-bottom: 2px solid #a3b18a;
+    padding-bottom: 8px;
+    margin: 32px 0 16px;
+    font-size: 1.5em;
+}
+h3 {
+    color: #5d4037;
+    margin: 20px 0 12px;
+    font-size: 1.2em;
+}
+p { margin: 12px 0; }
+ul, ol { margin: 12px 0 12px 24px; }
+li { margin: 4px 0; }
+pre {
+    background: #2d3436;
+    padding: 24px;
+    border-radius: 12px;
+    margin: 24px 0;
+    border: 3px solid #a3b18a;
+    overflow-x: auto;
+    font-size: 15px;
+    line-height: 1.6;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+    color: #f8f8f2;
+}
+code {
+    background: #e9f5db;
+    color: #3d405b;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+}
+pre code {
+    background: none;
+    color: inherit;
+    padding: 0;
+}
+.keyword { color: #ff79c6; font-weight: 600; }
+.type { color: #8be9fd; }
+.signal { color: #50fa7b; }
+.number { color: #ffb86c; }
+.comment { color: #6272a4; font-style: italic; }
+.string { color: #f1fa8c; }
+.concept-box {
+    background: #fff8f0;
+    border: 2px solid #c4a77d;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    color: #3d405b;
+}
+.concept-box h3 { color: #5d4037; margin-bottom: 12px; }
+.warning-box {
+    background: #fff8f0;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    border-left: 4px solid #ef4444;
+    color: #3d405b;
+}
+.warning-box h3 { color: #c53030; margin-bottom: 12px; }
+.tip-box {
+    background: #fff8f0;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    border-left: 4px solid #588157;
+    color: #3d405b;
+}
+.comparison-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+.comparison-table th {
+    background: #588157;
+    color: white;
+    padding: 12px;
+    text-align: left;
+}
+.comparison-table td {
+    background: #fff;
+    border: 1px solid #c4a77d;
+    padding: 12px;
+    color: #3d405b;
+}
+.comparison-table tr:nth-child(even) td {
+    background: #fff8f0;
+}
+.lang-toggle {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    background: #588157;
+    border: none;
+    border-radius: 24px;
+    padding: 10px 20px;
+    cursor: pointer;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    z-index: 1000;
+}
+.lang-toggle:hover { background: #3a5a40; }
+.ko { display: none; }
+.nav-links {
+    display: flex;
+    gap: 12px;
+    margin: 20px 0;
+    flex-wrap: wrap;
+}
+.nav-links a {
+    background: linear-gradient(135deg, #588157, #3a5a40);
+    color: #fff;
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 14px;
+}
+.nav-links a:hover { opacity: 0.9; }
+.diagram-box {
+    background: #fff;
+    border: 2px solid #a3b18a;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+    font-size: 14px;
+    line-height: 1.5;
+    overflow-x: auto;
+    white-space: pre;
+    color: #3d405b;
+}
+@media (max-width: 768px) {
+    body { padding: 16px; }
+    h1 { font-size: 1.8em; }
+    pre { font-size: 14px; padding: 16px; }
+    .lang-toggle { padding: 8px 16px; font-size: 13px; }
+}
+</style>
+</head>
+<body>
+
+<button class="lang-toggle" onclick="toggleLang()">한국어</button>
+
+<h1>📅 Day 24: Backpressure — Stall Signals & Bubbles</h1>
+
+<div class="nav-links">
+    <a href="day-24-quiz.html">📝 Quiz</a>
+    <a href="day-24-practice.html">💻 Practice</a>
+</div>
+
+<p class="en">Welcome to Day 24! Yesterday we learned about pipeline hazards. Today we tackle <strong>backpressure</strong> — the mechanism that prevents data loss when a downstream stage can't accept new data. This is one of the most critical concepts in real digital design.</p>
+<p class="ko" style="display:none;">Day 24에 오신 걸 환영합니다! 어제 파이프라인 해저드를 배웠고, 오늘은 <strong>백프레셔(backpressure)</strong>를 다룹니다 — 다운스트림 스테이지가 새 데이터를 받을 수 없을 때 데이터 손실을 방지하는 메커니즘입니다. 실제 디지털 설계에서 가장 중요한 개념 중 하나입니다.</p>
+
+<h2>1. What Is Backpressure?</h2>
+
+<p class="en">Backpressure is a <strong>flow control mechanism</strong> where a downstream consumer signals upstream that it's not ready to accept more data. Without backpressure, fast producers would overwrite data that slow consumers haven't processed yet.</p>
+<p class="ko" style="display:none;">백프레셔는 다운스트림 소비자가 상류에 "더 이상 데이터를 받을 준비가 안 됐다"고 신호를 보내는 <strong>흐름 제어 메커니즘</strong>입니다. 백프레셔 없이는 빠른 생산자가 느린 소비자가 아직 처리하지 못한 데이터를 덮어쓰게 됩니다.</p>
+
+<div class="concept-box">
+<h3>🌊 Real-World Analogy</h3>
+<p class="en">Think of a factory assembly line. If the painting station is slow, the welding station upstream must <strong>stop feeding parts</strong> — otherwise parts pile up and fall off the conveyor. The painting station raises a "I'm full!" flag. That flag is backpressure.</p>
+<p class="ko" style="display:none;">공장 조립 라인을 생각해보세요. 도장 스테이션이 느리면, 상류의 용접 스테이션은 <strong>부품 공급을 중단</strong>해야 합니다. 그렇지 않으면 부품이 쌓여 컨베이어에서 떨어집니다. 도장 스테이션이 "나 꽉 찼어!" 깃발을 올립니다. 그 깃발이 백프레셔입니다.</p>
+</div>
+
+<h2>2. Stall Signals</h2>
+
+<p class="en">A <strong>stall signal</strong> freezes one or more pipeline stages, preventing them from advancing. When a stage is stalled, it retains its current data and ignores any new clock edge for data advancement.</p>
+<p class="ko" style="display:none;"><strong>스톨(stall) 신호</strong>는 하나 이상의 파이프라인 스테이지를 동결시켜 진행을 방지합니다. 스테이지가 스톨되면 현재 데이터를 유지하고 데이터 진행을 위한 새 클럭 에지를 무시합니다.</p>
+
+<h3>Basic Stall Mechanism</h3>
+
+<pre><code><span class="comment">// Pipeline stage with stall support</span>
+<span class="keyword">module</span> <span class="type">pipe_stage</span> (
+    <span class="keyword">input</span>  <span class="type">logic</span>        <span class="signal">clk</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span>        <span class="signal">rst_n</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span>        <span class="signal">stall</span>,       <span class="comment">// Backpressure from downstream</span>
+    <span class="keyword">input</span>  <span class="type">logic</span> [<span class="number">31</span>:<span class="number">0</span>] <span class="signal">data_in</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span>        <span class="signal">valid_in</span>,
+    <span class="keyword">output</span> <span class="type">logic</span> [<span class="number">31</span>:<span class="number">0</span>] <span class="signal">data_out</span>,
+    <span class="keyword">output</span> <span class="type">logic</span>        <span class="signal">valid_out</span>
+);
+
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span> <span class="keyword">or</span> <span class="keyword">negedge</span> <span class="signal">rst_n</span>) <span class="keyword">begin</span>
+        <span class="keyword">if</span> (!<span class="signal">rst_n</span>) <span class="keyword">begin</span>
+            <span class="signal">data_out</span>  <= <span class="number">'0</span>;
+            <span class="signal">valid_out</span> <= <span class="number">1'b0</span>;
+        <span class="keyword">end</span> <span class="keyword">else if</span> (!<span class="signal">stall</span>) <span class="keyword">begin</span>
+            <span class="comment">// Only advance when NOT stalled</span>
+            <span class="signal">data_out</span>  <= <span class="signal">data_in</span>;
+            <span class="signal">valid_out</span> <= <span class="signal">valid_in</span>;
+        <span class="keyword">end</span>
+        <span class="comment">// When stalled: hold current values (implicit)</span>
+    <span class="keyword">end</span>
+
+<span class="keyword">endmodule</span></code></pre>
+
+<div class="tip-box">
+<h3>💡 Key Insight</h3>
+<p class="en">The stall signal acts as a <strong>clock enable</strong> for the pipeline register. When <code>stall = 1</code>, the register doesn't update — it freezes in place. This is the simplest form of backpressure.</p>
+<p class="ko" style="display:none;">스톨 신호는 파이프라인 레지스터의 <strong>클럭 인에이블</strong> 역할을 합니다. <code>stall = 1</code>이면 레지스터가 업데이트되지 않고 제자리에서 동결됩니다. 이것이 백프레셔의 가장 간단한 형태입니다.</p>
+</div>
+
+<h3>Stall Propagation in a Pipeline</h3>
+
+<p class="en">Stalls propagate <strong>backward</strong> through a pipeline. If Stage 3 stalls, Stage 2 must also stall (it can't push data into a frozen Stage 3), and Stage 1 must stall too.</p>
+<p class="ko" style="display:none;">스톨은 파이프라인을 통해 <strong>역방향으로</strong> 전파됩니다. 스테이지 3이 스톨되면 스테이지 2도 스톨되어야 하고(동결된 스테이지 3에 데이터를 밀어넣을 수 없으므로), 스테이지 1도 마찬가지입니다.</p>
+
+<div class="diagram-box">Stall Propagation:
+
+  Stage 1         Stage 2         Stage 3         Stage 4
+ ┌────────┐     ┌────────┐     ┌────────┐     ┌────────┐
+ │  FETCH │────▶│ DECODE │────▶│  EXEC  │────▶│  WRITE │
+ └────────┘     └────────┘     └────────┘     └────────┘
+      ▲              ▲              ▲              │
+      │              │              │              │
+      └──── stall ◄──┴──── stall ◄──┴──── stall ◄─┘
+                                          (source: memory busy)</div>
+
+<pre><code><span class="comment">// Stall chain in a 4-stage pipeline</span>
+<span class="keyword">assign</span> <span class="signal">stall_stage3</span> = <span class="signal">stall_stage4</span>;  <span class="comment">// Can't push into frozen stage</span>
+<span class="keyword">assign</span> <span class="signal">stall_stage2</span> = <span class="signal">stall_stage3</span>;
+<span class="keyword">assign</span> <span class="signal">stall_stage1</span> = <span class="signal">stall_stage2</span>;
+
+<span class="comment">// Common stall source: slow memory</span>
+<span class="keyword">assign</span> <span class="signal">stall_stage4</span> = <span class="signal">mem_busy</span>;  <span class="comment">// Write-back waiting for memory</span></code></pre>
+
+<h2>3. Pipeline Bubbles</h2>
+
+<p class="en">A <strong>bubble</strong> is an empty (invalid) pipeline slot. Bubbles are inserted when we need to create a gap in the pipeline — either due to a hazard or when a stall affects only part of the pipeline.</p>
+<p class="ko" style="display:none;"><strong>버블(bubble)</strong>은 빈(유효하지 않은) 파이프라인 슬롯입니다. 해저드로 인해 또는 스톨이 파이프라인의 일부에만 영향을 줄 때 파이프라인에 갭을 만들어야 할 경우 버블이 삽입됩니다.</p>
+
+<div class="concept-box">
+<h3>🫧 Bubble = NOP (No Operation)</h3>
+<p class="en">A bubble is essentially a <code>valid = 0</code> marker flowing through the pipeline. Downstream stages see it and know: "nothing useful here, skip processing." It consumes a cycle but doesn't produce incorrect results.</p>
+<p class="ko" style="display:none;">버블은 본질적으로 파이프라인을 통해 흐르는 <code>valid = 0</code> 마커입니다. 다운스트림 스테이지는 이를 보고 "여기에 유용한 것이 없으니 처리를 건너뛰자"라고 알게 됩니다. 사이클을 소비하지만 잘못된 결과를 생성하지 않습니다.</p>
+</div>
+
+<h3>Inserting a Bubble (Squash + Stall)</h3>
+
+<pre><code><span class="comment">// Stage with stall AND bubble insertion</span>
+<span class="keyword">module</span> <span class="type">pipe_stage_bubble</span> (
+    <span class="keyword">input</span>  <span class="type">logic</span>        <span class="signal">clk</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span>        <span class="signal">rst_n</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span>        <span class="signal">stall</span>,       <span class="comment">// Hold current data</span>
+    <span class="keyword">input</span>  <span class="type">logic</span>        <span class="signal">squash</span>,      <span class="comment">// Insert bubble (kill valid)</span>
+    <span class="keyword">input</span>  <span class="type">logic</span> [<span class="number">31</span>:<span class="number">0</span>] <span class="signal">data_in</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span>        <span class="signal">valid_in</span>,
+    <span class="keyword">output</span> <span class="type">logic</span> [<span class="number">31</span>:<span class="number">0</span>] <span class="signal">data_out</span>,
+    <span class="keyword">output</span> <span class="type">logic</span>        <span class="signal">valid_out</span>
+);
+
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span> <span class="keyword">or</span> <span class="keyword">negedge</span> <span class="signal">rst_n</span>) <span class="keyword">begin</span>
+        <span class="keyword">if</span> (!<span class="signal">rst_n</span>) <span class="keyword">begin</span>
+            <span class="signal">data_out</span>  <= <span class="number">'0</span>;
+            <span class="signal">valid_out</span> <= <span class="number">1'b0</span>;
+        <span class="keyword">end</span> <span class="keyword">else if</span> (<span class="signal">squash</span>) <span class="keyword">begin</span>
+            <span class="comment">// Insert bubble: invalidate this stage</span>
+            <span class="signal">valid_out</span> <= <span class="number">1'b0</span>;
+            <span class="comment">// data_out can be don't-care</span>
+        <span class="keyword">end</span> <span class="keyword">else if</span> (!<span class="signal">stall</span>) <span class="keyword">begin</span>
+            <span class="signal">data_out</span>  <= <span class="signal">data_in</span>;
+            <span class="signal">valid_out</span> <= <span class="signal">valid_in</span>;
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+
+<span class="keyword">endmodule</span></code></pre>
+
+<h3>Bubble vs Stall: When to Use Which?</h3>
+
+<table class="comparison-table">
+<tr><th>Aspect</th><th>Stall</th><th>Bubble</th></tr>
+<tr>
+<td class="en">What it does</td><td class="en">Freezes the entire pipeline (or upstream portion)</td><td class="en">Inserts an invalid slot, downstream keeps moving</td>
+<td class="ko" style="display:none;">하는 일</td><td class="ko" style="display:none;">전체 파이프라인(또는 상류 부분) 동결</td><td class="ko" style="display:none;">유효하지 않은 슬롯 삽입, 다운스트림은 계속 진행</td>
+</tr>
+<tr>
+<td class="en">Throughput impact</td><td class="en">Entire pipeline stops — 0 throughput during stall</td><td class="en">Only one slot wasted — pipeline keeps flowing</td>
+<td class="ko" style="display:none;">처리량 영향</td><td class="ko" style="display:none;">전체 파이프라인 정지 — 스톨 중 처리량 0</td><td class="ko" style="display:none;">한 슬롯만 낭비 — 파이프라인은 계속 흐름</td>
+</tr>
+<tr>
+<td class="en">Use case</td><td class="en">Downstream not ready (memory, slow consumer)</td><td class="en">Hazard resolution (1-2 cycle gaps needed)</td>
+<td class="ko" style="display:none;">사용 사례</td><td class="ko" style="display:none;">다운스트림 준비 안 됨 (메모리, 느린 소비자)</td><td class="ko" style="display:none;">해저드 해결 (1-2 사이클 갭 필요)</td>
+</tr>
+<tr>
+<td class="en">Signal direction</td><td class="en">Backward (downstream → upstream)</td><td class="en">Forward (inserted and flows downstream)</td>
+<td class="ko" style="display:none;">신호 방향</td><td class="ko" style="display:none;">역방향 (다운스트림 → 업스트림)</td><td class="ko" style="display:none;">순방향 (삽입되어 다운스트림으로 흐름)</td>
+</tr>
+</table>
+
+<h2>4. Combining Stall + Bubble</h2>
+
+<p class="en">In real pipelines, you often need <strong>both</strong>. Consider: Stage 3 detects a data hazard that needs 1 bubble cycle. It must stall Stages 1-2 (don't lose their data) while inserting a bubble into Stage 3→4.</p>
+<p class="ko" style="display:none;">실제 파이프라인에서는 종종 <strong>둘 다</strong> 필요합니다. 스테이지 3이 1 버블 사이클이 필요한 데이터 해저드를 감지합니다. 스테이지 1-2를 스톨시키고(데이터를 잃지 않도록) 스테이지 3→4에 버블을 삽입해야 합니다.</p>
+
+<div class="diagram-box">Cycle N:    [A] → [B] → [C] → [D]     (C needs data from D)
+                                          ↑ hazard detected!
+
+Cycle N+1:  [A] → [B] → [C] → [bubble]  (Stall A,B,C; bubble into D's input)
+              stall  stall  stall
+
+Cycle N+2:  [A] → [B] → [C] → [D_result] (D done, C can now use forwarded data)
+                                   ↑ forward</div>
+
+<h3>Pipeline Controller</h3>
+
+<pre><code><span class="comment">// Pipeline hazard controller</span>
+<span class="keyword">module</span> <span class="type">pipeline_ctrl</span> (
+    <span class="keyword">input</span>  <span class="type">logic</span> <span class="signal">data_hazard</span>,     <span class="comment">// From hazard detection unit</span>
+    <span class="keyword">input</span>  <span class="type">logic</span> <span class="signal">mem_busy</span>,        <span class="comment">// Memory not ready</span>
+    <span class="keyword">output</span> <span class="type">logic</span> <span class="signal">stall_fetch</span>,
+    <span class="keyword">output</span> <span class="type">logic</span> <span class="signal">stall_decode</span>,
+    <span class="keyword">output</span> <span class="type">logic</span> <span class="signal">stall_exec</span>,
+    <span class="keyword">output</span> <span class="type">logic</span> <span class="signal">stall_wb</span>,
+    <span class="keyword">output</span> <span class="type">logic</span> <span class="signal">bubble_exec</span>      <span class="comment">// Insert bubble after decode</span>
+);
+
+    <span class="comment">// Memory stall: freeze entire pipeline</span>
+    <span class="keyword">assign</span> <span class="signal">stall_wb</span>     = <span class="signal">mem_busy</span>;
+    <span class="keyword">assign</span> <span class="signal">stall_exec</span>   = <span class="signal">mem_busy</span>;
+    <span class="keyword">assign</span> <span class="signal">stall_decode</span> = <span class="signal">mem_busy</span> | <span class="signal">data_hazard</span>;
+    <span class="keyword">assign</span> <span class="signal">stall_fetch</span>  = <span class="signal">mem_busy</span> | <span class="signal">data_hazard</span>;
+
+    <span class="comment">// Data hazard: bubble into execute (only when not mem stall)</span>
+    <span class="keyword">assign</span> <span class="signal">bubble_exec</span>  = <span class="signal">data_hazard</span> & !<span class="signal">mem_busy</span>;
+
+<span class="keyword">endmodule</span></code></pre>
+
+<div class="warning-box">
+<h3>⚠️ Common Mistake: Bubble During Stall</h3>
+<p class="en">Never insert a bubble while the same stage is also stalled! If Stage 3 is stalled (holding valid data), inserting a bubble would <strong>destroy that data</strong>. The squash signal should be gated: <code>bubble = hazard & !stall</code>.</p>
+<p class="ko" style="display:none;">같은 스테이지가 스톨된 상태에서 버블을 삽입하면 안 됩니다! 스테이지 3이 스톨되어 유효한 데이터를 보유하고 있을 때 버블을 삽입하면 <strong>해당 데이터가 파괴</strong>됩니다. 스쿼시 신호는 게이팅해야 합니다: <code>bubble = hazard & !stall</code>.</p>
+</div>
+
+<h2>5. Performance Impact</h2>
+
+<p class="en">Every stall or bubble <strong>reduces throughput</strong>. The effective throughput of a pipeline is:</p>
+<p class="ko" style="display:none;">모든 스톨이나 버블은 <strong>처리량을 감소</strong>시킵니다. 파이프라인의 유효 처리량은:</p>
+
+<div class="concept-box">
+<h3>📊 Throughput Formula</h3>
+<p><code>Effective Throughput = 1 / (1 + stall_rate)</code></p>
+<p class="en">If a pipeline stalls 20% of cycles, throughput = 1/1.2 = <strong>83.3%</strong> of ideal. In a 5-stage pipeline running at 1 GHz, that's 833M operations/sec instead of 1G.</p>
+<p class="ko" style="display:none;">파이프라인이 20% 사이클 동안 스톨되면, 처리량 = 1/1.2 = 이상적인 것의 <strong>83.3%</strong>. 1 GHz에서 실행되는 5단계 파이프라인에서 1G 대신 833M 연산/초입니다.</p>
+</div>
+
+<h3>Reducing Stalls: Design Strategies</h3>
+
+<table class="comparison-table">
+<tr><th>Strategy</th><th>How It Works</th><th>Tradeoff</th></tr>
+<tr>
+<td class="en">Data Forwarding</td><td class="en">Bypass result directly to dependent stage</td><td class="en">Extra muxes, routing complexity</td>
+<td class="ko" style="display:none;">데이터 포워딩</td><td class="ko" style="display:none;">결과를 의존 스테이지에 직접 바이패스</td><td class="ko" style="display:none;">추가 먹스, 라우팅 복잡성</td>
+</tr>
+<tr>
+<td class="en">Out-of-order Execution</td><td class="en">Execute independent instructions while waiting</td><td class="en">Very complex control logic</td>
+<td class="ko" style="display:none;">비순서 실행</td><td class="ko" style="display:none;">대기 중 독립 명령어 실행</td><td class="ko" style="display:none;">매우 복잡한 제어 로직</td>
+</tr>
+<tr>
+<td class="en">Skid Buffer</td><td class="en">Small buffer absorbs 1-2 cycle stalls</td><td class="en">Extra area, but pipeline keeps flowing</td>
+<td class="ko" style="display:none;">스키드 버퍼</td><td class="ko" style="display:none;">작은 버퍼가 1-2 사이클 스톨을 흡수</td><td class="ko" style="display:none;">추가 면적, 하지만 파이프라인은 계속 흐름</td>
+</tr>
+<tr>
+<td class="en">Pipeline Interleaving</td><td class="en">Alternate between multiple threads</td><td class="en">Per-thread latency increases</td>
+<td class="ko" style="display:none;">파이프라인 인터리빙</td><td class="ko" style="display:none;">여러 스레드 간 교대</td><td class="ko" style="display:none;">스레드별 지연 증가</td>
+</tr>
+</table>
+
+<h2>6. Skid Buffer: Elegant Backpressure</h2>
+
+<p class="en">A <strong>skid buffer</strong> (or pipeline register with bypass) is a 1-entry buffer that absorbs a stall cycle. Instead of stalling the upstream immediately, data "skids" into the buffer, buying one extra cycle.</p>
+<p class="ko" style="display:none;"><strong>스키드 버퍼</strong>(또는 바이패스가 있는 파이프라인 레지스터)는 스톨 사이클을 흡수하는 1-엔트리 버퍼입니다. 상류를 즉시 스톨하는 대신 데이터가 버퍼로 "미끄러져" 들어가 한 사이클의 여유를 줍니다.</p>
+
+<pre><code><span class="comment">// Simple skid buffer</span>
+<span class="keyword">module</span> <span class="type">skid_buffer</span> #(
+    <span class="keyword">parameter</span> <span class="type">WIDTH</span> = <span class="number">32</span>
+)(
+    <span class="keyword">input</span>  <span class="type">logic</span>             <span class="signal">clk</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span>             <span class="signal">rst_n</span>,
+    <span class="comment">// Upstream interface</span>
+    <span class="keyword">input</span>  <span class="type">logic</span> [<span class="type">WIDTH</span>-<span class="number">1</span>:<span class="number">0</span>] <span class="signal">up_data</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span>             <span class="signal">up_valid</span>,
+    <span class="keyword">output</span> <span class="type">logic</span>             <span class="signal">up_ready</span>,
+    <span class="comment">// Downstream interface</span>
+    <span class="keyword">output</span> <span class="type">logic</span> [<span class="type">WIDTH</span>-<span class="number">1</span>:<span class="number">0</span>] <span class="signal">dn_data</span>,
+    <span class="keyword">output</span> <span class="type">logic</span>             <span class="signal">dn_valid</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span>             <span class="signal">dn_ready</span>
+);
+
+    <span class="type">logic</span> [<span class="type">WIDTH</span>-<span class="number">1</span>:<span class="number">0</span>] <span class="signal">buf_data</span>;
+    <span class="type">logic</span>             <span class="signal">buf_valid</span>;
+
+    <span class="comment">// Ready when buffer is empty</span>
+    <span class="keyword">assign</span> <span class="signal">up_ready</span> = !<span class="signal">buf_valid</span>;
+
+    <span class="comment">// Output: buffer has priority over direct passthrough</span>
+    <span class="keyword">assign</span> <span class="signal">dn_data</span>  = <span class="signal">buf_valid</span> ? <span class="signal">buf_data</span>  : <span class="signal">up_data</span>;
+    <span class="keyword">assign</span> <span class="signal">dn_valid</span> = <span class="signal">buf_valid</span> | <span class="signal">up_valid</span>;
+
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span> <span class="keyword">or</span> <span class="keyword">negedge</span> <span class="signal">rst_n</span>) <span class="keyword">begin</span>
+        <span class="keyword">if</span> (!<span class="signal">rst_n</span>) <span class="keyword">begin</span>
+            <span class="signal">buf_valid</span> <= <span class="number">1'b0</span>;
+        <span class="keyword">end</span> <span class="keyword">else if</span> (<span class="signal">buf_valid</span> && <span class="signal">dn_ready</span>) <span class="keyword">begin</span>
+            <span class="comment">// Buffer drains when downstream accepts</span>
+            <span class="signal">buf_valid</span> <= <span class="number">1'b0</span>;
+        <span class="keyword">end</span> <span class="keyword">else if</span> (<span class="signal">up_valid</span> && <span class="signal">up_ready</span> && !<span class="signal">dn_ready</span>) <span class="keyword">begin</span>
+            <span class="comment">// Capture into buffer when downstream is busy</span>
+            <span class="signal">buf_data</span>  <= <span class="signal">up_data</span>;
+            <span class="signal">buf_valid</span> <= <span class="number">1'b1</span>;
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+
+<span class="keyword">endmodule</span></code></pre>
+
+<div class="tip-box">
+<h3>💡 Why Skid Buffers Matter</h3>
+<p class="en">Skid buffers break the <strong>combinational stall chain</strong>. Without them, a stall at the last stage creates a combinational path all the way back to the first stage (stall propagation). This can become the critical timing path! A skid buffer registers the stall, limiting propagation to one stage at a time.</p>
+<p class="ko" style="display:none;">스키드 버퍼는 <strong>조합 스톨 체인</strong>을 끊습니다. 없으면 마지막 스테이지의 스톨이 첫 스테이지까지 조합 경로를 만듭니다(스톨 전파). 이것이 크리티컬 타이밍 경로가 될 수 있습니다! 스키드 버퍼는 스톨을 레지스터하여 한 번에 한 스테이지로 전파를 제한합니다.</p>
+</div>
+
+<h2>7. Interview Connection</h2>
+
+<div class="concept-box">
+<h3>🎯 What Interviewers Ask</h3>
+<ul>
+<li class="en"><strong>"What happens when your pipeline's memory stage takes 3 cycles?"</strong> → Stall the entire pipeline for 2 extra cycles, or use a skid buffer to reduce upstream impact.</li>
+<li class="ko" style="display:none;"><strong>"파이프라인의 메모리 스테이지가 3사이클 걸리면?"</strong> → 전체 파이프라인을 2사이클 추가 스톨하거나, 스키드 버퍼로 상류 영향을 줄입니다.</li>
+<li class="en"><strong>"How do you prevent data loss in a pipeline?"</strong> → Backpressure via stall signals. Never advance a stage if downstream can't accept.</li>
+<li class="ko" style="display:none;"><strong>"파이프라인에서 데이터 손실을 어떻게 방지하나요?"</strong> → 스톨 신호를 통한 백프레셔. 다운스트림이 받을 수 없으면 스테이지를 절대 진행시키지 않습니다.</li>
+<li class="en"><strong>"Stall vs bubble — when do you use each?"</strong> → Stall = downstream not ready (freeze everything). Bubble = need a gap for hazard resolution (downstream keeps moving).</li>
+<li class="ko" style="display:none;"><strong>"스톨 vs 버블 — 각각 언제 사용?"</strong> → 스톨 = 다운스트림 준비 안 됨(모두 동결). 버블 = 해저드 해결을 위한 갭 필요(다운스트림은 계속 진행).</li>
+</ul>
+</div>
+
+<h2>Summary</h2>
+
+<div class="concept-box">
+<h3 class="en">📝 Key Takeaways</h3>
+<h3 class="ko" style="display:none;">📝 핵심 정리</h3>
+<ol>
+<li class="en"><strong>Backpressure</strong> = downstream telling upstream "stop, I'm not ready"</li>
+<li class="ko" style="display:none;"><strong>백프레셔</strong> = 다운스트림이 업스트림에게 "멈춰, 준비 안 됐어"라고 말하는 것</li>
+<li class="en"><strong>Stall signals</strong> freeze pipeline stages by disabling register updates (clock enable)</li>
+<li class="ko" style="display:none;"><strong>스톨 신호</strong>는 레지스터 업데이트를 비활성화하여 파이프라인 스테이지를 동결 (클럭 인에이블)</li>
+<li class="en"><strong>Bubbles</strong> insert invalid (NOP) slots that flow downstream</li>
+<li class="ko" style="display:none;"><strong>버블</strong>은 다운스트림으로 흐르는 유효하지 않은(NOP) 슬롯을 삽입</li>
+<li class="en"><strong>Stalls propagate backward</strong>, bubbles flow forward</li>
+<li class="ko" style="display:none;"><strong>스톨은 역방향으로 전파</strong>, 버블은 순방향으로 흐름</li>
+<li class="en"><strong>Never bubble + stall the same stage</strong> simultaneously — data loss!</li>
+<li class="ko" style="display:none;">같은 스테이지를 동시에 <strong>버블 + 스톨하지 마세요</strong> — 데이터 손실!</li>
+<li class="en"><strong>Skid buffers</strong> break combinational stall chains and improve timing</li>
+<li class="ko" style="display:none;"><strong>스키드 버퍼</strong>는 조합 스톨 체인을 끊고 타이밍을 개선</li>
+</ol>
+</div>
+
+<p class="en"><strong>Tomorrow: Ready/Valid Handshake</strong> — the industry-standard flow control protocol that builds on everything we learned today! 🚀</p>
+<p class="ko" style="display:none;"><strong>내일: Ready/Valid 핸드셰이크</strong> — 오늘 배운 모든 것을 기반으로 하는 업계 표준 흐름 제어 프로토콜! 🚀</p>
+
+<div class="nav-links">
+    <a href="day-24-quiz.html">📝 Take the Quiz</a>
+    <a href="day-24-practice.html">💻 Practice Exercise</a>
+    <a href="day-23-lesson.html">← Day 23</a>
+</div>
+
+<script>
+let isKorean = false;
+function toggleLang() {
+    isKorean = !isKorean;
+    document.querySelectorAll('.en').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'none' : 'revert', 'important');
+    });
+    document.querySelectorAll('.ko').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'revert' : 'none', 'important');
+    });
+    document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+}
+</script>
+
+</body>
+</html>

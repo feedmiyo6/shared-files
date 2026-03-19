@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 24 Quiz: Backpressure — Stall Signals & Bubbles</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    background: linear-gradient(135deg, #fefae0 0%, #faedcd 100%);
+    color: #3d405b;
+    line-height: 1.8;
+    padding: 24px;
+    max-width: 920px;
+    margin: 0 auto;
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    font-size: 17px;
+}
+h1 {
+    color: #5d4037;
+    border-bottom: 3px solid #c4a77d;
+    padding-bottom: 12px;
+    margin-bottom: 24px;
+    font-size: 2em;
+}
+h2 {
+    color: #588157;
+    border-bottom: 2px solid #a3b18a;
+    padding-bottom: 8px;
+    margin: 32px 0 16px;
+    font-size: 1.5em;
+}
+h3 { color: #5d4037; margin: 20px 0 12px; }
+p { margin: 12px 0; }
+pre {
+    background: #2d3436;
+    padding: 24px;
+    border-radius: 12px;
+    margin: 24px 0;
+    border: 3px solid #a3b18a;
+    overflow-x: auto;
+    font-size: 15px;
+    line-height: 1.6;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+    color: #f8f8f2;
+}
+code {
+    background: #e9f5db;
+    color: #3d405b;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+}
+pre code { background: none; color: inherit; padding: 0; }
+.keyword { color: #ff79c6; font-weight: 600; }
+.type { color: #8be9fd; }
+.signal { color: #50fa7b; }
+.number { color: #ffb86c; }
+.comment { color: #6272a4; font-style: italic; }
+.lang-toggle {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    background: #588157;
+    border: none;
+    border-radius: 24px;
+    padding: 10px 20px;
+    cursor: pointer;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    z-index: 1000;
+}
+.lang-toggle:hover { background: #3a5a40; }
+.ko { display: none; }
+.nav-links {
+    display: flex;
+    gap: 12px;
+    margin: 20px 0;
+    flex-wrap: wrap;
+}
+.nav-links a {
+    background: linear-gradient(135deg, #588157, #3a5a40);
+    color: #fff;
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 14px;
+}
+.nav-links a:hover { opacity: 0.9; }
+.question-block {
+    background: #fff8f0;
+    border: 2px solid #c4a77d;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+}
+.question-block h3 { color: #5d4037; margin-bottom: 12px; }
+.options { list-style: none; padding: 0; margin: 12px 0; }
+.options li {
+    padding: 10px 16px;
+    margin: 6px 0;
+    border-radius: 8px;
+    cursor: pointer;
+    border: 2px solid #c4a77d;
+    background: #fff;
+    transition: all 0.2s;
+}
+.options li:hover { border-color: #588157; background: #e9f5db; }
+.options li.correct { background: #d4edda; border-color: #10b981; }
+.options li.incorrect { background: #fde8e8; border-color: #ef4444; }
+.explanation {
+    display: none;
+    margin-top: 12px;
+    padding: 12px;
+    background: #e9f5db;
+    border-radius: 8px;
+    border-left: 4px solid #588157;
+}
+.score-box {
+    background: #fff8f0;
+    border: 2px solid #588157;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 24px 0;
+    text-align: center;
+    display: none;
+}
+.score-box h2 { border: none; color: #588157; }
+.concept-box {
+    background: #fff8f0;
+    border: 2px solid #c4a77d;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    color: #3d405b;
+}
+.concept-box h3 { color: #5d4037; margin-bottom: 12px; }
+@media (max-width: 768px) {
+    body { padding: 16px; }
+    h1 { font-size: 1.8em; }
+    pre { font-size: 14px; padding: 16px; }
+    .lang-toggle { padding: 8px 16px; font-size: 13px; }
+}
+</style>
+</head>
+<body>
+
+<button class="lang-toggle" onclick="toggleLang()">한국어</button>
+
+<h1>📝 Day 24 Quiz: Backpressure</h1>
+
+<div class="nav-links">
+    <a href="day-24-lesson.html">📖 Lesson</a>
+    <a href="day-24-practice.html">💻 Practice</a>
+</div>
+
+<p class="en">Test your understanding of stall signals, bubbles, and backpressure mechanisms. Click an answer to check!</p>
+<p class="ko" style="display:none;">스톨 신호, 버블, 백프레셔 메커니즘에 대한 이해를 테스트하세요. 답을 클릭하세요!</p>
+
+<!-- Q1 -->
+<div class="question-block" id="q1">
+<h3>Q1. What is backpressure in a pipeline?</h3>
+<p class="ko" style="display:none;">파이프라인에서 백프레셔란 무엇인가요?</p>
+<ul class="options">
+<li onclick="checkAnswer(this, false)">A) A technique to increase clock frequency</li>
+<li onclick="checkAnswer(this, true)">B) A flow control mechanism where downstream signals upstream to stop sending data</li>
+<li onclick="checkAnswer(this, false)">C) A method to add more pipeline stages</li>
+<li onclick="checkAnswer(this, false)">D) A way to bypass pipeline registers</li>
+</ul>
+<div class="explanation">
+<p class="en">✅ <strong>B)</strong> Backpressure is when a downstream consumer tells the upstream producer: "I'm not ready, hold your data." This prevents data loss when the consumer is slower than the producer.</p>
+<p class="ko" style="display:none;">✅ <strong>B)</strong> 백프레셔는 다운스트림 소비자가 업스트림 생산자에게 "준비 안 됐으니 데이터를 보류해"라고 알려주는 것입니다. 소비자가 생산자보다 느릴 때 데이터 손실을 방지합니다.</p>
+</div>
+</div>
+
+<!-- Q2 -->
+<div class="question-block" id="q2">
+<h3>Q2. How does a stall signal work in a pipeline register?</h3>
+<p class="ko" style="display:none;">파이프라인 레지스터에서 스톨 신호는 어떻게 작동하나요?</p>
+<ul class="options">
+<li onclick="checkAnswer(this, false)">A) It clears the register to zero</li>
+<li onclick="checkAnswer(this, false)">B) It inverts the stored data</li>
+<li onclick="checkAnswer(this, true)">C) It acts as a clock enable — when asserted, the register holds its current value</li>
+<li onclick="checkAnswer(this, false)">D) It doubles the clock frequency for that stage</li>
+</ul>
+<div class="explanation">
+<p class="en">✅ <strong>C)</strong> The stall signal disables the register update. Code pattern: <code>if (!stall) data_out <= data_in;</code> — when stalled, the register simply doesn't change, preserving its current data.</p>
+<p class="ko" style="display:none;">✅ <strong>C)</strong> 스톨 신호는 레지스터 업데이트를 비활성화합니다. 코드 패턴: <code>if (!stall) data_out <= data_in;</code> — 스톨 시 레지스터는 변경되지 않고 현재 데이터를 보존합니다.</p>
+</div>
+</div>
+
+<!-- Q3 -->
+<div class="question-block" id="q3">
+<h3>Q3. In which direction do stall signals propagate?</h3>
+<p class="ko" style="display:none;">스톨 신호는 어느 방향으로 전파되나요?</p>
+<ul class="options">
+<li onclick="checkAnswer(this, false)">A) Forward (upstream → downstream)</li>
+<li onclick="checkAnswer(this, true)">B) Backward (downstream → upstream)</li>
+<li onclick="checkAnswer(this, false)">C) Both directions simultaneously</li>
+<li onclick="checkAnswer(this, false)">D) They don't propagate — each stage handles stalls independently</li>
+</ul>
+<div class="explanation">
+<p class="en">✅ <strong>B)</strong> Stalls propagate backward. If Stage 4 can't accept data, Stage 3 must stall (can't push into a frozen stage), then Stage 2, then Stage 1. The stall ripples upstream.</p>
+<p class="ko" style="display:none;">✅ <strong>B)</strong> 스톨은 역방향으로 전파됩니다. 스테이지 4가 데이터를 받을 수 없으면, 스테이지 3이 스톨되고, 그 다음 2, 1 순서로 스톨이 상류로 물결칩니다.</p>
+</div>
+</div>
+
+<!-- Q4 -->
+<div class="question-block" id="q4">
+<h3>Q4. What is a pipeline bubble?</h3>
+<p class="ko" style="display:none;">파이프라인 버블이란 무엇인가요?</p>
+<ul class="options">
+<li onclick="checkAnswer(this, false)">A) A hardware buffer that stores overflow data</li>
+<li onclick="checkAnswer(this, true)">B) An invalid (NOP) slot inserted into the pipeline</li>
+<li onclick="checkAnswer(this, false)">C) A clock gating technique</li>
+<li onclick="checkAnswer(this, false)">D) An error condition that crashes the pipeline</li>
+</ul>
+<div class="explanation">
+<p class="en">✅ <strong>B)</strong> A bubble is a slot with <code>valid = 0</code> that flows through the pipeline. Downstream stages see it and skip processing. It's essentially a NOP that takes up one cycle.</p>
+<p class="ko" style="display:none;">✅ <strong>B)</strong> 버블은 <code>valid = 0</code>인 슬롯으로 파이프라인을 통해 흐릅니다. 다운스트림 스테이지는 이를 보고 처리를 건너뜁니다. 본질적으로 한 사이클을 차지하는 NOP입니다.</p>
+</div>
+</div>
+
+<!-- Q5 -->
+<div class="question-block" id="q5">
+<h3>Q5. In which direction do bubbles flow?</h3>
+<p class="ko" style="display:none;">버블은 어느 방향으로 흐르나요?</p>
+<ul class="options">
+<li onclick="checkAnswer(this, true)">A) Forward (same direction as data)</li>
+<li onclick="checkAnswer(this, false)">B) Backward (opposite to data flow)</li>
+<li onclick="checkAnswer(this, false)">C) They stay in the stage where they were created</li>
+<li onclick="checkAnswer(this, false)">D) Both directions</li>
+</ul>
+<div class="explanation">
+<p class="en">✅ <strong>A)</strong> Bubbles flow forward through the pipeline, just like valid data. They are inserted at a specific stage and propagate downstream, creating a gap in the data flow.</p>
+<p class="ko" style="display:none;">✅ <strong>A)</strong> 버블은 유효한 데이터처럼 파이프라인을 순방향으로 흐릅니다. 특정 스테이지에서 삽입되어 다운스트림으로 전파되며 데이터 흐름에 갭을 만듭니다.</p>
+</div>
+</div>
+
+<!-- Q6 -->
+<div class="question-block" id="q6">
+<h3>Q6. What happens if you insert a bubble into a stage that is also stalled?</h3>
+<p class="ko" style="display:none;">스톨된 스테이지에 버블을 삽입하면 어떻게 되나요?</p>
+<ul class="options">
+<li onclick="checkAnswer(this, false)">A) The bubble is queued for later</li>
+<li onclick="checkAnswer(this, false)">B) Nothing — the stall takes priority</li>
+<li onclick="checkAnswer(this, true)">C) Data loss — the valid data being held is destroyed</li>
+<li onclick="checkAnswer(this, false)">D) The pipeline automatically resolves the conflict</li>
+</ul>
+<div class="explanation">
+<p class="en">✅ <strong>C)</strong> This is a critical bug! If a stage is stalled (holding valid data) and you squash it with a bubble, the valid data is overwritten with invalid. The fix: <code>bubble = hazard & !stall</code> — never bubble a stalled stage.</p>
+<p class="ko" style="display:none;">✅ <strong>C)</strong> 이것은 치명적인 버그입니다! 스테이지가 스톨되어(유효한 데이터 보유) 버블로 스쿼시하면 유효한 데이터가 무효로 덮어써집니다. 수정: <code>bubble = hazard & !stall</code> — 스톨된 스테이지에는 절대 버블을 넣지 마세요.</p>
+</div>
+</div>
+
+<!-- Q7 -->
+<div class="question-block" id="q7">
+<h3>Q7. Given a pipeline that stalls 25% of cycles, what is the effective throughput?</h3>
+<p class="ko" style="display:none;">25% 사이클 동안 스톨되는 파이프라인의 유효 처리량은?</p>
+<ul class="options">
+<li onclick="checkAnswer(this, false)">A) 25%</li>
+<li onclick="checkAnswer(this, false)">B) 75%</li>
+<li onclick="checkAnswer(this, true)">C) 80%</li>
+<li onclick="checkAnswer(this, false)">D) 100%</li>
+</ul>
+<div class="explanation">
+<p class="en">✅ <strong>C)</strong> Effective throughput = 1 / (1 + stall_rate) = 1 / 1.25 = <strong>80%</strong>. If your pipeline runs at 1 GHz, you get 800M operations/sec instead of 1G.</p>
+<p class="ko" style="display:none;">✅ <strong>C)</strong> 유효 처리량 = 1 / (1 + 스톨률) = 1 / 1.25 = <strong>80%</strong>. 1 GHz 파이프라인이면 1G 대신 800M 연산/초입니다.</p>
+</div>
+</div>
+
+<!-- Q8 -->
+<div class="question-block" id="q8">
+<h3>Q8. What is a skid buffer?</h3>
+<p class="ko" style="display:none;">스키드 버퍼란 무엇인가요?</p>
+<ul class="options">
+<li onclick="checkAnswer(this, false)">A) A large FIFO between pipeline stages</li>
+<li onclick="checkAnswer(this, true)">B) A small (1-entry) buffer that absorbs a stall cycle, breaking the combinational stall chain</li>
+<li onclick="checkAnswer(this, false)">C) A bypass path that skips pipeline stages</li>
+<li onclick="checkAnswer(this, false)">D) A technique to merge multiple bubbles into one</li>
+</ul>
+<div class="explanation">
+<p class="en">✅ <strong>B)</strong> A skid buffer is a 1-entry register that catches data when downstream stalls. Instead of instantly stalling upstream, it "absorbs" one cycle. This breaks the combinational stall chain that can become a critical timing path.</p>
+<p class="ko" style="display:none;">✅ <strong>B)</strong> 스키드 버퍼는 다운스트림이 스톨될 때 데이터를 잡는 1-엔트리 레지스터입니다. 상류를 즉시 스톨하는 대신 한 사이클을 "흡수"합니다. 크리티컬 타이밍 경로가 될 수 있는 조합 스톨 체인을 끊습니다.</p>
+</div>
+</div>
+
+<!-- Q9 -->
+<div class="question-block" id="q9">
+<h3>Q9. When should you use a stall vs. a bubble?</h3>
+<p class="ko" style="display:none;">스톨 vs 버블은 언제 사용해야 하나요?</p>
+<ul class="options">
+<li onclick="checkAnswer(this, false)">A) Stall for hazards, bubble for memory delays</li>
+<li onclick="checkAnswer(this, true)">B) Stall when downstream isn't ready (freeze everything); bubble when you need a gap for hazard resolution (downstream keeps moving)</li>
+<li onclick="checkAnswer(this, false)">C) They're interchangeable — use whichever is simpler</li>
+<li onclick="checkAnswer(this, false)">D) Always use bubbles — stalls are deprecated</li>
+</ul>
+<div class="explanation">
+<p class="en">✅ <strong>B)</strong> Stall = "stop the whole pipeline, downstream can't accept." Bubble = "insert a gap, downstream keeps flowing." Stalls freeze upstream; bubbles flow downstream. Different tools for different problems.</p>
+<p class="ko" style="display:none;">✅ <strong>B)</strong> 스톨 = "전체 파이프라인 정지, 다운스트림이 받을 수 없음." 버블 = "갭 삽입, 다운스트림은 계속 흐름." 스톨은 상류를 동결; 버블은 하류로 흐릅니다. 다른 문제에 다른 도구입니다.</p>
+</div>
+</div>
+
+<!-- Q10 -->
+<div class="question-block" id="q10">
+<h3>Q10. Why is a combinational stall chain a timing problem?</h3>
+<p class="ko" style="display:none;">조합 스톨 체인이 타이밍 문제인 이유는?</p>
+<pre><code><span class="keyword">assign</span> <span class="signal">stall_3</span> = <span class="signal">stall_4</span>;
+<span class="keyword">assign</span> <span class="signal">stall_2</span> = <span class="signal">stall_3</span>;
+<span class="keyword">assign</span> <span class="signal">stall_1</span> = <span class="signal">stall_2</span>;</code></pre>
+<ul class="options">
+<li onclick="checkAnswer(this, false)">A) It uses too many flip-flops</li>
+<li onclick="checkAnswer(this, true)">B) It creates a long combinational path from Stage 4 back to Stage 1 that must settle in one clock cycle</li>
+<li onclick="checkAnswer(this, false)">C) It causes metastability</li>
+<li onclick="checkAnswer(this, false)">D) It wastes power due to clock gating</li>
+</ul>
+<div class="explanation">
+<p class="en">✅ <strong>B)</strong> These are all <code>assign</code> statements — pure combinational logic. A stall at Stage 4 must propagate through Stage 3 → 2 → 1 all within one clock cycle. In a deep pipeline (10+ stages), this combinational chain becomes the critical path. Skid buffers fix this by registering the stall signal.</p>
+<p class="ko" style="display:none;">✅ <strong>B)</strong> 이것들은 모두 <code>assign</code> 문 — 순수 조합 로직입니다. 스테이지 4의 스톨이 3 → 2 → 1을 한 클럭 사이클 내에 통과해야 합니다. 깊은 파이프라인(10+ 스테이지)에서 이 조합 체인이 크리티컬 패스가 됩니다. 스키드 버퍼는 스톨 신호를 레지스터하여 이를 해결합니다.</p>
+</div>
+</div>
+
+<!-- Q11 -->
+<div class="question-block" id="q11">
+<h3>Q11. In this pipeline controller, what does <code>bubble_exec</code> do?</h3>
+<pre><code><span class="keyword">assign</span> <span class="signal">stall_decode</span> = <span class="signal">mem_busy</span> | <span class="signal">data_hazard</span>;
+<span class="keyword">assign</span> <span class="signal">stall_fetch</span>  = <span class="signal">mem_busy</span> | <span class="signal">data_hazard</span>;
+<span class="keyword">assign</span> <span class="signal">bubble_exec</span>  = <span class="signal">data_hazard</span> & !<span class="signal">mem_busy</span>;</code></pre>
+<ul class="options">
+<li onclick="checkAnswer(this, false)">A) Stalls the execute stage</li>
+<li onclick="checkAnswer(this, true)">B) Inserts an invalid slot into the execute stage while fetch/decode are stalled</li>
+<li onclick="checkAnswer(this, false)">C) Flushes the entire pipeline</li>
+<li onclick="checkAnswer(this, false)">D) Forwards data from writeback to execute</li>
+</ul>
+<div class="explanation">
+<p class="en">✅ <strong>B)</strong> When there's a data hazard (but no memory stall), fetch and decode freeze in place, while a bubble (valid=0) is pushed into execute. This creates a 1-cycle gap so the hazard resolves. Note: it's gated by <code>!mem_busy</code> to prevent bubbling during a memory stall.</p>
+<p class="ko" style="display:none;">✅ <strong>B)</strong> 데이터 해저드가 있을 때(메모리 스톨 아닌), 페치와 디코드는 제자리에서 동결되고 버블(valid=0)이 실행 스테이지에 삽입됩니다. 해저드가 해결되도록 1사이클 갭을 만듭니다. <code>!mem_busy</code>로 게이팅하여 메모리 스톨 중 버블 삽입을 방지합니다.</p>
+</div>
+</div>
+
+<!-- Q12 -->
+<div class="question-block" id="q12">
+<h3>Q12. In the skid buffer design, when is <code>up_ready</code> deasserted?</h3>
+<p class="ko" style="display:none;">스키드 버퍼 설계에서 <code>up_ready</code>는 언제 디어서트되나요?</p>
+<ul class="options">
+<li onclick="checkAnswer(this, false)">A) When downstream is not ready</li>
+<li onclick="checkAnswer(this, true)">B) When the internal buffer is full (buf_valid = 1)</li>
+<li onclick="checkAnswer(this, false)">C) When reset is asserted</li>
+<li onclick="checkAnswer(this, false)">D) When upstream has no valid data</li>
+</ul>
+<div class="explanation">
+<p class="en">✅ <strong>B)</strong> <code>up_ready = !buf_valid</code>. The skid buffer can accept one item even when downstream stalls. Once that buffer slot is full, it must tell upstream to stop. This is what "breaks" the stall chain — upstream gets one extra cycle before it sees the stall.</p>
+<p class="ko" style="display:none;">✅ <strong>B)</strong> <code>up_ready = !buf_valid</code>. 스키드 버퍼는 다운스트림이 스톨되어도 한 항목을 받을 수 있습니다. 버퍼 슬롯이 차면 상류에 멈추라고 해야 합니다. 이것이 스톨 체인을 "끊는" 것 — 상류가 스톨을 보기 전에 한 사이클의 여유를 줍니다.</p>
+</div>
+</div>
+
+<div class="score-box" id="scoreBox">
+<h2>🎯 Score: <span id="scoreValue">0</span> / 12</h2>
+<p id="scoreMsg"></p>
+</div>
+
+<div class="nav-links">
+    <a href="day-24-lesson.html">📖 Review Lesson</a>
+    <a href="day-24-practice.html">💻 Practice Exercise</a>
+</div>
+
+<script>
+let isKorean = false;
+let answered = 0;
+let correct = 0;
+const total = 12;
+
+function toggleLang() {
+    isKorean = !isKorean;
+    document.querySelectorAll('.en').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'none' : 'revert', 'important');
+    });
+    document.querySelectorAll('.ko').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'revert' : 'none', 'important');
+    });
+    document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+}
+
+function checkAnswer(el, isCorrect) {
+    if (el.classList.contains('correct') || el.classList.contains('incorrect')) return;
+    const options = el.parentElement.querySelectorAll('li');
+    let alreadyAnswered = false;
+    options.forEach(opt => {
+        if (opt.classList.contains('correct') || opt.classList.contains('incorrect')) alreadyAnswered = true;
+    });
+    if (alreadyAnswered) return;
+
+    answered++;
+    if (isCorrect) {
+        el.classList.add('correct');
+        correct++;
+    } else {
+        el.classList.add('incorrect');
+        options.forEach(opt => {
+            if (opt.getAttribute('onclick').includes('true')) opt.classList.add('correct');
+        });
+    }
+    el.closest('.question-block').querySelector('.explanation').style.display = 'block';
+
+    if (answered === total) {
+        const box = document.getElementById('scoreBox');
+        box.style.display = 'block';
+        document.getElementById('scoreValue').textContent = correct;
+        const pct = Math.round((correct / total) * 100);
+        const msg = document.getElementById('scoreMsg');
+        if (pct === 100) msg.textContent = '🌟 Perfect! You\'ve mastered backpressure!';
+        else if (pct >= 80) msg.textContent = '💪 Great job! Solid understanding of pipeline flow control.';
+        else if (pct >= 60) msg.textContent = '📖 Good effort! Review the stall vs bubble section.';
+        else msg.textContent = '🔄 Review the lesson and try again — backpressure is critical for design!';
+        box.scrollIntoView({ behavior: 'smooth' });
+    }
+}
+</script>
+
+</body>
+</html>
