@@ -3,154 +3,159 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Daily Tech Briefing — Mar 20, 2026</title>
+<title>Daily Tech Briefing — March 20, 2026</title>
 <style>
-  :root {
-    --bg: #0d1117; --card: #161b22; --border: #30363d;
-    --text: #e6edf3; --muted: #8b949e; --accent: #58a6ff;
-    --green: #3fb950; --purple: #bc8cff; --orange: #d29922; --pink: #f778ba;
-  }
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; padding: 16px; max-width: 720px; margin: 0 auto; }
-  header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
-  h1 { font-size: 1.4rem; }
-  .date { color: var(--muted); font-size: 0.85rem; }
-  .lang-toggle { background: var(--card); border: 1px solid var(--border); color: var(--accent); padding: 6px 14px; border-radius: 20px; cursor: pointer; font-size: 0.85rem; white-space: nowrap; }
-  .section { margin-bottom: 28px; }
-  .section-title { font-size: 1.1rem; font-weight: 700; margin-bottom: 12px; padding-left: 8px; border-left: 3px solid var(--accent); }
-  .section-title.ai { border-color: var(--accent); }
-  .section-title.markets { border-color: var(--green); }
-  .section-title.semi { border-color: var(--purple); }
-  .section-title.wild { border-color: var(--orange); }
-  .card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; margin-bottom: 12px; }
-  .card h3 { font-size: 0.95rem; margin-bottom: 4px; }
-  .card h3 a { color: var(--accent); text-decoration: none; }
-  .card h3 a:hover { text-decoration: underline; }
-  .source { color: var(--muted); font-size: 0.75rem; margin-bottom: 6px; }
-  .summary { font-size: 0.88rem; color: #c9d1d9; }
-  footer { text-align: center; color: var(--muted); font-size: 0.75rem; margin-top: 32px; padding-top: 16px; border-top: 1px solid var(--border); }
+  body { background: #0d1117; color: #c9d1d9; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; padding: 16px; max-width: 720px; margin: 0 auto; }
+  h1 { font-size: 1.6em; color: #58a6ff; margin-bottom: 4px; }
+  .date { color: #8b949e; font-size: 0.9em; margin-bottom: 24px; }
+  .lang-toggle { position: fixed; top: 12px; right: 12px; background: #21262d; color: #58a6ff; border: 1px solid #30363d; border-radius: 8px; padding: 6px 14px; font-size: 0.85em; cursor: pointer; z-index: 100; }
+  .lang-toggle:hover { background: #30363d; }
+  h2 { color: #f0883e; font-size: 1.15em; margin: 24px 0 12px; border-bottom: 1px solid #21262d; padding-bottom: 6px; }
+  .story { background: #161b22; border: 1px solid #21262d; border-radius: 10px; padding: 14px 16px; margin-bottom: 12px; }
+  .story h3 { font-size: 1em; color: #e6edf3; margin-bottom: 4px; }
+  .story .source { font-size: 0.8em; color: #8b949e; margin-bottom: 6px; }
+  .story p { font-size: 0.92em; color: #b1bac4; }
+  .story a { color: #58a6ff; text-decoration: none; font-size: 0.85em; }
+  .story a:hover { text-decoration: underline; }
+  .footer { text-align: center; color: #484f58; font-size: 0.75em; margin-top: 32px; padding-top: 16px; border-top: 1px solid #21262d; }
   .ko { display: none; }
   .ko.show { display: inline !important; }
   .en.hide { display: none !important; }
 </style>
 </head>
 <body>
-<header>
-  <div>
-    <h1>🌳 <span class="en">Daily Tech Briefing</span><span class="ko">오늘의 테크 브리핑</span></h1>
-    <div class="date">Friday, March 20, 2026</div>
-  </div>
-  <button class="lang-toggle" onclick="toggleLang()">한국어</button>
-</header>
+
+<button class="lang-toggle" onclick="toggleLang()">한국어</button>
+
+<h1>
+  <span class="en">🌳 Daily Tech Briefing</span>
+  <span class="ko">🌳 데일리 테크 브리핑</span>
+</h1>
+<div class="date">
+  <span class="en">Friday, March 20, 2026 · Curated by Totoro</span>
+  <span class="ko">2026년 3월 20일 금요일 · 토토로가 정리함</span>
+</div>
 
 <!-- AI & TECH -->
-<div class="section">
-  <div class="section-title ai"><span class="en">🤖 AI & Tech</span><span class="ko">🤖 AI & 테크</span></div>
+<h2>
+  <span class="en">🤖 AI &amp; Tech</span>
+  <span class="ko">🤖 AI &amp; 테크</span>
+</h2>
 
-  <div class="card">
-    <h3><a href="https://confer.to/blog/2026/03/encrypted-meta/" target="_blank">
-      <span class="en">Signal Creator Partners with Meta to Encrypt Meta AI</span>
-      <span class="ko">시그널 창시자, 메타 AI 암호화 위해 메타와 파트너십</span>
-    </a></h3>
-    <div class="source">Confer / The Verge</div>
-    <p class="summary">
-      <span class="en">Moxie Marlinspike, the creator of Signal, announced that his encrypted AI chatbot Confer will integrate its privacy technology to underpin Meta AI. Ten years after bringing end-to-end encryption to WhatsApp for billions of users, Marlinspike is now doing the same for AI chat — ensuring conversations with Meta AI stay private from employees, hackers, and governments alike.</span>
-      <span class="ko">시그널 창시자 목시 말린스파이크가 자신의 암호화 AI 챗봇 Confer의 프라이버시 기술을 메타 AI에 통합한다고 발표했습니다. 10년 전 왓츠앱에 종단간 암호화를 도입한 것처럼, 이번에는 AI 채팅에 같은 기술을 적용하여 메타 AI와의 대화가 직원, 해커, 정부로부터 보호될 수 있도록 합니다.</span>
-    </p>
-  </div>
+<div class="story">
+  <h3>
+    <span class="en">Amazon Planning Alexa-Powered Smartphone Comeback</span>
+    <span class="ko">아마존, 알렉사 탑재 스마트폰으로 재도전</span>
+  </h3>
+  <div class="source">Reuters · CNET · PCMag</div>
+  <p>
+    <span class="en">More than a decade after the Fire Phone disaster, Amazon is reportedly developing a new AI-powered smartphone centered on Alexa for shopping and smart home control. The device aims to deeply integrate Amazon's AI assistant into a mobile experience, betting that conversational AI has matured enough to make a phone worth using.</span>
+    <span class="ko">파이어폰 실패 이후 10년 만에 아마존이 쇼핑·스마트홈 제어에 특화된 알렉사 AI 스마트폰을 개발 중인 것으로 알려졌다. 대화형 AI가 충분히 성숙해 모바일 경험의 핵심이 될 수 있다는 판단이다.</span>
+  </p>
+  <a href="https://www.reuters.com/technology/amazon-plans-smartphone-comeback-2026-03-20/">Read more →</a>
+</div>
 
-  <div class="card">
-    <h3><a href="https://arstechnica.com/gadgets/2026/03/google-details-new-24-hour-process-to-sideload-unverified-android-apps/" target="_blank">
-      <span class="en">Google Unveils 24-Hour Wait to Sideload Unverified Android Apps</span>
-      <span class="ko">구글, 미인증 앱 사이드로딩에 24시간 대기 절차 도입</span>
-    </a></h3>
-    <div class="source">Ars Technica</div>
-    <p class="summary">
-      <span class="en">Starting September 2026, Android will restrict sideloading to verified developers only. Power users can bypass this via a new "advanced flow" buried in developer settings — requiring a device restart, a 24-hour cooldown, and multiple confirmation screens. Google says the delay combats high-pressure social engineering attacks that trick victims into installing malware immediately. The topic exploded on Hacker News with over 1,100 comments.</span>
-      <span class="ko">2026년 9월부터 안드로이드는 인증된 개발자의 앱만 사이드로딩을 허용합니다. 고급 사용자는 개발자 설정에 숨겨진 "고급 흐름"을 통해 우회할 수 있으며, 기기 재시작과 24시간 대기, 여러 확인 화면이 필요합니다. 구글은 이 지연이 피해자를 즉시 멀웨어 설치로 유도하는 사회공학 공격에 대응하기 위한 것이라고 밝혔습니다.</span>
-    </p>
-  </div>
-
-  <div class="card">
-    <h3><a href="https://about.fb.com/news/2026/03/boosting-your-support-and-safety-on-metas-apps-with-ai/" target="_blank">
-      <span class="en">Meta to Replace Human Content Moderators with AI Systems</span>
-      <span class="ko">메타, 콘텐츠 관리자를 AI 시스템으로 대체 예정</span>
-    </a></h3>
-    <div class="source">The Verge / Meta</div>
-    <p class="summary">
-      <span class="en">Meta announced a broad rollout of its AI support assistant for Facebook and Instagram, saying it will "reduce reliance on third-party vendors" that employ human content moderators over the next few years. The AI will handle repetitive reviews of graphic content and rapidly evolving adversarial tactics like scams and illicit drug sales — areas where human moderators have faced PTSD risks.</span>
-      <span class="ko">메타가 페이스북과 인스타그램용 AI 지원 어시스턴트를 전면 도입하며, 향후 수년간 인간 콘텐츠 관리 외주 업체 의존도를 줄이겠다고 발표했습니다. AI는 그래픽 콘텐츠의 반복 검토와 사기, 불법 약물 판매 등 빠르게 변하는 적대적 전술에 대응할 예정입니다.</span>
-    </p>
-  </div>
+<div class="story">
+  <h3>
+    <span class="en">Meta Replacing Human Content Moderators with AI</span>
+    <span class="ko">메타, AI로 인간 콘텐츠 모더레이터 대체 예고</span>
+  </h3>
+  <div class="source">Meta · The Verge</div>
+  <p>
+    <span class="en">Meta announced a global rollout of its AI support assistant for Facebook and Instagram, saying it will "reduce reliance on third-party vendors" for content moderation over the next few years. The AI handles scam reports, content appeals, privacy settings, and more — responding in under 5 seconds. Human moderators who've long faced PTSD risks may see their roles shrink significantly.</span>
+    <span class="ko">메타가 페이스북·인스타그램용 AI 지원 어시스턴트를 글로벌 출시하며 향후 수년 내 외부 콘텐츠 검수 인력 의존도를 줄이겠다고 발표했다. AI가 5초 내 스캠 신고, 콘텐츠 이의제기, 프라이버시 설정 등을 처리한다.</span>
+  </p>
+  <a href="https://about.fb.com/news/2026/03/boosting-your-support-and-safety-on-metas-apps-with-ai/">Read more →</a>
 </div>
 
 <!-- MARKETS -->
-<div class="section">
-  <div class="section-title markets"><span class="en">📈 Markets</span><span class="ko">📈 시장</span></div>
+<h2>
+  <span class="en">📈 Markets</span>
+  <span class="ko">📈 마켓</span>
+</h2>
 
-  <div class="card">
-    <h3><a href="https://www.forbes.com/sites/tylerroush/2026/03/20/super-micro-shares-plunge-25-after-co-founder-charged-in-25-billion-ai-chip-smuggling-plot/" target="_blank">
-      <span class="en">Super Micro Shares Plunge 25% After Co-Founder Charged in $2.5B Smuggling Plot</span>
-      <span class="ko">슈퍼마이크로 주가 25% 폭락 — 공동 창업자 25억 달러 AI칩 밀수 혐의</span>
-    </a></h3>
-    <div class="source">Forbes</div>
-    <p class="summary">
-      <span class="en">Super Micro Computer shares crashed 25% after a co-founder was charged in connection with an alleged $2.5 billion AI chip smuggling operation. The case highlights growing scrutiny over the semiconductor supply chain as export controls tighten. It's another blow for a company that has faced accounting and governance questions over the past year.</span>
-      <span class="ko">슈퍼마이크로컴퓨터의 공동 창업자가 25억 달러 규모의 AI 칩 밀수 혐의로 기소된 후 주가가 25% 폭락했습니다. 이 사건은 수출 규제가 강화되는 가운데 반도체 공급망에 대한 감시 강화를 보여줍니다. 지난 1년간 회계 및 거버넌스 문제를 겪은 회사에 또 다른 타격입니다.</span>
-    </p>
-  </div>
+<div class="story">
+  <h3>
+    <span class="en">Stocks Head for 4th Straight Losing Week; Oil Hovers at $108</span>
+    <span class="ko">증시 4주 연속 하락 행진, 유가 $108 부근</span>
+  </h3>
+  <div class="source">CNBC</div>
+  <p>
+    <span class="en">U.S. stocks are slipping toward a fourth consecutive losing week as the Iran conflict continues to weigh on markets. Oil prices remain elevated near $108/barrel, Treasury yields are climbing on fears that Fed rate cuts are off the table this year, and Goldman warns correction risks are rising. JPMorgan now says the Fed won't cut rates at all in 2026.</span>
+    <span class="ko">이란 분쟁이 계속되며 미국 증시가 4주 연속 하락세를 이어가고 있다. 유가 $108 부근, 국채 수익률 상승, 골드만삭스는 조정 리스크 확대를 경고했다. JP모건은 2026년 금리 인하 없을 것으로 전망했다.</span>
+  </p>
+  <a href="https://www.cnbc.com/2026/03/19/stock-market-today-live-updates.html">Read more →</a>
+</div>
+
+<div class="story">
+  <h3>
+    <span class="en">Uber Investing $1.25B in Rivian for 50,000 Robotaxis</span>
+    <span class="ko">우버, 리비안에 $12.5억 투자 — 로보택시 5만대 계획</span>
+  </h3>
+  <div class="source">CNBC</div>
+  <p>
+    <span class="en">Uber plans to invest up to $1.25 billion in Rivian as part of a deal to deploy up to 50,000 autonomous R2 electric robotaxis across multiple countries through 2031. An initial $300M investment is expected soon, with Rivian shares jumping ~10% in premarket. The deal marks a renewed push into autonomous rides after Uber sold its self-driving unit in 2020.</span>
+    <span class="ko">우버가 리비안에 최대 $12.5억을 투자해 2031년까지 5만대의 자율주행 R2 전기 로보택시를 여러 국가에 배치하는 계획을 발표했다. 초기 $3억 투자가 곧 진행될 예정이다.</span>
+  </p>
+  <a href="https://www.cnbc.com/2026/03/19/uber-rivian-robotaxi.html">Read more →</a>
 </div>
 
 <!-- SEMICONDUCTORS -->
-<div class="section">
-  <div class="section-title semi"><span class="en">🔬 Semiconductors</span><span class="ko">🔬 반도체</span></div>
+<h2>
+  <span class="en">🔬 Semiconductors</span>
+  <span class="ko">🔬 반도체</span>
+</h2>
 
-  <div class="card">
-    <h3><a href="https://www.wsj.com/tech/samsung-to-invest-over-70-billion-in-bid-for-edge-in-ai-chips-race-cb337171" target="_blank">
-      <span class="en">Samsung Plans $73 Billion AI Chip Investment Blitz in 2026</span>
-      <span class="ko">삼성, 2026년 AI 칩에 73조원 투자 계획 발표</span>
-    </a></h3>
-    <div class="source">Wall Street Journal</div>
-    <p class="summary">
-      <span class="en">Samsung Electronics announced plans to spend over 110 trillion KRW (~$73B) on facilities and R&D in 2026 — a 22% increase year-over-year. Co-CEO Jun Young-hyun says surging demand for agentic AI is driving orders, with funds funneled toward HBM production, advanced robotics, and next-gen memory to challenge SK Hynix's dominance as Nvidia's top memory supplier.</span>
-      <span class="ko">삼성전자가 2026년 시설 및 R&D에 110조 원 이상(약 730억 달러)을 투자한다고 발표했습니다. 전년 대비 22% 증가한 규모입니다. 전영현 대표이사는 에이전틱 AI 수요 급증이 주문을 견인하고 있으며, HBM 생산, 첨단 로보틱스, 차세대 메모리에 자금을 집중하여 엔비디아 메모리 주요 공급업체인 SK하이닉스에 도전할 계획이라고 밝혔습니다.</span>
-    </p>
-  </div>
+<div class="story">
+  <h3>
+    <span class="en">Super Micro Co-Founder Charged in $2.5B Nvidia Chip Smuggling to China — Stock Crashes 25%</span>
+    <span class="ko">슈퍼마이크로 공동창업자, $25억 엔비디아 칩 밀수 혐의 — 주가 25% 폭락</span>
+  </h3>
+  <div class="source">CNBC · Forbes</div>
+  <p>
+    <span class="en">Super Micro Computer co-founder Wally Liaw and two associates were charged with illegally diverting billions of dollars in Nvidia-powered servers to China, violating the Export Control Reform Act. SMCI shares plunged 25% on Friday. The company has placed the employees on leave and says the conduct contradicts its compliance policies. A Southeast Asian middleman allegedly created fake paperwork to facilitate the scheme.</span>
+    <span class="ko">슈퍼마이크로 공동창업자 리아우(Liaw)와 2명이 수십억 달러 규모의 엔비디아 칩 서버를 중국으로 불법 반출한 혐의로 기소됐다. SMCI 주가는 25% 급락했으며, 회사는 관련 직원을 휴직 처리했다.</span>
+  </p>
+  <a href="https://www.cnbc.com/2026/03/19/us-tech-execs-smuggled-nvidia-chips-to-china-prosecutors-say.html">Read more →</a>
+</div>
 
-  <div class="card">
-    <h3><a href="https://www.courtlistener.com/docket/72379655/96/anthropic-pbc-v-us-department-of-war/" target="_blank">
-      <span class="en">Pentagon Rebuts Anthropic Lawsuit Over "Supply Chain Risk" Designation</span>
-      <span class="ko">국방부, 앤트로픽 '공급망 리스크' 지정 소송에 반박</span>
-    </a></h3>
-    <div class="source">The Verge / Court Filing</div>
-    <p class="summary">
-      <span class="en">The Department of Defense filed a rebuttal to Anthropic's lawsuit over its "supply chain risk" designation, arguing the AI company could theoretically "disable its technology or alter model behavior during ongoing warfighting operations" if it felt red lines were crossed. The Pentagon deemed this an unacceptable national security risk — a fascinating clash between AI safety principles and military readiness.</span>
-      <span class="ko">국방부는 앤트로픽의 '공급망 리스크' 지정 소송에 대한 반박서를 제출하며, 앤트로픽이 레드라인이 넘어갔다고 판단할 경우 "전투 작전 중 기술을 비활성화하거나 모델 동작을 변경"할 수 있다고 주장했습니다. 국방부는 이를 국가 안보에 용납할 수 없는 위험으로 판단했으며, AI 안전 원칙과 군사적 준비태세 간의 흥미로운 충돌을 보여줍니다.</span>
-    </p>
-  </div>
+<div class="story">
+  <h3>
+    <span class="en">Micron Revenue Nearly Triples — AI Memory Demand Explodes</span>
+    <span class="ko">마이크론 매출 3배 가까이 성장 — AI 메모리 수요 폭발</span>
+  </h3>
+  <div class="source">CNBC</div>
+  <p>
+    <span class="en">Micron posted blowout Q2 results: revenue hit $23.86B (nearly 3x YoY from $8.05B), beating estimates by $3.8B. EPS came in at $12.20 vs $9.31 expected. The company guided next quarter to a staggering $33.5B in revenue — over 200% growth — driven by insatiable AI memory demand from Nvidia's GPU buildout. Micron is the only top-10 US tech stock that's up this year.</span>
+    <span class="ko">마이크론이 2분기 매출 $238.6억(전년 $80.5억 대비 약 3배)으로 예상치를 크게 상회했다. 다음 분기 가이던스는 $335억으로 200%+ 성장 전망이다. 엔비디아 GPU의 AI 메모리 수요가 폭발적이다.</span>
+  </p>
+  <a href="https://www.cnbc.com/2026/03/18/micron-mu-q2-earnings-report-2026.html">Read more →</a>
 </div>
 
 <!-- WILD CARD -->
-<div class="section">
-  <div class="section-title wild"><span class="en">🃏 Wild Card</span><span class="ko">🃏 와일드 카드</span></div>
+<h2>
+  <span class="en">🃏 Wild Card</span>
+  <span class="ko">🃏 와일드 카드</span>
+</h2>
 
-  <div class="card">
-    <h3><a href="https://trustedsec.com/blog/full-disclosure-a-third-and-fourth-azure-sign-in-log-bypass-found" target="_blank">
-      <span class="en">Researcher Reveals 4th Azure Sign-In Log Bypass — Invisible Logins, Full Tokens</span>
-      <span class="ko">연구원, Azure 로그인 로그 우회 4건 공개 — 보이지 않는 로그인과 전체 토큰 탈취</span>
-    </a></h3>
-    <div class="source">TrustedSec</div>
-    <p class="summary">
-      <span class="en">Security researcher Nyxgeek disclosed a third and fourth Azure Entra ID sign-in log bypass. By sending specially crafted login requests, attackers could retrieve fully functioning tokens without any activity appearing in admin logs — the critical logging that organizations worldwide rely on to detect intrusions. The bugs have been patched, but the pattern of recurring bypasses raises serious questions about Microsoft's authentication infrastructure.</span>
-      <span class="ko">보안 연구원 Nyxgeek이 Azure Entra ID 로그인 로그 우회 3번째와 4번째 방법을 공개했습니다. 특수하게 조작된 로그인 요청을 보내 관리자 로그에 활동이 표시되지 않으면서 완전한 토큰을 획득할 수 있었습니다. 전 세계 조직이 침입 탐지에 의존하는 핵심 로그가 우회된 것입니다. 버그는 패치되었지만, 반복되는 우회 패턴은 마이크로소프트 인증 인프라에 심각한 의문을 제기합니다.</span>
-    </p>
-  </div>
+<div class="story">
+  <h3>
+    <span class="en">Google's New Android Sideloading: Mandatory 24-Hour Wait + Dev Mode</span>
+    <span class="ko">구글, 안드로이드 사이드로딩에 24시간 대기 + 개발자 모드 의무화</span>
+  </h3>
+  <div class="source">The Verge · Ars Technica</div>
+  <p>
+    <span class="en">Google detailed its new "advanced flow" for sideloading unverified Android apps: enable developer mode, confirm you're not being coached by a scammer, restart your phone, wait 24 hours, then biometric-verify. It's a one-time process but sparked massive backlash — over 1,100 comments on Hacker News — with users arguing it undermines the openness that defines Android.</span>
+    <span class="ko">구글이 미인증 앱 사이드로딩에 개발자 모드 활성화, 24시간 대기, 생체인증 등의 새 절차를 발표했다. 일회성이지만 안드로이드의 개방성을 해친다는 거센 반발이 일었다 — 해커뉴스에서 1,100개 이상의 댓글이 달렸다.</span>
+  </p>
+  <a href="https://www.theverge.com/tech/897420/android-sideloading-unverified-developers-process">Read more →</a>
 </div>
 
-<footer>
-  <span class="en">Curated by Totoro 🌳 • Sources verified as of 9:00 AM MST</span>
-  <span class="ko">토토로 🌳 큐레이션 • 오전 9시(MST) 기준 출처 확인됨</span>
-</footer>
+<div class="footer">
+  <span class="en">Curated by Totoro 🌳 · Sources: Reuters, CNBC, The Verge, Meta, Ars Technica</span>
+  <span class="ko">토토로 🌳 가 정리함 · 출처: Reuters, CNBC, The Verge, Meta, Ars Technica</span>
+</div>
 
 <script>
 let isKorean = false;
