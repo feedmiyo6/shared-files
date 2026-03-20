@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Daily Tech Briefing — Mar 20, 2026</title>
+<style>
+  :root {
+    --bg: #0d1117; --card: #161b22; --border: #30363d;
+    --text: #e6edf3; --muted: #8b949e; --accent: #58a6ff;
+    --green: #3fb950; --purple: #bc8cff; --orange: #d29922; --pink: #f778ba;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; padding: 16px; max-width: 720px; margin: 0 auto; }
+  header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
+  h1 { font-size: 1.4rem; }
+  .date { color: var(--muted); font-size: 0.85rem; }
+  .lang-toggle { background: var(--card); border: 1px solid var(--border); color: var(--accent); padding: 6px 14px; border-radius: 20px; cursor: pointer; font-size: 0.85rem; white-space: nowrap; }
+  .section { margin-bottom: 28px; }
+  .section-title { font-size: 1.1rem; font-weight: 700; margin-bottom: 12px; padding-left: 8px; border-left: 3px solid var(--accent); }
+  .section-title.ai { border-color: var(--accent); }
+  .section-title.markets { border-color: var(--green); }
+  .section-title.semi { border-color: var(--purple); }
+  .section-title.wild { border-color: var(--orange); }
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; margin-bottom: 12px; }
+  .card h3 { font-size: 0.95rem; margin-bottom: 4px; }
+  .card h3 a { color: var(--accent); text-decoration: none; }
+  .card h3 a:hover { text-decoration: underline; }
+  .source { color: var(--muted); font-size: 0.75rem; margin-bottom: 6px; }
+  .summary { font-size: 0.88rem; color: #c9d1d9; }
+  footer { text-align: center; color: var(--muted); font-size: 0.75rem; margin-top: 32px; padding-top: 16px; border-top: 1px solid var(--border); }
+  .ko { display: none; }
+  .ko.show { display: inline !important; }
+  .en.hide { display: none !important; }
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <h1>🌳 <span class="en">Daily Tech Briefing</span><span class="ko">오늘의 테크 브리핑</span></h1>
+    <div class="date">Friday, March 20, 2026</div>
+  </div>
+  <button class="lang-toggle" onclick="toggleLang()">한국어</button>
+</header>
+
+<!-- AI & TECH -->
+<div class="section">
+  <div class="section-title ai"><span class="en">🤖 AI & Tech</span><span class="ko">🤖 AI & 테크</span></div>
+
+  <div class="card">
+    <h3><a href="https://confer.to/blog/2026/03/encrypted-meta/" target="_blank">
+      <span class="en">Signal Creator Partners with Meta to Encrypt Meta AI</span>
+      <span class="ko">시그널 창시자, 메타 AI 암호화 위해 메타와 파트너십</span>
+    </a></h3>
+    <div class="source">Confer / The Verge</div>
+    <p class="summary">
+      <span class="en">Moxie Marlinspike, the creator of Signal, announced that his encrypted AI chatbot Confer will integrate its privacy technology to underpin Meta AI. Ten years after bringing end-to-end encryption to WhatsApp for billions of users, Marlinspike is now doing the same for AI chat — ensuring conversations with Meta AI stay private from employees, hackers, and governments alike.</span>
+      <span class="ko">시그널 창시자 목시 말린스파이크가 자신의 암호화 AI 챗봇 Confer의 프라이버시 기술을 메타 AI에 통합한다고 발표했습니다. 10년 전 왓츠앱에 종단간 암호화를 도입한 것처럼, 이번에는 AI 채팅에 같은 기술을 적용하여 메타 AI와의 대화가 직원, 해커, 정부로부터 보호될 수 있도록 합니다.</span>
+    </p>
+  </div>
+
+  <div class="card">
+    <h3><a href="https://arstechnica.com/gadgets/2026/03/google-details-new-24-hour-process-to-sideload-unverified-android-apps/" target="_blank">
+      <span class="en">Google Unveils 24-Hour Wait to Sideload Unverified Android Apps</span>
+      <span class="ko">구글, 미인증 앱 사이드로딩에 24시간 대기 절차 도입</span>
+    </a></h3>
+    <div class="source">Ars Technica</div>
+    <p class="summary">
+      <span class="en">Starting September 2026, Android will restrict sideloading to verified developers only. Power users can bypass this via a new "advanced flow" buried in developer settings — requiring a device restart, a 24-hour cooldown, and multiple confirmation screens. Google says the delay combats high-pressure social engineering attacks that trick victims into installing malware immediately. The topic exploded on Hacker News with over 1,100 comments.</span>
+      <span class="ko">2026년 9월부터 안드로이드는 인증된 개발자의 앱만 사이드로딩을 허용합니다. 고급 사용자는 개발자 설정에 숨겨진 "고급 흐름"을 통해 우회할 수 있으며, 기기 재시작과 24시간 대기, 여러 확인 화면이 필요합니다. 구글은 이 지연이 피해자를 즉시 멀웨어 설치로 유도하는 사회공학 공격에 대응하기 위한 것이라고 밝혔습니다.</span>
+    </p>
+  </div>
+
+  <div class="card">
+    <h3><a href="https://about.fb.com/news/2026/03/boosting-your-support-and-safety-on-metas-apps-with-ai/" target="_blank">
+      <span class="en">Meta to Replace Human Content Moderators with AI Systems</span>
+      <span class="ko">메타, 콘텐츠 관리자를 AI 시스템으로 대체 예정</span>
+    </a></h3>
+    <div class="source">The Verge / Meta</div>
+    <p class="summary">
+      <span class="en">Meta announced a broad rollout of its AI support assistant for Facebook and Instagram, saying it will "reduce reliance on third-party vendors" that employ human content moderators over the next few years. The AI will handle repetitive reviews of graphic content and rapidly evolving adversarial tactics like scams and illicit drug sales — areas where human moderators have faced PTSD risks.</span>
+      <span class="ko">메타가 페이스북과 인스타그램용 AI 지원 어시스턴트를 전면 도입하며, 향후 수년간 인간 콘텐츠 관리 외주 업체 의존도를 줄이겠다고 발표했습니다. AI는 그래픽 콘텐츠의 반복 검토와 사기, 불법 약물 판매 등 빠르게 변하는 적대적 전술에 대응할 예정입니다.</span>
+    </p>
+  </div>
+</div>
+
+<!-- MARKETS -->
+<div class="section">
+  <div class="section-title markets"><span class="en">📈 Markets</span><span class="ko">📈 시장</span></div>
+
+  <div class="card">
+    <h3><a href="https://www.forbes.com/sites/tylerroush/2026/03/20/super-micro-shares-plunge-25-after-co-founder-charged-in-25-billion-ai-chip-smuggling-plot/" target="_blank">
+      <span class="en">Super Micro Shares Plunge 25% After Co-Founder Charged in $2.5B Smuggling Plot</span>
+      <span class="ko">슈퍼마이크로 주가 25% 폭락 — 공동 창업자 25억 달러 AI칩 밀수 혐의</span>
+    </a></h3>
+    <div class="source">Forbes</div>
+    <p class="summary">
+      <span class="en">Super Micro Computer shares crashed 25% after a co-founder was charged in connection with an alleged $2.5 billion AI chip smuggling operation. The case highlights growing scrutiny over the semiconductor supply chain as export controls tighten. It's another blow for a company that has faced accounting and governance questions over the past year.</span>
+      <span class="ko">슈퍼마이크로컴퓨터의 공동 창업자가 25억 달러 규모의 AI 칩 밀수 혐의로 기소된 후 주가가 25% 폭락했습니다. 이 사건은 수출 규제가 강화되는 가운데 반도체 공급망에 대한 감시 강화를 보여줍니다. 지난 1년간 회계 및 거버넌스 문제를 겪은 회사에 또 다른 타격입니다.</span>
+    </p>
+  </div>
+</div>
+
+<!-- SEMICONDUCTORS -->
+<div class="section">
+  <div class="section-title semi"><span class="en">🔬 Semiconductors</span><span class="ko">🔬 반도체</span></div>
+
+  <div class="card">
+    <h3><a href="https://www.wsj.com/tech/samsung-to-invest-over-70-billion-in-bid-for-edge-in-ai-chips-race-cb337171" target="_blank">
+      <span class="en">Samsung Plans $73 Billion AI Chip Investment Blitz in 2026</span>
+      <span class="ko">삼성, 2026년 AI 칩에 73조원 투자 계획 발표</span>
+    </a></h3>
+    <div class="source">Wall Street Journal</div>
+    <p class="summary">
+      <span class="en">Samsung Electronics announced plans to spend over 110 trillion KRW (~$73B) on facilities and R&D in 2026 — a 22% increase year-over-year. Co-CEO Jun Young-hyun says surging demand for agentic AI is driving orders, with funds funneled toward HBM production, advanced robotics, and next-gen memory to challenge SK Hynix's dominance as Nvidia's top memory supplier.</span>
+      <span class="ko">삼성전자가 2026년 시설 및 R&D에 110조 원 이상(약 730억 달러)을 투자한다고 발표했습니다. 전년 대비 22% 증가한 규모입니다. 전영현 대표이사는 에이전틱 AI 수요 급증이 주문을 견인하고 있으며, HBM 생산, 첨단 로보틱스, 차세대 메모리에 자금을 집중하여 엔비디아 메모리 주요 공급업체인 SK하이닉스에 도전할 계획이라고 밝혔습니다.</span>
+    </p>
+  </div>
+
+  <div class="card">
+    <h3><a href="https://www.courtlistener.com/docket/72379655/96/anthropic-pbc-v-us-department-of-war/" target="_blank">
+      <span class="en">Pentagon Rebuts Anthropic Lawsuit Over "Supply Chain Risk" Designation</span>
+      <span class="ko">국방부, 앤트로픽 '공급망 리스크' 지정 소송에 반박</span>
+    </a></h3>
+    <div class="source">The Verge / Court Filing</div>
+    <p class="summary">
+      <span class="en">The Department of Defense filed a rebuttal to Anthropic's lawsuit over its "supply chain risk" designation, arguing the AI company could theoretically "disable its technology or alter model behavior during ongoing warfighting operations" if it felt red lines were crossed. The Pentagon deemed this an unacceptable national security risk — a fascinating clash between AI safety principles and military readiness.</span>
+      <span class="ko">국방부는 앤트로픽의 '공급망 리스크' 지정 소송에 대한 반박서를 제출하며, 앤트로픽이 레드라인이 넘어갔다고 판단할 경우 "전투 작전 중 기술을 비활성화하거나 모델 동작을 변경"할 수 있다고 주장했습니다. 국방부는 이를 국가 안보에 용납할 수 없는 위험으로 판단했으며, AI 안전 원칙과 군사적 준비태세 간의 흥미로운 충돌을 보여줍니다.</span>
+    </p>
+  </div>
+</div>
+
+<!-- WILD CARD -->
+<div class="section">
+  <div class="section-title wild"><span class="en">🃏 Wild Card</span><span class="ko">🃏 와일드 카드</span></div>
+
+  <div class="card">
+    <h3><a href="https://trustedsec.com/blog/full-disclosure-a-third-and-fourth-azure-sign-in-log-bypass-found" target="_blank">
+      <span class="en">Researcher Reveals 4th Azure Sign-In Log Bypass — Invisible Logins, Full Tokens</span>
+      <span class="ko">연구원, Azure 로그인 로그 우회 4건 공개 — 보이지 않는 로그인과 전체 토큰 탈취</span>
+    </a></h3>
+    <div class="source">TrustedSec</div>
+    <p class="summary">
+      <span class="en">Security researcher Nyxgeek disclosed a third and fourth Azure Entra ID sign-in log bypass. By sending specially crafted login requests, attackers could retrieve fully functioning tokens without any activity appearing in admin logs — the critical logging that organizations worldwide rely on to detect intrusions. The bugs have been patched, but the pattern of recurring bypasses raises serious questions about Microsoft's authentication infrastructure.</span>
+      <span class="ko">보안 연구원 Nyxgeek이 Azure Entra ID 로그인 로그 우회 3번째와 4번째 방법을 공개했습니다. 특수하게 조작된 로그인 요청을 보내 관리자 로그에 활동이 표시되지 않으면서 완전한 토큰을 획득할 수 있었습니다. 전 세계 조직이 침입 탐지에 의존하는 핵심 로그가 우회된 것입니다. 버그는 패치되었지만, 반복되는 우회 패턴은 마이크로소프트 인증 인프라에 심각한 의문을 제기합니다.</span>
+    </p>
+  </div>
+</div>
+
+<footer>
+  <span class="en">Curated by Totoro 🌳 • Sources verified as of 9:00 AM MST</span>
+  <span class="ko">토토로 🌳 큐레이션 • 오전 9시(MST) 기준 출처 확인됨</span>
+</footer>
+
+<script>
+let isKorean = false;
+function toggleLang() {
+  isKorean = !isKorean;
+  document.querySelectorAll('.en').forEach(el => el.classList.toggle('hide', isKorean));
+  document.querySelectorAll('.ko').forEach(el => el.classList.toggle('show', isKorean));
+  document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+}
+</script>
+</body>
+</html>
