@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 25 Practice: Ready/Valid Handshake | Digital Design Study</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    background: linear-gradient(135deg, #fefae0 0%, #faedcd 100%);
+    color: #3d405b;
+    line-height: 1.8;
+    padding: 24px;
+    max-width: 920px;
+    margin: 0 auto;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+h1 {
+    color: #5d4037;
+    border-bottom: 3px solid #c4a77d;
+    padding-bottom: 12px;
+    margin: 24px 0 16px;
+    font-size: 2em;
+}
+h2 {
+    color: #588157;
+    border-bottom: 2px solid #a3b18a;
+    padding-bottom: 8px;
+    margin: 32px 0 16px;
+}
+h3 { color: #5d4037; margin: 20px 0 12px; }
+p { margin: 12px 0; }
+ul, ol { margin: 12px 0 12px 24px; }
+li { margin: 6px 0; }
+pre {
+    background: #2d3436;
+    padding: 24px;
+    border-radius: 12px;
+    margin: 24px 0;
+    border: 3px solid #a3b18a;
+    overflow-x: auto;
+    font-size: 15px;
+    line-height: 1.6;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+    color: #f8f8f2;
+}
+code {
+    background: #e9f5db;
+    color: #3d405b;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+}
+pre code { background: none; color: inherit; padding: 0; }
+.keyword { color: #ff79c6; font-weight: 600; }
+.type { color: #8be9fd; }
+.signal { color: #50fa7b; }
+.number { color: #ffb86c; }
+.comment { color: #6272a4; font-style: italic; }
+.string { color: #f1fa8c; }
+.concept-box {
+    background: #fff8f0;
+    border: 2px solid #c4a77d;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    color: #3d405b;
+}
+.concept-box h3 { color: #5d4037; margin-bottom: 12px; }
+.warning-box {
+    background: #fff8f0;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    border-left: 4px solid #ef4444;
+    color: #3d405b;
+}
+.warning-box h3 { color: #c53030; margin-bottom: 12px; }
+.tip-box {
+    background: #fff8f0;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    border-left: 4px solid #588157;
+    color: #3d405b;
+}
+.hint-box {
+    background: #fff8f0;
+    border-radius: 8px;
+    padding: 15px;
+    margin: 15px 0;
+    border-left: 4px solid #5d4037;
+    color: #3d405b;
+}
+.day-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, #588157, #3a5a40);
+    color: #fff;
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+.nav-links {
+    display: flex;
+    gap: 12px;
+    margin: 20px 0;
+    flex-wrap: wrap;
+}
+.nav-links a {
+    background: linear-gradient(135deg, #588157, #3a5a40);
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14px;
+}
+.nav-links a:hover { opacity: 0.9; }
+.lang-toggle {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    background: #588157;
+    border: none;
+    border-radius: 24px;
+    padding: 10px 20px;
+    cursor: pointer;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    z-index: 1000;
+}
+.lang-toggle:hover { background: #3a5a40; }
+.ko { display: none; }
+.exercise {
+    background: #fff;
+    border: 2px solid #a3b18a;
+    border-radius: 12px;
+    padding: 24px;
+    margin: 24px 0;
+}
+.exercise h3 {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.difficulty {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #fff;
+}
+.difficulty.easy { background: #10b981; }
+.difficulty.medium { background: #f59e0b; }
+.difficulty.hard { background: #ef4444; }
+details {
+    margin: 12px 0;
+}
+details summary {
+    cursor: pointer;
+    color: #588157;
+    font-weight: 600;
+    padding: 8px 0;
+}
+details summary:hover { color: #3a5a40; }
+.comparison-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+.comparison-table th {
+    background: #588157;
+    color: white;
+    padding: 12px;
+    text-align: left;
+}
+.comparison-table td {
+    background: #fff;
+    border: 1px solid #c4a77d;
+    padding: 12px;
+    color: #3d405b;
+}
+.comparison-table tr:nth-child(even) td { background: #fff8f0; }
+@media (max-width: 768px) {
+    body { padding: 16px; }
+    h1 { font-size: 1.8em; }
+    pre { font-size: 14px; padding: 16px; }
+    .lang-toggle { padding: 8px 16px; font-size: 13px; }
+}
+</style>
+</head>
+<body>
+
+<button class="lang-toggle" onclick="toggleLang()">한국어</button>
+
+<span class="day-badge">💻 Day 25 Practice</span>
+
+<h1>
+<span class="en">Ready/Valid Handshake — Practice Lab</span>
+<span class="ko" style="display:none;">Ready/Valid 핸드셰이크 — 실습</span>
+</h1>
+
+<div class="nav-links">
+    <a href="day-25-lesson.html">📖 Lesson</a>
+    <a href="day-25-quiz.html">📝 Quiz</a>
+    <a href="https://www.edaplayground.com" target="_blank">🔧 EDA Playground</a>
+</div>
+
+<div class="tip-box">
+<p class="en">💡 <strong>How to use:</strong> Copy each exercise into <a href="https://www.edaplayground.com" target="_blank">EDA Playground</a>. Select <strong>SystemVerilog</strong> and a simulator like <strong>Icarus Verilog</strong> or <strong>Synopsys VCS</strong>. Fill in the TODO sections and run!</p>
+<p class="ko" style="display:none;">💡 <strong>사용 방법:</strong> 각 연습을 <a href="https://www.edaplayground.com" target="_blank">EDA Playground</a>에 복사하세요. <strong>SystemVerilog</strong>와 <strong>Icarus Verilog</strong> 또는 <strong>Synopsys VCS</strong> 시뮬레이터를 선택하세요. TODO 섹션을 채우고 실행하세요!</p>
+</div>
+
+<!-- Exercise 1 -->
+<div class="exercise">
+<h3><span class="difficulty easy">EASY</span>
+<span class="en">Exercise 1: Basic Ready/Valid Source</span>
+<span class="ko" style="display:none;">연습 1: 기본 Ready/Valid 소스</span>
+</h3>
+
+<p class="en">Implement a simple source that sends values 0, 1, 2, 3, ... using the ready/valid protocol. The source increments its counter only after each successful transfer.</p>
+<p class="ko" style="display:none;">ready/valid 프로토콜을 사용하여 0, 1, 2, 3, ...을 보내는 간단한 소스를 구현하세요. 소스는 각 성공적인 전송 후에만 카운터를 증가시킵니다.</p>
+
+<pre><code><span class="keyword">module</span> <span class="type">counting_source</span> #(
+    <span class="keyword">parameter</span> <span class="type">WIDTH</span> = <span class="number">8</span>
+)(
+    <span class="keyword">input</span>  <span class="type">logic</span>             <span class="signal">clk</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span>             <span class="signal">rst_n</span>,
+    <span class="keyword">output</span> <span class="type">logic</span>             <span class="signal">out_valid</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span>             <span class="signal">out_ready</span>,
+    <span class="keyword">output</span> <span class="type">logic</span> [<span class="number">WIDTH-1</span>:<span class="number">0</span>] <span class="signal">out_data</span>
+);
+
+    <span class="type">logic</span> [<span class="number">WIDTH-1</span>:<span class="number">0</span>] <span class="signal">counter</span>;
+
+    <span class="comment">// TODO: Implement the counting source</span>
+    <span class="comment">// 1. out_valid should always be high (we always have data)</span>
+    <span class="comment">// 2. out_data should output the current counter value</span>
+    <span class="comment">// 3. Increment counter ONLY on successful transfer</span>
+    <span class="comment">//    (when both valid AND ready are high)</span>
+
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span> <span class="keyword">or</span> <span class="keyword">negedge</span> <span class="signal">rst_n</span>) <span class="keyword">begin</span>
+        <span class="keyword">if</span> (!<span class="signal">rst_n</span>) <span class="keyword">begin</span>
+            <span class="comment">// TODO: Reset counter</span>
+        <span class="keyword">end</span> <span class="keyword">else</span> <span class="keyword">begin</span>
+            <span class="comment">// TODO: Increment on transfer</span>
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+
+    <span class="comment">// TODO: Drive out_valid and out_data</span>
+
+<span class="keyword">endmodule</span>
+
+<span class="comment">// ─── Testbench ───</span>
+<span class="keyword">module</span> <span class="type">tb_counting_source</span>;
+    <span class="type">logic</span> <span class="signal">clk</span>, <span class="signal">rst_n</span>;
+    <span class="type">logic</span> <span class="signal">out_valid</span>, <span class="signal">out_ready</span>;
+    <span class="type">logic</span> [<span class="number">7</span>:<span class="number">0</span>] <span class="signal">out_data</span>;
+
+    <span class="type">counting_source</span> <span class="signal">dut</span> (.*);
+
+    <span class="keyword">initial</span> <span class="signal">clk</span> = <span class="number">0</span>;
+    <span class="keyword">always</span> #<span class="number">5</span> <span class="signal">clk</span> = ~<span class="signal">clk</span>;
+
+    <span class="keyword">initial</span> <span class="keyword">begin</span>
+        <span class="signal">rst_n</span> = <span class="number">0</span>; <span class="signal">out_ready</span> = <span class="number">0</span>;
+        #<span class="number">20</span> <span class="signal">rst_n</span> = <span class="number">1</span>;
+
+        <span class="comment">// Test 1: Ready always high — should count 0,1,2,3...</span>
+        <span class="signal">out_ready</span> = <span class="number">1</span>;
+        <span class="keyword">repeat</span>(<span class="number">4</span>) @(<span class="keyword">posedge</span> <span class="signal">clk</span>);
+
+        <span class="comment">// Test 2: Deassert ready — counter should STALL</span>
+        <span class="signal">out_ready</span> = <span class="number">0</span>;
+        <span class="keyword">repeat</span>(<span class="number">3</span>) @(<span class="keyword">posedge</span> <span class="signal">clk</span>);
+
+        <span class="comment">// Test 3: Reassert ready — should continue from where it stopped</span>
+        <span class="signal">out_ready</span> = <span class="number">1</span>;
+        <span class="keyword">repeat</span>(<span class="number">4</span>) @(<span class="keyword">posedge</span> <span class="signal">clk</span>);
+
+        $<span class="signal">display</span>(<span class="string">"Test complete!"</span>);
+        $<span class="signal">finish</span>;
+    <span class="keyword">end</span>
+
+    <span class="keyword">always</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span>) <span class="keyword">begin</span>
+        <span class="keyword">if</span> (<span class="signal">rst_n</span>)
+            $<span class="signal">display</span>(<span class="string">"[%0t] valid=%b ready=%b data=%0d %s"</span>,
+                $<span class="signal">time</span>, <span class="signal">out_valid</span>, <span class="signal">out_ready</span>, <span class="signal">out_data</span>,
+                (<span class="signal">out_valid</span> & <span class="signal">out_ready</span>) ? <span class="string">"&lt;-- TRANSFER"</span> : <span class="string">""</span>);
+    <span class="keyword">end</span>
+<span class="keyword">endmodule</span></code></pre>
+
+<div class="hint-box">
+<p class="en"><strong>🔑 Hint:</strong> The transfer condition is simply <code>out_valid & out_ready</code>. Since this source always has data, <code>out_valid</code> can be driven as a constant <code>1'b1</code> after reset.</p>
+<p class="ko" style="display:none;"><strong>🔑 힌트:</strong> 전송 조건은 간단히 <code>out_valid & out_ready</code>입니다. 이 소스는 항상 데이터가 있으므로 리셋 후 <code>out_valid</code>를 상수 <code>1'b1</code>로 구동할 수 있습니다.</p>
+</div>
+
+<details>
+<summary><span class="en">📋 Solution</span><span class="ko" style="display:none;">📋 솔루션</span></summary>
+<pre><code><span class="keyword">assign</span> <span class="signal">out_valid</span> = <span class="signal">rst_n</span>;  <span class="comment">// Always valid after reset</span>
+<span class="keyword">assign</span> <span class="signal">out_data</span>  = <span class="signal">counter</span>;
+
+<span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span> <span class="keyword">or</span> <span class="keyword">negedge</span> <span class="signal">rst_n</span>) <span class="keyword">begin</span>
+    <span class="keyword">if</span> (!<span class="signal">rst_n</span>) <span class="keyword">begin</span>
+        <span class="signal">counter</span> <= <span class="string">'0</span>;
+    <span class="keyword">end</span> <span class="keyword">else if</span> (<span class="signal">out_valid</span> & <span class="signal">out_ready</span>) <span class="keyword">begin</span>
+        <span class="signal">counter</span> <= <span class="signal">counter</span> + <span class="number">1</span>;
+    <span class="keyword">end</span>
+<span class="keyword">end</span></code></pre>
+</details>
+</div>
+
+<!-- Exercise 2 -->
+<div class="exercise">
+<h3><span class="difficulty medium">MEDIUM</span>
+<span class="en">Exercise 2: Ready/Valid Pipeline Stage</span>
+<span class="ko" style="display:none;">연습 2: Ready/Valid 파이프라인 스테이지</span>
+</h3>
+
+<p class="en">Build a pipeline stage that doubles its input data. It accepts data via ready/valid on the input side and presents the doubled result via ready/valid on the output side. This stage must properly propagate backpressure.</p>
+<p class="ko" style="display:none;">입력 데이터를 두 배로 만드는 파이프라인 스테이지를 구현하세요. 입력 측에서 ready/valid로 데이터를 받고 출력 측에서 ready/valid로 두 배 결과를 표시합니다. 이 스테이지는 백프레셔를 올바르게 전파해야 합니다.</p>
+
+<pre><code><span class="keyword">module</span> <span class="type">double_stage</span> #(
+    <span class="keyword">parameter</span> <span class="type">WIDTH</span> = <span class="number">8</span>
+)(
+    <span class="keyword">input</span>  <span class="type">logic</span>             <span class="signal">clk</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span>             <span class="signal">rst_n</span>,
+
+    <span class="comment">// Input interface (we are the SINK)</span>
+    <span class="keyword">input</span>  <span class="type">logic</span>             <span class="signal">in_valid</span>,
+    <span class="keyword">output</span> <span class="type">logic</span>             <span class="signal">in_ready</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span> [<span class="number">WIDTH-1</span>:<span class="number">0</span>] <span class="signal">in_data</span>,
+
+    <span class="comment">// Output interface (we are the SOURCE)</span>
+    <span class="keyword">output</span> <span class="type">logic</span>             <span class="signal">out_valid</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span>             <span class="signal">out_ready</span>,
+    <span class="keyword">output</span> <span class="type">logic</span> [<span class="number">WIDTH-1</span>:<span class="number">0</span>] <span class="signal">out_data</span>
+);
+
+    <span class="comment">// TODO: Implement the pipeline stage</span>
+    <span class="comment">// Requirements:</span>
+    <span class="comment">// 1. in_ready = out_ready | !out_valid</span>
+    <span class="comment">// 2. When in_ready, capture in_data, double it, store in out_data</span>
+    <span class="comment">// 3. out_valid tracks whether we have valid data stored</span>
+    <span class="comment">// 4. The "doubling" is: out_data = in_data << 1 (left shift by 1)</span>
+
+<span class="keyword">endmodule</span>
+
+<span class="comment">// ─── Testbench ───</span>
+<span class="keyword">module</span> <span class="type">tb_double_stage</span>;
+    <span class="type">logic</span> <span class="signal">clk</span>, <span class="signal">rst_n</span>;
+    <span class="type">logic</span> <span class="signal">in_valid</span>, <span class="signal">in_ready</span>;
+    <span class="type">logic</span> [<span class="number">7</span>:<span class="number">0</span>] <span class="signal">in_data</span>;
+    <span class="type">logic</span> <span class="signal">out_valid</span>, <span class="signal">out_ready</span>;
+    <span class="type">logic</span> [<span class="number">7</span>:<span class="number">0</span>] <span class="signal">out_data</span>;
+
+    <span class="type">double_stage</span> <span class="signal">dut</span> (.*);
+
+    <span class="keyword">initial</span> <span class="signal">clk</span> = <span class="number">0</span>;
+    <span class="keyword">always</span> #<span class="number">5</span> <span class="signal">clk</span> = ~<span class="signal">clk</span>;
+
+    <span class="keyword">task</span> <span class="type">send</span>(<span class="keyword">input</span> [<span class="number">7</span>:<span class="number">0</span>] <span class="signal">val</span>);
+        <span class="signal">in_valid</span> = <span class="number">1</span>; <span class="signal">in_data</span> = <span class="signal">val</span>;
+        @(<span class="keyword">posedge</span> <span class="signal">clk</span>);
+        <span class="keyword">while</span> (!<span class="signal">in_ready</span>) @(<span class="keyword">posedge</span> <span class="signal">clk</span>);
+        <span class="signal">in_valid</span> = <span class="number">0</span>;
+    <span class="keyword">endtask</span>
+
+    <span class="keyword">initial</span> <span class="keyword">begin</span>
+        <span class="signal">rst_n</span> = <span class="number">0</span>; <span class="signal">in_valid</span> = <span class="number">0</span>; <span class="signal">out_ready</span> = <span class="number">1</span>; <span class="signal">in_data</span> = <span class="number">0</span>;
+        #<span class="number">20</span> <span class="signal">rst_n</span> = <span class="number">1</span>;
+
+        <span class="comment">// Send values and check doubled output</span>
+        <span class="signal">send</span>(<span class="number">5</span>);   <span class="comment">// expect out_data = 10</span>
+        <span class="signal">send</span>(<span class="number">10</span>);  <span class="comment">// expect out_data = 20</span>
+        <span class="signal">send</span>(<span class="number">42</span>);  <span class="comment">// expect out_data = 84</span>
+
+        <span class="comment">// Test backpressure: stall downstream</span>
+        <span class="signal">out_ready</span> = <span class="number">0</span>;
+        <span class="signal">send</span>(<span class="number">7</span>);
+        #<span class="number">30</span>;
+        $<span class="signal">display</span>(<span class="string">"Stalled: out_valid=%b out_data=%0d"</span>, <span class="signal">out_valid</span>, <span class="signal">out_data</span>);
+        <span class="signal">out_ready</span> = <span class="number">1</span>;
+        #<span class="number">20</span>;
+
+        $<span class="signal">display</span>(<span class="string">"Test complete!"</span>);
+        $<span class="signal">finish</span>;
+    <span class="keyword">end</span>
+
+    <span class="keyword">always</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span>) <span class="keyword">begin</span>
+        <span class="keyword">if</span> (<span class="signal">rst_n</span> && <span class="signal">out_valid</span> && <span class="signal">out_ready</span>)
+            $<span class="signal">display</span>(<span class="string">"[%0t] OUTPUT: %0d (doubled)"</span>, $<span class="signal">time</span>, <span class="signal">out_data</span>);
+    <span class="keyword">end</span>
+<span class="keyword">endmodule</span></code></pre>
+
+<div class="hint-box">
+<p class="en"><strong>🔑 Hint:</strong> The key expression is <code>in_ready = out_ready | !out_valid</code>. When <code>in_ready</code> is true and <code>in_valid</code> is true, latch the input, double it (<code>in_data << 1</code>), and set <code>out_valid</code>.</p>
+<p class="ko" style="display:none;"><strong>🔑 힌트:</strong> 핵심 표현식은 <code>in_ready = out_ready | !out_valid</code>입니다. <code>in_ready</code>가 true이고 <code>in_valid</code>가 true이면, 입력을 래치하고 두 배로 만들어 (<code>in_data << 1</code>) <code>out_valid</code>를 설정하세요.</p>
+</div>
+
+<details>
+<summary><span class="en">📋 Solution</span><span class="ko" style="display:none;">📋 솔루션</span></summary>
+<pre><code><span class="keyword">assign</span> <span class="signal">in_ready</span> = <span class="signal">out_ready</span> | !<span class="signal">out_valid</span>;
+
+<span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span> <span class="keyword">or</span> <span class="keyword">negedge</span> <span class="signal">rst_n</span>) <span class="keyword">begin</span>
+    <span class="keyword">if</span> (!<span class="signal">rst_n</span>) <span class="keyword">begin</span>
+        <span class="signal">out_valid</span> <= <span class="number">1'b0</span>;
+        <span class="signal">out_data</span>  <= <span class="string">'0</span>;
+    <span class="keyword">end</span> <span class="keyword">else if</span> (<span class="signal">in_ready</span>) <span class="keyword">begin</span>
+        <span class="signal">out_valid</span> <= <span class="signal">in_valid</span>;
+        <span class="signal">out_data</span>  <= <span class="signal">in_data</span> << <span class="number">1</span>;  <span class="comment">// Double!</span>
+    <span class="keyword">end</span>
+<span class="keyword">end</span></code></pre>
+</details>
+</div>
+
+<!-- Exercise 3 -->
+<div class="exercise">
+<h3><span class="difficulty hard">HARD</span>
+<span class="en">Exercise 3: Skid Buffer Implementation</span>
+<span class="ko" style="display:none;">연습 3: 스키드 버퍼 구현</span>
+</h3>
+
+<p class="en">Implement a full skid buffer. This is the most important flow-control building block in real SoC design. The key insight: <code>in_ready</code> must NOT depend combinationally on <code>out_ready</code>.</p>
+<p class="ko" style="display:none;">완전한 스키드 버퍼를 구현하세요. 이것은 실제 SoC 설계에서 가장 중요한 흐름 제어 빌딩 블록입니다. 핵심 통찰: <code>in_ready</code>는 조합적으로 <code>out_ready</code>에 의존하면 안 됩니다.</p>
+
+<pre><code><span class="keyword">module</span> <span class="type">skid_buffer</span> #(
+    <span class="keyword">parameter</span> <span class="type">WIDTH</span> = <span class="number">8</span>
+)(
+    <span class="keyword">input</span>  <span class="type">logic</span>             <span class="signal">clk</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span>             <span class="signal">rst_n</span>,
+
+    <span class="comment">// Input interface</span>
+    <span class="keyword">input</span>  <span class="type">logic</span>             <span class="signal">in_valid</span>,
+    <span class="keyword">output</span> <span class="type">logic</span>             <span class="signal">in_ready</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span> [<span class="number">WIDTH-1</span>:<span class="number">0</span>] <span class="signal">in_data</span>,
+
+    <span class="comment">// Output interface</span>
+    <span class="keyword">output</span> <span class="type">logic</span>             <span class="signal">out_valid</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span>             <span class="signal">out_ready</span>,
+    <span class="keyword">output</span> <span class="type">logic</span> [<span class="number">WIDTH-1</span>:<span class="number">0</span>] <span class="signal">out_data</span>
+);
+
+    <span class="comment">// Two registers: main (output) and skid (overflow)</span>
+    <span class="type">logic</span> [<span class="number">WIDTH-1</span>:<span class="number">0</span>] <span class="signal">main_data</span>, <span class="signal">skid_data</span>;
+    <span class="type">logic</span> <span class="signal">main_valid</span>, <span class="signal">skid_valid</span>;
+
+    <span class="comment">// TODO: Implement the skid buffer</span>
+    <span class="comment">// Key requirements:</span>
+    <span class="comment">// 1. in_ready = !skid_valid (no comb path to out_ready!)</span>
+    <span class="comment">// 2. out_valid = main_valid</span>
+    <span class="comment">// 3. out_data = main_data</span>
+    <span class="comment">// 4. When downstream accepts (out_ready | !main_valid):</span>
+    <span class="comment">//    - If skid has data → move skid to main</span>
+    <span class="comment">//    - Else if input has data → move input to main</span>
+    <span class="comment">//    - Else → main_valid = 0</span>
+    <span class="comment">// 5. When downstream stalled but input has data:</span>
+    <span class="comment">//    - Catch input in skid register</span>
+
+<span class="keyword">endmodule</span>
+
+<span class="comment">// ─── Testbench ───</span>
+<span class="keyword">module</span> <span class="type">tb_skid_buffer</span>;
+    <span class="type">logic</span> <span class="signal">clk</span>, <span class="signal">rst_n</span>;
+    <span class="type">logic</span> <span class="signal">in_valid</span>, <span class="signal">in_ready</span>;
+    <span class="type">logic</span> [<span class="number">7</span>:<span class="number">0</span>] <span class="signal">in_data</span>;
+    <span class="type">logic</span> <span class="signal">out_valid</span>, <span class="signal">out_ready</span>;
+    <span class="type">logic</span> [<span class="number">7</span>:<span class="number">0</span>] <span class="signal">out_data</span>;
+    <span class="type">int</span> <span class="signal">errors</span> = <span class="number">0</span>;
+
+    <span class="type">skid_buffer</span> <span class="signal">dut</span> (.*);
+
+    <span class="keyword">initial</span> <span class="signal">clk</span> = <span class="number">0</span>;
+    <span class="keyword">always</span> #<span class="number">5</span> <span class="signal">clk</span> = ~<span class="signal">clk</span>;
+
+    <span class="keyword">task</span> <span class="type">automatic</span> <span class="signal">check_output</span>(<span class="keyword">input</span> [<span class="number">7</span>:<span class="number">0</span>] <span class="signal">expected</span>);
+        <span class="keyword">if</span> (<span class="signal">out_valid</span> && <span class="signal">out_ready</span>) <span class="keyword">begin</span>
+            <span class="keyword">if</span> (<span class="signal">out_data</span> !== <span class="signal">expected</span>) <span class="keyword">begin</span>
+                $<span class="signal">display</span>(<span class="string">"ERROR: got %0d, expected %0d"</span>, <span class="signal">out_data</span>, <span class="signal">expected</span>);
+                <span class="signal">errors</span>++;
+            <span class="keyword">end</span> <span class="keyword">else</span>
+                $<span class="signal">display</span>(<span class="string">"OK: transferred %0d"</span>, <span class="signal">out_data</span>);
+        <span class="keyword">end</span>
+    <span class="keyword">endtask</span>
+
+    <span class="keyword">initial</span> <span class="keyword">begin</span>
+        <span class="signal">rst_n</span> = <span class="number">0</span>; <span class="signal">in_valid</span> = <span class="number">0</span>; <span class="signal">out_ready</span> = <span class="number">0</span>; <span class="signal">in_data</span> = <span class="number">0</span>;
+        #<span class="number">20</span> <span class="signal">rst_n</span> = <span class="number">1</span>;
+
+        <span class="comment">// Test 1: Continuous flow (both ready)</span>
+        $<span class="signal">display</span>(<span class="string">"\n--- Test 1: Continuous flow ---"</span>);
+        <span class="signal">out_ready</span> = <span class="number">1</span>;
+        <span class="keyword">for</span> (<span class="type">int</span> <span class="signal">i</span> = <span class="number">0</span>; <span class="signal">i</span> < <span class="number">5</span>; <span class="signal">i</span>++) <span class="keyword">begin</span>
+            <span class="signal">in_valid</span> = <span class="number">1</span>; <span class="signal">in_data</span> = <span class="signal">i</span> * <span class="number">10</span>;
+            @(<span class="keyword">posedge</span> <span class="signal">clk</span>);
+        <span class="keyword">end</span>
+        <span class="signal">in_valid</span> = <span class="number">0</span>;
+        <span class="keyword">repeat</span>(<span class="number">3</span>) @(<span class="keyword">posedge</span> <span class="signal">clk</span>);
+
+        <span class="comment">// Test 2: Downstream stalls then resumes</span>
+        $<span class="signal">display</span>(<span class="string">"\n--- Test 2: Backpressure test ---"</span>);
+        <span class="signal">out_ready</span> = <span class="number">0</span>;
+        <span class="signal">in_valid</span> = <span class="number">1</span>; <span class="signal">in_data</span> = <span class="number">8'hAA</span>;
+        @(<span class="keyword">posedge</span> <span class="signal">clk</span>);
+        <span class="signal">in_data</span> = <span class="number">8'hBB</span>;  <span class="comment">// This should go to skid</span>
+        @(<span class="keyword">posedge</span> <span class="signal">clk</span>);
+        <span class="signal">in_valid</span> = <span class="number">0</span>;
+        <span class="keyword">repeat</span>(<span class="number">2</span>) @(<span class="keyword">posedge</span> <span class="signal">clk</span>);
+
+        $<span class="signal">display</span>(<span class="string">"Stalled state: out_valid=%b in_ready=%b"</span>, <span class="signal">out_valid</span>, <span class="signal">in_ready</span>);
+
+        <span class="comment">// Release backpressure</span>
+        <span class="signal">out_ready</span> = <span class="number">1</span>;
+        <span class="keyword">repeat</span>(<span class="number">5</span>) @(<span class="keyword">posedge</span> <span class="signal">clk</span>);
+
+        <span class="keyword">if</span> (<span class="signal">errors</span> == <span class="number">0</span>) $<span class="signal">display</span>(<span class="string">"\n✅ All tests passed!"</span>);
+        <span class="keyword">else</span> $<span class="signal">display</span>(<span class="string">"\n❌ %0d errors found"</span>, <span class="signal">errors</span>);
+        $<span class="signal">finish</span>;
+    <span class="keyword">end</span>
+
+    <span class="keyword">always</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span>) <span class="keyword">begin</span>
+        <span class="keyword">if</span> (<span class="signal">rst_n</span>)
+            $<span class="signal">display</span>(<span class="string">"[%0t] in: v=%b r=%b d=%02h | out: v=%b r=%b d=%02h"</span>,
+                $<span class="signal">time</span>, <span class="signal">in_valid</span>, <span class="signal">in_ready</span>, <span class="signal">in_data</span>,
+                <span class="signal">out_valid</span>, <span class="signal">out_ready</span>, <span class="signal">out_data</span>);
+    <span class="keyword">end</span>
+<span class="keyword">endmodule</span></code></pre>
+
+<div class="hint-box">
+<p class="en"><strong>🔑 Hint:</strong> Think of two states: (1) downstream is accepting or main is empty → pull from skid first, then input. (2) downstream is stalled AND main is full → catch incoming data in the skid register. The critical insight: <code>in_ready = !skid_valid</code> — no combinational path from <code>out_ready</code>!</p>
+<p class="ko" style="display:none;"><strong>🔑 힌트:</strong> 두 가지 상태를 생각하세요: (1) 다운스트림이 수락하거나 메인이 비어있으면 → 스키드에서 먼저, 그다음 입력에서 가져옴. (2) 다운스트림이 멈추고 메인이 가득 차면 → 들어오는 데이터를 스키드 레지스터에 잡음. 핵심 통찰: <code>in_ready = !skid_valid</code> — <code>out_ready</code>에서 조합 경로 없음!</p>
+</div>
+
+<details>
+<summary><span class="en">📋 Solution</span><span class="ko" style="display:none;">📋 솔루션</span></summary>
+<pre><code><span class="keyword">assign</span> <span class="signal">in_ready</span>  = !<span class="signal">skid_valid</span>;
+<span class="keyword">assign</span> <span class="signal">out_valid</span> = <span class="signal">main_valid</span>;
+<span class="keyword">assign</span> <span class="signal">out_data</span>  = <span class="signal">main_data</span>;
+
+<span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span> <span class="keyword">or</span> <span class="keyword">negedge</span> <span class="signal">rst_n</span>) <span class="keyword">begin</span>
+    <span class="keyword">if</span> (!<span class="signal">rst_n</span>) <span class="keyword">begin</span>
+        <span class="signal">main_valid</span> <= <span class="number">1'b0</span>;
+        <span class="signal">skid_valid</span> <= <span class="number">1'b0</span>;
+        <span class="signal">main_data</span>  <= <span class="string">'0</span>;
+        <span class="signal">skid_data</span>  <= <span class="string">'0</span>;
+    <span class="keyword">end</span> <span class="keyword">else</span> <span class="keyword">begin</span>
+        <span class="keyword">if</span> (<span class="signal">out_ready</span> | !<span class="signal">main_valid</span>) <span class="keyword">begin</span>
+            <span class="keyword">if</span> (<span class="signal">skid_valid</span>) <span class="keyword">begin</span>
+                <span class="signal">main_data</span>  <= <span class="signal">skid_data</span>;
+                <span class="signal">main_valid</span> <= <span class="number">1'b1</span>;
+                <span class="signal">skid_valid</span> <= <span class="number">1'b0</span>;
+            <span class="keyword">end</span> <span class="keyword">else if</span> (<span class="signal">in_valid</span> && <span class="signal">in_ready</span>) <span class="keyword">begin</span>
+                <span class="signal">main_data</span>  <= <span class="signal">in_data</span>;
+                <span class="signal">main_valid</span> <= <span class="number">1'b1</span>;
+            <span class="keyword">end</span> <span class="keyword">else</span> <span class="keyword">begin</span>
+                <span class="signal">main_valid</span> <= <span class="number">1'b0</span>;
+            <span class="keyword">end</span>
+        <span class="keyword">end</span> <span class="keyword">else if</span> (<span class="signal">in_valid</span> && <span class="signal">in_ready</span>) <span class="keyword">begin</span>
+            <span class="signal">skid_data</span>  <= <span class="signal">in_data</span>;
+            <span class="signal">skid_valid</span> <= <span class="number">1'b1</span>;
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+<span class="keyword">end</span></code></pre>
+</details>
+</div>
+
+<!-- Exercise 4 -->
+<div class="exercise">
+<h3><span class="difficulty hard">HARD</span>
+<span class="en">Exercise 4: Ready/Valid Data Aggregator</span>
+<span class="ko" style="display:none;">연습 4: Ready/Valid 데이터 집계기</span>
+</h3>
+
+<p class="en">Design a module that accepts 4 individual bytes (one per cycle via ready/valid) and outputs a 32-bit word. This is a common pattern in network protocol processing — assembling packet headers from byte streams.</p>
+<p class="ko" style="display:none;">4개의 개별 바이트를 받아(ready/valid를 통해 사이클당 하나) 32비트 워드를 출력하는 모듈을 설계하세요. 이것은 네트워크 프로토콜 처리에서 일반적인 패턴입니다 — 바이트 스트림에서 패킷 헤더를 조립합니다.</p>
+
+<pre><code><span class="keyword">module</span> <span class="type">byte_to_word</span> (
+    <span class="keyword">input</span>  <span class="type">logic</span>        <span class="signal">clk</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span>        <span class="signal">rst_n</span>,
+
+    <span class="comment">// Byte input (8-bit)</span>
+    <span class="keyword">input</span>  <span class="type">logic</span>        <span class="signal">in_valid</span>,
+    <span class="keyword">output</span> <span class="type">logic</span>        <span class="signal">in_ready</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span> [<span class="number">7</span>:<span class="number">0</span>]  <span class="signal">in_data</span>,
+
+    <span class="comment">// Word output (32-bit)</span>
+    <span class="keyword">output</span> <span class="type">logic</span>        <span class="signal">out_valid</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span>        <span class="signal">out_ready</span>,
+    <span class="keyword">output</span> <span class="type">logic</span> [<span class="number">31</span>:<span class="number">0</span>] <span class="signal">out_data</span>
+);
+
+    <span class="comment">// TODO: Implement byte-to-word aggregator</span>
+    <span class="comment">// Requirements:</span>
+    <span class="comment">// 1. Accept 4 bytes sequentially via ready/valid input</span>
+    <span class="comment">// 2. First byte → bits [31:24], second → [23:16], etc.</span>
+    <span class="comment">// 3. After 4 bytes, assert out_valid with 32-bit word</span>
+    <span class="comment">// 4. Stop accepting (in_ready=0) until output is taken</span>
+    <span class="comment">// 5. After output transfer, start collecting next 4 bytes</span>
+    <span class="comment">//</span>
+    <span class="comment">// Hint: Use a 2-bit counter to track which byte you're on</span>
+    <span class="comment">// Hint: Use a shift register to accumulate bytes</span>
+
+<span class="keyword">endmodule</span>
+
+<span class="comment">// ─── Testbench ───</span>
+<span class="keyword">module</span> <span class="type">tb_byte_to_word</span>;
+    <span class="type">logic</span> <span class="signal">clk</span>, <span class="signal">rst_n</span>;
+    <span class="type">logic</span> <span class="signal">in_valid</span>, <span class="signal">in_ready</span>;
+    <span class="type">logic</span> [<span class="number">7</span>:<span class="number">0</span>] <span class="signal">in_data</span>;
+    <span class="type">logic</span> <span class="signal">out_valid</span>, <span class="signal">out_ready</span>;
+    <span class="type">logic</span> [<span class="number">31</span>:<span class="number">0</span>] <span class="signal">out_data</span>;
+
+    <span class="type">byte_to_word</span> <span class="signal">dut</span> (.*);
+
+    <span class="keyword">initial</span> <span class="signal">clk</span> = <span class="number">0</span>;
+    <span class="keyword">always</span> #<span class="number">5</span> <span class="signal">clk</span> = ~<span class="signal">clk</span>;
+
+    <span class="keyword">initial</span> <span class="keyword">begin</span>
+        <span class="signal">rst_n</span> = <span class="number">0</span>; <span class="signal">in_valid</span> = <span class="number">0</span>; <span class="signal">out_ready</span> = <span class="number">1</span>; <span class="signal">in_data</span> = <span class="number">0</span>;
+        #<span class="number">20</span> <span class="signal">rst_n</span> = <span class="number">1</span>;
+
+        <span class="comment">// Send bytes: 0xDE, 0xAD, 0xBE, 0xEF</span>
+        <span class="comment">// Expected output word: 0xDEADBEEF</span>
+        <span class="signal">in_valid</span> = <span class="number">1</span>;
+        <span class="signal">in_data</span> = <span class="number">8'hDE</span>; @(<span class="keyword">posedge</span> <span class="signal">clk</span>);
+        <span class="signal">in_data</span> = <span class="number">8'hAD</span>; @(<span class="keyword">posedge</span> <span class="signal">clk</span>);
+        <span class="signal">in_data</span> = <span class="number">8'hBE</span>; @(<span class="keyword">posedge</span> <span class="signal">clk</span>);
+        <span class="signal">in_data</span> = <span class="number">8'hEF</span>; @(<span class="keyword">posedge</span> <span class="signal">clk</span>);
+        <span class="signal">in_valid</span> = <span class="number">0</span>;
+
+        <span class="keyword">repeat</span>(<span class="number">3</span>) @(<span class="keyword">posedge</span> <span class="signal">clk</span>);
+
+        $<span class="signal">display</span>(<span class="string">"Output: 0x%08h (expected 0xDEADBEEF)"</span>, <span class="signal">out_data</span>);
+        $<span class="signal">finish</span>;
+    <span class="keyword">end</span>
+
+    <span class="keyword">always</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span>) <span class="keyword">begin</span>
+        <span class="keyword">if</span> (<span class="signal">out_valid</span> && <span class="signal">out_ready</span>)
+            $<span class="signal">display</span>(<span class="string">"[%0t] WORD OUTPUT: 0x%08h"</span>, $<span class="signal">time</span>, <span class="signal">out_data</span>);
+    <span class="keyword">end</span>
+<span class="keyword">endmodule</span></code></pre>
+
+<details>
+<summary><span class="en">📋 Solution</span><span class="ko" style="display:none;">📋 솔루션</span></summary>
+<pre><code><span class="type">logic</span> [<span class="number">1</span>:<span class="number">0</span>]  <span class="signal">byte_cnt</span>;
+<span class="type">logic</span> [<span class="number">31</span>:<span class="number">0</span>] <span class="signal">shift_reg</span>;
+<span class="type">logic</span>        <span class="signal">word_ready</span>;
+
+<span class="keyword">assign</span> <span class="signal">word_ready</span> = (<span class="signal">byte_cnt</span> == <span class="number">2'd3</span>) && <span class="signal">in_valid</span> && <span class="signal">in_ready</span>;
+<span class="keyword">assign</span> <span class="signal">in_ready</span>   = !<span class="signal">out_valid</span>;  <span class="comment">// Accept bytes when no word pending</span>
+
+<span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span> <span class="keyword">or</span> <span class="keyword">negedge</span> <span class="signal">rst_n</span>) <span class="keyword">begin</span>
+    <span class="keyword">if</span> (!<span class="signal">rst_n</span>) <span class="keyword">begin</span>
+        <span class="signal">byte_cnt</span>  <= <span class="number">2'd0</span>;
+        <span class="signal">shift_reg</span> <= <span class="number">32'd0</span>;
+        <span class="signal">out_valid</span> <= <span class="number">1'b0</span>;
+        <span class="signal">out_data</span>  <= <span class="number">32'd0</span>;
+    <span class="keyword">end</span> <span class="keyword">else</span> <span class="keyword">begin</span>
+        <span class="comment">// Clear output when downstream accepts</span>
+        <span class="keyword">if</span> (<span class="signal">out_valid</span> && <span class="signal">out_ready</span>)
+            <span class="signal">out_valid</span> <= <span class="number">1'b0</span>;
+
+        <span class="comment">// Accept input bytes</span>
+        <span class="keyword">if</span> (<span class="signal">in_valid</span> && <span class="signal">in_ready</span>) <span class="keyword">begin</span>
+            <span class="signal">shift_reg</span> <= {<span class="signal">shift_reg</span>[<span class="number">23</span>:<span class="number">0</span>], <span class="signal">in_data</span>};
+            <span class="keyword">if</span> (<span class="signal">byte_cnt</span> == <span class="number">2'd3</span>) <span class="keyword">begin</span>
+                <span class="signal">out_data</span>  <= {<span class="signal">shift_reg</span>[<span class="number">23</span>:<span class="number">0</span>], <span class="signal">in_data</span>};
+                <span class="signal">out_valid</span> <= <span class="number">1'b1</span>;
+                <span class="signal">byte_cnt</span>  <= <span class="number">2'd0</span>;
+            <span class="keyword">end</span> <span class="keyword">else</span> <span class="keyword">begin</span>
+                <span class="signal">byte_cnt</span>  <= <span class="signal">byte_cnt</span> + <span class="number">1</span>;
+            <span class="keyword">end</span>
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+<span class="keyword">end</span></code></pre>
+</details>
+</div>
+
+<h2>
+<span class="en">🏆 Challenge: Connect Them All!</span>
+<span class="ko" style="display:none;">🏆 챌린지: 모두 연결하기!</span>
+</h2>
+
+<div class="concept-box">
+<p class="en">For an extra challenge, connect Exercise 1's <code>counting_source</code> → Exercise 2's <code>double_stage</code> → a sink that prints results. The counting source produces 0, 1, 2, 3... and the double stage should output 0, 2, 4, 6... Test with intermittent backpressure from the sink!</p>
+<p class="ko" style="display:none;">추가 챌린지로, 연습 1의 <code>counting_source</code> → 연습 2의 <code>double_stage</code> → 결과를 출력하는 싱크를 연결하세요. 카운팅 소스가 0, 1, 2, 3...을 생성하면 더블 스테이지는 0, 2, 4, 6...을 출력해야 합니다. 싱크에서 간헐적 백프레셔로 테스트하세요!</p>
+</div>
+
+<div class="nav-links">
+    <a href="day-25-lesson.html">📖 Review Lesson</a>
+    <a href="day-25-quiz.html">📝 Take Quiz</a>
+    <a href="day-24-practice.html">← Day 24 Practice</a>
+</div>
+
+<script>
+let isKorean = false;
+function toggleLang() {
+    isKorean = !isKorean;
+    document.querySelectorAll('.en').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'none' : 'revert', 'important');
+    });
+    document.querySelectorAll('.ko').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'revert' : 'none', 'important');
+    });
+    document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+}
+</script>
+
+</body>
+</html>

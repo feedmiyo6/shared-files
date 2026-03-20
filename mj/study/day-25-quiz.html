@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 25 Quiz: Ready/Valid Handshake | Digital Design Study</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    background: linear-gradient(135deg, #fefae0 0%, #faedcd 100%);
+    color: #3d405b;
+    line-height: 1.8;
+    padding: 24px;
+    max-width: 920px;
+    margin: 0 auto;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+h1 {
+    color: #5d4037;
+    border-bottom: 3px solid #c4a77d;
+    padding-bottom: 12px;
+    margin: 24px 0 16px;
+    font-size: 2em;
+}
+h2 {
+    color: #588157;
+    border-bottom: 2px solid #a3b18a;
+    padding-bottom: 8px;
+    margin: 32px 0 16px;
+}
+h3 { color: #5d4037; margin: 20px 0 12px; }
+p { margin: 12px 0; }
+code {
+    background: #e9f5db;
+    color: #3d405b;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+}
+.day-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, #588157, #3a5a40);
+    color: #fff;
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+.nav-links {
+    display: flex;
+    gap: 12px;
+    margin: 20px 0;
+    flex-wrap: wrap;
+}
+.nav-links a {
+    background: linear-gradient(135deg, #588157, #3a5a40);
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14px;
+}
+.nav-links a:hover { opacity: 0.9; }
+.lang-toggle {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    background: #588157;
+    border: none;
+    border-radius: 24px;
+    padding: 10px 20px;
+    cursor: pointer;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    z-index: 1000;
+}
+.lang-toggle:hover { background: #3a5a40; }
+.ko { display: none; }
+.question {
+    background: #fff8f0;
+    border: 2px solid #c4a77d;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+}
+.question h3 { margin-top: 0; }
+.options { list-style: none; padding: 0; margin: 12px 0; }
+.options li {
+    padding: 10px 16px;
+    margin: 6px 0;
+    border-radius: 8px;
+    cursor: pointer;
+    border: 2px solid #c4a77d;
+    background: #fff;
+    transition: all 0.2s;
+}
+.options li:hover { border-color: #588157; background: #e9f5db; }
+.options li.selected { border-color: #588157; background: #e9f5db; font-weight: 600; }
+.options li.correct { border-color: #10b981; background: #d1fae5; }
+.options li.incorrect { border-color: #ef4444; background: #fee2e2; }
+.explanation {
+    display: none;
+    background: #fff8f0;
+    border-left: 4px solid #588157;
+    border-radius: 8px;
+    padding: 15px;
+    margin-top: 12px;
+    color: #3d405b;
+}
+.explanation.show { display: block; }
+.score-box {
+    background: #fff8f0;
+    border: 3px solid #588157;
+    border-radius: 12px;
+    padding: 24px;
+    margin: 24px 0;
+    text-align: center;
+    display: none;
+}
+.score-box h2 { border: none; text-align: center; }
+.btn {
+    background: linear-gradient(135deg, #588157, #3a5a40);
+    color: #fff;
+    border: none;
+    padding: 12px 32px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    margin: 20px 0;
+}
+.btn:hover { opacity: 0.9; }
+@media (max-width: 768px) {
+    body { padding: 16px; }
+    h1 { font-size: 1.8em; }
+    .lang-toggle { padding: 8px 16px; font-size: 13px; }
+}
+</style>
+</head>
+<body>
+
+<button class="lang-toggle" onclick="toggleLang()">한국어</button>
+
+<span class="day-badge">📝 Day 25 Quiz</span>
+
+<h1>
+<span class="en">Ready/Valid Handshake — Quiz</span>
+<span class="ko" style="display:none;">Ready/Valid 핸드셰이크 — 퀴즈</span>
+</h1>
+
+<div class="nav-links">
+    <a href="day-25-lesson.html">📖 Lesson</a>
+    <a href="day-25-practice.html">💻 Practice</a>
+</div>
+
+<div id="quiz">
+
+<div class="question" data-correct="2">
+<h3>Q1. <span class="en">When does a data transfer occur in a ready/valid handshake?</span><span class="ko" style="display:none;">ready/valid 핸드셰이크에서 데이터 전송은 언제 발생합니까?</span></h3>
+<ul class="options">
+<li onclick="selectOption(this)"><span class="en">A) When valid rises to high</span><span class="ko" style="display:none;">A) valid가 high로 올라갈 때</span></li>
+<li onclick="selectOption(this)"><span class="en">B) When both valid AND ready are high on a clock edge</span><span class="ko" style="display:none;">B) 클럭 엣지에서 valid와 ready가 모두 high일 때</span></li>
+<li onclick="selectOption(this)"><span class="en">C) When ready rises to high</span><span class="ko" style="display:none;">C) ready가 high로 올라갈 때</span></li>
+<li onclick="selectOption(this)"><span class="en">D) When valid goes from high to low</span><span class="ko" style="display:none;">D) valid가 high에서 low로 갈 때</span></li>
+</ul>
+<div class="explanation"><span class="en">✅ Transfer = valid & ready. Both signals must be high simultaneously on the same positive clock edge for data to transfer.</span><span class="ko" style="display:none;">✅ 전송 = valid & ready. 데이터가 전송되려면 같은 양의 클럭 엣지에서 두 신호가 동시에 high여야 합니다.</span></div>
+</div>
+
+<div class="question" data-correct="3">
+<h3>Q2. <span class="en">Which of the following is FORBIDDEN in the AXI-style ready/valid protocol?</span><span class="ko" style="display:none;">AXI 스타일 ready/valid 프로토콜에서 금지된 것은?</span></h3>
+<ul class="options">
+<li onclick="selectOption(this)"><span class="en">A) Ready depends on valid</span><span class="ko" style="display:none;">A) Ready가 valid에 의존</span></li>
+<li onclick="selectOption(this)"><span class="en">B) Data changes after a transfer completes</span><span class="ko" style="display:none;">B) 전송 완료 후 데이터 변경</span></li>
+<li onclick="selectOption(this)"><span class="en">C) Valid depends on ready</span><span class="ko" style="display:none;">C) Valid가 ready에 의존</span></li>
+<li onclick="selectOption(this)"><span class="en">D) Ready is deasserted while valid is high</span><span class="ko" style="display:none;">D) valid가 high인 동안 ready 해제</span></li>
+</ul>
+<div class="explanation"><span class="en">✅ The source must assert valid independently of ready. If valid waits for ready, and ready waits for valid, you get a deadlock. Ready CAN depend on valid, but not the other way around.</span><span class="ko" style="display:none;">✅ 소스는 ready와 독립적으로 valid를 주장해야 합니다. valid가 ready를 기다리고 ready가 valid를 기다리면 데드락이 발생합니다. Ready는 valid에 의존할 수 있지만 반대는 안 됩니다.</span></div>
+</div>
+
+<div class="question" data-correct="1">
+<h3>Q3. <span class="en">What must happen to <code>valid</code> once it's asserted?</span><span class="ko" style="display:none;"><code>valid</code>가 주장된 후 어떻게 되어야 합니까?</span></h3>
+<ul class="options">
+<li onclick="selectOption(this)"><span class="en">A) It must stay high until both valid and ready are high (transfer completes)</span><span class="ko" style="display:none;">A) valid와 ready가 모두 high가 될 때까지(전송 완료) high를 유지해야 함</span></li>
+<li onclick="selectOption(this)"><span class="en">B) It can drop at any time</span><span class="ko" style="display:none;">B) 언제든지 떨어질 수 있음</span></li>
+<li onclick="selectOption(this)"><span class="en">C) It must stay high for at least 2 clock cycles</span><span class="ko" style="display:none;">C) 최소 2 클럭 사이클 동안 high를 유지해야 함</span></li>
+<li onclick="selectOption(this)"><span class="en">D) It must pulse high for exactly one cycle</span><span class="ko" style="display:none;">D) 정확히 한 사이클 동안 high 펄스여야 함</span></li>
+</ul>
+<div class="explanation"><span class="en">✅ Once valid is asserted, it must remain high until the handshake completes (valid & ready both high). Dropping valid early would violate the protocol and could cause data loss.</span><span class="ko" style="display:none;">✅ valid가 주장되면 핸드셰이크가 완료될 때까지(valid & ready 모두 high) high를 유지해야 합니다. valid를 일찍 떨어뜨리면 프로토콜 위반이며 데이터 손실이 발생할 수 있습니다.</span></div>
+</div>
+
+<div class="question" data-correct="2">
+<h3>Q4. <span class="en">In a simple pipe stage, <code>in_ready = out_ready | !out_valid</code>. What does <code>!out_valid</code> mean?</span><span class="ko" style="display:none;">간단한 파이프 스테이지에서 <code>in_ready = out_ready | !out_valid</code>. <code>!out_valid</code>는 무엇을 의미합니까?</span></h3>
+<ul class="options">
+<li onclick="selectOption(this)"><span class="en">A) The downstream is ready</span><span class="ko" style="display:none;">A) 다운스트림이 준비됨</span></li>
+<li onclick="selectOption(this)"><span class="en">B) The stage has no data stored, so it can accept new data</span><span class="ko" style="display:none;">B) 스테이지에 저장된 데이터가 없으므로 새 데이터를 받을 수 있음</span></li>
+<li onclick="selectOption(this)"><span class="en">C) The upstream has no data</span><span class="ko" style="display:none;">C) 업스트림에 데이터가 없음</span></li>
+<li onclick="selectOption(this)"><span class="en">D) A reset condition</span><span class="ko" style="display:none;">D) 리셋 조건</span></li>
+</ul>
+<div class="explanation"><span class="en">✅ When <code>out_valid</code> is low, the pipeline register is empty — nothing is being presented downstream. Therefore the stage can freely accept new data from upstream.</span><span class="ko" style="display:none;">✅ <code>out_valid</code>가 low이면 파이프라인 레지스터가 비어있어 다운스트림에 아무것도 표시되지 않습니다. 따라서 스테이지는 업스트림에서 자유롭게 새 데이터를 받을 수 있습니다.</span></div>
+</div>
+
+<div class="question" data-correct="3">
+<h3>Q5. <span class="en">What problem does a skid buffer solve?</span><span class="ko" style="display:none;">스키드 버퍼는 어떤 문제를 해결합니까?</span></h3>
+<ul class="options">
+<li onclick="selectOption(this)"><span class="en">A) Increases throughput beyond 1 transfer/cycle</span><span class="ko" style="display:none;">A) 1 전송/사이클 이상으로 처리량 증가</span></li>
+<li onclick="selectOption(this)"><span class="en">B) Eliminates the need for valid signals</span><span class="ko" style="display:none;">B) valid 신호의 필요성 제거</span></li>
+<li onclick="selectOption(this)"><span class="en">C) Breaks the combinational ready path across pipeline stages</span><span class="ko" style="display:none;">C) 파이프라인 스테이지 간 조합적 ready 경로를 끊음</span></li>
+<li onclick="selectOption(this)"><span class="en">D) Converts ready/valid to credit-based flow control</span><span class="ko" style="display:none;">D) ready/valid를 크레딧 기반 흐름 제어로 변환</span></li>
+</ul>
+<div class="explanation"><span class="en">✅ In a simple pipe stage, <code>in_ready</code> depends combinationally on <code>out_ready</code>. Across many stages, this chain becomes too long for timing. The skid buffer uses a small extra register to make <code>in_ready</code> depend only on local state (is the skid register empty?), breaking the combinational path.</span><span class="ko" style="display:none;">✅ 간단한 파이프 스테이지에서 <code>in_ready</code>는 조합적으로 <code>out_ready</code>에 의존합니다. 많은 스테이지에 걸쳐 이 체인은 타이밍에 너무 길어집니다. 스키드 버퍼는 작은 추가 레지스터를 사용하여 <code>in_ready</code>가 로컬 상태(스키드 레지스터가 비어있는가?)에만 의존하게 하여 조합 경로를 끊습니다.</span></div>
+</div>
+
+<div class="question" data-correct="4">
+<h3>Q6. <span class="en">In a skid buffer, when does data go into the skid register?</span><span class="ko" style="display:none;">스키드 버퍼에서 데이터가 스키드 레지스터에 들어가는 시점은?</span></h3>
+<ul class="options">
+<li onclick="selectOption(this)"><span class="en">A) Every clock cycle</span><span class="ko" style="display:none;">A) 매 클럭 사이클</span></li>
+<li onclick="selectOption(this)"><span class="en">B) When the main register is empty</span><span class="ko" style="display:none;">B) 메인 레지스터가 비어있을 때</span></li>
+<li onclick="selectOption(this)"><span class="en">C) When valid rises</span><span class="ko" style="display:none;">C) valid가 올라갈 때</span></li>
+<li onclick="selectOption(this)"><span class="en">D) When downstream is stalled but new data arrives from upstream</span><span class="ko" style="display:none;">D) 다운스트림이 멈추었지만 업스트림에서 새 데이터가 도착할 때</span></li>
+</ul>
+<div class="explanation"><span class="en">✅ The skid register catches "in-flight" data. When the downstream can't accept data (stalled) but the upstream has already sent data (because ready was registered and took a cycle to deassert), the skid register saves that data from being lost.</span><span class="ko" style="display:none;">✅ 스키드 레지스터는 "비행 중" 데이터를 잡습니다. 다운스트림이 데이터를 수락할 수 없지만(멈춤) 업스트림이 이미 데이터를 보냈을 때(ready가 레지스터되어 해제에 한 사이클 걸림), 스키드 레지스터가 해당 데이터를 손실로부터 저장합니다.</span></div>
+</div>
+
+<div class="question" data-correct="2">
+<h3>Q7. <span class="en">How many channels in AXI use the ready/valid handshake?</span><span class="ko" style="display:none;">AXI에서 몇 개의 채널이 ready/valid 핸드셰이크를 사용합니까?</span></h3>
+<ul class="options">
+<li onclick="selectOption(this)"><span class="en">A) 2 (read and write)</span><span class="ko" style="display:none;">A) 2개 (읽기와 쓰기)</span></li>
+<li onclick="selectOption(this)"><span class="en">B) 5 (AW, W, B, AR, R)</span><span class="ko" style="display:none;">B) 5개 (AW, W, B, AR, R)</span></li>
+<li onclick="selectOption(this)"><span class="en">C) 3 (address, data, response)</span><span class="ko" style="display:none;">C) 3개 (주소, 데이터, 응답)</span></li>
+<li onclick="selectOption(this)"><span class="en">D) 1 (the main data channel)</span><span class="ko" style="display:none;">D) 1개 (메인 데이터 채널)</span></li>
+</ul>
+<div class="explanation"><span class="en">✅ AXI has 5 independent channels: Write Address (AW), Write Data (W), Write Response (B), Read Address (AR), and Read Data (R). Each one uses its own VALID/READY pair.</span><span class="ko" style="display:none;">✅ AXI에는 5개의 독립 채널이 있습니다: 쓰기 주소(AW), 쓰기 데이터(W), 쓰기 응답(B), 읽기 주소(AR), 읽기 데이터(R). 각각 자체 VALID/READY 쌍을 사용합니다.</span></div>
+</div>
+
+<div class="question" data-correct="1">
+<h3>Q8. <span class="en">What is the throughput of a properly implemented skid buffer?</span><span class="ko" style="display:none;">올바르게 구현된 스키드 버퍼의 처리량은?</span></h3>
+<ul class="options">
+<li onclick="selectOption(this)"><span class="en">A) 1 transfer per clock cycle (same as simple pipe)</span><span class="ko" style="display:none;">A) 클럭 사이클당 1 전송 (간단한 파이프와 동일)</span></li>
+<li onclick="selectOption(this)"><span class="en">B) 2 transfers per clock cycle</span><span class="ko" style="display:none;">B) 클럭 사이클당 2 전송</span></li>
+<li onclick="selectOption(this)"><span class="en">C) 0.5 transfers per clock cycle</span><span class="ko" style="display:none;">C) 클럭 사이클당 0.5 전송</span></li>
+<li onclick="selectOption(this)"><span class="en">D) Variable, depends on data</span><span class="ko" style="display:none;">D) 가변적, 데이터에 따라 다름</span></li>
+</ul>
+<div class="explanation"><span class="en">✅ A well-designed skid buffer maintains full throughput of 1 transfer per cycle (sustained), while also registering the ready signal. The extra register absorbs the one-cycle gap when ready deasserts.</span><span class="ko" style="display:none;">✅ 잘 설계된 스키드 버퍼는 사이클당 1 전송의 전체 처리량(지속)을 유지하면서 ready 신호도 레지스터합니다. 추가 레지스터가 ready가 해제될 때 1 사이클 갭을 흡수합니다.</span></div>
+</div>
+
+<div class="question" data-correct="4">
+<h3>Q9. <span class="en">Why can <code>ready</code> depend on <code>valid</code> but not vice versa?</span><span class="ko" style="display:none;">왜 <code>ready</code>는 <code>valid</code>에 의존할 수 있지만 반대는 안 됩니까?</span></h3>
+<ul class="options">
+<li onclick="selectOption(this)"><span class="en">A) Because ready is always registered</span><span class="ko" style="display:none;">A) ready는 항상 레지스터되기 때문</span></li>
+<li onclick="selectOption(this)"><span class="en">B) Because the source is always faster</span><span class="ko" style="display:none;">B) 소스가 항상 더 빠르기 때문</span></li>
+<li onclick="selectOption(this)"><span class="en">C) Because valid is a higher priority signal</span><span class="ko" style="display:none;">C) valid가 더 높은 우선순위 신호이기 때문</span></li>
+<li onclick="selectOption(this)"><span class="en">D) Because if both depended on each other, neither would ever assert (deadlock)</span><span class="ko" style="display:none;">D) 둘 다 서로에게 의존하면 어느 것도 주장되지 않기 때문 (데드락)</span></li>
+</ul>
+<div class="explanation"><span class="en">✅ If valid waited for ready, and ready waited for valid, neither would ever go high — a classic deadlock. By making valid independent, someone always "goes first" and breaks the dependency cycle. Ready is allowed to depend on valid because that creates a one-way dependency, not a loop.</span><span class="ko" style="display:none;">✅ valid가 ready를 기다리고 ready가 valid를 기다리면 어느 것도 high가 되지 않습니다 — 전형적인 데드락. valid를 독립적으로 만들면 항상 누군가가 "먼저 가서" 의존성 사이클을 끊습니다. ready는 valid에 의존할 수 있는데, 이것이 루프가 아닌 단방향 의존성을 만들기 때문입니다.</span></div>
+</div>
+
+<div class="question" data-correct="3">
+<h3>Q10. <span class="en">You have a 10-stage pipeline using simple pipe stages (combinational ready). What's the main timing concern?</span><span class="ko" style="display:none;">간단한 파이프 스테이지(조합적 ready)를 사용하는 10단 파이프라인이 있습니다. 주요 타이밍 우려는?</span></h3>
+<ul class="options">
+<li onclick="selectOption(this)"><span class="en">A) Data path is too long</span><span class="ko" style="display:none;">A) 데이터 경로가 너무 김</span></li>
+<li onclick="selectOption(this)"><span class="en">B) Too many clock domains</span><span class="ko" style="display:none;">B) 너무 많은 클럭 도메인</span></li>
+<li onclick="selectOption(this)"><span class="en">C) The ready signal has a 10-stage combinational chain, violating timing</span><span class="ko" style="display:none;">C) ready 신호가 10단 조합 체인을 가져 타이밍을 위반</span></li>
+<li onclick="selectOption(this)"><span class="en">D) Throughput drops to 0.1 transfers/cycle</span><span class="ko" style="display:none;">D) 처리량이 0.1 전송/사이클로 감소</span></li>
+</ul>
+<div class="explanation"><span class="en">✅ Each simple pipe stage has <code>in_ready = out_ready | !out_valid</code>, creating a combinational dependency on the next stage's ready. Across 10 stages, ready propagates through 10 levels of combinational logic — often too slow for high-frequency designs. This is exactly why skid buffers exist!</span><span class="ko" style="display:none;">✅ 각 간단한 파이프 스테이지는 <code>in_ready = out_ready | !out_valid</code>로 다음 스테이지의 ready에 대한 조합적 의존성을 만듭니다. 10단에 걸쳐 ready가 10레벨의 조합 로직을 통과합니다 — 고주파 설계에는 종종 너무 느립니다. 이것이 바로 스키드 버퍼가 존재하는 이유입니다!</span></div>
+</div>
+
+<div class="question" data-correct="2">
+<h3>Q11. <span class="en">In a ready/valid interface, who drives <code>valid</code> and who drives <code>ready</code>?</span><span class="ko" style="display:none;">ready/valid 인터페이스에서 누가 <code>valid</code>를, 누가 <code>ready</code>를 구동합니까?</span></h3>
+<ul class="options">
+<li onclick="selectOption(this)"><span class="en">A) The sink drives both</span><span class="ko" style="display:none;">A) 싱크가 둘 다 구동</span></li>
+<li onclick="selectOption(this)"><span class="en">B) Source drives valid, sink drives ready</span><span class="ko" style="display:none;">B) 소스가 valid를, 싱크가 ready를 구동</span></li>
+<li onclick="selectOption(this)"><span class="en">C) Source drives ready, sink drives valid</span><span class="ko" style="display:none;">C) 소스가 ready를, 싱크가 valid를 구동</span></li>
+<li onclick="selectOption(this)"><span class="en">D) An arbiter drives both</span><span class="ko" style="display:none;">D) 중재기가 둘 다 구동</span></li>
+</ul>
+<div class="explanation"><span class="en">✅ The source (producer) asserts valid when it has data. The sink (consumer) asserts ready when it can accept data. Each side controls its own signal — this separation of concerns is what makes the protocol clean and deadlock-free.</span><span class="ko" style="display:none;">✅ 소스(생산자)는 데이터가 있을 때 valid를 주장합니다. 싱크(소비자)는 데이터를 받을 수 있을 때 ready를 주장합니다. 각 측이 자체 신호를 제어합니다 — 이 관심사의 분리가 프로토콜을 깔끔하고 데드락 없게 만듭니다.</span></div>
+</div>
+
+<div class="question" data-correct="1">
+<h3>Q12. <span class="en">What happens to data while <code>valid</code> is high but <code>ready</code> is low?</span><span class="ko" style="display:none;"><code>valid</code>가 high이지만 <code>ready</code>가 low일 때 데이터는 어떻게 됩니까?</span></h3>
+<ul class="options">
+<li onclick="selectOption(this)"><span class="en">A) Data must remain stable — no changes allowed</span><span class="ko" style="display:none;">A) 데이터가 안정적으로 유지되어야 함 — 변경 불가</span></li>
+<li onclick="selectOption(this)"><span class="en">B) Data can change freely since no transfer occurs</span><span class="ko" style="display:none;">B) 전송이 발생하지 않으므로 데이터를 자유롭게 변경 가능</span></li>
+<li onclick="selectOption(this)"><span class="en">C) Data is ignored by the sink</span><span class="ko" style="display:none;">C) 데이터가 싱크에 의해 무시됨</span></li>
+<li onclick="selectOption(this)"><span class="en">D) Data must be set to zero</span><span class="ko" style="display:none;">D) 데이터를 0으로 설정해야 함</span></li>
+</ul>
+<div class="explanation"><span class="en">✅ While valid is asserted, data must remain stable. The sink might sample data on the very cycle it asserts ready. Changing data while valid is high violates the protocol and could cause the sink to capture corrupted data.</span><span class="ko" style="display:none;">✅ valid가 주장되는 동안 데이터는 안정적으로 유지되어야 합니다. 싱크가 ready를 주장하는 바로 그 사이클에 데이터를 샘플링할 수 있습니다. valid가 high인 동안 데이터를 변경하면 프로토콜 위반이며 싱크가 손상된 데이터를 캡처할 수 있습니다.</span></div>
+</div>
+
+</div>
+
+<button class="btn" onclick="checkAnswers()">
+<span class="en">Check Answers</span>
+<span class="ko" style="display:none;">정답 확인</span>
+</button>
+
+<div class="score-box" id="scoreBox">
+<h2 id="scoreText"></h2>
+<p id="scoreFeedback"></p>
+</div>
+
+<div class="nav-links">
+    <a href="day-25-lesson.html">📖 Review Lesson</a>
+    <a href="day-25-practice.html">💻 Practice Lab →</a>
+</div>
+
+<script>
+let isKorean = false;
+function toggleLang() {
+    isKorean = !isKorean;
+    document.querySelectorAll('.en').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'none' : 'revert', 'important');
+    });
+    document.querySelectorAll('.ko').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'revert' : 'none', 'important');
+    });
+    document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+}
+
+function selectOption(li) {
+    const question = li.closest('.question');
+    if (question.classList.contains('answered')) return;
+    question.querySelectorAll('.options li').forEach(opt => opt.classList.remove('selected'));
+    li.classList.add('selected');
+}
+
+function checkAnswers() {
+    const questions = document.querySelectorAll('.question');
+    let correct = 0;
+    questions.forEach(q => {
+        q.classList.add('answered');
+        const correctIdx = parseInt(q.dataset.correct) - 1;
+        const options = q.querySelectorAll('.options li');
+        const selected = q.querySelector('.options li.selected');
+        options[correctIdx].classList.add('correct');
+        if (selected) {
+            const selectedIdx = Array.from(options).indexOf(selected);
+            if (selectedIdx === correctIdx) {
+                correct++;
+            } else {
+                selected.classList.add('incorrect');
+            }
+        }
+        q.querySelector('.explanation').classList.add('show');
+    });
+    const total = questions.length;
+    const pct = Math.round((correct / total) * 100);
+    const scoreBox = document.getElementById('scoreBox');
+    scoreBox.style.display = 'block';
+    document.getElementById('scoreText').textContent = `${correct}/${total} (${pct}%)`;
+    const fb = document.getElementById('scoreFeedback');
+    if (pct >= 90) fb.textContent = '🌟 Excellent! Ready/Valid master!';
+    else if (pct >= 70) fb.textContent = '👍 Good job! Review the ones you missed.';
+    else fb.textContent = '📖 Review the lesson and try again!';
+    scoreBox.scrollIntoView({ behavior: 'smooth' });
+}
+</script>
+
+</body>
+</html>
