@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clean Recipe PRD</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:#faf8f5;color:#2d3436;line-height:1.7;padding:20px;max-width:900px;margin:0 auto}
+h1{font-size:28px;color:#2d6a4f;margin:30px 0 8px;letter-spacing:-0.5px}
+h2{font-size:22px;color:#40916c;margin:30px 0 12px;padding-bottom:8px;border-bottom:2px solid #b7e4c7}
+h3{font-size:17px;color:#52796f;margin:22px 0 8px}
+h4{font-size:15px;color:#74b49b;margin:16px 0 6px}
+p{margin:8px 0 14px;color:#4a4a4a}
+ul,ol{margin:8px 0 14px 24px}
+li{margin:4px 0;color:#4a4a4a}
+code{background:#e8f5e9;color:#2d6a4f;padding:2px 7px;border-radius:4px;font-size:0.9em;font-family:'SF Mono','Fira Code',monospace}
+pre{background:#1b2631;color:#e8f5e9;padding:18px;border-radius:12px;overflow-x:auto;margin:12px 0 18px;font-size:13px;line-height:1.6}
+pre code{background:none;padding:0;color:#e8f5e9}
+.badge{display:inline-block;padding:3px 10px;border-radius:20px;font-size:12px;font-weight:600;margin:2px 4px}
+.badge-high{background:#d4edda;color:#155724}
+.badge-medium{background:#fff3cd;color:#856404}
+.badge-low{background:#e2e3e5;color:#383d41}
+.card{background:#fff;border-radius:16px;padding:24px;margin:18px 0;box-shadow:0 2px 12px rgba(0,0,0,0.06);border:1px solid #e8e8e8}
+.btw-card{background:linear-gradient(135deg,#f0fdf4,#ecfdf5);border:1px solid #86efac;border-radius:14px;padding:20px;margin:16px 0}
+.btw-card p{font-style:italic;color:#166534;margin:6px 0;padding-left:16px;border-left:3px solid #86efac}
+.legal-safe{background:#d4edda;border-left:4px solid #28a745;padding:14px 18px;border-radius:0 10px 10px 0;margin:10px 0}
+.legal-warn{background:#fff3cd;border-left:4px solid #ffc107;padding:14px 18px;border-radius:0 10px 10px 0;margin:10px 0}
+.flow-step{display:flex;align-items:flex-start;margin:10px 0;gap:12px}
+.flow-num{min-width:32px;height:32px;background:#2d6a4f;color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;flex-shrink:0}
+.flow-text{padding-top:4px}
+table{width:100%;border-collapse:collapse;margin:14px 0;border-radius:10px;overflow:hidden}
+th{background:#2d6a4f;color:#fff;padding:10px 14px;text-align:left;font-size:13px}
+td{padding:10px 14px;border-bottom:1px solid #e8e8e8;font-size:14px}
+tr:last-child td{border-bottom:none}
+tr:nth-child(even){background:#f8faf8}
+.subtitle{color:#6c757d;font-size:16px;margin-bottom:24px}
+.tag{display:inline-block;background:#e8f5e9;color:#2d6a4f;padding:4px 12px;border-radius:20px;font-size:12px;font-weight:600;margin:4px}
+.section-icon{font-size:22px;margin-right:8px}
+.cost-highlight{background:linear-gradient(135deg,#fff9e6,#fff3cd);border:1px solid #ffc107;border-radius:12px;padding:16px;margin:12px 0}
+.header-bar{background:linear-gradient(135deg,#2d6a4f,#40916c);color:#fff;padding:32px;border-radius:20px;margin-bottom:30px}
+.header-bar h1{color:#fff;margin:0 0 8px;font-size:32px}
+.header-bar .subtitle{color:#b7e4c7;margin:0}
+</style>
+</head>
+<body>
+
+<div class="header-bar">
+<h1>Clean Recipe View + Community Tips</h1>
+<p class="subtitle">Mini-PRD for Fridgenie Pro Feature</p>
+<div style="margin-top:14px">
+<span class="tag" style="background:rgba(255,255,255,0.2);color:#fff">Pro Tier</span>
+<span class="tag" style="background:rgba(255,255,255,0.2);color:#fff">AI-Powered</span>
+<span class="tag" style="background:rgba(255,255,255,0.2);color:#fff">5-7 Days</span>
+</div>
+</div>
+
+<h2><span class="section-icon">🎯</span>Overview</h2>
+<div class="card">
+<p>When users tap a source recipe link, instead of being sent to an ad-filled external site, we offer a <strong>"Clean Version"</strong> that extracts and reformats the original recipe in Fridgenie's style, plus a <strong>"BTW"</strong> section summarizing the most useful community comments and tips.</p>
+</div>
+
+<h2><span class="section-icon">😤</span>The Problem</h2>
+<div class="card">
+<ul>
+<li>Recipe blogs are notoriously terrible UX — 2000-word life stories before the recipe, popup ads, auto-play videos, cookie banners</li>
+<li>Users want the <strong>ORIGINAL</strong> recipe (not our AI-generated Fridgenie version) but can't stand the source site</li>
+<li>Valuable community wisdom (comments like "reduce salt by half" or "use day-old rice") is buried under hundreds of comments</li>
+</ul>
+</div>
+
+<h2><span class="section-icon">👤</span>User Stories</h2>
+<div class="card">
+<ol>
+<li>As a user, I want to read the original source recipe <strong>without ads and clutter</strong></li>
+<li>As a user, I want to see what other cooks say about this recipe <strong>without scrolling through 500 comments</strong></li>
+<li>As a user, I want to choose between the Fridgenie AI recipe and the cleaned-up original</li>
+</ol>
+</div>
+
+<h2><span class="section-icon">🎨</span>Feature Design</h2>
+
+<h3>UI Flow</h3>
+<div class="card">
+<div class="flow-step"><div class="flow-num">1</div><div class="flow-text">User is on Dish Detail screen, sees source recipe list</div></div>
+<div class="flow-step"><div class="flow-num">2</div><div class="flow-text">Each source card gets <strong>TWO buttons</strong>:<br><span class="tag">Clean Version</span> opens cleaned recipe in-app<br><span class="tag">View Original</span> opens external browser (existing)</div></div>
+<div class="flow-step"><div class="flow-num">3</div><div class="flow-text">Clean Version displays in a new screen with:<br>- Recipe title + "Adapted from [Source Name]" attribution<br>- Ingredients list (reformatted)<br>- Instructions (rephrased, numbered, with timing)<br>- "BTW" section with community insights</div></div>
+</div>
+
+<h3>BTW Section Design</h3>
+<div class="btw-card">
+<h4 style="color:#166534;margin-bottom:10px">From the Community (47 reviews, 4.7 avg)</h4>
+<p>"Many cooks recommend reducing soy sauce to 2 tbsp if using low-sodium"</p>
+<p>"Day-old rice works much better — fresh rice makes it mushy"</p>
+<p>"Add a splash of fish sauce for extra depth"</p>
+<p>"Doubles well for meal prep, keeps 3-4 days in the fridge"</p>
+</div>
+
+<h2><span class="section-icon">🔧</span>Technical Architecture</h2>
+
+<h3>Data Flow</h3>
+<div class="card">
+<div class="flow-step"><div class="flow-num">1</div><div class="flow-text">User taps "Clean Version"</div></div>
+<div class="flow-step"><div class="flow-num">2</div><div class="flow-text">App calls <code>clean-recipe</code> Edge Function with source URL</div></div>
+<div class="flow-step"><div class="flow-num">3</div><div class="flow-text">Edge Function checks cache (<code>clean_recipes</code> table) — returns if exists</div></div>
+<div class="flow-step"><div class="flow-num">4</div><div class="flow-text">If not cached: fetches source URL HTML</div></div>
+<div class="flow-step"><div class="flow-num">5</div><div class="flow-text">Sends to Claude Sonnet — extracts recipe + top 5-7 useful comments</div></div>
+<div class="flow-step"><div class="flow-num">6</div><div class="flow-text">AI <strong>rephrases</strong> recipe (NOT copy — same intent, different words)</div></div>
+<div class="flow-step"><div class="flow-num">7</div><div class="flow-text">Caches result in DB, returns structured JSON</div></div>
+</div>
+
+<h3>Edge Function: <code>clean-recipe</code></h3>
+<div class="card">
+<pre><code>Input:  { source_url, dish_name, language }
+Output: {
+  source_name, source_url, title,
+  prep_time_min, cook_time_min, servings,
+  ingredients: [{ name, quantity, unit, group }],
+  instructions: [{ step, text, time_min }],
+  community_tips: [{ text, sentiment }],
+  review_summary: { count, avg_rating }
+}</code></pre>
+</div>
+
+<h3>New DB Table: <code>clean_recipes</code></h3>
+<div class="card">
+<table>
+<tr><th>Column</th><th>Type</th><th>Notes</th></tr>
+<tr><td><code>id</code></td><td>uuid, PK</td><td></td></tr>
+<tr><td><code>source_url</code></td><td>text</td><td>unique index</td></tr>
+<tr><td><code>dish_cache_id</code></td><td>uuid, FK</td><td>nullable</td></tr>
+<tr><td><code>source_name</code></td><td>text</td><td></td></tr>
+<tr><td><code>title</code></td><td>text</td><td></td></tr>
+<tr><td><code>recipe_data</code></td><td>jsonb</td><td>full structured recipe</td></tr>
+<tr><td><code>community_tips</code></td><td>jsonb</td><td>array of tips</td></tr>
+<tr><td><code>review_summary</code></td><td>jsonb</td><td></td></tr>
+<tr><td><code>generation_model</code></td><td>text</td><td></td></tr>
+<tr><td><code>language</code></td><td>text</td><td></td></tr>
+<tr><td><code>created_at</code></td><td>timestamp</td><td></td></tr>
+</table>
+</div>
+
+<h2><span class="section-icon">⚖️</span>Legal & Attribution</h2>
+
+<h3>What's Legally Safe</h3>
+<div class="legal-safe">
+<strong>Recipe ingredient lists are NOT copyrightable</strong> — they are factual information (per Meredith Corp v. H&R Block, Publications International v. Meredith Corp)
+</div>
+<div class="legal-warn">
+<strong>Instructions CAN be copyrightable</strong> if they contain sufficient creative expression — so we MUST rephrase, not copy verbatim
+</div>
+<div class="legal-safe">
+<strong>Comment summaries are transformative</strong> — summarizing publicly posted user comments (not quoting verbatim) is fair use
+</div>
+
+<h3>What We Do</h3>
+<div class="card">
+<ol>
+<li><strong>NEVER</strong> copy instructions verbatim — AI rephrases with same intent but different words</li>
+<li><strong>ALWAYS</strong> show "Adapted from [Source Name]" with clickable link to original</li>
+<li>Ingredient lists extracted as-is (not copyrightable)</li>
+<li>Comments summarized/paraphrased, never quoted directly</li>
+<li>Include "View Original" button that drives traffic back to source</li>
+</ol>
+</div>
+
+<h3>Safeguards</h3>
+<div class="card">
+<ul>
+<li>Polite <code>User-Agent: Fridgenie-Bot/1.0</code> header</li>
+<li>Respect <code>robots.txt</code> — if blocked, show "Clean version unavailable"</li>
+<li>Rate limit: max 1 fetch per 5 seconds</li>
+<li>DMCA compliance — immediate removal on takedown</li>
+<li>Never cache original HTML, only restructured version</li>
+</ul>
+</div>
+
+<h2><span class="section-icon">💰</span>Monetization</h2>
+
+<div class="card">
+<table>
+<tr><th></th><th>Free Tier</th><th>Pro Tier ($4.99/mo)</th></tr>
+<tr><td>Fridgenie AI Recipe</td><td>Yes</td><td>Yes</td></tr>
+<tr><td>Source Links (external)</td><td>Yes</td><td>Yes</td></tr>
+<tr><td><strong>Clean Recipe View</strong></td><td>-</td><td><strong>Unlimited</strong></td></tr>
+<tr><td><strong>BTW Community Tips</strong></td><td>-</td><td><strong>Yes</strong></td></tr>
+<tr><td>Future: Meal Planning</td><td>-</td><td>Yes</td></tr>
+</table>
+</div>
+
+<div class="cost-highlight">
+<h4>Cost Analysis</h4>
+<ul>
+<li>Claude Sonnet per clean recipe: <strong>~$0.08-0.15</strong> (larger input from HTML)</li>
+<li>Cached forever after first generation — pay once, serve forever</li>
+<li>Break-even: ~35-50 clean recipes per pro subscriber/month</li>
+<li>Expected usage: 5-15/user/month = <strong>very profitable</strong></li>
+</ul>
+</div>
+
+<h2><span class="section-icon">📋</span>Priority & Effort</h2>
+
+<div class="card">
+<table>
+<tr><th>Component</th><th>Effort</th><th>Priority</th></tr>
+<tr><td>Edge Function (clean-recipe)</td><td>1-2 days</td><td><span class="badge badge-high">HIGH</span></td></tr>
+<tr><td>DB table + migration</td><td>0.5 day</td><td><span class="badge badge-high">HIGH</span></td></tr>
+<tr><td>CleanRecipeCard widget</td><td>1-2 days</td><td><span class="badge badge-high">HIGH</span></td></tr>
+<tr><td>Source card UI update</td><td>0.5 day</td><td><span class="badge badge-high">HIGH</span></td></tr>
+<tr><td>Pro tier gating</td><td>1 day</td><td><span class="badge badge-medium">MEDIUM</span></td></tr>
+<tr><td>robots.txt checking</td><td>0.5 day</td><td><span class="badge badge-medium">MEDIUM</span></td></tr>
+<tr><td>Rate limiting</td><td>0.5 day</td><td><span class="badge badge-low">LOW</span></td></tr>
+</table>
+<p style="margin-top:14px"><strong>Total: 5-7 days full implementation | MVP: 3-4 days</strong></p>
+</div>
+
+<h2><span class="section-icon">❓</span>Open Questions</h2>
+<div class="card">
+<ol>
+<li>Support sites behind paywalls (NYT Cooking)? <strong>Recommend NO</strong> for legal reasons</li>
+<li>Show BTW section on Fridgenie AI recipe too? Could be nice but requires source URL</li>
+<li>Merge comments from multiple sources for same dish? More useful but more complex</li>
+<li>Revenue split with sources? Probably overkill for MVP</li>
+</ol>
+</div>
+
+<div style="text-align:center;margin:40px 0 20px;color:#999;font-size:13px">
+Fridgenie Clean Recipe PRD | March 20, 2026
+</div>
+</body>
+</html>
