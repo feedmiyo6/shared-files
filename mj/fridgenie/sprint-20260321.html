@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fridgenie — Saturday Sprint Report & Loading Animation Plan</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&display=swap');
+  :root { --primary:#4A7C59; --primary-light:#6B9F7B; --surface:#FFF9F0; --bg:#F5EFE6; --text:#2D2D2D; --muted:#8B8678; --golden:#C4A35A; --card:#FFFFFF; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'Nunito',sans-serif; background:var(--bg); color:var(--text); max-width:480px; margin:0 auto; padding:16px 16px 100px; }
+  .lang-toggle { position:fixed; top:12px; right:12px; z-index:100; background:var(--primary); color:white; border:none; padding:6px 14px; border-radius:20px; font-family:'Nunito'; font-weight:700; font-size:13px; cursor:pointer; }
+  .ko { display:none; } .ko.show { display:inline !important; } .en.hide { display:none !important; }
+  h1 { font-family:'Fredoka'; font-size:24px; text-align:center; margin:20px 0 4px; color:var(--primary); }
+  .subtitle { text-align:center; font-size:13px; color:var(--muted); margin-bottom:24px; }
+  .section-title { font-family:'Fredoka'; font-size:18px; font-weight:600; margin:28px 0 12px; color:var(--primary); display:flex; align-items:center; gap:8px; }
+  .card { background:var(--card); border-radius:16px; padding:16px; margin-bottom:12px; box-shadow:0 2px 8px rgba(74,124,89,0.08); border:1px solid rgba(74,124,89,0.1); }
+  .stat-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:16px; }
+  .stat-card { background:var(--card); border-radius:14px; padding:14px; text-align:center; border:1px solid rgba(74,124,89,0.1); }
+  .stat-number { font-family:'Fredoka'; font-size:32px; font-weight:700; color:var(--primary); }
+  .stat-label { font-size:11px; color:var(--muted); font-weight:600; }
+  .build-list { list-style:none; padding:0; }
+  .build-list li { padding:8px 0; border-bottom:1px solid rgba(0,0,0,0.05); font-size:13px; line-height:1.4; }
+  .build-list li:last-child { border-bottom:none; }
+  .build-num { display:inline-block; background:var(--primary); color:white; font-size:10px; font-weight:700; padding:2px 6px; border-radius:8px; margin-right:6px; font-family:'Fredoka'; }
+  .phone-frame { background:var(--surface); border-radius:32px; padding:20px; margin:16px auto; max-width:320px; border:3px solid #E0D8CC; box-shadow:0 8px 24px rgba(0,0,0,0.12); }
+  .loading-mock { text-align:center; padding:24px 0; }
+  .chef-container { position:relative; width:120px; height:140px; margin:0 auto 16px; }
+  .chef-hat { width:50px; height:35px; background:white; border-radius:25px 25px 8px 8px; position:absolute; top:0; left:50%; transform:translateX(-50%); border:2px solid #E0D8CC; animation:bounce 1.5s ease-in-out infinite; }
+  .chef-hat::before { content:''; width:60px; height:12px; background:white; border-radius:6px; position:absolute; bottom:-2px; left:-5px; border:2px solid #E0D8CC; }
+  .chef-face { position:absolute; top:28px; left:50%; transform:translateX(-50%); font-size:28px; animation:bounce 1.5s ease-in-out infinite; }
+  .chef-body { width:70px; height:55px; background:var(--primary-light); border-radius:35px 35px 20px 20px; position:absolute; top:52px; left:50%; transform:translateX(-50%); animation:bounce 1.5s ease-in-out infinite; }
+  .chef-spoon { position:absolute; right:12px; top:55px; font-size:22px; animation:stir 1s ease-in-out infinite; transform-origin:bottom center; }
+  .pot { width:70px; height:40px; background:#8B7355; border-radius:0 0 20px 20px; position:absolute; bottom:0; left:50%; transform:translateX(-50%); }
+  .pot::before { content:''; position:absolute; top:0; left:0; right:0; height:8px; background:#6B5B45; border-radius:4px; }
+  .steam { position:absolute; top:-15px; display:flex; gap:8px; left:50%; transform:translateX(-50%); }
+  .steam-line { width:3px; height:12px; background:rgba(255,255,255,0.6); border-radius:2px; animation:steam 1.5s ease-out infinite; }
+  .steam-line:nth-child(2) { animation-delay:0.3s; height:16px; }
+  .steam-line:nth-child(3) { animation-delay:0.6s; }
+  @keyframes bounce { 0%,100%{transform:translateX(-50%) translateY(0)} 50%{transform:translateX(-50%) translateY(-4px)} }
+  @keyframes stir { 0%,100%{transform:rotate(-15deg)} 50%{transform:rotate(15deg)} }
+  @keyframes steam { 0%{opacity:0.8;transform:translateY(0)} 100%{opacity:0;transform:translateY(-20px)} }
+  .loading-text { font-family:'Fredoka'; font-size:16px; font-weight:600; color:var(--primary); margin:12px 0 4px; }
+  .loading-subtext { font-size:12px; color:var(--muted); margin-bottom:16px; }
+  .progress-bar { width:80%; height:6px; background:rgba(74,124,89,0.15); border-radius:3px; margin:0 auto 20px; overflow:hidden; }
+  .progress-fill { height:100%; background:var(--primary); border-radius:3px; animation:grow 10s linear infinite; }
+  @keyframes grow { 0%{width:0%} 90%{width:90%} 100%{width:95%} }
+  .fun-fact { background:rgba(196,163,90,0.1); border-radius:12px; padding:12px; border:1px solid rgba(196,163,90,0.2); text-align:left; }
+  .fun-fact-label { font-size:10px; font-weight:700; color:var(--golden); text-transform:uppercase; letter-spacing:1px; margin-bottom:4px; }
+  .facts-demo { position:relative; height:55px; overflow:hidden; }
+  .fact-slide { position:absolute; width:100%; animation:cycle 12s linear infinite; opacity:0; font-size:13px; line-height:1.4; }
+  .fact-slide:nth-child(1){animation-delay:0s} .fact-slide:nth-child(2){animation-delay:3s} .fact-slide:nth-child(3){animation-delay:6s} .fact-slide:nth-child(4){animation-delay:9s}
+  @keyframes cycle { 0%{opacity:0;transform:translateY(10px)} 5%{opacity:1;transform:translateY(0)} 20%{opacity:1;transform:translateY(0)} 25%{opacity:0;transform:translateY(-10px)} 100%{opacity:0} }
+  .plan-item { display:flex; gap:12px; padding:10px 0; border-bottom:1px solid rgba(0,0,0,0.05); }
+  .plan-item:last-child { border-bottom:none; }
+  .plan-icon { width:36px; height:36px; background:var(--primary); color:white; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:18px; flex-shrink:0; }
+  .plan-title { font-weight:700; font-size:14px; margin-bottom:2px; }
+  .plan-desc { font-size:12px; color:var(--muted); line-height:1.4; }
+  .fact-library { display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; margin-top:12px; }
+  .fact-category { background:var(--surface); border-radius:12px; padding:10px; text-align:center; border:1px solid rgba(74,124,89,0.1); }
+  .fact-emoji { font-size:24px; }
+  .fact-cat-name { font-size:10px; font-weight:700; color:var(--muted); margin-top:4px; }
+  .fact-count { font-family:'Fredoka'; font-size:16px; font-weight:600; color:var(--primary); }
+  .timeline { position:relative; padding-left:24px; margin-top:12px; }
+  .timeline::before { content:''; position:absolute; left:8px; top:0; bottom:0; width:2px; background:rgba(74,124,89,0.2); }
+  .timeline-item { position:relative; padding:8px 0; font-size:13px; line-height:1.4; }
+  .timeline-item::before { content:''; position:absolute; left:-20px; top:14px; width:10px; height:10px; background:var(--primary); border-radius:50%; border:2px solid var(--bg); }
+  .time-badge { display:inline-block; background:var(--primary); color:white; font-size:10px; font-weight:700; padding:1px 6px; border-radius:6px; font-family:'Fredoka'; }
+  .highlight-box { background:linear-gradient(135deg,rgba(74,124,89,0.08),rgba(196,163,90,0.08)); border-radius:14px; padding:16px; margin:12px 0; border:1px solid rgba(74,124,89,0.15); }
+</style>
+</head>
+<body>
+<button class="lang-toggle" onclick="toggleLang()">한국어</button>
+<h1>🌳 <span class="en">Saturday Sprint Report</span><span class="ko">토요일 스프린트 리포트</span></h1>
+<p class="subtitle"><span class="en">March 21, 2026 — Fridgenie Polish & Features</span><span class="ko">2026년 3월 21일 — 프리지니 개선 & 기능 추가</span></p>
+
+<div class="stat-grid">
+  <div class="stat-card"><div class="stat-number">19</div><div class="stat-label"><span class="en">BUILDS SHIPPED</span><span class="ko">빌드 배포</span></div></div>
+  <div class="stat-card"><div class="stat-number">2.4K</div><div class="stat-label"><span class="en">LINES CHANGED</span><span class="ko">코드 변경</span></div></div>
+  <div class="stat-card"><div class="stat-number">3</div><div class="stat-label"><span class="en">EDGE FUNCTIONS</span><span class="ko">엣지 함수</span></div></div>
+  <div class="stat-card"><div class="stat-number">5h</div><div class="stat-label"><span class="en">SPRINT TIME</span><span class="ko">스프린트 시간</span></div></div>
+</div>
+
+<div class="section-title">📋 <span class="en">Build Log (8→26)</span><span class="ko">빌드 로그 (8→26)</span></div>
+<div class="card">
+  <ul class="build-list">
+    <li><span class="build-num">8-10</span> <span class="en">Onboarding tours: spotlight targets, fixed card position, pulsing ring, removed fake features</span><span class="ko">온보딩 투어: 스포트라이트, 카드 위치 고정, 가짜 기능 제거</span></li>
+    <li><span class="build-num">11-13</span> <span class="en">Promo code fix (13 chars), chip layout shift fix, success message visibility</span><span class="ko">프로모 코드 수정, 칩 레이아웃, 성공 메시지</span></li>
+    <li><span class="build-num">14-18</span> <span class="en">🆕 Clean Recipe — extract recipes from sources + community tips (Pro only)</span><span class="ko">🆕 클린 레시피 — 소스에서 레시피 추출 + 커뮤니티 팁</span></li>
+    <li><span class="build-num">19-20</span> <span class="en">🗑️ Removed Amazon Fresh + Magic Shop. Fixed match %. 🧅→📊</span><span class="ko">🗑️ Amazon Fresh + 매직샵 제거. 매칭 수정</span></li>
+    <li><span class="build-num">21-22</span> <span class="en">🧠 Chef-level recipes, 14-day no-repeat, special instructions tour</span><span class="ko">🧠 셰프급 레시피, 14일 비반복, 특별 지시 투어</span></li>
+    <li><span class="build-num">23-25</span> <span class="en">Profile live-sync, cuisine override fix, generation spinner fix</span><span class="ko">프로필 실시간 동기화, 요리 오버라이드 수정, 스피너 수정</span></li>
+    <li><span class="build-num">26</span> <span class="en">Global tap-to-dismiss keyboard</span><span class="ko">전체 키보드 닫기</span></li>
+  </ul>
+</div>
+
+<div class="section-title">🎬 <span class="en">Loading Animation Plan</span><span class="ko">로딩 애니메이션 계획</span></div>
+
+<div class="phone-frame">
+  <div class="loading-mock">
+    <div class="chef-container">
+      <div class="chef-hat"></div>
+      <div class="chef-face">😊</div>
+      <div class="chef-body"></div>
+      <div class="chef-spoon">🥄</div>
+      <div class="pot">
+        <div class="steam"><div class="steam-line"></div><div class="steam-line"></div><div class="steam-line"></div></div>
+      </div>
+    </div>
+    <div class="loading-text"><span class="en">Cooking up your recipe...</span><span class="ko">레시피를 만들고 있어요...</span></div>
+    <div class="loading-subtext"><span class="en">~10 seconds • Feel free to browse other dishes!</span><span class="ko">~10초 • 다른 요리를 둘러봐도 돼요!</span></div>
+    <div class="progress-bar"><div class="progress-fill"></div></div>
+    <div class="fun-fact">
+      <div class="fun-fact-label">💡 <span class="en">Did you know?</span><span class="ko">알고 계셨나요?</span></div>
+      <div class="facts-demo">
+        <div class="fact-slide"><span class="en">Honey never spoils. 3,000-year-old honey found in Egyptian tombs was still edible! 🍯</span><span class="ko">꿀은 절대 상하지 않아요. 3,000년 된 이집트 무덤의 꿀도 먹을 수 있었대요! 🍯</span></div>
+        <div class="fact-slide"><span class="en">Carrots were originally purple! Orange ones were bred by the Dutch in the 1600s. 🥕</span><span class="ko">당근은 원래 보라색이었어요! 오렌지색은 1600년대 네덜란드에서 개량된 거예요. 🥕</span></div>
+        <div class="fact-slide"><span class="en">Kimchi has 200+ varieties in Korea. Each region has its own unique style! 🇰🇷</span><span class="ko">한국에는 200가지 이상의 김치가 있어요. 지역마다 고유한 스타일! 🇰🇷</span></div>
+        <div class="fact-slide"><span class="en">Pineapple takes 2-3 YEARS to grow. One plant = one pineapple at a time. 🍍</span><span class="ko">파인애플은 자라는 데 2-3년 걸려요. 한 그루에 하나만! 🍍</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="plan-item"><div class="plan-icon">🎨</div><div><div class="plan-title"><span class="en">Animated Chef Character</span><span class="ko">셰프 캐릭터 애니메이션</span></div><div class="plan-desc"><span class="en">Ghibli-style chef stirring a pot with steam. Pure Flutter animation — no external assets. Bouncing hat, stirring spoon, rising steam particles.</span><span class="ko">지브리 스타일 셰프가 냄비를 젓는 모습. 순수 Flutter 애니메이션. 모자 바운스, 숟가락 젓기, 김 올라감.</span></div></div></div>
+  <div class="plan-item"><div class="plan-icon">⏱️</div><div><div class="plan-title"><span class="en">Progress Bar + Time Estimate</span><span class="ko">진행 바 + 예상 시간</span></div><div class="plan-desc"><span class="en">"~10 seconds" shown upfront. Smooth bar fills to 90%, then slows (never 100% until actually done). Manages expectations perfectly.</span><span class="ko">"~10초" 표시. 부드러운 바가 90%까지 채워지고 완료까지 느려짐.</span></div></div></div>
+  <div class="plan-item"><div class="plan-icon">💡</div><div><div class="plan-title"><span class="en">Fun Facts Library (50+)</span><span class="ko">재미있는 사실 라이브러리 (50+)</span></div><div class="plan-desc"><span class="en">Random fact every 3 seconds. Bilingual EN/KO. 6 categories: Cooking Tips, Food Origins, Nutrition, Mind-Blowing, Korean Food, World Records.</span><span class="ko">3초마다 랜덤 사실. EN/KO 이중 언어. 6개 카테고리.</span></div></div></div>
+  <div class="plan-item"><div class="plan-icon">🚪</div><div><div class="plan-title"><span class="en">"Browse While Waiting"</span><span class="ko">"기다리는 동안 둘러보기"</span></div><div class="plan-desc"><span class="en">Tell users they can navigate away — recipe generates in background. Show subtle badge/notification when ready.</span><span class="ko">다른 곳으로 이동해도 된다고 안내 — 레시피는 백그라운드 생성. 완료 시 알림.</span></div></div></div>
+</div>
+
+<div class="section-title">📚 <span class="en">Facts Library Categories</span><span class="ko">사실 라이브러리 카테고리</span></div>
+<div class="card">
+  <div class="fact-library">
+    <div class="fact-category"><div class="fact-emoji">🍳</div><div class="fact-cat-name"><span class="en">Cooking</span><span class="ko">요리</span></div><div class="fact-count">10+</div></div>
+    <div class="fact-category"><div class="fact-emoji">🌍</div><div class="fact-cat-name"><span class="en">Origins</span><span class="ko">기원</span></div><div class="fact-count">10+</div></div>
+    <div class="fact-category"><div class="fact-emoji">🧬</div><div class="fact-cat-name"><span class="en">Nutrition</span><span class="ko">영양</span></div><div class="fact-count">8+</div></div>
+    <div class="fact-category"><div class="fact-emoji">🤯</div><div class="fact-cat-name"><span class="en">Wild</span><span class="ko">놀라운</span></div><div class="fact-count">8+</div></div>
+    <div class="fact-category"><div class="fact-emoji">🇰🇷</div><div class="fact-cat-name"><span class="en">Korean</span><span class="ko">한식</span></div><div class="fact-count">8+</div></div>
+    <div class="fact-category"><div class="fact-emoji">🏆</div><div class="fact-cat-name"><span class="en">Records</span><span class="ko">기록</span></div><div class="fact-count">6+</div></div>
+  </div>
+</div>
+
+<div class="section-title">📍 <span class="en">Where It Shows</span><span class="ko">표시 위치</span></div>
+<div class="card">
+  <div class="timeline">
+    <div class="timeline-item"><b><span class="en">Fridgenie Recipe</span><span class="ko">프리지니 레시피</span></b><br><span class="time-badge">~8s</span> <span style="font-size:12px;color:var(--muted)"><span class="en">Dish detail → Generate Recipe</span><span class="ko">요리 상세 → 레시피 생성</span></span></div>
+    <div class="timeline-item"><b><span class="en">Clean Version</span><span class="ko">클린 버전</span></b><br><span class="time-badge">~12s</span> <span style="font-size:12px;color:var(--muted)"><span class="en">Source card → Clean Version</span><span class="ko">소스 카드 → 클린 버전</span></span></div>
+    <div class="timeline-item"><b><span class="en">Dish Suggestions</span><span class="ko">요리 추천</span></b><br><span class="time-badge">~5s</span> <span style="font-size:12px;color:var(--muted)"><span class="en">Recipes tab → Discover</span><span class="ko">레시피 탭 → 발견</span></span></div>
+  </div>
+</div>
+
+<div class="section-title">🚀 <span class="en">Next Steps</span><span class="ko">다음 단계</span></div>
+<div class="highlight-box">
+  <div style="font-size:13px;line-height:1.8">
+    <b>1.</b> <span class="en">Build Flutter loading widget (chef animation + progress + facts)</span><span class="ko">Flutter 로딩 위젯 빌드 (셰프 애니메이션 + 진행 + 사실)</span><br>
+    <b>2.</b> <span class="en">Create fun_facts.dart — 50+ bilingual facts</span><span class="ko">fun_facts.dart — 50개 이상 이중언어 사실</span><br>
+    <b>3.</b> <span class="en">Replace all 3 loading spinners with animated widget</span><span class="ko">3개 로딩 스피너를 애니메이션 위젯으로 교체</span><br>
+    <b>4.</b> <span class="en">Figma design refresh (waiting on designer)</span><span class="ko">Figma 디자인 리프레시 (디자이너 대기)</span><br>
+    <b>5.</b> <span class="en">TestFlight beta distribution</span><span class="ko">TestFlight 베타 배포</span>
+  </div>
+</div>
+
+<p style="text-align:center;font-size:12px;color:var(--muted);margin-top:32px;">🌳 <span class="en">Totoro — Saturday Sprint, 7 PM → Midnight</span><span class="ko">토토로 — 토요일 스프린트, 오후 7시 → 자정</span></p>
+
+<script>
+let isKorean=false;
+function toggleLang(){isKorean=!isKorean;document.querySelectorAll('.en').forEach(el=>el.classList.toggle('hide',isKorean));document.querySelectorAll('.ko').forEach(el=>el.classList.toggle('show',isKorean));document.querySelector('.lang-toggle').textContent=isKorean?'English':'한국어';}
+</script>
+</body>
+</html>
