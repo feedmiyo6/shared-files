@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 26 Practice: Ready/Valid Timing Analysis</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    background: linear-gradient(135deg, #fefae0 0%, #faedcd 100%);
+    color: #3d405b;
+    line-height: 1.8;
+    padding: 24px;
+    max-width: 920px;
+    margin: 0 auto;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+h1 {
+    color: #5d4037;
+    border-bottom: 3px solid #c4a77d;
+    padding-bottom: 12px;
+    margin-bottom: 24px;
+    font-size: 2em;
+}
+h2 {
+    color: #588157;
+    border-bottom: 2px solid #a3b18a;
+    padding-bottom: 8px;
+    margin: 32px 0 16px;
+}
+h3 { color: #5d4037; margin: 20px 0 12px; }
+p { margin: 12px 0; }
+ul, ol { margin: 12px 0 12px 24px; }
+li { margin: 6px 0; }
+pre {
+    background: #2d3436;
+    padding: 24px;
+    border-radius: 12px;
+    margin: 24px 0;
+    border: 3px solid #a3b18a;
+    overflow-x: auto;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+    font-size: 15px;
+    line-height: 1.6;
+    color: #f8f8f2;
+}
+code {
+    background: #e9f5db;
+    color: #3d405b;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+}
+pre code { background: none; color: inherit; padding: 0; }
+.keyword { color: #ff79c6; font-weight: 600; }
+.type { color: #8be9fd; }
+.signal { color: #50fa7b; }
+.number { color: #ffb86c; }
+.comment { color: #6272a4; font-style: italic; }
+.string { color: #f1fa8c; }
+.concept-box {
+    background: #fff8f0;
+    border: 2px solid #c4a77d;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    color: #3d405b;
+}
+.concept-box h3 { color: #5d4037; margin-bottom: 12px; }
+.warning-box {
+    background: #fff8f0;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    border-left: 4px solid #ef4444;
+    color: #3d405b;
+}
+.warning-box h3 { color: #c53030; margin-bottom: 12px; }
+.tip-box {
+    background: #fff8f0;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    border-left: 4px solid #588157;
+    color: #3d405b;
+}
+.hint-box {
+    background: #fff8f0;
+    border-radius: 8px;
+    padding: 15px;
+    margin: 15px 0;
+    border-left: 4px solid #5d4037;
+    color: #3d405b;
+}
+.exercise {
+    background: #fff;
+    border: 2px solid #a3b18a;
+    border-radius: 12px;
+    padding: 24px;
+    margin: 24px 0;
+}
+.exercise h3 { color: #588157; }
+textarea {
+    width: 100%;
+    min-height: 200px;
+    background: #2d3436;
+    color: #f8f8f2;
+    border: 3px solid #a3b18a;
+    border-radius: 12px;
+    padding: 16px;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+    font-size: 14px;
+    line-height: 1.6;
+    resize: vertical;
+    margin: 12px 0;
+}
+textarea:focus { outline: none; border-color: #588157; }
+.reveal-btn {
+    background: linear-gradient(135deg, #588157, #3a5a40);
+    color: #fff;
+    border: none;
+    border-radius: 24px;
+    padding: 10px 24px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 14px;
+    margin: 8px 4px;
+}
+.reveal-btn:hover { opacity: 0.9; }
+.solution { display: none; margin-top: 16px; }
+.timing-diagram {
+    background: #fff;
+    border: 2px solid #c4a77d;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    overflow-x: auto;
+}
+.timing-diagram pre {
+    background: #fff;
+    color: #3d405b;
+    border: none;
+    padding: 12px;
+    font-size: 14px;
+    line-height: 1.4;
+}
+.timing-diagram pre code { background: none; color: #3d405b; }
+.nav-links {
+    display: flex;
+    gap: 12px;
+    margin: 20px 0;
+    flex-wrap: wrap;
+}
+.nav-links a {
+    background: linear-gradient(135deg, #588157, #3a5a40);
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 24px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14px;
+}
+.nav-links a:hover { opacity: 0.9; }
+.lang-toggle {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    background: #588157;
+    border: none;
+    border-radius: 24px;
+    padding: 10px 20px;
+    cursor: pointer;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    z-index: 1000;
+}
+.lang-toggle:hover { background: #3a5a40; }
+.ko { display: none; }
+.comparison-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+.comparison-table th {
+    background: #588157;
+    color: white;
+    padding: 12px;
+    text-align: left;
+}
+.comparison-table td {
+    background: #fff;
+    border: 1px solid #c4a77d;
+    padding: 12px;
+    color: #3d405b;
+}
+.comparison-table tr:nth-child(even) td { background: #fff8f0; }
+@media (max-width: 768px) {
+    body { padding: 16px; }
+    h1 { font-size: 1.8em; }
+    pre { font-size: 14px; padding: 16px; }
+    .lang-toggle { padding: 8px 16px; font-size: 13px; }
+}
+</style>
+</head>
+<body>
+
+<button class="lang-toggle" onclick="toggleLang()">한국어</button>
+
+<h1>💻 Day 26 Practice: Ready/Valid Timing Analysis</h1>
+
+<div class="nav-links">
+    <a href="day-26-lesson.html">📖 Lesson</a>
+    <a href="day-26-quiz.html">📝 Quiz</a>
+</div>
+
+<p class="en">Three hands-on exercises to build intuition for ready/valid timing. Write code, trace signals, and fix bugs!</p>
+<p class="ko" style="display:none;">Ready/valid 타이밍에 대한 직관을 구축하기 위한 세 가지 실습 연습입니다. 코드를 작성하고, 신호를 추적하고, 버그를 수정하세요!</p>
+
+<!-- Exercise 1 -->
+<div class="exercise">
+    <h3>🔧 Exercise 1: Timing Diagram Analysis</h3>
+    <p class="en">Given this timing diagram, answer: (a) How many transfers occur? (b) What is the throughput? (c) In which cycles do transfers happen?</p>
+    <p class="ko" style="display:none;">이 타이밍 다이어그램이 주어졌을 때: (a) 몇 개의 전송이 발생합니까? (b) 처리량은 얼마입니까? (c) 어느 사이클에서 전송이 발생합니까?</p>
+
+    <div class="timing-diagram">
+<pre><code>              C1     C2     C3     C4     C5     C6     C7     C8
+         ┌──┐ ┌──┐ ┌──┐ ┌──┐ ┌──┐ ┌──┐ ┌──┐ ┌──┐ ┌──┐ ┌──┐
+  clk    ┘  └─┘  └─┘  └─┘  └─┘  └─┘  └─┘  └─┘  └─┘  └─┘  └─
+
+         ┌───────────────────┐     ┌──────────────────┐
+  valid  ┘                   └─────┘                  └────────
+
+         ┌───────────────────┐     ┌──────────────────┐
+  data   ╡  D0  │  D1  │ D2 ╞═════╡  D3  │  D4  │D5 ╞════════
+              ┌────────────────────────────┐     ┌─────┐
+  ready  ─────┘                            └─────┘     └───────
+</code></pre>
+    </div>
+
+    <textarea placeholder="Write your analysis here...&#10;(a) Number of transfers: ...&#10;(b) Throughput: ...&#10;(c) Transfer cycles: ..."></textarea>
+
+    <button class="reveal-btn" onclick="toggleSolution('sol1')">Show Solution</button>
+    <div class="solution" id="sol1">
+        <div class="concept-box">
+            <h3>✅ Solution</h3>
+            <p class="en"><strong>(a) 5 transfers</strong></p>
+            <p class="en"><strong>(b) Throughput = 5/8 = 62.5%</strong></p>
+            <p class="en"><strong>(c) Transfers at C2, C3, C4, C6, C7</strong></p>
+            <p class="ko" style="display:none;"><strong>(a) 5개의 전송</strong></p>
+            <p class="ko" style="display:none;"><strong>(b) 처리량 = 5/8 = 62.5%</strong></p>
+            <p class="ko" style="display:none;"><strong>(c) C2, C3, C4, C6, C7에서 전송</strong></p>
+            <p class="en"><strong>Trace:</strong></p>
+            <p class="ko" style="display:none;"><strong>추적:</strong></p>
+            <ul>
+                <li class="en">C1: valid=1, ready=0 → STALL (D0 held)</li>
+                <li class="ko" style="display:none;">C1: valid=1, ready=0 → 스톨 (D0 유지)</li>
+                <li class="en">C2: valid=1, ready=1 → TRANSFER D0 ✓</li>
+                <li class="ko" style="display:none;">C2: valid=1, ready=1 → 전송 D0 ✓</li>
+                <li class="en">C3: valid=1, ready=1 → TRANSFER D1 ✓</li>
+                <li class="ko" style="display:none;">C3: valid=1, ready=1 → 전송 D1 ✓</li>
+                <li class="en">C4: valid=1, ready=1 → TRANSFER D2 ✓</li>
+                <li class="ko" style="display:none;">C4: valid=1, ready=1 → 전송 D2 ✓</li>
+                <li class="en">C5: valid=0 → NO TRANSFER (source has no data)</li>
+                <li class="ko" style="display:none;">C5: valid=0 → 전송 없음 (소스에 데이터 없음)</li>
+                <li class="en">C6: valid=1, ready=1 → TRANSFER D3 ✓</li>
+                <li class="ko" style="display:none;">C6: valid=1, ready=1 → 전송 D3 ✓</li>
+                <li class="en">C7: valid=1, ready=1 → TRANSFER D4 ✓</li>
+                <li class="ko" style="display:none;">C7: valid=1, ready=1 → 전송 D4 ✓</li>
+                <li class="en">C8: valid=1, ready=0 → STALL (D5 held, not transferred)</li>
+                <li class="ko" style="display:none;">C8: valid=1, ready=0 → 스톨 (D5 유지, 전송되지 않음)</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- Exercise 2 -->
+<div class="exercise">
+    <h3>🔧 Exercise 2: Fix the Buggy Source</h3>
+    <p class="en">This ready/valid source has a critical protocol violation. Find and fix it!</p>
+    <p class="ko" style="display:none;">이 ready/valid 소스에는 중요한 프로토콜 위반이 있습니다. 찾아서 고치세요!</p>
+
+<pre><code><span class="keyword">module</span> <span class="type">buggy_source</span> #(
+    <span class="keyword">parameter</span> <span class="type">DATA_W</span> = <span class="number">8</span>
+)(
+    <span class="keyword">input</span>  <span class="type">logic</span>              <span class="signal">clk</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span>              <span class="signal">rst_n</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span>              <span class="signal">data_available</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span> [<span class="type">DATA_W</span>-<span class="number">1</span>:<span class="number">0</span>] <span class="signal">next_data</span>,
+    <span class="keyword">output</span> <span class="type">logic</span>              <span class="signal">o_valid</span>,
+    <span class="keyword">output</span> <span class="type">logic</span> [<span class="type">DATA_W</span>-<span class="number">1</span>:<span class="number">0</span>] <span class="signal">o_data</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span>              <span class="signal">i_ready</span>
+);
+
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span> <span class="keyword">or</span> <span class="keyword">negedge</span> <span class="signal">rst_n</span>) <span class="keyword">begin</span>
+        <span class="keyword">if</span> (!<span class="signal">rst_n</span>) <span class="keyword">begin</span>
+            <span class="signal">o_valid</span> <= <span class="number">1'b0</span>;
+            <span class="signal">o_data</span>  <= <span class="string">'0</span>;
+        <span class="keyword">end</span> <span class="keyword">else begin</span>
+            <span class="comment">// BUG: What's wrong here?</span>
+            <span class="signal">o_valid</span> <= <span class="signal">data_available</span>;
+            <span class="signal">o_data</span>  <= <span class="signal">next_data</span>;
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+
+<span class="keyword">endmodule</span>
+</code></pre>
+
+    <div class="hint-box">
+        <p class="en"><strong>💡 Hint:</strong> What happens when <code>o_valid=1</code>, <code>i_ready=0</code>, and <code>data_available</code> changes? Think about the stall rule.</p>
+        <p class="ko" style="display:none;"><strong>💡 힌트:</strong> <code>o_valid=1</code>, <code>i_ready=0</code>이고 <code>data_available</code>이 변경되면 어떻게 됩니까? 스톨 규칙을 생각해보세요.</p>
+    </div>
+
+    <textarea placeholder="Describe the bug and write the fixed code here..."></textarea>
+
+    <button class="reveal-btn" onclick="toggleSolution('sol2')">Show Solution</button>
+    <div class="solution" id="sol2">
+        <div class="warning-box">
+            <h3>🐛 The Bug</h3>
+            <p class="en">The source updates <code>o_valid</code> and <code>o_data</code> every cycle, regardless of whether a stall is happening. If <code>o_valid=1</code> and <code>i_ready=0</code> (stall), but <code>data_available</code> goes low, the source will deassert <code>valid</code> — <strong>protocol violation!</strong> It also changes <code>o_data</code> during the stall.</p>
+            <p class="ko" style="display:none;">소스가 스톨 여부와 관계없이 매 사이클 <code>o_valid</code>와 <code>o_data</code>를 업데이트합니다. <code>o_valid=1</code>이고 <code>i_ready=0</code>(스톨)이지만 <code>data_available</code>이 로우가 되면 소스가 valid를 디어서트합니다 — <strong>프로토콜 위반!</strong> 또한 스톨 중에 <code>o_data</code>를 변경합니다.</p>
+        </div>
+        <div class="concept-box">
+            <h3>✅ Fixed Code</h3>
+<pre><code><span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span> <span class="keyword">or</span> <span class="keyword">negedge</span> <span class="signal">rst_n</span>) <span class="keyword">begin</span>
+    <span class="keyword">if</span> (!<span class="signal">rst_n</span>) <span class="keyword">begin</span>
+        <span class="signal">o_valid</span> <= <span class="number">1'b0</span>;
+        <span class="signal">o_data</span>  <= <span class="string">'0</span>;
+    <span class="keyword">end</span> <span class="keyword">else if</span> (<span class="signal">o_valid</span> && !<span class="signal">i_ready</span>) <span class="keyword">begin</span>
+        <span class="comment">// STALL: hold valid and data stable!</span>
+        <span class="comment">// Do nothing — keep current values</span>
+    <span class="keyword">end</span> <span class="keyword">else begin</span>
+        <span class="comment">// Transfer complete or idle: safe to update</span>
+        <span class="signal">o_valid</span> <= <span class="signal">data_available</span>;
+        <span class="signal">o_data</span>  <= <span class="signal">next_data</span>;
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+</code></pre>
+            <p class="en"><strong>Key fix:</strong> Added the <code>o_valid && !i_ready</code> stall condition. During stall, the always_ff block does nothing — holding both signals stable.</p>
+            <p class="ko" style="display:none;"><strong>핵심 수정:</strong> <code>o_valid && !i_ready</code> 스톨 조건을 추가했습니다. 스톨 중 always_ff 블록은 아무것도 하지 않아 두 신호를 안정적으로 유지합니다.</p>
+        </div>
+    </div>
+</div>
+
+<!-- Exercise 3 -->
+<div class="exercise">
+    <h3>🔧 Exercise 3: Write a Ready/Valid Counter Source</h3>
+    <p class="en">Design a module that outputs an incrementing counter (0, 1, 2, 3, ...) using the ready/valid protocol. The counter only advances when a transfer occurs. Include proper stall handling!</p>
+    <p class="ko" style="display:none;">Ready/valid 프로토콜을 사용하여 증가하는 카운터 (0, 1, 2, 3, ...)를 출력하는 모듈을 설계하세요. 카운터는 전송이 발생할 때만 진행됩니다. 적절한 스톨 처리를 포함하세요!</p>
+
+    <div class="concept-box">
+        <h3>📋 Requirements</h3>
+        <ul>
+            <li class="en">Output: <code>o_valid</code>, <code>o_data[7:0]</code> (8-bit counter)</li>
+            <li class="ko" style="display:none;">출력: <code>o_valid</code>, <code>o_data[7:0]</code> (8비트 카운터)</li>
+            <li class="en">Input: <code>i_ready</code></li>
+            <li class="ko" style="display:none;">입력: <code>i_ready</code></li>
+            <li class="en"><code>o_valid</code> is always high (always has data)</li>
+            <li class="ko" style="display:none;"><code>o_valid</code>는 항상 하이 (항상 데이터가 있음)</li>
+            <li class="en">Counter only increments when <code>valid && ready</code></li>
+            <li class="ko" style="display:none;">카운터는 <code>valid && ready</code>일 때만 증가</li>
+            <li class="en">Proper async reset (counter starts at 0)</li>
+            <li class="ko" style="display:none;">적절한 비동기 리셋 (카운터는 0에서 시작)</li>
+        </ul>
+    </div>
+
+    <textarea placeholder="Write your SystemVerilog module here...&#10;&#10;module rv_counter (&#10;    input  logic       clk,&#10;    input  logic       rst_n,&#10;    output logic       o_valid,&#10;    output logic [7:0] o_data,&#10;    input  logic       i_ready&#10;);&#10;&#10;    // Your code here...&#10;&#10;endmodule"></textarea>
+
+    <button class="reveal-btn" onclick="toggleSolution('sol3')">Show Solution</button>
+    <div class="solution" id="sol3">
+        <div class="concept-box">
+            <h3>✅ Solution</h3>
+<pre><code><span class="keyword">module</span> <span class="type">rv_counter</span> (
+    <span class="keyword">input</span>  <span class="type">logic</span>       <span class="signal">clk</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span>       <span class="signal">rst_n</span>,
+    <span class="keyword">output</span> <span class="type">logic</span>       <span class="signal">o_valid</span>,
+    <span class="keyword">output</span> <span class="type">logic</span> [<span class="number">7</span>:<span class="number">0</span>] <span class="signal">o_data</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span>       <span class="signal">i_ready</span>
+);
+
+    <span class="comment">// Always have data to send</span>
+    <span class="keyword">assign</span> <span class="signal">o_valid</span> = <span class="number">1'b1</span>;
+
+    <span class="comment">// Transfer detection</span>
+    <span class="type">logic</span> <span class="signal">transfer</span>;
+    <span class="keyword">assign</span> <span class="signal">transfer</span> = <span class="signal">o_valid</span> && <span class="signal">i_ready</span>;
+
+    <span class="comment">// Counter — only increments on transfer</span>
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span> <span class="keyword">or</span> <span class="keyword">negedge</span> <span class="signal">rst_n</span>) <span class="keyword">begin</span>
+        <span class="keyword">if</span> (!<span class="signal">rst_n</span>)
+            <span class="signal">o_data</span> <= <span class="number">8'd0</span>;
+        <span class="keyword">else if</span> (<span class="signal">transfer</span>)
+            <span class="signal">o_data</span> <= <span class="signal">o_data</span> + <span class="number">8'd1</span>;
+        <span class="comment">// else: stall — hold current value</span>
+    <span class="keyword">end</span>
+
+<span class="keyword">endmodule</span>
+</code></pre>
+            <p class="en"><strong>Key points:</strong></p>
+            <p class="ko" style="display:none;"><strong>핵심 포인트:</strong></p>
+            <ul>
+                <li class="en"><code>o_valid = 1</code> always — this counter always has data to send</li>
+                <li class="ko" style="display:none;"><code>o_valid = 1</code> 항상 — 이 카운터는 항상 보낼 데이터가 있음</li>
+                <li class="en">Counter increments ONLY on <code>transfer</code> — stall holds the value</li>
+                <li class="ko" style="display:none;">카운터는 <code>transfer</code> 시에만 증가 — 스톨 시 값 유지</li>
+                <li class="en">No deadlock risk: valid doesn't depend on ready</li>
+                <li class="ko" style="display:none;">데드락 위험 없음: valid가 ready에 의존하지 않음</li>
+                <li class="en">Data stays stable during stall (implicit in the else branch)</li>
+                <li class="ko" style="display:none;">스톨 중 데이터 안정 유지 (else 분기에 암시적)</li>
+            </ul>
+        </div>
+
+        <div class="tip-box">
+            <h3>💡 Try It on EDA Playground!</h3>
+            <p class="en">Paste the module into <a href="https://www.edaplayground.com" target="_blank" style="color:#588157;">EDA Playground</a> with a testbench that toggles <code>i_ready</code> randomly. Verify the counter only advances on transfer cycles.</p>
+            <p class="ko" style="display:none;">모듈을 <a href="https://www.edaplayground.com" target="_blank" style="color:#588157;">EDA Playground</a>에 붙여넣고 <code>i_ready</code>를 무작위로 토글하는 테스트벤치와 함께 사용하세요. 카운터가 전송 사이클에서만 진행되는지 확인하세요.</p>
+        </div>
+
+        <h3 class="en">Bonus: Testbench</h3>
+        <h3 class="ko" style="display:none;">보너스: 테스트벤치</h3>
+<pre><code><span class="keyword">module</span> <span class="type">tb_rv_counter</span>;
+    <span class="type">logic</span> <span class="signal">clk</span>, <span class="signal">rst_n</span>, <span class="signal">o_valid</span>, <span class="signal">i_ready</span>;
+    <span class="type">logic</span> [<span class="number">7</span>:<span class="number">0</span>] <span class="signal">o_data</span>;
+
+    <span class="type">rv_counter</span> <span class="signal">dut</span> (.*);
+
+    <span class="comment">// Clock: 10ns period</span>
+    <span class="keyword">initial</span> <span class="signal">clk</span> = <span class="number">0</span>;
+    <span class="keyword">always</span> #<span class="number">5</span> <span class="signal">clk</span> = ~<span class="signal">clk</span>;
+
+    <span class="keyword">initial</span> <span class="keyword">begin</span>
+        <span class="signal">rst_n</span> = <span class="number">0</span>; <span class="signal">i_ready</span> = <span class="number">0</span>;
+        #<span class="number">20</span> <span class="signal">rst_n</span> = <span class="number">1</span>;
+
+        <span class="comment">// Back-to-back transfers</span>
+        @(<span class="keyword">posedge</span> <span class="signal">clk</span>) <span class="signal">i_ready</span> <= <span class="number">1</span>;
+        <span class="keyword">repeat</span>(<span class="number">5</span>) @(<span class="keyword">posedge</span> <span class="signal">clk</span>);
+
+        <span class="comment">// Stall for 3 cycles</span>
+        <span class="signal">i_ready</span> <= <span class="number">0</span>;
+        <span class="keyword">repeat</span>(<span class="number">3</span>) @(<span class="keyword">posedge</span> <span class="signal">clk</span>);
+
+        <span class="comment">// Resume</span>
+        <span class="signal">i_ready</span> <= <span class="number">1</span>;
+        <span class="keyword">repeat</span>(<span class="number">5</span>) @(<span class="keyword">posedge</span> <span class="signal">clk</span>);
+
+        <span class="comment">// Random ready</span>
+        <span class="keyword">repeat</span>(<span class="number">20</span>) <span class="keyword">begin</span>
+            @(<span class="keyword">posedge</span> <span class="signal">clk</span>) <span class="signal">i_ready</span> <= $urandom_range(<span class="number">0</span>,<span class="number">1</span>);
+        <span class="keyword">end</span>
+
+        $finish;
+    <span class="keyword">end</span>
+
+    <span class="comment">// Monitor</span>
+    <span class="keyword">always</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span>) <span class="keyword">begin</span>
+        <span class="keyword">if</span> (<span class="signal">o_valid</span> && <span class="signal">i_ready</span>)
+            $display(<span class="string">"[%0t] TRANSFER: data=%0d"</span>, $time, <span class="signal">o_data</span>);
+    <span class="keyword">end</span>
+
+<span class="keyword">endmodule</span>
+</code></pre>
+    </div>
+</div>
+
+<h2>🎯 Challenge: Throughput Calculator</h2>
+
+<div class="exercise">
+    <p class="en">Fill in this table analyzing different ready/valid scenarios:</p>
+    <p class="ko" style="display:none;">다양한 ready/valid 시나리오를 분석하여 이 표를 채우세요:</p>
+
+    <table class="comparison-table">
+        <tr>
+            <th class="en">Scenario</th><th class="en">Transfers</th><th class="en">Cycles</th><th class="en">Throughput</th>
+            <th class="ko" style="display:none;">시나리오</th><th class="ko" style="display:none;">전송</th><th class="ko" style="display:none;">사이클</th><th class="ko" style="display:none;">처리량</th>
+        </tr>
+        <tr>
+            <td>Back-to-back (no stalls)</td><td>10</td><td>10</td><td>?</td>
+        </tr>
+        <tr>
+            <td>Ready every other cycle</td><td>10</td><td>20</td><td>?</td>
+        </tr>
+        <tr>
+            <td>3 stall cycles per transfer</td><td>10</td><td>40</td><td>?</td>
+        </tr>
+        <tr>
+            <td>Source valid 50%, sink always ready</td><td>10</td><td>20</td><td>?</td>
+        </tr>
+    </table>
+
+    <button class="reveal-btn" onclick="toggleSolution('sol4')">Show Answers</button>
+    <div class="solution" id="sol4">
+        <div class="concept-box">
+            <h3>✅ Answers</h3>
+            <table class="comparison-table">
+                <tr><th>Scenario</th><th>Throughput</th></tr>
+                <tr><td>Back-to-back</td><td><strong>100%</strong> (10/10)</td></tr>
+                <tr><td>Ready every other cycle</td><td><strong>50%</strong> (10/20)</td></tr>
+                <tr><td>3 stall cycles per transfer</td><td><strong>25%</strong> (10/40)</td></tr>
+                <tr><td>Source valid 50%</td><td><strong>50%</strong> (10/20)</td></tr>
+            </table>
+            <p class="en"><strong>Insight:</strong> Throughput is limited by whichever side is slower — the source (valid rate) or the sink (ready rate). The bottleneck determines overall throughput.</p>
+            <p class="ko" style="display:none;"><strong>인사이트:</strong> 처리량은 더 느린 쪽에 의해 제한됩니다 — 소스 (valid 비율) 또는 싱크 (ready 비율). 병목이 전체 처리량을 결정합니다.</p>
+        </div>
+    </div>
+</div>
+
+<div class="nav-links" style="margin-top: 32px;">
+    <a href="day-26-lesson.html">📖 Review Lesson</a>
+    <a href="day-26-quiz.html">📝 Take the Quiz</a>
+</div>
+
+<script>
+let isKorean = false;
+function toggleLang() {
+    isKorean = !isKorean;
+    document.querySelectorAll('.en').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'none' : 'revert', 'important');
+    });
+    document.querySelectorAll('.ko').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'revert' : 'none', 'important');
+    });
+    document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+}
+function toggleSolution(id) {
+    const sol = document.getElementById(id);
+    sol.style.display = sol.style.display === 'block' ? 'none' : 'block';
+}
+</script>
+
+</body>
+</html>

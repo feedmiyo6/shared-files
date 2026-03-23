@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 26 Quiz: Ready/Valid Deep Dive</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    background: linear-gradient(135deg, #fefae0 0%, #faedcd 100%);
+    color: #3d405b;
+    line-height: 1.8;
+    padding: 24px;
+    max-width: 920px;
+    margin: 0 auto;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+h1 {
+    color: #5d4037;
+    border-bottom: 3px solid #c4a77d;
+    padding-bottom: 12px;
+    margin-bottom: 24px;
+    font-size: 2em;
+}
+h2 {
+    color: #588157;
+    border-bottom: 2px solid #a3b18a;
+    padding-bottom: 8px;
+    margin: 32px 0 16px;
+}
+h3 { color: #5d4037; margin: 20px 0 12px; }
+p { margin: 12px 0; }
+code {
+    background: #e9f5db;
+    color: #3d405b;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+}
+.question {
+    background: #fff8f0;
+    border: 2px solid #c4a77d;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    color: #3d405b;
+}
+.question h3 { color: #5d4037; margin-bottom: 12px; }
+.options { list-style: none; padding: 0; margin: 12px 0; }
+.options li {
+    padding: 10px 16px;
+    margin: 8px 0;
+    border-radius: 8px;
+    cursor: pointer;
+    border: 2px solid #a3b18a;
+    background: #fff;
+    transition: all 0.2s;
+}
+.options li:hover { background: #e9f5db; }
+.options li.correct {
+    background: #d4edda;
+    border-color: #588157;
+    color: #3d405b;
+}
+.options li.incorrect {
+    background: #f8d7da;
+    border-color: #ef4444;
+    color: #3d405b;
+}
+.options li.disabled { pointer-events: none; opacity: 0.7; }
+.explanation {
+    display: none;
+    margin-top: 12px;
+    padding: 12px;
+    border-radius: 8px;
+    background: #fff;
+    border-left: 4px solid #588157;
+    color: #3d405b;
+}
+.score-box {
+    background: #fff8f0;
+    border: 2px solid #c4a77d;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    text-align: center;
+    display: none;
+    color: #3d405b;
+}
+.score-box h2 { color: #5d4037; border: none; }
+.nav-links {
+    display: flex;
+    gap: 12px;
+    margin: 20px 0;
+    flex-wrap: wrap;
+}
+.nav-links a {
+    background: linear-gradient(135deg, #588157, #3a5a40);
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 24px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14px;
+}
+.nav-links a:hover { opacity: 0.9; }
+.lang-toggle {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    background: #588157;
+    border: none;
+    border-radius: 24px;
+    padding: 10px 20px;
+    cursor: pointer;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    z-index: 1000;
+}
+.lang-toggle:hover { background: #3a5a40; }
+.ko { display: none; }
+@media (max-width: 768px) {
+    body { padding: 16px; }
+    h1 { font-size: 1.8em; }
+    .lang-toggle { padding: 8px 16px; font-size: 13px; }
+}
+</style>
+</head>
+<body>
+
+<button class="lang-toggle" onclick="toggleLang()">한국어</button>
+
+<h1>📝 Day 26 Quiz: Ready/Valid Deep Dive</h1>
+
+<div class="nav-links">
+    <a href="day-26-lesson.html">📖 Lesson</a>
+    <a href="day-26-practice.html">💻 Practice</a>
+</div>
+
+<p class="en">Test your understanding of ready/valid timing diagrams and protocol rules. Click an answer to check!</p>
+<p class="ko" style="display:none;">Ready/valid 타이밍 다이어그램과 프로토콜 규칙에 대한 이해를 테스트하세요. 답을 클릭해 확인하세요!</p>
+
+<!-- Q1 -->
+<div class="question" id="q1">
+    <h3 class="en">Q1. When does a transfer occur in a ready/valid handshake?</h3>
+    <h3 class="ko" style="display:none;">Q1. Ready/valid 핸드셰이크에서 전송은 언제 발생합니까?</h3>
+    <ul class="options">
+        <li onclick="check(this,'q1',false)">A) When valid rises (posedge valid)</li>
+        <li onclick="check(this,'q1',true)">B) When both valid AND ready are high on the rising clock edge</li>
+        <li onclick="check(this,'q1',false)">C) When ready rises (posedge ready)</li>
+        <li onclick="check(this,'q1',false)">D) When data changes value</li>
+    </ul>
+    <div class="explanation" id="q1-exp">
+        <p class="en">✅ Transfer = <code>valid && ready</code> sampled at the rising clock edge. Neither signal edge alone triggers a transfer.</p>
+        <p class="ko" style="display:none;">✅ 전송 = 상승 클록 에지에서 샘플링된 <code>valid && ready</code>. 어느 신호의 에지만으로는 전송이 트리거되지 않습니다.</p>
+    </div>
+</div>
+
+<!-- Q2 -->
+<div class="question" id="q2">
+    <h3 class="en">Q2. What is the golden rule that prevents deadlocks?</h3>
+    <h3 class="ko" style="display:none;">Q2. 데드락을 방지하는 황금 규칙은 무엇입니까?</h3>
+    <ul class="options">
+        <li onclick="check(this,'q2',false)">A) Ready must not depend on valid</li>
+        <li onclick="check(this,'q2',true)">B) Valid must not depend on ready</li>
+        <li onclick="check(this,'q2',false)">C) Both valid and ready must be registered</li>
+        <li onclick="check(this,'q2',false)">D) Data must change every cycle</li>
+    </ul>
+    <div class="explanation" id="q2-exp">
+        <p class="en">✅ Valid must not depend on ready. The source must assert valid whenever it has data, regardless of the sink's state. Ready MAY depend on valid in some protocols.</p>
+        <p class="ko" style="display:none;">✅ Valid는 ready에 의존하면 안 됩니다. 소스는 싱크 상태와 관계없이 데이터가 있을 때마다 valid를 어서트해야 합니다. 일부 프로토콜에서 ready는 valid에 의존할 수 있습니다.</p>
+    </div>
+</div>
+
+<!-- Q3 -->
+<div class="question" id="q3">
+    <h3 class="en">Q3. During a stall (valid=1, ready=0), what must the source do?</h3>
+    <h3 class="ko" style="display:none;">Q3. 스톨 중 (valid=1, ready=0), 소스는 무엇을 해야 합니까?</h3>
+    <ul class="options">
+        <li onclick="check(this,'q3',false)">A) Deassert valid and retry later</li>
+        <li onclick="check(this,'q3',false)">B) Change data to signal urgency</li>
+        <li onclick="check(this,'q3',true)">C) Hold both valid and data stable</li>
+        <li onclick="check(this,'q3',false)">D) Toggle valid to get the sink's attention</li>
+    </ul>
+    <div class="explanation" id="q3-exp">
+        <p class="en">✅ Once valid is asserted, the source must keep it asserted AND keep data stable until the transfer completes (ready goes high).</p>
+        <p class="ko" style="display:none;">✅ Valid가 어서트되면, 소스는 전송이 완료될 때까지 (ready가 하이가 될 때까지) valid를 유지하고 data를 안정적으로 유지해야 합니다.</p>
+    </div>
+</div>
+
+<!-- Q4 -->
+<div class="question" id="q4">
+    <h3 class="en">Q4. If 8 transfers happen over 20 clock cycles, what is the throughput?</h3>
+    <h3 class="ko" style="display:none;">Q4. 20 클록 사이클 동안 8개의 전송이 발생하면 처리량은 얼마입니까?</h3>
+    <ul class="options">
+        <li onclick="check(this,'q4',false)">A) 80%</li>
+        <li onclick="check(this,'q4',false)">B) 20%</li>
+        <li onclick="check(this,'q4',true)">C) 40%</li>
+        <li onclick="check(this,'q4',false)">D) 8%</li>
+    </ul>
+    <div class="explanation" id="q4-exp">
+        <p class="en">✅ Throughput = transfers / cycles = 8/20 = 40%. Maximum throughput (100%) means one transfer per cycle.</p>
+        <p class="ko" style="display:none;">✅ 처리량 = 전송 / 사이클 = 8/20 = 40%. 최대 처리량 (100%)은 사이클당 하나의 전송을 의미합니다.</p>
+    </div>
+</div>
+
+<!-- Q5 -->
+<div class="question" id="q5">
+    <h3 class="en">Q5. In back-to-back transfers, what state are valid and ready in?</h3>
+    <h3 class="ko" style="display:none;">Q5. 연속 전송에서 valid와 ready는 어떤 상태입니까?</h3>
+    <ul class="options">
+        <li onclick="check(this,'q5',false)">A) They alternate — one cycle valid, one cycle ready</li>
+        <li onclick="check(this,'q5',true)">B) Both stay high continuously</li>
+        <li onclick="check(this,'q5',false)">C) Valid pulses each cycle, ready stays high</li>
+        <li onclick="check(this,'q5',false)">D) Ready pulses each cycle, valid stays high</li>
+    </ul>
+    <div class="explanation" id="q5-exp">
+        <p class="en">✅ For maximum throughput, both valid and ready stay asserted continuously. Data changes every clock edge while both are high.</p>
+        <p class="ko" style="display:none;">✅ 최대 처리량을 위해 valid와 ready 모두 지속적으로 어서트됩니다. 둘 다 하이인 동안 데이터는 매 클록 에지마다 변경됩니다.</p>
+    </div>
+</div>
+
+<!-- Q6 -->
+<div class="question" id="q6">
+    <h3 class="en">Q6. What is the purpose of a skid buffer?</h3>
+    <h3 class="ko" style="display:none;">Q6. 스키드 버퍼의 목적은 무엇입니까?</h3>
+    <ul class="options">
+        <li onclick="check(this,'q6',false)">A) To increase data width</li>
+        <li onclick="check(this,'q6',false)">B) To convert between clock domains</li>
+        <li onclick="check(this,'q6',true)">C) To absorb one cycle of backpressure and prevent stall propagation</li>
+        <li onclick="check(this,'q6',false)">D) To synchronize metastable signals</li>
+    </ul>
+    <div class="explanation" id="q6-exp">
+        <p class="en">✅ A skid buffer adds one slot of storage, absorbing a single cycle of stall so the source doesn't immediately stall when the sink pauses.</p>
+        <p class="ko" style="display:none;">✅ 스키드 버퍼는 하나의 저장 슬롯을 추가하여 싱크가 일시 정지할 때 소스가 즉시 스톨되지 않도록 단일 사이클의 스톨을 흡수합니다.</p>
+    </div>
+</div>
+
+<!-- Q7 -->
+<div class="question" id="q7">
+    <h3 class="en">Q7. In the source module, when does new data get loaded?</h3>
+    <h3 class="ko" style="display:none;">Q7. 소스 모듈에서 새 데이터는 언제 로드됩니까?</h3>
+    <ul class="options">
+        <li onclick="check(this,'q7',false)">A) Every clock cycle</li>
+        <li onclick="check(this,'q7',true)">B) When a transfer completes OR when idle (not valid)</li>
+        <li onclick="check(this,'q7',false)">C) Only when ready is asserted</li>
+        <li onclick="check(this,'q7',false)">D) Only on reset</li>
+    </ul>
+    <div class="explanation" id="q7-exp">
+        <p class="en">✅ New data loads on <code>transfer || !o_valid</code>. After a successful transfer, load next data immediately (back-to-back capable). When idle, also free to load.</p>
+        <p class="ko" style="display:none;">✅ 새 데이터는 <code>transfer || !o_valid</code>에서 로드됩니다. 성공적 전송 후 즉시 다음 데이터를 로드 (연속 전송 가능). 유휴 시에도 자유롭게 로드.</p>
+    </div>
+</div>
+
+<!-- Q8 -->
+<div class="question" id="q8">
+    <h3 class="en">Q8. In the skid buffer, when does data get saved to the skid register?</h3>
+    <h3 class="ko" style="display:none;">Q8. 스키드 버퍼에서 데이터는 언제 스키드 레지스터에 저장됩니까?</h3>
+    <ul class="options">
+        <li onclick="check(this,'q8',false)">A) On every transfer</li>
+        <li onclick="check(this,'q8',false)">B) When the skid register is full</li>
+        <li onclick="check(this,'q8',true)">C) When input is valid, output is valid, but downstream isn't ready</li>
+        <li onclick="check(this,'q8',false)">D) When both valid and ready are low</li>
+    </ul>
+    <div class="explanation" id="q8-exp">
+        <p class="en">✅ The skid register captures data when: <code>i_valid && o_valid && !i_ready</code>. The output is stalled but new input is arriving — save it to prevent data loss.</p>
+        <p class="ko" style="display:none;">✅ 스키드 레지스터는 <code>i_valid && o_valid && !i_ready</code>일 때 데이터를 캡처합니다. 출력은 스톨되었지만 새 입력이 도착 — 데이터 손실을 방지하기 위해 저장합니다.</p>
+    </div>
+</div>
+
+<!-- Q9 -->
+<div class="question" id="q9">
+    <h3 class="en">Q9. How much latency does a skid buffer add?</h3>
+    <h3 class="ko" style="display:none;">Q9. 스키드 버퍼는 얼마나 많은 지연을 추가합니까?</h3>
+    <ul class="options">
+        <li onclick="check(this,'q9',true)">A) 1 clock cycle</li>
+        <li onclick="check(this,'q9',false)">B) 2 clock cycles</li>
+        <li onclick="check(this,'q9',false)">C) 0 cycles (purely combinational)</li>
+        <li onclick="check(this,'q9',false)">D) Variable, depends on data width</li>
+    </ul>
+    <div class="explanation" id="q9-exp">
+        <p class="en">✅ A skid buffer adds exactly 1 cycle of latency but preserves full throughput. It's the minimum-cost way to break timing paths in a pipeline.</p>
+        <p class="ko" style="display:none;">✅ 스키드 버퍼는 정확히 1 사이클의 지연을 추가하지만 전체 처리량을 유지합니다. 파이프라인에서 타이밍 경로를 끊는 최소 비용 방법입니다.</p>
+    </div>
+</div>
+
+<!-- Q10 -->
+<div class="question" id="q10">
+    <h3 class="en">Q10. Which protocols use the ready/valid handshake pattern?</h3>
+    <h3 class="ko" style="display:none;">Q10. 어떤 프로토콜이 ready/valid 핸드셰이크 패턴을 사용합니까?</h3>
+    <ul class="options">
+        <li onclick="check(this,'q10',false)">A) Only AXI</li>
+        <li onclick="check(this,'q10',false)">B) Only AMBA protocols</li>
+        <li onclick="check(this,'q10',true)">C) AXI, AHB, TileLink, and most custom on-chip interfaces</li>
+        <li onclick="check(this,'q10',false)">D) Only off-chip protocols like PCIe</li>
+    </ul>
+    <div class="explanation" id="q10-exp">
+        <p class="en">✅ The ready/valid handshake is ubiquitous in on-chip design. AXI (TVALID/TREADY), TileLink, and virtually all custom interfaces use this pattern.</p>
+        <p class="ko" style="display:none;">✅ Ready/valid 핸드셰이크는 온칩 설계에서 유비쿼터스입니다. AXI (TVALID/TREADY), TileLink, 그리고 거의 모든 커스텀 인터페이스가 이 패턴을 사용합니다.</p>
+    </div>
+</div>
+
+<!-- Q11 -->
+<div class="question" id="q11">
+    <h3 class="en">Q11. Can <code>ready</code> depend on <code>valid</code>?</h3>
+    <h3 class="ko" style="display:none;">Q11. <code>ready</code>는 <code>valid</code>에 의존할 수 있습니까?</h3>
+    <ul class="options">
+        <li onclick="check(this,'q11',false)">A) Never — both must be independent</li>
+        <li onclick="check(this,'q11',true)">B) Yes — ready may depend on valid (but not the reverse)</li>
+        <li onclick="check(this,'q11',false)">C) Yes — valid may depend on ready (but not the reverse)</li>
+        <li onclick="check(this,'q11',false)">D) Both may depend on each other</li>
+    </ul>
+    <div class="explanation" id="q11-exp">
+        <p class="en">✅ Ready may depend on valid (common in some protocols). But valid MUST NOT depend on ready — that's the rule that prevents deadlocks.</p>
+        <p class="ko" style="display:none;">✅ Ready는 valid에 의존할 수 있습니다 (일부 프로토콜에서 일반적). 하지만 valid는 ready에 의존하면 안 됩니다 — 이것이 데드락을 방지하는 규칙입니다.</p>
+    </div>
+</div>
+
+<!-- Q12 -->
+<div class="question" id="q12">
+    <h3 class="en">Q12. In the sink module, what determines <code>o_ready</code>?</h3>
+    <h3 class="ko" style="display:none;">Q12. 싱크 모듈에서 <code>o_ready</code>는 무엇에 의해 결정됩니까?</h3>
+    <ul class="options">
+        <li onclick="check(this,'q12',false)">A) It's always high</li>
+        <li onclick="check(this,'q12',true)">B) Whether the internal buffer is empty (not full)</li>
+        <li onclick="check(this,'q12',false)">C) Whether valid is asserted</li>
+        <li onclick="check(this,'q12',false)">D) A fixed timer</li>
+    </ul>
+    <div class="explanation" id="q12-exp">
+        <p class="en">✅ <code>o_ready = !buffer_full</code>. The sink is ready to accept data when its internal buffer has room. This is a common pattern — ready reflects available capacity.</p>
+        <p class="ko" style="display:none;">✅ <code>o_ready = !buffer_full</code>. 싱크는 내부 버퍼에 공간이 있을 때 데이터를 수용할 준비가 됩니다. 이것은 일반적인 패턴입니다 — ready는 사용 가능한 용량을 반영합니다.</p>
+    </div>
+</div>
+
+<div class="score-box" id="scoreBox">
+    <h2>🎯 Your Score: <span id="scoreText"></span></h2>
+    <p id="scoreMsg"></p>
+</div>
+
+<div class="nav-links">
+    <a href="day-26-lesson.html">📖 Review Lesson</a>
+    <a href="day-26-practice.html">💻 Practice Lab →</a>
+</div>
+
+<script>
+let isKorean = false;
+let score = 0;
+let answered = 0;
+const total = 12;
+
+function toggleLang() {
+    isKorean = !isKorean;
+    document.querySelectorAll('.en').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'none' : 'revert', 'important');
+    });
+    document.querySelectorAll('.ko').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'revert' : 'none', 'important');
+    });
+    document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+}
+
+function check(el, qId, correct) {
+    if (el.classList.contains('disabled')) return;
+    const options = el.parentElement.querySelectorAll('li');
+    options.forEach(o => o.classList.add('disabled'));
+    answered++;
+    if (correct) {
+        el.classList.add('correct');
+        score++;
+    } else {
+        el.classList.add('incorrect');
+        options.forEach(o => { if (!o.classList.contains('incorrect')) check_correct(o, qId); });
+    }
+    document.getElementById(qId + '-exp').style.display = 'block';
+    if (answered === total) showScore();
+}
+
+function check_correct(el, qId) {
+    // Find correct answer by re-checking onclick
+}
+
+function showScore() {
+    const box = document.getElementById('scoreBox');
+    box.style.display = 'block';
+    document.getElementById('scoreText').textContent = score + ' / ' + total;
+    const pct = Math.round(score / total * 100);
+    let msg = '';
+    if (pct >= 90) msg = '🌟 Excellent! Ready/valid mastery!';
+    else if (pct >= 70) msg = '👍 Good work! Review the timing diagrams once more.';
+    else msg = '📖 Review the lesson and try again!';
+    document.getElementById('scoreMsg').textContent = msg;
+    box.scrollIntoView({ behavior: 'smooth' });
+}
+</script>
+
+</body>
+</html>

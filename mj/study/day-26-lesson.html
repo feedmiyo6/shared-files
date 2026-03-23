@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 26: Ready/Valid Deep Dive — Timing Diagrams</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    background: linear-gradient(135deg, #fefae0 0%, #faedcd 100%);
+    color: #3d405b;
+    line-height: 1.8;
+    padding: 24px;
+    max-width: 920px;
+    margin: 0 auto;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+h1 {
+    color: #5d4037;
+    border-bottom: 3px solid #c4a77d;
+    padding-bottom: 12px;
+    margin-bottom: 24px;
+    font-size: 2em;
+}
+h2 {
+    color: #588157;
+    border-bottom: 2px solid #a3b18a;
+    padding-bottom: 8px;
+    margin: 32px 0 16px;
+}
+h3 {
+    color: #5d4037;
+    margin: 20px 0 12px;
+}
+p { margin: 12px 0; }
+ul, ol { margin: 12px 0 12px 24px; }
+li { margin: 6px 0; }
+pre {
+    background: #2d3436;
+    padding: 24px;
+    border-radius: 12px;
+    margin: 24px 0;
+    border: 3px solid #a3b18a;
+    overflow-x: auto;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+    font-size: 15px;
+    line-height: 1.6;
+    color: #f8f8f2;
+}
+code {
+    background: #e9f5db;
+    color: #3d405b;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+}
+pre code { background: none; color: inherit; padding: 0; }
+.keyword { color: #ff79c6; font-weight: 600; }
+.type { color: #8be9fd; }
+.signal { color: #50fa7b; }
+.number { color: #ffb86c; }
+.comment { color: #6272a4; font-style: italic; }
+.string { color: #f1fa8c; }
+.concept-box {
+    background: #fff8f0;
+    border: 2px solid #c4a77d;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    color: #3d405b;
+}
+.concept-box h3 { color: #5d4037; margin-bottom: 12px; }
+.warning-box {
+    background: #fff8f0;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    border-left: 4px solid #ef4444;
+    color: #3d405b;
+}
+.warning-box h3 { color: #c53030; margin-bottom: 12px; }
+.tip-box {
+    background: #fff8f0;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    border-left: 4px solid #588157;
+    color: #3d405b;
+}
+.comparison-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+.comparison-table th {
+    background: #588157;
+    color: white;
+    padding: 12px;
+    text-align: left;
+}
+.comparison-table td {
+    background: #fff;
+    border: 1px solid #c4a77d;
+    padding: 12px;
+    color: #3d405b;
+}
+.comparison-table tr:nth-child(even) td { background: #fff8f0; }
+.timing-diagram {
+    background: #fff;
+    border: 2px solid #c4a77d;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    overflow-x: auto;
+}
+.timing-diagram pre {
+    background: #fff;
+    color: #3d405b;
+    border: none;
+    padding: 12px;
+    font-size: 14px;
+    line-height: 1.4;
+}
+.timing-diagram pre code { background: none; color: #3d405b; }
+.nav-links {
+    display: flex;
+    gap: 12px;
+    margin: 20px 0;
+    flex-wrap: wrap;
+}
+.nav-links a {
+    background: linear-gradient(135deg, #588157, #3a5a40);
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 24px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14px;
+}
+.nav-links a:hover { opacity: 0.9; }
+.lang-toggle {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    background: #588157;
+    border: none;
+    border-radius: 24px;
+    padding: 10px 20px;
+    cursor: pointer;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    z-index: 1000;
+}
+.lang-toggle:hover { background: #3a5a40; }
+.ko { display: none; }
+@media (max-width: 768px) {
+    body { padding: 16px; }
+    h1 { font-size: 1.8em; }
+    pre { font-size: 14px; padding: 16px; }
+    .lang-toggle { padding: 8px 16px; font-size: 13px; }
+}
+</style>
+</head>
+<body>
+
+<button class="lang-toggle" onclick="toggleLang()">한국어</button>
+
+<h1>🚦 Day 26: Ready/Valid Deep Dive — Timing Diagrams</h1>
+
+<p class="en"><strong>Week 6, Day 1</strong> — Welcome to Bus Protocol Thinking! Yesterday we introduced ready/valid handshakes. Today we go deep into timing diagrams and the exact cycle-by-cycle behavior of the ready/valid protocol.</p>
+<p class="ko" style="display:none;"><strong>6주차 1일</strong> — 버스 프로토콜 사고에 오신 걸 환영합니다! 어제 ready/valid 핸드셰이크를 소개했고, 오늘은 타이밍 다이어그램과 ready/valid 프로토콜의 정확한 사이클별 동작을 깊이 살펴봅니다.</p>
+
+<div class="nav-links">
+    <a href="day-26-quiz.html">📝 Quiz</a>
+    <a href="day-26-practice.html">💻 Practice</a>
+    <a href="day-25-lesson.html">← Day 25</a>
+</div>
+
+<h2>1. The Ready/Valid Contract</h2>
+
+<p class="en">The ready/valid handshake is the most fundamental bus protocol in digital design. Every modern SoC uses it — AXI, AHB, TileLink, and custom interfaces all build on this pattern.</p>
+<p class="ko" style="display:none;">Ready/valid 핸드셰이크는 디지털 설계에서 가장 기본적인 버스 프로토콜입니다. 모든 현대 SoC가 이를 사용합니다 — AXI, AHB, TileLink, 커스텀 인터페이스 모두 이 패턴 위에 구축됩니다.</p>
+
+<div class="concept-box">
+    <h3>📋 The Three Signals</h3>
+    <p class="en"><strong>Valid</strong> — Source says "I have data ready"<br>
+    <strong>Ready</strong> — Sink says "I can accept data"<br>
+    <strong>Data</strong> — The payload being transferred</p>
+    <p class="ko" style="display:none;"><strong>Valid</strong> — 소스가 "데이터가 준비됐다"고 알림<br>
+    <strong>Ready</strong> — 싱크가 "데이터를 받을 수 있다"고 알림<br>
+    <strong>Data</strong> — 전송되는 페이로드</p>
+    <p class="en"><strong>Transfer happens when:</strong> <code>valid && ready</code> on the rising clock edge.</p>
+    <p class="ko" style="display:none;"><strong>전송 발생 조건:</strong> 클록 상승 에지에서 <code>valid && ready</code>.</p>
+</div>
+
+<h2>2. Timing Diagram: Normal Transfer</h2>
+
+<p class="en">Let's trace cycle-by-cycle how a normal handshake works. The source asserts <code>valid</code> and presents <code>data</code>. The sink asserts <code>ready</code>. When both are high simultaneously, the transfer completes.</p>
+<p class="ko" style="display:none;">정상 핸드셰이크가 어떻게 작동하는지 사이클별로 추적해봅시다. 소스가 <code>valid</code>를 어서트하고 <code>data</code>를 제시합니다. 싱크가 <code>ready</code>를 어서트합니다. 둘 다 동시에 하이일 때 전송이 완료됩니다.</p>
+
+<div class="timing-diagram">
+<pre><code>              Cycle 1    Cycle 2    Cycle 3    Cycle 4    Cycle 5
+         ┌──┐  ┌──┐  ┌──┐  ┌──┐  ┌──┐  ┌──┐  ┌──┐  ┌──┐  ┌──┐  ┌──┐
+  clk    ┘  └──┘  └──┘  └──┘  └──┘  └──┘  └──┘  └──┘  └──┘  └──┘  └──┘
+
+              ┌─────────────────────┐
+  valid  ─────┘                     └─────────────────────────────
+              ┌─────────────────────┐
+  data   ═════╡       D0           ╞═════════════════════════════
+                        ┌──────────┐
+  ready  ───────────────┘          └──────────────────────────────
+
+                           ↑
+                      TRANSFER! (valid & ready both HIGH)
+</code></pre>
+</div>
+
+<p class="en"><strong>Key observations:</strong></p>
+<p class="ko" style="display:none;"><strong>주요 관찰:</strong></p>
+<ul>
+    <li class="en">Source asserts <code>valid</code> + <code>data</code> at Cycle 1</li>
+    <li class="ko" style="display:none;">소스가 사이클 1에서 <code>valid</code> + <code>data</code>를 어서트</li>
+    <li class="en">Sink asserts <code>ready</code> at Cycle 2 (it needed one cycle to prepare)</li>
+    <li class="ko" style="display:none;">싱크가 사이클 2에서 <code>ready</code>를 어서트 (준비에 1 사이클 필요)</li>
+    <li class="en">Transfer occurs at the Cycle 2→3 clock edge (both high)</li>
+    <li class="ko" style="display:none;">전송은 사이클 2→3 클록 에지에서 발생 (둘 다 하이)</li>
+    <li class="en">Source deasserts <code>valid</code> after successful transfer</li>
+    <li class="ko" style="display:none;">소스가 성공적 전송 후 <code>valid</code>를 디어서트</li>
+</ul>
+
+<h2>3. Four Handshake Scenarios</h2>
+
+<p class="en">There are exactly four possible timing relationships between <code>valid</code> and <code>ready</code>:</p>
+<p class="ko" style="display:none;"><code>valid</code>와 <code>ready</code> 사이에는 정확히 네 가지 타이밍 관계가 있습니다:</p>
+
+<table class="comparison-table">
+    <tr>
+        <th class="en">Scenario</th><th class="en">Valid First</th><th class="en">Ready First</th><th class="en">Behavior</th>
+        <th class="ko" style="display:none;">시나리오</th><th class="ko" style="display:none;">Valid 먼저</th><th class="ko" style="display:none;">Ready 먼저</th><th class="ko" style="display:none;">동작</th>
+    </tr>
+    <tr>
+        <td class="en">Immediate</td><td class="en">Same cycle</td><td class="en">Same cycle</td><td class="en">Transfer in 1 cycle</td>
+        <td class="ko" style="display:none;">즉시</td><td class="ko" style="display:none;">같은 사이클</td><td class="ko" style="display:none;">같은 사이클</td><td class="ko" style="display:none;">1 사이클에 전송</td>
+    </tr>
+    <tr>
+        <td class="en">Valid waits</td><td class="en">First</td><td class="en">Later</td><td class="en">Source holds data until ready</td>
+        <td class="ko" style="display:none;">Valid 대기</td><td class="ko" style="display:none;">먼저</td><td class="ko" style="display:none;">나중</td><td class="ko" style="display:none;">소스가 ready까지 데이터 유지</td>
+    </tr>
+    <tr>
+        <td class="en">Ready waits</td><td class="en">Later</td><td class="en">First</td><td class="en">Sink waits for data</td>
+        <td class="ko" style="display:none;">Ready 대기</td><td class="ko" style="display:none;">나중</td><td class="ko" style="display:none;">먼저</td><td class="ko" style="display:none;">싱크가 데이터 대기</td>
+    </tr>
+    <tr>
+        <td class="en">Stall</td><td class="en">Asserted</td><td class="en">Deasserted</td><td class="en">Backpressure — source must hold</td>
+        <td class="ko" style="display:none;">스톨</td><td class="ko" style="display:none;">어서트됨</td><td class="ko" style="display:none;">디어서트됨</td><td class="ko" style="display:none;">백프레셔 — 소스가 유지해야 함</td>
+    </tr>
+</table>
+
+<h2>4. Timing Diagram: Backpressure (Stall)</h2>
+
+<p class="en">This is the most important scenario for pipeline design. The sink is busy and cannot accept data, so it deasserts <code>ready</code>. The source MUST hold <code>valid</code> and <code>data</code> stable.</p>
+<p class="ko" style="display:none;">파이프라인 설계에서 가장 중요한 시나리오입니다. 싱크가 바빠서 데이터를 받을 수 없으므로 <code>ready</code>를 디어서트합니다. 소스는 <code>valid</code>와 <code>data</code>를 안정적으로 유지해야 합니다.</p>
+
+<div class="timing-diagram">
+<pre><code>              C1     C2     C3     C4     C5     C6
+         ┌──┐ ┌──┐ ┌──┐ ┌──┐ ┌──┐ ┌──┐ ┌──┐ ┌──┐ ┌──┐
+  clk    ┘  └─┘  └─┘  └─┘  └─┘  └─┘  └─┘  └─┘  └─┘  └─
+
+         ┌────────────────────────────────────┐
+  valid  ┘                                    └──────────
+
+         ┌────────────────────────────────────┐
+  data   ╡            D0 (HELD STABLE)        ╞═════════
+                                  ┌───────────┐
+  ready  ─────────────────────────┘           └──────────
+
+                STALL     STALL    ↑ TRANSFER!
+</code></pre>
+</div>
+
+<div class="warning-box">
+    <h3>⚠️ Critical Rule: Valid Must Not Depend on Ready!</h3>
+    <p class="en">Once <code>valid</code> is asserted, the source <strong>CANNOT</strong> deassert it until the transfer completes (i.e., until <code>ready</code> goes high). This prevents deadlocks where both sides wait for each other.</p>
+    <p class="ko" style="display:none;"><code>valid</code>가 어서트되면, 소스는 전송이 완료될 때까지 (즉, <code>ready</code>가 하이가 될 때까지) <strong>디어서트할 수 없습니다</strong>. 이는 양쪽이 서로를 기다리는 데드락을 방지합니다.</p>
+    <p class="en"><strong>Also:</strong> <code>data</code> must remain stable while <code>valid</code> is asserted. Changing data mid-handshake is a protocol violation!</p>
+    <p class="ko" style="display:none;"><strong>또한:</strong> <code>valid</code>가 어서트된 동안 <code>data</code>는 안정적이어야 합니다. 핸드셰이크 중 데이터 변경은 프로토콜 위반입니다!</p>
+</div>
+
+<h2>5. Timing Diagram: Back-to-Back Transfers</h2>
+
+<p class="en">In high-throughput pipelines, we want transfers every cycle. This means <code>valid</code> and <code>ready</code> stay high continuously — no gaps!</p>
+<p class="ko" style="display:none;">고처리량 파이프라인에서는 매 사이클 전송을 원합니다. 이는 <code>valid</code>와 <code>ready</code>가 지속적으로 하이 상태를 유지한다는 뜻입니다 — 갭 없이!</p>
+
+<div class="timing-diagram">
+<pre><code>              C1     C2     C3     C4     C5
+         ┌──┐ ┌──┐ ┌──┐ ┌──┐ ┌──┐ ┌──┐ ┌──┐
+  clk    ┘  └─┘  └─┘  └─┘  └─┘  └─┘  └─┘  └─
+
+         ┌──────────────────────────────────┐
+  valid  ┘                                  └────
+
+         ┌─────┬──────┬──────┬──────┬──────┐
+  data   ╡ D0  │  D1  │  D2  │  D3  │  D4  ╞═══
+         ┌──────────────────────────────────┐
+  ready  ┘                                  └────
+
+          ↑ T0  ↑ T1   ↑ T2   ↑ T3   ↑ T4
+        (Transfer every single cycle = max throughput!)
+</code></pre>
+</div>
+
+<div class="tip-box">
+    <h3>💡 Throughput Formula</h3>
+    <p class="en"><strong>Throughput = Transfers / Total Cycles</strong><br>
+    Back-to-back: 5 transfers in 5 cycles = 100% throughput<br>
+    With stalls: 5 transfers in 10 cycles = 50% throughput<br>
+    This metric is crucial for performance analysis in design reviews!</p>
+    <p class="ko" style="display:none;"><strong>처리량 = 전송 수 / 총 사이클</strong><br>
+    연속 전송: 5 사이클에 5 전송 = 100% 처리량<br>
+    스톨 포함: 10 사이클에 5 전송 = 50% 처리량<br>
+    이 메트릭은 설계 리뷰에서 성능 분석에 필수적입니다!</p>
+</div>
+
+<h2>6. Timing Diagram: Intermittent Valid</h2>
+
+<p class="en">Sometimes the source doesn't have data every cycle. <code>valid</code> toggles on and off. The sink keeps <code>ready</code> high, accepting whenever data appears.</p>
+<p class="ko" style="display:none;">때때로 소스가 매 사이클 데이터를 가지고 있지 않습니다. <code>valid</code>가 켜졌다 꺼졌다 합니다. 싱크는 <code>ready</code>를 하이로 유지하며 데이터가 나타날 때마다 수용합니다.</p>
+
+<div class="timing-diagram">
+<pre><code>              C1     C2     C3     C4     C5     C6
+         ┌──┐ ┌──┐ ┌──┐ ┌──┐ ┌──┐ ┌──┐ ┌──┐ ┌──┐
+  clk    ┘  └─┘  └─┘  └─┘  └─┘  └─┘  └─┘  └─┘  └─
+
+         ┌─────┐           ┌─────┐     ┌─────┐
+  valid  ┘     └───────────┘     └─────┘     └──────
+
+         ┌─────┐           ┌─────┐     ┌─────┐
+  data   ╡ D0  ╞═══════════╡ D1  ╞═════╡ D2  ╞════
+         ┌──────────────────────────────────────────
+  ready  ┘
+
+          ↑ T0              ↑ T1        ↑ T2
+        (3 transfers in 6 cycles = 50% throughput)
+</code></pre>
+</div>
+
+<h2>7. SystemVerilog: Ready/Valid Source</h2>
+
+<pre><code><span class="keyword">module</span> <span class="type">rv_source</span> #(
+    <span class="keyword">parameter</span> <span class="type">DATA_W</span> = <span class="number">8</span>
+)(
+    <span class="keyword">input</span>  <span class="type">logic</span>              <span class="signal">clk</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span>              <span class="signal">rst_n</span>,
+    <span class="comment">// Ready/Valid output interface</span>
+    <span class="keyword">output</span> <span class="type">logic</span>              <span class="signal">o_valid</span>,
+    <span class="keyword">output</span> <span class="type">logic</span> [<span class="type">DATA_W</span>-<span class="number">1</span>:<span class="number">0</span>] <span class="signal">o_data</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span>              <span class="signal">i_ready</span>
+);
+
+    <span class="type">logic</span> [<span class="type">DATA_W</span>-<span class="number">1</span>:<span class="number">0</span>] <span class="signal">next_data</span>;
+    <span class="type">logic</span>              <span class="signal">data_available</span>;
+
+    <span class="comment">// Transfer happens when both valid and ready are high</span>
+    <span class="type">logic</span> <span class="signal">transfer</span>;
+    <span class="keyword">assign</span> <span class="signal">transfer</span> = <span class="signal">o_valid</span> && <span class="signal">i_ready</span>;
+
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span> <span class="keyword">or</span> <span class="keyword">negedge</span> <span class="signal">rst_n</span>) <span class="keyword">begin</span>
+        <span class="keyword">if</span> (!<span class="signal">rst_n</span>) <span class="keyword">begin</span>
+            <span class="signal">o_valid</span> <= <span class="number">1'b0</span>;
+            <span class="signal">o_data</span>  <= <span class="string">'0</span>;
+        <span class="keyword">end</span> <span class="keyword">else if</span> (<span class="signal">transfer</span> || !<span class="signal">o_valid</span>) <span class="keyword">begin</span>
+            <span class="comment">// Load new data when: transfer just completed OR we're idle</span>
+            <span class="signal">o_valid</span> <= <span class="signal">data_available</span>;
+            <span class="signal">o_data</span>  <= <span class="signal">next_data</span>;
+        <span class="keyword">end</span>
+        <span class="comment">// If valid && !ready: HOLD — do nothing (stall)</span>
+    <span class="keyword">end</span>
+
+<span class="keyword">endmodule</span>
+</code></pre>
+
+<div class="concept-box">
+    <h3>🔍 Code Walkthrough</h3>
+    <ul>
+        <li class="en"><code>transfer</code> fires only when both <code>valid</code> and <code>ready</code> are asserted</li>
+        <li class="ko" style="display:none;"><code>transfer</code>는 <code>valid</code>와 <code>ready</code>가 모두 어서트될 때만 발생</li>
+        <li class="en">On transfer: load new data immediately (back-to-back capable)</li>
+        <li class="ko" style="display:none;">전송 시: 새 데이터를 즉시 로드 (연속 전송 가능)</li>
+        <li class="en">On stall (<code>valid && !ready</code>): do nothing — data stays stable</li>
+        <li class="ko" style="display:none;">스톨 시 (<code>valid && !ready</code>): 아무것도 하지 않음 — 데이터 안정 유지</li>
+        <li class="en">On idle (<code>!valid</code>): can load new data without waiting</li>
+        <li class="ko" style="display:none;">유휴 시 (<code>!valid</code>): 대기 없이 새 데이터 로드 가능</li>
+    </ul>
+</div>
+
+<h2>8. SystemVerilog: Ready/Valid Sink</h2>
+
+<pre><code><span class="keyword">module</span> <span class="type">rv_sink</span> #(
+    <span class="keyword">parameter</span> <span class="type">DATA_W</span> = <span class="number">8</span>
+)(
+    <span class="keyword">input</span>  <span class="type">logic</span>              <span class="signal">clk</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span>              <span class="signal">rst_n</span>,
+    <span class="comment">// Ready/Valid input interface</span>
+    <span class="keyword">input</span>  <span class="type">logic</span>              <span class="signal">i_valid</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span> [<span class="type">DATA_W</span>-<span class="number">1</span>:<span class="number">0</span>] <span class="signal">i_data</span>,
+    <span class="keyword">output</span> <span class="type">logic</span>              <span class="signal">o_ready</span>
+);
+
+    <span class="type">logic</span> [<span class="type">DATA_W</span>-<span class="number">1</span>:<span class="number">0</span>] <span class="signal">stored_data</span>;
+    <span class="type">logic</span>              <span class="signal">buffer_full</span>;
+
+    <span class="comment">// Ready when buffer is empty</span>
+    <span class="keyword">assign</span> <span class="signal">o_ready</span> = !<span class="signal">buffer_full</span>;
+
+    <span class="comment">// Transfer detection</span>
+    <span class="type">logic</span> <span class="signal">transfer</span>;
+    <span class="keyword">assign</span> <span class="signal">transfer</span> = <span class="signal">i_valid</span> && <span class="signal">o_ready</span>;
+
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span> <span class="keyword">or</span> <span class="keyword">negedge</span> <span class="signal">rst_n</span>) <span class="keyword">begin</span>
+        <span class="keyword">if</span> (!<span class="signal">rst_n</span>) <span class="keyword">begin</span>
+            <span class="signal">stored_data</span> <= <span class="string">'0</span>;
+            <span class="signal">buffer_full</span> <= <span class="number">1'b0</span>;
+        <span class="keyword">end</span> <span class="keyword">else begin</span>
+            <span class="keyword">if</span> (<span class="signal">transfer</span>) <span class="keyword">begin</span>
+                <span class="signal">stored_data</span> <= <span class="signal">i_data</span>;
+                <span class="signal">buffer_full</span> <= <span class="number">1'b1</span>;
+            <span class="keyword">end</span> <span class="keyword">else if</span> (<span class="signal">buffer_full</span>) <span class="keyword">begin</span>
+                <span class="comment">// Process and consume data</span>
+                <span class="signal">buffer_full</span> <= <span class="number">1'b0</span>;
+            <span class="keyword">end</span>
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+
+<span class="keyword">endmodule</span>
+</code></pre>
+
+<h2>9. Timing Diagram: Deadlock Hazard</h2>
+
+<p class="en">What happens if both sides wait for the other? This creates a <strong>deadlock</strong> — a circular dependency that never resolves.</p>
+<p class="ko" style="display:none;">양쪽이 서로를 기다리면 어떻게 될까요? 이것은 <strong>데드락</strong>을 만듭니다 — 절대 해결되지 않는 순환 의존성입니다.</p>
+
+<div class="timing-diagram">
+<pre><code>  DEADLOCK SCENARIO:
+  Source thinks: "I'll assert valid only when I see ready"
+  Sink thinks:   "I'll assert ready only when I see valid"
+
+              C1     C2     C3     C4     C5 ...forever
+  valid  ──────────────────────────────────── (never asserted!)
+  ready  ──────────────────────────────────── (never asserted!)
+
+  ❌ NO TRANSFER EVER HAPPENS!
+</code></pre>
+</div>
+
+<div class="warning-box">
+    <h3>⚠️ The Golden Rule of Ready/Valid</h3>
+    <p class="en"><strong>Valid MUST NOT depend on ready.</strong> The source must be willing to assert <code>valid</code> regardless of <code>ready</code>'s state. However, <code>ready</code> MAY depend on <code>valid</code> (this is allowed and common in some protocols).</p>
+    <p class="ko" style="display:none;"><strong>Valid는 ready에 의존하면 안 됩니다.</strong> 소스는 <code>ready</code> 상태와 관계없이 <code>valid</code>를 어서트할 수 있어야 합니다. 그러나 <code>ready</code>는 <code>valid</code>에 의존할 수 있습니다 (이것은 일부 프로토콜에서 허용되고 일반적입니다).</p>
+</div>
+
+<h2>10. Skid Buffer: Handling Backpressure Gracefully</h2>
+
+<p class="en">A <strong>skid buffer</strong> (also called a pipeline register) adds one slot of storage between source and sink. This prevents the source from stalling when the sink briefly isn't ready.</p>
+<p class="ko" style="display:none;"><strong>스키드 버퍼</strong>(파이프라인 레지스터라고도 함)는 소스와 싱크 사이에 하나의 저장 슬롯을 추가합니다. 이는 싱크가 잠시 준비되지 않았을 때 소스가 스톨되는 것을 방지합니다.</p>
+
+<pre><code><span class="keyword">module</span> <span class="type">skid_buffer</span> #(
+    <span class="keyword">parameter</span> <span class="type">DATA_W</span> = <span class="number">8</span>
+)(
+    <span class="keyword">input</span>  <span class="type">logic</span>              <span class="signal">clk</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span>              <span class="signal">rst_n</span>,
+    <span class="comment">// Input side (from source)</span>
+    <span class="keyword">input</span>  <span class="type">logic</span>              <span class="signal">i_valid</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span> [<span class="type">DATA_W</span>-<span class="number">1</span>:<span class="number">0</span>] <span class="signal">i_data</span>,
+    <span class="keyword">output</span> <span class="type">logic</span>              <span class="signal">o_ready</span>,
+    <span class="comment">// Output side (to sink)</span>
+    <span class="keyword">output</span> <span class="type">logic</span>              <span class="signal">o_valid</span>,
+    <span class="keyword">output</span> <span class="type">logic</span> [<span class="type">DATA_W</span>-<span class="number">1</span>:<span class="number">0</span>] <span class="signal">o_data</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span>              <span class="signal">i_ready</span>
+);
+
+    <span class="comment">// Skid register — catches data when output stalls</span>
+    <span class="type">logic</span> [<span class="type">DATA_W</span>-<span class="number">1</span>:<span class="number">0</span>] <span class="signal">skid_data</span>;
+    <span class="type">logic</span>              <span class="signal">skid_valid</span>;
+
+    <span class="comment">// We can accept data if skid register is empty</span>
+    <span class="keyword">assign</span> <span class="signal">o_ready</span> = !<span class="signal">skid_valid</span>;
+
+    <span class="comment">// Output mux: prefer skid data if available</span>
+    <span class="keyword">assign</span> <span class="signal">o_valid</span> = <span class="signal">skid_valid</span> || <span class="signal">i_valid</span>;
+    <span class="keyword">assign</span> <span class="signal">o_data</span>  = <span class="signal">skid_valid</span> ? <span class="signal">skid_data</span> : <span class="signal">i_data</span>;
+
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span> <span class="keyword">or</span> <span class="keyword">negedge</span> <span class="signal">rst_n</span>) <span class="keyword">begin</span>
+        <span class="keyword">if</span> (!<span class="signal">rst_n</span>) <span class="keyword">begin</span>
+            <span class="signal">skid_data</span>  <= <span class="string">'0</span>;
+            <span class="signal">skid_valid</span> <= <span class="number">1'b0</span>;
+        <span class="keyword">end</span> <span class="keyword">else begin</span>
+            <span class="keyword">if</span> (<span class="signal">skid_valid</span>) <span class="keyword">begin</span>
+                <span class="comment">// Skid has data — drain it when output accepts</span>
+                <span class="keyword">if</span> (<span class="signal">i_ready</span>)
+                    <span class="signal">skid_valid</span> <= <span class="number">1'b0</span>;
+            <span class="keyword">end</span> <span class="keyword">else if</span> (<span class="signal">i_valid</span> && <span class="signal">o_valid</span> && !<span class="signal">i_ready</span>) <span class="keyword">begin</span>
+                <span class="comment">// Output stalled + new input arriving → save to skid</span>
+                <span class="signal">skid_data</span>  <= <span class="signal">i_data</span>;
+                <span class="signal">skid_valid</span> <= <span class="number">1'b1</span>;
+            <span class="keyword">end</span>
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+
+<span class="keyword">endmodule</span>
+</code></pre>
+
+<div class="concept-box">
+    <h3>🧩 Why Skid Buffers Matter</h3>
+    <ul>
+        <li class="en">Decouples source timing from sink timing</li>
+        <li class="ko" style="display:none;">소스 타이밍과 싱크 타이밍을 분리</li>
+        <li class="en">Prevents stall propagation through the pipeline</li>
+        <li class="ko" style="display:none;">파이프라인을 통한 스톨 전파를 방지</li>
+        <li class="en">Adds only 1 cycle of latency, but preserves throughput</li>
+        <li class="ko" style="display:none;">1 사이클의 지연만 추가하지만 처리량을 유지</li>
+        <li class="en">Used everywhere: AXI interfaces, pipeline stages, NoC routers</li>
+        <li class="ko" style="display:none;">모든 곳에서 사용: AXI 인터페이스, 파이프라인 스테이지, NoC 라우터</li>
+    </ul>
+</div>
+
+<h2>11. Key Takeaways</h2>
+
+<div class="concept-box">
+    <h3>📝 Today's Summary</h3>
+    <ol>
+        <li class="en"><strong>Transfer = valid && ready</strong> on clock edge — this is the fundamental rule</li>
+        <li class="ko" style="display:none;"><strong>전송 = valid && ready</strong> 클록 에지에서 — 이것이 기본 규칙</li>
+        <li class="en"><strong>Valid must not depend on ready</strong> — prevents deadlocks</li>
+        <li class="ko" style="display:none;"><strong>Valid는 ready에 의존하면 안 됨</strong> — 데드락 방지</li>
+        <li class="en"><strong>Data must stay stable</strong> while valid is asserted during stall</li>
+        <li class="ko" style="display:none;">스톨 중 valid가 어서트된 동안 <strong>데이터는 안정적이어야 함</strong></li>
+        <li class="en"><strong>Throughput = transfers / cycles</strong> — measure pipeline efficiency</li>
+        <li class="ko" style="display:none;"><strong>처리량 = 전송 / 사이클</strong> — 파이프라인 효율 측정</li>
+        <li class="en"><strong>Skid buffers</strong> decouple stages and prevent stall propagation</li>
+        <li class="ko" style="display:none;"><strong>스키드 버퍼</strong>는 스테이지를 분리하고 스톨 전파를 방지</li>
+    </ol>
+</div>
+
+<div class="nav-links">
+    <a href="day-26-quiz.html">📝 Take the Quiz →</a>
+    <a href="day-26-practice.html">💻 Practice Lab →</a>
+</div>
+
+<script>
+let isKorean = false;
+function toggleLang() {
+    isKorean = !isKorean;
+    document.querySelectorAll('.en').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'none' : 'revert', 'important');
+    });
+    document.querySelectorAll('.ko').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'revert' : 'none', 'important');
+    });
+    document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+}
+</script>
+
+</body>
+</html>
