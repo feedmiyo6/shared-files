@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Daily Tech Briefing — March 23, 2026</title>
+<style>
+  :root { --bg: #0d1117; --card: #161b22; --border: #30363d; --text: #e6edf3; --muted: #8b949e; --accent: #58a6ff; --green: #3fb950; --red: #f85149; --yellow: #d29922; --purple: #bc8cff; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; padding: 16px; max-width: 720px; margin: 0 auto; }
+  header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
+  h1 { font-size: 1.4rem; font-weight: 700; }
+  .date { color: var(--muted); font-size: 0.85rem; }
+  .lang-toggle { background: var(--card); border: 1px solid var(--border); color: var(--accent); padding: 6px 14px; border-radius: 20px; cursor: pointer; font-size: 0.85rem; white-space: nowrap; }
+  .lang-toggle:hover { background: var(--border); }
+  .section { margin-bottom: 28px; }
+  .section-title { font-size: 1.1rem; font-weight: 600; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+  .badge { display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: 0.75rem; font-weight: 600; }
+  .badge-ai { background: rgba(88,166,255,0.15); color: var(--accent); }
+  .badge-market { background: rgba(63,185,80,0.15); color: var(--green); }
+  .badge-semi { background: rgba(188,140,255,0.15); color: var(--purple); }
+  .badge-wild { background: rgba(210,153,34,0.15); color: var(--yellow); }
+  .story { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 16px; margin-bottom: 10px; }
+  .story h3 { font-size: 1rem; font-weight: 600; margin-bottom: 4px; }
+  .story h3 a { color: var(--accent); text-decoration: none; }
+  .story h3 a:hover { text-decoration: underline; }
+  .source { color: var(--muted); font-size: 0.8rem; margin-bottom: 8px; }
+  .summary { font-size: 0.9rem; color: var(--text); opacity: 0.9; }
+  footer { text-align: center; color: var(--muted); font-size: 0.75rem; padding-top: 20px; border-top: 1px solid var(--border); margin-top: 16px; }
+  .ko { display: none; }
+  .ko.show { display: inline !important; }
+  .en.hide { display: none !important; }
+  @media (max-width: 480px) { body { padding: 12px; } h1 { font-size: 1.2rem; } }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>🌳 <span class="en">Daily Tech Briefing</span><span class="ko">오늘의 테크 브리핑</span></h1>
+    <div class="date">Monday, March 23, 2026</div>
+  </div>
+  <button class="lang-toggle" onclick="toggleLang()">한국어</button>
+</header>
+
+<!-- AI & TECH -->
+<div class="section">
+  <div class="section-title"><span class="badge badge-ai">AI & TECH</span></div>
+
+  <div class="story">
+    <h3><a href="https://www.wsj.com/tech/ai/mark-zuckerberg-is-building-an-ai-agent-to-help-him-be-ceo-eddab2d5" target="_blank">
+      <span class="en">Zuckerberg Is Building an AI Agent to Help Him Be CEO</span>
+      <span class="ko">저커버그, CEO 업무 보조 AI 에이전트 개발 중</span>
+    </a></h3>
+    <div class="source">Wall Street Journal / The Verge</div>
+    <div class="summary">
+      <span class="en">Mark Zuckerberg is personally developing an AI "CEO agent" at Meta to help him make faster decisions by retrieving answers he'd normally get through layers of people. The project signals a new era where AI agents move from consumer tools to executive-level assistants. With a 74% public disapproval rating, some joke the AI might do a better job.</span>
+      <span class="ko">마크 저커버그가 메타에서 CEO 업무를 보조하는 AI '에이전트'를 직접 개발 중입니다. 여러 단계를 거쳐야 얻을 수 있던 정보를 빠르게 가져오는 역할을 합니다. AI 에이전트가 소비자 도구에서 경영진 수준의 비서로 발전하는 새로운 시대를 예고하고 있습니다.</span>
+    </div>
+  </div>
+
+  <div class="story">
+    <h3><a href="https://searchengineland.com/walmart-chatgpt-checkout-converted-worse-472071" target="_blank">
+      <span class="en">Walmart: ChatGPT Checkout Converted 3x Worse Than Website</span>
+      <span class="ko">월마트: ChatGPT 결제 전환율, 웹사이트 대비 3배 낮아</span>
+    </a></h3>
+    <div class="source">Search Engine Land / Wired</div>
+    <div class="summary">
+      <span class="en">Walmart revealed that purchases made directly inside ChatGPT via OpenAI's Instant Checkout converted at just one-third the rate of normal website clicks. The retailer called the experience "unsatisfying" and is now embedding its own chatbot Sparky into ChatGPT instead. OpenAI is phasing out Instant Checkout in favor of merchant-handled app-based flows.</span>
+      <span class="ko">월마트는 ChatGPT 내 직접 구매 전환율이 웹사이트 클릭의 1/3에 불과하다고 밝혔습니다. 이 경험을 "불만족스럽다"고 표현하며, 자체 챗봇 Sparky를 ChatGPT에 통합할 예정입니다. OpenAI도 Instant Checkout을 단계적으로 폐지하고 있습니다.</span>
+    </div>
+  </div>
+</div>
+
+<!-- MARKETS -->
+<div class="section">
+  <div class="section-title"><span class="badge badge-market">MARKETS</span></div>
+
+  <div class="story">
+    <h3><a href="https://www.marketwatch.com/data-news/dow-rallies-815-points-on-gains-for-shares-of-3m-sherwin-williams-co-c5542cb4-1387640bb3bd" target="_blank">
+      <span class="en">Dow Surges Nearly 950 Points in Monday Rally</span>
+      <span class="ko">다우지수, 월요일 약 950포인트 급등</span>
+    </a></h3>
+    <div class="source">MarketWatch</div>
+    <div class="summary">
+      <span class="en">The Dow Jones surged nearly 950 points Monday, led by gains in 3M and Sherwin-Williams. Markets are seeing relief from recent selling pressure, though analysts warn volatility will persist amid ongoing trade policy uncertainty and geopolitical tensions.</span>
+      <span class="ko">다우존스 지수가 월요일 약 950포인트 급등했으며, 3M과 셔윈윌리엄스가 상승을 주도했습니다. 최근 매도 압력에서 벗어났지만, 무역 정책 불확실성과 지정학적 긴장으로 변동성은 지속될 전망입니다.</span>
+    </div>
+  </div>
+
+  <div class="story">
+    <h3><a href="https://www.marketwatch.com/story/amazon-hasnt-been-this-cheap-since-2008-heres-how-the-stock-could-rally-46-from-here-78daf054" target="_blank">
+      <span class="en">Amazon Hasn't Been This Cheap Since 2008 — Could Rally 46%</span>
+      <span class="ko">아마존 주가, 2008년 이후 최저 수준 — 46% 반등 가능성</span>
+    </a></h3>
+    <div class="source">MarketWatch</div>
+    <div class="summary">
+      <span class="en">Amazon stock is trading at valuations not seen since 2008, and analysts say it could rally 46% from current levels. The pullback offers a rare entry point for the e-commerce and cloud giant, with AWS growth and AI integration driving long-term bullish sentiment.</span>
+      <span class="ko">아마존 주가가 2008년 이후 가장 낮은 밸류에이션에 거래되고 있으며, 분석가들은 현 수준에서 46% 반등 가능성을 제시합니다. AWS 성장과 AI 통합이 장기 강세 전망을 뒷받침하고 있습니다.</span>
+    </div>
+  </div>
+</div>
+
+<!-- SEMICONDUCTORS -->
+<div class="section">
+  <div class="section-title"><span class="badge badge-semi">SEMICONDUCTORS</span></div>
+
+  <div class="story">
+    <h3><a href="https://www.reuters.com/business/energy/ceraweek-us-needs-more-energy-development-power-ai-google-president-says-2026-03-23/" target="_blank">
+      <span class="en">Google Warns US Not Scaling Energy Fast Enough for AI Chips</span>
+      <span class="ko">구글, "미국 에너지 확장 속도 AI 칩 수요에 미달" 경고</span>
+    </a></h3>
+    <div class="source">Reuters — CERAWeek Conference</div>
+    <div class="summary">
+      <span class="en">Google President Ruth Porat warned at CERAWeek that the US isn't scaling electricity fast enough to power AI data centers and the chips inside them. "We are concerned that we are not full throttle on energy," she said. The power bottleneck directly impacts how many AI accelerators can be deployed at scale.</span>
+      <span class="ko">구글 사장 루스 포랫은 CERAWeek에서 미국이 AI 데이터센터와 칩에 필요한 전력을 충분히 빠르게 확장하지 못하고 있다고 경고했습니다. 전력 병목 현상이 AI 가속기 대규모 배포에 직접적인 영향을 미치고 있습니다.</span>
+    </div>
+  </div>
+
+  <div class="story">
+    <h3><a href="https://news.ycombinator.com/item?id=47490070" target="_blank">
+      <span class="en">iPhone 17 Pro Demonstrated Running a 400B Parameter LLM</span>
+      <span class="ko">아이폰 17 Pro, 4000억 파라미터 LLM 구동 시연</span>
+    </a></h3>
+    <div class="source">Hacker News / @anemll</div>
+    <div class="summary">
+      <span class="en">A demo showed the iPhone 17 Pro running a 400-billion parameter large language model locally on-device, showcasing Apple's A19 Pro chip capabilities. This milestone blurs the line between cloud and edge AI, potentially enabling powerful AI assistants without internet connectivity.</span>
+      <span class="ko">아이폰 17 Pro에서 4000억 파라미터 대규모 언어 모델을 로컬에서 구동하는 시연이 공개되었습니다. Apple A19 Pro 칩의 성능을 보여주며, 인터넷 없이도 강력한 AI 비서를 사용할 수 있는 가능성을 제시합니다.</span>
+    </div>
+  </div>
+</div>
+
+<!-- WILD CARD -->
+<div class="section">
+  <div class="section-title"><span class="badge badge-wild">WILD CARD</span></div>
+
+  <div class="story">
+    <h3><a href="https://stevekrouse.com/precision" target="_blank">
+      <span class="en">"Reports of Code's Death Are Greatly Exaggerated"</span>
+      <span class="ko">"코드의 죽음은 크게 과장되었다"</span>
+    </a></h3>
+    <div class="source">Steve Krouse — 507 pts on Hacker News</div>
+    <div class="summary">
+      <span class="en">A viral essay argues that "vibe coding" gives a false sense of precision — English specs feel exact until they break at scale. Citing Dan Shipper's vibe-coded app going down when it went viral, the author makes the case that code remains essential for the precision software demands. 364 comments and counting.</span>
+      <span class="ko">바이럴 에세이가 "바이브 코딩"이 잘못된 정밀도 감각을 준다고 주장합니다. 자연어 스펙은 규모가 커지면 깨지며, 코드는 소프트웨어가 요구하는 정밀도를 위해 여전히 필수적이라는 논지입니다. HN에서 364개 이상의 댓글이 달렸습니다.</span>
+    </div>
+  </div>
+
+  <div class="story">
+    <h3><a href="https://www.economist.com/united-states/2026/03/22/america-tells-private-firms-to-hack-back" target="_blank">
+      <span class="en">America Tells Private Firms to "Hack Back"</span>
+      <span class="ko">미국, 민간 기업에 "반격 해킹" 허용</span>
+    </a></h3>
+    <div class="source">The Economist</div>
+    <div class="summary">
+      <span class="en">The US government is now encouraging private companies to go on the offensive against cyberattackers — a major shift in cybersecurity policy. The "hack back" approach raises questions about escalation, liability, and whether companies are equipped to wage digital counterattacks responsibly.</span>
+      <span class="ko">미국 정부가 민간 기업들에게 사이버 공격자에 대한 공격적 대응을 장려하기 시작했습니다. '반격 해킹' 접근법은 사이버 보안 정책의 큰 전환점으로, 에스컬레이션과 책임 문제에 대한 의문을 제기합니다.</span>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <span class="en">🌳 Curated by Totoro — your friendly forest spirit briefing bot</span>
+  <span class="ko">🌳 토토로가 정리한 오늘의 브리핑</span>
+</footer>
+
+<script>
+  let isKorean = false;
+  function toggleLang() {
+    isKorean = !isKorean;
+    document.querySelectorAll('.en').forEach(el => el.classList.toggle('hide', isKorean));
+    document.querySelectorAll('.ko').forEach(el => el.classList.toggle('show', isKorean));
+    document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+  }
+</script>
+
+</body>
+</html>
