@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 27: AXI Basics — Channels & Signals</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    background: linear-gradient(135deg, #fefae0 0%, #faedcd 100%);
+    color: #3d405b;
+    line-height: 1.8;
+    padding: 24px;
+    max-width: 920px;
+    margin: 0 auto;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+h1 { color: #5d4037; border-bottom: 3px solid #c4a77d; padding-bottom: 12px; margin: 24px 0 16px; font-size: 2em; }
+h2 { color: #588157; border-bottom: 2px solid #a3b18a; padding-bottom: 8px; margin: 28px 0 14px; font-size: 1.5em; }
+h3 { color: #5d4037; margin: 20px 0 10px; font-size: 1.2em; }
+p { margin: 10px 0; }
+ul, ol { margin: 10px 0 10px 24px; }
+li { margin: 4px 0; }
+
+pre {
+    background: #2d3436;
+    padding: 24px;
+    border-radius: 12px;
+    margin: 24px 0;
+    border: 3px solid #a3b18a;
+    overflow-x: auto;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+    font-size: 15px;
+    line-height: 1.6;
+    color: #f8f8f2;
+}
+code {
+    background: #e9f5db;
+    color: #3d405b;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+}
+pre code { background: none; color: inherit; padding: 0; }
+
+.keyword { color: #ff79c6; font-weight: 600; }
+.type { color: #8be9fd; }
+.signal { color: #50fa7b; }
+.number { color: #ffb86c; }
+.comment { color: #6272a4; font-style: italic; }
+.string { color: #f1fa8c; }
+
+.concept-box {
+    background: #fff8f0;
+    border: 2px solid #c4a77d;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    color: #3d405b;
+}
+.concept-box h3 { color: #5d4037; margin-bottom: 12px; }
+
+.warning-box {
+    background: #fff8f0;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    border-left: 4px solid #ef4444;
+    color: #3d405b;
+}
+.warning-box h3 { color: #c53030; margin-bottom: 12px; }
+
+.tip-box {
+    background: #fff8f0;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    border-left: 4px solid #588157;
+    color: #3d405b;
+}
+
+.comparison-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+.comparison-table th {
+    background: #588157;
+    color: white;
+    padding: 12px;
+    text-align: left;
+}
+.comparison-table td {
+    background: #fff;
+    border: 1px solid #c4a77d;
+    padding: 12px;
+    color: #3d405b;
+}
+.comparison-table tr:nth-child(even) td { background: #fff8f0; }
+
+.lang-toggle {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    background: #588157;
+    border: none;
+    border-radius: 24px;
+    padding: 10px 20px;
+    cursor: pointer;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    z-index: 1000;
+}
+.lang-toggle:hover { background: #3a5a40; }
+.ko { display: none; }
+
+.nav-links { display: flex; gap: 12px; margin: 20px 0; flex-wrap: wrap; }
+.nav-links a {
+    background: linear-gradient(135deg, #588157, #3a5a40);
+    color: #fff;
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 14px;
+}
+.nav-links a:hover { opacity: 0.9; }
+
+.diagram-box {
+    background: #fff;
+    border: 2px solid #a3b18a;
+    border-radius: 12px;
+    padding: 24px;
+    margin: 20px 0;
+    text-align: center;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #3d405b;
+    overflow-x: auto;
+    white-space: pre;
+}
+
+@media (max-width: 768px) {
+    body { padding: 16px; }
+    h1 { font-size: 1.8em; }
+    pre { font-size: 14px; padding: 16px; }
+    .lang-toggle { padding: 8px 16px; font-size: 13px; }
+}
+</style>
+</head>
+<body>
+
+<button class="lang-toggle" onclick="toggleLang()">한국어</button>
+
+<h1>📚 Day 27: AXI Basics — Channels & Signals</h1>
+
+<div class="nav-links">
+    <a href="day-27-quiz.html">📝 Quiz</a>
+    <a href="day-27-practice.html">💻 Practice</a>
+    <a href="day-26-lesson.html">← Day 26</a>
+</div>
+
+<p class="en"><strong>Week 6, Day 2</strong> — Yesterday we took a deep dive into Ready/Valid handshaking. Today we build on that foundation to explore <strong>AXI (Advanced eXtensible Interface)</strong>, ARM's industry-standard bus protocol that uses Ready/Valid on every channel.</p>
+<p class="ko" style="display:none;"><strong>6주차, 2일</strong> — 어제 Ready/Valid 핸드셰이킹을 심층적으로 다뤘습니다. 오늘은 그 기반 위에 ARM의 산업 표준 버스 프로토콜인 <strong>AXI (Advanced eXtensible Interface)</strong>를 살펴봅니다. AXI는 모든 채널에서 Ready/Valid를 사용합니다.</p>
+
+<h2>1. What is AXI?</h2>
+
+<p class="en">AXI is part of the <strong>AMBA (Advanced Microcontroller Bus Architecture)</strong> family, defined by ARM. It's the go-to protocol for high-performance on-chip communication in modern SoCs. Almost every chip you'll work with uses some form of AMBA/AXI.</p>
+<p class="ko" style="display:none;">AXI는 ARM이 정의한 <strong>AMBA (Advanced Microcontroller Bus Architecture)</strong> 제품군의 일부입니다. 현대 SoC에서 고성능 온칩 통신을 위한 핵심 프로토콜입니다. 여러분이 작업할 거의 모든 칩이 AMBA/AXI의 일부 형태를 사용합니다.</p>
+
+<div class="concept-box">
+    <h3>🏛️ AMBA Protocol Family</h3>
+    <table class="comparison-table">
+        <tr><th>Protocol</th><th class="en">Use Case</th><th class="ko" style="display:none;">사용 사례</th><th class="en">Complexity</th><th class="ko" style="display:none;">복잡도</th></tr>
+        <tr><td><strong>APB</strong></td><td class="en">Simple peripherals (UART, GPIO, config regs)</td><td class="ko" style="display:none;">간단한 주변장치 (UART, GPIO, 설정 레지스터)</td><td class="en">Low</td><td class="ko" style="display:none;">낮음</td></tr>
+        <tr><td><strong>AHB</strong></td><td class="en">Mid-performance (DMA, on-chip SRAM)</td><td class="ko" style="display:none;">중간 성능 (DMA, 온칩 SRAM)</td><td class="en">Medium</td><td class="ko" style="display:none;">중간</td></tr>
+        <tr><td><strong>AXI</strong></td><td class="en">High-performance (CPU↔memory, accelerators)</td><td class="ko" style="display:none;">고성능 (CPU↔메모리, 가속기)</td><td class="en">High</td><td class="ko" style="display:none;">높음</td></tr>
+        <tr><td><strong>AXI-Lite</strong></td><td class="en">Simplified AXI (config registers, no bursts)</td><td class="ko" style="display:none;">단순화된 AXI (설정 레지스터, 버스트 없음)</td><td class="en">Medium</td><td class="ko" style="display:none;">중간</td></tr>
+        <tr><td><strong>AXI-Stream</strong></td><td class="en">Streaming data (no address, point-to-point)</td><td class="ko" style="display:none;">스트리밍 데이터 (주소 없음, 점대점)</td><td class="en">Low-Med</td><td class="ko" style="display:none;">낮음-중간</td></tr>
+    </table>
+</div>
+
+<h2>2. The Five AXI Channels</h2>
+
+<p class="en">AXI's key architectural insight: <strong>separate read and write paths</strong> with <strong>independent channels</strong>. This allows simultaneous reads and writes — no waiting!</p>
+<p class="ko" style="display:none;">AXI의 핵심 아키텍처 인사이트: <strong>읽기와 쓰기 경로를 분리</strong>하여 <strong>독립적인 채널</strong>을 사용합니다. 이로써 동시 읽기와 쓰기가 가능합니다 — 대기 시간 없음!</p>
+
+<div class="diagram-box">
+     ┌─────────────┐                        ┌─────────────┐
+     │             │  ──AW (Write Addr)──▶   │             │
+     │             │  ──W  (Write Data)──▶   │             │
+     │   MASTER    │  ◀──B  (Write Resp)──   │    SLAVE    │
+     │   (CPU)     │  ──AR (Read Addr) ──▶   │   (Memory)  │
+     │             │  ◀──R  (Read Data) ──   │             │
+     └─────────────┘                        └─────────────┘
+</div>
+
+<div class="concept-box">
+    <h3 class="en">📡 The Five Channels</h3>
+    <h3 class="ko" style="display:none;">📡 5개 채널</h3>
+    <table class="comparison-table">
+        <tr><th>Channel</th><th class="en">Name</th><th class="ko" style="display:none;">이름</th><th class="en">Direction</th><th class="ko" style="display:none;">방향</th><th class="en">Purpose</th><th class="ko" style="display:none;">목적</th></tr>
+        <tr><td><strong>AW</strong></td><td class="en">Write Address</td><td class="ko" style="display:none;">쓰기 주소</td><td class="en">Master → Slave</td><td class="ko" style="display:none;">마스터 → 슬레이브</td><td class="en">Where to write</td><td class="ko" style="display:none;">어디에 쓸 것인지</td></tr>
+        <tr><td><strong>W</strong></td><td class="en">Write Data</td><td class="ko" style="display:none;">쓰기 데이터</td><td class="en">Master → Slave</td><td class="ko" style="display:none;">마스터 → 슬레이브</td><td class="en">The data to write</td><td class="ko" style="display:none;">쓸 데이터</td></tr>
+        <tr><td><strong>B</strong></td><td class="en">Write Response</td><td class="ko" style="display:none;">쓰기 응답</td><td class="en">Slave → Master</td><td class="ko" style="display:none;">슬레이브 → 마스터</td><td class="en">Write status (ok/error)</td><td class="ko" style="display:none;">쓰기 상태 (성공/에러)</td></tr>
+        <tr><td><strong>AR</strong></td><td class="en">Read Address</td><td class="ko" style="display:none;">읽기 주소</td><td class="en">Master → Slave</td><td class="ko" style="display:none;">마스터 → 슬레이브</td><td class="en">Where to read</td><td class="ko" style="display:none;">어디에서 읽을 것인지</td></tr>
+        <tr><td><strong>R</strong></td><td class="en">Read Data</td><td class="ko" style="display:none;">읽기 데이터</td><td class="en">Slave → Master</td><td class="ko" style="display:none;">슬레이브 → 마스터</td><td class="en">The data read + status</td><td class="ko" style="display:none;">읽은 데이터 + 상태</td></tr>
+    </table>
+</div>
+
+<div class="tip-box">
+    <h3>💡 Why Separate Channels?</h3>
+    <p class="en">Each channel has its <strong>own Ready/Valid handshake</strong>. This means the write address can be accepted before write data arrives, or multiple reads can be outstanding at once. This <strong>decoupling</strong> is what gives AXI its performance advantage.</p>
+    <p class="ko" style="display:none;">각 채널은 <strong>자체 Ready/Valid 핸드셰이크</strong>를 가집니다. 즉, 쓰기 데이터가 도착하기 전에 쓰기 주소를 수락할 수 있고, 여러 읽기 요청을 동시에 처리할 수 있습니다. 이 <strong>디커플링</strong>이 AXI의 성능 이점을 제공합니다.</p>
+</div>
+
+<h2>3. Channel Signals in Detail</h2>
+
+<h3>Write Address Channel (AW)</h3>
+
+<pre><code><span class="comment">// Write Address Channel signals</span>
+<span class="keyword">logic</span>                  <span class="signal">AWVALID</span>;   <span class="comment">// Master: address valid</span>
+<span class="keyword">logic</span>                  <span class="signal">AWREADY</span>;   <span class="comment">// Slave: ready to accept</span>
+<span class="keyword">logic</span> [<span class="number">31</span>:<span class="number">0</span>]          <span class="signal">AWADDR</span>;    <span class="comment">// Write address</span>
+<span class="keyword">logic</span> [<span class="number">7</span>:<span class="number">0</span>]           <span class="signal">AWLEN</span>;     <span class="comment">// Burst length (0-255 → 1-256 beats)</span>
+<span class="keyword">logic</span> [<span class="number">2</span>:<span class="number">0</span>]           <span class="signal">AWSIZE</span>;    <span class="comment">// Bytes per beat (2^AWSIZE)</span>
+<span class="keyword">logic</span> [<span class="number">1</span>:<span class="number">0</span>]           <span class="signal">AWBURST</span>;   <span class="comment">// Burst type: FIXED/INCR/WRAP</span>
+<span class="keyword">logic</span> [<span class="number">3</span>:<span class="number">0</span>]           <span class="signal">AWID</span>;      <span class="comment">// Transaction ID</span>
+</code></pre>
+
+<h3>Write Data Channel (W)</h3>
+
+<pre><code><span class="comment">// Write Data Channel signals</span>
+<span class="keyword">logic</span>                  <span class="signal">WVALID</span>;    <span class="comment">// Master: data valid</span>
+<span class="keyword">logic</span>                  <span class="signal">WREADY</span>;    <span class="comment">// Slave: ready for data</span>
+<span class="keyword">logic</span> [<span class="number">31</span>:<span class="number">0</span>]          <span class="signal">WDATA</span>;     <span class="comment">// Write data</span>
+<span class="keyword">logic</span> [<span class="number">3</span>:<span class="number">0</span>]           <span class="signal">WSTRB</span>;     <span class="comment">// Write strobes (byte enables)</span>
+<span class="keyword">logic</span>                  <span class="signal">WLAST</span>;     <span class="comment">// Last beat in burst</span>
+</code></pre>
+
+<h3>Write Response Channel (B)</h3>
+
+<pre><code><span class="comment">// Write Response Channel signals</span>
+<span class="keyword">logic</span>                  <span class="signal">BVALID</span>;    <span class="comment">// Slave: response valid</span>
+<span class="keyword">logic</span>                  <span class="signal">BREADY</span>;    <span class="comment">// Master: ready for response</span>
+<span class="keyword">logic</span> [<span class="number">1</span>:<span class="number">0</span>]           <span class="signal">BRESP</span>;     <span class="comment">// Response: OKAY/EXOKAY/SLVERR/DECERR</span>
+<span class="keyword">logic</span> [<span class="number">3</span>:<span class="number">0</span>]           <span class="signal">BID</span>;       <span class="comment">// Transaction ID (matches AWID)</span>
+</code></pre>
+
+<h3>Read Address Channel (AR)</h3>
+
+<pre><code><span class="comment">// Read Address Channel signals</span>
+<span class="keyword">logic</span>                  <span class="signal">ARVALID</span>;   <span class="comment">// Master: address valid</span>
+<span class="keyword">logic</span>                  <span class="signal">ARREADY</span>;   <span class="comment">// Slave: ready to accept</span>
+<span class="keyword">logic</span> [<span class="number">31</span>:<span class="number">0</span>]          <span class="signal">ARADDR</span>;    <span class="comment">// Read address</span>
+<span class="keyword">logic</span> [<span class="number">7</span>:<span class="number">0</span>]           <span class="signal">ARLEN</span>;     <span class="comment">// Burst length</span>
+<span class="keyword">logic</span> [<span class="number">2</span>:<span class="number">0</span>]           <span class="signal">ARSIZE</span>;    <span class="comment">// Bytes per beat</span>
+<span class="keyword">logic</span> [<span class="number">1</span>:<span class="number">0</span>]           <span class="signal">ARBURST</span>;   <span class="comment">// Burst type</span>
+<span class="keyword">logic</span> [<span class="number">3</span>:<span class="number">0</span>]           <span class="signal">ARID</span>;      <span class="comment">// Transaction ID</span>
+</code></pre>
+
+<h3>Read Data Channel (R)</h3>
+
+<pre><code><span class="comment">// Read Data Channel signals</span>
+<span class="keyword">logic</span>                  <span class="signal">RVALID</span>;    <span class="comment">// Slave: data valid</span>
+<span class="keyword">logic</span>                  <span class="signal">RREADY</span>;    <span class="comment">// Master: ready for data</span>
+<span class="keyword">logic</span> [<span class="number">31</span>:<span class="number">0</span>]          <span class="signal">RDATA</span>;     <span class="comment">// Read data</span>
+<span class="keyword">logic</span> [<span class="number">1</span>:<span class="number">0</span>]           <span class="signal">RRESP</span>;     <span class="comment">// Response status</span>
+<span class="keyword">logic</span>                  <span class="signal">RLAST</span>;     <span class="comment">// Last beat in burst</span>
+<span class="keyword">logic</span> [<span class="number">3</span>:<span class="number">0</span>]           <span class="signal">RID</span>;       <span class="comment">// Transaction ID (matches ARID)</span>
+</code></pre>
+
+<h2>4. Burst Transfers</h2>
+
+<p class="en">A single AXI address transaction can trigger <strong>multiple data beats</strong> — this is called a <strong>burst</strong>. Instead of sending an address for every word, you send one address and stream the data.</p>
+<p class="ko" style="display:none;">단일 AXI 주소 트랜잭션이 <strong>여러 데이터 비트</strong>를 트리거할 수 있습니다 — 이를 <strong>버스트</strong>라고 합니다. 모든 워드에 대해 주소를 보내는 대신, 하나의 주소를 보내고 데이터를 스트리밍합니다.</p>
+
+<div class="concept-box">
+    <h3 class="en">🔄 Burst Types</h3>
+    <h3 class="ko" style="display:none;">🔄 버스트 유형</h3>
+    <table class="comparison-table">
+        <tr><th>Type</th><th>AWBURST</th><th class="en">Address Behavior</th><th class="ko" style="display:none;">주소 동작</th><th class="en">Use Case</th><th class="ko" style="display:none;">사용 사례</th></tr>
+        <tr><td><strong>FIXED</strong></td><td>2'b00</td><td class="en">Same address every beat</td><td class="ko" style="display:none;">매 비트마다 같은 주소</td><td class="en">FIFO access (same reg)</td><td class="ko" style="display:none;">FIFO 접근 (같은 레지스터)</td></tr>
+        <tr><td><strong>INCR</strong></td><td>2'b01</td><td class="en">Address increments each beat</td><td class="ko" style="display:none;">매 비트마다 주소 증가</td><td class="en">Sequential memory (most common!)</td><td class="ko" style="display:none;">순차 메모리 (가장 일반적!)</td></tr>
+        <tr><td><strong>WRAP</strong></td><td>2'b10</td><td class="en">Wraps at boundary</td><td class="ko" style="display:none;">경계에서 래핑</td><td class="en">Cache line fills</td><td class="ko" style="display:none;">캐시 라인 채움</td></tr>
+    </table>
+</div>
+
+<p class="en"><strong>Burst length:</strong> <code>AWLEN + 1</code> = number of beats. So <code>AWLEN = 3</code> means 4 beats. <code>AWLEN = 0</code> is a single transfer (still technically a "burst of 1").</p>
+<p class="ko" style="display:none;"><strong>버스트 길이:</strong> <code>AWLEN + 1</code> = 비트 수. 따라서 <code>AWLEN = 3</code>은 4비트를 의미합니다. <code>AWLEN = 0</code>은 단일 전송입니다 (기술적으로 "1개의 버스트").</p>
+
+<p class="en"><strong>Beat size:</strong> <code>2^AWSIZE</code> = bytes per beat. For a 32-bit bus: <code>AWSIZE = 2</code> (2² = 4 bytes).</p>
+<p class="ko" style="display:none;"><strong>비트 크기:</strong> <code>2^AWSIZE</code> = 비트당 바이트. 32비트 버스의 경우: <code>AWSIZE = 2</code> (2² = 4 바이트).</p>
+
+<h2>5. Write Strobes (WSTRB)</h2>
+
+<p class="en">Write strobes enable <strong>byte-level write control</strong>. Each bit in WSTRB corresponds to one byte of WDATA.</p>
+<p class="ko" style="display:none;">쓰기 스트로브는 <strong>바이트 수준 쓰기 제어</strong>를 가능하게 합니다. WSTRB의 각 비트는 WDATA의 한 바이트에 해당합니다.</p>
+
+<pre><code><span class="comment">// For a 32-bit data bus (4 bytes):</span>
+<span class="comment">// WSTRB[0] → WDATA[7:0]   (byte 0)</span>
+<span class="comment">// WSTRB[1] → WDATA[15:8]  (byte 1)</span>
+<span class="comment">// WSTRB[2] → WDATA[23:16] (byte 2)</span>
+<span class="comment">// WSTRB[3] → WDATA[31:24] (byte 3)</span>
+
+<span class="comment">// Example: Write only bytes 0 and 2</span>
+<span class="signal">WSTRB</span> = <span class="number">4'b0101</span>;  <span class="comment">// Only bytes 0 and 2 are written</span>
+<span class="signal">WDATA</span> = <span class="number">32'hDEADBEEF</span>;
+<span class="comment">// Byte 0 (EF) → written</span>
+<span class="comment">// Byte 1 (BE) → NOT written (preserved)</span>
+<span class="comment">// Byte 2 (AD) → written</span>
+<span class="comment">// Byte 3 (DE) → NOT written (preserved)</span>
+</code></pre>
+
+<div class="tip-box">
+    <h3>💡 Why WSTRB Matters</h3>
+    <p class="en">Without byte strobes, writing a single byte to a 32-bit word would require a <strong>read-modify-write</strong> — read the full word, change one byte, write it all back. WSTRB lets the slave handle it atomically. This is critical for things like memory-mapped registers where only certain bytes should change.</p>
+    <p class="ko" style="display:none;">바이트 스트로브 없이는 32비트 워드에 단일 바이트를 쓰려면 <strong>읽기-수정-쓰기</strong>가 필요합니다 — 전체 워드를 읽고, 한 바이트를 변경하고, 다시 전체를 씁니다. WSTRB는 슬레이브가 이를 원자적으로 처리하게 합니다.</p>
+</div>
+
+<h2>6. Response Codes</h2>
+
+<div class="concept-box">
+    <h3 class="en">📋 AXI Response Types (BRESP / RRESP)</h3>
+    <h3 class="ko" style="display:none;">📋 AXI 응답 유형 (BRESP / RRESP)</h3>
+    <table class="comparison-table">
+        <tr><th>Code</th><th>Name</th><th class="en">Meaning</th><th class="ko" style="display:none;">의미</th></tr>
+        <tr><td>2'b00</td><td>OKAY</td><td class="en">Normal success</td><td class="ko" style="display:none;">정상 성공</td></tr>
+        <tr><td>2'b01</td><td>EXOKAY</td><td class="en">Exclusive access success</td><td class="ko" style="display:none;">독점 접근 성공</td></tr>
+        <tr><td>2'b10</td><td>SLVERR</td><td class="en">Slave error (valid address, but error)</td><td class="ko" style="display:none;">슬레이브 에러 (유효한 주소지만 에러)</td></tr>
+        <tr><td>2'b11</td><td>DECERR</td><td class="en">Decode error (no slave at that address)</td><td class="ko" style="display:none;">디코드 에러 (해당 주소에 슬레이브 없음)</td></tr>
+    </table>
+</div>
+
+<h2>7. Transaction IDs — Out-of-Order Completion</h2>
+
+<p class="en">Each transaction gets an <strong>ID tag</strong> (AWID/ARID). The slave returns data/responses with matching IDs (BID/RID). This allows:</p>
+<p class="ko" style="display:none;">각 트랜잭션은 <strong>ID 태그</strong>(AWID/ARID)를 받습니다. 슬레이브는 일치하는 ID(BID/RID)와 함께 데이터/응답을 반환합니다. 이를 통해:</p>
+
+<ul>
+    <li class="en"><strong>Out-of-order completion</strong> — a fast memory can respond before a slow peripheral</li>
+    <li class="ko" style="display:none;"><strong>순서 무관 완료</strong> — 빠른 메모리가 느린 주변장치보다 먼저 응답할 수 있음</li>
+    <li class="en"><strong>Interleaving</strong> — data from different transactions can be mixed on the channel</li>
+    <li class="ko" style="display:none;"><strong>인터리빙</strong> — 다른 트랜잭션의 데이터가 채널에서 혼합될 수 있음</li>
+    <li class="en"><strong>Multiple outstanding transactions</strong> — don't wait for one to finish before starting the next</li>
+    <li class="ko" style="display:none;"><strong>다중 미처리 트랜잭션</strong> — 하나가 끝날 때까지 기다리지 않고 다음을 시작</li>
+</ul>
+
+<pre><code><span class="comment">// Master issues two reads with different IDs:</span>
+<span class="comment">// Time 0: AR transaction with ARID=0, addr=0x1000 (slow memory)</span>
+<span class="comment">// Time 1: AR transaction with ARID=1, addr=0x2000 (fast SRAM)</span>
+<span class="comment">// Time 5: R data arrives  with RID=1  (fast one returns first!)</span>
+<span class="comment">// Time 10: R data arrives with RID=0  (slow one completes later)</span>
+</code></pre>
+
+<h2>8. AXI Write Transaction Flow</h2>
+
+<p class="en">Here's how a complete write works step by step:</p>
+<p class="ko" style="display:none;">완전한 쓰기가 단계별로 어떻게 작동하는지 보겠습니다:</p>
+
+<div class="diagram-box">
+   Master                           Slave
+     │                                │
+     │──── AWVALID + AWADDR ─────────▶│  1. Master presents write address
+     │◀─── AWREADY ──────────────────│  2. Slave accepts address
+     │                                │
+     │──── WVALID + WDATA + WSTRB ──▶│  3. Master sends data beat(s)
+     │◀─── WREADY ──────────────────│  4. Slave accepts data
+     │──── WLAST (with final beat) ─▶│  5. Master signals last beat
+     │                                │
+     │◀─── BVALID + BRESP ──────────│  6. Slave sends write response
+     │──── BREADY ──────────────────▶│  7. Master accepts response
+     │                                │
+</div>
+
+<div class="warning-box">
+    <h3>⚠️ Key Rule: Address ≠ Data Ordering</h3>
+    <p class="en">In AXI, <strong>write data can arrive BEFORE the write address!</strong> The AW and W channels are independent. The slave must be able to buffer data until it knows the destination address. This is surprising but critical for performance — the master can start streaming data while the address is still being routed through an interconnect.</p>
+    <p class="ko" style="display:none;">AXI에서 <strong>쓰기 데이터가 쓰기 주소보다 먼저 도착할 수 있습니다!</strong> AW와 W 채널은 독립적입니다. 슬레이브는 목적지 주소를 알 때까지 데이터를 버퍼링할 수 있어야 합니다. 이는 놀랍지만 성능에 중요합니다.</p>
+</div>
+
+<h2>9. AXI-Lite: The Simpler Cousin</h2>
+
+<p class="en">For register access (configuration, status), full AXI is overkill. <strong>AXI-Lite</strong> strips it down:</p>
+<p class="ko" style="display:none;">레지스터 접근(구성, 상태)에는 전체 AXI가 과도합니다. <strong>AXI-Lite</strong>는 이를 단순화합니다:</p>
+
+<div class="concept-box">
+    <h3 class="en">AXI vs AXI-Lite</h3>
+    <h3 class="ko" style="display:none;">AXI vs AXI-Lite</h3>
+    <table class="comparison-table">
+        <tr><th>Feature</th><th>AXI (Full)</th><th>AXI-Lite</th></tr>
+        <tr><td class="en">Burst transfers</td><td class="ko" style="display:none;">버스트 전송</td><td>✅ Up to 256 beats</td><td>❌ Single beat only</td></tr>
+        <tr><td class="en">Transaction IDs</td><td class="ko" style="display:none;">트랜잭션 ID</td><td>✅ Out-of-order</td><td>❌ No IDs</td></tr>
+        <tr><td class="en">Data width</td><td class="ko" style="display:none;">데이터 폭</td><td>Variable</td><td>32 or 64 bit only</td></tr>
+        <tr><td class="en">Write strobes</td><td class="ko" style="display:none;">쓰기 스트로브</td><td>✅ Full control</td><td>✅ Still supported</td></tr>
+        <tr><td class="en">Complexity</td><td class="ko" style="display:none;">복잡도</td><td>High</td><td>Low</td></tr>
+        <tr><td class="en">Use case</td><td class="ko" style="display:none;">사용 사례</td><td>Data paths</td><td>Config registers</td></tr>
+    </table>
+</div>
+
+<h2>10. Simple AXI-Lite Slave (SystemVerilog)</h2>
+
+<p class="en">Here's a minimal AXI-Lite slave with 4 registers — the most common starting point for any IP block:</p>
+<p class="ko" style="display:none;">여기 4개의 레지스터를 가진 최소한의 AXI-Lite 슬레이브가 있습니다 — 모든 IP 블록의 가장 일반적인 시작점입니다:</p>
+
+<pre><code><span class="keyword">module</span> <span class="type">axi_lite_slave</span> #(
+    <span class="keyword">parameter</span> <span class="type">ADDR_WIDTH</span> = <span class="number">4</span>,
+    <span class="keyword">parameter</span> <span class="type">DATA_WIDTH</span> = <span class="number">32</span>
+)(
+    <span class="keyword">input</span>  <span class="keyword">logic</span>                       <span class="signal">ACLK</span>,
+    <span class="keyword">input</span>  <span class="keyword">logic</span>                       <span class="signal">ARESETn</span>,
+
+    <span class="comment">// Write Address Channel</span>
+    <span class="keyword">input</span>  <span class="keyword">logic</span> [<span class="type">ADDR_WIDTH</span>-<span class="number">1</span>:<span class="number">0</span>]     <span class="signal">AWADDR</span>,
+    <span class="keyword">input</span>  <span class="keyword">logic</span>                       <span class="signal">AWVALID</span>,
+    <span class="keyword">output</span> <span class="keyword">logic</span>                       <span class="signal">AWREADY</span>,
+
+    <span class="comment">// Write Data Channel</span>
+    <span class="keyword">input</span>  <span class="keyword">logic</span> [<span class="type">DATA_WIDTH</span>-<span class="number">1</span>:<span class="number">0</span>]     <span class="signal">WDATA</span>,
+    <span class="keyword">input</span>  <span class="keyword">logic</span> [<span class="type">DATA_WIDTH</span>/<span class="number">8</span>-<span class="number">1</span>:<span class="number">0</span>]   <span class="signal">WSTRB</span>,
+    <span class="keyword">input</span>  <span class="keyword">logic</span>                       <span class="signal">WVALID</span>,
+    <span class="keyword">output</span> <span class="keyword">logic</span>                       <span class="signal">WREADY</span>,
+
+    <span class="comment">// Write Response Channel</span>
+    <span class="keyword">output</span> <span class="keyword">logic</span> [<span class="number">1</span>:<span class="number">0</span>]                <span class="signal">BRESP</span>,
+    <span class="keyword">output</span> <span class="keyword">logic</span>                       <span class="signal">BVALID</span>,
+    <span class="keyword">input</span>  <span class="keyword">logic</span>                       <span class="signal">BREADY</span>,
+
+    <span class="comment">// Read Address Channel</span>
+    <span class="keyword">input</span>  <span class="keyword">logic</span> [<span class="type">ADDR_WIDTH</span>-<span class="number">1</span>:<span class="number">0</span>]     <span class="signal">ARADDR</span>,
+    <span class="keyword">input</span>  <span class="keyword">logic</span>                       <span class="signal">ARVALID</span>,
+    <span class="keyword">output</span> <span class="keyword">logic</span>                       <span class="signal">ARREADY</span>,
+
+    <span class="comment">// Read Data Channel</span>
+    <span class="keyword">output</span> <span class="keyword">logic</span> [<span class="type">DATA_WIDTH</span>-<span class="number">1</span>:<span class="number">0</span>]     <span class="signal">RDATA</span>,
+    <span class="keyword">output</span> <span class="keyword">logic</span> [<span class="number">1</span>:<span class="number">0</span>]                <span class="signal">RRESP</span>,
+    <span class="keyword">output</span> <span class="keyword">logic</span>                       <span class="signal">RVALID</span>,
+    <span class="keyword">input</span>  <span class="keyword">logic</span>                       <span class="signal">RREADY</span>
+);
+
+    <span class="comment">// 4 internal registers</span>
+    <span class="keyword">logic</span> [<span class="type">DATA_WIDTH</span>-<span class="number">1</span>:<span class="number">0</span>] <span class="signal">reg_file</span> [<span class="number">0</span>:<span class="number">3</span>];
+
+    <span class="comment">// ---- Write Logic ----</span>
+    <span class="keyword">logic</span> <span class="signal">aw_done</span>, <span class="signal">w_done</span>;
+    <span class="keyword">logic</span> [<span class="type">ADDR_WIDTH</span>-<span class="number">1</span>:<span class="number">0</span>] <span class="signal">wr_addr</span>;
+
+    <span class="comment">// Accept write address</span>
+    <span class="keyword">assign</span> <span class="signal">AWREADY</span> = !<span class="signal">aw_done</span>;
+
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">ACLK</span> <span class="keyword">or</span> <span class="keyword">negedge</span> <span class="signal">ARESETn</span>)
+        <span class="keyword">if</span> (!<span class="signal">ARESETn</span>)
+            <span class="signal">aw_done</span> &lt;= <span class="number">1'b0</span>;
+        <span class="keyword">else if</span> (<span class="signal">BVALID</span> && <span class="signal">BREADY</span>)
+            <span class="signal">aw_done</span> &lt;= <span class="number">1'b0</span>;
+        <span class="keyword">else if</span> (<span class="signal">AWVALID</span> && <span class="signal">AWREADY</span>)
+            <span class="signal">aw_done</span> &lt;= <span class="number">1'b1</span>;
+
+    <span class="comment">// Capture write address</span>
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">ACLK</span>)
+        <span class="keyword">if</span> (<span class="signal">AWVALID</span> && <span class="signal">AWREADY</span>)
+            <span class="signal">wr_addr</span> &lt;= <span class="signal">AWADDR</span>;
+
+    <span class="comment">// Accept write data & update registers</span>
+    <span class="keyword">assign</span> <span class="signal">WREADY</span> = !<span class="signal">w_done</span>;
+
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">ACLK</span> <span class="keyword">or</span> <span class="keyword">negedge</span> <span class="signal">ARESETn</span>)
+        <span class="keyword">if</span> (!<span class="signal">ARESETn</span>)
+            <span class="signal">w_done</span> &lt;= <span class="number">1'b0</span>;
+        <span class="keyword">else if</span> (<span class="signal">BVALID</span> && <span class="signal">BREADY</span>)
+            <span class="signal">w_done</span> &lt;= <span class="number">1'b0</span>;
+        <span class="keyword">else if</span> (<span class="signal">WVALID</span> && <span class="signal">WREADY</span>)
+            <span class="signal">w_done</span> &lt;= <span class="number">1'b1</span>;
+
+    <span class="comment">// Write to register file with byte strobes</span>
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">ACLK</span>)
+        <span class="keyword">if</span> (<span class="signal">WVALID</span> && <span class="signal">WREADY</span>)
+            <span class="keyword">for</span> (<span class="keyword">int</span> <span class="signal">i</span> = <span class="number">0</span>; <span class="signal">i</span> &lt; <span class="type">DATA_WIDTH</span>/<span class="number">8</span>; <span class="signal">i</span>++)
+                <span class="keyword">if</span> (<span class="signal">WSTRB</span>[<span class="signal">i</span>])
+                    <span class="signal">reg_file</span>[<span class="signal">wr_addr</span>[<span class="number">3</span>:<span class="number">2</span>]][<span class="signal">i</span>*<span class="number">8</span> +: <span class="number">8</span>] &lt;= <span class="signal">WDATA</span>[<span class="signal">i</span>*<span class="number">8</span> +: <span class="number">8</span>];
+
+    <span class="comment">// Write response</span>
+    <span class="keyword">assign</span> <span class="signal">BVALID</span> = <span class="signal">aw_done</span> && <span class="signal">w_done</span>;
+    <span class="keyword">assign</span> <span class="signal">BRESP</span>  = <span class="number">2'b00</span>;  <span class="comment">// Always OKAY</span>
+
+    <span class="comment">// ---- Read Logic ----</span>
+    <span class="keyword">logic</span> <span class="signal">rd_valid</span>;
+
+    <span class="keyword">assign</span> <span class="signal">ARREADY</span> = !<span class="signal">rd_valid</span>;
+
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">ACLK</span> <span class="keyword">or</span> <span class="keyword">negedge</span> <span class="signal">ARESETn</span>)
+        <span class="keyword">if</span> (!<span class="signal">ARESETn</span>)
+            <span class="signal">rd_valid</span> &lt;= <span class="number">1'b0</span>;
+        <span class="keyword">else if</span> (<span class="signal">RVALID</span> && <span class="signal">RREADY</span>)
+            <span class="signal">rd_valid</span> &lt;= <span class="number">1'b0</span>;
+        <span class="keyword">else if</span> (<span class="signal">ARVALID</span> && <span class="signal">ARREADY</span>)
+            <span class="signal">rd_valid</span> &lt;= <span class="number">1'b1</span>;
+
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">ACLK</span>)
+        <span class="keyword">if</span> (<span class="signal">ARVALID</span> && <span class="signal">ARREADY</span>)
+            <span class="signal">RDATA</span> &lt;= <span class="signal">reg_file</span>[<span class="signal">ARADDR</span>[<span class="number">3</span>:<span class="number">2</span>]];
+
+    <span class="keyword">assign</span> <span class="signal">RVALID</span> = <span class="signal">rd_valid</span>;
+    <span class="keyword">assign</span> <span class="signal">RRESP</span>  = <span class="number">2'b00</span>;
+
+<span class="keyword">endmodule</span>
+</code></pre>
+
+<h2>11. Key Takeaways</h2>
+
+<div class="concept-box">
+    <h3 class="en">🎯 Today's Key Points</h3>
+    <h3 class="ko" style="display:none;">🎯 오늘의 핵심 포인트</h3>
+    <ol>
+        <li class="en"><strong>5 channels:</strong> AW, W, B (write path) + AR, R (read path) — all use Ready/Valid</li>
+        <li class="ko" style="display:none;"><strong>5개 채널:</strong> AW, W, B (쓰기 경로) + AR, R (읽기 경로) — 모두 Ready/Valid 사용</li>
+        <li class="en"><strong>Bursts:</strong> One address, multiple data beats — FIXED, INCR, or WRAP</li>
+        <li class="ko" style="display:none;"><strong>버스트:</strong> 하나의 주소, 여러 데이터 비트 — FIXED, INCR, 또는 WRAP</li>
+        <li class="en"><strong>WSTRB:</strong> Byte-level write enable — no need for read-modify-write</li>
+        <li class="ko" style="display:none;"><strong>WSTRB:</strong> 바이트 수준 쓰기 활성화 — 읽기-수정-쓰기 불필요</li>
+        <li class="en"><strong>Transaction IDs:</strong> Enable out-of-order completion and interleaving</li>
+        <li class="ko" style="display:none;"><strong>트랜잭션 ID:</strong> 순서 무관 완료 및 인터리빙 가능</li>
+        <li class="en"><strong>AXI-Lite:</strong> Simplified version for register access — no bursts, no IDs</li>
+        <li class="ko" style="display:none;"><strong>AXI-Lite:</strong> 레지스터 접근을 위한 단순화 버전 — 버스트 없음, ID 없음</li>
+        <li class="en"><strong>Response codes:</strong> OKAY, EXOKAY, SLVERR, DECERR — always check!</li>
+        <li class="ko" style="display:none;"><strong>응답 코드:</strong> OKAY, EXOKAY, SLVERR, DECERR — 항상 확인!</li>
+    </ol>
+</div>
+
+<div class="tip-box">
+    <h3>🔗 Connection to Your Work</h3>
+    <p class="en">In your Ethernet PHY/Switch work at Microchip, the register configuration interfaces likely use <strong>AXI-Lite</strong> for MDIO register access, while bulk data paths (packet buffers, DMA) would use <strong>full AXI</strong>. Understanding both is essential for your digital design transition!</p>
+    <p class="ko" style="display:none;">Microchip에서의 이더넷 PHY/Switch 작업에서, 레지스터 구성 인터페이스는 MDIO 레지스터 접근에 <strong>AXI-Lite</strong>를, 대량 데이터 경로(패킷 버퍼, DMA)는 <strong>전체 AXI</strong>를 사용할 가능성이 높습니다. 디지털 설계 전환에 둘 다 이해하는 것이 필수적입니다!</p>
+</div>
+
+<div class="nav-links">
+    <a href="day-27-quiz.html">📝 Take the Quiz →</a>
+    <a href="day-27-practice.html">💻 Practice →</a>
+</div>
+
+<script>
+let isKorean = false;
+function toggleLang() {
+    isKorean = !isKorean;
+    document.querySelectorAll('.en').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'none' : 'revert', 'important');
+    });
+    document.querySelectorAll('.ko').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'revert' : 'none', 'important');
+    });
+    document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+}
+</script>
+
+</body>
+</html>
