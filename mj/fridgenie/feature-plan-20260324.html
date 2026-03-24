@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fridgenie Feature Plan — March 2026</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: #faf8f4; color: #2d2a26; line-height: 1.65; padding: 20px; max-width: 820px; margin: 0 auto; }
+  .lang-toggle { position: fixed; top: 16px; right: 16px; background: #4a7c59; color: white; border: none; padding: 8px 16px; border-radius: 20px; cursor: pointer; font-size: 13px; z-index: 100; box-shadow: 0 2px 8px rgba(0,0,0,0.15); }
+  .lang-toggle:hover { background: #3d6b4a; }
+  .ko { display: none; }
+  .ko.show { display: inline !important; }
+  .en.hide { display: none !important; }
+  h1 { font-size: 28px; color: #2d5a3a; margin: 30px 0 8px; border-bottom: 3px solid #c8dfc0; padding-bottom: 8px; }
+  h2 { font-size: 22px; color: #3a6b48; margin: 28px 0 12px; }
+  h3 { font-size: 17px; color: #4a7c59; margin: 20px 0 8px; }
+  p { margin: 8px 0; }
+  .hero { background: linear-gradient(135deg, #4a7c59 0%, #2d5a3a 100%); color: white; padding: 30px; border-radius: 16px; margin-bottom: 30px; }
+  .hero h1 { color: white; border: none; margin: 0 0 8px; }
+  .hero p { opacity: 0.9; font-size: 15px; }
+  .feature-card { background: white; border-radius: 14px; padding: 24px; margin: 16px 0; box-shadow: 0 2px 12px rgba(74,124,89,0.08); border-left: 4px solid #4a7c59; }
+  .feature-card.hot { border-left-color: #d4603a; }
+  .feature-card.cool { border-left-color: #5b8fb9; }
+  .feature-card.gold { border-left-color: #c4973a; }
+  .verdict { background: #f0f7f2; border-radius: 10px; padding: 16px; margin: 12px 0; border: 1px solid #c8dfc0; }
+  .verdict.caution { background: #fef6f0; border-color: #e8c9a8; }
+  .verdict.love { background: #f0f7f2; border-color: #a8d4b0; }
+  .verdict.alt { background: #f0f4f8; border-color: #b0c8d8; }
+  .badge { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 11px; font-weight: 700; text-transform: uppercase; margin-right: 6px; }
+  .badge.must { background: #d4603a; color: white; }
+  .badge.nice { background: #5b8fb9; color: white; }
+  .badge.star { background: #c4973a; color: white; }
+  .badge.easy { background: #4a7c59; color: white; }
+  .badge.hard { background: #8b5e3c; color: white; }
+  .impl-table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 14px; }
+  .impl-table th { background: #4a7c59; color: white; padding: 10px 12px; text-align: left; }
+  .impl-table td { padding: 10px 12px; border-bottom: 1px solid #e8e4de; }
+  .impl-table tr:nth-child(even) { background: #f5f3ef; }
+  .timeline { background: white; border-radius: 14px; padding: 24px; margin: 20px 0; box-shadow: 0 2px 12px rgba(74,124,89,0.08); }
+  .phase { display: flex; align-items: flex-start; margin: 16px 0; padding-left: 24px; border-left: 3px solid #c8dfc0; }
+  .phase-num { min-width: 36px; height: 36px; background: #4a7c59; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px; margin-right: 14px; flex-shrink: 0; }
+  .phase-content { flex: 1; }
+  .phase-content strong { color: #2d5a3a; }
+  ul { margin: 8px 0 8px 20px; }
+  li { margin: 4px 0; }
+  .db-schema { background: #1e1e2e; color: #cdd6f4; padding: 16px; border-radius: 10px; font-family: 'SF Mono', 'Fira Code', monospace; font-size: 13px; overflow-x: auto; white-space: pre; margin: 12px 0; line-height: 1.5; }
+  .db-schema .keyword { color: #89b4fa; }
+  .db-schema .type { color: #a6e3a1; }
+  .db-schema .comment { color: #6c7086; }
+  .highlight { background: #e8f5e9; padding: 2px 6px; border-radius: 4px; }
+  .totoro-note { background: #f5f0e8; border-radius: 10px; padding: 14px 16px; margin: 12px 0; font-style: italic; border-left: 3px solid #c4973a; }
+  @media (max-width: 600px) { body { padding: 12px; } h1 { font-size: 22px; } h2 { font-size: 18px; } .feature-card { padding: 16px; } }
+</style>
+</head>
+<body>
+
+<button class="lang-toggle" onclick="toggleLang()">한국어</button>
+
+<div class="hero">
+  <h1>
+    <span class="en">🧞 Fridgenie — Feature Plan & Analysis</span>
+    <span class="ko">🧞 Fridgenie — 기능 계획 & 분석</span>
+  </h1>
+  <p>
+    <span class="en">March 24, 2026 — Totoro's honest take on Minjun's feature ideas 🌳</span>
+    <span class="ko">2026년 3월 24일 — 민준이의 기능 아이디어에 대한 토토로의 솔직한 의견 🌳</span>
+  </p>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- FEATURE 1: NOTIFICATIONS -->
+<!-- ═══════════════════════════════════════════ -->
+
+<div class="feature-card gold">
+  <h2>
+    <span class="en">1. 🔔 Smart Notifications (Re-engagement)</span>
+    <span class="ko">1. 🔔 스마트 알림 (재참여 유도)</span>
+  </h2>
+  <p>
+    <span class="badge nice">Nice-to-have</span>
+    <span class="badge easy">Low effort</span>
+  </p>
+  
+  <p>
+    <span class="en">Your instinct to skip expiration tracking is right — it's a data-entry burden that kills retention. Nobody wants to type "expires March 28" for every tomato. Here's what I'd do instead:</span>
+    <span class="ko">유통기한 추적을 건너뛰겠다는 직감이 맞아요 — 데이터 입력 부담이 리텐션을 죽여요. 토마토마다 "3월 28일 만료" 치고 싶은 사람은 없으니까요. 대신 이렇게 하면 좋겠어요:</span>
+  </p>
+
+  <div class="verdict love">
+    <h3>
+      <span class="en">✅ My Recommendation: "Gentle Nudge" Notifications</span>
+      <span class="ko">✅ 추천: "부드러운 알림" 알림</span>
+    </h3>
+    <ul>
+      <li>
+        <span class="en"><strong>Weekly Meal Inspiration</strong> (Sun/Mon morning) — "🍳 Ready to plan this week's meals? You have 12 ingredients waiting!" → Opens Daily Recipe tab</span>
+        <span class="ko"><strong>주간 식사 영감</strong> (일/월 아침) — "🍳 이번 주 식사 계획 세울래요? 재료 12개가 기다리고 있어요!" → 일일 레시피 탭 열기</span>
+      </li>
+      <li>
+        <span class="en"><strong>Shopping Reminder</strong> — "🛒 Your shopping list has 8 items — heading to the store soon?" (triggered if list has items for 2+ days)</span>
+        <span class="ko"><strong>장보기 리마인더</strong> — "🛒 장바구니에 8개 있어요 — 곧 마트 가세요?" (2일 이상 목록에 있을 때 트리거)</span>
+      </li>
+      <li>
+        <span class="en"><strong>Household Activity</strong> — "Lucy added 5 items to the fridge! 🧊" (only if household sync feature exists)</span>
+        <span class="ko"><strong>가족 활동</strong> — "Lucy가 냉장고에 5개 추가했어요! 🧊" (가족 동기화 기능이 있을 때만)</span>
+      </li>
+      <li>
+        <span class="en"><strong>Comeback nudge</strong> — After 5 days inactive: "Your kitchen misses you 🥺 — what did you cook this week?"</span>
+        <span class="ko"><strong>복귀 유도</strong> — 5일 비활성 후: "주방이 보고 싶어해요 🥺 — 이번 주 뭐 만들었어요?"</span>
+      </li>
+    </ul>
+  </div>
+
+  <div class="totoro-note">
+    <span class="en">🌳 Totoro's take: Do NOT over-notify. 2-3 per week MAX. One annoying push and users disable all notifications forever. Less is more. Also — schedule these server-side (Supabase Edge Function + cron or local iOS notifications with pre-scheduled times). No need for Firebase Cloud Messaging for v1.</span>
+    <span class="ko">🌳 토토로의 의견: 알림을 남발하지 마세요. 주 2-3개 MAX. 한 번 짜증나는 푸시가 오면 영원히 알림을 끄거든요. 적을수록 좋아요. 또한 — 서버 사이드로 스케줄하세요 (Supabase Edge Function + cron 또는 로컬 iOS 알림). v1에는 Firebase Cloud Messaging 필요 없어요.</span>
+  </div>
+
+  <h3>
+    <span class="en">Implementation</span>
+    <span class="ko">구현 방법</span>
+  </h3>
+  <table class="impl-table">
+    <tr><th><span class="en">Component</span><span class="ko">컴포넌트</span></th><th><span class="en">Approach</span><span class="ko">방법</span></th></tr>
+    <tr>
+      <td><span class="en">Package</span><span class="ko">패키지</span></td>
+      <td><code>flutter_local_notifications</code> — <span class="en">no server needed, schedule locally</span><span class="ko">서버 불필요, 로컬 스케줄링</span></td>
+    </tr>
+    <tr>
+      <td><span class="en">Schedule Logic</span><span class="ko">스케줄 로직</span></td>
+      <td><span class="en">On app open: schedule next week's notifications. Cancel old ones. Simple.</span><span class="ko">앱 열 때: 다음 주 알림 스케줄. 이전 것 취소. 심플.</span></td>
+    </tr>
+    <tr>
+      <td><span class="en">Settings</span><span class="ko">설정</span></td>
+      <td><span class="en">Toggle in Profile: "Cooking reminders" ON/OFF. Default ON.</span><span class="ko">프로필에서 토글: "요리 리마인더" ON/OFF. 기본 ON.</span></td>
+    </tr>
+    <tr>
+      <td><span class="en">Effort</span><span class="ko">난이도</span></td>
+      <td><span class="en">~1 day. Pure local, no backend changes.</span><span class="ko">~1일. 순수 로컬, 백엔드 변경 없음.</span></td>
+    </tr>
+  </table>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- FEATURE 2: HOUSEHOLD SYNC HIGHLIGHTS -->
+<!-- ═══════════════════════════════════════════ -->
+
+<div class="feature-card cool">
+  <h2>
+    <span class="en">2. 📋 Household Activity Highlights</span>
+    <span class="ko">2. 📋 가족 활동 하이라이트</span>
+  </h2>
+  <p>
+    <span class="badge nice">Nice-to-have</span>
+    <span class="badge easy">Medium effort</span>
+  </p>
+
+  <p>
+    <span class="en">The idea: when you open the app, see what your household changed since your last visit. "Lucy added 3 items to the fridge" or "Shopping list updated: 4 new items."</span>
+    <span class="ko">아이디어: 앱을 열면 마지막 방문 이후 가족이 변경한 내용을 봐요. "Lucy가 냉장고에 3개 추가" 또는 "장바구니 업데이트: 4개 새 항목."</span>
+  </p>
+
+  <div class="verdict love">
+    <h3>
+      <span class="en">✅ I love this — but let's keep it lightweight</span>
+      <span class="ko">✅ 좋아요 — 근데 가볍게 가자</span>
+    </h3>
+    <p>
+      <span class="en">Instead of a complex activity feed, I'd do a <strong>"What's New" banner</strong> on the home dashboard that appears on first open after changes:</span>
+      <span class="ko">복잡한 활동 피드 대신, 변경 후 첫 실행 시 홈 대시보드에 <strong>"새 소식" 배너</strong>를 표시:</span>
+    </p>
+    <ul>
+      <li>
+        <span class="en">"🧊 Lucy added Chicken, Milk, Eggs to the fridge" — tap to view fridge</span>
+        <span class="ko">"🧊 Lucy가 닭고기, 우유, 달걀을 냉장고에 추가" — 탭하면 냉장고로</span>
+      </li>
+      <li>
+        <span class="en">"🛒 Shopping list: 3 items checked off" — tap to view list</span>
+        <span class="ko">"🛒 장바구니: 3개 완료" — 탭하면 목록으로</span>
+      </li>
+    </ul>
+    <p>
+      <span class="en">Dismisses on tap or auto-hides after 10 seconds. Shows max 2-3 changes, summarized.</span>
+      <span class="ko">탭하면 닫히거나 10초 후 자동 숨김. 최대 2-3개 변경사항만 요약 표시.</span>
+    </p>
+  </div>
+
+  <h3>
+    <span class="en">Implementation</span>
+    <span class="ko">구현 방법</span>
+  </h3>
+  <table class="impl-table">
+    <tr><th><span class="en">Component</span><span class="ko">컴포넌트</span></th><th><span class="en">Approach</span><span class="ko">방법</span></th></tr>
+    <tr>
+      <td><span class="en">Track "last seen"</span><span class="ko">"마지막 확인" 추적</span></td>
+      <td><span class="en">Store <code>last_active_at</code> timestamp in profiles table (update on app open)</span><span class="ko">profiles 테이블에 <code>last_active_at</code> 타임스탬프 저장 (앱 열 때 업데이트)</span></td>
+    </tr>
+    <tr>
+      <td><span class="en">Query changes</span><span class="ko">변경사항 조회</span></td>
+      <td><span class="en">On home screen load: query pantry_items + shopping_list WHERE updated_at > my last_active_at AND user_id ≠ me</span><span class="ko">홈 화면 로드 시: pantry_items + shopping_list WHERE updated_at > my last_active_at AND user_id ≠ me</span></td>
+    </tr>
+    <tr>
+      <td><span class="en">Display</span><span class="ko">표시</span></td>
+      <td><span class="en">Animated slide-down card on home dashboard, above quick actions</span><span class="ko">홈 대시보드에 애니메이션 슬라이드다운 카드, 퀵 액션 위에</span></td>
+    </tr>
+    <tr>
+      <td><span class="en">DB change</span><span class="ko">DB 변경</span></td>
+      <td><span class="en">Add <code>last_active_at</code> to profiles + add <code>updated_by</code> to pantry_items and shopping_list</span><span class="ko">profiles에 <code>last_active_at</code> 추가 + pantry_items와 shopping_list에 <code>updated_by</code> 추가</span></td>
+    </tr>
+    <tr>
+      <td><span class="en">Effort</span><span class="ko">난이도</span></td>
+      <td><span class="en">~2 days. Small migration + 1 new widget + query logic.</span><span class="ko">~2일. 작은 마이그레이션 + 위젯 1개 + 쿼리 로직.</span></td>
+    </tr>
+  </table>
+
+  <div class="totoro-note">
+    <span class="en">🌳 Totoro's take: Great for multi-person households. But for solo users (no household members), this feature does nothing. Make sure it gracefully hides when household_size = 1. Also, defer this until AFTER App Store launch — it's polish, not core.</span>
+    <span class="ko">🌳 토토로의 의견: 다인 가구에 좋아요. 근데 1인 사용자(가족 없음)에겐 의미 없어요. household_size = 1이면 숨겨야 해요. 그리고 앱스토어 출시 후에 하세요 — 핵심 기능이 아니라 마무리예요.</span>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- FEATURE 3: MULTI-LIST SHOPPING -->
+<!-- ═══════════════════════════════════════════ -->
+
+<div class="feature-card hot">
+  <h2>
+    <span class="en">3. 🛒 Multi-Store Shopping Lists</span>
+    <span class="ko">3. 🛒 매장별 장바구니</span>
+  </h2>
+  <p>
+    <span class="badge must">High Impact</span>
+    <span class="badge hard">Complex</span>
+  </p>
+
+  <p>
+    <span class="en">Your idea: multiple shopping lists (one per store), with drag-and-drop to sort items between stores. Users get full freedom.</span>
+    <span class="ko">아이디어: 여러 장바구니 (매장당 하나), 드래그앤드롭으로 매장 간 아이템 정리. 사용자에게 완전한 자유를.</span>
+  </p>
+
+  <div class="verdict caution">
+    <h3>
+      <span class="en">⚠️ I like the goal but NOT drag-and-drop for v1</span>
+      <span class="ko">⚠️ 목표는 좋은데 v1에서 드래그앤드롭은 NO</span>
+    </h3>
+    <p>
+      <span class="en">Here's my honest take: drag-and-drop between lists on mobile is fiddly UX that frustrates more than it helps. Even big apps (Todoist, Things) avoid cross-list drag on mobile. Instead:</span>
+      <span class="ko">솔직히 말하면: 모바일에서 리스트 간 드래그앤드롭은 짜증나는 UX예요. Todoist, Things 같은 큰 앱도 모바일에서 크로스 리스트 드래그를 피해요. 대신:</span>
+    </p>
+  </div>
+
+  <div class="verdict alt">
+    <h3>
+      <span class="en">💡 Better Approach: Store Tags + Grouped View</span>
+      <span class="ko">💡 더 나은 방법: 매장 태그 + 그룹 뷰</span>
+    </h3>
+    <p>
+      <span class="en">Keep ONE shopping list, but let users <strong>tag items with a store</strong>. Then offer a <strong>grouped view</strong> that organizes by store. Simple swipe or long-press to change store. Here's why this is better:</span>
+      <span class="ko">장바구니는 하나로 유지하되, 사용자가 <strong>아이템에 매장 태그</strong>를 달 수 있게. 그리고 <strong>매장별 그룹 뷰</strong>를 제공. 심플한 스와이프나 롱프레스로 매장 변경. 이게 더 나은 이유:</span>
+    </p>
+    <ul>
+      <li>
+        <span class="en"><strong>No data model overhaul</strong> — just add <code>store_tag</code> to shopping_list (already exists on staples!)</span>
+        <span class="ko"><strong>데이터 모델 변경 최소</strong> — shopping_list에 <code>store_tag</code>만 추가 (staples에 이미 있어요!)</span>
+      </li>
+      <li>
+        <span class="en"><strong>One list to rule them all</strong> — "Magic Shop" and recipe ingredients still add to the same list</span>
+        <span class="ko"><strong>하나의 리스트로 통합</strong> — "매직샵"과 레시피 재료가 같은 리스트에 추가</span>
+      </li>
+      <li>
+        <span class="en"><strong>Toggle view</strong> — "All Items" vs "By Store" toggle at the top</span>
+        <span class="ko"><strong>뷰 전환</strong> — 상단에서 "전체" vs "매장별" 토글</span>
+      </li>
+      <li>
+        <span class="en"><strong>Quick assign</strong> — long-press item → pick store from a quick picker (chips: Costco, H Mart, Walmart, Custom...)</span>
+        <span class="ko"><strong>빠른 지정</strong> — 아이템 롱프레스 → 빠른 선택기에서 매장 고르기 (칩: 코스트코, H Mart, 월마트, 커스텀...)</span>
+      </li>
+      <li>
+        <span class="en"><strong>Smart defaults</strong> — if user always tags "Milk" as Costco, auto-suggest next time</span>
+        <span class="ko"><strong>스마트 기본값</strong> — 사용자가 항상 "우유"를 코스트코로 태그하면 다음에 자동 추천</span>
+      </li>
+    </ul>
+  </div>
+
+  <h3>
+    <span class="en">Implementation</span>
+    <span class="ko">구현 방법</span>
+  </h3>
+
+  <div class="db-schema"><span class="comment">-- Migration: add store_tag to shopping_list</span>
+<span class="keyword">ALTER TABLE</span> shopping_list
+  <span class="keyword">ADD COLUMN</span> store_tag <span class="type">text</span>;
+
+<span class="comment">-- New table: user's saved stores</span>
+<span class="keyword">CREATE TABLE</span> household_stores (
+  id <span class="type">uuid</span> <span class="keyword">PRIMARY KEY DEFAULT</span> gen_random_uuid(),
+  household_id <span class="type">uuid</span> <span class="keyword">REFERENCES</span> households(id),
+  store_name <span class="type">text NOT NULL</span>,
+  emoji <span class="type">text DEFAULT</span> '🏪',
+  sort_order <span class="type">int DEFAULT</span> 0,
+  created_at <span class="type">timestamptz DEFAULT</span> now()
+);
+
+<span class="comment">-- Optional: item-store memory for smart defaults</span>
+<span class="keyword">CREATE TABLE</span> item_store_memory (
+  household_id <span class="type">uuid</span>,
+  item_name <span class="type">text</span>,
+  store_tag <span class="type">text</span>,
+  use_count <span class="type">int DEFAULT</span> 1,
+  <span class="keyword">PRIMARY KEY</span> (household_id, item_name)
+);</div>
+
+  <table class="impl-table">
+    <tr><th><span class="en">Component</span><span class="ko">컴포넌트</span></th><th><span class="en">Effort</span><span class="ko">난이도</span></th></tr>
+    <tr><td><span class="en">DB migration + RLS</span><span class="ko">DB 마이그레이션 + RLS</span></td><td><span class="en">0.5 day</span><span class="ko">0.5일</span></td></tr>
+    <tr><td><span class="en">Store management UI (add/edit/delete stores)</span><span class="ko">매장 관리 UI (추가/수정/삭제)</span></td><td><span class="en">1 day</span><span class="ko">1일</span></td></tr>
+    <tr><td><span class="en">Shopping list grouped view + toggle</span><span class="ko">장바구니 그룹 뷰 + 토글</span></td><td><span class="en">1.5 days</span><span class="ko">1.5일</span></td></tr>
+    <tr><td><span class="en">Long-press store picker</span><span class="ko">롱프레스 매장 선택기</span></td><td><span class="en">0.5 day</span><span class="ko">0.5일</span></td></tr>
+    <tr><td><span class="en">Smart defaults (item-store memory)</span><span class="ko">스마트 기본값 (아이템-매장 기억)</span></td><td><span class="en">0.5 day (defer to v2)</span><span class="ko">0.5일 (v2로 미루기)</span></td></tr>
+    <tr><td><strong><span class="en">Total</span><span class="ko">합계</span></strong></td><td><strong><span class="en">~3-4 days</span><span class="ko">~3-4일</span></strong></td></tr>
+  </table>
+
+  <div class="totoro-note">
+    <span class="en">🌳 Totoro's take: This is the most impactful feature on this list. Real people shop at 2-3 stores. H Mart for Korean stuff, Costco for bulk, Walmart for basics — this is real life. But do it as store TAGS on the existing list, not separate lists. Way simpler, way more flexible. The drag-and-drop can come later as a v2 cherry-on-top if people actually want it.</span>
+    <span class="ko">🌳 토토로의 의견: 이 리스트에서 가장 임팩트 있는 기능이에요. 실제 사람들은 2-3개 매장에서 장을 봐요. H Mart는 한국 식품, 코스트코는 대량, 월마트는 기본 — 이게 현실이에요. 근데 별도 리스트가 아니라 기존 리스트에 매장 태그로 하세요. 훨씬 심플하고 유연해요. 드래그앤드롭은 사람들이 진짜 원하면 v2에서 추가하면 돼요.</span>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- FEATURE 4: DAILY RECIPE + LEFTOVERS LOOP -->
+<!-- ═══════════════════════════════════════════ -->
+
+<div class="feature-card" style="border-left-color: #9b59b6;">
+  <h2>
+    <span class="en">4. 🍽️ Daily Recipe Discovery + Leftover Loop</span>
+    <span class="ko">4. 🍽️ 일일 레시피 추천 + 남은 재료 루프</span>
+  </h2>
+  <p>
+    <span class="badge star">⭐ Killer Feature</span>
+    <span class="badge hard">Complex</span>
+  </p>
+
+  <p>
+    <span class="en">This is genuinely brilliant. Let me break down what you described because there are actually <strong>three connected ideas</strong>:</span>
+    <span class="ko">이건 진짜 천재적이에요. 설명한 걸 분석하면 실제로 <strong>세 가지 연결된 아이디어</strong>가 있어요:</span>
+  </p>
+
+  <div class="verdict love">
+    <h3>
+      <span class="en">The Flywheel 🔄</span>
+      <span class="ko">플라이휠 🔄</span>
+    </h3>
+    <ol>
+      <li>
+        <span class="en"><strong>Daily Dish Card</strong> — "Hey, wanna cook Kimchi Jjigae today?" (NOT based on what you have — pure inspiration)</span>
+        <span class="ko"><strong>일일 요리 카드</strong> — "오늘 김치찌개 어때요?" (가지고 있는 재료 기반 아님 — 순수 영감)</span>
+      </li>
+      <li>
+        <span class="en"><strong>"Generate Shopping List"</strong> → tap → Fridgenie checks what you already have, creates a shopping list for ONLY the missing ingredients, named "🍲 Kimchi Jjigae"</span>
+        <span class="ko"><strong>"장보기 목록 생성"</strong> → 탭 → Fridgenie가 이미 있는 재료 확인, 부족한 재료만 장바구니 생성, 이름 "🍲 김치찌개"</span>
+      </li>
+      <li>
+        <span class="en"><strong>The Leftover Loop</strong> — User buys ingredients, cooks, has leftovers (bought 1lb pork belly but only used half). Fridgenie detects the new "unusual" ingredients and suggests: "You have leftover pork belly + green onions — how about Bossam tomorrow?"</span>
+        <span class="ko"><strong>남은 재료 루프</strong> — 사용자가 재료를 사고, 요리하고, 남은 것이 있어요 (삼겹살 1파운드 샀는데 반만 사용). Fridgenie가 새로운 "비평소" 재료를 감지하고 추천: "삼겹살 + 파가 남았네요 — 내일 보쌈 어때요?"</span>
+      </li>
+    </ol>
+    <p>
+      <span class="en">This creates a <strong>virtuous cycle</strong>: discover → shop → cook → leftover → discover new dish → repeat. Users keep coming back because Fridgenie keeps introducing new recipes based on what they actually have. <span class="highlight">This is your moat.</span></span>
+      <span class="ko">이것은 <strong>선순환</strong>을 만들어요: 발견 → 장보기 → 요리 → 남은 재료 → 새 요리 발견 → 반복. Fridgenie가 실제 가지고 있는 재료로 계속 새 레시피를 소개하니까 사용자가 계속 돌아와요. <span class="highlight">이게 당신의 해자(moat)예요.</span></span>
+    </p>
+  </div>
+
+  <h3>
+    <span class="en">Architecture: How to Build This</span>
+    <span class="ko">아키텍처: 어떻게 구축할까</span>
+  </h3>
+
+  <h3>
+    <span class="en">Part A: Daily Recipe Card</span>
+    <span class="ko">파트 A: 일일 레시피 카드</span>
+  </h3>
+  <table class="impl-table">
+    <tr><th><span class="en">Decision</span><span class="ko">결정사항</span></th><th><span class="en">Approach</span><span class="ko">방법</span></th></tr>
+    <tr>
+      <td><span class="en">Where it lives</span><span class="ko">위치</span></td>
+      <td><span class="en">Home dashboard — a beautiful card between greeting and quick actions. Swipeable if we want to show 2-3 options.</span><span class="ko">홈 대시보드 — 인사말과 퀵 액션 사이에 아름다운 카드. 2-3개 옵션 보여주려면 스와이프 가능.</span></td>
+    </tr>
+    <tr>
+      <td><span class="en">Content source</span><span class="ko">콘텐츠 소스</span></td>
+      <td><span class="en"><strong>Option A:</strong> Pre-curated dish pool (200-300 dishes with images, no AI cost) — RECOMMENDED for v1<br><strong>Option B:</strong> AI-generated daily (costs tokens per user per day) — better for v2</span><span class="ko"><strong>옵션 A:</strong> 사전 큐레이션된 요리 풀 (200-300개, 이미지 포함, AI 비용 없음) — v1 추천<br><strong>옵션 B:</strong> AI가 매일 생성 (사용자당 매일 토큰 비용) — v2에 더 적합</span></td>
+    </tr>
+    <tr>
+      <td><span class="en">Personalization</span><span class="ko">개인화</span></td>
+      <td><span class="en">Filter by user's cuisine_preferences + cooking_skill + dietary_restrictions. Already in profiles!</span><span class="ko">사용자의 cuisine_preferences + cooking_skill + dietary_restrictions로 필터. 이미 profiles에 있어요!</span></td>
+    </tr>
+    <tr>
+      <td><span class="en">CTA button</span><span class="ko">CTA 버튼</span></td>
+      <td><span class="en">"🛒 Generate Shopping List" — the money button</span><span class="ko">"🛒 장보기 목록 생성" — 핵심 버튼</span></td>
+    </tr>
+  </table>
+
+  <h3>
+    <span class="en">Part B: "Generate Shopping List for [Dish]"</span>
+    <span class="ko">파트 B: "[요리] 장보기 목록 생성"</span>
+  </h3>
+  <table class="impl-table">
+    <tr><th><span class="en">Step</span><span class="ko">단계</span></th><th><span class="en">What happens</span><span class="ko">동작</span></th></tr>
+    <tr>
+      <td>1</td>
+      <td><span class="en">User taps "Generate Shopping List" on Kimchi Jjigae card</span><span class="ko">사용자가 김치찌개 카드에서 "장보기 목록 생성" 탭</span></td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td><span class="en">Fridgenie fetches dish's full ingredient list (from dish pool or AI)</span><span class="ko">Fridgenie가 요리의 전체 재료 목록 가져오기 (요리 풀 또는 AI에서)</span></td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td><span class="en">Cross-reference with user's current pantry/fridge inventory</span><span class="ko">사용자의 현재 팬트리/냉장고 재고와 교차 확인</span></td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td><span class="en">Show confirmation sheet: "You have ✅ Tofu, ✅ Green onion — Need: 🛒 Pork belly, 🛒 Kimchi, 🛒 Gochugaru"</span><span class="ko">확인 시트 표시: "있는 것 ✅ 두부, ✅ 대파 — 필요 🛒 삼겹살, 🛒 김치, 🛒 고추가루"</span></td>
+    </tr>
+    <tr>
+      <td>5</td>
+      <td><span class="en">User confirms → items added to shopping list with <code>source: 'daily_recipe'</code> and <code>recipe_name: 'Kimchi Jjigae'</code></span><span class="ko">사용자 확인 → <code>source: 'daily_recipe'</code>와 <code>recipe_name: '김치찌개'</code>로 장바구니에 추가</span></td>
+    </tr>
+    <tr>
+      <td>6</td>
+      <td><span class="en">Shopping list shows items grouped under "🍲 Kimchi Jjigae" header</span><span class="ko">장바구니에서 "🍲 김치찌개" 헤더 아래 그룹으로 표시</span></td>
+    </tr>
+  </table>
+
+  <h3>
+    <span class="en">Part C: The Leftover Loop (The Genius Part)</span>
+    <span class="ko">파트 C: 남은 재료 루프 (천재적인 부분)</span>
+  </h3>
+  <table class="impl-table">
+    <tr><th><span class="en">Trigger</span><span class="ko">트리거</span></th><th><span class="en">Action</span><span class="ko">동작</span></th></tr>
+    <tr>
+      <td><span class="en">After cooking</span><span class="ko">요리 후</span></td>
+      <td><span class="en">User checks off ingredients they used (or marks dish as "cooked"). Remaining ingredients stay in inventory.</span><span class="ko">사용자가 사용한 재료를 체크하거나 요리를 "완료"로 표시. 남은 재료는 재고에 유지.</span></td>
+    </tr>
+    <tr>
+      <td><span class="en">Smart detection</span><span class="ko">스마트 감지</span></td>
+      <td><span class="en">Fridgenie notices: "User has pork belly + napa cabbage that weren't there last week → likely leftovers from Kimchi Jjigae shopping"</span><span class="ko">Fridgenie 감지: "지난주에 없던 삼겹살 + 배추가 있네 → 김치찌개 장보기에서 남은 거"</span></td>
+    </tr>
+    <tr>
+      <td><span class="en">Suggestion</span><span class="ko">추천</span></td>
+      <td><span class="en">Next daily card: prioritize dishes that USE those leftover ingredients. "Got leftover pork belly? Try Bossam! 🥬"</span><span class="ko">다음 일일 카드: 남은 재료를 사용하는 요리 우선. "삼겹살 남았어요? 보쌈 어때요! 🥬"</span></td>
+    </tr>
+  </table>
+
+  <div class="db-schema"><span class="comment">-- New table: curated dish pool</span>
+<span class="keyword">CREATE TABLE</span> dish_pool (
+  id <span class="type">uuid</span> <span class="keyword">PRIMARY KEY DEFAULT</span> gen_random_uuid(),
+  name <span class="type">text NOT NULL</span>,
+  name_ko <span class="type">text</span>,
+  name_zh <span class="type">text</span>,
+  description <span class="type">text</span>,
+  cuisine <span class="type">text NOT NULL</span>,
+  difficulty <span class="type">text DEFAULT</span> 'easy',
+  cook_time_min <span class="type">int DEFAULT</span> 30,
+  image_url <span class="type">text</span>,
+  ingredients <span class="type">jsonb NOT NULL</span>,  <span class="comment">-- [{name, amount, unit, category}]</span>
+  tags <span class="type">text[] DEFAULT</span> '{}',  <span class="comment">-- ['spicy','comfort','quick']</span>
+  dietary <span class="type">text[] DEFAULT</span> '{}', <span class="comment">-- ['vegetarian','pescatarian']</span>
+  seasonal <span class="type">text[] DEFAULT</span> '{}' <span class="comment">-- ['spring','winter'] for seasonal recs</span>
+);
+
+<span class="comment">-- Track what users have seen / cooked</span>
+<span class="keyword">CREATE TABLE</span> daily_recipe_log (
+  id <span class="type">uuid</span> <span class="keyword">PRIMARY KEY DEFAULT</span> gen_random_uuid(),
+  household_id <span class="type">uuid</span> <span class="keyword">REFERENCES</span> households(id),
+  dish_id <span class="type">uuid</span> <span class="keyword">REFERENCES</span> dish_pool(id),
+  shown_at <span class="type">date NOT NULL</span>,
+  action <span class="type">text</span>, <span class="comment">-- 'dismissed', 'shopping_generated', 'cooked'</span>
+  created_at <span class="type">timestamptz DEFAULT</span> now()
+);</div>
+
+  <table class="impl-table">
+    <tr><th><span class="en">Phase</span><span class="ko">단계</span></th><th><span class="en">Effort</span><span class="ko">난이도</span></th></tr>
+    <tr><td><span class="en">Dish pool table + seed 50-100 dishes</span><span class="ko">요리 풀 테이블 + 50-100개 요리 시드</span></td><td><span class="en">1 day (AI can generate the seed data)</span><span class="ko">1일 (AI가 시드 데이터 생성 가능)</span></td></tr>
+    <tr><td><span class="en">Daily card widget on home screen</span><span class="ko">홈 화면 일일 카드 위젯</span></td><td><span class="en">1 day</span><span class="ko">1일</span></td></tr>
+    <tr><td><span class="en">"Generate Shopping List" flow</span><span class="ko">"장보기 목록 생성" 플로우</span></td><td><span class="en">1.5 days</span><span class="ko">1.5일</span></td></tr>
+    <tr><td><span class="en">Shopping list grouped by dish name</span><span class="ko">요리명별 장바구니 그룹핑</span></td><td><span class="en">0.5 day</span><span class="ko">0.5일</span></td></tr>
+    <tr><td><span class="en">Leftover detection + smart suggestions</span><span class="ko">남은 재료 감지 + 스마트 추천</span></td><td><span class="en">2 days (v2 — needs usage tracking)</span><span class="ko">2일 (v2 — 사용 추적 필요)</span></td></tr>
+    <tr><td><strong><span class="en">Total v1</span><span class="ko">v1 합계</span></strong></td><td><strong><span class="en">~4 days</span><span class="ko">~4일</span></strong></td></tr>
+    <tr><td><strong><span class="en">Total with leftover loop</span><span class="ko">남은 재료 루프 포함 합계</span></strong></td><td><strong><span class="en">~6 days</span><span class="ko">~6일</span></strong></td></tr>
+  </table>
+
+  <div class="totoro-note">
+    <span class="en">🌳 Totoro's take: THIS IS THE FEATURE. The daily recipe card alone is nice but forgettable. The leftover loop is what makes it addictive. It's the "oh you have stuff in your fridge you didn't know what to do with" → "here's exactly what to make" pipeline. No other kitchen app does this well. Build the card + shopping generation for v1 (App Store launch), add the leftover loop in the first post-launch update. That update will be your "wow" moment in reviews.</span>
+    <span class="ko">🌳 토토로의 의견: 이게 핵심 기능이에요. 일일 레시피 카드만으로는 괜찮지만 잊혀져요. 남은 재료 루프가 중독성을 만들어요. "냉장고에 뭐 해야 할지 모르는 재료가 있네" → "정확히 이거 만들어" 파이프라인이에요. 다른 주방 앱은 이걸 잘 못해요. v1에서 카드 + 장보기 생성을 만들고, 출시 후 첫 업데이트에서 남은 재료 루프를 추가하세요. 그 업데이트가 리뷰에서 "와" 모먼트가 될 거예요.</span>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- ROADMAP -->
+<!-- ═══════════════════════════════════════════ -->
+
+<h1>
+  <span class="en">📅 Proposed Roadmap</span>
+  <span class="ko">📅 제안 로드맵</span>
+</h1>
+
+<div class="timeline">
+  <div class="phase">
+    <div class="phase-num">1</div>
+    <div class="phase-content">
+      <strong>
+        <span class="en">Now → App Store (by April 20)</span>
+        <span class="ko">지금 → 앱스토어 (4월 20일까지)</span>
+      </strong>
+      <p>
+        <span class="en">Don't add new features. Ship what you have. Focus on:</span>
+        <span class="ko">새 기능 추가 금지. 있는 것을 출시하세요. 집중:</span>
+      </p>
+      <ul>
+        <li><span class="en">Testing all flows thoroughly</span><span class="ko">모든 플로우 철저히 테스트</span></li>
+        <li><span class="en">App Store screenshots + metadata</span><span class="ko">앱스토어 스크린샷 + 메타데이터</span></li>
+        <li><span class="en">Submit for review</span><span class="ko">리뷰 제출</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="phase">
+    <div class="phase-num">2</div>
+    <div class="phase-content">
+      <strong>
+        <span class="en">v2.3 — "Store Smart" Update (~1 week after launch)</span>
+        <span class="ko">v2.3 — "스마트 장보기" 업데이트 (출시 ~1주 후)</span>
+      </strong>
+      <ul>
+        <li><span class="en">🛒 Multi-store tags on shopping list</span><span class="ko">🛒 장바구니 매장별 태그</span></li>
+        <li><span class="en">🔔 Local notifications (gentle nudges)</span><span class="ko">🔔 로컬 알림 (부드러운 넛지)</span></li>
+      </ul>
+      <p><span class="en"><em>~4-5 days of work</em></span><span class="ko"><em>~4-5일 작업</em></span></p>
+    </div>
+  </div>
+
+  <div class="phase">
+    <div class="phase-num">3</div>
+    <div class="phase-content">
+      <strong>
+        <span class="en">v2.4 — "Daily Dish" Update (~2-3 weeks after launch)</span>
+        <span class="ko">v2.4 — "오늘의 요리" 업데이트 (출시 ~2-3주 후)</span>
+      </strong>
+      <ul>
+        <li><span class="en">🍽️ Daily recipe card on home screen</span><span class="ko">🍽️ 홈 화면 일일 레시피 카드</span></li>
+        <li><span class="en">🛒 "Generate Shopping List for [Dish]" flow</span><span class="ko">🛒 "[요리] 장보기 목록 생성" 플로우</span></li>
+        <li><span class="en">📋 Household activity highlights</span><span class="ko">📋 가족 활동 하이라이트</span></li>
+      </ul>
+      <p><span class="en"><em>~5-6 days of work</em></span><span class="ko"><em>~5-6일 작업</em></span></p>
+    </div>
+  </div>
+
+  <div class="phase">
+    <div class="phase-num">4</div>
+    <div class="phase-content">
+      <strong>
+        <span class="en">v2.5 — "Leftover Loop" Update (~1 month after launch)</span>
+        <span class="ko">v2.5 — "남은 재료 루프" 업데이트 (출시 ~1개월 후)</span>
+      </strong>
+      <ul>
+        <li><span class="en">🔄 Leftover detection + smart daily suggestions</span><span class="ko">🔄 남은 재료 감지 + 스마트 일일 추천</span></li>
+        <li><span class="en">🧠 Item-store memory (auto-assign stores)</span><span class="ko">🧠 아이템-매장 기억 (자동 매장 지정)</span></li>
+        <li><span class="en">📊 Cooking history / stats</span><span class="ko">📊 요리 기록 / 통계</span></li>
+      </ul>
+      <p><span class="en"><em>This is the "wow" update that drives reviews</em></span><span class="ko"><em>리뷰를 이끄는 "와" 업데이트</em></span></p>
+    </div>
+  </div>
+</div>
+
+<div class="totoro-note" style="margin-top: 24px;">
+  <span class="en">🌳 <strong>Bottom line:</strong> Your ideas are really good — especially the Daily Recipe → Shopping List → Leftover Loop. That's a genuine product insight, not just a feature. But timing matters: ship to App Store first with what you have (it's already solid), then roll out these features as updates. Each update gives you a reason to re-engage users and get featured in "What's New." Plus, you'll have real user feedback to refine these features before building them.</span>
+  <span class="ko">🌳 <strong>결론:</strong> 아이디어가 정말 좋아요 — 특히 일일 레시피 → 장보기 목록 → 남은 재료 루프. 단순한 기능이 아니라 진짜 제품 인사이트예요. 근데 타이밍이 중요해요: 지금 있는 것으로 먼저 앱스토어에 출시하세요 (이미 탄탄해요), 그다음 이 기능들을 업데이트로 출시하세요. 각 업데이트가 사용자를 재참여시키고 "새로운 기능"에 등록될 이유가 돼요. 게다가 구축하기 전에 실제 사용자 피드백으로 기능을 다듬을 수 있어요.</span>
+</div>
+
+<script>
+let isKorean = false;
+function toggleLang() {
+  isKorean = !isKorean;
+  document.querySelectorAll('.en').forEach(el => el.classList.toggle('hide', isKorean));
+  document.querySelectorAll('.ko').forEach(el => el.classList.toggle('show', isKorean));
+  document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+}
+</script>
+
+</body>
+</html>
