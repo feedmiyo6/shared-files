@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fridgenie — Email & Auth Setup Guide</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: #FDF8F0;
+    color: #2D3436;
+    line-height: 1.7;
+    padding: 0;
+  }
+  .lang-toggle {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    z-index: 100;
+    background: #4A7C59;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 14px;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  }
+  .lang-toggle:hover { background: #3d6a4a; }
+  .ko { display: none; }
+  .ko.show { display: inline !important; }
+  .en.hide { display: none !important; }
+  .ko-block { display: none; }
+  .ko-block.show { display: block !important; }
+  .en-block.hide { display: none !important; }
+
+  .header {
+    background: linear-gradient(135deg, #4A7C59 0%, #6B9B7B 100%);
+    color: white;
+    padding: 48px 24px 36px;
+    text-align: center;
+  }
+  .header h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+  .header p { font-size: 15px; opacity: 0.9; }
+  .container { max-width: 720px; margin: 0 auto; padding: 24px 16px 60px; }
+  
+  .section {
+    background: white;
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    border: 1px solid #E8E0D4;
+  }
+  .section h2 {
+    font-size: 20px;
+    color: #4A7C59;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .section h3 {
+    font-size: 16px;
+    color: #2D3436;
+    margin: 20px 0 10px;
+    font-weight: 600;
+  }
+  .step {
+    background: #F7F3EC;
+    border-radius: 12px;
+    padding: 16px;
+    margin: 12px 0;
+    border-left: 4px solid #4A7C59;
+  }
+  .step-num {
+    display: inline-block;
+    background: #4A7C59;
+    color: white;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 28px;
+    font-size: 14px;
+    font-weight: 700;
+    margin-right: 8px;
+  }
+  .step p { margin-top: 8px; font-size: 14px; }
+  .step code {
+    background: #E8E0D4;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 13px;
+  }
+  
+  .code-block {
+    background: #1e1e1e;
+    color: #d4d4d4;
+    padding: 16px;
+    border-radius: 10px;
+    overflow-x: auto;
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 12px;
+    line-height: 1.6;
+    margin: 12px 0;
+    white-space: pre-wrap;
+    word-break: break-all;
+  }
+  .code-block .tag { color: #569cd6; }
+  .code-block .attr { color: #9cdcfe; }
+  .code-block .str { color: #ce9178; }
+  .code-block .comment { color: #6a9955; }
+
+  .warning {
+    background: #FFF3E0;
+    border: 1px solid #FFB74D;
+    border-radius: 12px;
+    padding: 16px;
+    margin: 16px 0;
+    font-size: 14px;
+  }
+  .warning::before { content: '⚠️ '; }
+
+  .info {
+    background: #E3F2FD;
+    border: 1px solid #64B5F6;
+    border-radius: 12px;
+    padding: 16px;
+    margin: 16px 0;
+    font-size: 14px;
+  }
+  .info::before { content: '💡 '; }
+
+  .success {
+    background: #E8F5E9;
+    border: 1px solid #81C784;
+    border-radius: 12px;
+    padding: 16px;
+    margin: 16px 0;
+    font-size: 14px;
+  }
+  .success::before { content: '✅ '; }
+
+  .checklist { list-style: none; padding: 0; }
+  .checklist li {
+    padding: 8px 0;
+    font-size: 14px;
+    border-bottom: 1px solid #F0EBE3;
+  }
+  .checklist li::before { content: '☐ '; font-size: 16px; }
+  .checklist li:last-child { border-bottom: none; }
+
+  .tag-badge {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+  .required { background: #FFEBEE; color: #C62828; }
+  .optional { background: #E8F5E9; color: #2E7D32; }
+  .future { background: #F3E5F5; color: #6A1B9A; }
+
+  a { color: #4A7C59; text-decoration: none; font-weight: 600; }
+  a:hover { text-decoration: underline; }
+
+  .copy-btn {
+    background: #4A7C59;
+    color: white;
+    border: none;
+    padding: 6px 14px;
+    border-radius: 8px;
+    font-size: 12px;
+    cursor: pointer;
+    margin-top: 8px;
+  }
+  .copy-btn:hover { background: #3d6a4a; }
+  .copy-btn:active { transform: scale(0.95); }
+</style>
+</head>
+<body>
+
+<button class="lang-toggle" onclick="toggleLang()">한국어</button>
+
+<div class="header">
+  <h1>🧞 <span class="en">Fridgenie — Email & Auth Setup Guide</span><span class="ko">Fridgenie — 이메일 & 인증 설정 가이드</span></h1>
+  <p class="en">Steps to customize Supabase email templates for production</p>
+  <p class="ko">프로덕션을 위한 Supabase 이메일 템플릿 커스터마이징 단계</p>
+</div>
+
+<div class="container">
+
+  <!-- OVERVIEW -->
+  <div class="section">
+    <h2>📋 <span class="en">Overview</span><span class="ko">개요</span></h2>
+    <p class="en">Fridgenie uses Supabase Auth for email verification and password reset. By default, the emails look generic and show Supabase URLs. This guide walks you through making them professional and branded.</p>
+    <p class="ko">Fridgenie는 이메일 인증과 비밀번호 재설정에 Supabase Auth를 사용합니다. 기본 이메일은 일반적이고 Supabase URL을 보여줍니다. 이 가이드는 이메일을 전문적이고 브랜딩된 형태로 만드는 과정을 안내합니다.</p>
+
+    <div class="info">
+      <span class="en"><strong>What Totoro handled (code):</strong> Deep link handling, PKCE auth flow, password reset screen, auth event handler — all done in the app code.</span>
+      <span class="ko"><strong>토토로가 처리한 것 (코드):</strong> 딥 링크 처리, PKCE 인증 플로우, 비밀번호 재설정 화면, 인증 이벤트 핸들러 — 앱 코드에서 모두 완료.</span>
+    </div>
+
+    <p class="en" style="margin-top:12px"><strong>What you need to do (dashboard):</strong></p>
+    <p class="ko" style="margin-top:12px"><strong>당신이 해야 할 것 (대시보드):</strong></p>
+    <ul class="checklist">
+      <li><span class="en">Customize email templates <span class="tag-badge required">Required</span></span><span class="ko">이메일 템플릿 커스터마이징 <span class="tag-badge required">필수</span></span></li>
+      <li><span class="en">Configure redirect URL <span class="tag-badge required">Required</span></span><span class="ko">리다이렉트 URL 설정 <span class="tag-badge required">필수</span></span></li>
+      <li><span class="en">Set up custom SMTP (Resend) <span class="tag-badge optional">Recommended</span></span><span class="ko">커스텀 SMTP 설정 (Resend) <span class="tag-badge optional">권장</span></span></li>
+      <li><span class="en">Update sender name to LLC <span class="tag-badge future">Future</span></span><span class="ko">LLC 이름으로 발신자 이름 변경 <span class="tag-badge future">향후</span></span></li>
+    </ul>
+  </div>
+
+  <!-- STEP 1: REDIRECT URL -->
+  <div class="section">
+    <h2>1️⃣ <span class="en">Configure Redirect URL</span><span class="ko">리다이렉트 URL 설정</span></h2>
+
+    <div class="step">
+      <span class="step-num">1</span><strong class="en">Go to Supabase Dashboard</strong><strong class="ko">Supabase 대시보드로 이동</strong>
+      <p class="en">Open <a href="https://supabase.com/dashboard/project/rhhaojpsqfbapltcvsbz/auth/url-configuration" target="_blank">Authentication → URL Configuration</a></p>
+      <p class="ko"><a href="https://supabase.com/dashboard/project/rhhaojpsqfbapltcvsbz/auth/url-configuration" target="_blank">Authentication → URL Configuration</a> 열기</p>
+    </div>
+
+    <div class="step">
+      <span class="step-num">2</span><strong class="en">Add Redirect URL</strong><strong class="ko">리다이렉트 URL 추가</strong>
+      <p class="en">Under <strong>"Redirect URLs"</strong>, add:</p>
+      <p class="ko"><strong>"Redirect URLs"</strong> 아래에 추가:</p>
+      <div class="code-block">com.fridgenie.app://callback</div>
+      <button class="copy-btn" onclick="navigator.clipboard.writeText('com.fridgenie.app://callback')">📋 Copy</button>
+      <p class="en" style="margin-top:8px">This tells Supabase to redirect back to the app after email verification / password reset.</p>
+      <p class="ko" style="margin-top:8px">이메일 인증/비밀번호 재설정 후 앱으로 다시 리다이렉트하도록 Supabase에 알려줍니다.</p>
+    </div>
+
+    <div class="warning">
+      <span class="en"><strong>Important:</strong> If this URL isn't in the allow list, Supabase will silently ignore the redirect and the deep link won't work!</span>
+      <span class="ko"><strong>중요:</strong> 이 URL이 허용 목록에 없으면 Supabase가 리다이렉트를 무시하고 딥 링크가 작동하지 않습니다!</span>
+    </div>
+  </div>
+
+  <!-- STEP 2: EMAIL TEMPLATES -->
+  <div class="section">
+    <h2>2️⃣ <span class="en">Customize Email Templates</span><span class="ko">이메일 템플릿 커스터마이징</span></h2>
+
+    <div class="step">
+      <span class="step-num">1</span><strong class="en">Go to Email Templates</strong><strong class="ko">이메일 템플릿으로 이동</strong>
+      <p class="en">Open <a href="https://supabase.com/dashboard/project/rhhaojpsqfbapltcvsbz/auth/templates" target="_blank">Authentication → Email Templates</a></p>
+      <p class="ko"><a href="https://supabase.com/dashboard/project/rhhaojpsqfbapltcvsbz/auth/templates" target="_blank">Authentication → Email Templates</a> 열기</p>
+    </div>
+
+    <h3 class="en">📧 Confirm Signup Template</h3>
+    <h3 class="ko">📧 가입 확인 템플릿</h3>
+
+    <div class="step">
+      <span class="step-num">2</span><strong class="en">Set Subject Line</strong><strong class="ko">제목 설정</strong>
+      <div class="code-block">Verify your Fridgenie account 🧞</div>
+      <button class="copy-btn" onclick="navigator.clipboard.writeText('Verify your Fridgenie account 🧞')">📋 Copy Subject</button>
+    </div>
+
+    <div class="step">
+      <span class="step-num">3</span><strong class="en">Replace HTML Body</strong><strong class="ko">HTML 본문 교체</strong>
+      <p class="en">Copy and paste this entire HTML into the template body:</p>
+      <p class="ko">이 HTML 전체를 템플릿 본문에 복사 붙여넣기:</p>
+      <div class="code-block" id="confirm-template">&lt;div style="font-family: -apple-system, 'Segoe UI', Roboto, sans-serif; max-width: 480px; margin: 0 auto; padding: 40px 24px; background: #FDF8F0;"&gt;
+  &lt;div style="text-align: center; margin-bottom: 32px;"&gt;
+    &lt;div style="font-size: 48px; margin-bottom: 8px;"&gt;🧞&lt;/div&gt;
+    &lt;h1 style="color: #4A7C59; font-size: 24px; font-weight: 700; margin: 0;"&gt;Welcome to Fridgenie!&lt;/h1&gt;
+  &lt;/div&gt;
+  &lt;div style="background: white; border-radius: 16px; padding: 32px 24px; border: 1px solid #E8E0D4;"&gt;
+    &lt;p style="color: #2D3436; font-size: 16px; line-height: 1.6; margin: 0 0 24px;"&gt;
+      Thanks for signing up! Tap the button below to verify your email and start organizing your kitchen. 🍳
+    &lt;/p&gt;
+    &lt;div style="text-align: center; margin: 28px 0;"&gt;
+      &lt;a href="{{ .ConfirmationURL }}" target="_blank" style="background: #4A7C59; color: white; padding: 14px 32px; border-radius: 12px; text-decoration: none; font-size: 16px; font-weight: 600; display: inline-block;"&gt;
+        Verify My Email ✉️
+      &lt;/a&gt;
+    &lt;/div&gt;
+    &lt;p style="color: #888; font-size: 13px; line-height: 1.5; margin: 24px 0 0; border-top: 1px solid #F0EBE3; padding-top: 16px;"&gt;
+      If you didn't sign up for Fridgenie, you can safely ignore this email.
+    &lt;/p&gt;
+  &lt;/div&gt;
+  &lt;p style="text-align: center; color: #aaa; font-size: 12px; margin-top: 24px;"&gt;
+    Fridgenie — Your Smart Kitchen Companion
+  &lt;/p&gt;
+&lt;/div&gt;</div>
+      <button class="copy-btn" onclick="copyTemplate('confirm-template')">📋 Copy Template</button>
+    </div>
+
+    <h3 class="en">🔑 Reset Password Template</h3>
+    <h3 class="ko">🔑 비밀번호 재설정 템플릿</h3>
+
+    <div class="step">
+      <span class="step-num">4</span><strong class="en">Switch to "Reset Password" tab</strong><strong class="ko">"Reset Password" 탭으로 전환</strong>
+    </div>
+
+    <div class="step">
+      <span class="step-num">5</span><strong class="en">Set Subject Line</strong><strong class="ko">제목 설정</strong>
+      <div class="code-block">Reset your Fridgenie password 🔑</div>
+      <button class="copy-btn" onclick="navigator.clipboard.writeText('Reset your Fridgenie password 🔑')">📋 Copy Subject</button>
+    </div>
+
+    <div class="step">
+      <span class="step-num">6</span><strong class="en">Replace HTML Body</strong><strong class="ko">HTML 본문 교체</strong>
+      <div class="code-block" id="reset-template">&lt;div style="font-family: -apple-system, 'Segoe UI', Roboto, sans-serif; max-width: 480px; margin: 0 auto; padding: 40px 24px; background: #FDF8F0;"&gt;
+  &lt;div style="text-align: center; margin-bottom: 32px;"&gt;
+    &lt;div style="font-size: 48px; margin-bottom: 8px;"&gt;🔑&lt;/div&gt;
+    &lt;h1 style="color: #4A7C59; font-size: 24px; font-weight: 700; margin: 0;"&gt;Reset Your Password&lt;/h1&gt;
+  &lt;/div&gt;
+  &lt;div style="background: white; border-radius: 16px; padding: 32px 24px; border: 1px solid #E8E0D4;"&gt;
+    &lt;p style="color: #2D3436; font-size: 16px; line-height: 1.6; margin: 0 0 24px;"&gt;
+      We received a request to reset your Fridgenie password. Tap the button below to choose a new one.
+    &lt;/p&gt;
+    &lt;div style="text-align: center; margin: 28px 0;"&gt;
+      &lt;a href="{{ .ConfirmationURL }}" target="_blank" style="background: #4A7C59; color: white; padding: 14px 32px; border-radius: 12px; text-decoration: none; font-size: 16px; font-weight: 600; display: inline-block;"&gt;
+        Reset Password 🔐
+      &lt;/a&gt;
+    &lt;/div&gt;
+    &lt;p style="color: #888; font-size: 13px; line-height: 1.5; margin: 24px 0 0; border-top: 1px solid #F0EBE3; padding-top: 16px;"&gt;
+      If you didn't request a password reset, you can safely ignore this email. Your password won't change.
+    &lt;/p&gt;
+  &lt;/div&gt;
+  &lt;p style="text-align: center; color: #aaa; font-size: 12px; margin-top: 24px;"&gt;
+    Fridgenie — Your Smart Kitchen Companion
+  &lt;/p&gt;
+&lt;/div&gt;</div>
+      <button class="copy-btn" onclick="copyTemplate('reset-template')">📋 Copy Template</button>
+    </div>
+
+    <div class="info">
+      <span class="en"><strong>Note:</strong> <code>{{ .ConfirmationURL }}</code> is a Supabase variable — it automatically inserts the correct verification/reset link. Don't change it!</span>
+      <span class="ko"><strong>참고:</strong> <code>{{ .ConfirmationURL }}</code>는 Supabase 변수입니다 — 올바른 인증/재설정 링크가 자동으로 삽입됩니다. 변경하지 마세요!</span>
+    </div>
+
+    <div class="info">
+      <span class="en"><strong>Future LLC Update:</strong> When you register your LLC, just change "Fridgenie — Your Smart Kitchen Companion" at the bottom to "© 2026 [Your LLC Name]". Easy swap!</span>
+      <span class="ko"><strong>향후 LLC 업데이트:</strong> LLC 등록 후 하단의 "Fridgenie — Your Smart Kitchen Companion"을 "© 2026 [LLC 이름]"으로 변경하면 됩니다. 간단!</span>
+    </div>
+  </div>
+
+  <!-- STEP 3: CUSTOM SMTP -->
+  <div class="section">
+    <h2>3️⃣ <span class="en">Custom SMTP with Resend</span><span class="ko">Resend로 커스텀 SMTP 설정</span> <span class="tag-badge optional">Recommended</span></h2>
+
+    <div class="warning">
+      <span class="en"><strong>Why this matters:</strong> Supabase free tier only sends <strong>4 emails per hour</strong> via built-in SMTP. For production with real users, you NEED custom SMTP or emails will be silently dropped.</span>
+      <span class="ko"><strong>왜 중요한가:</strong> Supabase 무료 플랜은 내장 SMTP로 <strong>시간당 4개의 이메일</strong>만 전송합니다. 실제 사용자가 있는 프로덕션에서는 커스텀 SMTP가 필수입니다. 그렇지 않으면 이메일이 조용히 드랍됩니다.</span>
+    </div>
+
+    <div class="step">
+      <span class="step-num">1</span><strong class="en">Sign up for Resend</strong><strong class="ko">Resend 가입</strong>
+      <p class="en">Go to <a href="https://resend.com" target="_blank">resend.com</a> and create a free account.</p>
+      <p class="ko"><a href="https://resend.com" target="_blank">resend.com</a>에서 무료 계정 생성.</p>
+      <p class="en"><strong>Free tier:</strong> 3,000 emails/month, 100/day — more than enough for launch.</p>
+      <p class="ko"><strong>무료 플랜:</strong> 월 3,000건, 일 100건 — 런칭에 충분합니다.</p>
+    </div>
+
+    <div class="step">
+      <span class="step-num">2</span><strong class="en">Add & verify your domain</strong><strong class="ko">도메인 추가 & 인증</strong>
+      <p class="en">In Resend dashboard → Domains → Add <code>fridgenie.app</code></p>
+      <p class="ko">Resend 대시보드 → Domains → <code>fridgenie.app</code> 추가</p>
+      <p class="en">They'll give you DNS records (DKIM, SPF) to add at your domain registrar. This ensures emails come from <code>@fridgenie.app</code> and don't land in spam.</p>
+      <p class="ko">도메인 등록기관에 추가할 DNS 레코드(DKIM, SPF)를 제공합니다. 이메일이 <code>@fridgenie.app</code>에서 발송되고 스팸에 안 걸립니다.</p>
+    </div>
+
+    <div class="step">
+      <span class="step-num">3</span><strong class="en">Get SMTP credentials</strong><strong class="ko">SMTP 인증정보 가져오기</strong>
+      <p class="en">In Resend → SMTP settings, you'll see:</p>
+      <p class="ko">Resend → SMTP settings에서 확인:</p>
+      <div class="code-block">Host: smtp.resend.com
+Port: 465
+Username: resend
+Password: re_xxxxxxxxxx (your API key)</div>
+    </div>
+
+    <div class="step">
+      <span class="step-num">4</span><strong class="en">Configure in Supabase</strong><strong class="ko">Supabase에서 설정</strong>
+      <p class="en">Go to <a href="https://supabase.com/dashboard/project/rhhaojpsqfbapltcvsbz/settings/auth" target="_blank">Project Settings → Auth → SMTP Settings</a></p>
+      <p class="ko"><a href="https://supabase.com/dashboard/project/rhhaojpsqfbapltcvsbz/settings/auth" target="_blank">Project Settings → Auth → SMTP Settings</a> 열기</p>
+      <p class="en">Toggle "Enable Custom SMTP" ON, then fill in:</p>
+      <p class="ko">"Enable Custom SMTP" 활성화 후 입력:</p>
+      <div class="code-block">Sender email: hello@fridgenie.app
+Sender name: Fridgenie
+Host: smtp.resend.com
+Port: 465
+Username: resend
+Password: [your Resend API key]
+Minimum interval: 30 (seconds between emails per user)</div>
+    </div>
+
+    <div class="success">
+      <span class="en">After this, all auth emails will come from <strong>hello@fridgenie.app</strong> with your branded templates. Professional! 🎉</span>
+      <span class="ko">이후 모든 인증 이메일이 <strong>hello@fridgenie.app</strong>에서 브랜딩된 템플릿으로 발송됩니다. 전문적! 🎉</span>
+    </div>
+  </div>
+
+  <!-- STEP 4: TESTING -->
+  <div class="section">
+    <h2>4️⃣ <span class="en">Testing Checklist</span><span class="ko">테스트 체크리스트</span></h2>
+    <p class="en">After setting up templates and (optionally) SMTP, test these flows:</p>
+    <p class="ko">템플릿과 (선택사항) SMTP 설정 후 다음 플로우를 테스트:</p>
+
+    <ul class="checklist">
+      <li><span class="en"><strong>Email signup:</strong> Sign up with new email → get branded verification email → tap link → app opens → lands on household setup</span><span class="ko"><strong>이메일 가입:</strong> 새 이메일로 가입 → 브랜딩된 인증 이메일 수신 → 링크 탭 → 앱 열림 → 가구 설정으로 이동</span></li>
+      <li><span class="en"><strong>Forgot password:</strong> Tap "Forgot password" → enter email → get branded reset email → tap link → app opens → reset password screen → enter new password → success</span><span class="ko"><strong>비밀번호 찾기:</strong> "비밀번호 찾기" 탭 → 이메일 입력 → 브랜딩된 재설정 이메일 수신 → 링크 탭 → 앱 열림 → 비밀번호 재설정 화면 → 새 비밀번호 입력 → 성공</span></li>
+      <li><span class="en"><strong>Resend verification:</strong> On confirmation screen, tap "Resend" → get another email within a minute</span><span class="ko"><strong>인증 재전송:</strong> 확인 화면에서 "재전송" 탭 → 1분 내에 또 다른 이메일 수신</span></li>
+      <li><span class="en"><strong>Apple Sign-In:</strong> Still works normally (no email needed)</span><span class="ko"><strong>Apple 로그인:</strong> 정상 작동 확인 (이메일 불필요)</span></li>
+      <li><span class="en"><strong>Check spam folder:</strong> If using default Supabase SMTP, emails may land in spam. Custom SMTP (Resend) fixes this.</span><span class="ko"><strong>스팸 폴더 확인:</strong> 기본 Supabase SMTP 사용 시 이메일이 스팸에 갈 수 있습니다. 커스텀 SMTP (Resend)로 해결됩니다.</span></li>
+    </ul>
+  </div>
+
+  <!-- QUICK REFERENCE -->
+  <div class="section">
+    <h2>📎 <span class="en">Quick Reference</span><span class="ko">빠른 참조</span></h2>
+    <table style="width:100%; border-collapse: collapse; font-size: 14px;">
+      <tr style="border-bottom: 1px solid #E8E0D4;">
+        <td style="padding: 8px 0; font-weight: 600;"><span class="en">Supabase Project</span><span class="ko">Supabase 프로젝트</span></td>
+        <td style="padding: 8px 0;"><code>rhhaojpsqfbapltcvsbz</code></td>
+      </tr>
+      <tr style="border-bottom: 1px solid #E8E0D4;">
+        <td style="padding: 8px 0; font-weight: 600;"><span class="en">Redirect URL</span><span class="ko">리다이렉트 URL</span></td>
+        <td style="padding: 8px 0;"><code>com.fridgenie.app://callback</code></td>
+      </tr>
+      <tr style="border-bottom: 1px solid #E8E0D4;">
+        <td style="padding: 8px 0; font-weight: 600;"><span class="en">Bundle ID</span><span class="ko">번들 ID</span></td>
+        <td style="padding: 8px 0;"><code>com.fridgenie.app</code></td>
+      </tr>
+      <tr style="border-bottom: 1px solid #E8E0D4;">
+        <td style="padding: 8px 0; font-weight: 600;"><span class="en">Domain</span><span class="ko">도메인</span></td>
+        <td style="padding: 8px 0;"><code>fridgenie.app</code></td>
+      </tr>
+      <tr>
+        <td style="padding: 8px 0; font-weight: 600;">SMTP</td>
+        <td style="padding: 8px 0;"><code>smtp.resend.com:465</code></td>
+      </tr>
+    </table>
+  </div>
+
+</div>
+
+<script>
+let isKorean = false;
+function toggleLang() {
+  isKorean = !isKorean;
+  document.querySelectorAll('.en').forEach(el => el.classList.toggle('hide', isKorean));
+  document.querySelectorAll('.ko').forEach(el => el.classList.toggle('show', isKorean));
+  document.querySelectorAll('.en-block').forEach(el => el.classList.toggle('hide', isKorean));
+  document.querySelectorAll('.ko-block').forEach(el => el.classList.toggle('show', isKorean));
+  document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+}
+
+function copyTemplate(id) {
+  const el = document.getElementById(id);
+  // Decode HTML entities to get actual HTML
+  const ta = document.createElement('textarea');
+  ta.innerHTML = el.textContent;
+  navigator.clipboard.writeText(ta.value).then(() => {
+    const btn = el.nextElementSibling;
+    const orig = btn.textContent;
+    btn.textContent = '✅ Copied!';
+    setTimeout(() => btn.textContent = orig, 2000);
+  });
+}
+</script>
+
+</body>
+</html>
