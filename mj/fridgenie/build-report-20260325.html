@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fridgenie Build Report — March 25, 2026</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Inter', -apple-system, sans-serif; background: #FFF9F2; color: #2C2420; line-height: 1.6; padding: 20px; max-width: 700px; margin: 0 auto; }
+  .lang-toggle { position: fixed; top: 16px; right: 16px; background: #2F5E45; color: #fff; border: none; padding: 8px 14px; border-radius: 12px; font-size: 13px; font-weight: 700; cursor: pointer; z-index: 999; }
+  .ko { display: none; }
+  .ko.show { display: inline !important; }
+  .en.hide { display: none !important; }
+  h1 { font-family: 'DM Serif Display', Georgia, serif; font-size: 26px; color: #2F5E45; margin: 40px 0 8px; }
+  h2 { font-family: 'DM Serif Display', Georgia, serif; font-size: 20px; color: #2C2420; margin: 28px 0 12px; border-bottom: 2px solid #E8EDE6; padding-bottom: 6px; }
+  h3 { font-size: 16px; margin: 16px 0 8px; color: #2F5E45; }
+  .subtitle { font-size: 14px; color: #2C242090; margin-bottom: 24px; }
+  .card { background: #FFFDF8; border: 1px solid #E8EDE6; border-radius: 16px; padding: 16px; margin: 12px 0; }
+  .card.done { border-left: 4px solid #4A8B6A; }
+  .card.partial { border-left: 4px solid #E8B44C; }
+  .card.todo { border-left: 4px solid #D4A5A5; }
+  .badge { display: inline-block; padding: 3px 10px; border-radius: 10px; font-size: 11px; font-weight: 700; margin-left: 6px; }
+  .badge.done { background: #4A8B6A20; color: #4A8B6A; }
+  .badge.partial { background: #E8B44C20; color: #E8B44C; }
+  .badge.todo { background: #D4A5A520; color: #D4A5A5; }
+  .badge.new { background: #E8967D20; color: #E8967D; }
+  ul { padding-left: 20px; margin: 8px 0; }
+  li { margin: 6px 0; font-size: 14px; }
+  .test-steps { background: #2F5E4508; border-radius: 12px; padding: 14px; margin: 10px 0; }
+  .test-steps ol { padding-left: 20px; }
+  .test-steps li { font-size: 13px; margin: 4px 0; }
+  .stat-row { display: flex; gap: 10px; flex-wrap: wrap; margin: 12px 0; }
+  .stat { background: #FFFDF8; border: 1px solid #E8EDE6; border-radius: 14px; padding: 12px 16px; flex: 1; min-width: 100px; text-align: center; }
+  .stat .num { font-family: 'DM Serif Display', Georgia, serif; font-size: 28px; color: #2F5E45; }
+  .stat .label { font-size: 11px; color: #2C242080; }
+  .files { font-family: monospace; font-size: 12px; background: #2C242008; padding: 12px; border-radius: 10px; margin: 8px 0; }
+  .files div { padding: 2px 0; }
+  .files .new { color: #4A8B6A; }
+  .files .mod { color: #E8B44C; }
+  .divider { height: 1px; background: #E8EDE6; margin: 24px 0; }
+  .footer { text-align: center; font-size: 12px; color: #2C242060; margin-top: 32px; padding: 16px; }
+  @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;600;700&display=swap');
+</style>
+</head>
+<body>
+<button class="lang-toggle" onclick="toggleLang()">한국어</button>
+
+<h1>🧊 Fridgenie Build Report</h1>
+<p class="subtitle">
+  <span class="en">March 25, 2026 — Feature Sprint Results</span>
+  <span class="ko">2026년 3월 25일 — 기능 스프린트 결과</span>
+</p>
+
+<div class="stat-row">
+  <div class="stat"><div class="num">299</div><div class="label"><span class="en">Dishes Seeded</span><span class="ko">등록된 요리</span></div></div>
+  <div class="stat"><div class="num">5</div><div class="label"><span class="en">New Features</span><span class="ko">새 기능</span></div></div>
+  <div class="stat"><div class="num">+1,240</div><div class="label"><span class="en">Lines Added</span><span class="ko">추가된 코드</span></div></div>
+  <div class="stat"><div class="num">0</div><div class="label"><span class="en">Errors</span><span class="ko">에러</span></div></div>
+</div>
+
+<!-- ═══ COMPLETED FEATURES ═══ -->
+
+<h2>✅ <span class="en">Completed Features</span><span class="ko">완료된 기능</span></h2>
+
+<!-- 1. Daily Dish Suggestions -->
+<div class="card done">
+  <h3>🍽️ <span class="en">Daily Dish Suggestions</span><span class="ko">오늘의 요리 추천</span> <span class="badge done">DONE</span> <span class="badge new">NEW</span></h3>
+  <ul>
+    <li><span class="en">299 real dishes seeded across 12 cuisines (Korean 30, Japanese 27, Indian/Chinese/American 26, etc.)</span><span class="ko">12개 요리 카테고리에 299개 실제 요리 등록 (한국 30, 일본 27, 인도/중국/미국 26 등)</span></li>
+    <li><span class="en">Horizontal swipe carousel on home dashboard (5 daily picks)</span><span class="ko">홈 대시보드에 가로 스와이프 캐러셀 (매일 5개 추천)</span></li>
+    <li><span class="en">90-day cooldown — no repeat suggestions for 3 months</span><span class="ko">90일 쿨다운 — 3개월간 중복 추천 없음</span></li>
+    <li><span class="en">Respects cuisine preferences + dietary restrictions from profile</span><span class="ko">프로필의 요리 선호도 + 식단 제한 반영</span></li>
+    <li><span class="en">"New picks" refresh button to get fresh suggestions</span><span class="ko">"새로운 추천" 새로고침 버튼</span></li>
+    <li><span class="en">Tap any card → opens dish detail screen</span><span class="ko">카드 탭 → 요리 상세 화면 열기</span></li>
+  </ul>
+  <div class="test-steps">
+    <strong><span class="en">🧪 How to Test:</span><span class="ko">🧪 테스트 방법:</span></strong>
+    <ol>
+      <li><span class="en">Open the app → Home dashboard should show "Today's Picks" carousel</span><span class="ko">앱 열기 → 홈 대시보드에 "Today's Picks" 캐러셀 표시</span></li>
+      <li><span class="en">Swipe left/right through 5 dish cards</span><span class="ko">5개 요리 카드 좌우 스와이프</span></li>
+      <li><span class="en">Tap a card → should navigate to dish detail</span><span class="ko">카드 탭 → 요리 상세로 이동해야 함</span></li>
+      <li><span class="en">Tap "New picks" → should load 5 different dishes</span><span class="ko">"New picks" 탭 → 다른 5개 요리 로드</span></li>
+      <li><span class="en">Set dietary restrictions in Profile → refresh → verify filtered results</span><span class="ko">프로필에서 식단 제한 설정 → 새로고침 → 필터된 결과 확인</span></li>
+    </ol>
+  </div>
+</div>
+
+<!-- 2. Generate Shopping List -->
+<div class="card done">
+  <h3>🛒 <span class="en">Generate Shopping List for Dish</span><span class="ko">요리별 장보기 목록 생성</span> <span class="badge done">DONE</span> <span class="badge new">NEW</span></h3>
+  <ul>
+    <li><span class="en">Cart button (🛒) on each daily dish card</span><span class="ko">각 추천 카드에 장바구니 버튼 (🛒)</span></li>
+    <li><span class="en">Bottom sheet cross-references ingredients with your pantry</span><span class="ko">바텀 시트에서 재료와 팬트리 교차 확인</span></li>
+    <li><span class="en">Shows ✅ "You Have" vs 🛒 "Need to Buy"</span><span class="ko">✅ "있는 것" vs 🛒 "사야 할 것" 표시</span></li>
+    <li><span class="en">One-tap "Add X Items to Shopping List" button</span><span class="ko">"장바구니에 X개 추가" 원탭 버튼</span></li>
+    <li><span class="en">23 popular dishes have full ingredient lists (Kimchi Jjigae, Pad Thai, Butter Chicken, etc.)</span><span class="ko">23개 인기 요리에 전체 재료 목록 (김치찌개, 팟타이, 버터 치킨 등)</span></li>
+    <li><span class="en">Dishes without ingredients show a graceful "coming soon" message</span><span class="ko">재료 없는 요리는 "곧 추가" 메시지 표시</span></li>
+  </ul>
+  <div class="test-steps">
+    <strong><span class="en">🧪 How to Test:</span><span class="ko">🧪 테스트 방법:</span></strong>
+    <ol>
+      <li><span class="en">On a daily dish card, tap the 🛒 cart icon (right side)</span><span class="ko">추천 카드에서 🛒 아이콘 탭 (오른쪽)</span></li>
+      <li><span class="en">Bottom sheet should appear with ingredient list</span><span class="ko">재료 목록이 있는 바텀 시트 표시</span></li>
+      <li><span class="en">Add some items to your fridge first → re-check → those should show as ✅</span><span class="ko">냉장고에 재료 먼저 추가 → 다시 확인 → ✅로 표시되어야 함</span></li>
+      <li><span class="en">Tap "Add X Items" → go to Shopping tab → verify items added</span><span class="ko">"X개 추가" 탭 → 장보기 탭 → 추가된 항목 확인</span></li>
+      <li><span class="en">Try a dish without ingredients → should show info message</span><span class="ko">재료 없는 요리 시도 → 안내 메시지 표시</span></li>
+    </ol>
+  </div>
+</div>
+
+<!-- 3. Multi-Store Shopping -->
+<div class="card partial">
+  <h3>🏪 <span class="en">Multi-Store Shopping</span><span class="ko">매장별 장보기</span> <span class="badge partial">80%</span> <span class="badge new">NEW</span></h3>
+  <ul>
+    <li><span class="en">✅ household_stores table with RLS (DB ready)</span><span class="ko">✅ household_stores 테이블 + RLS (DB 준비 완료)</span></li>
+    <li><span class="en">✅ store_tag column on shopping_list items</span><span class="ko">✅ shopping_list에 store_tag 컬럼</span></li>
+    <li><span class="en">✅ HouseholdStore model + StoreNotifier provider</span><span class="ko">✅ HouseholdStore 모델 + StoreNotifier 프로바이더</span></li>
+    <li><span class="en">✅ Store picker bottom sheet (assign store to any item)</span><span class="ko">✅ 매장 선택 바텀 시트 (아이템에 매장 지정)</span></li>
+    <li><span class="en">✅ Add custom stores (Costco, H Mart, etc.)</span><span class="ko">✅ 커스텀 매장 추가 (코스트코, H Mart 등)</span></li>
+    <li><span class="en">⏳ "All Items" / "By Store" toggle view (UI not wired yet)</span><span class="ko">⏳ "전체" / "매장별" 토글 뷰 (UI 미연결)</span></li>
+    <li><span class="en">⏳ Store group headers with emoji + count</span><span class="ko">⏳ 이모지 + 개수 매장 그룹 헤더</span></li>
+  </ul>
+  <div class="test-steps">
+    <strong><span class="en">🧪 How to Test (what's working):</span><span class="ko">🧪 테스트 방법 (작동하는 부분):</span></strong>
+    <ol>
+      <li><span class="en">The store picker sheet is built — needs to be wired to long-press on shopping items</span><span class="ko">매장 선택 시트 구현 완료 — 장보기 아이템 롱프레스에 연결 필요</span></li>
+      <li><span class="en">Store provider is ready to stream household stores</span><span class="ko">매장 프로바이더가 가구 매장 스트림 준비 완료</span></li>
+    </ol>
+  </div>
+</div>
+
+<!-- 4. Household Activity Banner -->
+<div class="card done">
+  <h3>📋 <span class="en">Household Activity Highlights</span><span class="ko">가족 활동 하이라이트</span> <span class="badge done">DONE</span> <span class="badge new">NEW</span></h3>
+  <ul>
+    <li><span class="en">Banner on home dashboard: "🧊 Added Chicken, Milk to the fridge"</span><span class="ko">홈 대시보드 배너: "🧊 닭고기, 우유를 냉장고에 추가"</span></li>
+    <li><span class="en">Tracks last_active_at per user</span><span class="ko">사용자별 last_active_at 추적</span></li>
+    <li><span class="en">Auto-dismisses after 10 seconds or on tap</span><span class="ko">10초 후 자동 닫힘 또는 탭 시 닫힘</span></li>
+    <li><span class="en">Tap navigates to relevant screen (fridge or shopping)</span><span class="ko">탭하면 관련 화면으로 이동 (냉장고 또는 장보기)</span></li>
+    <li><span class="en">Only shows for households with 2+ members</span><span class="ko">2명 이상 가구에서만 표시</span></li>
+    <li><span class="en">Animated slide-down entrance</span><span class="ko">슬라이드 다운 애니메이션</span></li>
+  </ul>
+  <div class="test-steps">
+    <strong><span class="en">🧪 How to Test:</span><span class="ko">🧪 테스트 방법:</span></strong>
+    <ol>
+      <li><span class="en">Need 2+ household members to trigger</span><span class="ko">트리거하려면 2명 이상의 가구원 필요</span></li>
+      <li><span class="en">Have another member add items to fridge or shopping list</span><span class="ko">다른 가구원이 냉장고 또는 장보기에 아이템 추가</span></li>
+      <li><span class="en">Open app → banner should slide down showing changes</span><span class="ko">앱 열기 → 변경사항을 보여주는 배너가 슬라이드 다운</span></li>
+      <li><span class="en">Tap banner → should navigate to fridge/shopping</span><span class="ko">배너 탭 → 냉장고/장보기로 이동해야 함</span></li>
+      <li><span class="en">Wait 10s → should auto-dismiss</span><span class="ko">10초 대기 → 자동 닫힘</span></li>
+    </ol>
+  </div>
+</div>
+
+<!-- ═══ NOT YET DONE ═══ -->
+
+<h2>⏳ <span class="en">Remaining from Feature Plan</span><span class="ko">기능 계획에서 남은 것</span></h2>
+
+<div class="card todo">
+  <h3>🏪 <span class="en">"By Store" Grouped View</span><span class="ko">"매장별" 그룹 뷰</span> <span class="badge todo">TODO</span></h3>
+  <ul>
+    <li><span class="en">SegmentedButton toggle: "All Items" / "By Store" at top of shopping list</span><span class="ko">쇼핑 리스트 상단에 "전체" / "매장별" 세그먼트 버튼 토글</span></li>
+    <li><span class="en">Group items by store_tag with store emoji headers</span><span class="ko">store_tag로 아이템 그룹화 + 매장 이모지 헤더</span></li>
+    <li><span class="en">Long-press on items → store picker sheet</span><span class="ko">아이템 롱프레스 → 매장 선택 시트</span></li>
+  </ul>
+  <p style="font-size:13px;color:#2C242090;margin-top:8px"><span class="en">Effort: ~0.5 day. Backend ready, just UI wiring.</span><span class="ko">난이도: ~0.5일. 백엔드 준비 완료, UI 연결만 필요.</span></p>
+</div>
+
+<div class="card todo">
+  <h3>🔔 <span class="en">Smart Notifications</span><span class="ko">스마트 알림</span> <span class="badge todo">TODO</span></h3>
+  <ul>
+    <li><span class="en">flutter_local_notifications package (not yet added to pubspec)</span><span class="ko">flutter_local_notifications 패키지 (pubspec에 미추가)</span></li>
+    <li><span class="en">Weekly meal inspiration (Sunday 9am)</span><span class="ko">주간 식사 영감 (일요일 오전 9시)</span></li>
+    <li><span class="en">Shopping reminder (if list has items 2+ days)</span><span class="ko">장보기 리마인더 (2일 이상 목록에 있을 때)</span></li>
+    <li><span class="en">Comeback nudge (after 5 days inactive)</span><span class="ko">복귀 유도 (5일 비활성 후)</span></li>
+    <li><span class="en">Toggle in Profile settings</span><span class="ko">프로필 설정에서 토글</span></li>
+  </ul>
+  <p style="font-size:13px;color:#2C242090;margin-top:8px"><span class="en">Effort: ~1 day. Needs iOS notification permission setup + package install.</span><span class="ko">난이도: ~1일. iOS 알림 권한 설정 + 패키지 설치 필요.</span></p>
+</div>
+
+<div class="card todo">
+  <h3>🛒 <span class="en">Shopping List Grouped by Dish</span><span class="ko">요리별 장보기 그룹</span> <span class="badge todo">TODO</span></h3>
+  <ul>
+    <li><span class="en">When items are added via "Generate Shopping List," group them under the dish name header</span><span class="ko">"장보기 목록 생성"으로 추가된 아이템을 요리 이름 헤더 아래 그룹화</span></li>
+    <li><span class="en">"🍲 Kimchi Jjigae" header with items underneath</span><span class="ko">"🍲 김치찌개" 헤더 아래 아이템 표시</span></li>
+  </ul>
+  <p style="font-size:13px;color:#2C242090;margin-top:8px"><span class="en">Effort: ~0.5 day. recipe_id already tracked on items.</span><span class="ko">난이도: ~0.5일. recipe_id 이미 아이템에 추적 중.</span></p>
+</div>
+
+<div class="card todo">
+  <h3>🔄 <span class="en">Leftover Loop (v2)</span><span class="ko">남은 재료 루프 (v2)</span> <span class="badge todo">V2</span></h3>
+  <ul>
+    <li><span class="en">Detect leftover ingredients after cooking</span><span class="ko">요리 후 남은 재료 감지</span></li>
+    <li><span class="en">Smart daily suggestions using what you already have</span><span class="ko">이미 있는 재료로 스마트 일일 추천</span></li>
+    <li><span class="en">Cooking history tracking</span><span class="ko">요리 기록 추적</span></li>
+  </ul>
+  <p style="font-size:13px;color:#2C242090;margin-top:8px"><span class="en">Effort: ~2 days. Post-launch feature per roadmap.</span><span class="ko">난이도: ~2일. 로드맵에 따라 출시 후 기능.</span></p>
+</div>
+
+<div class="card todo">
+  <h3>🧠 <span class="en">Item-Store Memory</span><span class="ko">아이템-매장 기억</span> <span class="badge todo">V2</span></h3>
+  <ul>
+    <li><span class="en">Auto-suggest store when adding items based on history</span><span class="ko">기록 기반으로 아이템 추가 시 매장 자동 추천</span></li>
+    <li><span class="en">"Milk always from Costco" → auto-tag next time</span><span class="ko">"우유는 항상 코스트코" → 다음에 자동 태그</span></li>
+  </ul>
+  <p style="font-size:13px;color:#2C242090;margin-top:8px"><span class="en">Effort: ~0.5 day. Deferred to v2.</span><span class="ko">난이도: ~0.5일. v2로 미루기.</span></p>
+</div>
+
+<div class="divider"></div>
+
+<h2>📁 <span class="en">Files Changed</span><span class="ko">변경된 파일</span></h2>
+<div class="files">
+  <div class="new">+ lib/models/daily_suggestion.dart (ingredients field)</div>
+  <div class="new">+ lib/models/household_store.dart (NEW)</div>
+  <div class="mod">~ lib/models/shopping_item.dart (storeTag field)</div>
+  <div class="new">+ lib/providers/store_provider.dart (NEW)</div>
+  <div class="new">+ lib/providers/daily_suggestions_provider.dart</div>
+  <div class="mod">~ lib/screens/home/home_dashboard_screen.dart</div>
+  <div class="mod">~ lib/widgets/daily_dish_carousel.dart (cart button)</div>
+  <div class="new">+ lib/widgets/generate_shopping_sheet.dart (NEW)</div>
+  <div class="new">+ lib/widgets/household_activity_banner.dart (NEW)</div>
+  <div class="new">+ lib/widgets/store_picker_sheet.dart (NEW)</div>
+  <div class="new">+ supabase/migrations/20260325100000_daily_dish_suggestions.sql</div>
+  <div class="new">+ supabase/migrations/20260325100001_seed_dish_suggestions.sql</div>
+  <div class="new">+ supabase/migrations/20260325110000_seed_more_dishes.sql</div>
+  <div class="new">+ supabase/migrations/20260325110001_dish_ingredients_and_store_tags.sql</div>
+</div>
+
+<div class="footer">
+  <span class="en">🌳 Built by Totoro — Fridgenie v2.3 Feature Sprint<br>March 25, 2026</span>
+  <span class="ko">🌳 토토로가 빌드함 — Fridgenie v2.3 기능 스프린트<br>2026년 3월 25일</span>
+</div>
+
+<script>
+let isKorean = false;
+function toggleLang() {
+  isKorean = !isKorean;
+  document.querySelectorAll('.en').forEach(el => el.classList.toggle('hide', isKorean));
+  document.querySelectorAll('.ko').forEach(el => el.classList.toggle('show', isKorean));
+  document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+}
+</script>
+</body>
+</html>
