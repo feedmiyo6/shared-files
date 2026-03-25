@@ -53,8 +53,8 @@
 
 <div class="stat-row">
   <div class="stat"><div class="num">299</div><div class="label"><span class="en">Dishes Seeded</span><span class="ko">등록된 요리</span></div></div>
-  <div class="stat"><div class="num">5</div><div class="label"><span class="en">New Features</span><span class="ko">새 기능</span></div></div>
-  <div class="stat"><div class="num">+1,240</div><div class="label"><span class="en">Lines Added</span><span class="ko">추가된 코드</span></div></div>
+  <div class="stat"><div class="num">7</div><div class="label"><span class="en">New Features</span><span class="ko">새 기능</span></div></div>
+  <div class="stat"><div class="num">+1,967</div><div class="label"><span class="en">Lines Added</span><span class="ko">추가된 코드</span></div></div>
   <div class="stat"><div class="num">0</div><div class="label"><span class="en">Errors</span><span class="ko">에러</span></div></div>
 </div>
 
@@ -109,22 +109,22 @@
 </div>
 
 <!-- 3. Multi-Store Shopping -->
-<div class="card partial">
-  <h3>🏪 <span class="en">Multi-Store Shopping</span><span class="ko">매장별 장보기</span> <span class="badge partial">80%</span> <span class="badge new">NEW</span></h3>
+<div class="card done">
+  <h3>🏪 <span class="en">Multi-Store Shopping</span><span class="ko">매장별 장보기</span> <span class="badge done">DONE</span> <span class="badge new">NEW</span></h3>
   <ul>
-    <li><span class="en">✅ household_stores table with RLS (DB ready)</span><span class="ko">✅ household_stores 테이블 + RLS (DB 준비 완료)</span></li>
-    <li><span class="en">✅ store_tag column on shopping_list items</span><span class="ko">✅ shopping_list에 store_tag 컬럼</span></li>
-    <li><span class="en">✅ HouseholdStore model + StoreNotifier provider</span><span class="ko">✅ HouseholdStore 모델 + StoreNotifier 프로바이더</span></li>
-    <li><span class="en">✅ Store picker bottom sheet (assign store to any item)</span><span class="ko">✅ 매장 선택 바텀 시트 (아이템에 매장 지정)</span></li>
-    <li><span class="en">✅ Add custom stores (Costco, H Mart, etc.)</span><span class="ko">✅ 커스텀 매장 추가 (코스트코, H Mart 등)</span></li>
-    <li><span class="en">⏳ "All Items" / "By Store" toggle view (UI not wired yet)</span><span class="ko">⏳ "전체" / "매장별" 토글 뷰 (UI 미연결)</span></li>
-    <li><span class="en">⏳ Store group headers with emoji + count</span><span class="ko">⏳ 이모지 + 개수 매장 그룹 헤더</span></li>
+    <li><span class="en">✅ "All Items" / "By Store" toggle (SegmentedButton at top of shopping list)</span><span class="ko">✅ "전체" / "매장별" 토글 (장보기 상단 SegmentedButton)</span></li>
+    <li><span class="en">✅ Store group headers with emoji + "X left" count</span><span class="ko">✅ 이모지 + "X개 남음" 매장 그룹 헤더</span></li>
+    <li><span class="en">✅ Long-press any item → "Assign Store" or "Save as Staple" menu</span><span class="ko">✅ 아이템 롱프레스 → "매장 지정" 또는 "항시 구매 저장" 메뉴</span></li>
+    <li><span class="en">✅ Store picker bottom sheet with add custom store</span><span class="ko">✅ 매장 선택 바텀 시트 + 커스텀 매장 추가</span></li>
+    <li><span class="en">✅ household_stores table + HouseholdStore model + StoreNotifier</span><span class="ko">✅ household_stores 테이블 + 모델 + 프로바이더</span></li>
   </ul>
   <div class="test-steps">
-    <strong><span class="en">🧪 How to Test (what's working):</span><span class="ko">🧪 테스트 방법 (작동하는 부분):</span></strong>
+    <strong><span class="en">🧪 How to Test:</span><span class="ko">🧪 테스트 방법:</span></strong>
     <ol>
-      <li><span class="en">The store picker sheet is built — needs to be wired to long-press on shopping items</span><span class="ko">매장 선택 시트 구현 완료 — 장보기 아이템 롱프레스에 연결 필요</span></li>
-      <li><span class="en">Store provider is ready to stream household stores</span><span class="ko">매장 프로바이더가 가구 매장 스트림 준비 완료</span></li>
+      <li><span class="en">Go to Shopping tab → toggle "By Store" at top</span><span class="ko">장보기 탭 → 상단 "By Store" 토글</span></li>
+      <li><span class="en">Items should group by store (uncategorized items at bottom)</span><span class="ko">아이템이 매장별로 그룹화 (미분류 아이템 하단)</span></li>
+      <li><span class="en">Long-press any item → tap "Assign Store" → pick/add store</span><span class="ko">아이템 롱프레스 → "매장 지정" → 매장 선택/추가</span></li>
+      <li><span class="en">Switch back to "All Items" → normal view returns</span><span class="ko">"전체"로 전환 → 기본 뷰 복원</span></li>
     </ol>
   </div>
 </div>
@@ -152,19 +152,48 @@
   </div>
 </div>
 
+<!-- Leftover Loop -->
+<div class="card done">
+  <h3>🔄 <span class="en">Leftover Loop</span><span class="ko">남은 재료 루프</span> <span class="badge done">DONE</span> <span class="badge new">NEW</span></h3>
+  <ul>
+    <li><span class="en">✅ cooking_log table — tracks when dishes are cooked + ingredients used</span><span class="ko">✅ cooking_log 테이블 — 요리 시점 + 사용 재료 추적</span></li>
+    <li><span class="en">✅ CookingNotifier provider with logCookedDish()</span><span class="ko">✅ CookingNotifier 프로바이더 + logCookedDish()</span></li>
+    <li><span class="en">✅ get_leftover_suggestions RPC — prioritizes dishes matching pantry ingredients</span><span class="ko">✅ get_leftover_suggestions RPC — 팬트리 재료에 맞는 요리 우선</span></li>
+    <li><span class="en">✅ 14-day cooldown on recently cooked dishes</span><span class="ko">✅ 최근 요리한 요리 14일 쿨다운</span></li>
+    <li><span class="en">✅ Cooking history provider (last 20 entries)</span><span class="ko">✅ 요리 기록 프로바이더 (최근 20개)</span></li>
+  </ul>
+  <div class="test-steps">
+    <strong><span class="en">🧪 How to Test:</span><span class="ko">🧪 테스트 방법:</span></strong>
+    <ol>
+      <li><span class="en">The cooking log is ready to be called from dish detail screen (wire "I cooked this!" button)</span><span class="ko">요리 기록이 요리 상세 화면에서 호출 준비됨 ("요리했어요!" 버튼 연결)</span></li>
+      <li><span class="en">The RPC avoids suggesting dishes you recently cooked (14-day window)</span><span class="ko">RPC가 최근 요리한 요리 추천 회피 (14일 윈도우)</span></li>
+      <li><span class="en">Future: wire leftover suggestions into the daily carousel as a "Based on your pantry" section</span><span class="ko">향후: 남은 재료 추천을 일일 캐러셀에 "팬트리 기반" 섹션으로 연결</span></li>
+    </ol>
+  </div>
+</div>
+
+<!-- Item-Store Memory -->
+<div class="card done">
+  <h3>🧠 <span class="en">Item-Store Memory</span><span class="ko">아이템-매장 기억</span> <span class="badge done">DONE</span> <span class="badge new">NEW</span></h3>
+  <ul>
+    <li><span class="en">✅ item_store_memory table — remembers which store per item per household</span><span class="ko">✅ item_store_memory 테이블 — 가구별 아이템당 매장 기억</span></li>
+    <li><span class="en">✅ Auto-saves to memory when you assign a store to any item</span><span class="ko">✅ 아이템에 매장 지정 시 자동 기억 저장</span></li>
+    <li><span class="en">✅ getSuggestedStore() method ready for auto-suggest on new items</span><span class="ko">✅ getSuggestedStore() 메서드 — 새 아이템에 자동 추천 준비</span></li>
+    <li><span class="en">✅ Tracks use_count for confidence scoring</span><span class="ko">✅ use_count 추적으로 신뢰도 점수화</span></li>
+  </ul>
+  <div class="test-steps">
+    <strong><span class="en">🧪 How to Test:</span><span class="ko">🧪 테스트 방법:</span></strong>
+    <ol>
+      <li><span class="en">Long-press a shopping item → "Assign Store" → pick Costco</span><span class="ko">장보기 아이템 롱프레스 → "매장 지정" → 코스트코 선택</span></li>
+      <li><span class="en">That item-store pair is now remembered in item_store_memory</span><span class="ko">해당 아이템-매장 쌍이 item_store_memory에 저장됨</span></li>
+      <li><span class="en">Future: when adding the same item again, auto-suggest that store</span><span class="ko">향후: 같은 아이템 다시 추가 시 해당 매장 자동 추천</span></li>
+    </ol>
+  </div>
+</div>
+
 <!-- ═══ NOT YET DONE ═══ -->
 
 <h2>⏳ <span class="en">Remaining from Feature Plan</span><span class="ko">기능 계획에서 남은 것</span></h2>
-
-<div class="card todo">
-  <h3>🏪 <span class="en">"By Store" Grouped View</span><span class="ko">"매장별" 그룹 뷰</span> <span class="badge todo">TODO</span></h3>
-  <ul>
-    <li><span class="en">SegmentedButton toggle: "All Items" / "By Store" at top of shopping list</span><span class="ko">쇼핑 리스트 상단에 "전체" / "매장별" 세그먼트 버튼 토글</span></li>
-    <li><span class="en">Group items by store_tag with store emoji headers</span><span class="ko">store_tag로 아이템 그룹화 + 매장 이모지 헤더</span></li>
-    <li><span class="en">Long-press on items → store picker sheet</span><span class="ko">아이템 롱프레스 → 매장 선택 시트</span></li>
-  </ul>
-  <p style="font-size:13px;color:#2C242090;margin-top:8px"><span class="en">Effort: ~0.5 day. Backend ready, just UI wiring.</span><span class="ko">난이도: ~0.5일. 백엔드 준비 완료, UI 연결만 필요.</span></p>
-</div>
 
 <div class="card todo">
   <h3>🔔 <span class="en">Smart Notifications</span><span class="ko">스마트 알림</span> <span class="badge todo">TODO</span></h3>
@@ -187,24 +216,7 @@
   <p style="font-size:13px;color:#2C242090;margin-top:8px"><span class="en">Effort: ~0.5 day. recipe_id already tracked on items.</span><span class="ko">난이도: ~0.5일. recipe_id 이미 아이템에 추적 중.</span></p>
 </div>
 
-<div class="card todo">
-  <h3>🔄 <span class="en">Leftover Loop (v2)</span><span class="ko">남은 재료 루프 (v2)</span> <span class="badge todo">V2</span></h3>
-  <ul>
-    <li><span class="en">Detect leftover ingredients after cooking</span><span class="ko">요리 후 남은 재료 감지</span></li>
-    <li><span class="en">Smart daily suggestions using what you already have</span><span class="ko">이미 있는 재료로 스마트 일일 추천</span></li>
-    <li><span class="en">Cooking history tracking</span><span class="ko">요리 기록 추적</span></li>
-  </ul>
-  <p style="font-size:13px;color:#2C242090;margin-top:8px"><span class="en">Effort: ~2 days. Post-launch feature per roadmap.</span><span class="ko">난이도: ~2일. 로드맵에 따라 출시 후 기능.</span></p>
-</div>
 
-<div class="card todo">
-  <h3>🧠 <span class="en">Item-Store Memory</span><span class="ko">아이템-매장 기억</span> <span class="badge todo">V2</span></h3>
-  <ul>
-    <li><span class="en">Auto-suggest store when adding items based on history</span><span class="ko">기록 기반으로 아이템 추가 시 매장 자동 추천</span></li>
-    <li><span class="en">"Milk always from Costco" → auto-tag next time</span><span class="ko">"우유는 항상 코스트코" → 다음에 자동 태그</span></li>
-  </ul>
-  <p style="font-size:13px;color:#2C242090;margin-top:8px"><span class="en">Effort: ~0.5 day. Deferred to v2.</span><span class="ko">난이도: ~0.5일. v2로 미루기.</span></p>
-</div>
 
 <div class="divider"></div>
 
