@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 28 Practice: Build a Round-Robin Arbiter</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    background: linear-gradient(135deg, #fefae0 0%, #faedcd 100%);
+    color: #3d405b;
+    line-height: 1.8;
+    padding: 24px;
+    max-width: 920px;
+    margin: 0 auto;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+h1 {
+    color: #5d4037;
+    border-bottom: 3px solid #c4a77d;
+    padding-bottom: 12px;
+    margin: 24px 0 16px;
+    font-size: 2em;
+}
+h2 {
+    color: #588157;
+    border-bottom: 2px solid #a3b18a;
+    padding-bottom: 8px;
+    margin: 32px 0 16px;
+}
+h3 { color: #5d4037; margin: 20px 0 12px; }
+p { margin: 12px 0; }
+ul, ol { margin: 12px 0 12px 24px; }
+li { margin: 4px 0; }
+pre {
+    background: #2d3436;
+    padding: 24px;
+    border-radius: 12px;
+    margin: 24px 0;
+    border: 3px solid #a3b18a;
+    overflow-x: auto;
+    font-size: 15px;
+    line-height: 1.6;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+    color: #f8f8f2;
+}
+code {
+    background: #e9f5db;
+    color: #3d405b;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+}
+pre code { background: none; color: inherit; padding: 0; }
+.keyword { color: #ff79c6; font-weight: 600; }
+.type { color: #8be9fd; }
+.signal { color: #50fa7b; }
+.number { color: #ffb86c; }
+.comment { color: #6272a4; font-style: italic; }
+.string { color: #f1fa8c; }
+.concept-box {
+    background: #fff8f0;
+    border: 2px solid #c4a77d;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    color: #3d405b;
+}
+.concept-box h3 { color: #5d4037; margin-bottom: 12px; }
+.warning-box {
+    background: #fff8f0;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    border-left: 4px solid #ef4444;
+    color: #3d405b;
+}
+.warning-box h3 { color: #c53030; margin-bottom: 12px; }
+.tip-box {
+    background: #fff8f0;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    border-left: 4px solid #588157;
+    color: #3d405b;
+}
+.hint-box {
+    background: #fff8f0;
+    border-radius: 8px;
+    padding: 15px;
+    margin: 15px 0;
+    border-left: 4px solid #5d4037;
+    color: #3d405b;
+}
+.lang-toggle {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    background: #588157;
+    border: none;
+    border-radius: 24px;
+    padding: 10px 20px;
+    cursor: pointer;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    z-index: 1000;
+}
+.lang-toggle:hover { background: #3a5a40; }
+.ko { display: none; }
+.nav-links {
+    display: flex;
+    gap: 12px;
+    margin: 20px 0;
+    flex-wrap: wrap;
+}
+.nav-links a {
+    background: linear-gradient(135deg, #588157, #3a5a40);
+    color: #fff;
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 14px;
+}
+.nav-links a:hover { opacity: 0.9; }
+.reveal-btn {
+    background: linear-gradient(135deg, #588157, #3a5a40);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 14px;
+    margin: 12px 0;
+}
+.reveal-btn:hover { opacity: 0.9; }
+.hidden-solution { display: none; }
+.comparison-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+.comparison-table th {
+    background: #588157;
+    color: white;
+    padding: 12px;
+    text-align: left;
+}
+.comparison-table td {
+    background: #fff;
+    border: 1px solid #c4a77d;
+    padding: 12px;
+    color: #3d405b;
+}
+.comparison-table tr:nth-child(even) td { background: #fff8f0; }
+@media (max-width: 768px) {
+    body { padding: 16px; }
+    h1 { font-size: 1.8em; }
+    pre { font-size: 14px; padding: 16px; }
+    .lang-toggle { padding: 8px 16px; font-size: 13px; }
+}
+</style>
+</head>
+<body>
+<button class="lang-toggle" onclick="toggleLang()">한국어</button>
+
+<h1>🔧 Day 28 Practice: Build a Round-Robin Arbiter</h1>
+
+<div class="nav-links">
+    <a href="day-28-lesson.html">📖 Lesson</a>
+    <a href="day-28-quiz.html">📝 Quiz</a>
+</div>
+
+<div class="concept-box">
+    <h3>🎯 Goal</h3>
+    <p class="en">Build a <strong>parameterized 4-master round-robin arbiter</strong> with a testbench that proves fairness. Then extend it to weighted round-robin as a bonus challenge.</p>
+    <p class="ko" style="display:none;"><strong>파라미터화된 4-마스터 라운드 로빈 아비터</strong>를 구축하고, 공정성을 증명하는 테스트벤치를 작성하세요. 보너스 과제로 가중 라운드 로빈으로 확장합니다.</p>
+</div>
+
+<!-- ==================== EXERCISE 1 ==================== -->
+<h2>Exercise 1: Fixed-Priority Arbiter (Warmup)</h2>
+
+<p class="en">Start with the simpler case. Implement a fixed-priority arbiter using the <code>req & (~req + 1)</code> trick.</p>
+<p class="ko" style="display:none;">간단한 경우부터 시작하세요. <code>req & (~req + 1)</code> 트릭을 사용하여 고정 우선순위 아비터를 구현하세요.</p>
+
+<div class="concept-box">
+    <h3>📋 Requirements</h3>
+    <ul>
+        <li class="en">Parameterized N (default 4)</li>
+        <li class="ko" style="display:none;">파라미터화된 N (기본값 4)</li>
+        <li class="en">Purely combinational — no clock</li>
+        <li class="ko" style="display:none;">순수 조합 논리 — 클록 없음</li>
+        <li class="en">Bit 0 = highest priority</li>
+        <li class="ko" style="display:none;">비트 0 = 최우선순위</li>
+        <li class="en">Only one grant bit asserted at a time</li>
+        <li class="ko" style="display:none;">한 번에 하나의 승인 비트만 활성화</li>
+    </ul>
+</div>
+
+<h3>Skeleton</h3>
+<pre><code><span class="keyword">module</span> <span class="type">fixed_priority_arb</span> #(
+    <span class="keyword">parameter</span> <span class="type">N</span> = <span class="number">4</span>
+)(
+    <span class="keyword">input  logic</span> [<span class="signal">N</span>-<span class="number">1</span>:<span class="number">0</span>] <span class="signal">req</span>,
+    <span class="keyword">output logic</span> [<span class="signal">N</span>-<span class="number">1</span>:<span class="number">0</span>] <span class="signal">grant</span>
+);
+
+    <span class="comment">// TODO: Implement using bit manipulation</span>
+    <span class="comment">// Hint: grant = req & (???)</span>
+
+<span class="keyword">endmodule</span></code></pre>
+
+<button class="reveal-btn" onclick="document.getElementById('sol1').style.display='block'; this.style.display='none';">Show Solution</button>
+<div class="hidden-solution" id="sol1">
+<pre><code><span class="keyword">module</span> <span class="type">fixed_priority_arb</span> #(
+    <span class="keyword">parameter</span> <span class="type">N</span> = <span class="number">4</span>
+)(
+    <span class="keyword">input  logic</span> [<span class="signal">N</span>-<span class="number">1</span>:<span class="number">0</span>] <span class="signal">req</span>,
+    <span class="keyword">output logic</span> [<span class="signal">N</span>-<span class="number">1</span>:<span class="number">0</span>] <span class="signal">grant</span>
+);
+
+    <span class="comment">// Isolate the lowest set bit = highest priority requester</span>
+    <span class="keyword">assign</span> <span class="signal">grant</span> = <span class="signal">req</span> & (~<span class="signal">req</span> + <span class="number">1</span>);
+
+<span class="keyword">endmodule</span></code></pre>
+
+<div class="tip-box">
+    <h3>💡 Why This Works</h3>
+    <p class="en"><code>~req + 1</code> is the two's complement. When ANDed with <code>req</code>, all bits cancel except the lowest set bit. Example: <code>req = 4'b1010</code>, <code>~req+1 = 4'b0110</code>, <code>req & (~req+1) = 4'b0010</code> ✓</p>
+    <p class="ko" style="display:none;"><code>~req + 1</code>은 2의 보수입니다. <code>req</code>와 AND하면 최하위 설정 비트를 제외한 모든 비트가 소거됩니다. 예: <code>req = 4'b1010</code>, <code>~req+1 = 4'b0110</code>, <code>req & (~req+1) = 4'b0010</code> ✓</p>
+</div>
+</div>
+
+<!-- ==================== EXERCISE 2 ==================== -->
+<h2>Exercise 2: Round-Robin Arbiter</h2>
+
+<p class="en">Now build the real deal: a mask-based round-robin arbiter with full fairness.</p>
+<p class="ko" style="display:none;">이제 진짜를 만들어 봅시다: 완전한 공정성을 갖춘 마스크 기반 라운드 로빈 아비터.</p>
+
+<div class="concept-box">
+    <h3>📋 Requirements</h3>
+    <ul>
+        <li class="en">Parameterized N (default 4)</li>
+        <li class="ko" style="display:none;">파라미터화된 N (기본값 4)</li>
+        <li class="en">Synchronous with active-low reset</li>
+        <li class="ko" style="display:none;">비동기 리셋 (active-low) 포함 동기식</li>
+        <li class="en">Mask register tracks served masters</li>
+        <li class="ko" style="display:none;">마스크 레지스터로 서비스된 마스터 추적</li>
+        <li class="en">Falls back to unmasked priority when all masked out</li>
+        <li class="ko" style="display:none;">모든 마스크 소진 시 마스크 없는 우선순위로 폴백</li>
+    </ul>
+</div>
+
+<h3>Skeleton</h3>
+<pre><code><span class="keyword">module</span> <span class="type">rr_arbiter</span> #(
+    <span class="keyword">parameter</span> <span class="type">N</span> = <span class="number">4</span>
+)(
+    <span class="keyword">input  logic</span>              <span class="signal">clk</span>,
+    <span class="keyword">input  logic</span>              <span class="signal">rst_n</span>,
+    <span class="keyword">input  logic</span> [<span class="signal">N</span>-<span class="number">1</span>:<span class="number">0</span>]     <span class="signal">req</span>,
+    <span class="keyword">output logic</span> [<span class="signal">N</span>-<span class="number">1</span>:<span class="number">0</span>]     <span class="signal">grant</span>
+);
+
+    <span class="type">logic</span> [<span class="signal">N</span>-<span class="number">1</span>:<span class="number">0</span>] <span class="signal">mask</span>;
+    <span class="type">logic</span> [<span class="signal">N</span>-<span class="number">1</span>:<span class="number">0</span>] <span class="signal">masked_req</span>, <span class="signal">mask_grant</span>, <span class="signal">raw_grant</span>;
+
+    <span class="comment">// TODO: Compute masked_req</span>
+
+    <span class="comment">// TODO: Priority encode masked_req → mask_grant</span>
+
+    <span class="comment">// TODO: Priority encode req → raw_grant</span>
+
+    <span class="comment">// TODO: Select grant (masked if available, else raw)</span>
+
+    <span class="comment">// TODO: Update mask register on grant</span>
+
+<span class="keyword">endmodule</span></code></pre>
+
+<div class="hint-box">
+    <h3>💡 Hints</h3>
+    <ol>
+        <li class="en">Use the same <code>x & (~x + 1)</code> trick for both priority encoders</li>
+        <li class="ko" style="display:none;">두 우선순위 인코더 모두에 <code>x & (~x + 1)</code> 트릭을 사용하세요</li>
+        <li class="en">After granting from masked: clear the granted bit AND all lower bits from mask</li>
+        <li class="ko" style="display:none;">마스크에서 승인 후: 승인된 비트와 그 아래 모든 비트를 마스크에서 클리어</li>
+        <li class="en">After granting from raw (mask was empty): compute new mask excluding granted + below</li>
+        <li class="ko" style="display:none;">원시에서 승인 후 (마스크가 비었을 때): 승인된 비트 + 아래를 제외한 새 마스크 계산</li>
+        <li class="en">Reset mask to all 1s</li>
+        <li class="ko" style="display:none;">마스크를 모두 1로 리셋</li>
+    </ol>
+</div>
+
+<button class="reveal-btn" onclick="document.getElementById('sol2').style.display='block'; this.style.display='none';">Show Solution</button>
+<div class="hidden-solution" id="sol2">
+<pre><code><span class="keyword">module</span> <span class="type">rr_arbiter</span> #(
+    <span class="keyword">parameter</span> <span class="type">N</span> = <span class="number">4</span>
+)(
+    <span class="keyword">input  logic</span>              <span class="signal">clk</span>,
+    <span class="keyword">input  logic</span>              <span class="signal">rst_n</span>,
+    <span class="keyword">input  logic</span> [<span class="signal">N</span>-<span class="number">1</span>:<span class="number">0</span>]     <span class="signal">req</span>,
+    <span class="keyword">output logic</span> [<span class="signal">N</span>-<span class="number">1</span>:<span class="number">0</span>]     <span class="signal">grant</span>
+);
+
+    <span class="type">logic</span> [<span class="signal">N</span>-<span class="number">1</span>:<span class="number">0</span>] <span class="signal">mask</span>;
+    <span class="type">logic</span> [<span class="signal">N</span>-<span class="number">1</span>:<span class="number">0</span>] <span class="signal">masked_req</span>, <span class="signal">mask_grant</span>, <span class="signal">raw_grant</span>;
+
+    <span class="comment">// Step 1: Apply mask to requests</span>
+    <span class="keyword">assign</span> <span class="signal">masked_req</span> = <span class="signal">req</span> & <span class="signal">mask</span>;
+
+    <span class="comment">// Step 2: Priority encode both</span>
+    <span class="keyword">assign</span> <span class="signal">mask_grant</span> = <span class="signal">masked_req</span> & (~<span class="signal">masked_req</span> + <span class="number">1</span>);
+    <span class="keyword">assign</span> <span class="signal">raw_grant</span>  = <span class="signal">req</span> & (~<span class="signal">req</span> + <span class="number">1</span>);
+
+    <span class="comment">// Step 3: Use masked grant if any masked request, else raw</span>
+    <span class="keyword">assign</span> <span class="signal">grant</span> = (|<span class="signal">masked_req</span>) ? <span class="signal">mask_grant</span> : <span class="signal">raw_grant</span>;
+
+    <span class="comment">// Step 4: Update mask</span>
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span> <span class="keyword">or negedge</span> <span class="signal">rst_n</span>) <span class="keyword">begin</span>
+        <span class="keyword">if</span> (!<span class="signal">rst_n</span>) <span class="keyword">begin</span>
+            <span class="signal">mask</span> <= {<span class="signal">N</span>{<span class="number">1'b1</span>}};
+        <span class="keyword">end else if</span> (|<span class="signal">grant</span>) <span class="keyword">begin</span>
+            <span class="keyword">if</span> (|<span class="signal">masked_req</span>)
+                <span class="signal">mask</span> <= <span class="signal">mask</span> & ~((<span class="signal">mask_grant</span> << <span class="number">1</span>) - <span class="number">1</span>)
+                         & ~<span class="signal">mask_grant</span>;
+            <span class="keyword">else</span>
+                <span class="signal">mask</span> <= ~((<span class="signal">raw_grant</span> << <span class="number">1</span>) - <span class="number">1</span>)
+                         & ~<span class="signal">raw_grant</span>;
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+
+<span class="keyword">endmodule</span></code></pre>
+</div>
+
+<!-- ==================== EXERCISE 3 ==================== -->
+<h2>Exercise 3: Testbench — Prove Fairness</h2>
+
+<p class="en">Write a testbench that applies <code>req = 4'b1111</code> for 12 cycles and counts grants per master. Verify each master gets exactly 3 grants (12 cycles / 4 masters).</p>
+<p class="ko" style="display:none;">12 사이클 동안 <code>req = 4'b1111</code>을 적용하고 마스터별 승인 횟수를 세는 테스트벤치를 작성하세요. 각 마스터가 정확히 3회 승인 (12사이클 / 4마스터)을 받는지 확인하세요.</p>
+
+<h3>Testbench Skeleton</h3>
+<pre><code><span class="keyword">module</span> <span class="type">tb_rr_arbiter</span>;
+
+    <span class="type">logic</span>       <span class="signal">clk</span>, <span class="signal">rst_n</span>;
+    <span class="type">logic</span> [<span class="number">3</span>:<span class="number">0</span>] <span class="signal">req</span>, <span class="signal">grant</span>;
+    <span class="type">int</span>         <span class="signal">count</span>[<span class="number">4</span>];
+
+    <span class="type">rr_arbiter</span> #(<span class="number">4</span>) <span class="signal">dut</span> (.*);
+
+    <span class="comment">// Clock: 10ns period</span>
+    <span class="keyword">initial</span> <span class="signal">clk</span> = <span class="number">0</span>;
+    <span class="keyword">always</span> #<span class="number">5</span> <span class="signal">clk</span> = ~<span class="signal">clk</span>;
+
+    <span class="keyword">initial</span> <span class="keyword">begin</span>
+        <span class="comment">// TODO: Reset sequence</span>
+
+        <span class="comment">// TODO: Apply req=4'b1111 for 12 cycles</span>
+
+        <span class="comment">// TODO: Count grants per master</span>
+
+        <span class="comment">// TODO: Assert each count == 3</span>
+
+        $finish;
+    <span class="keyword">end</span>
+
+<span class="keyword">endmodule</span></code></pre>
+
+<button class="reveal-btn" onclick="document.getElementById('sol3').style.display='block'; this.style.display='none';">Show Solution</button>
+<div class="hidden-solution" id="sol3">
+<pre><code><span class="keyword">module</span> <span class="type">tb_rr_arbiter</span>;
+
+    <span class="type">logic</span>       <span class="signal">clk</span>, <span class="signal">rst_n</span>;
+    <span class="type">logic</span> [<span class="number">3</span>:<span class="number">0</span>] <span class="signal">req</span>, <span class="signal">grant</span>;
+    <span class="type">int</span>         <span class="signal">count</span>[<span class="number">4</span>];
+
+    <span class="type">rr_arbiter</span> #(<span class="number">4</span>) <span class="signal">dut</span> (.*);
+
+    <span class="keyword">initial</span> <span class="signal">clk</span> = <span class="number">0</span>;
+    <span class="keyword">always</span> #<span class="number">5</span> <span class="signal">clk</span> = ~<span class="signal">clk</span>;
+
+    <span class="keyword">initial</span> <span class="keyword">begin</span>
+        <span class="comment">// Initialize</span>
+        <span class="keyword">for</span> (<span class="keyword">int</span> <span class="signal">i</span> = <span class="number">0</span>; <span class="signal">i</span> < <span class="number">4</span>; <span class="signal">i</span>++) <span class="signal">count</span>[<span class="signal">i</span>] = <span class="number">0</span>;
+        <span class="signal">req</span> = <span class="number">4'b0000</span>;
+
+        <span class="comment">// Reset</span>
+        <span class="signal">rst_n</span> = <span class="number">0</span>;
+        @(<span class="keyword">posedge</span> <span class="signal">clk</span>);
+        @(<span class="keyword">posedge</span> <span class="signal">clk</span>);
+        <span class="signal">rst_n</span> = <span class="number">1</span>;
+
+        <span class="comment">// All masters requesting for 12 cycles</span>
+        <span class="signal">req</span> = <span class="number">4'b1111</span>;
+        <span class="keyword">repeat</span>(<span class="number">12</span>) <span class="keyword">begin</span>
+            @(<span class="keyword">posedge</span> <span class="signal">clk</span>);
+            #<span class="number">1</span>;  <span class="comment">// Small delay for grant to settle</span>
+            <span class="keyword">for</span> (<span class="keyword">int</span> <span class="signal">i</span> = <span class="number">0</span>; <span class="signal">i</span> < <span class="number">4</span>; <span class="signal">i</span>++)
+                <span class="keyword">if</span> (<span class="signal">grant</span>[<span class="signal">i</span>]) <span class="signal">count</span>[<span class="signal">i</span>]++;
+            $display(<span class="string">"req=%b grant=%b"</span>, <span class="signal">req</span>, <span class="signal">grant</span>);
+        <span class="keyword">end</span>
+
+        <span class="comment">// Verify fairness</span>
+        <span class="keyword">for</span> (<span class="keyword">int</span> <span class="signal">i</span> = <span class="number">0</span>; <span class="signal">i</span> < <span class="number">4</span>; <span class="signal">i</span>++) <span class="keyword">begin</span>
+            $display(<span class="string">"Master %0d: %0d grants"</span>, <span class="signal">i</span>, <span class="signal">count</span>[<span class="signal">i</span>]);
+            <span class="keyword">assert</span>(<span class="signal">count</span>[<span class="signal">i</span>] == <span class="number">3</span>)
+                <span class="keyword">else</span> $error(<span class="string">"Fairness violation! Master %0d got %0d grants"</span>,
+                            <span class="signal">i</span>, <span class="signal">count</span>[<span class="signal">i</span>]);
+        <span class="keyword">end</span>
+
+        $display(<span class="string">"✅ All fairness checks passed!"</span>);
+        $finish;
+    <span class="keyword">end</span>
+
+<span class="keyword">endmodule</span></code></pre>
+</div>
+
+<!-- ==================== BONUS ==================== -->
+<h2>🌟 Bonus: Weighted Round-Robin</h2>
+
+<p class="en">Extend your arbiter to support configurable weights per master. Each master gets <code>weight[i]</code> consecutive grants before the arbiter moves on.</p>
+<p class="ko" style="display:none;">아비터를 확장하여 마스터별 설정 가능한 가중치를 지원하세요. 각 마스터는 아비터가 다음으로 넘어가기 전에 <code>weight[i]</code>번의 연속 승인을 받습니다.</p>
+
+<div class="concept-box">
+    <h3>📋 Bonus Requirements</h3>
+    <ul>
+        <li class="en">Add <code>parameter int WEIGHT[N] = '{3, 1, 1, 1}</code></li>
+        <li class="ko" style="display:none;"><code>parameter int WEIGHT[N] = '{3, 1, 1, 1}</code> 추가</li>
+        <li class="en">Add a credit counter per master</li>
+        <li class="ko" style="display:none;">마스터별 크레딧 카운터 추가</li>
+        <li class="en">Decrement credit on grant; skip master when credit is 0</li>
+        <li class="ko" style="display:none;">승인 시 크레딧 감소; 크레딧 0일 때 마스터 건너뜀</li>
+        <li class="en">Reload all credits when a round completes</li>
+        <li class="ko" style="display:none;">라운드 완료 시 모든 크레딧 리로드</li>
+    </ul>
+</div>
+
+<button class="reveal-btn" onclick="document.getElementById('sol4').style.display='block'; this.style.display='none';">Show Solution</button>
+<div class="hidden-solution" id="sol4">
+<pre><code><span class="keyword">module</span> <span class="type">wrr_arbiter</span> #(
+    <span class="keyword">parameter</span> <span class="type">N</span> = <span class="number">4</span>,
+    <span class="keyword">parameter</span> <span class="type">int</span> <span class="signal">WEIGHT</span>[<span class="signal">N</span>] = '{<span class="number">3</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>}
+)(
+    <span class="keyword">input  logic</span>                     <span class="signal">clk</span>,
+    <span class="keyword">input  logic</span>                     <span class="signal">rst_n</span>,
+    <span class="keyword">input  logic</span> [<span class="signal">N</span>-<span class="number">1</span>:<span class="number">0</span>]            <span class="signal">req</span>,
+    <span class="keyword">output logic</span> [<span class="signal">N</span>-<span class="number">1</span>:<span class="number">0</span>]            <span class="signal">grant</span>
+);
+
+    <span class="type">logic</span> [$clog2(<span class="signal">N</span>)-<span class="number">1</span>:<span class="number">0</span>] <span class="signal">ptr</span>;
+    <span class="type">int</span> <span class="signal">credit</span>[<span class="signal">N</span>];
+
+    <span class="keyword">always_comb</span> <span class="keyword">begin</span>
+        <span class="signal">grant</span> = <span class="string">'0</span>;
+        <span class="comment">// Search from ptr, wrapping around</span>
+        <span class="keyword">for</span> (<span class="keyword">int</span> <span class="signal">i</span> = <span class="number">0</span>; <span class="signal">i</span> < <span class="signal">N</span>; <span class="signal">i</span>++) <span class="keyword">begin</span>
+            <span class="keyword">automatic</span> <span class="keyword">int</span> <span class="signal">idx</span> = (<span class="signal">ptr</span> + <span class="signal">i</span>) % <span class="signal">N</span>;
+            <span class="keyword">if</span> (<span class="signal">req</span>[<span class="signal">idx</span>] && <span class="signal">credit</span>[<span class="signal">idx</span>] > <span class="number">0</span>) <span class="keyword">begin</span>
+                <span class="signal">grant</span>[<span class="signal">idx</span>] = <span class="number">1'b1</span>;
+                <span class="keyword">break</span>;
+            <span class="keyword">end</span>
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span> <span class="keyword">or negedge</span> <span class="signal">rst_n</span>) <span class="keyword">begin</span>
+        <span class="keyword">if</span> (!<span class="signal">rst_n</span>) <span class="keyword">begin</span>
+            <span class="signal">ptr</span> <= <span class="string">'0</span>;
+            <span class="keyword">for</span> (<span class="keyword">int</span> <span class="signal">i</span> = <span class="number">0</span>; <span class="signal">i</span> < <span class="signal">N</span>; <span class="signal">i</span>++)
+                <span class="signal">credit</span>[<span class="signal">i</span>] <= <span class="signal">WEIGHT</span>[<span class="signal">i</span>];
+        <span class="keyword">end else if</span> (|<span class="signal">grant</span>) <span class="keyword">begin</span>
+            <span class="keyword">for</span> (<span class="keyword">int</span> <span class="signal">i</span> = <span class="number">0</span>; <span class="signal">i</span> < <span class="signal">N</span>; <span class="signal">i</span>++) <span class="keyword">begin</span>
+                <span class="keyword">if</span> (<span class="signal">grant</span>[<span class="signal">i</span>]) <span class="keyword">begin</span>
+                    <span class="signal">credit</span>[<span class="signal">i</span>] <= <span class="signal">credit</span>[<span class="signal">i</span>] - <span class="number">1</span>;
+                    <span class="comment">// If credit exhausted, move pointer</span>
+                    <span class="keyword">if</span> (<span class="signal">credit</span>[<span class="signal">i</span>] == <span class="number">1</span>)
+                        <span class="signal">ptr</span> <= (<span class="signal">i</span> + <span class="number">1</span>) % <span class="signal">N</span>;
+                <span class="keyword">end</span>
+            <span class="keyword">end</span>
+
+            <span class="comment">// Reload credits when all exhausted</span>
+            <span class="keyword">if</span> (<span class="signal">credit</span>[<span class="number">0</span>] + <span class="signal">credit</span>[<span class="number">1</span>] +
+                <span class="signal">credit</span>[<span class="number">2</span>] + <span class="signal">credit</span>[<span class="number">3</span>] <= <span class="number">1</span>) <span class="keyword">begin</span>
+                <span class="keyword">for</span> (<span class="keyword">int</span> <span class="signal">i</span> = <span class="number">0</span>; <span class="signal">i</span> < <span class="signal">N</span>; <span class="signal">i</span>++)
+                    <span class="signal">credit</span>[<span class="signal">i</span>] <= <span class="signal">WEIGHT</span>[<span class="signal">i</span>];
+            <span class="keyword">end</span>
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+
+<span class="keyword">endmodule</span></code></pre>
+</div>
+
+<!-- ==================== CHALLENGE ==================== -->
+<h2>🏆 Interview Challenge</h2>
+
+<div class="concept-box">
+    <h3>Common Interview Question</h3>
+    <p class="en"><strong>"Design a round-robin arbiter for N requesters. How would you handle the case where a master holds its request for multiple cycles?"</strong></p>
+    <p class="ko" style="display:none;"><strong>"N개의 요청자를 위한 라운드 로빈 아비터를 설계하세요. 마스터가 여러 사이클 동안 요청을 유지하는 경우는 어떻게 처리하시겠습니까?"</strong></p>
+    <p class="en">Think about: Should the arbiter only rotate when the current master <em>releases</em> its request? Or should it forcefully rotate every cycle? This leads to the concept of <strong>preemptive vs non-preemptive</strong> arbitration.</p>
+    <p class="ko" style="display:none;">생각해볼 점: 아비터는 현재 마스터가 요청을 <em>해제</em>할 때만 회전해야 할까요? 아니면 매 사이클마다 강제 회전해야 할까요? 이는 <strong>선점형(preemptive) vs 비선점형(non-preemptive)</strong> 중재 개념으로 이어집니다.</p>
+</div>
+
+<div class="warning-box">
+    <h3>⚠️ Try on EDA Playground!</h3>
+    <p class="en">Go to <a href="https://www.edaplayground.com" style="color:#588157;">edaplayground.com</a>, select SystemVerilog, and test your arbiter. Verify the grant pattern matches expectations for various request patterns!</p>
+    <p class="ko" style="display:none;"><a href="https://www.edaplayground.com" style="color:#588157;">edaplayground.com</a>에서 SystemVerilog를 선택하고 아비터를 테스트하세요. 다양한 요청 패턴에 대해 승인 패턴이 기대와 일치하는지 확인하세요!</p>
+</div>
+
+<div class="nav-links">
+    <a href="day-28-lesson.html">📖 Lesson</a>
+    <a href="day-28-quiz.html">📝 Quiz</a>
+</div>
+
+<script>
+let isKorean = false;
+function toggleLang() {
+    isKorean = !isKorean;
+    document.querySelectorAll('.en').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'none' : 'revert', 'important');
+    });
+    document.querySelectorAll('.ko').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'revert' : 'none', 'important');
+    });
+    document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+}
+</script>
+</body>
+</html>

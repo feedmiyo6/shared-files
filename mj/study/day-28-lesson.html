@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 28: Arbitration — Priority & Round-Robin</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    background: linear-gradient(135deg, #fefae0 0%, #faedcd 100%);
+    color: #3d405b;
+    line-height: 1.8;
+    padding: 24px;
+    max-width: 920px;
+    margin: 0 auto;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+h1 {
+    color: #5d4037;
+    border-bottom: 3px solid #c4a77d;
+    padding-bottom: 12px;
+    margin: 24px 0 16px;
+    font-size: 2em;
+}
+h2 {
+    color: #588157;
+    border-bottom: 2px solid #a3b18a;
+    padding-bottom: 8px;
+    margin: 32px 0 16px;
+}
+h3 {
+    color: #5d4037;
+    margin: 20px 0 12px;
+}
+p { margin: 12px 0; }
+ul, ol { margin: 12px 0 12px 24px; }
+li { margin: 4px 0; }
+pre {
+    background: #2d3436;
+    padding: 24px;
+    border-radius: 12px;
+    margin: 24px 0;
+    border: 3px solid #a3b18a;
+    overflow-x: auto;
+    font-size: 15px;
+    line-height: 1.6;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+    color: #f8f8f2;
+}
+code {
+    background: #e9f5db;
+    color: #3d405b;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+}
+pre code {
+    background: none;
+    color: inherit;
+    padding: 0;
+}
+.keyword { color: #ff79c6; font-weight: 600; }
+.type { color: #8be9fd; }
+.signal { color: #50fa7b; }
+.number { color: #ffb86c; }
+.comment { color: #6272a4; font-style: italic; }
+.string { color: #f1fa8c; }
+.concept-box {
+    background: #fff8f0;
+    border: 2px solid #c4a77d;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    color: #3d405b;
+}
+.concept-box h3 { color: #5d4037; margin-bottom: 12px; }
+.warning-box {
+    background: #fff8f0;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    border-left: 4px solid #ef4444;
+    color: #3d405b;
+}
+.warning-box h3 { color: #c53030; margin-bottom: 12px; }
+.tip-box {
+    background: #fff8f0;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    border-left: 4px solid #588157;
+    color: #3d405b;
+}
+.comparison-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+.comparison-table th {
+    background: #588157;
+    color: white;
+    padding: 12px;
+    text-align: left;
+}
+.comparison-table td {
+    background: #fff;
+    border: 1px solid #c4a77d;
+    padding: 12px;
+    color: #3d405b;
+}
+.comparison-table tr:nth-child(even) td {
+    background: #fff8f0;
+}
+.lang-toggle {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    background: #588157;
+    border: none;
+    border-radius: 24px;
+    padding: 10px 20px;
+    cursor: pointer;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    z-index: 1000;
+}
+.lang-toggle:hover { background: #3a5a40; }
+.ko { display: none; }
+.nav-links {
+    display: flex;
+    gap: 12px;
+    margin: 20px 0;
+    flex-wrap: wrap;
+}
+.nav-links a {
+    background: linear-gradient(135deg, #588157, #3a5a40);
+    color: #fff;
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 14px;
+}
+.nav-links a:hover { opacity: 0.9; }
+.diagram-box {
+    background: #fff;
+    border: 2px solid #a3b18a;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    text-align: center;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #3d405b;
+    overflow-x: auto;
+    white-space: pre;
+}
+@media (max-width: 768px) {
+    body { padding: 16px; }
+    h1 { font-size: 1.8em; }
+    pre { font-size: 14px; padding: 16px; }
+    .lang-toggle { padding: 8px 16px; font-size: 13px; }
+}
+</style>
+</head>
+<body>
+<button class="lang-toggle" onclick="toggleLang()">한국어</button>
+
+<h1>📅 Day 28: Arbitration — Priority & Round-Robin</h1>
+
+<div class="nav-links">
+    <a href="day-28-quiz.html">📝 Quiz</a>
+    <a href="day-28-practice.html">🔧 Practice</a>
+    <a href="day-27-lesson.html">← Day 27</a>
+</div>
+
+<p class="en">When multiple masters want to use a shared resource (bus, memory, FIFO), an <strong>arbiter</strong> decides who gets access. Today we study the two most fundamental arbitration schemes: <strong>fixed-priority</strong> and <strong>round-robin</strong>.</p>
+<p class="ko" style="display:none;">여러 마스터가 공유 자원(버스, 메모리, FIFO)을 사용하려 할 때, <strong>아비터(arbiter)</strong>가 누구에게 접근 권한을 줄지 결정합니다. 오늘은 가장 기본적인 두 가지 중재 방식: <strong>고정 우선순위(fixed-priority)</strong>와 <strong>라운드 로빈(round-robin)</strong>을 공부합니다.</p>
+
+<!-- ==================== SECTION 1 ==================== -->
+<h2>1. Why Arbitration Matters</h2>
+
+<p class="en">In any SoC, multiple blocks compete for shared resources. Without arbitration:</p>
+<p class="ko" style="display:none;">모든 SoC에서 여러 블록이 공유 자원을 두고 경쟁합니다. 중재 없이는:</p>
+
+<ul>
+    <li class="en">Two masters could drive the bus simultaneously → <strong>bus contention</strong></li>
+    <li class="ko" style="display:none;">두 마스터가 동시에 버스를 구동 → <strong>버스 충돌(bus contention)</strong></li>
+    <li class="en">Data corruption, undefined behavior</li>
+    <li class="ko" style="display:none;">데이터 손상, 정의되지 않은 동작</li>
+    <li class="en">Some masters could <strong>starve</strong> — never getting access</li>
+    <li class="ko" style="display:none;">일부 마스터가 <strong>기아 상태(starvation)</strong>에 빠질 수 있음 — 영원히 접근 못함</li>
+</ul>
+
+<div class="concept-box">
+    <h3>🎯 Arbiter's Job</h3>
+    <p class="en">Accept <strong>requests</strong> from N masters, produce exactly <strong>one grant</strong> at a time. The grant signal tells the winning master it can proceed.</p>
+    <p class="ko" style="display:none;">N개의 마스터로부터 <strong>요청(request)</strong>을 받아, 한 번에 정확히 <strong>하나의 승인(grant)</strong>만 발행합니다. 승인 신호는 해당 마스터가 진행할 수 있음을 알려줍니다.</p>
+</div>
+
+<div class="diagram-box">
+  Master 0 ──req[0]──┐                ┌──grant[0]──→ Master 0
+  Master 1 ──req[1]──┤   ┌────────┐  ├──grant[1]──→ Master 1
+  Master 2 ──req[2]──┼──→│ ARBITER │──┼──grant[2]──→ Master 2
+  Master 3 ──req[3]──┘   └────────┘  └──grant[3]──→ Master 3
+</div>
+
+<!-- ==================== SECTION 2 ==================== -->
+<h2>2. Fixed-Priority Arbitration</h2>
+
+<p class="en">The simplest scheme: assign each master a fixed priority level. The highest-priority requester always wins.</p>
+<p class="ko" style="display:none;">가장 간단한 방식: 각 마스터에 고정된 우선순위를 부여합니다. 가장 높은 우선순위의 요청자가 항상 이깁니다.</p>
+
+<h3>How It Works</h3>
+<p class="en">Priority: Master 0 > Master 1 > Master 2 > Master 3. If Master 0 requests, it always gets the grant — regardless of who else is requesting.</p>
+<p class="ko" style="display:none;">우선순위: Master 0 > Master 1 > Master 2 > Master 3. Master 0이 요청하면, 다른 누가 요청하든 항상 승인을 받습니다.</p>
+
+<pre><code><span class="keyword">module</span> <span class="type">priority_arbiter</span> #(
+    <span class="keyword">parameter</span> <span class="type">N</span> = <span class="number">4</span>
+)(
+    <span class="keyword">input  logic</span> [<span class="signal">N</span>-<span class="number">1</span>:<span class="number">0</span>] <span class="signal">req</span>,
+    <span class="keyword">output logic</span> [<span class="signal">N</span>-<span class="number">1</span>:<span class="number">0</span>] <span class="signal">grant</span>
+);
+
+    <span class="comment">// Combinational — no clock needed</span>
+    <span class="keyword">always_comb</span> <span class="keyword">begin</span>
+        <span class="signal">grant</span> = <span class="string">'0</span>;  <span class="comment">// Default: no grant</span>
+        <span class="keyword">for</span> (<span class="keyword">int</span> <span class="signal">i</span> = <span class="number">0</span>; <span class="signal">i</span> < <span class="signal">N</span>; <span class="signal">i</span>++) <span class="keyword">begin</span>
+            <span class="keyword">if</span> (<span class="signal">req</span>[<span class="signal">i</span>]) <span class="keyword">begin</span>
+                <span class="signal">grant</span>[<span class="signal">i</span>] = <span class="number">1'b1</span>;
+                <span class="keyword">break</span>;  <span class="comment">// First requester wins</span>
+            <span class="keyword">end</span>
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+
+<span class="keyword">endmodule</span></code></pre>
+
+<div class="tip-box">
+    <h3>💡 One-Liner Trick</h3>
+    <p class="en">You can also compute fixed-priority grant with bit manipulation: <code>grant = req & (~req + 1)</code>. This isolates the lowest set bit — equivalent to highest priority if bit 0 is highest.</p>
+    <p class="ko" style="display:none;">비트 연산으로도 고정 우선순위 승인을 계산할 수 있습니다: <code>grant = req & (~req + 1)</code>. 이것은 최하위 설정 비트를 분리합니다 — 비트 0이 최우선이면 동일한 결과입니다.</p>
+</div>
+
+<table class="comparison-table">
+    <tr><th>Scenario (req)</th><th>Grant</th><th>Winner</th></tr>
+    <tr><td><code>4'b1010</code></td><td><code>4'b0010</code></td><td>Master 1</td></tr>
+    <tr><td><code>4'b1111</code></td><td><code>4'b0001</code></td><td>Master 0</td></tr>
+    <tr><td><code>4'b1100</code></td><td><code>4'b0100</code></td><td>Master 2</td></tr>
+    <tr><td><code>4'b0001</code></td><td><code>4'b0001</code></td><td>Master 0</td></tr>
+</table>
+
+<div class="warning-box">
+    <h3>⚠️ Starvation Problem</h3>
+    <p class="en">If Master 0 always has a request pending, Masters 1-3 <strong>never</strong> get the grant. This is the fundamental weakness of fixed-priority — low-priority masters can starve indefinitely.</p>
+    <p class="ko" style="display:none;">Master 0이 항상 요청을 걸고 있으면, Master 1-3은 <strong>절대</strong> 승인을 받지 못합니다. 이것이 고정 우선순위의 근본적 약점입니다 — 낮은 우선순위의 마스터는 무한정 기아 상태에 빠질 수 있습니다.</p>
+</div>
+
+<!-- ==================== SECTION 3 ==================== -->
+<h2>3. Round-Robin Arbitration</h2>
+
+<p class="en">Round-robin solves starvation by rotating priority after each grant. The last winner gets the <em>lowest</em> priority next time.</p>
+<p class="ko" style="display:none;">라운드 로빈은 각 승인 후 우선순위를 회전시켜 기아 문제를 해결합니다. 마지막 승자는 다음 번에 <em>가장 낮은</em> 우선순위를 받습니다.</p>
+
+<h3>The Concept: Rotating Priority Pointer</h3>
+
+<div class="diagram-box">
+  Cycle 1:  Priority → [0] > 1 > 2 > 3    Grant → Master 0
+  Cycle 2:  Priority → [1] > 2 > 3 > 0    Grant → Master 1
+  Cycle 3:  Priority → [2] > 3 > 0 > 1    Grant → Master 2
+  Cycle 4:  Priority → [3] > 0 > 1 > 2    Grant → Master 3
+  Cycle 5:  Priority → [0] > 1 > 2 > 3    (wraps around)
+</div>
+
+<p class="en">A <strong>pointer register</strong> tracks who has highest priority. After granting, the pointer advances to the next master. This guarantees every master gets a fair share over time.</p>
+<p class="ko" style="display:none;"><strong>포인터 레지스터</strong>가 누가 최우선인지 추적합니다. 승인 후 포인터가 다음 마스터로 이동합니다. 이렇게 하면 시간이 지나면서 모든 마스터가 공정하게 접근할 수 있습니다.</p>
+
+<h3>Implementation: Mask-Based Round-Robin</h3>
+
+<p class="en">The classic approach uses a <strong>mask</strong> to suppress requests from masters that have already been served in this "round":</p>
+<p class="ko" style="display:none;">전통적인 방식은 <strong>마스크</strong>를 사용하여 이번 "라운드"에서 이미 서비스된 마스터의 요청을 억제합니다:</p>
+
+<pre><code><span class="keyword">module</span> <span class="type">round_robin_arbiter</span> #(
+    <span class="keyword">parameter</span> <span class="type">N</span> = <span class="number">4</span>
+)(
+    <span class="keyword">input  logic</span>              <span class="signal">clk</span>,
+    <span class="keyword">input  logic</span>              <span class="signal">rst_n</span>,
+    <span class="keyword">input  logic</span> [<span class="signal">N</span>-<span class="number">1</span>:<span class="number">0</span>]     <span class="signal">req</span>,
+    <span class="keyword">output logic</span> [<span class="signal">N</span>-<span class="number">1</span>:<span class="number">0</span>]     <span class="signal">grant</span>
+);
+
+    <span class="type">logic</span> [<span class="signal">N</span>-<span class="number">1</span>:<span class="number">0</span>] <span class="signal">mask</span>;        <span class="comment">// Tracks which masters still have priority</span>
+    <span class="type">logic</span> [<span class="signal">N</span>-<span class="number">1</span>:<span class="number">0</span>] <span class="signal">masked_req</span>;  <span class="comment">// req AND mask</span>
+    <span class="type">logic</span> [<span class="signal">N</span>-<span class="number">1</span>:<span class="number">0</span>] <span class="signal">mask_grant</span>;  <span class="comment">// Grant from masked requests</span>
+    <span class="type">logic</span> [<span class="signal">N</span>-<span class="number">1</span>:<span class="number">0</span>] <span class="signal">raw_grant</span>;   <span class="comment">// Grant from unmasked requests</span>
+
+    <span class="comment">// Masked request = only consider unserved masters</span>
+    <span class="keyword">assign</span> <span class="signal">masked_req</span> = <span class="signal">req</span> & <span class="signal">mask</span>;
+
+    <span class="comment">// Priority encode masked requests (isolate LSB)</span>
+    <span class="keyword">assign</span> <span class="signal">mask_grant</span> = <span class="signal">masked_req</span> & (~<span class="signal">masked_req</span> + <span class="number">1</span>);
+
+    <span class="comment">// Priority encode raw requests (fallback)</span>
+    <span class="keyword">assign</span> <span class="signal">raw_grant</span> = <span class="signal">req</span> & (~<span class="signal">req</span> + <span class="number">1</span>);
+
+    <span class="comment">// Use masked grant if any masked request exists, else raw</span>
+    <span class="keyword">assign</span> <span class="signal">grant</span> = (|<span class="signal">masked_req</span>) ? <span class="signal">mask_grant</span> : <span class="signal">raw_grant</span>;
+
+    <span class="comment">// Update mask after each grant</span>
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span> <span class="keyword">or negedge</span> <span class="signal">rst_n</span>) <span class="keyword">begin</span>
+        <span class="keyword">if</span> (!<span class="signal">rst_n</span>) <span class="keyword">begin</span>
+            <span class="signal">mask</span> <= {<span class="signal">N</span>{<span class="number">1'b1</span>}};  <span class="comment">// All enabled at reset</span>
+        <span class="keyword">end else if</span> (|<span class="signal">grant</span>) <span class="keyword">begin</span>
+            <span class="keyword">if</span> (|<span class="signal">masked_req</span>)
+                <span class="comment">// Clear granted bit and all lower bits in mask</span>
+                <span class="signal">mask</span> <= <span class="signal">mask</span> & ~((<span class="signal">mask_grant</span> << <span class="number">1</span>) - <span class="number">1</span>)
+                         & ~<span class="signal">mask_grant</span>;
+            <span class="keyword">else</span>
+                <span class="comment">// All masked out — reset mask, clear granted + below</span>
+                <span class="signal">mask</span> <= ~((<span class="signal">raw_grant</span> << <span class="number">1</span>) - <span class="number">1</span>) & ~<span class="signal">raw_grant</span>;
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+
+<span class="keyword">endmodule</span></code></pre>
+
+<div class="concept-box">
+    <h3>🔍 How the Mask Works — Step by Step</h3>
+    <p class="en">Let's trace through with N=4, all requesting (<code>req = 4'b1111</code>):</p>
+    <p class="ko" style="display:none;">N=4, 모두 요청 중인 경우(<code>req = 4'b1111</code>)를 따라가 봅시다:</p>
+    <table class="comparison-table">
+        <tr><th>Cycle</th><th>mask</th><th>masked_req</th><th>grant</th><th>Next mask</th></tr>
+        <tr><td>1</td><td><code>1111</code></td><td><code>1111</code></td><td><code>0001</code> (M0)</td><td><code>1110</code></td></tr>
+        <tr><td>2</td><td><code>1110</code></td><td><code>1110</code></td><td><code>0010</code> (M1)</td><td><code>1100</code></td></tr>
+        <tr><td>3</td><td><code>1100</code></td><td><code>1100</code></td><td><code>0100</code> (M2)</td><td><code>1000</code></td></tr>
+        <tr><td>4</td><td><code>1000</code></td><td><code>1000</code></td><td><code>1000</code> (M3)</td><td><code>0000</code></td></tr>
+        <tr><td>5</td><td><code>0000</code></td><td><code>0000</code></td><td><code>0001</code> (M0)</td><td><code>1110</code></td></tr>
+    </table>
+    <p class="en">Perfect fairness! Each master gets exactly one grant per round.</p>
+    <p class="ko" style="display:none;">완벽한 공정성! 각 마스터가 라운드당 정확히 한 번의 승인을 받습니다.</p>
+</div>
+
+<!-- ==================== SECTION 4 ==================== -->
+<h2>4. Pointer-Based Round-Robin (Alternative)</h2>
+
+<p class="en">Another common implementation uses a simple pointer register that advances after each grant. The "barrel shift" approach rotates requests so the next-in-line always appears at position 0:</p>
+<p class="ko" style="display:none;">또 다른 일반적인 구현은 각 승인 후 이동하는 간단한 포인터 레지스터를 사용합니다. "배럴 시프트" 방식은 요청을 회전시켜 다음 차례가 항상 위치 0에 나타나게 합니다:</p>
+
+<pre><code><span class="keyword">module</span> <span class="type">rr_arbiter_pointer</span> #(
+    <span class="keyword">parameter</span> <span class="type">N</span> = <span class="number">4</span>
+)(
+    <span class="keyword">input  logic</span>                     <span class="signal">clk</span>,
+    <span class="keyword">input  logic</span>                     <span class="signal">rst_n</span>,
+    <span class="keyword">input  logic</span> [<span class="signal">N</span>-<span class="number">1</span>:<span class="number">0</span>]            <span class="signal">req</span>,
+    <span class="keyword">output logic</span> [<span class="signal">N</span>-<span class="number">1</span>:<span class="number">0</span>]            <span class="signal">grant</span>
+);
+
+    <span class="type">logic</span> [$clog2(<span class="signal">N</span>)-<span class="number">1</span>:<span class="number">0</span>] <span class="signal">ptr</span>;  <span class="comment">// Points to highest-priority master</span>
+    <span class="type">logic</span> [<span class="number">2</span>*<span class="signal">N</span>-<span class="number">1</span>:<span class="number">0</span>]      <span class="signal">dbl_req</span>;
+    <span class="type">logic</span> [<span class="number">2</span>*<span class="signal">N</span>-<span class="number">1</span>:<span class="number">0</span>]      <span class="signal">dbl_grant</span>;
+
+    <span class="comment">// Double the request vector for wrap-around search</span>
+    <span class="keyword">assign</span> <span class="signal">dbl_req</span> = {<span class="signal">req</span>, <span class="signal">req</span>} >> <span class="signal">ptr</span>;
+
+    <span class="comment">// Isolate lowest set bit (highest-priority after rotation)</span>
+    <span class="keyword">assign</span> <span class="signal">dbl_grant</span> = <span class="signal">dbl_req</span> & (~<span class="signal">dbl_req</span> + <span class="number">1</span>);
+
+    <span class="comment">// Rotate grant back to original position</span>
+    <span class="keyword">always_comb</span> <span class="keyword">begin</span>
+        <span class="type">logic</span> [<span class="number">2</span>*<span class="signal">N</span>-<span class="number">1</span>:<span class="number">0</span>] <span class="signal">shifted</span>;
+        <span class="signal">shifted</span> = <span class="signal">dbl_grant</span> << <span class="signal">ptr</span>;
+        <span class="signal">grant</span>   = <span class="signal">shifted</span>[<span class="signal">N</span>-<span class="number">1</span>:<span class="number">0</span>] | <span class="signal">shifted</span>[<span class="number">2</span>*<span class="signal">N</span>-<span class="number">1</span>:<span class="signal">N</span>];
+    <span class="keyword">end</span>
+
+    <span class="comment">// Advance pointer after grant</span>
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span> <span class="keyword">or negedge</span> <span class="signal">rst_n</span>) <span class="keyword">begin</span>
+        <span class="keyword">if</span> (!<span class="signal">rst_n</span>)
+            <span class="signal">ptr</span> <= <span class="string">'0</span>;
+        <span class="keyword">else if</span> (|<span class="signal">grant</span>) <span class="keyword">begin</span>
+            <span class="comment">// Find which master was granted, advance ptr past it</span>
+            <span class="keyword">for</span> (<span class="keyword">int</span> <span class="signal">i</span> = <span class="number">0</span>; <span class="signal">i</span> < <span class="signal">N</span>; <span class="signal">i</span>++)
+                <span class="keyword">if</span> (<span class="signal">grant</span>[<span class="signal">i</span>])
+                    <span class="signal">ptr</span> <= (<span class="signal">i</span> + <span class="number">1</span>) % <span class="signal">N</span>;
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+
+<span class="keyword">endmodule</span></code></pre>
+
+<!-- ==================== SECTION 5 ==================== -->
+<h2>5. Comparison: Fixed-Priority vs Round-Robin</h2>
+
+<table class="comparison-table">
+    <tr>
+        <th>Property</th>
+        <th>Fixed-Priority</th>
+        <th>Round-Robin</th>
+    </tr>
+    <tr>
+        <td class="en"><strong>Fairness</strong></td>
+        <td class="ko" style="display:none;"><strong>공정성</strong></td>
+        <td class="en">❌ Unfair — high priority always wins</td>
+        <td class="ko" style="display:none;">❌ 불공정 — 높은 우선순위가 항상 이김</td>
+        <td class="en">✅ Fair — all masters served equally</td>
+        <td class="ko" style="display:none;">✅ 공정 — 모든 마스터 동등하게 서비스</td>
+    </tr>
+    <tr>
+        <td class="en"><strong>Starvation</strong></td>
+        <td class="ko" style="display:none;"><strong>기아 상태</strong></td>
+        <td class="en">⚠️ Low-priority can starve</td>
+        <td class="ko" style="display:none;">⚠️ 낮은 우선순위 기아 가능</td>
+        <td class="en">✅ Starvation-free</td>
+        <td class="ko" style="display:none;">✅ 기아 없음</td>
+    </tr>
+    <tr>
+        <td class="en"><strong>Latency</strong></td>
+        <td class="ko" style="display:none;"><strong>지연 시간</strong></td>
+        <td class="en">✅ Best-case for high priority</td>
+        <td class="ko" style="display:none;">✅ 높은 우선순위에 최적</td>
+        <td class="en">Bounded: max N-1 cycles wait</td>
+        <td class="ko" style="display:none;">제한적: 최대 N-1 사이클 대기</td>
+    </tr>
+    <tr>
+        <td class="en"><strong>Complexity</strong></td>
+        <td class="ko" style="display:none;"><strong>복잡도</strong></td>
+        <td>Combinational only</td>
+        <td>Needs state register</td>
+    </tr>
+    <tr>
+        <td class="en"><strong>Use Cases</strong></td>
+        <td class="ko" style="display:none;"><strong>사용 사례</strong></td>
+        <td class="en">Interrupts, real-time critical paths</td>
+        <td class="ko" style="display:none;">인터럽트, 실시간 중요 경로</td>
+        <td class="en">Bus access, shared memory, DMA</td>
+        <td class="ko" style="display:none;">버스 접근, 공유 메모리, DMA</td>
+    </tr>
+</table>
+
+<!-- ==================== SECTION 6 ==================== -->
+<h2>6. Weighted Round-Robin</h2>
+
+<p class="en">Sometimes pure fairness isn't ideal — some masters need more bandwidth. <strong>Weighted round-robin (WRR)</strong> gives each master a configurable number of grants per round:</p>
+<p class="ko" style="display:none;">순수한 공정성이 항상 이상적이지는 않습니다 — 일부 마스터는 더 많은 대역폭이 필요합니다. <strong>가중 라운드 로빈(WRR)</strong>은 각 마스터에 라운드당 설정 가능한 승인 횟수를 부여합니다:</p>
+
+<div class="concept-box">
+    <h3>💡 WRR Example</h3>
+    <p class="en">With weights [3, 1, 1, 1]:</p>
+    <p class="ko" style="display:none;">가중치 [3, 1, 1, 1]인 경우:</p>
+    <ul>
+        <li class="en">Master 0 gets 3 grants → Master 1 gets 1 → Master 2 gets 1 → Master 3 gets 1 → repeat</li>
+        <li class="ko" style="display:none;">Master 0: 3회 승인 → Master 1: 1회 → Master 2: 1회 → Master 3: 1회 → 반복</li>
+    </ul>
+    <p class="en">Master 0 gets 50% bandwidth, others get ~17% each. Use a <strong>credit counter</strong> per master — decrement on grant, skip when zero.</p>
+    <p class="ko" style="display:none;">Master 0은 대역폭의 50%, 나머지는 각각 ~17%를 받습니다. 마스터별 <strong>크레딧 카운터</strong>를 사용합니다 — 승인 시 감소, 0일 때 건너뜀.</p>
+</div>
+
+<!-- ==================== SECTION 7 ==================== -->
+<h2>7. Real-World Applications</h2>
+
+<div class="tip-box">
+    <h3>🌍 Where You'll See Arbiters</h3>
+    <ul>
+        <li class="en"><strong>AXI Interconnect:</strong> Multiple masters → shared slaves. Round-robin is default for most AXI interconnects.</li>
+        <li class="ko" style="display:none;"><strong>AXI 인터커넥트:</strong> 다수 마스터 → 공유 슬레이브. 대부분의 AXI 인터커넥트에서 라운드 로빈이 기본.</li>
+        <li class="en"><strong>Ethernet Switch:</strong> Multiple ports competing for egress — uses WRR or deficit round-robin (DRR).</li>
+        <li class="ko" style="display:none;"><strong>이더넷 스위치:</strong> 여러 포트가 출력을 두고 경쟁 — WRR 또는 DRR(적자 라운드 로빈) 사용.</li>
+        <li class="en"><strong>CPU Cache:</strong> Arbiter decides which core accesses shared L2/L3.</li>
+        <li class="ko" style="display:none;"><strong>CPU 캐시:</strong> 아비터가 어떤 코어가 공유 L2/L3에 접근하는지 결정.</li>
+        <li class="en"><strong>DMA Controller:</strong> Multiple DMA channels competing for memory bus.</li>
+        <li class="ko" style="display:none;"><strong>DMA 컨트롤러:</strong> 여러 DMA 채널이 메모리 버스를 두고 경쟁.</li>
+    </ul>
+</div>
+
+<div class="concept-box">
+    <h3>🔗 Connection to Your Work</h3>
+    <p class="en">In automotive Ethernet switches (like the ones at Microchip), arbitration is critical. When multiple ports send frames simultaneously, the switch fabric uses arbitration to decide which frame gets forwarded first. Understanding priority vs round-robin directly applies to QoS (Quality of Service) in networking!</p>
+    <p class="ko" style="display:none;">자동차 이더넷 스위치(예: Microchip 제품)에서 중재는 매우 중요합니다. 여러 포트가 동시에 프레임을 보낼 때, 스위치 패브릭은 중재를 사용하여 어떤 프레임을 먼저 전달할지 결정합니다. 우선순위 vs 라운드 로빈의 이해는 네트워킹의 QoS(서비스 품질)에 직접 적용됩니다!</p>
+</div>
+
+<!-- ==================== SECTION 8 ==================== -->
+<h2>8. Key Takeaways</h2>
+
+<div class="concept-box">
+    <h3>📌 Summary</h3>
+    <ol>
+        <li class="en"><strong>Arbiters</strong> resolve contention when multiple masters request a shared resource</li>
+        <li class="ko" style="display:none;"><strong>아비터</strong>는 여러 마스터가 공유 자원을 요청할 때 경합을 해결합니다</li>
+        <li class="en"><strong>Fixed-priority</strong> is simple (combinational) but causes starvation</li>
+        <li class="ko" style="display:none;"><strong>고정 우선순위</strong>는 간단하지만(조합 논리) 기아 상태를 유발합니다</li>
+        <li class="en"><strong>Round-robin</strong> is fair, starvation-free, uses a rotating pointer/mask</li>
+        <li class="ko" style="display:none;"><strong>라운드 로빈</strong>은 공정하고 기아가 없으며, 회전하는 포인터/마스크를 사용합니다</li>
+        <li class="en"><strong>Weighted round-robin</strong> adds configurable bandwidth allocation</li>
+        <li class="ko" style="display:none;"><strong>가중 라운드 로빈</strong>은 설정 가능한 대역폭 할당을 추가합니다</li>
+        <li class="en">The <code>grant = req & (~req + 1)</code> trick isolates the lowest set bit — fundamental to priority encoding</li>
+        <li class="ko" style="display:none;"><code>grant = req & (~req + 1)</code> 트릭은 최하위 설정 비트를 분리합니다 — 우선순위 인코딩의 핵심</li>
+        <li class="en">Tomorrow: <strong>Flow Control</strong> — buffering and credits!</li>
+        <li class="ko" style="display:none;">내일: <strong>흐름 제어(Flow Control)</strong> — 버퍼링과 크레딧!</li>
+    </ol>
+</div>
+
+<div class="nav-links">
+    <a href="day-28-quiz.html">📝 Take the Quiz</a>
+    <a href="day-28-practice.html">🔧 Practice Exercise</a>
+    <a href="day-27-lesson.html">← Day 27</a>
+</div>
+
+<script>
+let isKorean = false;
+function toggleLang() {
+    isKorean = !isKorean;
+    document.querySelectorAll('.en').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'none' : 'revert', 'important');
+    });
+    document.querySelectorAll('.ko').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'revert' : 'none', 'important');
+    });
+    document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 28 Quiz: Arbitration — Priority & Round-Robin</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    background: linear-gradient(135deg, #fefae0 0%, #faedcd 100%);
+    color: #3d405b;
+    line-height: 1.8;
+    padding: 24px;
+    max-width: 920px;
+    margin: 0 auto;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+h1 {
+    color: #5d4037;
+    border-bottom: 3px solid #c4a77d;
+    padding-bottom: 12px;
+    margin: 24px 0 16px;
+    font-size: 2em;
+}
+h2 {
+    color: #588157;
+    border-bottom: 2px solid #a3b18a;
+    padding-bottom: 8px;
+    margin: 32px 0 16px;
+}
+h3 { color: #5d4037; margin: 20px 0 12px; }
+p { margin: 12px 0; }
+code {
+    background: #e9f5db;
+    color: #3d405b;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+}
+.lang-toggle {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    background: #588157;
+    border: none;
+    border-radius: 24px;
+    padding: 10px 20px;
+    cursor: pointer;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    z-index: 1000;
+}
+.lang-toggle:hover { background: #3a5a40; }
+.ko { display: none; }
+.nav-links {
+    display: flex;
+    gap: 12px;
+    margin: 20px 0;
+    flex-wrap: wrap;
+}
+.nav-links a {
+    background: linear-gradient(135deg, #588157, #3a5a40);
+    color: #fff;
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 14px;
+}
+.nav-links a:hover { opacity: 0.9; }
+.question {
+    background: #fff8f0;
+    border: 2px solid #c4a77d;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+}
+.question h3 { margin-top: 0; }
+.options { list-style: none; padding: 0; margin: 12px 0; }
+.options li {
+    padding: 12px 16px;
+    margin: 8px 0;
+    border-radius: 8px;
+    cursor: pointer;
+    border: 2px solid #c4a77d;
+    background: #fff;
+    transition: all 0.2s;
+}
+.options li:hover { border-color: #588157; background: #e9f5db; }
+.options li.correct { background: #d4edda; border-color: #10b981; }
+.options li.wrong { background: #fde8e8; border-color: #ef4444; }
+.options li.disabled { pointer-events: none; opacity: 0.7; }
+.explanation {
+    display: none;
+    background: #fff;
+    border-left: 4px solid #588157;
+    padding: 15px;
+    margin: 12px 0;
+    border-radius: 0 8px 8px 0;
+}
+.score-box {
+    background: #fff8f0;
+    border: 3px solid #588157;
+    border-radius: 12px;
+    padding: 24px;
+    text-align: center;
+    margin: 30px 0;
+    display: none;
+}
+.score-box h2 { border: none; margin: 0 0 8px; }
+.score-box .score-num { font-size: 3em; color: #588157; font-weight: bold; }
+@media (max-width: 768px) {
+    body { padding: 16px; }
+    h1 { font-size: 1.8em; }
+    .lang-toggle { padding: 8px 16px; font-size: 13px; }
+}
+</style>
+</head>
+<body>
+<button class="lang-toggle" onclick="toggleLang()">한국어</button>
+
+<h1>📝 Day 28 Quiz: Arbitration</h1>
+
+<div class="nav-links">
+    <a href="day-28-lesson.html">📖 Lesson</a>
+    <a href="day-28-practice.html">🔧 Practice</a>
+</div>
+
+<div id="scoreBox" class="score-box">
+    <h2>Quiz Complete!</h2>
+    <div class="score-num" id="scoreNum"></div>
+    <p id="scoreMsg"></p>
+</div>
+
+<!-- Q1 -->
+<div class="question" id="q1">
+    <h3>Q1. What is the primary purpose of an arbiter?</h3>
+    <p class="en">Select the best answer:</p>
+    <p class="ko" style="display:none;">가장 적절한 답을 선택하세요:</p>
+    <ul class="options">
+        <li onclick="answer(1,this,'a')">A) To increase clock frequency</li>
+        <li onclick="answer(1,this,'b')">B) To decide which master gets access to a shared resource</li>
+        <li onclick="answer(1,this,'c')">C) To synchronize clock domains</li>
+        <li onclick="answer(1,this,'d')">D) To reset the system after a fault</li>
+    </ul>
+    <div class="explanation" id="exp1">
+        <p class="en"><strong>B is correct.</strong> An arbiter's job is to accept requests from multiple masters and grant access to exactly one at a time, preventing bus contention.</p>
+        <p class="ko" style="display:none;"><strong>B가 정답입니다.</strong> 아비터의 역할은 여러 마스터의 요청을 받아 한 번에 정확히 하나에게만 접근 권한을 부여하여 버스 충돌을 방지하는 것입니다.</p>
+    </div>
+</div>
+
+<!-- Q2 -->
+<div class="question" id="q2">
+    <h3>Q2. In a 4-bit fixed-priority arbiter (bit 0 = highest), what is the grant for <code>req = 4'b1010</code>?</h3>
+    <ul class="options">
+        <li onclick="answer(2,this,'a')">A) <code>4'b1000</code></li>
+        <li onclick="answer(2,this,'b')">B) <code>4'b0010</code></li>
+        <li onclick="answer(2,this,'c')">C) <code>4'b1010</code></li>
+        <li onclick="answer(2,this,'d')">D) <code>4'b0001</code></li>
+    </ul>
+    <div class="explanation" id="exp2">
+        <p class="en"><strong>B is correct.</strong> <code>req = 4'b1010</code> means Masters 1 and 3 are requesting. Bit 1 has higher priority than bit 3, so <code>grant = 4'b0010</code>.</p>
+        <p class="ko" style="display:none;"><strong>B가 정답입니다.</strong> <code>req = 4'b1010</code>은 마스터 1과 3이 요청 중임을 의미합니다. 비트 1이 비트 3보다 높은 우선순위이므로 <code>grant = 4'b0010</code>입니다.</p>
+    </div>
+</div>
+
+<!-- Q3 -->
+<div class="question" id="q3">
+    <h3>Q3. What is the fundamental weakness of fixed-priority arbitration?</h3>
+    <ul class="options">
+        <li onclick="answer(3,this,'a')">A) It requires too many flip-flops</li>
+        <li onclick="answer(3,this,'b')">B) It cannot handle more than 2 masters</li>
+        <li onclick="answer(3,this,'c')">C) Low-priority masters can starve</li>
+        <li onclick="answer(3,this,'d')">D) It is too slow for high-frequency designs</li>
+    </ul>
+    <div class="explanation" id="exp3">
+        <p class="en"><strong>C is correct.</strong> If a higher-priority master always has a request pending, lower-priority masters will never receive a grant — this is called starvation.</p>
+        <p class="ko" style="display:none;"><strong>C가 정답입니다.</strong> 높은 우선순위 마스터가 항상 요청을 걸고 있으면, 낮은 우선순위 마스터는 절대 승인을 받지 못합니다 — 이를 기아 상태(starvation)라고 합니다.</p>
+    </div>
+</div>
+
+<!-- Q4 -->
+<div class="question" id="q4">
+    <h3>Q4. How does round-robin arbitration prevent starvation?</h3>
+    <ul class="options">
+        <li onclick="answer(4,this,'a')">A) By using a higher clock frequency</li>
+        <li onclick="answer(4,this,'b')">B) By rotating priority so the last winner gets lowest priority next</li>
+        <li onclick="answer(4,this,'c')">C) By granting all requests simultaneously</li>
+        <li onclick="answer(4,this,'d')">D) By randomly selecting a master</li>
+    </ul>
+    <div class="explanation" id="exp4">
+        <p class="en"><strong>B is correct.</strong> After granting, the pointer/mask advances so the winning master becomes lowest priority. This guarantees every master eventually gets served.</p>
+        <p class="ko" style="display:none;"><strong>B가 정답입니다.</strong> 승인 후 포인터/마스크가 이동하여 승자가 최저 우선순위가 됩니다. 이렇게 하면 모든 마스터가 결국 서비스를 받게 됩니다.</p>
+    </div>
+</div>
+
+<!-- Q5 -->
+<div class="question" id="q5">
+    <h3>Q5. The expression <code>grant = req & (~req + 1)</code> does what?</h3>
+    <ul class="options">
+        <li onclick="answer(5,this,'a')">A) Sets all bits of grant</li>
+        <li onclick="answer(5,this,'b')">B) Isolates the highest set bit</li>
+        <li onclick="answer(5,this,'c')">C) Isolates the lowest set bit</li>
+        <li onclick="answer(5,this,'d')">D) Inverts the request vector</li>
+    </ul>
+    <div class="explanation" id="exp5">
+        <p class="en"><strong>C is correct.</strong> <code>~req + 1</code> is the two's complement (negation). ANDing with the original isolates the lowest set bit. This is a fundamental bit manipulation trick used in priority encoders.</p>
+        <p class="ko" style="display:none;"><strong>C가 정답입니다.</strong> <code>~req + 1</code>은 2의 보수(부정)입니다. 원본과 AND하면 최하위 설정 비트가 분리됩니다. 이것은 우선순위 인코더에 사용되는 기본적인 비트 조작 기법입니다.</p>
+    </div>
+</div>
+
+<!-- Q6 -->
+<div class="question" id="q6">
+    <h3>Q6. In a 4-master round-robin arbiter, what is the maximum number of cycles a master must wait before getting a grant?</h3>
+    <ul class="options">
+        <li onclick="answer(6,this,'a')">A) 1 cycle</li>
+        <li onclick="answer(6,this,'b')">B) 3 cycles (N-1)</li>
+        <li onclick="answer(6,this,'c')">C) 4 cycles (N)</li>
+        <li onclick="answer(6,this,'d')">D) Unbounded</li>
+    </ul>
+    <div class="explanation" id="exp6">
+        <p class="en"><strong>B is correct.</strong> In the worst case, the other N-1 masters all get served before you. With 4 masters, you wait at most 3 cycles.</p>
+        <p class="ko" style="display:none;"><strong>B가 정답입니다.</strong> 최악의 경우, 다른 N-1개의 마스터가 모두 먼저 서비스됩니다. 4개 마스터의 경우 최대 3사이클 대기합니다.</p>
+    </div>
+</div>
+
+<!-- Q7 -->
+<div class="question" id="q7">
+    <h3>Q7. What does the "mask" do in a mask-based round-robin arbiter?</h3>
+    <ul class="options">
+        <li onclick="answer(7,this,'a')">A) Blocks the clock to certain masters</li>
+        <li onclick="answer(7,this,'b')">B) Suppresses requests from already-served masters in the current round</li>
+        <li onclick="answer(7,this,'c')">C) Encrypts the grant signal</li>
+        <li onclick="answer(7,this,'d')">D) Doubles the priority of the next master</li>
+    </ul>
+    <div class="explanation" id="exp7">
+        <p class="en"><strong>B is correct.</strong> The mask clears bits for masters that have already received a grant in this round. When all bits are cleared, the mask resets and a new round begins.</p>
+        <p class="ko" style="display:none;"><strong>B가 정답입니다.</strong> 마스크는 이번 라운드에서 이미 승인을 받은 마스터의 비트를 클리어합니다. 모든 비트가 클리어되면 마스크가 리셋되고 새 라운드가 시작됩니다.</p>
+    </div>
+</div>
+
+<!-- Q8 -->
+<div class="question" id="q8">
+    <h3>Q8. Fixed-priority arbitration is purely combinational (no clock needed). True or False?</h3>
+    <ul class="options">
+        <li onclick="answer(8,this,'a')">A) True</li>
+        <li onclick="answer(8,this,'b')">B) False</li>
+    </ul>
+    <div class="explanation" id="exp8">
+        <p class="en"><strong>A (True) is correct.</strong> Fixed-priority arbitration is a simple priority encoder — pure combinational logic with no state. Round-robin, by contrast, needs a register to track the rotating priority.</p>
+        <p class="ko" style="display:none;"><strong>A (True)가 정답입니다.</strong> 고정 우선순위 중재는 간단한 우선순위 인코더 — 상태가 없는 순수 조합 논리입니다. 반면 라운드 로빈은 회전하는 우선순위를 추적하는 레지스터가 필요합니다.</p>
+    </div>
+</div>
+
+<!-- Q9 -->
+<div class="question" id="q9">
+    <h3>Q9. In weighted round-robin with weights [3, 1, 1, 1], what percentage of bandwidth does Master 0 get?</h3>
+    <ul class="options">
+        <li onclick="answer(9,this,'a')">A) 25%</li>
+        <li onclick="answer(9,this,'b')">B) 33%</li>
+        <li onclick="answer(9,this,'c')">C) 50%</li>
+        <li onclick="answer(9,this,'d')">D) 75%</li>
+    </ul>
+    <div class="explanation" id="exp9">
+        <p class="en"><strong>C is correct.</strong> Total weight = 3+1+1+1 = 6. Master 0 gets 3/6 = 50% of the bandwidth.</p>
+        <p class="ko" style="display:none;"><strong>C가 정답입니다.</strong> 총 가중치 = 3+1+1+1 = 6. Master 0은 3/6 = 50%의 대역폭을 받습니다.</p>
+    </div>
+</div>
+
+<!-- Q10 -->
+<div class="question" id="q10">
+    <h3>Q10. Which arbitration scheme would you use for interrupt handling where some interrupts are more critical?</h3>
+    <ul class="options">
+        <li onclick="answer(10,this,'a')">A) Round-robin</li>
+        <li onclick="answer(10,this,'b')">B) Fixed-priority</li>
+        <li onclick="answer(10,this,'c')">C) Random</li>
+        <li onclick="answer(10,this,'d')">D) No arbitration needed</li>
+    </ul>
+    <div class="explanation" id="exp10">
+        <p class="en"><strong>B is correct.</strong> Interrupts have inherent urgency levels (e.g., NMI > timer > keyboard). Fixed-priority ensures the most critical interrupt is always handled first.</p>
+        <p class="ko" style="display:none;"><strong>B가 정답입니다.</strong> 인터럽트는 본질적인 긴급성 수준이 있습니다(예: NMI > 타이머 > 키보드). 고정 우선순위는 가장 중요한 인터럽트가 항상 먼저 처리되도록 보장합니다.</p>
+    </div>
+</div>
+
+<!-- Q11 -->
+<div class="question" id="q11">
+    <h3>Q11. In the mask-based round-robin, what happens when <code>masked_req</code> is all zeros?</h3>
+    <ul class="options">
+        <li onclick="answer(11,this,'a')">A) The arbiter stalls until a new request arrives</li>
+        <li onclick="answer(11,this,'b')">B) It falls back to unmasked (raw) priority encoding and resets the mask</li>
+        <li onclick="answer(11,this,'c')">C) All grants are asserted simultaneously</li>
+        <li onclick="answer(11,this,'d')">D) The system resets</li>
+    </ul>
+    <div class="explanation" id="exp11">
+        <p class="en"><strong>B is correct.</strong> When all served masters are masked out, the arbiter falls back to <code>raw_grant</code> (unmasked priority encoding) and resets the mask. This starts a new round.</p>
+        <p class="ko" style="display:none;"><strong>B가 정답입니다.</strong> 서비스된 모든 마스터가 마스크 아웃되면, 아비터는 <code>raw_grant</code>(마스크되지 않은 우선순위 인코딩)로 폴백하고 마스크를 리셋합니다. 새 라운드가 시작됩니다.</p>
+    </div>
+</div>
+
+<!-- Q12 -->
+<div class="question" id="q12">
+    <h3>Q12. Where would you typically find round-robin arbitration in an SoC?</h3>
+    <ul class="options">
+        <li onclick="answer(12,this,'a')">A) Clock generation PLL</li>
+        <li onclick="answer(12,this,'b')">B) AXI bus interconnect for shared memory access</li>
+        <li onclick="answer(12,this,'c')">C) Power-on reset circuit</li>
+        <li onclick="answer(12,this,'d')">D) Voltage regulator</li>
+    </ul>
+    <div class="explanation" id="exp12">
+        <p class="en"><strong>B is correct.</strong> AXI interconnects use round-robin (or configurable arbitration) when multiple bus masters compete for the same slave (e.g., shared SRAM). This ensures fair bandwidth allocation.</p>
+        <p class="ko" style="display:none;"><strong>B가 정답입니다.</strong> AXI 인터커넥트는 여러 버스 마스터가 같은 슬레이브(예: 공유 SRAM)를 두고 경쟁할 때 라운드 로빈(또는 설정 가능한 중재)을 사용합니다. 이는 공정한 대역폭 할당을 보장합니다.</p>
+    </div>
+</div>
+
+<script>
+const answers = {1:'b',2:'b',3:'c',4:'b',5:'c',6:'b',7:'b',8:'a',9:'c',10:'b',11:'b',12:'b'};
+let score = 0;
+let answered = 0;
+const total = Object.keys(answers).length;
+
+function answer(q, el, choice) {
+    const opts = el.parentElement.querySelectorAll('li');
+    if ([...opts].some(o => o.classList.contains('correct') || o.classList.contains('wrong'))) return;
+    
+    opts.forEach(o => o.classList.add('disabled'));
+    
+    if (choice === answers[q]) {
+        el.classList.add('correct');
+        score++;
+    } else {
+        el.classList.add('wrong');
+        opts.forEach(o => {
+            if (o.textContent.charAt(0).toLowerCase() === answers[q]) o.classList.add('correct');
+        });
+    }
+    
+    document.getElementById('exp' + q).style.display = 'block';
+    answered++;
+    
+    if (answered === total) {
+        const box = document.getElementById('scoreBox');
+        box.style.display = 'block';
+        document.getElementById('scoreNum').textContent = score + ' / ' + total;
+        const pct = Math.round(score/total*100);
+        let msg = pct >= 90 ? '🌟 Excellent! Master-level arbitration knowledge!' :
+                  pct >= 70 ? '👍 Great job! Solid understanding of arbitration.' :
+                  pct >= 50 ? '📚 Good start! Review the lesson for the questions you missed.' :
+                  '💪 Keep studying! Re-read the lesson and try again.';
+        document.getElementById('scoreMsg').textContent = msg;
+        box.scrollIntoView({ behavior: 'smooth' });
+    }
+}
+
+let isKorean = false;
+function toggleLang() {
+    isKorean = !isKorean;
+    document.querySelectorAll('.en').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'none' : 'revert', 'important');
+    });
+    document.querySelectorAll('.ko').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'revert' : 'none', 'important');
+    });
+    document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+}
+</script>
+</body>
+</html>
