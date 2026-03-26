@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fridgenie — Full Feature Audit Report</title>
+<style>
+  :root {
+    --bg: #FEFAF3;
+    --surface: #FFFFFF;
+    --primary: #2D6A4F;
+    --secondary: #D4A373;
+    --accent: #E76F51;
+    --text: #2D2D2D;
+    --muted: #7A7A7A;
+    --green: #40916C;
+    --red: #E63946;
+    --yellow: #F4A261;
+    --blue: #457B9D;
+    --border: #E8E0D4;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+  .container { max-width: 960px; margin: 0 auto; padding: 24px 16px; }
+  h1 { font-family: 'DM Serif Display', Georgia, serif; font-size: 28px; color: var(--primary); margin-bottom: 4px; }
+  h2 { font-family: 'DM Serif Display', Georgia, serif; font-size: 22px; color: var(--primary); margin: 32px 0 16px; border-bottom: 2px solid var(--border); padding-bottom: 8px; }
+  h3 { font-size: 16px; font-weight: 700; margin: 20px 0 8px; color: var(--text); }
+  .subtitle { color: var(--muted); font-size: 14px; margin-bottom: 24px; }
+  .lang-toggle { position: fixed; top: 16px; right: 16px; background: var(--primary); color: white; border: none; padding: 8px 16px; border-radius: 20px; cursor: pointer; font-size: 13px; font-weight: 600; z-index: 100; box-shadow: 0 2px 8px rgba(0,0,0,0.15); }
+  .lang-toggle:hover { opacity: 0.9; }
+  .ko { display: none; }
+  .ko.show { display: inline !important; }
+  .en.hide { display: none !important; }
+
+  .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin: 16px 0; }
+  .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px; text-align: center; }
+  .stat-val { font-size: 28px; font-weight: 800; color: var(--primary); }
+  .stat-label { font-size: 12px; color: var(--muted); margin-top: 4px; }
+
+  .feature { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 20px; margin: 12px 0; }
+  .feature-header { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+  .feature-icon { font-size: 24px; }
+  .feature-title { font-size: 16px; font-weight: 700; flex: 1; }
+  .status-badge { display: inline-block; padding: 3px 10px; border-radius: 10px; font-size: 11px; font-weight: 700; text-transform: uppercase; }
+  .status-ok { background: #D8F3DC; color: #1B4332; }
+  .status-warn { background: #FFF3CD; color: #856404; }
+  .status-issue { background: #F8D7DA; color: #721C24; }
+  .status-new { background: #D0E8FF; color: #084298; }
+
+  .flow-table { width: 100%; border-collapse: collapse; margin: 10px 0; font-size: 13px; }
+  .flow-table th { text-align: left; padding: 8px 10px; background: var(--primary); color: white; font-weight: 600; }
+  .flow-table td { padding: 8px 10px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  .flow-table tr:last-child td { border-bottom: none; }
+  .check { color: var(--green); font-weight: 700; }
+  .cross { color: var(--red); font-weight: 700; }
+  .warn-icon { color: var(--yellow); font-weight: 700; }
+
+  .flow-diagram { background: #F0F7F4; border-radius: 12px; padding: 16px; margin: 12px 0; font-family: monospace; font-size: 13px; line-height: 1.8; white-space: pre-wrap; color: var(--primary); }
+
+  .fix-item { display: flex; gap: 8px; margin: 6px 0; font-size: 13px; }
+  .fix-item::before { content: '✅'; }
+  .fix-pending::before { content: '⏳'; }
+
+  .section-summary { background: linear-gradient(135deg, #F0F7F4, #FEFAF3); border-left: 4px solid var(--primary); padding: 16px; border-radius: 0 12px 12px 0; margin: 16px 0; font-size: 14px; }
+
+  .db-table { font-size: 12px; width: 100%; border-collapse: collapse; }
+  .db-table th { background: var(--secondary); color: white; padding: 6px 8px; text-align: left; font-size: 11px; }
+  .db-table td { padding: 6px 8px; border-bottom: 1px solid var(--border); font-family: monospace; font-size: 12px; }
+
+  .pipeline-arrow { text-align: center; font-size: 20px; color: var(--primary); margin: 4px 0; }
+
+  @media (max-width: 600px) {
+    .stat-grid { grid-template-columns: repeat(2, 1fr); }
+    .flow-table { font-size: 12px; }
+    .flow-table th, .flow-table td { padding: 6px; }
+  }
+</style>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+<button class="lang-toggle" onclick="toggleLang()">한국어</button>
+<div class="container">
+
+<h1>🧊 Fridgenie — <span class="en">Full Feature Audit Report</span><span class="ko">전체 기능 감사 보고서</span></h1>
+<p class="subtitle"><span class="en">Generated March 26, 2026 · Backend + Frontend + Database Loop Analysis</span><span class="ko">2026년 3월 26일 생성 · 백엔드 + 프론트엔드 + 데이터베이스 루프 분석</span></p>
+
+<!-- ═══ OVERVIEW STATS ═══ -->
+<h2>📊 <span class="en">System Overview</span><span class="ko">시스템 개요</span></h2>
+<div class="stat-grid">
+  <div class="stat-card"><div class="stat-val">25,785</div><div class="stat-label"><span class="en">Lines of Dart</span><span class="ko">Dart 코드 라인</span></div></div>
+  <div class="stat-card"><div class="stat-val">10</div><div class="stat-label"><span class="en">Edge Functions</span><span class="ko">엣지 함수</span></div></div>
+  <div class="stat-card"><div class="stat-val">22</div><div class="stat-label"><span class="en">DB Migrations</span><span class="ko">DB 마이그레이션</span></div></div>
+  <div class="stat-card"><div class="stat-val">15+</div><div class="stat-label"><span class="en">Tables</span><span class="ko">테이블</span></div></div>
+  <div class="stat-card"><div class="stat-val">449</div><div class="stat-label"><span class="en">Seed Recipes</span><span class="ko">시드 레시피</span></div></div>
+  <div class="stat-card"><div class="stat-val">299</div><div class="stat-label"><span class="en">Dish Pool</span><span class="ko">요리 풀</span></div></div>
+  <div class="stat-card"><div class="stat-val">697</div><div class="stat-label"><span class="en">Cached Dishes</span><span class="ko">캐시된 요리</span></div></div>
+  <div class="stat-card"><div class="stat-val">2,692</div><div class="stat-label"><span class="en">Source Links</span><span class="ko">소스 링크</span></div></div>
+</div>
+
+<div class="section-summary">
+  <strong><span class="en">Database Health:</span><span class="ko">데이터베이스 상태:</span></strong>
+  <span class="en">13 users, 14 households, 524 pantry items, 20 shopping list items, 45 recipe history entries, 2 cooking logs, 8 clean recipe caches, 2 favorites, 2 customizations.</span>
+  <span class="ko">13명 사용자, 14가구, 524개 팬트리 항목, 20개 쇼핑 목록 항목, 45개 레시피 히스토리, 2개 요리 로그, 8개 클린 레시피 캐시, 2개 즐겨찾기, 2개 커스텀.</span>
+</div>
+
+<!-- ═══ FEATURE 1: AUTH ═══ -->
+<h2>🔐 <span class="en">Features & Loop Analysis</span><span class="ko">기능 및 루프 분석</span></h2>
+
+<div class="feature">
+  <div class="feature-header">
+    <span class="feature-icon">🔑</span>
+    <span class="feature-title"><span class="en">1. Authentication & Onboarding</span><span class="ko">1. 인증 및 온보딩</span></span>
+    <span class="status-badge status-ok">✅ <span class="en">Healthy</span><span class="ko">정상</span></span>
+  </div>
+  <table class="flow-table">
+    <tr><th><span class="en">Layer</span><span class="ko">레이어</span></th><th><span class="en">Component</span><span class="ko">구성요소</span></th><th><span class="en">Status</span><span class="ko">상태</span></th></tr>
+    <tr><td>Frontend</td><td>login_screen, signup_screen, forgot_password, email_confirmation, social_auth_buttons</td><td><span class="check">✅</span></td></tr>
+    <tr><td>Backend</td><td>Supabase Auth (email + social)</td><td><span class="check">✅</span></td></tr>
+    <tr><td>Database</td><td>auth.users → profiles → households</td><td><span class="check">✅</span></td></tr>
+    <tr><td>Onboarding</td><td>onboarding_screen → setup_preferences → quick_stock → household_setup</td><td><span class="check">✅</span></td></tr>
+  </table>
+  <p style="font-size:13px;color:var(--muted);margin-top:8px;"><span class="en">Loop complete: signup → profile creation → household assignment → cuisine/dietary preferences saved → ready for suggestions.</span><span class="ko">루프 완료: 가입 → 프로필 생성 → 가구 배정 → 요리/식이 선호도 저장 → 추천 준비.</span></p>
+</div>
+
+<!-- ═══ FEATURE 2: PANTRY ═══ -->
+<div class="feature">
+  <div class="feature-header">
+    <span class="feature-icon">🥫</span>
+    <span class="feature-title"><span class="en">2. Pantry Management</span><span class="ko">2. 팬트리 관리</span></span>
+    <span class="status-badge status-ok">✅ <span class="en">Healthy</span><span class="ko">정상</span></span>
+  </div>
+  <table class="flow-table">
+    <tr><th><span class="en">Layer</span><span class="ko">레이어</span></th><th><span class="en">Component</span><span class="ko">구성요소</span></th><th><span class="en">Status</span><span class="ko">상태</span></th></tr>
+    <tr><td>Frontend</td><td>pantry_screen, fridge_screen, add_item_screen, item_detail_screen</td><td><span class="check">✅</span></td></tr>
+    <tr><td>Widgets</td><td>pantry_item_tile, category_section, expiry_badge, expiry_indicator, traffic_light_indicator</td><td><span class="check">✅</span></td></tr>
+    <tr><td>Backend</td><td>pantry_provider, pending_changes_provider</td><td><span class="check">✅</span></td></tr>
+    <tr><td>Database</td><td>pantry_items (524 rows), categories, expiry tracking</td><td><span class="check">✅</span></td></tr>
+  </table>
+  <p style="font-size:13px;color:var(--muted);margin-top:8px;"><span class="en">Loop: Add items (manual/voice/receipt) → stored with expiry → feeds recipe matching → "I Cooked This!" deducts ingredients.</span><span class="ko">루프: 항목 추가 (수동/음성/영수증) → 유통기한과 함께 저장 → 레시피 매칭에 활용 → "요리했어요!" 재료 차감.</span></p>
+</div>
+
+<!-- ═══ FEATURE 3: RECEIPT SCAN ═══ -->
+<div class="feature">
+  <div class="feature-header">
+    <span class="feature-icon">🧾</span>
+    <span class="feature-title"><span class="en">3. Receipt Scanning (OCR)</span><span class="ko">3. 영수증 스캔 (OCR)</span></span>
+    <span class="status-badge status-ok">✅ <span class="en">Healthy</span><span class="ko">정상</span></span>
+  </div>
+  <table class="flow-table">
+    <tr><th><span class="en">Layer</span><span class="ko">레이어</span></th><th><span class="en">Component</span><span class="ko">구성요소</span></th><th><span class="en">Status</span><span class="ko">상태</span></th></tr>
+    <tr><td>Frontend</td><td>receipt_scan_screen, receipt_preview_screen, ingredient_confirmation_sheet</td><td><span class="check">✅</span></td></tr>
+    <tr><td>Edge Fn</td><td>receipt-ocr (GPT-4o, classifies ingredient/grocery/non_food)</td><td><span class="check">✅</span></td></tr>
+    <tr><td>Database</td><td>Scanned items → pantry_items (via pending_changes)</td><td><span class="check">✅</span></td></tr>
+  </table>
+  <p style="font-size:13px;color:var(--muted);margin-top:8px;"><span class="en">Loop: Camera → OCR → classified items preview (cooking ingredients vs. other) → confirm → added to pantry. Image quality: 92%, max 3000×4000.</span><span class="ko">루프: 카메라 → OCR → 분류된 항목 미리보기 (요리 재료 vs. 기타) → 확인 → 팬트리에 추가. 이미지 품질: 92%, 최대 3000×4000.</span></p>
+</div>
+
+<!-- ═══ FEATURE 4: VOICE INPUT ═══ -->
+<div class="feature">
+  <div class="feature-header">
+    <span class="feature-icon">🎙️</span>
+    <span class="feature-title"><span class="en">4. Voice Input</span><span class="ko">4. 음성 입력</span></span>
+    <span class="status-badge status-ok">✅ <span class="en">Healthy</span><span class="ko">정상</span></span>
+  </div>
+  <table class="flow-table">
+    <tr><th><span class="en">Layer</span><span class="ko">레이어</span></th><th><span class="en">Component</span><span class="ko">구성요소</span></th><th><span class="en">Status</span><span class="ko">상태</span></th></tr>
+    <tr><td>Frontend</td><td>voice_input_screen</td><td><span class="check">✅</span></td></tr>
+    <tr><td>Edge Fn</td><td>voice-transcribe (Whisper + GPT)</td><td><span class="check">✅</span></td></tr>
+    <tr><td>Database</td><td>voice_usage (tracking), transcribed → pantry_items</td><td><span class="check">✅</span></td></tr>
+  </table>
+</div>
+
+<!-- ═══ FEATURE 5: AI RECIPE DISCOVERY ═══ -->
+<div class="feature">
+  <div class="feature-header">
+    <span class="feature-icon">🤖</span>
+    <span class="feature-title"><span class="en">5. AI Recipe Discovery (Main Flow)</span><span class="ko">5. AI 레시피 발견 (메인 플로우)</span></span>
+    <span class="status-badge status-ok">✅ <span class="en">Healthy</span><span class="ko">정상</span></span>
+  </div>
+  <table class="flow-table">
+    <tr><th><span class="en">Layer</span><span class="ko">레이어</span></th><th><span class="en">Component</span><span class="ko">구성요소</span></th><th><span class="en">Status</span><span class="ko">상태</span></th></tr>
+    <tr><td>Frontend</td><td>recipes_screen → recipe_results_screen → dish_detail_screen</td><td><span class="check">✅</span></td></tr>
+    <tr><td>Provider</td><td>recipe_ai_provider (pantry-match scoring)</td><td><span class="check">✅</span></td></tr>
+    <tr><td>Edge Fn</td><td>recipe-suggest (GPT-4.1-mini/nano two-tier)</td><td><span class="check">✅</span></td></tr>
+    <tr><td>Database</td><td>dish_cache (697), recipe_sources (2,692), user_recipe_history (45)</td><td><span class="check">✅</span></td></tr>
+  </table>
+  <div class="flow-diagram">User pantry → AI suggests 5 dishes with match % → cached in dish_cache
+→ User taps dish → sources fetched (Brave Search) → cached in recipe_sources
+→ User can view source links OR Fridgenie recipe OR Clean Version
+→ Browsing logged to user_recipe_history</div>
+</div>
+
+<!-- ═══ FEATURE 6: SOURCE LINKS + CLEAN RECIPE ═══ -->
+<div class="feature">
+  <div class="feature-header">
+    <span class="feature-icon">📖</span>
+    <span class="feature-title"><span class="en">6. Recipe Sources & Clean Version</span><span class="ko">6. 레시피 소스 및 클린 버전</span></span>
+    <span class="status-badge status-warn">⚠️ <span class="en">Partial Issues</span><span class="ko">부분 문제</span></span>
+  </div>
+  <table class="flow-table">
+    <tr><th><span class="en">Layer</span><span class="ko">레이어</span></th><th><span class="en">Component</span><span class="ko">구성요소</span></th><th><span class="en">Status</span><span class="ko">상태</span></th></tr>
+    <tr><td>Frontend</td><td>dish_detail_screen (_SourceCard), clean_recipe_screen</td><td><span class="check">✅</span></td></tr>
+    <tr><td>Edge Fn</td><td>fetch-sources (Brave Search), clean-recipe (GPT-4.1-mini)</td><td><span class="warn-icon">⚠️</span></td></tr>
+    <tr><td>Database</td><td>recipe_sources (2,692), clean_recipes (8 cached)</td><td><span class="check">✅</span></td></tr>
+  </table>
+  <h3 style="color:var(--accent);">⚠️ <span class="en">Known Issues</span><span class="ko">알려진 문제</span></h3>
+  <ul style="font-size:13px;margin:8px 0 0 20px;">
+    <li><span class="en"><strong>Clean Recipe extraction fails frequently.</strong> Many recipe sites block bot User-Agents (403/406). The function uses "Fridgenie-Bot/1.0" which triggers bot detection. JS-rendered sites (React/Next.js) return empty HTML shells.</span><span class="ko"><strong>클린 레시피 추출이 자주 실패합니다.</strong> 많은 레시피 사이트가 봇 User-Agent를 차단합니다 (403/406). JS 렌더링 사이트는 빈 HTML을 반환합니다.</span></li>
+    <li><span class="en"><strong>Only 8 clean recipes cached out of 2,692 sources</strong> — 0.3% success rate indicates systemic extraction issues.</span><span class="ko"><strong>2,692개 소스 중 8개만 클린 레시피 캐시됨</strong> — 0.3% 성공률은 체계적 추출 문제를 나타냅니다.</span></li>
+    <li><span class="en"><strong>Fix applied (today):</strong> For Today's Pick dishes that have Fridgenie recipes, the Clean Version button is now hidden since the Fridgenie recipe IS the clean version. Main flow still has Clean Version available.</span><span class="ko"><strong>수정 적용 (오늘):</strong> Fridgenie 레시피가 있는 오늘의 추천 요리에서는 클린 버전 버튼이 숨겨집니다. 메인 플로우에서는 여전히 클린 버전 사용 가능.</span></li>
+  </ul>
+  <h3><span class="en">Recommended Future Fixes</span><span class="ko">향후 수정 권장사항</span></h3>
+  <ul style="font-size:13px;margin:8px 0 0 20px;">
+    <li><span class="en">Use a headless browser (Puppeteer/Playwright) for JS-rendered sites instead of raw fetch()</span><span class="ko">JS 렌더링 사이트에 대해 fetch() 대신 헤드리스 브라우저 사용</span></li>
+    <li><span class="en">Rotate User-Agent strings to avoid bot detection</span><span class="ko">봇 감지를 피하기 위해 User-Agent 문자열 교체</span></li>
+    <li><span class="en">Fall back to structured data (JSON-LD/Schema.org) extraction before AI — many recipe sites embed it</span><span class="ko">AI 전에 구조화된 데이터 (JSON-LD/Schema.org) 추출 시도 — 많은 레시피 사이트가 포함</span></li>
+  </ul>
+</div>
+
+<!-- ═══ FEATURE 7: FRIDGENIE RECIPES ═══ -->
+<div class="feature">
+  <div class="feature-header">
+    <span class="feature-icon">🧑‍🍳</span>
+    <span class="feature-title"><span class="en">7. Fridgenie Recipes (Internal)</span><span class="ko">7. Fridgenie 레시피 (내부)</span></span>
+    <span class="status-badge status-ok">✅ <span class="en">Healthy</span><span class="ko">정상</span></span>
+  </div>
+  <table class="flow-table">
+    <tr><th><span class="en">Layer</span><span class="ko">레이어</span></th><th><span class="en">Component</span><span class="ko">구성요소</span></th><th><span class="en">Status</span><span class="ko">상태</span></th></tr>
+    <tr><td>Frontend</td><td>fridgenie_recipe_card widget, dish_detail_screen (Fridgenie section)</td><td><span class="check">✅</span></td></tr>
+    <tr><td>Provider</td><td>fridgenie_recipe_provider</td><td><span class="check">✅</span></td></tr>
+    <tr><td>Edge Fn</td><td>generate-recipe (on-demand generation)</td><td><span class="check">✅</span></td></tr>
+    <tr><td>Database</td><td>fridgenie_recipes (449), household_recipe_customizations (2)</td><td><span class="check">✅</span></td></tr>
+  </table>
+  <p style="font-size:13px;color:var(--muted);margin-top:8px;"><span class="en">449 pre-seeded recipes with full ingredients (JSONB), instructions, KO/ZH translations, nutrition estimates. 100% coverage of the 299-dish pool. Users can customize (ingredient mods, step notes) saved per-household.</span><span class="ko">449개 사전 시드 레시피, 전체 재료 (JSONB), 조리법, 한국어/중국어 번역, 영양 추정. 299개 요리 풀 100% 커버. 사용자는 가구별 맞춤설정 가능.</span></p>
+</div>
+
+<!-- ═══ FEATURE 8: TODAY'S PICK ═══ -->
+<div class="feature">
+  <div class="feature-header">
+    <span class="feature-icon">🍽️</span>
+    <span class="feature-title"><span class="en">8. Today's Pick (Daily Suggestions)</span><span class="ko">8. 오늘의 추천 (일일 제안)</span></span>
+    <span class="status-badge status-new">🔧 <span class="en">Fixed Today</span><span class="ko">오늘 수정됨</span></span>
+  </div>
+  <table class="flow-table">
+    <tr><th><span class="en">Layer</span><span class="ko">레이어</span></th><th><span class="en">Component</span><span class="ko">구성요소</span></th><th><span class="en">Status</span><span class="ko">상태</span></th></tr>
+    <tr><td>Frontend</td><td>daily_dish_carousel (PageView), home_dashboard_screen</td><td><span class="check">✅</span></td></tr>
+    <tr><td>Provider</td><td>daily_suggestions_provider</td><td><span class="check">✅ <span class="en">Updated</span><span class="ko">업데이트됨</span></span></td></tr>
+    <tr><td>DB RPC</td><td>get_daily_suggestions (random), get_leftover_suggestions (pantry-aware)</td><td><span class="check">✅ <span class="en">Now blended</span><span class="ko">블렌딩 활성화됨</span></span></td></tr>
+    <tr><td>Database</td><td>dish_suggestion_pool (299), user_daily_suggestions (10)</td><td><span class="check">✅</span></td></tr>
+  </table>
+
+  <h3><span class="en">What Was Fixed (Today, March 26)</span><span class="ko">오늘 수정된 내용 (3월 26일)</span></h3>
+  <div class="fix-item"><span class="en"><code>get_leftover_suggestions</code> RPC was dead code — now activated. Blends 3 random + 2 leftover-aware picks.</span><span class="ko"><code>get_leftover_suggestions</code> RPC가 사용되지 않았음 — 이제 활성화. 랜덤 3개 + 남은재료 기반 2개 블렌딩.</span></div>
+  <div class="fix-item"><span class="en">Clean Version button hidden on Today's Pick when Fridgenie recipe exists (main flow unaffected).</span><span class="ko">Fridgenie 레시피가 있을 때 오늘의 추천에서 클린 버전 버튼 숨김 (메인 플로우 영향 없음).</span></div>
+  <div class="fix-item"><span class="en">Search events now logged to <code>dish_search_log</code> when users tap daily picks.</span><span class="ko">사용자가 일일 추천을 탭할 때 <code>dish_search_log</code>에 검색 이벤트 로깅.</span></div>
+
+  <div class="flow-diagram"><span class="en">FULL LOOP (NOW CLOSED):
+dish_suggestion_pool (299 curated + promoted organic)
+  → get_daily_suggestions (cuisine/dietary prefs, 90-day cooldown)
+  → BLEND with get_leftover_suggestions (pantry-aware)
+  → DailyDishCarousel (5 swipeable cards)
+  → User taps → ensureInDishCache + log to dish_search_log
+  → DishDetailScreen (Fridgenie recipe + sources)
+  → "I Cooked This!" → cooking_log (WITH ingredients now)
+  → search_count +2 on dish_cache
+  → Leftover ingredients feed next day's suggestions
+  → Popular dishes promoted to pool via promote-dishes Edge Function</span><span class="ko">전체 루프 (이제 완성):
+dish_suggestion_pool (299 큐레이션 + 프로모션된 유기적 요리)
+  → get_daily_suggestions (요리/식이 선호, 90일 쿨다운)
+  → get_leftover_suggestions와 블렌딩 (팬트리 인식)
+  → DailyDishCarousel (5개 스와이프 카드)
+  → 사용자 탭 → ensureInDishCache + dish_search_log에 로깅
+  → DishDetailScreen (Fridgenie 레시피 + 소스)
+  → "요리했어요!" → cooking_log (재료 포함)
+  → dish_cache에서 search_count +2
+  → 남은 재료가 다음 날 제안에 반영
+  → 인기 요리가 promote-dishes 엣지 함수로 풀에 프로모션</span></div>
+</div>
+
+<!-- ═══ FEATURE 9: PROMOTION PIPELINE ═══ -->
+<div class="feature">
+  <div class="feature-header">
+    <span class="feature-icon">📈</span>
+    <span class="feature-title"><span class="en">9. Dish Promotion Pipeline</span><span class="ko">9. 요리 프로모션 파이프라인</span></span>
+    <span class="status-badge status-new">🆕 <span class="en">New Today</span><span class="ko">오늘 신규</span></span>
+  </div>
+  <table class="flow-table">
+    <tr><th><span class="en">Layer</span><span class="ko">레이어</span></th><th><span class="en">Component</span><span class="ko">구성요소</span></th><th><span class="en">Status</span><span class="ko">상태</span></th></tr>
+    <tr><td>Edge Fn</td><td>promote-dishes (scans dish_cache → promotes to pool)</td><td><span class="check">✅ <span class="en">Built, not yet deployed</span><span class="ko">구축됨, 아직 배포 안됨</span></span></td></tr>
+    <tr><td>Database</td><td>promotion_tracking (promoted_at, promotion_eligible on dish_cache)</td><td><span class="check">✅ <span class="en">Applied</span><span class="ko">적용됨</span></span></td></tr>
+    <tr><td>Database</td><td>dish_search_log (search velocity), trending_dishes (7-day view)</td><td><span class="check">✅ <span class="en">Applied</span><span class="ko">적용됨</span></span></td></tr>
+    <tr><td>Frontend</td><td>dish_search_log integration in providers</td><td><span class="check">✅ <span class="en">Wired today</span><span class="ko">오늘 연결됨</span></span></td></tr>
+  </table>
+  <h3><span class="en">Remaining: Deploy Edge Function</span><span class="ko">남은 작업: 엣지 함수 배포</span></h3>
+  <p style="font-size:13px;color:var(--muted);"><span class="en"><code>supabase functions deploy promote-dishes --no-verify-jwt</code> + schedule (daily cron or manual POST). The function supports <code>dry_run: true</code> for previewing promotions.</span><span class="ko"><code>supabase functions deploy promote-dishes --no-verify-jwt</code> + 스케줄 (일일 크론 또는 수동 POST). <code>dry_run: true</code>로 프로모션 미리보기 지원.</span></p>
+</div>
+
+<!-- ═══ FEATURE 10: COOKING LOG ═══ -->
+<div class="feature">
+  <div class="feature-header">
+    <span class="feature-icon">🍳</span>
+    <span class="feature-title"><span class="en">10. "I Cooked This!" & Cooking Log</span><span class="ko">10. "요리했어요!" 및 요리 로그</span></span>
+    <span class="status-badge status-new">🔧 <span class="en">Fixed Today</span><span class="ko">오늘 수정됨</span></span>
+  </div>
+  <table class="flow-table">
+    <tr><th><span class="en">Layer</span><span class="ko">레이어</span></th><th><span class="en">Component</span><span class="ko">구성요소</span></th><th><span class="en">Status</span><span class="ko">상태</span></th></tr>
+    <tr><td>Frontend</td><td>dish_detail_screen ("I Cooked This!" button + undo)</td><td><span class="check">✅</span></td></tr>
+    <tr><td>Provider</td><td>cooking_provider (logCookedDish)</td><td><span class="check">✅ <span class="en">Updated</span><span class="ko">업데이트됨</span></span></td></tr>
+    <tr><td>Database</td><td>cooking_log (2 entries), household_recipe_customizations</td><td><span class="check">✅</span></td></tr>
+  </table>
+  <h3><span class="en">What Was Fixed</span><span class="ko">수정된 내용</span></h3>
+  <div class="fix-item"><span class="en"><code>ingredients_used</code> was always empty — now populated from Fridgenie recipe ingredients when available.</span><span class="ko"><code>ingredients_used</code>가 항상 비어있었음 — 이제 Fridgenie 레시피 재료에서 채워짐.</span></div>
+  <div class="fix-item"><span class="en"><code>search_count</code> now incremented by +2 on cook events (stronger signal for promotion pipeline).</span><span class="ko">요리 이벤트에서 <code>search_count</code> +2 증가 (프로모션 파이프라인에 더 강한 신호).</span></div>
+</div>
+
+<!-- ═══ FEATURE 11: SHOPPING LIST ═══ -->
+<div class="feature">
+  <div class="feature-header">
+    <span class="feature-icon">🛒</span>
+    <span class="feature-title"><span class="en">11. Shopping List</span><span class="ko">11. 쇼핑 목록</span></span>
+    <span class="status-badge status-ok">✅ <span class="en">Healthy</span><span class="ko">정상</span></span>
+  </div>
+  <table class="flow-table">
+    <tr><th><span class="en">Layer</span><span class="ko">레이어</span></th><th><span class="en">Component</span><span class="ko">구성요소</span></th><th><span class="en">Status</span><span class="ko">상태</span></th></tr>
+    <tr><td>Frontend</td><td>shopping_list_screen, generate_shopping_sheet, store_picker_sheet</td><td><span class="check">✅</span></td></tr>
+    <tr><td>Provider</td><td>shopping_provider, staples_provider, store_provider</td><td><span class="check">✅</span></td></tr>
+    <tr><td>Database</td><td>shopping_list (20 items), shopping_staples, item_store_memory</td><td><span class="check">✅</span></td></tr>
+  </table>
+  <p style="font-size:13px;color:var(--muted);margin-top:8px;"><span class="en">Loop: "Add Missing" from recipe → shopping list → store tags remembered via item_store_memory → checked off → could auto-add to pantry (future). Magic shop groups by store.</span><span class="ko">루프: 레시피에서 "부족한 재료 추가" → 쇼핑 목록 → item_store_memory로 매장 태그 기억 → 체크오프 → 팬트리에 자동 추가 가능 (향후). 매직 샵은 매장별 그룹.</span></p>
+</div>
+
+<!-- ═══ FEATURE 12: FAVORITES ═══ -->
+<div class="feature">
+  <div class="feature-header">
+    <span class="feature-icon">❤️</span>
+    <span class="feature-title"><span class="en">12. Favorites & History</span><span class="ko">12. 즐겨찾기 및 히스토리</span></span>
+    <span class="status-badge status-ok">✅ <span class="en">Healthy</span><span class="ko">정상</span></span>
+  </div>
+  <table class="flow-table">
+    <tr><th><span class="en">Layer</span><span class="ko">레이어</span></th><th><span class="en">Component</span><span class="ko">구성요소</span></th><th><span class="en">Status</span><span class="ko">상태</span></th></tr>
+    <tr><td>Frontend</td><td>favorites_screen, dish_detail_screen (heart button)</td><td><span class="check">✅</span></td></tr>
+    <tr><td>Provider</td><td>user_favorites_provider, recipe_history_provider</td><td><span class="check">✅</span></td></tr>
+    <tr><td>Database</td><td>user_favorites (2), user_recipe_history (45)</td><td><span class="check">✅</span></td></tr>
+  </table>
+</div>
+
+<!-- ═══ FEATURE 13: SUBSCRIPTION ═══ -->
+<div class="feature">
+  <div class="feature-header">
+    <span class="feature-icon">💎</span>
+    <span class="feature-title"><span class="en">13. Subscription & Pro Features</span><span class="ko">13. 구독 및 프로 기능</span></span>
+    <span class="status-badge status-warn">⚠️ <span class="en">Partial</span><span class="ko">부분적</span></span>
+  </div>
+  <table class="flow-table">
+    <tr><th><span class="en">Layer</span><span class="ko">레이어</span></th><th><span class="en">Component</span><span class="ko">구성요소</span></th><th><span class="en">Status</span><span class="ko">상태</span></th></tr>
+    <tr><td>Frontend</td><td>subscription_provider, promo_code_dialog</td><td><span class="check">✅</span></td></tr>
+    <tr><td>Database</td><td>subscription_tiers migration exists</td><td><span class="warn-icon">⚠️</span> <span class="en">Table not found in REST API</span><span class="ko">REST API에서 테이블 미발견</span></td></tr>
+  </table>
+  <p style="font-size:13px;color:var(--accent);margin-top:8px;"><span class="en">Note: Clean Version is gated behind Pro. Promo code system exists. The subscriptions table may need to be created or have RLS issues preventing access.</span><span class="ko">참고: 클린 버전은 프로 기능. 프로모 코드 시스템 존재. subscriptions 테이블이 생성되지 않았거나 RLS 문제가 있을 수 있음.</span></p>
+</div>
+
+<!-- ═══ FEATURE 14: HOUSEHOLD ═══ -->
+<div class="feature">
+  <div class="feature-header">
+    <span class="feature-icon">🏠</span>
+    <span class="feature-title"><span class="en">14. Household System & Invites</span><span class="ko">14. 가구 시스템 및 초대</span></span>
+    <span class="status-badge status-ok">✅ <span class="en">Healthy</span><span class="ko">정상</span></span>
+  </div>
+  <table class="flow-table">
+    <tr><th><span class="en">Layer</span><span class="ko">레이어</span></th><th><span class="en">Component</span><span class="ko">구성요소</span></th><th><span class="en">Status</span><span class="ko">상태</span></th></tr>
+    <tr><td>Frontend</td><td>household_setup_screen, join_household_screen, household_activity_banner</td><td><span class="check">✅</span></td></tr>
+    <tr><td>Provider</td><td>household_provider</td><td><span class="check">✅</span></td></tr>
+    <tr><td>Database</td><td>households (14), profiles (13), invite codes system (3 migrations)</td><td><span class="check">✅</span></td></tr>
+  </table>
+</div>
+
+<!-- ═══ FEATURE 15: i18n ═══ -->
+<div class="feature">
+  <div class="feature-header">
+    <span class="feature-icon">🌏</span>
+    <span class="feature-title"><span class="en">15. Internationalization (EN/KO/ZH)</span><span class="ko">15. 국제화 (영어/한국어/중국어)</span></span>
+    <span class="status-badge status-ok">✅ <span class="en">Healthy</span><span class="ko">정상</span></span>
+  </div>
+  <p style="font-size:13px;color:var(--muted);margin-top:8px;"><span class="en">Full l10n with app_localizations (EN, KO, ZH). Fridgenie recipes include title_ko and title_zh for all 449 entries. Locale provider syncs across app.</span><span class="ko">app_localizations로 전체 l10n (영어, 한국어, 중국어). Fridgenie 레시피 449개 모두 title_ko, title_zh 포함. 로케일 프로바이더가 앱 전체 동기화.</span></p>
+</div>
+
+<!-- ═══ EDGE FUNCTIONS SUMMARY ═══ -->
+<h2>⚡ <span class="en">Edge Functions Status</span><span class="ko">엣지 함수 상태</span></h2>
+<table class="db-table">
+  <tr><th><span class="en">Function</span><span class="ko">함수</span></th><th><span class="en">Model</span><span class="ko">모델</span></th><th><span class="en">Purpose</span><span class="ko">용도</span></th><th><span class="en">Status</span><span class="ko">상태</span></th></tr>
+  <tr><td>recipe-suggest</td><td>GPT-4.1-mini + nano</td><td><span class="en">AI recipe discovery (two-tier)</span><span class="ko">AI 레시피 발견 (2단계)</span></td><td><span class="check">✅</span></td></tr>
+  <tr><td>generate-recipe</td><td>GPT-4o</td><td><span class="en">On-demand Fridgenie recipe generation</span><span class="ko">온디맨드 Fridgenie 레시피 생성</span></td><td><span class="check">✅</span></td></tr>
+  <tr><td>clean-recipe</td><td>GPT-4.1-mini</td><td><span class="en">Extract recipe from external URL</span><span class="ko">외부 URL에서 레시피 추출</span></td><td><span class="warn-icon">⚠️</span> <span class="en">Low success rate</span><span class="ko">낮은 성공률</span></td></tr>
+  <tr><td>fetch-sources</td><td>Brave Search</td><td><span class="en">Find recipe sources for dishes</span><span class="ko">요리에 대한 레시피 소스 찾기</span></td><td><span class="check">✅</span></td></tr>
+  <tr><td>fetch-dish-image</td><td>Brave Search</td><td><span class="en">Find dish thumbnail images</span><span class="ko">요리 썸네일 이미지 찾기</span></td><td><span class="check">✅</span></td></tr>
+  <tr><td>receipt-ocr</td><td>GPT-4o</td><td><span class="en">Receipt scanning + classification</span><span class="ko">영수증 스캔 + 분류</span></td><td><span class="check">✅</span></td></tr>
+  <tr><td>voice-transcribe</td><td>Whisper + GPT</td><td><span class="en">Voice input transcription</span><span class="ko">음성 입력 전사</span></td><td><span class="check">✅</span></td></tr>
+  <tr><td>seed-enrich</td><td>—</td><td><span class="en">Seed data enrichment</span><span class="ko">시드 데이터 보강</span></td><td><span class="check">✅</span></td></tr>
+  <tr><td>delete-account</td><td>—</td><td><span class="en">Account deletion (GDPR)</span><span class="ko">계정 삭제 (GDPR)</span></td><td><span class="check">✅</span></td></tr>
+  <tr><td>promote-dishes</td><td>—</td><td><span class="en">Auto-promote popular dishes to pool</span><span class="ko">인기 요리 자동 풀 프로모션</span></td><td><span class="status-badge status-new" style="font-size:10px;">NEW</span> <span class="en">Built, needs deploy</span><span class="ko">구축됨, 배포 필요</span></td></tr>
+</table>
+
+<!-- ═══ DATABASE TABLES ═══ -->
+<h2>🗄️ <span class="en">Database Tables</span><span class="ko">데이터베이스 테이블</span></h2>
+<table class="db-table">
+  <tr><th><span class="en">Table</span><span class="ko">테이블</span></th><th><span class="en">Rows</span><span class="ko">행 수</span></th><th><span class="en">Purpose</span><span class="ko">용도</span></th><th>RLS</th></tr>
+  <tr><td>profiles</td><td>13</td><td><span class="en">User profiles + preferences</span><span class="ko">사용자 프로필 + 선호도</span></td><td><span class="check">✅</span></td></tr>
+  <tr><td>households</td><td>14</td><td><span class="en">Household groups</span><span class="ko">가구 그룹</span></td><td><span class="check">✅</span></td></tr>
+  <tr><td>pantry_items</td><td>524</td><td><span class="en">Ingredient inventory</span><span class="ko">재료 재고</span></td><td><span class="check">✅</span></td></tr>
+  <tr><td>dish_cache</td><td>697</td><td><span class="en">All discovered dishes</span><span class="ko">발견된 모든 요리</span></td><td><span class="check">✅</span></td></tr>
+  <tr><td>dish_suggestion_pool</td><td>299</td><td><span class="en">Curated daily pick pool</span><span class="ko">큐레이션된 일일 추천 풀</span></td><td><span class="check">✅</span></td></tr>
+  <tr><td>fridgenie_recipes</td><td>449</td><td><span class="en">Internal recipes (ingredients + instructions)</span><span class="ko">내부 레시피 (재료 + 조리법)</span></td><td><span class="check">✅</span></td></tr>
+  <tr><td>recipe_sources</td><td>2,692</td><td><span class="en">External recipe links</span><span class="ko">외부 레시피 링크</span></td><td><span class="check">✅</span></td></tr>
+  <tr><td>clean_recipes</td><td>8</td><td><span class="en">Extracted clean versions</span><span class="ko">추출된 클린 버전</span></td><td><span class="check">✅</span></td></tr>
+  <tr><td>user_daily_suggestions</td><td>10</td><td><span class="en">Per-user daily pick tracking</span><span class="ko">사용자별 일일 추천 추적</span></td><td><span class="check">✅</span></td></tr>
+  <tr><td>cooking_log</td><td>2</td><td><span class="en">"I Cooked This!" records</span><span class="ko">"요리했어요!" 기록</span></td><td><span class="check">✅</span></td></tr>
+  <tr><td>shopping_list</td><td>20</td><td><span class="en">Shopping list items</span><span class="ko">쇼핑 목록 항목</span></td><td><span class="check">✅</span></td></tr>
+  <tr><td>user_favorites</td><td>2</td><td><span class="en">Saved favorites</span><span class="ko">저장된 즐겨찾기</span></td><td><span class="check">✅</span></td></tr>
+  <tr><td>user_recipe_history</td><td>45</td><td><span class="en">Recipe browsing history</span><span class="ko">레시피 브라우징 히스토리</span></td><td><span class="check">✅</span></td></tr>
+  <tr><td>household_recipe_customizations</td><td>2</td><td><span class="en">Per-household recipe tweaks</span><span class="ko">가구별 레시피 맞춤</span></td><td><span class="check">✅</span></td></tr>
+  <tr><td>item_store_memory</td><td>0</td><td><span class="en">Remembers store per item</span><span class="ko">항목별 매장 기억</span></td><td><span class="check">✅</span></td></tr>
+  <tr><td>dish_search_log</td><td>0</td><td><span class="en">Search velocity tracking (NEW)</span><span class="ko">검색 속도 추적 (신규)</span></td><td><span class="check">✅</span></td></tr>
+  <tr><td>voice_usage</td><td>0</td><td><span class="en">Voice feature usage tracking</span><span class="ko">음성 기능 사용량 추적</span></td><td><span class="check">✅</span></td></tr>
+</table>
+
+<!-- ═══ CHANGES MADE TODAY ═══ -->
+<h2>📋 <span class="en">Changes Made Today (March 26, 2026)</span><span class="ko">오늘 변경사항 (2026년 3월 26일)</span></h2>
+
+<div class="feature" style="border-left: 4px solid var(--green);">
+  <h3><span class="en">Commit 1: Seed Recipes + Promotion Pipeline</span><span class="ko">커밋 1: 시드 레시피 + 프로모션 파이프라인</span></h3>
+  <div class="fix-item"><span class="en">Generated 63 missing recipes (Thai 20, Vietnamese 23, Korean 5, Spanish 5, misc 10)</span><span class="ko">63개 누락 레시피 생성 (태국 20, 베트남 23, 한국 5, 스페인 5, 기타 10)</span></div>
+  <div class="fix-item"><span class="en">100% pool coverage: all 299 dish_suggestion_pool entries now have fridgenie_recipes</span><span class="ko">100% 풀 커버리지: 299개 dish_suggestion_pool 항목 모두 fridgenie_recipes 보유</span></div>
+  <div class="fix-item"><span class="en">Built promote-dishes Edge Function (auto-promotes organic dishes to pool)</span><span class="ko">promote-dishes 엣지 함수 구축 (유기적 요리 자동 풀 프로모션)</span></div>
+  <div class="fix-item"><span class="en">Added promotion_tracking migration (promoted_at, promotion_eligible columns)</span><span class="ko">promotion_tracking 마이그레이션 추가 (promoted_at, promotion_eligible 컬럼)</span></div>
+  <div class="fix-item"><span class="en">Added trending_dishes migration (dish_search_log table + trending view)</span><span class="ko">trending_dishes 마이그레이션 추가 (dish_search_log 테이블 + 트렌딩 뷰)</span></div>
+</div>
+
+<div class="feature" style="border-left: 4px solid var(--blue);">
+  <h3><span class="en">Commit 2: Close Full Backend Loop — 5 Fixes</span><span class="ko">커밋 2: 전체 백엔드 루프 완성 — 5개 수정</span></h3>
+  <div class="fix-item"><span class="en">Fix 1: Hide Clean Version on Today's Pick when Fridgenie recipe exists</span><span class="ko">수정 1: Fridgenie 레시피 있을 때 오늘의 추천에서 클린 버전 숨김</span></div>
+  <div class="fix-item"><span class="en">Fix 2: Wire Fridgenie recipe ingredients into cooking_log (was always empty)</span><span class="ko">수정 2: Fridgenie 레시피 재료를 cooking_log에 연결 (이전에는 항상 비어있음)</span></div>
+  <div class="fix-item"><span class="en">Fix 3: Activate get_leftover_suggestions (blend 3 random + 2 leftover-aware)</span><span class="ko">수정 3: get_leftover_suggestions 활성화 (랜덤 3 + 남은재료 기반 2 블렌딩)</span></div>
+  <div class="fix-item"><span class="en">Fix 4: Log searches to dish_search_log + increment search_count on views</span><span class="ko">수정 4: dish_search_log에 검색 로깅 + 조회 시 search_count 증가</span></div>
+  <div class="fix-item"><span class="en">Fix 5: Increment search_count +2 on cook events (stronger promotion signal)</span><span class="ko">수정 5: 요리 이벤트에서 search_count +2 증가 (더 강한 프로모션 신호)</span></div>
+</div>
+
+<!-- ═══ REMAINING ACTION ITEMS ═══ -->
+<h2>🎯 <span class="en">Remaining Action Items</span><span class="ko">남은 작업 항목</span></h2>
+<div class="feature" style="border-left: 4px solid var(--accent);">
+  <ul style="font-size:13px;margin-left:16px;">
+    <li><span class="en"><strong>Deploy promote-dishes Edge Function</strong> — <code>supabase functions deploy promote-dishes --no-verify-jwt</code> + set up daily cron</span><span class="ko"><strong>promote-dishes 엣지 함수 배포</strong> + 일일 크론 설정</span></li>
+    <li><span class="en"><strong>Improve clean-recipe success rate</strong> — Add JSON-LD extraction fallback, rotate User-Agents, consider headless browser for JS sites</span><span class="ko"><strong>클린 레시피 성공률 개선</strong> — JSON-LD 추출 폴백 추가, User-Agent 교체, JS 사이트에 헤드리스 브라우저 고려</span></li>
+    <li><span class="en"><strong>Dish images for pool</strong> — All 299 dishes still use text image_hints, not real image URLs</span><span class="ko"><strong>풀 요리 이미지</strong> — 299개 요리 모두 텍스트 image_hint 사용, 실제 이미지 URL 아님</span></li>
+    <li><span class="en"><strong>Subscriptions table</strong> — May need creation or RLS fix (404 on REST API)</span><span class="ko"><strong>구독 테이블</strong> — 생성 또는 RLS 수정 필요 (REST API에서 404)</span></li>
+    <li><span class="en"><strong>Expand to 2000+ dishes</strong> — Combine manual seed batches + organic promotion pipeline</span><span class="ko"><strong>2000개 이상으로 확장</strong> — 수동 시드 배치 + 유기적 프로모션 파이프라인 결합</span></li>
+    <li><span class="en"><strong>Shopping → Pantry auto-add</strong> — When items checked off shopping list, option to auto-add to pantry</span><span class="ko"><strong>쇼핑 → 팬트리 자동 추가</strong> — 쇼핑 목록에서 체크오프 시 팬트리에 자동 추가 옵션</span></li>
+  </ul>
+</div>
+
+<p style="text-align:center;color:var(--muted);font-size:12px;margin-top:32px;padding-bottom:24px;">
+  <span class="en">Generated by Totoro 🌳 · Fridgenie Audit · March 26, 2026</span>
+  <span class="ko">토토로 🌳 생성 · Fridgenie 감사 · 2026년 3월 26일</span>
+</p>
+
+</div>
+
+<script>
+let isKorean = false;
+function toggleLang() {
+  isKorean = !isKorean;
+  document.querySelectorAll('.en').forEach(el => el.classList.toggle('hide', isKorean));
+  document.querySelectorAll('.ko').forEach(el => el.classList.toggle('show', isKorean));
+  document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+}
+</script>
+</body>
+</html>
