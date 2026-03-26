@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 29: Flow Control — Buffering & Credits | Digital Design Study</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    background: linear-gradient(135deg, #fefae0 0%, #faedcd 100%);
+    color: #3d405b;
+    line-height: 1.8;
+    padding: 24px;
+    max-width: 920px;
+    margin: 0 auto;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+h1 {
+    color: #5d4037;
+    border-bottom: 3px solid #c4a77d;
+    padding-bottom: 12px;
+    margin-bottom: 24px;
+    font-size: 2em;
+}
+h2 {
+    color: #588157;
+    border-bottom: 2px solid #a3b18a;
+    padding-bottom: 8px;
+    margin: 32px 0 16px;
+}
+h3 {
+    color: #5d4037;
+    margin: 20px 0 10px;
+}
+p { margin: 12px 0; }
+ul, ol { margin: 12px 0 12px 24px; }
+li { margin: 6px 0; }
+pre {
+    background: #2d3436;
+    padding: 24px;
+    border-radius: 12px;
+    margin: 24px 0;
+    border: 3px solid #a3b18a;
+    overflow-x: auto;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+    font-size: 15px;
+    line-height: 1.6;
+    color: #f8f8f2;
+}
+code {
+    background: #e9f5db;
+    color: #3d405b;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+}
+pre code { background: none; color: #f8f8f2; padding: 0; }
+.keyword { color: #ff79c6; font-weight: 600; }
+.type { color: #8be9fd; }
+.signal { color: #50fa7b; }
+.number { color: #ffb86c; }
+.comment { color: #6272a4; font-style: italic; }
+.string { color: #f1fa8c; }
+.concept-box {
+    background: #fff8f0;
+    border: 2px solid #c4a77d;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    color: #3d405b;
+}
+.concept-box h3 { color: #5d4037; margin-bottom: 12px; }
+.warning-box {
+    background: #fff8f0;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    border-left: 4px solid #ef4444;
+    color: #3d405b;
+}
+.warning-box h3 { color: #c53030; margin-bottom: 12px; }
+.tip-box {
+    background: #fff8f0;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    border-left: 4px solid #588157;
+    color: #3d405b;
+}
+.comparison-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+.comparison-table th {
+    background: #588157;
+    color: white;
+    padding: 12px;
+    text-align: left;
+}
+.comparison-table td {
+    background: #fff;
+    border: 1px solid #c4a77d;
+    padding: 12px;
+    color: #3d405b;
+}
+.comparison-table tr:nth-child(even) td { background: #fff8f0; }
+.section {
+    background: #fff;
+    border-radius: 12px;
+    padding: 24px;
+    margin: 24px 0;
+    border: 1px solid #c4a77d;
+}
+.nav-links {
+    display: flex;
+    gap: 12px;
+    margin: 24px 0;
+    flex-wrap: wrap;
+}
+.nav-links a {
+    background: linear-gradient(135deg, #588157, #3a5a40);
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 24px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14px;
+}
+.nav-links a:hover { opacity: 0.9; }
+.lang-toggle {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    background: #588157;
+    border: none;
+    border-radius: 24px;
+    padding: 10px 20px;
+    cursor: pointer;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    z-index: 1000;
+}
+.lang-toggle:hover { background: #3a5a40; }
+.ko { display: none; }
+.diagram-box {
+    background: #2d3436;
+    border-radius: 12px;
+    padding: 24px;
+    margin: 20px 0;
+    border: 3px solid #a3b18a;
+    color: #f8f8f2;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+    font-size: 14px;
+    line-height: 1.4;
+    white-space: pre;
+    overflow-x: auto;
+}
+@media (max-width: 768px) {
+    body { padding: 16px; }
+    h1 { font-size: 1.8em; }
+    pre { font-size: 14px; padding: 16px; }
+    .lang-toggle { padding: 8px 16px; font-size: 13px; }
+}
+</style>
+</head>
+<body>
+
+<button class="lang-toggle" onclick="toggleLang()">한국어</button>
+
+<h1>📅 Day 29: Flow Control — Buffering & Credits</h1>
+
+<div class="nav-links">
+    <a href="day-29-quiz.html">📝 Quiz</a>
+    <a href="day-29-practice.html">💻 Practice</a>
+</div>
+
+<p class="en">Welcome to Day 29! Yesterday we explored arbitration — how to fairly share a bus among multiple masters. Today we tackle the next critical piece: <strong>flow control</strong>. How does a sender know if the receiver can accept data? How do we prevent data loss without killing throughput? Buffering and credit-based flow control are the answers.</p>
+<p class="ko" style="display:none;">Day 29에 오신 걸 환영합니다! 어제는 중재(arbitration) — 여러 마스터가 버스를 공정하게 공유하는 방법을 배웠습니다. 오늘은 다음 핵심 주제인 <strong>흐름 제어(flow control)</strong>를 다룹니다. 송신자가 수신자가 데이터를 받을 수 있는지 어떻게 알 수 있을까요? 처리량을 죽이지 않고 데이터 손실을 방지하는 방법은? 버퍼링과 크레딧 기반 흐름 제어가 그 답입니다.</p>
+
+<div class="section">
+<h2>1. Why Flow Control Matters</h2>
+
+<p class="en">In any digital system where a <strong>producer</strong> generates data and a <strong>consumer</strong> processes it, the two may operate at different rates. Without flow control:</p>
+<p class="ko" style="display:none;">데이터를 생성하는 <strong>생산자(producer)</strong>와 처리하는 <strong>소비자(consumer)</strong>가 있는 디지털 시스템에서, 둘은 서로 다른 속도로 동작할 수 있습니다. 흐름 제어 없이는:</p>
+
+<ul>
+    <li class="en">Data gets <strong>dropped</strong> when the receiver is busy</li>
+    <li class="ko" style="display:none;">수신자가 바쁠 때 데이터가 <strong>손실</strong>됩니다</li>
+    <li class="en">The receiver <strong>overflows</strong> its internal storage</li>
+    <li class="ko" style="display:none;">수신자의 내부 저장소가 <strong>오버플로</strong>됩니다</li>
+    <li class="en">The system becomes <strong>unreliable</strong></li>
+    <li class="ko" style="display:none;">시스템이 <strong>불안정</strong>해집니다</li>
+</ul>
+
+<div class="concept-box">
+<h3>🎯 The Core Problem</h3>
+<p class="en">A sender producing 1 word/cycle talks to a receiver that sometimes needs 2-3 cycles per word (e.g., memory writes). Without flow control, the sender blindly pushes data and the receiver loses it.</p>
+<p class="ko" style="display:none;">1 cycle당 1 워드를 생산하는 송신자가, 가끔 워드당 2~3 cycle이 필요한 수신자(예: 메모리 쓰기)와 통신합니다. 흐름 제어 없이는, 송신자가 맹목적으로 데이터를 밀어넣어 수신자가 데이터를 잃게 됩니다.</p>
+</div>
+</div>
+
+<div class="section">
+<h2>2. Flow Control Mechanisms Overview</h2>
+
+<table class="comparison-table">
+<tr>
+    <th>Mechanism</th>
+    <th class="en">How It Works</th>
+    <th class="ko" style="display:none;">작동 방식</th>
+    <th class="en">Latency Cost</th>
+    <th class="ko" style="display:none;">지연 비용</th>
+    <th class="en">Best For</th>
+    <th class="ko" style="display:none;">적합한 용도</th>
+</tr>
+<tr>
+    <td><strong>Ready/Valid</strong></td>
+    <td class="en">Receiver asserts <code>ready</code> when available</td>
+    <td class="ko" style="display:none;">수신자가 가용 시 <code>ready</code> 신호 출력</td>
+    <td class="en">1 cycle (combinational path)</td>
+    <td class="ko" style="display:none;">1 cycle (조합 경로)</td>
+    <td class="en">Short-distance, on-chip</td>
+    <td class="ko" style="display:none;">짧은 거리, 칩 내부</td>
+</tr>
+<tr>
+    <td><strong>Buffering (FIFO)</strong></td>
+    <td class="en">Store data in buffer, decouple rates</td>
+    <td class="ko" style="display:none;">버퍼에 데이터 저장, 속도 분리</td>
+    <td class="en">Buffer depth cycles</td>
+    <td class="ko" style="display:none;">버퍼 깊이만큼의 cycle</td>
+    <td class="en">Rate mismatch, CDC</td>
+    <td class="ko" style="display:none;">속도 불일치, CDC</td>
+</tr>
+<tr>
+    <td><strong>Credit-Based</strong></td>
+    <td class="en">Sender tracks available receiver slots</td>
+    <td class="ko" style="display:none;">송신자가 수신자의 가용 슬롯 추적</td>
+    <td class="en">0 cycle (preemptive)</td>
+    <td class="ko" style="display:none;">0 cycle (선제적)</td>
+    <td class="en">Long pipelines, NoC</td>
+    <td class="ko" style="display:none;">긴 파이프라인, NoC</td>
+</tr>
+<tr>
+    <td><strong>XON/XOFF</strong></td>
+    <td class="en">Receiver sends pause/resume signals</td>
+    <td class="ko" style="display:none;">수신자가 일시정지/재개 신호 전송</td>
+    <td class="en">Round-trip latency</td>
+    <td class="ko" style="display:none;">왕복 지연</td>
+    <td class="en">Serial links, Ethernet</td>
+    <td class="ko" style="display:none;">시리얼 링크, 이더넷</td>
+</tr>
+</table>
+</div>
+
+<div class="section">
+<h2>3. Buffering with FIFOs</h2>
+
+<p class="en">The most common flow control mechanism is inserting a <strong>FIFO buffer</strong> between producer and consumer. The FIFO absorbs bursts when the consumer is slower, and drains when the consumer catches up.</p>
+<p class="ko" style="display:none;">가장 흔한 흐름 제어 메커니즘은 생산자와 소비자 사이에 <strong>FIFO 버퍼</strong>를 삽입하는 것입니다. FIFO는 소비자가 느릴 때 버스트를 흡수하고, 소비자가 따라잡으면 비워집니다.</p>
+
+<div class="diagram-box">Producer          FIFO Buffer          Consumer
+  ┌─────┐       ┌─────────────┐       ┌─────┐
+  │     ├──────►│ ░░░░░░░░    ├──────►│     │
+  │ TX  │ wr_en │  depth = 8  │ rd_en │ RX  │
+  │     │◄──────┤ count = 5   ├──────►│     │
+  └─────┘ !full └─────────────┘!empty └─────┘
+
+  Write side:                 Read side:
+  - Writes when !full         - Reads when !empty
+  - Stalls when full          - Stalls when empty
+  - count tracks occupancy    - Decouples timing</div>
+
+<h3>Key FIFO Signals for Flow Control</h3>
+
+<pre><code><span class="keyword">module</span> <span class="type">fifo_flow_ctrl</span> #(
+    <span class="keyword">parameter</span> <span class="type">DEPTH</span> = <span class="number">8</span>,
+    <span class="keyword">parameter</span> <span class="type">WIDTH</span> = <span class="number">32</span>
+)(
+    <span class="keyword">input</span>  <span class="type">logic</span>             <span class="signal">clk</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span>             <span class="signal">rst_n</span>,
+    <span class="comment">// Write (producer) side</span>
+    <span class="keyword">input</span>  <span class="type">logic</span>             <span class="signal">wr_valid</span>,   <span class="comment">// Producer has data</span>
+    <span class="keyword">input</span>  <span class="type">logic</span> [<span class="number">WIDTH-1</span>:<span class="number">0</span>] <span class="signal">wr_data</span>,
+    <span class="keyword">output</span> <span class="type">logic</span>             <span class="signal">wr_ready</span>,   <span class="comment">// FIFO can accept (not full)</span>
+    <span class="comment">// Read (consumer) side</span>
+    <span class="keyword">output</span> <span class="type">logic</span>             <span class="signal">rd_valid</span>,   <span class="comment">// FIFO has data (not empty)</span>
+    <span class="keyword">output</span> <span class="type">logic</span> [<span class="number">WIDTH-1</span>:<span class="number">0</span>] <span class="signal">rd_data</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span>             <span class="signal">rd_ready</span>,   <span class="comment">// Consumer can accept</span>
+    <span class="comment">// Status</span>
+    <span class="keyword">output</span> <span class="type">logic</span> [<span class="number">$clog2(DEPTH)</span>:<span class="number">0</span>] <span class="signal">count</span>
+);
+
+    <span class="type">logic</span> [<span class="number">WIDTH-1</span>:<span class="number">0</span>] <span class="signal">mem</span> [<span class="number">DEPTH</span>];
+    <span class="type">logic</span> [<span class="number">$clog2(DEPTH)-1</span>:<span class="number">0</span>] <span class="signal">wr_ptr</span>, <span class="signal">rd_ptr</span>;
+
+    <span class="keyword">wire</span> <span class="signal">do_write</span> = <span class="signal">wr_valid</span> && <span class="signal">wr_ready</span>;
+    <span class="keyword">wire</span> <span class="signal">do_read</span>  = <span class="signal">rd_valid</span> && <span class="signal">rd_ready</span>;
+
+    <span class="keyword">assign</span> <span class="signal">wr_ready</span> = (<span class="signal">count</span> < <span class="number">DEPTH</span>);     <span class="comment">// Not full</span>
+    <span class="keyword">assign</span> <span class="signal">rd_valid</span> = (<span class="signal">count</span> > <span class="number">0</span>);         <span class="comment">// Not empty</span>
+    <span class="keyword">assign</span> <span class="signal">rd_data</span>  = <span class="signal">mem</span>[<span class="signal">rd_ptr</span>];
+
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span> <span class="keyword">or negedge</span> <span class="signal">rst_n</span>) <span class="keyword">begin</span>
+        <span class="keyword">if</span> (!<span class="signal">rst_n</span>) <span class="keyword">begin</span>
+            <span class="signal">wr_ptr</span> <= <span class="number">'0</span>;
+            <span class="signal">rd_ptr</span> <= <span class="number">'0</span>;
+            <span class="signal">count</span>  <= <span class="number">'0</span>;
+        <span class="keyword">end else begin</span>
+            <span class="keyword">if</span> (<span class="signal">do_write</span>) <span class="keyword">begin</span>
+                <span class="signal">mem</span>[<span class="signal">wr_ptr</span>] <= <span class="signal">wr_data</span>;
+                <span class="signal">wr_ptr</span> <= <span class="signal">wr_ptr</span> + <span class="number">1</span>;
+            <span class="keyword">end</span>
+            <span class="keyword">if</span> (<span class="signal">do_read</span>) <span class="keyword">begin</span>
+                <span class="signal">rd_ptr</span> <= <span class="signal">rd_ptr</span> + <span class="number">1</span>;
+            <span class="keyword">end</span>
+            <span class="comment">// Update count</span>
+            <span class="keyword">case</span> ({<span class="signal">do_write</span>, <span class="signal">do_read</span>})
+                <span class="number">2'b10</span>: <span class="signal">count</span> <= <span class="signal">count</span> + <span class="number">1</span>;
+                <span class="number">2'b01</span>: <span class="signal">count</span> <= <span class="signal">count</span> - <span class="number">1</span>;
+                <span class="keyword">default</span>: <span class="signal">count</span> <= <span class="signal">count</span>;
+            <span class="keyword">endcase</span>
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+
+<span class="keyword">endmodule</span></code></pre>
+
+<div class="tip-box">
+<h3>💡 FIFO Sizing Rule of Thumb</h3>
+<p class="en">FIFO depth should cover the <strong>worst-case burst</strong> where the producer outpaces the consumer. If the producer sends at rate <em>R<sub>p</sub></em> and consumer drains at rate <em>R<sub>c</sub></em> during a burst of <em>B</em> cycles: <code>Depth ≥ B × (R_p - R_c) / R_p</code></p>
+<p class="ko" style="display:none;">FIFO 깊이는 생산자가 소비자보다 빠른 <strong>최악의 버스트</strong>를 커버해야 합니다. 생산자가 <em>R<sub>p</sub></em> 속도로, 소비자가 <em>R<sub>c</sub></em> 속도로, <em>B</em> cycle 동안 버스트하면: <code>깊이 ≥ B × (R_p - R_c) / R_p</code></p>
+</div>
+</div>
+
+<div class="section">
+<h2>4. Credit-Based Flow Control</h2>
+
+<p class="en">Ready/valid has a subtle problem: the <code>ready</code> signal must propagate from receiver to sender, creating a <strong>combinational path</strong>. For long pipelines or across chips, this path is too slow. Credit-based flow control solves this elegantly.</p>
+<p class="ko" style="display:none;">Ready/valid에는 미묘한 문제가 있습니다: <code>ready</code> 신호가 수신자에서 송신자로 전파되어야 하며, 이것이 <strong>조합 경로</strong>를 만듭니다. 긴 파이프라인이나 칩 간에는 이 경로가 너무 느립니다. 크레딧 기반 흐름 제어가 이를 우아하게 해결합니다.</p>
+
+<div class="concept-box">
+<h3>🏦 Credit System Analogy</h3>
+<p class="en">Think of it like a bank account. The receiver has a FIFO with <em>N</em> slots. The sender starts with <em>N</em> credits (one per slot). Each send costs 1 credit. Each time the receiver consumes an entry, it returns 1 credit. The sender <strong>never sends when credits = 0</strong>, guaranteeing no overflow.</p>
+<p class="ko" style="display:none;">은행 계좌처럼 생각하세요. 수신자는 <em>N</em>개 슬롯의 FIFO를 가집니다. 송신자는 <em>N</em>개의 크레딧(슬롯당 하나)으로 시작합니다. 전송할 때마다 크레딧 1개 소모. 수신자가 항목을 소비하면 크레딧 1개 반환. 송신자는 <strong>크레딧 = 0일 때 절대 전송하지 않으므로</strong>, 오버플로가 보장되지 않습니다.</p>
+</div>
+
+<div class="diagram-box">Credit-Based Flow Control
+
+  Sender                                    Receiver
+  ┌──────────┐    data (when credits>0)    ┌──────────┐
+  │          ├────────────────────────────►│  FIFO    │
+  │ credits  │                             │  (N=4)   │
+  │  = 2     │◄────────────────────────────┤          │
+  │          │    credit_return            │          │
+  └──────────┘    (when entry consumed)    └──────────┘
+
+  Timeline:
+  Cycle 1: credits=4, send A → credits=3
+  Cycle 2: credits=3, send B → credits=2
+  Cycle 3: credits=2, send C → credits=1, recv consumes A → credits=2
+  Cycle 4: credits=2, send D → credits=1
+  Cycle 5: credits=1, send E → credits=0  ← STALL until credit returns
+  Cycle 6: credits=0, WAIT.  recv consumes B → credits=1, send F</div>
+
+<h3>Credit-Based Sender Module</h3>
+
+<pre><code><span class="keyword">module</span> <span class="type">credit_sender</span> #(
+    <span class="keyword">parameter</span> <span class="type">MAX_CREDITS</span> = <span class="number">4</span>,
+    <span class="keyword">parameter</span> <span class="type">WIDTH</span>       = <span class="number">32</span>
+)(
+    <span class="keyword">input</span>  <span class="type">logic</span>             <span class="signal">clk</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span>             <span class="signal">rst_n</span>,
+    <span class="comment">// From upstream (data to send)</span>
+    <span class="keyword">input</span>  <span class="type">logic</span>             <span class="signal">src_valid</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span> [<span class="number">WIDTH-1</span>:<span class="number">0</span>] <span class="signal">src_data</span>,
+    <span class="keyword">output</span> <span class="type">logic</span>             <span class="signal">src_ready</span>,    <span class="comment">// Backpressure upstream</span>
+    <span class="comment">// To downstream (credit-controlled link)</span>
+    <span class="keyword">output</span> <span class="type">logic</span>             <span class="signal">tx_valid</span>,
+    <span class="keyword">output</span> <span class="type">logic</span> [<span class="number">WIDTH-1</span>:<span class="number">0</span>] <span class="signal">tx_data</span>,
+    <span class="comment">// Credit return from receiver</span>
+    <span class="keyword">input</span>  <span class="type">logic</span>             <span class="signal">credit_return</span> <span class="comment">// Pulse: 1 credit returned</span>
+);
+
+    <span class="type">logic</span> [<span class="number">$clog2(MAX_CREDITS)</span>:<span class="number">0</span>] <span class="signal">credits</span>;
+
+    <span class="keyword">wire</span> <span class="signal">can_send</span>  = (<span class="signal">credits</span> > <span class="number">0</span>) && <span class="signal">src_valid</span>;
+    <span class="keyword">assign</span> <span class="signal">src_ready</span> = (<span class="signal">credits</span> > <span class="number">0</span>);
+    <span class="keyword">assign</span> <span class="signal">tx_valid</span>  = <span class="signal">can_send</span>;
+    <span class="keyword">assign</span> <span class="signal">tx_data</span>   = <span class="signal">src_data</span>;
+
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span> <span class="keyword">or negedge</span> <span class="signal">rst_n</span>) <span class="keyword">begin</span>
+        <span class="keyword">if</span> (!<span class="signal">rst_n</span>) <span class="keyword">begin</span>
+            <span class="signal">credits</span> <= <span class="number">MAX_CREDITS</span>;  <span class="comment">// Start with full credits</span>
+        <span class="keyword">end else begin</span>
+            <span class="keyword">case</span> ({<span class="signal">can_send</span>, <span class="signal">credit_return</span>})
+                <span class="number">2'b10</span>: <span class="signal">credits</span> <= <span class="signal">credits</span> - <span class="number">1</span>;  <span class="comment">// Sent, no return</span>
+                <span class="number">2'b01</span>: <span class="signal">credits</span> <= <span class="signal">credits</span> + <span class="number">1</span>;  <span class="comment">// Return, no send</span>
+                <span class="keyword">default</span>: <span class="signal">credits</span> <= <span class="signal">credits</span>;    <span class="comment">// Both or neither</span>
+            <span class="keyword">endcase</span>
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+
+<span class="keyword">endmodule</span></code></pre>
+
+<h3>Credit-Based Receiver Module</h3>
+
+<pre><code><span class="keyword">module</span> <span class="type">credit_receiver</span> #(
+    <span class="keyword">parameter</span> <span class="type">DEPTH</span> = <span class="number">4</span>,
+    <span class="keyword">parameter</span> <span class="type">WIDTH</span> = <span class="number">32</span>
+)(
+    <span class="keyword">input</span>  <span class="type">logic</span>             <span class="signal">clk</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span>             <span class="signal">rst_n</span>,
+    <span class="comment">// From sender (credit-controlled link)</span>
+    <span class="keyword">input</span>  <span class="type">logic</span>             <span class="signal">rx_valid</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span> [<span class="number">WIDTH-1</span>:<span class="number">0</span>] <span class="signal">rx_data</span>,
+    <span class="comment">// To downstream consumer</span>
+    <span class="keyword">output</span> <span class="type">logic</span>             <span class="signal">out_valid</span>,
+    <span class="keyword">output</span> <span class="type">logic</span> [<span class="number">WIDTH-1</span>:<span class="number">0</span>] <span class="signal">out_data</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span>             <span class="signal">out_ready</span>,
+    <span class="comment">// Credit return to sender</span>
+    <span class="keyword">output</span> <span class="type">logic</span>             <span class="signal">credit_return</span>
+);
+
+    <span class="comment">// Internal FIFO storage</span>
+    <span class="type">logic</span> [<span class="number">WIDTH-1</span>:<span class="number">0</span>] <span class="signal">fifo</span> [<span class="number">DEPTH</span>];
+    <span class="type">logic</span> [<span class="number">$clog2(DEPTH)-1</span>:<span class="number">0</span>] <span class="signal">wr_ptr</span>, <span class="signal">rd_ptr</span>;
+    <span class="type">logic</span> [<span class="number">$clog2(DEPTH)</span>:<span class="number">0</span>] <span class="signal">count</span>;
+
+    <span class="keyword">wire</span> <span class="signal">do_read</span> = (<span class="signal">count</span> > <span class="number">0</span>) && <span class="signal">out_ready</span>;
+    <span class="keyword">assign</span> <span class="signal">out_valid</span>     = (<span class="signal">count</span> > <span class="number">0</span>);
+    <span class="keyword">assign</span> <span class="signal">out_data</span>      = <span class="signal">fifo</span>[<span class="signal">rd_ptr</span>];
+    <span class="keyword">assign</span> <span class="signal">credit_return</span> = <span class="signal">do_read</span>;  <span class="comment">// Return credit when consumed</span>
+
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span> <span class="keyword">or negedge</span> <span class="signal">rst_n</span>) <span class="keyword">begin</span>
+        <span class="keyword">if</span> (!<span class="signal">rst_n</span>) <span class="keyword">begin</span>
+            <span class="signal">wr_ptr</span> <= <span class="number">'0</span>;
+            <span class="signal">rd_ptr</span> <= <span class="number">'0</span>;
+            <span class="signal">count</span>  <= <span class="number">'0</span>;
+        <span class="keyword">end else begin</span>
+            <span class="keyword">if</span> (<span class="signal">rx_valid</span>) <span class="keyword">begin</span>
+                <span class="signal">fifo</span>[<span class="signal">wr_ptr</span>] <= <span class="signal">rx_data</span>;
+                <span class="signal">wr_ptr</span> <= <span class="signal">wr_ptr</span> + <span class="number">1</span>;
+            <span class="keyword">end</span>
+            <span class="keyword">if</span> (<span class="signal">do_read</span>) <span class="keyword">begin</span>
+                <span class="signal">rd_ptr</span> <= <span class="signal">rd_ptr</span> + <span class="number">1</span>;
+            <span class="keyword">end</span>
+            <span class="keyword">case</span> ({<span class="signal">rx_valid</span>, <span class="signal">do_read</span>})
+                <span class="number">2'b10</span>: <span class="signal">count</span> <= <span class="signal">count</span> + <span class="number">1</span>;
+                <span class="number">2'b01</span>: <span class="signal">count</span> <= <span class="signal">count</span> - <span class="number">1</span>;
+                <span class="keyword">default</span>: <span class="signal">count</span> <= <span class="signal">count</span>;
+            <span class="keyword">endcase</span>
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+
+<span class="keyword">endmodule</span></code></pre>
+</div>
+
+<div class="section">
+<h2>5. Ready/Valid vs Credits — When to Use Which</h2>
+
+<table class="comparison-table">
+<tr>
+    <th>Aspect</th>
+    <th>Ready/Valid</th>
+    <th>Credit-Based</th>
+</tr>
+<tr>
+    <td class="en"><strong>Combinational path</strong></td>
+    <td class="ko" style="display:none;"><strong>조합 경로</strong></td>
+    <td class="en">Ready → sender (can be long)</td>
+    <td class="ko" style="display:none;">Ready → 송신자 (길 수 있음)</td>
+    <td class="en">None on send path</td>
+    <td class="ko" style="display:none;">전송 경로에 없음</td>
+</tr>
+<tr>
+    <td class="en"><strong>Latency hiding</strong></td>
+    <td class="ko" style="display:none;"><strong>지연 숨기기</strong></td>
+    <td class="en">Poor (stalls propagate)</td>
+    <td class="ko" style="display:none;">나쁨 (정지 전파)</td>
+    <td class="en">Excellent (pre-allocated)</td>
+    <td class="ko" style="display:none;">우수 (사전 할당)</td>
+</tr>
+<tr>
+    <td class="en"><strong>Area cost</strong></td>
+    <td class="ko" style="display:none;"><strong>면적 비용</strong></td>
+    <td class="en">Minimal</td>
+    <td class="ko" style="display:none;">최소</td>
+    <td class="en">Credit counter + FIFO</td>
+    <td class="ko" style="display:none;">크레딧 카운터 + FIFO</td>
+</tr>
+<tr>
+    <td class="en"><strong>Common usage</strong></td>
+    <td class="ko" style="display:none;"><strong>일반 사용처</strong></td>
+    <td class="en">AXI, on-chip interfaces</td>
+    <td class="ko" style="display:none;">AXI, 칩 내부 인터페이스</td>
+    <td class="en">PCIe, NoC, chip-to-chip</td>
+    <td class="ko" style="display:none;">PCIe, NoC, 칩 간</td>
+</tr>
+<tr>
+    <td class="en"><strong>Complexity</strong></td>
+    <td class="ko" style="display:none;"><strong>복잡도</strong></td>
+    <td class="en">Simple</td>
+    <td class="ko" style="display:none;">단순</td>
+    <td class="en">Medium (credit tracking)</td>
+    <td class="ko" style="display:none;">중간 (크레딧 추적)</td>
+</tr>
+</table>
+
+<div class="warning-box">
+<h3>⚠️ Credit Counter Bugs</h3>
+<p class="en">The most dangerous bug in credit systems: <strong>credit leak</strong>. If a credit is consumed but never returned (e.g., due to a dropped packet), the system slowly deadlocks. Always verify: <code>credits_sent == credits_returned</code> over any long period. Some designs add a periodic credit "refresh" as a safety net.</p>
+<p class="ko" style="display:none;">크레딧 시스템의 가장 위험한 버그: <strong>크레딧 누수(leak)</strong>. 크레딧이 소비되었지만 반환되지 않으면(예: 패킷 드롭), 시스템이 서서히 데드락에 빠집니다. 항상 검증하세요: 장기간에 걸쳐 <code>보낸 크레딧 == 반환된 크레딧</code>. 일부 설계는 안전장치로 주기적인 크레딧 "갱신"을 추가합니다.</p>
+</div>
+</div>
+
+<div class="section">
+<h2>6. XON/XOFF (Pause Frame) Flow Control</h2>
+
+<p class="en">In serial links like <strong>Ethernet</strong> (very relevant to your work!), the receiver can send a <strong>pause frame</strong> to tell the sender to stop. This is XON/XOFF flow control — the same concept Minjun sees in 100BASE-T1 and 1000BASE-T1 PHYs.</p>
+<p class="ko" style="display:none;"><strong>이더넷</strong>과 같은 시리얼 링크에서(Minjun의 업무와 매우 관련 있음!), 수신자는 <strong>pause 프레임</strong>을 보내 송신자에게 멈추라고 알릴 수 있습니다. 이것이 XON/XOFF 흐름 제어입니다 — 100BASE-T1과 1000BASE-T1 PHY에서 볼 수 있는 바로 그 개념입니다.</p>
+
+<div class="concept-box">
+<h3>🔌 Ethernet Pause Frames (IEEE 802.3x)</h3>
+<ul>
+    <li class="en"><strong>XOFF (Pause)</strong>: Receiver sends a pause frame with a <code>quanta</code> timer value. Sender stops for that many quanta (1 quanta = 512 bit times).</li>
+    <li class="ko" style="display:none;"><strong>XOFF (Pause)</strong>: 수신자가 <code>quanta</code> 타이머 값이 포함된 pause 프레임을 전송. 송신자는 해당 quanta만큼 정지 (1 quanta = 512 비트 시간).</li>
+    <li class="en"><strong>XON (Resume)</strong>: Receiver sends a pause frame with <code>quanta = 0</code> to cancel the pause early.</li>
+    <li class="ko" style="display:none;"><strong>XON (Resume)</strong>: 수신자가 <code>quanta = 0</code>인 pause 프레임을 보내 조기 재개.</li>
+    <li class="en"><strong>Priority-Based (PFC)</strong>: IEEE 802.1Qbb allows pausing specific traffic classes independently — critical for automotive networks.</li>
+    <li class="ko" style="display:none;"><strong>우선순위 기반 (PFC)</strong>: IEEE 802.1Qbb는 특정 트래픽 클래스를 독립적으로 일시정지 가능 — 자동차 네트워크에 중요.</li>
+</ul>
+</div>
+</div>
+
+<div class="section">
+<h2>7. Elastic Buffers — Combining Concepts</h2>
+
+<p class="en">In real chips, you often combine buffering with credit or ready/valid to create <strong>elastic buffers</strong> (also called skid buffers). These add 1-2 entries of storage to break timing paths while maintaining full throughput.</p>
+<p class="ko" style="display:none;">실제 칩에서는 종종 버퍼링을 크레딧이나 ready/valid와 결합하여 <strong>탄성 버퍼(elastic buffer)</strong>(스키드 버퍼라고도 함)를 만듭니다. 이는 1~2개의 저장 항목을 추가하여 전체 처리량을 유지하면서 타이밍 경로를 끊습니다.</p>
+
+<pre><code><span class="comment">// Skid buffer: breaks ready path while maintaining throughput</span>
+<span class="keyword">module</span> <span class="type">skid_buffer</span> #(
+    <span class="keyword">parameter</span> <span class="type">WIDTH</span> = <span class="number">32</span>
+)(
+    <span class="keyword">input</span>  <span class="type">logic</span>             <span class="signal">clk</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span>             <span class="signal">rst_n</span>,
+    <span class="comment">// Input (registered ready)</span>
+    <span class="keyword">input</span>  <span class="type">logic</span>             <span class="signal">in_valid</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span> [<span class="number">WIDTH-1</span>:<span class="number">0</span>] <span class="signal">in_data</span>,
+    <span class="keyword">output</span> <span class="type">logic</span>             <span class="signal">in_ready</span>,
+    <span class="comment">// Output</span>
+    <span class="keyword">output</span> <span class="type">logic</span>             <span class="signal">out_valid</span>,
+    <span class="keyword">output</span> <span class="type">logic</span> [<span class="number">WIDTH-1</span>:<span class="number">0</span>] <span class="signal">out_data</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span>             <span class="signal">out_ready</span>
+);
+
+    <span class="type">logic</span> [<span class="number">WIDTH-1</span>:<span class="number">0</span>] <span class="signal">skid_data</span>;
+    <span class="type">logic</span>             <span class="signal">skid_valid</span>;
+
+    <span class="comment">// Output comes from skid register if it has data</span>
+    <span class="keyword">assign</span> <span class="signal">out_valid</span> = <span class="signal">skid_valid</span> || <span class="signal">in_valid</span>;
+    <span class="keyword">assign</span> <span class="signal">out_data</span>  = <span class="signal">skid_valid</span> ? <span class="signal">skid_data</span> : <span class="signal">in_data</span>;
+
+    <span class="comment">// Ready is registered — breaks combinational path!</span>
+    <span class="keyword">assign</span> <span class="signal">in_ready</span> = !<span class="signal">skid_valid</span>;
+
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span> <span class="keyword">or negedge</span> <span class="signal">rst_n</span>) <span class="keyword">begin</span>
+        <span class="keyword">if</span> (!<span class="signal">rst_n</span>) <span class="keyword">begin</span>
+            <span class="signal">skid_valid</span> <= <span class="number">1'b0</span>;
+        <span class="keyword">end else if</span> (<span class="signal">in_valid</span> && <span class="signal">in_ready</span> && !<span class="signal">out_ready</span>) <span class="keyword">begin</span>
+            <span class="comment">// Input arrives but output blocked — store in skid</span>
+            <span class="signal">skid_data</span>  <= <span class="signal">in_data</span>;
+            <span class="signal">skid_valid</span> <= <span class="number">1'b1</span>;
+        <span class="keyword">end else if</span> (<span class="signal">out_ready</span>) <span class="keyword">begin</span>
+            <span class="signal">skid_valid</span> <= <span class="number">1'b0</span>;  <span class="comment">// Drain skid</span>
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+
+<span class="keyword">endmodule</span></code></pre>
+
+<div class="tip-box">
+<h3>💡 Why Skid Buffers Matter</h3>
+<p class="en">In ready/valid, the <code>ready</code> signal often creates the worst timing path in the design because it goes from consumer back through every pipeline stage. A skid buffer at each stage breaks this into 1-stage hops, making timing closure much easier.</p>
+<p class="ko" style="display:none;">Ready/valid에서 <code>ready</code> 신호는 종종 설계에서 최악의 타이밍 경로를 만듭니다. 소비자에서 모든 파이프라인 단계를 거꾸로 거쳐가기 때문입니다. 각 단계의 스키드 버퍼는 이를 1단계 홉으로 분리하여 타이밍 클로저를 훨씬 쉽게 만듭니다.</p>
+</div>
+</div>
+
+<div class="section">
+<h2>8. Real-World: Where You'll See This</h2>
+
+<div class="concept-box">
+<h3>🚗 Automotive Ethernet (Your Domain!)</h3>
+<ul>
+    <li class="en"><strong>MAC TX buffer</strong>: FIFO between the MAC layer and PHY. When the PHY can't transmit (e.g., link training), the buffer absorbs frames.</li>
+    <li class="ko" style="display:none;"><strong>MAC TX 버퍼</strong>: MAC 계층과 PHY 사이의 FIFO. PHY가 전송할 수 없을 때(예: 링크 트레이닝), 버퍼가 프레임을 흡수합니다.</li>
+    <li class="en"><strong>Switch fabric</strong>: Multi-port switches use credit-based flow control between ingress and egress ports to prevent head-of-line blocking.</li>
+    <li class="ko" style="display:none;"><strong>스위치 패브릭</strong>: 멀티포트 스위치는 입력과 출력 포트 사이에 크레딧 기반 흐름 제어를 사용하여 head-of-line 블로킹을 방지합니다.</li>
+    <li class="en"><strong>RGMII/SGMII interface</strong>: Elastic buffers compensate for clock frequency differences between MAC and PHY.</li>
+    <li class="ko" style="display:none;"><strong>RGMII/SGMII 인터페이스</strong>: 탄성 버퍼가 MAC과 PHY 간의 클럭 주파수 차이를 보상합니다.</li>
+</ul>
+</div>
+</div>
+
+<div class="section">
+<h2>🧠 Key Takeaways</h2>
+
+<ol>
+    <li class="en"><strong>FIFOs</strong> are the workhorses of flow control — they decouple producer and consumer rates</li>
+    <li class="ko" style="display:none;"><strong>FIFO</strong>는 흐름 제어의 핵심 — 생산자와 소비자 속도를 분리합니다</li>
+    <li class="en"><strong>Credit-based</strong> flow control eliminates the ready-path problem in long pipelines</li>
+    <li class="ko" style="display:none;"><strong>크레딧 기반</strong> 흐름 제어는 긴 파이프라인에서 ready 경로 문제를 제거합니다</li>
+    <li class="en"><strong>Skid buffers</strong> break combinational paths while maintaining throughput</li>
+    <li class="ko" style="display:none;"><strong>스키드 버퍼</strong>는 처리량을 유지하면서 조합 경로를 끊습니다</li>
+    <li class="en"><strong>XON/XOFF</strong> pause frames are how Ethernet does flow control — directly relevant to your PHY work</li>
+    <li class="ko" style="display:none;"><strong>XON/XOFF</strong> pause 프레임은 이더넷의 흐름 제어 방식 — PHY 업무에 직접 관련됩니다</li>
+    <li class="en"><strong>Size buffers</strong> for worst-case burst, not average case</li>
+    <li class="ko" style="display:none;"><strong>버퍼 크기</strong>는 평균이 아닌 최악의 버스트 기준으로 설정하세요</li>
+</ol>
+</div>
+
+<div class="nav-links">
+    <a href="day-29-quiz.html">📝 Take the Quiz</a>
+    <a href="day-29-practice.html">💻 Practice Exercises</a>
+    <a href="day-28-lesson.html">← Day 28</a>
+</div>
+
+<script>
+let isKorean = false;
+function toggleLang() {
+    isKorean = !isKorean;
+    document.querySelectorAll('.en').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'none' : 'revert', 'important');
+    });
+    document.querySelectorAll('.ko').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'revert' : 'none', 'important');
+    });
+    document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+}
+</script>
+
+</body>
+</html>

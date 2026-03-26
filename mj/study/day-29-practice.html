@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 29 Practice: Flow Control — Buffering & Credits | Digital Design Study</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    background: linear-gradient(135deg, #fefae0 0%, #faedcd 100%);
+    color: #3d405b;
+    line-height: 1.8;
+    padding: 24px;
+    max-width: 920px;
+    margin: 0 auto;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+h1 {
+    color: #5d4037;
+    border-bottom: 3px solid #c4a77d;
+    padding-bottom: 12px;
+    margin-bottom: 24px;
+    font-size: 2em;
+}
+h2 {
+    color: #588157;
+    border-bottom: 2px solid #a3b18a;
+    padding-bottom: 8px;
+    margin: 32px 0 16px;
+}
+h3 { color: #5d4037; margin: 20px 0 10px; }
+p { margin: 12px 0; }
+ul, ol { margin: 12px 0 12px 24px; }
+li { margin: 6px 0; }
+pre {
+    background: #2d3436;
+    padding: 24px;
+    border-radius: 12px;
+    margin: 24px 0;
+    border: 3px solid #a3b18a;
+    overflow-x: auto;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+    font-size: 15px;
+    line-height: 1.6;
+    color: #f8f8f2;
+}
+code {
+    background: #e9f5db;
+    color: #3d405b;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+}
+pre code { background: none; color: #f8f8f2; padding: 0; }
+.keyword { color: #ff79c6; font-weight: 600; }
+.type { color: #8be9fd; }
+.signal { color: #50fa7b; }
+.number { color: #ffb86c; }
+.comment { color: #6272a4; font-style: italic; }
+.string { color: #f1fa8c; }
+.section {
+    background: #fff;
+    border-radius: 12px;
+    padding: 24px;
+    margin: 24px 0;
+    border: 1px solid #c4a77d;
+}
+.concept-box {
+    background: #fff8f0;
+    border: 2px solid #c4a77d;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    color: #3d405b;
+}
+.concept-box h3 { color: #5d4037; margin-bottom: 12px; }
+.hint-box {
+    background: #fff8f0;
+    border-radius: 8px;
+    padding: 15px;
+    margin: 15px 0;
+    border-left: 4px solid #5d4037;
+    color: #3d405b;
+}
+.warning-box {
+    background: #fff8f0;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    border-left: 4px solid #ef4444;
+    color: #3d405b;
+}
+.warning-box h3 { color: #c53030; margin-bottom: 12px; }
+.tip-box {
+    background: #fff8f0;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    border-left: 4px solid #588157;
+    color: #3d405b;
+}
+.solution {
+    display: none;
+    background: #fff8f0;
+    border: 2px solid #a3b18a;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 16px 0;
+}
+.solution-btn {
+    background: linear-gradient(135deg, #588157, #3a5a40);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 14px;
+    margin: 12px 0;
+}
+.solution-btn:hover { opacity: 0.9; }
+.nav-links {
+    display: flex;
+    gap: 12px;
+    margin: 24px 0;
+    flex-wrap: wrap;
+}
+.nav-links a {
+    background: linear-gradient(135deg, #588157, #3a5a40);
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 24px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14px;
+}
+.nav-links a:hover { opacity: 0.9; }
+.lang-toggle {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    background: #588157;
+    border: none;
+    border-radius: 24px;
+    padding: 10px 20px;
+    cursor: pointer;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    z-index: 1000;
+}
+.lang-toggle:hover { background: #3a5a40; }
+.ko { display: none; }
+.comparison-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+.comparison-table th {
+    background: #588157;
+    color: white;
+    padding: 12px;
+    text-align: left;
+}
+.comparison-table td {
+    background: #fff;
+    border: 1px solid #c4a77d;
+    padding: 12px;
+    color: #3d405b;
+}
+.comparison-table tr:nth-child(even) td { background: #fff8f0; }
+@media (max-width: 768px) {
+    body { padding: 16px; }
+    h1 { font-size: 1.8em; }
+    pre { font-size: 14px; padding: 16px; }
+    .lang-toggle { padding: 8px 16px; font-size: 13px; }
+}
+</style>
+</head>
+<body>
+
+<button class="lang-toggle" onclick="toggleLang()">한국어</button>
+
+<h1>💻 Day 29 Practice: Flow Control</h1>
+
+<div class="nav-links">
+    <a href="day-29-lesson.html">📖 Lesson</a>
+    <a href="day-29-quiz.html">📝 Quiz</a>
+</div>
+
+<div class="concept-box">
+<h3>🎯 Today's Exercises</h3>
+<p class="en">Three hands-on exercises building real flow control modules. Use <a href="https://www.edaplayground.com/" target="_blank">EDA Playground</a> to simulate.</p>
+<p class="ko" style="display:none;">실제 흐름 제어 모듈을 만드는 3개의 실습 과제입니다. <a href="https://www.edaplayground.com/" target="_blank">EDA Playground</a>에서 시뮬레이션하세요.</p>
+<ol>
+    <li class="en"><strong>Exercise 1:</strong> Almost-Full FIFO with Watermark (Beginner)</li>
+    <li class="ko" style="display:none;"><strong>과제 1:</strong> 워터마크가 있는 Almost-Full FIFO (초급)</li>
+    <li class="en"><strong>Exercise 2:</strong> Credit-Based Sender + Receiver System (Intermediate)</li>
+    <li class="ko" style="display:none;"><strong>과제 2:</strong> 크레딧 기반 송신자 + 수신자 시스템 (중급)</li>
+    <li class="en"><strong>Exercise 3:</strong> Skid Buffer with Testbench (Advanced)</li>
+    <li class="ko" style="display:none;"><strong>과제 3:</strong> 테스트벤치가 있는 스키드 버퍼 (고급)</li>
+</ol>
+</div>
+
+<!-- Exercise 1 -->
+<div class="section">
+<h2>Exercise 1: Almost-Full FIFO with Watermark</h2>
+
+<p class="en">Build a FIFO that asserts an <code>almost_full</code> signal when the occupancy reaches a configurable watermark threshold. This is used in Ethernet switches to trigger pause frames <em>before</em> the buffer overflows.</p>
+<p class="ko" style="display:none;">점유율이 구성 가능한 워터마크 임계값에 도달하면 <code>almost_full</code> 신호를 출력하는 FIFO를 구축하세요. 이더넷 스위치에서 버퍼가 오버플로하기 <em>전에</em> pause 프레임을 트리거하는 데 사용됩니다.</p>
+
+<div class="concept-box">
+<h3>📋 Requirements</h3>
+<ul>
+    <li class="en">Parameterized <code>DEPTH</code> (default 8) and <code>WIDTH</code> (default 32)</li>
+    <li class="ko" style="display:none;">매개변수화된 <code>DEPTH</code> (기본값 8) 및 <code>WIDTH</code> (기본값 32)</li>
+    <li class="en">Parameterized <code>WATERMARK</code> (default 6) — assert <code>almost_full</code> when <code>count >= WATERMARK</code></li>
+    <li class="ko" style="display:none;">매개변수화된 <code>WATERMARK</code> (기본값 6) — <code>count >= WATERMARK</code>일 때 <code>almost_full</code> 출력</li>
+    <li class="en">Standard signals: <code>wr_valid</code>, <code>wr_ready</code>, <code>rd_valid</code>, <code>rd_ready</code></li>
+    <li class="ko" style="display:none;">표준 신호: <code>wr_valid</code>, <code>wr_ready</code>, <code>rd_valid</code>, <code>rd_ready</code></li>
+    <li class="en">Output: <code>almost_full</code>, <code>count</code>, <code>full</code>, <code>empty</code></li>
+    <li class="ko" style="display:none;">출력: <code>almost_full</code>, <code>count</code>, <code>full</code>, <code>empty</code></li>
+</ul>
+</div>
+
+<h3>Starter Template</h3>
+
+<pre><code><span class="keyword">module</span> <span class="type">watermark_fifo</span> #(
+    <span class="keyword">parameter</span> <span class="type">DEPTH</span>     = <span class="number">8</span>,
+    <span class="keyword">parameter</span> <span class="type">WIDTH</span>     = <span class="number">32</span>,
+    <span class="keyword">parameter</span> <span class="type">WATERMARK</span> = <span class="number">6</span>
+)(
+    <span class="keyword">input</span>  <span class="type">logic</span>                        <span class="signal">clk</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span>                        <span class="signal">rst_n</span>,
+    <span class="comment">// Write port</span>
+    <span class="keyword">input</span>  <span class="type">logic</span>                        <span class="signal">wr_valid</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span> [<span class="number">WIDTH-1</span>:<span class="number">0</span>]            <span class="signal">wr_data</span>,
+    <span class="keyword">output</span> <span class="type">logic</span>                        <span class="signal">wr_ready</span>,
+    <span class="comment">// Read port</span>
+    <span class="keyword">output</span> <span class="type">logic</span>                        <span class="signal">rd_valid</span>,
+    <span class="keyword">output</span> <span class="type">logic</span> [<span class="number">WIDTH-1</span>:<span class="number">0</span>]            <span class="signal">rd_data</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span>                        <span class="signal">rd_ready</span>,
+    <span class="comment">// Status</span>
+    <span class="keyword">output</span> <span class="type">logic</span>                        <span class="signal">almost_full</span>,
+    <span class="keyword">output</span> <span class="type">logic</span>                        <span class="signal">full</span>,
+    <span class="keyword">output</span> <span class="type">logic</span>                        <span class="signal">empty</span>,
+    <span class="keyword">output</span> <span class="type">logic</span> [<span class="number">$clog2(DEPTH)</span>:<span class="number">0</span>]     <span class="signal">count</span>
+);
+
+    <span class="comment">// TODO: Implement the FIFO with watermark</span>
+    <span class="comment">// 1. Declare memory array and pointers</span>
+    <span class="comment">// 2. Generate do_write and do_read signals</span>
+    <span class="comment">// 3. Drive status outputs (full, empty, almost_full)</span>
+    <span class="comment">// 4. Implement pointer and count update logic</span>
+
+<span class="keyword">endmodule</span></code></pre>
+
+<div class="hint-box">
+<h3>💡 Hints</h3>
+<ul>
+    <li class="en"><code>almost_full = (count >= WATERMARK)</code> — this fires <em>before</em> full, giving the system time to react</li>
+    <li class="ko" style="display:none;"><code>almost_full = (count >= WATERMARK)</code> — full 이전에 발생하여 시스템이 반응할 시간을 줌</li>
+    <li class="en">In Ethernet, <code>almost_full</code> triggers a pause frame to the link partner</li>
+    <li class="ko" style="display:none;">이더넷에서 <code>almost_full</code>은 링크 파트너에게 pause 프레임을 트리거합니다</li>
+    <li class="en">Use circular pointer arithmetic (pointers wrap at DEPTH)</li>
+    <li class="ko" style="display:none;">순환 포인터 산술 사용 (포인터가 DEPTH에서 래핑)</li>
+</ul>
+</div>
+
+<button class="solution-btn" onclick="toggleSolution('sol1')">Show Solution</button>
+<div class="solution" id="sol1">
+<pre><code><span class="keyword">module</span> <span class="type">watermark_fifo</span> #(
+    <span class="keyword">parameter</span> <span class="type">DEPTH</span>     = <span class="number">8</span>,
+    <span class="keyword">parameter</span> <span class="type">WIDTH</span>     = <span class="number">32</span>,
+    <span class="keyword">parameter</span> <span class="type">WATERMARK</span> = <span class="number">6</span>
+)(
+    <span class="keyword">input</span>  <span class="type">logic</span>                        <span class="signal">clk</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span>                        <span class="signal">rst_n</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span>                        <span class="signal">wr_valid</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span> [<span class="number">WIDTH-1</span>:<span class="number">0</span>]            <span class="signal">wr_data</span>,
+    <span class="keyword">output</span> <span class="type">logic</span>                        <span class="signal">wr_ready</span>,
+    <span class="keyword">output</span> <span class="type">logic</span>                        <span class="signal">rd_valid</span>,
+    <span class="keyword">output</span> <span class="type">logic</span> [<span class="number">WIDTH-1</span>:<span class="number">0</span>]            <span class="signal">rd_data</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span>                        <span class="signal">rd_ready</span>,
+    <span class="keyword">output</span> <span class="type">logic</span>                        <span class="signal">almost_full</span>,
+    <span class="keyword">output</span> <span class="type">logic</span>                        <span class="signal">full</span>,
+    <span class="keyword">output</span> <span class="type">logic</span>                        <span class="signal">empty</span>,
+    <span class="keyword">output</span> <span class="type">logic</span> [<span class="number">$clog2(DEPTH)</span>:<span class="number">0</span>]     <span class="signal">count</span>
+);
+
+    <span class="type">logic</span> [<span class="number">WIDTH-1</span>:<span class="number">0</span>] <span class="signal">mem</span> [<span class="number">DEPTH</span>];
+    <span class="type">logic</span> [<span class="number">$clog2(DEPTH)-1</span>:<span class="number">0</span>] <span class="signal">wr_ptr</span>, <span class="signal">rd_ptr</span>;
+
+    <span class="keyword">wire</span> <span class="signal">do_write</span> = <span class="signal">wr_valid</span> && <span class="signal">wr_ready</span>;
+    <span class="keyword">wire</span> <span class="signal">do_read</span>  = <span class="signal">rd_valid</span> && <span class="signal">rd_ready</span>;
+
+    <span class="comment">// Status outputs</span>
+    <span class="keyword">assign</span> <span class="signal">full</span>        = (<span class="signal">count</span> == <span class="number">DEPTH</span>);
+    <span class="keyword">assign</span> <span class="signal">empty</span>       = (<span class="signal">count</span> == <span class="number">0</span>);
+    <span class="keyword">assign</span> <span class="signal">almost_full</span> = (<span class="signal">count</span> >= <span class="number">WATERMARK</span>);
+    <span class="keyword">assign</span> <span class="signal">wr_ready</span>    = !<span class="signal">full</span>;
+    <span class="keyword">assign</span> <span class="signal">rd_valid</span>    = !<span class="signal">empty</span>;
+    <span class="keyword">assign</span> <span class="signal">rd_data</span>     = <span class="signal">mem</span>[<span class="signal">rd_ptr</span>];
+
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span> <span class="keyword">or negedge</span> <span class="signal">rst_n</span>) <span class="keyword">begin</span>
+        <span class="keyword">if</span> (!<span class="signal">rst_n</span>) <span class="keyword">begin</span>
+            <span class="signal">wr_ptr</span> <= <span class="number">'0</span>;
+            <span class="signal">rd_ptr</span> <= <span class="number">'0</span>;
+            <span class="signal">count</span>  <= <span class="number">'0</span>;
+        <span class="keyword">end else begin</span>
+            <span class="keyword">if</span> (<span class="signal">do_write</span>) <span class="keyword">begin</span>
+                <span class="signal">mem</span>[<span class="signal">wr_ptr</span>] <= <span class="signal">wr_data</span>;
+                <span class="signal">wr_ptr</span> <= (<span class="signal">wr_ptr</span> == <span class="number">DEPTH-1</span>) ? <span class="number">'0</span> : <span class="signal">wr_ptr</span> + <span class="number">1</span>;
+            <span class="keyword">end</span>
+            <span class="keyword">if</span> (<span class="signal">do_read</span>) <span class="keyword">begin</span>
+                <span class="signal">rd_ptr</span> <= (<span class="signal">rd_ptr</span> == <span class="number">DEPTH-1</span>) ? <span class="number">'0</span> : <span class="signal">rd_ptr</span> + <span class="number">1</span>;
+            <span class="keyword">end</span>
+            <span class="keyword">case</span> ({<span class="signal">do_write</span>, <span class="signal">do_read</span>})
+                <span class="number">2'b10</span>: <span class="signal">count</span> <= <span class="signal">count</span> + <span class="number">1</span>;
+                <span class="number">2'b01</span>: <span class="signal">count</span> <= <span class="signal">count</span> - <span class="number">1</span>;
+                <span class="keyword">default</span>: <span class="signal">count</span> <= <span class="signal">count</span>;
+            <span class="keyword">endcase</span>
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+
+<span class="keyword">endmodule</span></code></pre>
+</div>
+</div>
+
+<!-- Exercise 2 -->
+<div class="section">
+<h2>Exercise 2: Credit-Based Flow Control System</h2>
+
+<p class="en">Build a complete credit-based flow control system: a <strong>credit sender</strong> and a <strong>credit receiver</strong> connected together. The sender tracks credits and only transmits when credits are available. The receiver consumes data and returns credits.</p>
+<p class="ko" style="display:none;">완전한 크레딧 기반 흐름 제어 시스템을 구축하세요: <strong>크레딧 송신자</strong>와 <strong>크레딧 수신자</strong>를 연결합니다. 송신자는 크레딧을 추적하고 크레딧이 있을 때만 전송합니다. 수신자는 데이터를 소비하고 크레딧을 반환합니다.</p>
+
+<div class="concept-box">
+<h3>📋 Requirements</h3>
+<ul>
+    <li class="en"><code>MAX_CREDITS = 4</code> (receiver FIFO depth = 4)</li>
+    <li class="ko" style="display:none;"><code>MAX_CREDITS = 4</code> (수신자 FIFO 깊이 = 4)</li>
+    <li class="en">Sender: decrements credits on send, increments on <code>credit_return</code></li>
+    <li class="ko" style="display:none;">송신자: 전송 시 크레딧 감소, <code>credit_return</code> 시 증가</li>
+    <li class="en">Receiver: stores data in FIFO, returns credit when entry consumed by downstream</li>
+    <li class="ko" style="display:none;">수신자: FIFO에 데이터 저장, 다운스트림에서 소비 시 크레딧 반환</li>
+    <li class="en">Write a testbench that sends 10 items with a slow consumer (consumes every 3 cycles)</li>
+    <li class="ko" style="display:none;">느린 소비자로 10개 항목을 전송하는 테스트벤치 작성 (3 cycle마다 소비)</li>
+    <li class="en">Verify: no data lost, credit count never goes negative or exceeds MAX_CREDITS</li>
+    <li class="ko" style="display:none;">검증: 데이터 손실 없음, 크레딧이 음수가 되거나 MAX_CREDITS를 초과하지 않음</li>
+</ul>
+</div>
+
+<h3>Starter Template — Top Module</h3>
+
+<pre><code><span class="keyword">module</span> <span class="type">credit_system</span> #(
+    <span class="keyword">parameter</span> <span class="type">MAX_CREDITS</span> = <span class="number">4</span>,
+    <span class="keyword">parameter</span> <span class="type">WIDTH</span>       = <span class="number">8</span>
+)(
+    <span class="keyword">input</span>  <span class="type">logic</span>             <span class="signal">clk</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span>             <span class="signal">rst_n</span>,
+    <span class="comment">// Producer interface</span>
+    <span class="keyword">input</span>  <span class="type">logic</span>             <span class="signal">prod_valid</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span> [<span class="number">WIDTH-1</span>:<span class="number">0</span>] <span class="signal">prod_data</span>,
+    <span class="keyword">output</span> <span class="type">logic</span>             <span class="signal">prod_ready</span>,
+    <span class="comment">// Consumer interface</span>
+    <span class="keyword">output</span> <span class="type">logic</span>             <span class="signal">cons_valid</span>,
+    <span class="keyword">output</span> <span class="type">logic</span> [<span class="number">WIDTH-1</span>:<span class="number">0</span>] <span class="signal">cons_data</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span>             <span class="signal">cons_ready</span>,
+    <span class="comment">// Debug</span>
+    <span class="keyword">output</span> <span class="type">logic</span> [<span class="number">$clog2(MAX_CREDITS)</span>:<span class="number">0</span>] <span class="signal">credits_dbg</span>
+);
+
+    <span class="comment">// TODO: Instantiate credit_sender and credit_receiver</span>
+    <span class="comment">// Connect tx_valid, tx_data, and credit_return between them</span>
+
+<span class="keyword">endmodule</span></code></pre>
+
+<div class="hint-box">
+<h3>💡 Hints</h3>
+<ul>
+    <li class="en">The <code>credit_return</code> signal goes from receiver back to sender</li>
+    <li class="ko" style="display:none;"><code>credit_return</code> 신호는 수신자에서 송신자로 돌아갑니다</li>
+    <li class="en">In real designs, <code>credit_return</code> may travel through pipeline stages — add latency with a shift register for a more realistic simulation</li>
+    <li class="ko" style="display:none;">실제 설계에서 <code>credit_return</code>은 파이프라인 단계를 거쳐야 할 수 있음 — 시프트 레지스터로 지연 추가하면 더 현실적</li>
+    <li class="en">Use assertions: <code>assert(credits >= 0)</code> and <code>assert(credits <= MAX_CREDITS)</code></li>
+    <li class="ko" style="display:none;">어서션 사용: <code>assert(credits >= 0)</code> 및 <code>assert(credits <= MAX_CREDITS)</code></li>
+</ul>
+</div>
+
+<button class="solution-btn" onclick="toggleSolution('sol2')">Show Solution</button>
+<div class="solution" id="sol2">
+<pre><code><span class="keyword">module</span> <span class="type">credit_system</span> #(
+    <span class="keyword">parameter</span> <span class="type">MAX_CREDITS</span> = <span class="number">4</span>,
+    <span class="keyword">parameter</span> <span class="type">WIDTH</span>       = <span class="number">8</span>
+)(
+    <span class="keyword">input</span>  <span class="type">logic</span>             <span class="signal">clk</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span>             <span class="signal">rst_n</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span>             <span class="signal">prod_valid</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span> [<span class="number">WIDTH-1</span>:<span class="number">0</span>] <span class="signal">prod_data</span>,
+    <span class="keyword">output</span> <span class="type">logic</span>             <span class="signal">prod_ready</span>,
+    <span class="keyword">output</span> <span class="type">logic</span>             <span class="signal">cons_valid</span>,
+    <span class="keyword">output</span> <span class="type">logic</span> [<span class="number">WIDTH-1</span>:<span class="number">0</span>] <span class="signal">cons_data</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span>             <span class="signal">cons_ready</span>,
+    <span class="keyword">output</span> <span class="type">logic</span> [<span class="number">$clog2(MAX_CREDITS)</span>:<span class="number">0</span>] <span class="signal">credits_dbg</span>
+);
+
+    <span class="type">logic</span> <span class="signal">tx_valid</span>, <span class="signal">credit_return</span>;
+    <span class="type">logic</span> [<span class="number">WIDTH-1</span>:<span class="number">0</span>] <span class="signal">tx_data</span>;
+
+    <span class="comment">// Credit Sender</span>
+    <span class="type">logic</span> [<span class="number">$clog2(MAX_CREDITS)</span>:<span class="number">0</span>] <span class="signal">credits</span>;
+    <span class="keyword">wire</span> <span class="signal">can_send</span> = (<span class="signal">credits</span> > <span class="number">0</span>) && <span class="signal">prod_valid</span>;
+
+    <span class="keyword">assign</span> <span class="signal">prod_ready</span>  = (<span class="signal">credits</span> > <span class="number">0</span>);
+    <span class="keyword">assign</span> <span class="signal">tx_valid</span>    = <span class="signal">can_send</span>;
+    <span class="keyword">assign</span> <span class="signal">tx_data</span>     = <span class="signal">prod_data</span>;
+    <span class="keyword">assign</span> <span class="signal">credits_dbg</span> = <span class="signal">credits</span>;
+
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span> <span class="keyword">or negedge</span> <span class="signal">rst_n</span>) <span class="keyword">begin</span>
+        <span class="keyword">if</span> (!<span class="signal">rst_n</span>)
+            <span class="signal">credits</span> <= <span class="number">MAX_CREDITS</span>;
+        <span class="keyword">else</span>
+            <span class="keyword">case</span> ({<span class="signal">can_send</span>, <span class="signal">credit_return</span>})
+                <span class="number">2'b10</span>: <span class="signal">credits</span> <= <span class="signal">credits</span> - <span class="number">1</span>;
+                <span class="number">2'b01</span>: <span class="signal">credits</span> <= <span class="signal">credits</span> + <span class="number">1</span>;
+                <span class="keyword">default</span>: <span class="signal">credits</span> <= <span class="signal">credits</span>;
+            <span class="keyword">endcase</span>
+    <span class="keyword">end</span>
+
+    <span class="comment">// Credit Receiver (FIFO)</span>
+    <span class="type">logic</span> [<span class="number">WIDTH-1</span>:<span class="number">0</span>] <span class="signal">fifo</span> [<span class="number">MAX_CREDITS</span>];
+    <span class="type">logic</span> [<span class="number">$clog2(MAX_CREDITS)-1</span>:<span class="number">0</span>] <span class="signal">wr_ptr</span>, <span class="signal">rd_ptr</span>;
+    <span class="type">logic</span> [<span class="number">$clog2(MAX_CREDITS)</span>:<span class="number">0</span>] <span class="signal">fifo_count</span>;
+
+    <span class="keyword">wire</span> <span class="signal">do_read</span> = (<span class="signal">fifo_count</span> > <span class="number">0</span>) && <span class="signal">cons_ready</span>;
+    <span class="keyword">assign</span> <span class="signal">cons_valid</span>     = (<span class="signal">fifo_count</span> > <span class="number">0</span>);
+    <span class="keyword">assign</span> <span class="signal">cons_data</span>      = <span class="signal">fifo</span>[<span class="signal">rd_ptr</span>];
+    <span class="keyword">assign</span> <span class="signal">credit_return</span> = <span class="signal">do_read</span>;
+
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span> <span class="keyword">or negedge</span> <span class="signal">rst_n</span>) <span class="keyword">begin</span>
+        <span class="keyword">if</span> (!<span class="signal">rst_n</span>) <span class="keyword">begin</span>
+            <span class="signal">wr_ptr</span>     <= <span class="number">'0</span>;
+            <span class="signal">rd_ptr</span>     <= <span class="number">'0</span>;
+            <span class="signal">fifo_count</span> <= <span class="number">'0</span>;
+        <span class="keyword">end else begin</span>
+            <span class="keyword">if</span> (<span class="signal">tx_valid</span>) <span class="keyword">begin</span>
+                <span class="signal">fifo</span>[<span class="signal">wr_ptr</span>] <= <span class="signal">tx_data</span>;
+                <span class="signal">wr_ptr</span> <= <span class="signal">wr_ptr</span> + <span class="number">1</span>;
+            <span class="keyword">end</span>
+            <span class="keyword">if</span> (<span class="signal">do_read</span>)
+                <span class="signal">rd_ptr</span> <= <span class="signal">rd_ptr</span> + <span class="number">1</span>;
+            <span class="keyword">case</span> ({<span class="signal">tx_valid</span>, <span class="signal">do_read</span>})
+                <span class="number">2'b10</span>: <span class="signal">fifo_count</span> <= <span class="signal">fifo_count</span> + <span class="number">1</span>;
+                <span class="number">2'b01</span>: <span class="signal">fifo_count</span> <= <span class="signal">fifo_count</span> - <span class="number">1</span>;
+                <span class="keyword">default</span>: <span class="signal">fifo_count</span> <= <span class="signal">fifo_count</span>;
+            <span class="keyword">endcase</span>
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+
+    <span class="comment">// Assertions</span>
+    <span class="comment">// synthesis translate_off</span>
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span>) <span class="keyword">begin</span>
+        <span class="keyword">assert</span>(<span class="signal">credits</span> <= <span class="number">MAX_CREDITS</span>) <span class="keyword">else</span>
+            <span class="signal">$error</span>(<span class="string">"Credit overflow! credits=%0d"</span>, <span class="signal">credits</span>);
+        <span class="keyword">assert</span>(<span class="signal">fifo_count</span> <= <span class="number">MAX_CREDITS</span>) <span class="keyword">else</span>
+            <span class="signal">$error</span>(<span class="string">"FIFO overflow! count=%0d"</span>, <span class="signal">fifo_count</span>);
+    <span class="keyword">end</span>
+    <span class="comment">// synthesis translate_on</span>
+
+<span class="keyword">endmodule</span></code></pre>
+
+<h3>Testbench</h3>
+<pre><code><span class="keyword">module</span> <span class="type">tb_credit_system</span>;
+    <span class="type">logic</span> <span class="signal">clk</span>, <span class="signal">rst_n</span>;
+    <span class="type">logic</span> <span class="signal">prod_valid</span>, <span class="signal">prod_ready</span>;
+    <span class="type">logic</span> [<span class="number">7</span>:<span class="number">0</span>] <span class="signal">prod_data</span>;
+    <span class="type">logic</span> <span class="signal">cons_valid</span>, <span class="signal">cons_ready</span>;
+    <span class="type">logic</span> [<span class="number">7</span>:<span class="number">0</span>] <span class="signal">cons_data</span>;
+    <span class="type">logic</span> [<span class="number">2</span>:<span class="number">0</span>] <span class="signal">credits_dbg</span>;
+    <span class="type">integer</span> <span class="signal">sent</span>, <span class="signal">received</span>;
+
+    <span class="type">credit_system</span> #(.<span class="signal">MAX_CREDITS</span>(<span class="number">4</span>), .<span class="signal">WIDTH</span>(<span class="number">8</span>)) <span class="signal">dut</span> (.*);
+
+    <span class="keyword">always</span> #<span class="number">5</span> <span class="signal">clk</span> = ~<span class="signal">clk</span>;
+
+    <span class="comment">// Slow consumer: accepts every 3 cycles</span>
+    <span class="type">integer</span> <span class="signal">cons_cnt</span>;
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span>) <span class="keyword">begin</span>
+        <span class="keyword">if</span> (!<span class="signal">rst_n</span>) <span class="signal">cons_cnt</span> <= <span class="number">0</span>;
+        <span class="keyword">else</span> <span class="signal">cons_cnt</span> <= (<span class="signal">cons_cnt</span> == <span class="number">2</span>) ? <span class="number">0</span> : <span class="signal">cons_cnt</span> + <span class="number">1</span>;
+    <span class="keyword">end</span>
+    <span class="keyword">assign</span> <span class="signal">cons_ready</span> = (<span class="signal">cons_cnt</span> == <span class="number">0</span>);
+
+    <span class="keyword">initial begin</span>
+        <span class="signal">clk</span> = <span class="number">0</span>; <span class="signal">rst_n</span> = <span class="number">0</span>; <span class="signal">prod_valid</span> = <span class="number">0</span>;
+        <span class="signal">sent</span> = <span class="number">0</span>; <span class="signal">received</span> = <span class="number">0</span>;
+        #<span class="number">20</span> <span class="signal">rst_n</span> = <span class="number">1</span>;
+
+        <span class="comment">// Send 10 items</span>
+        <span class="keyword">for</span> (<span class="type">int</span> <span class="signal">i</span> = <span class="number">0</span>; <span class="signal">i</span> < <span class="number">10</span>; <span class="signal">i</span>++) <span class="keyword">begin</span>
+            <span class="signal">prod_valid</span> = <span class="number">1</span>;
+            <span class="signal">prod_data</span>  = <span class="signal">i</span>;
+            @(<span class="keyword">posedge</span> <span class="signal">clk</span>);
+            <span class="keyword">while</span> (!<span class="signal">prod_ready</span>) @(<span class="keyword">posedge</span> <span class="signal">clk</span>);
+            <span class="signal">sent</span>++;
+            <span class="signal">$display</span>(<span class="string">"[%0t] Sent %0d, credits=%0d"</span>,
+                     <span class="signal">$time</span>, <span class="signal">i</span>, <span class="signal">credits_dbg</span>);
+        <span class="keyword">end</span>
+        <span class="signal">prod_valid</span> = <span class="number">0</span>;
+
+        <span class="comment">// Wait for consumer to drain</span>
+        #<span class="number">200</span>;
+        <span class="signal">$display</span>(<span class="string">"Sent: %0d, Credits final: %0d"</span>,
+                 <span class="signal">sent</span>, <span class="signal">credits_dbg</span>);
+        <span class="signal">$finish</span>;
+    <span class="keyword">end</span>
+
+<span class="keyword">endmodule</span></code></pre>
+</div>
+</div>
+
+<!-- Exercise 3 -->
+<div class="section">
+<h2>Exercise 3: Skid Buffer with Comprehensive Testbench</h2>
+
+<p class="en">Implement a skid buffer that registers the <code>ready</code> signal, then write a testbench that verifies: (1) full throughput when consumer is always ready, (2) correct behavior when consumer stalls randomly, (3) no data loss or duplication.</p>
+<p class="ko" style="display:none;"><code>ready</code> 신호를 레지스터하는 스키드 버퍼를 구현한 다음, 테스트벤치를 작성하여 검증하세요: (1) 소비자가 항상 준비될 때 전체 처리량, (2) 소비자가 무작위로 정지할 때의 올바른 동작, (3) 데이터 손실이나 중복 없음.</p>
+
+<div class="concept-box">
+<h3>📋 Requirements</h3>
+<ul>
+    <li class="en">Implement the skid buffer from the lesson</li>
+    <li class="ko" style="display:none;">레슨의 스키드 버퍼 구현</li>
+    <li class="en"><code>in_ready</code> must be <strong>registered</strong> (not combinational from <code>out_ready</code>)</li>
+    <li class="ko" style="display:none;"><code>in_ready</code>는 <strong>레지스터</strong>되어야 함 (<code>out_ready</code>에서 조합적이지 않음)</li>
+    <li class="en">Testbench sends 100 sequential values (0-99)</li>
+    <li class="ko" style="display:none;">테스트벤치가 100개의 순차 값(0-99) 전송</li>
+    <li class="en">Verify all 100 values are received in order with a scoreboard</li>
+    <li class="ko" style="display:none;">스코어보드로 100개 값이 순서대로 수신되는지 검증</li>
+    <li class="en">Add random <code>out_ready</code> deassertion (50% probability)</li>
+    <li class="ko" style="display:none;">무작위 <code>out_ready</code> 비활성화 추가 (50% 확률)</li>
+</ul>
+</div>
+
+<div class="hint-box">
+<h3>💡 Key Insight</h3>
+<p class="en">The skid buffer's <code>in_ready</code> is <code>!skid_valid</code> — it's registered because <code>skid_valid</code> is a flip-flop output. This means the producer sees ready go low <strong>one cycle after</strong> the consumer stalls, which is why we need the skid register to catch that one extra word.</p>
+<p class="ko" style="display:none;">스키드 버퍼의 <code>in_ready</code>는 <code>!skid_valid</code> — <code>skid_valid</code>가 플립플롭 출력이므로 레지스터됩니다. 소비자가 정지한 후 <strong>1 cycle 후에</strong> 생산자가 ready low를 보게 되므로, 그 추가 1 워드를 잡기 위해 스키드 레지스터가 필요합니다.</p>
+</div>
+
+<button class="solution-btn" onclick="toggleSolution('sol3')">Show Solution</button>
+<div class="solution" id="sol3">
+<pre><code><span class="keyword">module</span> <span class="type">skid_buffer</span> #(
+    <span class="keyword">parameter</span> <span class="type">WIDTH</span> = <span class="number">8</span>
+)(
+    <span class="keyword">input</span>  <span class="type">logic</span>             <span class="signal">clk</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span>             <span class="signal">rst_n</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span>             <span class="signal">in_valid</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span> [<span class="number">WIDTH-1</span>:<span class="number">0</span>] <span class="signal">in_data</span>,
+    <span class="keyword">output</span> <span class="type">logic</span>             <span class="signal">in_ready</span>,
+    <span class="keyword">output</span> <span class="type">logic</span>             <span class="signal">out_valid</span>,
+    <span class="keyword">output</span> <span class="type">logic</span> [<span class="number">WIDTH-1</span>:<span class="number">0</span>] <span class="signal">out_data</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span>             <span class="signal">out_ready</span>
+);
+
+    <span class="type">logic</span> [<span class="number">WIDTH-1</span>:<span class="number">0</span>] <span class="signal">skid_data</span>;
+    <span class="type">logic</span>             <span class="signal">skid_valid</span>;
+
+    <span class="keyword">assign</span> <span class="signal">out_valid</span> = <span class="signal">skid_valid</span> || <span class="signal">in_valid</span>;
+    <span class="keyword">assign</span> <span class="signal">out_data</span>  = <span class="signal">skid_valid</span> ? <span class="signal">skid_data</span> : <span class="signal">in_data</span>;
+    <span class="keyword">assign</span> <span class="signal">in_ready</span>  = !<span class="signal">skid_valid</span>;
+
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span> <span class="keyword">or negedge</span> <span class="signal">rst_n</span>) <span class="keyword">begin</span>
+        <span class="keyword">if</span> (!<span class="signal">rst_n</span>) <span class="keyword">begin</span>
+            <span class="signal">skid_valid</span> <= <span class="number">1'b0</span>;
+        <span class="keyword">end else if</span> (<span class="signal">in_valid</span> && <span class="signal">in_ready</span> && !<span class="signal">out_ready</span>) <span class="keyword">begin</span>
+            <span class="signal">skid_data</span>  <= <span class="signal">in_data</span>;
+            <span class="signal">skid_valid</span> <= <span class="number">1'b1</span>;
+        <span class="keyword">end else if</span> (<span class="signal">out_ready</span>) <span class="keyword">begin</span>
+            <span class="signal">skid_valid</span> <= <span class="number">1'b0</span>;
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+
+<span class="keyword">endmodule</span></code></pre>
+
+<h3>Testbench with Scoreboard</h3>
+<pre><code><span class="keyword">module</span> <span class="type">tb_skid_buffer</span>;
+    <span class="type">logic</span> <span class="signal">clk</span>, <span class="signal">rst_n</span>;
+    <span class="type">logic</span> <span class="signal">in_valid</span>, <span class="signal">in_ready</span>;
+    <span class="type">logic</span> [<span class="number">7</span>:<span class="number">0</span>] <span class="signal">in_data</span>;
+    <span class="type">logic</span> <span class="signal">out_valid</span>, <span class="signal">out_ready</span>;
+    <span class="type">logic</span> [<span class="number">7</span>:<span class="number">0</span>] <span class="signal">out_data</span>;
+    <span class="type">integer</span> <span class="signal">expected</span>, <span class="signal">received_cnt</span>;
+
+    <span class="type">skid_buffer</span> #(.<span class="signal">WIDTH</span>(<span class="number">8</span>)) <span class="signal">dut</span> (.*);
+
+    <span class="keyword">always</span> #<span class="number">5</span> <span class="signal">clk</span> = ~<span class="signal">clk</span>;
+
+    <span class="comment">// Random consumer (50% ready)</span>
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span>)
+        <span class="signal">out_ready</span> <= <span class="signal">$urandom_range</span>(<span class="number">0</span>,<span class="number">1</span>);
+
+    <span class="comment">// Scoreboard: check output order</span>
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span>) <span class="keyword">begin</span>
+        <span class="keyword">if</span> (<span class="signal">rst_n</span> && <span class="signal">out_valid</span> && <span class="signal">out_ready</span>) <span class="keyword">begin</span>
+            <span class="keyword">if</span> (<span class="signal">out_data</span> !== <span class="signal">expected</span>[<span class="number">7</span>:<span class="number">0</span>]) <span class="keyword">begin</span>
+                <span class="signal">$error</span>(<span class="string">"MISMATCH: got %0d, expected %0d"</span>,
+                       <span class="signal">out_data</span>, <span class="signal">expected</span>);
+                <span class="signal">$finish</span>;
+            <span class="keyword">end</span>
+            <span class="signal">expected</span> <= <span class="signal">expected</span> + <span class="number">1</span>;
+            <span class="signal">received_cnt</span> <= <span class="signal">received_cnt</span> + <span class="number">1</span>;
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+
+    <span class="keyword">initial begin</span>
+        <span class="signal">clk</span> = <span class="number">0</span>; <span class="signal">rst_n</span> = <span class="number">0</span>; <span class="signal">in_valid</span> = <span class="number">0</span>;
+        <span class="signal">expected</span> = <span class="number">0</span>; <span class="signal">received_cnt</span> = <span class="number">0</span>;
+        #<span class="number">20</span> <span class="signal">rst_n</span> = <span class="number">1</span>;
+
+        <span class="comment">// Send 100 values</span>
+        <span class="keyword">for</span> (<span class="type">int</span> <span class="signal">i</span> = <span class="number">0</span>; <span class="signal">i</span> < <span class="number">100</span>; <span class="signal">i</span>++) <span class="keyword">begin</span>
+            <span class="signal">in_valid</span> = <span class="number">1</span>;
+            <span class="signal">in_data</span>  = <span class="signal">i</span>;
+            @(<span class="keyword">posedge</span> <span class="signal">clk</span>);
+            <span class="keyword">while</span> (!<span class="signal">in_ready</span>) @(<span class="keyword">posedge</span> <span class="signal">clk</span>);
+        <span class="keyword">end</span>
+        <span class="signal">in_valid</span> = <span class="number">0</span>;
+
+        <span class="comment">// Wait for drain</span>
+        #<span class="number">500</span>;
+        <span class="keyword">if</span> (<span class="signal">received_cnt</span> == <span class="number">100</span>)
+            <span class="signal">$display</span>(<span class="string">"PASS: All 100 values received in order!"</span>);
+        <span class="keyword">else</span>
+            <span class="signal">$error</span>(<span class="string">"FAIL: Only %0d/100 received"</span>, <span class="signal">received_cnt</span>);
+        <span class="signal">$finish</span>;
+    <span class="keyword">end</span>
+
+<span class="keyword">endmodule</span></code></pre>
+</div>
+</div>
+
+<div class="section">
+<h2>🏁 Bonus Challenge</h2>
+
+<div class="warning-box">
+<h3>🔥 Hard Mode: Credit Return Latency</h3>
+<p class="en">Modify Exercise 2 so the <code>credit_return</code> signal takes <strong>3 cycles</strong> to travel from receiver to sender (simulating a long pipeline). How does this affect the required initial credit count? What happens if you keep <code>MAX_CREDITS = 4</code> but the round-trip latency is 3?</p>
+<p class="ko" style="display:none;">과제 2를 수정하여 <code>credit_return</code> 신호가 수신자에서 송신자까지 <strong>3 cycle</strong>이 걸리도록 하세요(긴 파이프라인 시뮬레이션). 이것이 필요한 초기 크레딧 수에 어떤 영향을 미치나요? <code>MAX_CREDITS = 4</code>를 유지하되 왕복 지연이 3이면 어떻게 되나요?</p>
+</div>
+
+<div class="tip-box">
+<h3>💡 Answer</h3>
+<p class="en">With 3-cycle return latency, up to 3 extra items could be "in flight" (sent but credit not yet returned). You need <code>MAX_CREDITS = FIFO_DEPTH + return_latency</code> to maintain full throughput. With only 4 credits and 3-cycle latency, the sender stalls frequently because it runs out of credits while waiting for returns — even though the FIFO has space!</p>
+<p class="ko" style="display:none;">3-cycle 반환 지연이 있으면 최대 3개의 추가 항목이 "전송 중"(보냈지만 크레딧 미반환)일 수 있습니다. 전체 처리량을 유지하려면 <code>MAX_CREDITS = FIFO 깊이 + 반환 지연</code>이 필요합니다. 4개 크레딧과 3-cycle 지연만으로는 FIFO에 공간이 있어도 크레딧 대기로 송신자가 자주 정지합니다!</p>
+</div>
+</div>
+
+<div class="nav-links">
+    <a href="day-29-lesson.html">📖 Review Lesson</a>
+    <a href="day-29-quiz.html">📝 Take the Quiz</a>
+    <a href="day-28-lesson.html">← Day 28</a>
+</div>
+
+<script>
+function toggleSolution(id) {
+    const el = document.getElementById(id);
+    el.style.display = el.style.display === 'block' ? 'none' : 'block';
+}
+
+let isKorean = false;
+function toggleLang() {
+    isKorean = !isKorean;
+    document.querySelectorAll('.en').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'none' : 'revert', 'important');
+    });
+    document.querySelectorAll('.ko').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'revert' : 'none', 'important');
+    });
+    document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+}
+</script>
+
+</body>
+</html>
