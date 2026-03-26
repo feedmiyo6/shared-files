@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fridgenie — App Store Launch Checklist</title>
+<style>
+  :root { --bg:#FEFAF3; --surface:#FFF; --primary:#2D6A4F; --accent:#E76F51; --text:#2D2D2D; --muted:#7A7A7A; --green:#40916C; --red:#E63946; --yellow:#F4A261; --blue:#457B9D; --border:#E8E0D4; }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Inter',-apple-system,sans-serif;background:var(--bg);color:var(--text);line-height:1.7}
+  .c{max-width:900px;margin:0 auto;padding:24px 16px}
+  h1{font-family:'DM Serif Display',Georgia,serif;font-size:26px;color:var(--primary);margin-bottom:4px}
+  h2{font-family:'DM Serif Display',Georgia,serif;font-size:20px;color:var(--primary);margin:32px 0 14px;border-bottom:2px solid var(--border);padding-bottom:6px}
+  h3{font-size:15px;font-weight:700;margin:16px 0 6px}
+  .sub{color:var(--muted);font-size:13px;margin-bottom:20px}
+  .lang-toggle{position:fixed;top:14px;right:14px;background:var(--primary);color:#fff;border:none;padding:7px 14px;border-radius:18px;cursor:pointer;font-size:12px;font-weight:600;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.15)}
+  .ko{display:none}.ko.show{display:inline !important}.en.hide{display:none !important}
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px;margin:10px 0}
+  .card-head{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+  .card-icon{font-size:22px}
+  .card-title{font-size:15px;font-weight:700;flex:1}
+  .badge{display:inline-block;padding:2px 9px;border-radius:8px;font-size:10px;font-weight:700;text-transform:uppercase}
+  .b-you{background:#FFE4E1;color:#B91C1C}
+  .b-totoro{background:#D0E8FF;color:#1E40AF}
+  .b-elissa{background:#F3E8FF;color:#6B21A8}
+  .b-done{background:#D8F3DC;color:#1B4332}
+  .b-critical{background:#FEE2E2;color:#991B1B;animation:pulse 2s infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.7}}
+  .item{display:flex;gap:8px;margin:5px 0;font-size:13px;align-items:flex-start}
+  .item-icon{flex-shrink:0;width:20px;text-align:center}
+  .check{color:var(--green)}
+  .cross{color:var(--red)}
+  .warn{color:var(--yellow)}
+  .section-note{background:linear-gradient(135deg,#F0F7F4,#FEFAF3);border-left:4px solid var(--primary);padding:14px;border-radius:0 12px 12px 0;margin:12px 0;font-size:13px}
+  .tip{background:#FFF8E1;border-left:4px solid var(--yellow);padding:12px;border-radius:0 10px 10px 0;margin:10px 0;font-size:12px}
+  table{width:100%;border-collapse:collapse;margin:10px 0;font-size:12px}
+  th{background:var(--primary);color:#fff;padding:6px 8px;text-align:left;font-size:11px}
+  td{padding:6px 8px;border-bottom:1px solid var(--border)}
+  .timeline{position:relative;padding-left:24px;margin:12px 0}
+  .timeline::before{content:'';position:absolute;left:8px;top:0;bottom:0;width:2px;background:var(--border)}
+  .tl-item{position:relative;margin:12px 0}
+  .tl-item::before{content:'';position:absolute;left:-20px;top:6px;width:12px;height:12px;border-radius:50%;background:var(--primary);border:2px solid var(--bg)}
+  .tl-label{font-size:11px;font-weight:700;color:var(--primary)}
+  .tl-text{font-size:13px}
+  @media(max-width:600px){.c{padding:16px 12px}h1{font-size:22px}table{font-size:11px}}
+</style>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+<button class="lang-toggle" onclick="toggleLang()">한국어</button>
+<div class="c">
+
+<h1>🧊 Fridgenie — <span class="en">App Store Launch Master Checklist</span><span class="ko">앱스토어 출시 마스터 체크리스트</span></h1>
+<p class="sub"><span class="en">Everything you need to pass App Review on the first try. March 2026.</span><span class="ko">앱 리뷰를 한 번에 통과하기 위한 모든 것. 2026년 3월.</span></p>
+
+<div class="section-note">
+<strong>🏷️ <span class="en">Legend:</span><span class="ko">범례:</span></strong>
+<span class="badge b-you"><span class="en">MINJUN</span><span class="ko">민준</span></span> <span class="en">= You must do this manually</span><span class="ko">= 수동으로 해야 함</span> &nbsp;
+<span class="badge b-totoro">TOTORO</span> <span class="en">= I can do this for you</span><span class="ko">= 제가 할 수 있음</span> &nbsp;
+<span class="badge b-elissa">ELISSA</span> <span class="en">= Needs design work</span><span class="ko">= 디자인 작업 필요</span> &nbsp;
+<span class="badge b-done"><span class="en">DONE</span><span class="ko">완료</span></span> <span class="en">= Already complete</span><span class="ko">= 이미 완료</span>
+</div>
+
+<!-- ═══════════════════════════════════════ -->
+<!-- SECTION 1: BUSINESS & LEGAL -->
+<!-- ═══════════════════════════════════════ -->
+<h2>📋 1. <span class="en">Business & Legal Setup</span><span class="ko">사업 및 법적 설정</span></h2>
+
+<div class="card">
+<div class="card-head"><span class="card-icon">🏢</span><span class="card-title"><span class="en">LLC Formation</span><span class="ko">LLC 설립</span></span><span class="badge b-you b-critical">MINJUN — <span class="en">CRITICAL</span><span class="ko">필수</span></span></div>
+<div class="item"><span class="item-icon">☐</span><span class="en"><strong>Form an LLC in Arizona</strong> — Protects your personal assets. File with AZ Corporation Commission (~$50). You can do this online at azcc.gov.</span><span class="ko"><strong>애리조나에서 LLC 설립</strong> — 개인 자산 보호. AZ Corporation Commission에 신청 (~$50). azcc.gov에서 온라인으로 가능.</span></div>
+<div class="item"><span class="item-icon">☐</span><span class="en"><strong>Get an EIN (free)</strong> — IRS.gov, takes 5 min online. Needed for business bank account + Apple tax forms.</span><span class="ko"><strong>EIN 받기 (무료)</strong> — IRS.gov에서 5분. 사업용 은행 계좌 + Apple 세금 양식에 필요.</span></div>
+<div class="item"><span class="item-icon">☐</span><span class="en"><strong>Business bank account</strong> — Open one with your EIN. Chase, Mercury, or any bank. Keeps personal/business finances separate.</span><span class="ko"><strong>사업용 은행 계좌</strong> — EIN으로 개설. Chase, Mercury 등. 개인/사업 재정 분리.</span></div>
+<div class="item"><span class="item-icon">☐</span><span class="en"><strong>Business credit/debit card</strong> — Linked to business account. Used for Apple Developer fees, Supabase, API costs.</span><span class="ko"><strong>사업용 신용/체크카드</strong> — 사업 계좌에 연결. Apple Developer 비용, Supabase, API 비용에 사용.</span></div>
+<div class="tip">💡 <span class="en">You can publish under your personal Apple Developer account ($99/yr) initially. LLC is recommended before you start earning revenue, but NOT required for App Store submission. Don't let LLC delay your launch.</span><span class="ko">처음에는 개인 Apple Developer 계정 ($99/yr)으로 출시 가능. LLC는 수익 발생 전 권장되지만 앱스토어 제출에 필수는 아님. LLC 때문에 출시를 미루지 마세요.</span></div>
+</div>
+
+<div class="card">
+<div class="card-head"><span class="card-icon">🍎</span><span class="card-title"><span class="en">Apple Developer Account</span><span class="ko">Apple Developer 계정</span></span><span class="badge b-done">DONE</span></div>
+<div class="item"><span class="item-icon">✅</span><span class="en">Apple Developer Program membership ($99/yr) — already active</span><span class="ko">Apple Developer Program 멤버십 ($99/yr) — 이미 활성</span></div>
+<div class="item"><span class="item-icon">☐</span><span class="en"><strong>Update to Organization account (optional)</strong> — If you form LLC, you can convert from Individual to Organization. Requires D-U-N-S number (free, takes 1-2 weeks from Dun & Bradstreet).</span><span class="ko"><strong>Organization 계정으로 업데이트 (선택)</strong> — LLC 설립 시 Individual에서 Organization으로 전환 가능. D-U-N-S 번호 필요 (무료, Dun & Bradstreet에서 1-2주).</span></div>
+<div class="item"><span class="item-icon">☐</span><span class="badge b-you">MINJUN</span><span class="en"> <strong>Add tax ID to Supabase billing</strong> — Dashboard shows "Missing tax ID" warning. Add your EIN once you have it.</span><span class="ko"> <strong>Supabase 청구에 세금 ID 추가</strong> — 대시보드에 "Missing tax ID" 경고 표시. EIN 받으면 추가.</span></div>
+</div>
+
+<div class="card">
+<div class="card-head"><span class="card-icon">⚖️</span><span class="card-title"><span class="en">Legal Documents</span><span class="ko">법적 문서</span></span><span class="badge b-totoro">TOTORO</span></div>
+<div class="item"><span class="item-icon">☐</span><span class="en"><strong>Privacy Policy (PUBLIC URL)</strong> — Apple REQUIRES a publicly accessible privacy policy URL. Must disclose: data collected, how it's used, third parties (Supabase, OpenAI, Brave Search), account deletion. I'll create this and host on fridgenie.app/privacy.</span><span class="ko"><strong>개인정보 처리방침 (공개 URL)</strong> — Apple이 공개 접근 가능한 개인정보 처리방침 URL을 필수로 요구. 수집 데이터, 사용 방법, 제3자 (Supabase, OpenAI, Brave Search), 계정 삭제 공개 필요. fridgenie.app/privacy에 생성.</span></div>
+<div class="item"><span class="item-icon">☐</span><span class="en"><strong>Terms of Service</strong> — Not strictly required by Apple but strongly recommended. Protects you legally. I'll draft and host on fridgenie.app/terms.</span><span class="ko"><strong>이용약관</strong> — Apple에서 엄격하게 요구하지 않지만 강력히 권장. 법적 보호. fridgenie.app/terms에 생성.</span></div>
+<div class="item"><span class="item-icon">☐</span><span class="en"><strong>EULA (End User License Agreement)</strong> — Apple provides a standard EULA. You can use theirs or write a custom one. Standard is fine for launch.</span><span class="ko"><strong>EULA (최종 사용자 라이선스 계약)</strong> — Apple이 표준 EULA 제공. 그것 사용 또는 커스텀 작성. 출시에는 표준으로 충분.</span></div>
+</div>
+
+<!-- ═══════════════════════════════════════ -->
+<!-- SECTION 2: APPLE REVIEW REQUIREMENTS -->
+<!-- ═══════════════════════════════════════ -->
+<h2>🔍 2. <span class="en">Apple Review Requirements (Rejection Killers)</span><span class="ko">Apple 리뷰 요구사항 (거절 방지)</span></h2>
+
+<div class="card" style="border-left:4px solid var(--red)">
+<div class="card-head"><span class="card-icon">🚨</span><span class="card-title"><span class="en">Top Rejection Reasons & Our Status</span><span class="ko">주요 거절 사유 및 현재 상태</span></span></div>
+<table>
+<tr><th>#</th><th><span class="en">Rejection Reason</span><span class="ko">거절 사유</span></th><th><span class="en">Our Status</span><span class="ko">상태</span></th><th><span class="en">Action</span><span class="ko">조치</span></th></tr>
+<tr><td>1</td><td><span class="en"><strong>Crashes / Bugs</strong> — #1 rejection reason</span><span class="ko"><strong>크래시 / 버그</strong> — #1 거절 사유</span></td><td class="warn">⚠️</td><td><span class="en">No crash reporting yet. Add Crashlytics.</span><span class="ko">크래시 리포팅 없음. Crashlytics 추가.</span></td></tr>
+<tr><td>2</td><td><span class="en"><strong>Broken links</strong> — Privacy Policy, Support URL</span><span class="ko"><strong>깨진 링크</strong> — 개인정보 처리방침, 지원 URL</span></td><td class="cross">❌</td><td><span class="en">Need to create privacy policy page</span><span class="ko">개인정보 처리방침 페이지 생성 필요</span></td></tr>
+<tr><td>3</td><td><span class="en"><strong>No demo account</strong> for reviewer</span><span class="ko">리뷰어용 <strong>데모 계정 없음</strong></span></td><td class="cross">❌</td><td><span class="en">Create test account: reviewer@fridgenie.app</span><span class="ko">테스트 계정 생성: reviewer@fridgenie.app</span></td></tr>
+<tr><td>4</td><td><span class="en"><strong>Incomplete metadata</strong> — description, screenshots</span><span class="ko"><strong>불완전한 메타데이터</strong> — 설명, 스크린샷</span></td><td class="cross">❌</td><td><span class="en">Need screenshots + description</span><span class="ko">스크린샷 + 설명 필요</span></td></tr>
+<tr><td>5</td><td><span class="en"><strong>Privacy Nutrition Label</strong> mismatch</span><span class="ko"><strong>개인정보 영양 라벨</strong> 불일치</span></td><td class="cross">❌</td><td><span class="en">Fill out in App Store Connect</span><span class="ko">App Store Connect에서 작성</span></td></tr>
+<tr><td>6</td><td><span class="en"><strong>Missing PrivacyInfo.xcprivacy</strong></span><span class="ko"><strong>PrivacyInfo.xcprivacy 누락</strong></span></td><td class="cross">❌</td><td><span class="en">Must create app-level privacy manifest</span><span class="ko">앱 레벨 프라이버시 매니페스트 생성 필요</span></td></tr>
+<tr><td>7</td><td><span class="en"><strong>Account deletion</strong> not working</span><span class="ko"><strong>계정 삭제</strong> 미작동</span></td><td class="check">✅</td><td><span class="en">Already implemented</span><span class="ko">이미 구현됨</span></td></tr>
+<tr><td>8</td><td><span class="en"><strong>Permissions</strong> without justification</span><span class="ko">정당화 없는 <strong>권한</strong></span></td><td class="check">✅</td><td><span class="en">Camera, Mic, Photos — all have descriptions</span><span class="ko">카메라, 마이크, 사진 — 모두 설명 있음</span></td></tr>
+<tr><td>9</td><td><span class="en"><strong>Export compliance</strong></span><span class="ko"><strong>수출 규정 준수</strong></span></td><td class="check">✅</td><td><span class="en">ITSAppUsesNonExemptEncryption = false</span><span class="ko">설정됨</span></td></tr>
+<tr><td>10</td><td><span class="en"><strong>Minimum functionality</strong> — app must do more than a website</span><span class="ko"><strong>최소 기능</strong> — 웹사이트 이상이어야 함</span></td><td class="check">✅</td><td><span class="en">Camera, voice, pantry — native features</span><span class="ko">카메라, 음성, 팬트리 — 네이티브 기능</span></td></tr>
+</table>
+</div>
+
+<div class="card">
+<div class="card-head"><span class="card-icon">🔒</span><span class="card-title"><span class="en">Privacy & Data (Apple Cares A LOT)</span><span class="ko">개인정보 & 데이터 (Apple이 매우 중시)</span></span></div>
+<h3><span class="en">Privacy Nutrition Label</span><span class="ko">개인정보 영양 라벨</span></h3>
+<p style="font-size:13px;margin-bottom:8px"><span class="en">You must declare ALL data your app collects in App Store Connect. Here's what Fridgenie collects:</span><span class="ko">App Store Connect에서 앱이 수집하는 모든 데이터를 선언해야 합니다. Fridgenie가 수집하는 데이터:</span></p>
+<table>
+<tr><th><span class="en">Data Type</span><span class="ko">데이터 유형</span></th><th><span class="en">Purpose</span><span class="ko">목적</span></th><th><span class="en">Linked to Identity?</span><span class="ko">신원 연결?</span></th></tr>
+<tr><td>Email</td><td><span class="en">Authentication</span><span class="ko">인증</span></td><td><span class="en">Yes</span><span class="ko">예</span></td></tr>
+<tr><td>Name</td><td><span class="en">Profile display</span><span class="ko">프로필 표시</span></td><td><span class="en">Yes</span><span class="ko">예</span></td></tr>
+<tr><td><span class="en">Photos (receipts)</span><span class="ko">사진 (영수증)</span></td><td><span class="en">Receipt scanning</span><span class="ko">영수증 스캔</span></td><td><span class="en">No (processed, not stored)</span><span class="ko">아니오 (처리 후 저장 안함)</span></td></tr>
+<tr><td><span class="en">Audio (voice)</span><span class="ko">오디오 (음성)</span></td><td><span class="en">Voice input</span><span class="ko">음성 입력</span></td><td><span class="en">No (processed, not stored)</span><span class="ko">아니오 (처리 후 저장 안함)</span></td></tr>
+<tr><td><span class="en">Usage Data</span><span class="ko">사용 데이터</span></td><td><span class="en">Recipe history, favorites</span><span class="ko">레시피 히스토리, 즐겨찾기</span></td><td><span class="en">Yes</span><span class="ko">예</span></td></tr>
+</table>
+<div class="tip">💡 <span class="en">We do NOT track: IDFA, location, contacts, health data, financial data. No third-party analytics SDK. This is good — keeps the label simple.</span><span class="ko">추적하지 않는 것: IDFA, 위치, 연락처, 건강 데이터, 금융 데이터. 제3자 분석 SDK 없음. 좋음 — 라벨을 단순하게 유지.</span></div>
+
+<h3><span class="en">Privacy Manifest (PrivacyInfo.xcprivacy)</span><span class="ko">프라이버시 매니페스트</span></h3>
+<p style="font-size:13px"><span class="badge b-totoro">TOTORO</span> <span class="en">Since April 2024, Apple requires a PrivacyInfo.xcprivacy file in your app bundle. Our third-party SDKs have theirs, but we need one for the app itself. I'll create this — it declares which "required reason APIs" we use (UserDefaults, file timestamps, etc).</span><span class="ko">2024년 4월부터 Apple은 앱 번들에 PrivacyInfo.xcprivacy 파일을 요구합니다. 제3자 SDK에는 있지만 앱 자체에 필요합니다. 제가 생성합니다.</span></p>
+</div>
+
+<div class="card">
+<div class="card-head"><span class="card-icon">👤</span><span class="card-title"><span class="en">Demo Account for App Reviewer</span><span class="ko">앱 리뷰어용 데모 계정</span></span><span class="badge b-totoro">TOTORO</span></div>
+<p style="font-size:13px"><span class="en">Apple reviewers need to test your app. You MUST provide login credentials. I'll create:</span><span class="ko">Apple 리뷰어가 앱을 테스트해야 합니다. 로그인 자격 증명을 반드시 제공해야 합니다:</span></p>
+<div class="item"><span class="item-icon">☐</span><span class="en">Email: <code>reviewer@fridgenie.app</code> (or a test Supabase account)</span><span class="ko">이메일: <code>reviewer@fridgenie.app</code> (또는 Supabase 테스트 계정)</span></div>
+<div class="item"><span class="item-icon">☐</span><span class="en">Pre-populate with pantry items, preferences, and household data so reviewer sees a full experience</span><span class="ko">팬트리 항목, 선호도, 가구 데이터를 미리 채워 리뷰어가 전체 경험을 볼 수 있도록</span></div>
+<div class="item"><span class="item-icon">☐</span><span class="en">Write App Review Notes explaining: AI features, voice input, receipt scan, household invite flow</span><span class="ko">앱 리뷰 노트 작성: AI 기능, 음성 입력, 영수증 스캔, 가구 초대 플로우 설명</span></div>
+</div>
+
+<!-- ═══════════════════════════════════════ -->
+<!-- SECTION 3: ACCESSIBILITY -->
+<!-- ═══════════════════════════════════════ -->
+<h2>♿ 3. <span class="en">Accessibility (Apple Takes This Seriously)</span><span class="ko">접근성 (Apple이 진지하게 여김)</span></h2>
+
+<div class="card">
+<div class="card-head"><span class="card-icon">🎨</span><span class="card-title"><span class="en">Color & Visual Accessibility</span><span class="ko">색상 & 시각 접근성</span></span><span class="badge b-totoro">TOTORO</span> <span class="badge b-elissa">ELISSA</span></div>
+<div class="item"><span class="item-icon">⚠️</span><span class="en"><strong>Color contrast ratio</strong> — All text must meet WCAG 2.1 AA: 4.5:1 for normal text, 3:1 for large text. Our Ghibli cream backgrounds may be borderline with light text. Need to audit.</span><span class="ko"><strong>색상 대비율</strong> — 모든 텍스트는 WCAG 2.1 AA 충족 필요: 일반 텍스트 4.5:1, 큰 텍스트 3:1. Ghibli 크림 배경이 밝은 텍스트와 경계선일 수 있음. 감사 필요.</span></div>
+<div class="item"><span class="item-icon">⚠️</span><span class="en"><strong>Don't rely on color alone</strong> — Difficulty indicators (easy/medium/hard) use green/yellow/red. Color blind users can't distinguish these. Add text labels or icons alongside colors.</span><span class="ko"><strong>색상만 의존하지 않기</strong> — 난이도 표시 (쉬움/보통/어려움)가 녹색/노란색/빨간색 사용. 색맹 사용자 구별 불가. 색상 옆에 텍스트 라벨 또는 아이콘 추가.</span></div>
+<div class="item"><span class="item-icon">⚠️</span><span class="en"><strong>Expiry traffic light</strong> — Red/yellow/green for pantry items. Same issue. Need shape or text backup.</span><span class="ko"><strong>유통기한 신호등</strong> — 팬트리 항목에 빨강/노랑/녹색. 같은 문제. 모양 또는 텍스트 백업 필요.</span></div>
+
+<h3><span class="en">VoiceOver & Screen Reader Support</span><span class="ko">VoiceOver & 스크린 리더 지원</span></h3>
+<div class="item"><span class="item-icon">❌</span><span class="en"><strong>0 Semantics widgets found</strong> — Flutter needs explicit Semantics() wrappers for VoiceOver to work properly. Critical screens (home, recipe detail, pantry) need semantic labels. Won't cause rejection for v1 but Apple WILL flag it in future updates.</span><span class="ko"><strong>Semantics 위젯 0개 발견</strong> — Flutter에서 VoiceOver가 제대로 작동하려면 명시적 Semantics() 래퍼 필요. v1에서는 거절 원인이 되지 않지만 향후 업데이트에서 Apple이 지적할 수 있음.</span></div>
+
+<h3><span class="en">Dynamic Type (Text Size)</span><span class="ko">다이나믹 타입 (텍스트 크기)</span></h3>
+<div class="item"><span class="item-icon">⚠️</span><span class="en"><strong>Support system text scaling</strong> — Users with low vision increase system text size. Flutter generally handles this, but hardcoded fontSize values can break layouts. Test with Settings > Accessibility > Larger Text > max size.</span><span class="ko"><strong>시스템 텍스트 크기 조정 지원</strong> — 저시력 사용자가 시스템 텍스트 크기를 증가. Flutter가 일반적으로 처리하지만 하드코딩된 fontSize 값이 레이아웃을 깨뜨릴 수 있음. 설정 > 접근성 > 더 큰 텍스트 > 최대 크기로 테스트.</span></div>
+</div>
+
+<!-- ═══════════════════════════════════════ -->
+<!-- SECTION 4: APP STORE CONNECT -->
+<!-- ═══════════════════════════════════════ -->
+<h2>📱 4. <span class="en">App Store Connect Setup</span><span class="ko">App Store Connect 설정</span></h2>
+
+<div class="card">
+<div class="card-head"><span class="card-icon">📝</span><span class="card-title"><span class="en">Metadata (All Required)</span><span class="ko">메타데이터 (모두 필수)</span></span></div>
+<table>
+<tr><th><span class="en">Field</span><span class="ko">필드</span></th><th><span class="en">Limit</span><span class="ko">제한</span></th><th><span class="en">Who</span><span class="ko">누가</span></th><th><span class="en">Status</span><span class="ko">상태</span></th></tr>
+<tr><td><span class="en">App Name</span><span class="ko">앱 이름</span></td><td>30 chars</td><td><span class="badge b-done">DONE</span></td><td>Fridgenie</td></tr>
+<tr><td><span class="en">Subtitle</span><span class="ko">부제</span></td><td>30 chars</td><td><span class="badge b-totoro">TOTORO</span></td><td><span class="en">I'll draft options</span><span class="ko">옵션 작성</span></td></tr>
+<tr><td><span class="en">Description</span><span class="ko">설명</span></td><td>4000 chars</td><td><span class="badge b-totoro">TOTORO</span></td><td><span class="en">I'll write</span><span class="ko">작성</span></td></tr>
+<tr><td><span class="en">Keywords</span><span class="ko">키워드</span></td><td>100 chars</td><td><span class="badge b-totoro">TOTORO</span></td><td><span class="en">I'll research</span><span class="ko">조사</span></td></tr>
+<tr><td><span class="en">Screenshots</span><span class="ko">스크린샷</span></td><td>min 3</td><td><span class="badge b-elissa">ELISSA</span></td><td><span class="en">Design frames</span><span class="ko">프레임 디자인</span></td></tr>
+<tr><td><span class="en">App Icon</span><span class="ko">앱 아이콘</span></td><td>1024x1024</td><td><span class="badge b-done">DONE</span></td><td>✅</td></tr>
+<tr><td><span class="en">Category</span><span class="ko">카테고리</span></td><td>—</td><td><span class="badge b-you">MINJUN</span></td><td>Food & Drink</td></tr>
+<tr><td><span class="en">Age Rating</span><span class="ko">연령 등급</span></td><td>—</td><td><span class="badge b-you">MINJUN</span></td><td><span class="en">Fill questionnaire (4+)</span><span class="ko">설문 작성 (4+)</span></td></tr>
+<tr><td><span class="en">Privacy Policy URL</span><span class="ko">개인정보 처리방침 URL</span></td><td>URL</td><td><span class="badge b-totoro">TOTORO</span></td><td>fridgenie.app/privacy</td></tr>
+<tr><td><span class="en">Support URL</span><span class="ko">지원 URL</span></td><td>URL</td><td><span class="badge b-totoro">TOTORO</span></td><td>fridgenie.app/support</td></tr>
+<tr><td><span class="en">Marketing URL</span><span class="ko">마케팅 URL</span></td><td>URL</td><td><span class="badge b-done">DONE</span></td><td>fridgenie.app</td></tr>
+<tr><td><span class="en">Review Notes</span><span class="ko">리뷰 노트</span></td><td>—</td><td><span class="badge b-totoro">TOTORO</span></td><td><span class="en">Demo account + feature explanation</span><span class="ko">데모 계정 + 기능 설명</span></td></tr>
+<tr><td><span class="en">Demo Account</span><span class="ko">데모 계정</span></td><td>—</td><td><span class="badge b-totoro">TOTORO</span></td><td><span class="en">Create + pre-populate</span><span class="ko">생성 + 데이터 채우기</span></td></tr>
+</table>
+</div>
+
+<div class="card">
+<div class="card-head"><span class="card-icon">📸</span><span class="card-title"><span class="en">Screenshots Required</span><span class="ko">필수 스크린샷</span></span><span class="badge b-elissa">ELISSA</span></div>
+<table>
+<tr><th><span class="en">Device</span><span class="ko">기기</span></th><th><span class="en">Size</span><span class="ko">크기</span></th><th><span class="en">Required?</span><span class="ko">필수?</span></th></tr>
+<tr><td>iPhone 6.7" (15 Pro Max)</td><td>1290 × 2796</td><td><strong><span class="en">YES</span><span class="ko">예</span></strong></td></tr>
+<tr><td>iPhone 6.5" (11 Pro Max)</td><td>1242 × 2688</td><td><strong><span class="en">YES</span><span class="ko">예</span></strong></td></tr>
+<tr><td>iPhone 5.5" (8 Plus)</td><td>1242 × 2208</td><td><span class="en">Auto-scales</span><span class="ko">자동 크기 조정</span></td></tr>
+<tr><td>iPad Pro 12.9"</td><td>2048 × 2732</td><td><span class="en">Only if iPad support</span><span class="ko">iPad 지원 시에만</span></td></tr>
+</table>
+<div class="tip">💡 <span class="en">Minimum 3 screenshots per size, maximum 10. Recommend 5-6 showing: Home (Today's Pick), Recipe Detail, Pantry, Receipt Scan, Voice Input, Shopping List. Elissa can design frames with device mockups and marketing text.</span><span class="ko">크기당 최소 3개, 최대 10개. 5-6개 권장: 홈 (오늘의 추천), 레시피 상세, 팬트리, 영수증 스캔, 음성 입력, 쇼핑 목록.</span></div>
+</div>
+
+<!-- ═══════════════════════════════════════ -->
+<!-- SECTION 5: TECHNICAL -->
+<!-- ═══════════════════════════════════════ -->
+<h2>⚙️ 5. <span class="en">Technical Requirements</span><span class="ko">기술 요구사항</span></h2>
+
+<div class="card">
+<div class="card-head"><span class="card-icon">💥</span><span class="card-title"><span class="en">Crash Reporting (Strongly Recommended)</span><span class="ko">크래시 리포팅 (강력 권장)</span></span><span class="badge b-totoro">TOTORO</span></div>
+<p style="font-size:13px"><span class="en">Without crash reporting, you won't know when users hit issues. Apple can see crash rates and will reject updates if too high.</span><span class="ko">크래시 리포팅 없이는 사용자 문제를 알 수 없습니다. Apple이 크래시율을 확인할 수 있으며 너무 높으면 업데이트를 거절합니다.</span></p>
+<div class="item"><span class="item-icon">☐</span><span class="en"><strong>Add Firebase Crashlytics</strong> — Free, industry standard. Shows crash logs, affected users, stack traces.</span><span class="ko"><strong>Firebase Crashlytics 추가</strong> — 무료, 업계 표준. 크래시 로그, 영향받은 사용자, 스택 트레이스 표시.</span></div>
+<div class="item"><span class="item-icon">☐</span><span class="en"><strong>Add Firebase Analytics</strong> (optional but recommended) — Track screen views, feature usage, retention.</span><span class="ko"><strong>Firebase Analytics 추가</strong> (선택이지만 권장) — 화면 조회, 기능 사용, 리텐션 추적.</span></div>
+</div>
+
+<div class="card">
+<div class="card-head"><span class="card-icon">💰</span><span class="card-title"><span class="en">Monetization (Pre-Launch)</span><span class="ko">수익화 (출시 전)</span></span></div>
+<p style="font-size:13px"><span class="en">Current: promo-code-only Pro tier. For real monetization, you'll need one of:</span><span class="ko">현재: 프로모 코드 전용 Pro 등급. 실제 수익화를 위해 다음 중 하나 필요:</span></p>
+<div class="item"><span class="item-icon">☐</span><span class="en"><strong>Option A: StoreKit 2 (In-App Subscription)</strong> — Apple takes 15-30% cut. Use RevenueCat SDK for easy management. Configure in App Store Connect.</span><span class="ko"><strong>옵션 A: StoreKit 2 (인앱 구독)</strong> — Apple이 15-30% 수수료. RevenueCat SDK로 쉬운 관리. App Store Connect에서 설정.</span></div>
+<div class="item"><span class="item-icon">☐</span><span class="en"><strong>Option B: AdMob (Ads for free tier)</strong> — Already have test IDs. Switch to production IDs. Banner ads on non-essential screens.</span><span class="ko"><strong>옵션 B: AdMob (무료 등급 광고)</strong> — 이미 테스트 ID 있음. 프로덕션 ID로 전환. 비필수 화면에 배너 광고.</span></div>
+<div class="tip">💡 <span class="en">You can launch WITHOUT monetization. Get users first, add subscriptions/ads in v2.4. Apple won't reject for being free.</span><span class="ko">수익화 없이 출시 가능. 먼저 사용자를 확보하고 v2.4에서 구독/광고 추가. Apple은 무료라고 거절하지 않음.</span></div>
+</div>
+
+<div class="card">
+<div class="card-head"><span class="card-icon">🛡️</span><span class="card-title"><span class="en">Security Checklist</span><span class="ko">보안 체크리스트</span></span></div>
+<div class="item"><span class="item-icon">✅</span><span class="en">All API calls go through Supabase Edge Functions (no keys in client)</span><span class="ko">모든 API 호출이 Supabase Edge Functions를 통과 (클라이언트에 키 없음)</span></div>
+<div class="item"><span class="item-icon">✅</span><span class="en">RLS (Row Level Security) on all tables</span><span class="ko">모든 테이블에 RLS (행 수준 보안)</span></div>
+<div class="item"><span class="item-icon">✅</span><span class="en">No OpenAI API key in Flutter code</span><span class="ko">Flutter 코드에 OpenAI API 키 없음</span></div>
+<div class="item"><span class="item-icon">✅</span><span class="en">Account deletion implemented (Apple requirement since 2022)</span><span class="ko">계정 삭제 구현 (2022년부터 Apple 필수 요구)</span></div>
+<div class="item"><span class="item-icon">✅</span><span class="en">HTTPS everywhere (Supabase enforces TLS)</span><span class="ko">모든 곳에서 HTTPS (Supabase가 TLS 적용)</span></div>
+<div class="item"><span class="item-icon">✅</span><span class="en">Export compliance: ITSAppUsesNonExemptEncryption = false</span><span class="ko">수출 규정 준수 설정됨</span></div>
+</div>
+
+<!-- ═══════════════════════════════════════ -->
+<!-- SECTION 6: DESIGN -->
+<!-- ═══════════════════════════════════════ -->
+<h2>🎨 6. <span class="en">Design Polish (Elissa Meeting)</span><span class="ko">디자인 마무리 (Elissa 미팅)</span></h2>
+
+<div class="card">
+<div class="card-head"><span class="card-icon">✨</span><span class="card-title"><span class="en">Things to Discuss with Elissa</span><span class="ko">Elissa와 논의할 사항</span></span><span class="badge b-elissa">ELISSA</span></div>
+<div class="item"><span class="item-icon">☐</span><span class="en"><strong>App Store screenshots</strong> — 5-6 with device mockups and marketing text</span><span class="ko"><strong>앱스토어 스크린샷</strong> — 기기 목업과 마케팅 텍스트 포함 5-6개</span></div>
+<div class="item"><span class="item-icon">☐</span><span class="en"><strong>Splash screen redesign</strong> — Current is placeholder</span><span class="ko"><strong>스플래시 화면 재디자인</strong> — 현재 플레이스홀더</span></div>
+<div class="item"><span class="item-icon">☐</span><span class="en"><strong>Color contrast audit</strong> — Ensure WCAG AA compliance on Ghibli palette</span><span class="ko"><strong>색상 대비 감사</strong> — Ghibli 팔레트에서 WCAG AA 준수 확인</span></div>
+<div class="item"><span class="item-icon">☐</span><span class="en"><strong>Colorblind-safe indicators</strong> — Add shapes/text to red/yellow/green indicators</span><span class="ko"><strong>색맹 안전 표시</strong> — 빨강/노랑/녹색 표시에 모양/텍스트 추가</span></div>
+<div class="item"><span class="item-icon">☐</span><span class="en"><strong>Empty states</strong> — Ensure all empty screens look intentional and helpful</span><span class="ko"><strong>빈 상태</strong> — 모든 빈 화면이 의도적이고 도움이 되어 보이도록</span></div>
+<div class="item"><span class="item-icon">☐</span><span class="en"><strong>Hero animations</strong> — Smooth transitions between screens</span><span class="ko"><strong>히어로 애니메이션</strong> — 화면 간 부드러운 전환</span></div>
+</div>
+
+<!-- ═══════════════════════════════════════ -->
+<!-- SECTION 7: TOTORO ROADMAP -->
+<!-- ═══════════════════════════════════════ -->
+<h2>🗺️ 7. <span class="en">Totoro's Roadmap (What I Can Do)</span><span class="ko">토토로의 로드맵 (내가 할 수 있는 것)</span></h2>
+
+<p style="font-size:13px;margin-bottom:12px"><span class="en">Review this and give me a go — I'll knock these out in order:</span><span class="ko">검토 후 승인해 주세요 — 순서대로 처리합니다:</span></p>
+
+<div class="timeline">
+<div class="tl-item">
+<div class="tl-label"><span class="en">Step 1: Privacy & Legal Pages</span><span class="ko">1단계: 개인정보 & 법적 페이지</span></div>
+<div class="tl-text"><span class="en">Create and deploy to fridgenie.app: /privacy, /terms, /support pages. These are required URLs for App Store Connect.</span><span class="ko">fridgenie.app에 생성 및 배포: /privacy, /terms, /support 페이지. App Store Connect에 필수 URL.</span></div>
+</div>
+<div class="tl-item">
+<div class="tl-label"><span class="en">Step 2: PrivacyInfo.xcprivacy</span><span class="ko">2단계: PrivacyInfo.xcprivacy</span></div>
+<div class="tl-text"><span class="en">Create app-level privacy manifest declaring required reason APIs. Apple rejects without this since April 2024.</span><span class="ko">필수 이유 API를 선언하는 앱 레벨 프라이버시 매니페스트 생성. 2024년 4월부터 이것 없이 Apple이 거절.</span></div>
+</div>
+<div class="tl-item">
+<div class="tl-label"><span class="en">Step 3: Firebase Crashlytics</span><span class="ko">3단계: Firebase Crashlytics</span></div>
+<div class="tl-text"><span class="en">Add crash reporting SDK. Configure Firebase project, add GoogleService-Info.plist, initialize in app.</span><span class="ko">크래시 리포팅 SDK 추가. Firebase 프로젝트 설정, GoogleService-Info.plist 추가, 앱에서 초기화.</span></div>
+</div>
+<div class="tl-item">
+<div class="tl-label"><span class="en">Step 4: Demo Account</span><span class="ko">4단계: 데모 계정</span></div>
+<div class="tl-text"><span class="en">Create reviewer test account, pre-populate with realistic pantry/household data, write App Review notes.</span><span class="ko">리뷰어 테스트 계정 생성, 실제적인 팬트리/가구 데이터로 채우기, 앱 리뷰 노트 작성.</span></div>
+</div>
+<div class="tl-item">
+<div class="tl-label"><span class="en">Step 5: App Store Metadata</span><span class="ko">5단계: 앱스토어 메타데이터</span></div>
+<div class="tl-text"><span class="en">Draft subtitle, description (EN/KO), keywords. You review and approve before I submit.</span><span class="ko">부제, 설명 (영어/한국어), 키워드 작성. 제출 전 검토 및 승인.</span></div>
+</div>
+<div class="tl-item">
+<div class="tl-label"><span class="en">Step 6: Accessibility Pass</span><span class="ko">6단계: 접근성 패스</span></div>
+<div class="tl-text"><span class="en">Add basic Semantics labels to key screens. Add text labels to color-only indicators. Color contrast fixes (after Elissa's design pass).</span><span class="ko">주요 화면에 기본 Semantics 레이블 추가. 색상 전용 표시에 텍스트 레이블 추가. 색상 대비 수정 (Elissa 디자인 패스 후).</span></div>
+</div>
+<div class="tl-item">
+<div class="tl-label"><span class="en">Step 7: Final Build & Submit</span><span class="ko">7단계: 최종 빌드 & 제출</span></div>
+<div class="tl-text"><span class="en">After screenshots from Elissa, final build + upload + submit for review. Average review time: 24-48 hours.</span><span class="ko">Elissa의 스크린샷 후 최종 빌드 + 업로드 + 리뷰 제출. 평균 리뷰 시간: 24-48시간.</span></div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════ -->
+<!-- SECTION 8: MINJUN TODO -->
+<!-- ═══════════════════════════════════════ -->
+<h2>✋ 8. <span class="en">Minjun's Manual TODO (Only You Can Do These)</span><span class="ko">민준의 수동 할 일 (본인만 할 수 있는 것)</span></h2>
+
+<div class="card" style="border-left:4px solid var(--accent)">
+<div class="item"><span class="item-icon">1️⃣</span><span class="en"><strong>LLC Formation</strong> — azcc.gov (AZ Corporation Commission). ~$50, online, takes 1-2 weeks for processing. Can launch before this is done.</span><span class="ko"><strong>LLC 설립</strong> — azcc.gov. ~$50, 온라인, 처리 1-2주. 완료 전 출시 가능.</span></div>
+<div class="item"><span class="item-icon">2️⃣</span><span class="en"><strong>EIN</strong> — irs.gov/ein. Free, instant online. Do this after LLC is approved.</span><span class="ko"><strong>EIN</strong> — irs.gov/ein. 무료, 온라인 즉시. LLC 승인 후 진행.</span></div>
+<div class="item"><span class="item-icon">3️⃣</span><span class="en"><strong>Business bank account</strong> — Open with EIN. Mercury.com is great for startups (no fees, online).</span><span class="ko"><strong>사업용 은행 계좌</strong> — EIN으로 개설. Mercury.com이 스타트업에 적합 (수수료 없음, 온라인).</span></div>
+<div class="item"><span class="item-icon">4️⃣</span><span class="en"><strong>App Store Connect: Age Rating questionnaire</strong> — Simple multiple choice (2 min). Answer "None" for most. Category: Food & Drink.</span><span class="ko"><strong>App Store Connect: 연령 등급 설문</strong> — 간단한 객관식 (2분). 대부분 "없음" 선택. 카테고리: Food & Drink.</span></div>
+<div class="item"><span class="item-icon">5️⃣</span><span class="en"><strong>App Store Connect: Privacy Nutrition Label</strong> — Fill out data collection declarations (I'll give you exact answers to select).</span><span class="ko"><strong>App Store Connect: 개인정보 영양 라벨</strong> — 데이터 수집 선언 작성 (선택할 정확한 답변을 드릴게요).</span></div>
+<div class="item"><span class="item-icon">6️⃣</span><span class="en"><strong>Elissa design meeting</strong> — Screenshots, splash screen, color accessibility, UI polish.</span><span class="ko"><strong>Elissa 디자인 미팅</strong> — 스크린샷, 스플래시 화면, 색상 접근성, UI 마무리.</span></div>
+<div class="item"><span class="item-icon">7️⃣</span><span class="en"><strong>Test the build</strong> — Verify all flows work on TestFlight v2.3.0.</span><span class="ko"><strong>빌드 테스트</strong> — TestFlight v2.3.0에서 모든 플로우 확인.</span></div>
+</div>
+
+<!-- ═══════════════════════════════════════ -->
+<!-- SUMMARY -->
+<!-- ═══════════════════════════════════════ -->
+<h2>📊 <span class="en">Summary</span><span class="ko">요약</span></h2>
+
+<div class="card">
+<table>
+<tr><th><span class="en">Area</span><span class="ko">영역</span></th><th><span class="en">Status</span><span class="ko">상태</span></th><th><span class="en">Blocking?</span><span class="ko">차단?</span></th><th><span class="en">Owner</span><span class="ko">담당</span></th></tr>
+<tr><td><span class="en">Core App</span><span class="ko">핵심 앱</span></td><td>✅ 100%</td><td>—</td><td>—</td></tr>
+<tr><td><span class="en">Backend</span><span class="ko">백엔드</span></td><td>✅ 100%</td><td>—</td><td>—</td></tr>
+<tr><td><span class="en">Privacy Policy URL</span><span class="ko">개인정보 처리방침</span></td><td>❌</td><td><strong><span class="en">YES</span><span class="ko">예</span></strong></td><td><span class="badge b-totoro">TOTORO</span></td></tr>
+<tr><td><span class="en">Privacy Manifest</span><span class="ko">프라이버시 매니페스트</span></td><td>❌</td><td><strong><span class="en">YES</span><span class="ko">예</span></strong></td><td><span class="badge b-totoro">TOTORO</span></td></tr>
+<tr><td><span class="en">Demo Account</span><span class="ko">데모 계정</span></td><td>❌</td><td><strong><span class="en">YES</span><span class="ko">예</span></strong></td><td><span class="badge b-totoro">TOTORO</span></td></tr>
+<tr><td><span class="en">Crash Reporting</span><span class="ko">크래시 리포팅</span></td><td>❌</td><td><span class="en">Recommended</span><span class="ko">권장</span></td><td><span class="badge b-totoro">TOTORO</span></td></tr>
+<tr><td><span class="en">Metadata</span><span class="ko">메타데이터</span></td><td>❌</td><td><strong><span class="en">YES</span><span class="ko">예</span></strong></td><td><span class="badge b-totoro">TOTORO</span> + <span class="badge b-you">MINJUN</span></td></tr>
+<tr><td><span class="en">Screenshots</span><span class="ko">스크린샷</span></td><td>❌</td><td><strong><span class="en">YES</span><span class="ko">예</span></strong></td><td><span class="badge b-elissa">ELISSA</span></td></tr>
+<tr><td><span class="en">Accessibility</span><span class="ko">접근성</span></td><td>⚠️</td><td><span class="en">Not yet, but soon</span><span class="ko">아직은 아니지만 곧</span></td><td><span class="badge b-totoro">TOTORO</span></td></tr>
+<tr><td><span class="en">Nutrition Label</span><span class="ko">영양 라벨</span></td><td>❌</td><td><strong><span class="en">YES</span><span class="ko">예</span></strong></td><td><span class="badge b-you">MINJUN</span></td></tr>
+<tr><td><span class="en">LLC / EIN</span><span class="ko">LLC / EIN</span></td><td>❌</td><td><span class="en">Not for v1</span><span class="ko">v1에 불필요</span></td><td><span class="badge b-you">MINJUN</span></td></tr>
+<tr><td><span class="en">Monetization</span><span class="ko">수익화</span></td><td>❌</td><td><span class="en">Not for v1</span><span class="ko">v1에 불필요</span></td><td><span class="en">Later</span><span class="ko">나중에</span></td></tr>
+</table>
+</div>
+
+<p style="text-align:center;color:var(--muted);font-size:11px;margin-top:32px;padding-bottom:24px">
+<span class="en">Generated by Totoro 🌳 · March 26, 2026 · Based on Apple App Review Guidelines + common rejection analysis</span>
+<span class="ko">토토로 🌳 생성 · 2026년 3월 26일 · Apple 앱 리뷰 가이드라인 + 일반적인 거절 분석 기반</span>
+</p>
+
+</div>
+<script>
+let isKorean=false;
+function toggleLang(){
+  isKorean=!isKorean;
+  document.querySelectorAll('.en').forEach(el=>el.classList.toggle('hide',isKorean));
+  document.querySelectorAll('.ko').forEach(el=>el.classList.toggle('show',isKorean));
+  document.querySelector('.lang-toggle').textContent=isKorean?'English':'한국어';
+}
+</script>
+</body>
+</html>
