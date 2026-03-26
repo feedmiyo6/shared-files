@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Daily Tech Briefing — Mar 26, 2026</title>
+<style>
+  :root {
+    --bg: #0d1117; --card: #161b22; --border: #30363d;
+    --text: #c9d1d9; --heading: #f0f6fc; --accent: #58a6ff;
+    --tag-ai: #7ee787; --tag-mkt: #f78166; --tag-semi: #d2a8ff; --tag-wild: #ffa657;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; padding: 16px; max-width: 720px; margin: 0 auto; }
+  header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
+  h1 { font-size: 1.4rem; color: var(--heading); }
+  .date { color: #8b949e; font-size: 0.85rem; margin-top: 4px; }
+  .lang-toggle { background: var(--card); color: var(--accent); border: 1px solid var(--border); padding: 6px 14px; border-radius: 20px; cursor: pointer; font-size: 0.85rem; white-space: nowrap; }
+  .lang-toggle:hover { background: var(--border); }
+  .section-title { font-size: 1.1rem; color: var(--heading); margin: 24px 0 12px; display: flex; align-items: center; gap: 8px; }
+  .tag { font-size: 0.7rem; padding: 2px 8px; border-radius: 12px; font-weight: 600; text-transform: uppercase; }
+  .tag-ai { background: rgba(126,231,135,0.15); color: var(--tag-ai); }
+  .tag-mkt { background: rgba(247,129,102,0.15); color: var(--tag-mkt); }
+  .tag-semi { background: rgba(210,168,255,0.15); color: var(--tag-semi); }
+  .tag-wild { background: rgba(255,166,87,0.15); color: var(--tag-wild); }
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px; margin-bottom: 12px; }
+  .card h3 { color: var(--heading); font-size: 1rem; margin-bottom: 6px; }
+  .card .source { color: #8b949e; font-size: 0.8rem; margin-bottom: 8px; }
+  .card p { font-size: 0.9rem; }
+  .card a { color: var(--accent); text-decoration: none; font-size: 0.85rem; }
+  .card a:hover { text-decoration: underline; }
+  footer { text-align: center; color: #484f58; font-size: 0.75rem; margin-top: 32px; padding-top: 16px; border-top: 1px solid var(--border); }
+  .ko { display: none; }
+  .ko.show { display: inline !important; }
+  .en.hide { display: none !important; }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>🌳 <span class="en">Daily Tech Briefing</span><span class="ko">오늘의 테크 브리핑</span></h1>
+    <div class="date"><span class="en">Thursday, March 26, 2026</span><span class="ko">2026년 3월 26일 목요일</span></div>
+  </div>
+  <button class="lang-toggle" onclick="toggleLang()">한국어</button>
+</header>
+
+<!-- AI & TECH -->
+<div class="section-title"><span class="tag tag-ai">AI & Tech</span></div>
+
+<div class="card">
+  <h3><span class="en">Google's TurboQuant Slashes AI Memory Usage by 6x</span><span class="ko">구글 TurboQuant, AI 메모리 사용량 6배 절감</span></h3>
+  <div class="source">Google Research / The Verge</div>
+  <p><span class="en">Google unveiled TurboQuant, a compression algorithm that shrinks the data stored by large language models, reducing memory usage by at least six times "with zero accuracy loss." The breakthrough could make running powerful AI models far more accessible on consumer hardware and edge devices.</span><span class="ko">구글이 대규모 언어 모델의 데이터를 압축하는 TurboQuant 알고리즘을 공개했습니다. 정확도 손실 없이 메모리 사용량을 최소 6배 줄일 수 있으며, 일반 하드웨어와 엣지 디바이스에서도 강력한 AI 모델 실행이 가능해질 전망입니다.</span></p>
+  <a href="https://research.google/blog/turboquant-redefining-ai-efficiency-with-extreme-compression/" target="_blank"><span class="en">Read more →</span><span class="ko">자세히 보기 →</span></a>
+</div>
+
+<div class="card">
+  <h3><span class="en">Apple Can Distill Google's Gemini to Train Smaller AI Models</span><span class="ko">애플, 구글 제미나이로 소형 AI 모델 훈련 가능</span></h3>
+  <div class="source">The Information / The Verge</div>
+  <p><span class="en">Apple reportedly has "complete access" to Google's Gemini in its data centers as part of their January deal. Apple can use Gemini to train smaller "student" AI models via distillation — specially tuned for Apple devices with less computing power. This deepens the Apple-Google AI partnership significantly.</span><span class="ko">애플이 1월 계약의 일환으로 데이터센터에서 구글 제미나이에 '완전 접근'이 가능한 것으로 알려졌습니다. 증류(distillation) 기법으로 애플 기기에 최적화된 소형 AI 모델을 훈련할 수 있어, 양사의 AI 협력이 한층 깊어졌습니다.</span></p>
+  <a href="https://www.theverge.com/news/860521/apple-siri-google-gemini-ai-personalization" target="_blank"><span class="en">Read more →</span><span class="ko">자세히 보기 →</span></a>
+</div>
+
+<div class="card">
+  <h3><span class="en">ARC-AGI-3: New Benchmark Pushes AI Reasoning Limits</span><span class="ko">ARC-AGI-3: AI 추론 능력의 새로운 벤치마크</span></h3>
+  <div class="source">ARC Prize / Hacker News</div>
+  <p><span class="en">The ARC Prize team released ARC-AGI-3, the latest version of their abstract reasoning benchmark that tests whether AI systems can truly generalize. The release has sparked intense discussion in the AI community, with 460+ upvotes and nearly 300 comments on Hacker News about what it means for the path to AGI.</span><span class="ko">ARC Prize 팀이 AI의 진정한 일반화 능력을 테스트하는 추상 추론 벤치마크 ARC-AGI-3를 발표했습니다. 해커뉴스에서 460개 이상의 추천과 약 300개의 댓글이 달리며 AGI로 가는 길에 대한 활발한 논의가 이어지고 있습니다.</span></p>
+  <a href="https://arcprize.org/arc-agi/3" target="_blank"><span class="en">Read more →</span><span class="ko">자세히 보기 →</span></a>
+</div>
+
+<!-- MARKETS -->
+<div class="section-title"><span class="tag tag-mkt"><span class="en">Markets</span><span class="ko">시장</span></span></div>
+
+<div class="card">
+  <h3><span class="en">Meta Lays Off Hundreds More Across Reality Labs & Social Teams</span><span class="ko">메타, 리얼리티 랩스·소셜 팀 등 수백 명 추가 해고</span></h3>
+  <div class="source">The Information / The Verge</div>
+  <p><span class="en">Meta is cutting "a few hundred" more jobs across Reality Labs, social media, recruiting, and sales divisions. This follows January layoffs as the company continues pulling back from the metaverse push and refocuses on AI and wearables. The ongoing restructuring signals Meta's shifting strategic priorities.</span><span class="ko">메타가 리얼리티 랩스, 소셜미디어, 채용, 영업 부서에서 수백 명을 추가 해고합니다. 1월 정리해고에 이어 메타버스에서 후퇴하고 AI와 웨어러블에 집중하는 전략적 전환이 계속되고 있습니다.</span></p>
+  <a href="https://www.theverge.com/news/861295/meta-reality-labs-layoffs-shift-to-wearables" target="_blank"><span class="en">Read more →</span><span class="ko">자세히 보기 →</span></a>
+</div>
+
+<div class="card">
+  <h3><span class="en">Landmark Verdict: Instagram & YouTube Found Negligent in Addiction Trial</span><span class="ko">획기적 판결: 인스타그램·유튜브, 아동 중독 재판에서 과실 인정</span></h3>
+  <div class="source">LA Times / WSJ</div>
+  <p><span class="en">An L.A. jury delivered a landmark verdict finding Meta's Instagram and Google's YouTube were designed to addict children. This is one of the first major court rulings holding social media companies liable for harm to minors, and could set precedent for hundreds of similar pending lawsuits nationwide.</span><span class="ko">LA 배심원단이 메타의 인스타그램과 구글의 유튜브가 아동을 중독시키도록 설계되었다는 획기적 판결을 내렸습니다. 소셜미디어 기업의 미성년자 피해 책임을 인정한 최초의 주요 판결 중 하나로, 전국적으로 수백 건의 유사 소송에 영향을 미칠 전망입니다.</span></p>
+  <a href="https://www.latimes.com/california/story/2026-03-25/social-media-lawsuit-trial-meta-google-verdict" target="_blank"><span class="en">Read more →</span><span class="ko">자세히 보기 →</span></a>
+</div>
+
+<!-- SEMICONDUCTORS -->
+<div class="section-title"><span class="tag tag-semi"><span class="en">Semiconductors</span><span class="ko">반도체</span></span></div>
+
+<div class="card">
+  <h3><span class="en">AMD Unveils Ryzen 9 9950X3D with Dual 3D V-Cache</span><span class="ko">AMD, 듀얼 3D V-Cache 탑재 라이젠 9 9950X3D 공개</span></h3>
+  <div class="source">AMD / The Verge</div>
+  <p><span class="en">AMD announced the Ryzen 9 9950X3D — its first CPU with dual 3D V-Cache split across both chiplets. With 16 Zen 5 cores and 208MB of total cache, AMD positions it as bridging the gap between workstation and gaming PCs, touting 5-10% creative app gains in tools like DaVinci Resolve.</span><span class="ko">AMD가 최초로 두 칩렛에 걸쳐 3D V-Cache를 분할 탑재한 라이젠 9 9950X3D를 발표했습니다. 16개 Zen 5 코어와 총 208MB 캐시를 갖추고, 다빈치 리졸브 같은 크리에이티브 앱에서 5-10% 성능 향상을 강조하며 워크스테이션과 게이밍 PC의 중간 포지션을 노립니다.</span></p>
+  <a href="https://www.theverge.com/reviews/626820/amd-ryzen-9-9950x3d-review-cpu-processor-benchmark-test" target="_blank"><span class="en">Read more →</span><span class="ko">자세히 보기 →</span></a>
+</div>
+
+<div class="card">
+  <h3><span class="en">Apple Expands US Chip Manufacturing with TDK, Bosch Partners</span><span class="ko">애플, TDK·보쉬와 미국 내 칩 제조 확대</span></h3>
+  <div class="source">Apple / The Verge</div>
+  <p><span class="en">Apple is adding new partners to its American Manufacturing Program — TDK will make camera stabilization sensors, while Bosch will build chips for crash detection and activity tracking. The $400M expansion adds Cirrus Logic and Qnity Electronics, though it won't significantly reduce Apple's reliance on China.</span><span class="ko">애플이 미국 제조 프로그램에 새 파트너를 추가합니다. TDK는 카메라 안정화 센서를, 보쉬는 충돌 감지·활동 추적용 칩을 제조합니다. 4억 달러 규모이지만 중국 의존도를 크게 줄이기엔 부족하다는 평가입니다.</span></p>
+  <a href="https://www.apple.com/newsroom/2026/03/apple-adds-new-partners-to-its-american-manufacturing-program/" target="_blank"><span class="en">Read more →</span><span class="ko">자세히 보기 →</span></a>
+</div>
+
+<!-- WILD CARD -->
+<div class="section-title"><span class="tag tag-wild"><span class="en">Wild Card</span><span class="ko">와일드 카드</span></span></div>
+
+<div class="card">
+  <h3><span class="en">EU Parliament Kills Chat Control — Stops Mass Surveillance</span><span class="ko">EU 의회, 채팅 통제법 폐기 — 대규모 감시 저지</span></h3>
+  <div class="source">Patrick Breyer / Hacker News</div>
+  <p><span class="en">In a dramatic vote, the European Parliament decided that Chat Control 1.0 must stop, effectively blocking the proposed mass surveillance of private messages. Privacy advocates celebrate the decision as a major victory for digital rights, though the debate over online child safety measures will continue in different forms.</span><span class="ko">유럽 의회가 극적인 투표로 채팅 통제법 1.0을 폐기하며 개인 메시지 대규모 감시를 차단했습니다. 디지털 권리의 큰 승리로 평가되지만, 온라인 아동 안전 조치에 대한 논쟁은 다른 형태로 계속될 전망입니다.</span></p>
+  <a href="https://www.patrick-breyer.de/en/end-of-chat-control-eu-parliament-stops-mass-surveillance-in-voting-thriller-paving-the-way-for-genuine-child-protection/" target="_blank"><span class="en">Read more →</span><span class="ko">자세히 보기 →</span></a>
+</div>
+
+<footer>
+  <span class="en">Curated by Totoro 🌳 for Minjun</span><span class="ko">토토로 🌳가 민준을 위해 큐레이션</span>
+</footer>
+
+<script>
+let isKorean = false;
+function toggleLang() {
+  isKorean = !isKorean;
+  document.querySelectorAll('.en').forEach(el => el.classList.toggle('hide', isKorean));
+  document.querySelectorAll('.ko').forEach(el => el.classList.toggle('show', isKorean));
+  document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+}
+</script>
+</body>
+</html>
