@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grove 🌳 Build Report — March 27, 2026</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+
+  :root {
+    --bg: #f5f0e8;
+    --fg: #2d3b2d;
+    --card: #faf7f2;
+    --primary: #4a7c59;
+    --primary-light: #8fbc8f;
+    --accent: #e8dcc8;
+    --border: #d4cfc5;
+    --muted: #8a8575;
+    --success: #22c55e;
+    --warn: #f59e0b;
+    --error: #ef4444;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg);
+    color: var(--fg);
+    line-height: 1.6;
+    padding: 2rem 1rem;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .lang-toggle {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    background: var(--primary);
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 2rem;
+    font-size: 0.85rem;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    z-index: 100;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  }
+  .lang-toggle:hover { opacity: 0.9; }
+
+  .ko { display: none; }
+  .ko.show { display: inline !important; }
+  .en.hide { display: none !important; }
+
+  h1, h2, h3 { font-family: 'Fredoka', sans-serif; }
+
+  h1 {
+    font-size: 2.2rem;
+    color: var(--primary);
+    margin-bottom: 0.25rem;
+  }
+
+  .subtitle {
+    color: var(--muted);
+    font-size: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 1rem;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+  }
+
+  .card h2 {
+    font-size: 1.3rem;
+    color: var(--primary);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .stat-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 0.75rem;
+    padding: 1.25rem;
+    text-align: center;
+  }
+
+  .stat-card .number {
+    font-family: 'Fredoka', sans-serif;
+    font-size: 2rem;
+    font-weight: 600;
+    color: var(--primary);
+  }
+
+  .stat-card .label {
+    font-size: 0.85rem;
+    color: var(--muted);
+    margin-top: 0.25rem;
+  }
+
+  .timeline {
+    position: relative;
+    padding-left: 2rem;
+  }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 0.5rem;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: var(--primary-light);
+  }
+
+  .timeline-item {
+    position: relative;
+    margin-bottom: 1.5rem;
+    padding-left: 1rem;
+  }
+
+  .timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -1.75rem;
+    top: 0.5rem;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--primary);
+    border: 2px solid var(--card);
+  }
+
+  .timeline-time {
+    font-size: 0.8rem;
+    color: var(--muted);
+    font-weight: 500;
+  }
+
+  .timeline-title {
+    font-weight: 600;
+    margin: 0.25rem 0;
+  }
+
+  .timeline-desc {
+    font-size: 0.9rem;
+    color: var(--muted);
+  }
+
+  .tag {
+    display: inline-block;
+    background: var(--accent);
+    color: var(--fg);
+    padding: 0.2rem 0.6rem;
+    border-radius: 1rem;
+    font-size: 0.75rem;
+    margin: 0.15rem;
+  }
+
+  .tag.green { background: #dcfce7; color: #166534; }
+  .tag.blue { background: #dbeafe; color: #1e40af; }
+  .tag.purple { background: #f3e8ff; color: #6b21a8; }
+  .tag.orange { background: #ffedd5; color: #9a3412; }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0;
+    font-size: 0.9rem;
+  }
+
+  th, td {
+    padding: 0.75rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+
+  th {
+    font-weight: 600;
+    color: var(--primary);
+    background: rgba(74, 124, 89, 0.05);
+  }
+
+  .feature-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+  }
+
+  .feature-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 0.75rem;
+    padding: 1.25rem;
+  }
+
+  .feature-card h3 {
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .feature-card p {
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+
+  .token-bar {
+    height: 8px;
+    background: var(--accent);
+    border-radius: 4px;
+    overflow: hidden;
+    margin: 0.5rem 0;
+  }
+
+  .token-bar-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.3s;
+  }
+
+  .footer {
+    text-align: center;
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 0.85rem;
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.25rem 0.75rem;
+    border-radius: 2rem;
+    font-size: 0.8rem;
+    font-weight: 500;
+  }
+
+  .badge.success { background: #dcfce7; color: #166534; }
+  .badge.info { background: #dbeafe; color: #1e40af; }
+
+  @media (max-width: 640px) {
+    body { padding: 1rem 0.75rem; }
+    h1 { font-size: 1.6rem; }
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    .feature-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<button class="lang-toggle" onclick="toggleLang()">한국어</button>
+
+<h1>🌳 <span class="en">Grove Build Report</span><span class="ko">Grove 빌드 리포트</span></h1>
+<p class="subtitle">
+  <span class="en">Friday, March 27, 2026 · Built by Totoro 🌳</span>
+  <span class="ko">2026년 3월 27일 금요일 · Totoro 🌳 제작</span>
+</p>
+
+<!-- Overview Stats -->
+<div class="stats-grid">
+  <div class="stat-card">
+    <div class="number">34</div>
+    <div class="label"><span class="en">Files Created</span><span class="ko">생성된 파일</span></div>
+  </div>
+  <div class="stat-card">
+    <div class="number">4,024</div>
+    <div class="label"><span class="en">Lines of Code</span><span class="ko">코드 라인 수</span></div>
+  </div>
+  <div class="stat-card">
+    <div class="number">6</div>
+    <div class="label"><span class="en">Full Pages</span><span class="ko">전체 페이지</span></div>
+  </div>
+  <div class="stat-card">
+    <div class="number">3</div>
+    <div class="label"><span class="en">Git Commits</span><span class="ko">Git 커밋</span></div>
+  </div>
+</div>
+
+<!-- What is Grove? -->
+<div class="card">
+  <h2>🌿 <span class="en">What is Grove?</span><span class="ko">Grove란?</span></h2>
+  <p>
+    <span class="en">
+      <strong>Grove</strong> is a Personal AI Knowledge Hub — a beautiful Next.js web app for capturing, organizing, and growing your knowledge. Think of it as a second brain with a cozy Ghibli-inspired aesthetic. It features smart capture for links/text/code/ideas, a full markdown notes editor, a focus timer with session tracking, and a knowledge base with powerful filtering.
+    </span>
+    <span class="ko">
+      <strong>Grove</strong>는 개인 AI 지식 허브입니다 — 지식을 캡처하고, 정리하고, 성장시키기 위한 아름다운 Next.js 웹 앱입니다. 아늑한 지브리 스타일의 미학을 가진 세컨드 브레인이라고 생각하세요. 링크/텍스트/코드/아이디어를 위한 스마트 캡처, 마크다운 노트 에디터, 세션 추적이 있는 포커스 타이머, 그리고 강력한 필터링 기능을 갖춘 지식 베이스를 제공합니다.
+    </span>
+  </p>
+</div>
+
+<!-- Tech Stack -->
+<div class="card">
+  <h2>⚙️ <span class="en">Tech Stack</span><span class="ko">기술 스택</span></h2>
+  <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+    <span class="tag green">Next.js 14</span>
+    <span class="tag green">TypeScript</span>
+    <span class="tag blue">Tailwind CSS</span>
+    <span class="tag blue">shadcn/ui</span>
+    <span class="tag purple">Zustand</span>
+    <span class="tag purple">React Markdown</span>
+    <span class="tag orange">Radix UI</span>
+    <span class="tag orange">Lucide Icons</span>
+    <span class="tag green">date-fns</span>
+  </div>
+</div>
+
+<!-- Features -->
+<div class="card">
+  <h2>✨ <span class="en">Features Built</span><span class="ko">구현된 기능</span></h2>
+  <div class="feature-grid">
+    <div class="feature-card">
+      <h3>🏠 <span class="en">Dashboard</span><span class="ko">대시보드</span></h3>
+      <p><span class="en">Time-based greeting, live Phoenix weather via Open-Meteo API, daily quotes, stats cards, recent activity feed, and GitHub-style activity streak tracker.</span><span class="ko">시간 기반 인사말, Open-Meteo API를 통한 피닉스 실시간 날씨, 오늘의 명언, 통계 카드, 최근 활동 피드, GitHub 스타일 활동 연속 추적기.</span></p>
+    </div>
+    <div class="feature-card">
+      <h3>📸 <span class="en">Smart Capture</span><span class="ko">스마트 캡처</span></h3>
+      <p><span class="en">Capture links, text, code snippets, and ideas. Tag and categorize everything. Type-specific input (monospace for code). Recent captures sidebar.</span><span class="ko">링크, 텍스트, 코드 스니펫, 아이디어를 캡처. 태그와 카테고리 분류. 유형별 입력 (코드용 고정폭 폰트). 최근 캡처 사이드바.</span></p>
+    </div>
+    <div class="feature-card">
+      <h3>📚 <span class="en">Knowledge Base</span><span class="ko">지식 베이스</span></h3>
+      <p><span class="en">Grid view with type/category filtering, text search, sort options (newest/oldest/title), expandable cards, color-coded type badges, tag cloud.</span><span class="ko">유형/카테고리 필터링이 있는 그리드 뷰, 텍스트 검색, 정렬 옵션, 확장 가능한 카드, 색상 코딩된 유형 배지, 태그 클라우드.</span></p>
+    </div>
+    <div class="feature-card">
+      <h3>📝 <span class="en">Notes Editor</span><span class="ko">노트 에디터</span></h3>
+      <p><span class="en">Split-pane with note list + editor. Markdown with live preview. Auto-save (1s debounce). Inline title editing. Search across all notes. Tag support.</span><span class="ko">노트 목록 + 에디터 분할 화면. 실시간 미리보기가 있는 마크다운. 자동 저장 (1초 디바운스). 인라인 제목 편집. 전체 노트 검색. 태그 지원.</span></p>
+    </div>
+    <div class="feature-card">
+      <h3>🎯 <span class="en">Focus Mode</span><span class="ko">포커스 모드</span></h3>
+      <p><span class="en">Circular SVG timer with progress. Pomodoro presets (25/45/60/90 min). Pause/resume. Session history with completion status. Daily & weekly stats. Desktop notifications.</span><span class="ko">진행 상태가 있는 원형 SVG 타이머. 포모도로 프리셋 (25/45/60/90분). 일시정지/재개. 완료 상태 세션 기록. 일간 & 주간 통계. 데스크톱 알림.</span></p>
+    </div>
+    <div class="feature-card">
+      <h3>⚙️ <span class="en">Settings</span><span class="ko">설정</span></h3>
+      <p><span class="en">Dark/light/system theme. Profile management. JSON data export/import for backup. Clear all data option. Version info.</span><span class="ko">다크/라이트/시스템 테마. 프로필 관리. 백업용 JSON 데이터 내보내기/가져오기. 전체 데이터 삭제 옵션. 버전 정보.</span></p>
+    </div>
+  </div>
+</div>
+
+<!-- Bonus Features -->
+<div class="card">
+  <h2>🎁 <span class="en">Bonus Features</span><span class="ko">보너스 기능</span></h2>
+  <div class="feature-grid">
+    <div class="feature-card">
+      <h3>⌘K <span class="en">Command Palette</span><span class="ko">커맨드 팔레트</span></h3>
+      <p><span class="en">Spotlight-style quick actions. Keyboard navigation (↑↓ Enter). Fuzzy search. Theme toggle shortcut. Navigate anywhere instantly.</span><span class="ko">스포트라이트 스타일 빠른 액션. 키보드 내비게이션. 퍼지 검색. 테마 전환 단축키. 어디든 즉시 이동.</span></p>
+    </div>
+    <div class="feature-card">
+      <h3>⚡ <span class="en">Quick Capture FAB</span><span class="ko">빠른 캡처 버튼</span></h3>
+      <p><span class="en">Floating action button (Alt+N) for instant idea capture. Type selection, ⌘+Enter to save. Available on every page.</span><span class="ko">즉석 아이디어 캡처를 위한 플로팅 액션 버튼 (Alt+N). 유형 선택, ⌘+Enter로 저장. 모든 페이지에서 사용 가능.</span></p>
+    </div>
+    <div class="feature-card">
+      <h3>🔥 <span class="en">Activity Streak</span><span class="ko">활동 연속 기록</span></h3>
+      <p><span class="en">GitHub-style contribution grid (49 days). Streak counter. Activity intensity levels. Gamifies daily knowledge capture.</span><span class="ko">GitHub 스타일 기여 그리드 (49일). 연속 카운터. 활동 강도 레벨. 일일 지식 캡처를 게임화.</span></p>
+    </div>
+  </div>
+</div>
+
+<!-- Build Timeline -->
+<div class="card">
+  <h2>⏱️ <span class="en">Build Timeline</span><span class="ko">빌드 타임라인</span></h2>
+  <div class="timeline">
+    <div class="timeline-item">
+      <div class="timeline-time">4:30 PM MST</div>
+      <div class="timeline-title"><span class="en">Project Planning & Architecture</span><span class="ko">프로젝트 계획 & 아키텍처</span></div>
+      <div class="timeline-desc"><span class="en">Designed PROJECT_PLAN.md with full feature spec, DB schema, design system, and 6-hour timeline. Chose tech stack.</span><span class="ko">전체 기능 스펙, DB 스키마, 디자인 시스템, 6시간 타임라인이 포함된 PROJECT_PLAN.md 설계. 기술 스택 선택.</span></div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-time">4:33 PM</div>
+      <div class="timeline-title"><span class="en">Delegated to Claude Code (Sonnet 4.6)</span><span class="ko">Claude Code (Sonnet 4.6)에 위임</span></div>
+      <div class="timeline-desc"><span class="en">Spawned Claude Code with Sonnet model for heavy scaffolding — all 6 pages, 10 UI components, 4 Zustand stores, type definitions, Ghibli theme CSS.</span><span class="ko">Sonnet 모델로 Claude Code를 실행하여 핵심 스캐폴딩 수행 — 6개 페이지, 10개 UI 컴포넌트, 4개 Zustand 스토어, 타입 정의, 지브리 테마 CSS.</span></div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-time">4:44 PM</div>
+      <div class="timeline-title"><span class="en">31 Files Generated, Build Verified</span><span class="ko">31개 파일 생성, 빌드 검증</span></div>
+      <div class="timeline-desc"><span class="en">Claude Code completed all files. Clean Next.js build with 0 errors. Dev server confirmed 200 OK on all routes.</span><span class="ko">Claude Code가 모든 파일 완성. 오류 0개로 깨끗한 Next.js 빌드. 모든 라우트에서 200 OK 확인.</span></div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-time">4:50 PM</div>
+      <div class="timeline-title"><span class="en">Code Review & Quality Check</span><span class="ko">코드 리뷰 & 품질 확인</span></div>
+      <div class="timeline-desc"><span class="en">Reviewed all 31 files for quality. TypeScript types, component separation, state management patterns all production-grade.</span><span class="ko">31개 파일 전체 품질 리뷰. TypeScript 타입, 컴포넌트 분리, 상태 관리 패턴 모두 프로덕션 수준.</span></div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-time">4:55 PM</div>
+      <div class="timeline-title"><span class="en">Added Command Palette (⌘K)</span><span class="ko">커맨드 팔레트 (⌘K) 추가</span></div>
+      <div class="timeline-desc"><span class="en">Built spotlight-style command palette with fuzzy search, keyboard navigation, theme toggle. Added keyboard shortcut hint in sidebar.</span><span class="ko">퍼지 검색, 키보드 내비게이션, 테마 전환이 있는 스포트라이트 스타일 커맨드 팔레트 구축. 사이드바에 키보드 단축키 힌트 추가.</span></div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-time">5:00 PM</div>
+      <div class="timeline-title"><span class="en">Added Quick Capture & Streak Tracker</span><span class="ko">빠른 캡처 & 연속 추적기 추가</span></div>
+      <div class="timeline-desc"><span class="en">Built floating Quick Capture button (Alt+N), GitHub-style activity streak tracker with 49-day contribution grid.</span><span class="ko">플로팅 빠른 캡처 버튼 (Alt+N), 49일 기여 그리드가 있는 GitHub 스타일 활동 연속 추적기 구축.</span></div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-time">5:05 PM</div>
+      <div class="timeline-title"><span class="en">GitHub Repo Created & Report</span><span class="ko">GitHub 레포 생성 & 리포트</span></div>
+      <div class="timeline-desc"><span class="en">Created private repo feedmiyo6/grove, 3 commits pushed. Building this report.</span><span class="ko">비공개 레포 feedmiyo6/grove 생성, 3개 커밋 푸시. 이 리포트 작성 중.</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- Token Usage -->
+<div class="card">
+  <h2>🪙 <span class="en">Token & Resource Usage</span><span class="ko">토큰 & 리소스 사용량</span></h2>
+  <table>
+    <thead>
+      <tr>
+        <th><span class="en">Agent/Model</span><span class="ko">에이전트/모델</span></th>
+        <th><span class="en">Task</span><span class="ko">작업</span></th>
+        <th><span class="en">Tokens (est.)</span><span class="ko">토큰 (추정)</span></th>
+        <th><span class="en">Notes</span><span class="ko">비고</span></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="tag purple">Claude Opus 4.6</span></td>
+        <td><span class="en">Orchestration, planning, review, enhancements</span><span class="ko">오케스트레이션, 계획, 리뷰, 개선</span></td>
+        <td>~87k context</td>
+        <td><span class="en">Main agent (this session)</span><span class="ko">메인 에이전트 (이 세션)</span></td>
+      </tr>
+      <tr>
+        <td><span class="tag blue">Claude Sonnet 4.6</span></td>
+        <td><span class="en">Heavy scaffolding — all 31 source files</span><span class="ko">핵심 스캐폴딩 — 31개 소스 파일 전체</span></td>
+        <td>~150k (est.)</td>
+        <td><span class="en">Via Claude Code CLI (--print mode)</span><span class="ko">Claude Code CLI를 통해 (--print 모드)</span></td>
+      </tr>
+      <tr>
+        <td><span class="tag green">Opus 4.6</span></td>
+        <td><span class="en">Command Palette, Quick Capture, Streak Tracker</span><span class="ko">커맨드 팔레트, 빠른 캡처, 연속 추적기</span></td>
+        <td>~11k out</td>
+        <td><span class="en">Hand-written by orchestrator</span><span class="ko">오케스트레이터가 직접 작성</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p style="margin-top: 1rem; font-size: 0.85rem; color: var(--muted);">
+    <span class="en">💡 Strategy: Used <strong>Sonnet 4.6</strong> for the bulk code generation (cost-efficient, fast) and <strong>Opus 4.6</strong> for architecture, review, and creative features (higher quality). This is the mixed-model approach you requested!</span>
+    <span class="ko">💡 전략: 대량 코드 생성에는 <strong>Sonnet 4.6</strong>를 사용하고 (비용 효율적, 빠름), 아키텍처, 리뷰, 창의적 기능에는 <strong>Opus 4.6</strong>를 사용했습니다 (더 높은 품질). 요청하신 혼합 모델 접근 방식입니다!</span>
+  </p>
+</div>
+
+<!-- Git History -->
+<div class="card">
+  <h2>📋 <span class="en">Git Commits</span><span class="ko">Git 커밋</span></h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Hash</th>
+        <th><span class="en">Message</span><span class="ko">메시지</span></th>
+        <th><span class="en">Files</span><span class="ko">파일</span></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>48f5dc4</code></td>
+        <td>feat: initial Grove app — all 6 pages, Ghibli theme, localStorage persistence</td>
+        <td>31</td>
+      </tr>
+      <tr>
+        <td><code>5a8d3c6</code></td>
+        <td>feat: add command palette (⌘K) with keyboard navigation</td>
+        <td>5</td>
+      </tr>
+      <tr>
+        <td><code>04bd058</code></td>
+        <td>feat: add Quick Capture FAB, Command Palette, Streak Tracker</td>
+        <td>4</td>
+      </tr>
+    </tbody>
+  </table>
+  <p style="margin-top: 0.75rem;">
+    <span class="badge info">🔗 <span class="en">Repo</span><span class="ko">레포</span>: github.com/feedmiyo6/grove (private)</span>
+  </p>
+</div>
+
+<!-- How to Run -->
+<div class="card">
+  <h2>🚀 <span class="en">How to Run</span><span class="ko">실행 방법</span></h2>
+  <pre style="background: #2d3b2d; color: #e8e0d0; padding: 1.25rem; border-radius: 0.75rem; overflow-x: auto; font-size: 0.85rem; line-height: 1.8;">
+<span style="color: #8fbc8f;"># Clone and run</span>
+cd ~/Projects/grove
+npm install
+npm run dev
+
+<span style="color: #8fbc8f;"># Open in browser</span>
+http://localhost:3000
+
+<span style="color: #8fbc8f;"># Keyboard shortcuts</span>
+⌘K   → Command Palette
+Alt+N → Quick Capture
+  </pre>
+</div>
+
+<!-- What's Next -->
+<div class="card">
+  <h2>🔮 <span class="en">What's Next (Future Enhancements)</span><span class="ko">다음 단계 (향후 개선)</span></h2>
+  <ul style="padding-left: 1.25rem; font-size: 0.9rem; line-height: 2;">
+    <li><span class="en"><strong>Supabase Backend</strong> — Cloud sync, auth, multi-device access</span><span class="ko"><strong>Supabase 백엔드</strong> — 클라우드 동기화, 인증, 다중 기기 접근</span></li>
+    <li><span class="en"><strong>AI Summarization</strong> — Auto-summarize captured URLs and text with OpenAI</span><span class="ko"><strong>AI 요약</strong> — OpenAI로 캡처된 URL과 텍스트 자동 요약</span></li>
+    <li><span class="en"><strong>Semantic Search</strong> — pgvector embeddings for natural language knowledge retrieval</span><span class="ko"><strong>시맨틱 검색</strong> — 자연어 지식 검색을 위한 pgvector 임베딩</span></li>
+    <li><span class="en"><strong>Browser Extension</strong> — Capture directly from any webpage</span><span class="ko"><strong>브라우저 확장</strong> — 어떤 웹페이지에서든 직접 캡처</span></li>
+    <li><span class="en"><strong>AI Tags</strong> — Auto-tagging and categorization</span><span class="ko"><strong>AI 태그</strong> — 자동 태깅 및 분류</span></li>
+    <li><span class="en"><strong>Vercel Deploy</strong> — One-click deployment</span><span class="ko"><strong>Vercel 배포</strong> — 원클릭 배포</span></li>
+  </ul>
+</div>
+
+<!-- Footer -->
+<div class="footer">
+  <p>🌳 <span class="en">Built with love by Totoro · For Minjun · March 27, 2026</span><span class="ko">Totoro가 정성껏 제작 · Minjun을 위해 · 2026년 3월 27일</span></p>
+  <p style="margin-top: 0.5rem; font-size: 0.75rem;">
+    <span class="en">Grove — Grow your knowledge garden 🌿</span>
+    <span class="ko">Grove — 당신의 지식 정원을 키우세요 🌿</span>
+  </p>
+</div>
+
+<script>
+let isKorean = false;
+function toggleLang() {
+  isKorean = !isKorean;
+  document.querySelectorAll('.en').forEach(el => el.classList.toggle('hide', isKorean));
+  document.querySelectorAll('.ko').forEach(el => el.classList.toggle('show', isKorean));
+  document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+}
+</script>
+
+</body>
+</html>
