@@ -495,7 +495,7 @@
       <span class="ko">📋 핵심 스펙</span>
     </h3>
     <ul class="kv-list">
-      <li><span class="kv-label"><span class="en">Platform</span><span class="ko">플랫폼</span></span> <span class="kv-value">iOS (Flutter)</span></li>
+      <li><span class="kv-label"><span class="en">Platform</span><span class="ko">플랫폼</span></span> <span class="kv-value">iOS + macOS (Flutter)</span></li>
       <li><span class="kv-label"><span class="en">Backend</span><span class="ko">백엔드</span></span> <span class="kv-value">Supabase (new project)</span></li>
       <li><span class="kv-label"><span class="en">AI Models</span><span class="ko">AI 모델</span></span> <span class="kv-value">Claude Sonnet + Haiku + GPT-4.1-nano</span></li>
       <li><span class="kv-label"><span class="en">Distribution</span><span class="ko">배포</span></span> <span class="kv-value">TestFlight (private)</span></li>
@@ -604,9 +604,112 @@ user_memory
   </div>
 </div>
 
+<!-- RAG SYSTEM -->
+<div class="section">
+  <div class="section-label">04 — RAG System</div>
+  <h2>
+    <span class="en">Bring Your Own Sources</span>
+    <span class="ko">나만의 소스 가져오기</span>
+  </h2>
+  <p class="section-desc">
+    <span class="en">Like NotebookLM, users can upload their own study materials as sources. Bloom ingests, chunks, embeds, and uses them for question generation, answer evaluation, and contextual references. Your sources become the foundation of your study experience.</span>
+    <span class="ko">NotebookLM처럼 사용자가 자신의 학습 자료를 소스로 업로드할 수 있습니다. Bloom이 수집, 청킹, 임베딩하여 문제 생성, 답변 평가, 컨텍스트 참조에 사용합니다. 소스가 학습 경험의 기반이 됩니다.</span>
+  </p>
+
+  <div class="card card-purple">
+    <h3><span class="en">📄 Supported Source Types</span><span class="ko">📄 지원 소스 유형</span></h3>
+    <ul>
+      <li><span class="en"><strong>PDFs</strong> — textbooks, guidelines, lecture slides, practice exams</span><span class="ko"><strong>PDF</strong> — 교과서, 가이드라인, 강의 슬라이드, 모의 시험</span></li>
+      <li><span class="en"><strong>Web URLs</strong> — articles, guidelines (ACOG bulletins, UpToDate), reference pages</span><span class="ko"><strong>웹 URL</strong> — 기사, 가이드라인 (ACOG 게시물, UpToDate), 참고 페이지</span></li>
+      <li><span class="en"><strong>Text/Notes</strong> — copy-paste your own notes, summaries, mnemonics</span><span class="ko"><strong>텍스트/노트</strong> — 자신의 노트, 요약, 기억법 복사-붙여넣기</span></li>
+      <li><span class="en"><strong>Images</strong> — diagrams, flowcharts, clinical images for reference</span><span class="ko"><strong>이미지</strong> — 다이어그램, 플로차트, 임상 이미지 참조</span></li>
+    </ul>
+  </div>
+
+  <div class="card card-mint">
+    <h3><span class="en">🔍 RAG Pipeline</span><span class="ko">🔍 RAG 파이프라인</span></h3>
+    <p><span class="en">When a source is uploaded:</span><span class="ko">소스가 업로드되면:</span></p>
+    <ul>
+      <li><span class="en"><strong>1. Parse & Extract</strong> — PDF text extraction, URL scraping, image OCR</span><span class="ko"><strong>1. 파싱 & 추출</strong> — PDF 텍스트 추출, URL 스크래핑, 이미지 OCR</span></li>
+      <li><span class="en"><strong>2. Chunk</strong> — Split into semantic chunks (512-1024 tokens) with overlap</span><span class="ko"><strong>2. 청킹</strong> — 오버랩이 있는 의미 단위 청크(512-1024 토큰)로 분할</span></li>
+      <li><span class="en"><strong>3. Embed</strong> — Generate vector embeddings (OpenAI text-embedding-3-small, ~$0.02/1M tokens)</span><span class="ko"><strong>3. 임베딩</strong> — 벡터 임베딩 생성 (OpenAI text-embedding-3-small, ~$0.02/1M 토큰)</span></li>
+      <li><span class="en"><strong>4. Store</strong> — Supabase pgvector for semantic search</span><span class="ko"><strong>4. 저장</strong> — 시맨틱 검색을 위한 Supabase pgvector</span></li>
+      <li><span class="en"><strong>5. Index</strong> — Auto-tag topics, link to project's topic tree</span><span class="ko"><strong>5. 인덱싱</strong> — 자동 주제 태깅, 프로젝트 주제 트리에 연결</span></li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3><span class="en">💡 How RAG Enhances Every Mode</span><span class="ko">💡 RAG가 모든 모드를 향상시키는 방법</span></h3>
+    <ul>
+      <li><span class="en"><strong>Question Generation</strong> — generates questions directly from YOUR sources, not generic AI knowledge</span><span class="ko"><strong>문제 생성</strong> — 일반 AI 지식이 아닌 사용자의 소스에서 직접 문제 생성</span></li>
+      <li><span class="en"><strong>Answer Evaluation</strong> — AI references your specific textbook/guideline when grading: <em>"According to Williams Obstetrics Ch.35 (your source), the correct approach is..."</em></span><span class="ko"><strong>답변 평가</strong> — AI가 채점 시 사용자의 특정 교과서/가이드라인 참조: <em>"Williams 산과학 35장(귀하의 소스)에 따르면..."</em></span></li>
+      <li><span class="en"><strong>Teach-Back</strong> — evaluates your explanation against what your source materials say</span><span class="ko"><strong>가르치기 모드</strong> — 소스 자료 내용과 비교하여 설명 평가</span></li>
+      <li><span class="en"><strong>Audio Briefing</strong> — summarizes YOUR sources, not generic content</span><span class="ko"><strong>오디오 브리핑</strong> — 일반 콘텐츠가 아닌 사용자의 소스 요약</span></li>
+      <li><span class="en"><strong>Flashcards</strong> — auto-generated from highlighted sections of your materials</span><span class="ko"><strong>플래시카드</strong> — 자료의 하이라이트 섹션에서 자동 생성</span></li>
+    </ul>
+  </div>
+
+  <div class="card card-sky">
+    <h3><span class="en">📚 Source Management UI</span><span class="ko">📚 소스 관리 UI</span></h3>
+    <ul>
+      <li><span class="en">Library view showing all uploaded sources per project</span><span class="ko">프로젝트별 업로드된 모든 소스를 보여주는 라이브러리 뷰</span></li>
+      <li><span class="en">Source health indicator (chunks indexed, topics mapped)</span><span class="ko">소스 상태 표시기 (인덱싱된 청크, 매핑된 주제)</span></li>
+      <li><span class="en">Citation links in feedback — tap to jump to the source</span><span class="ko">피드백의 인용 링크 — 탭하면 소스로 이동</span></li>
+      <li><span class="en">Bulk upload (drag & drop on Mac, file picker on iOS)</span><span class="ko">일괄 업로드 (Mac에서 드래그 앤 드롭, iOS에서 파일 선택기)</span></li>
+      <li><span class="en">"Generate questions from this source" — one-tap action</span><span class="ko">"이 소스에서 문제 생성" — 원탭 액션</span></li>
+    </ul>
+  </div>
+</div>
+
+<!-- INTERACTIVE PROJECT PIVOTING -->
+<div class="section">
+  <div class="section-label">05 — Interactive Pivoting</div>
+  <h2>
+    <span class="en">Your Study, Your Rules</span>
+    <span class="ko">당신의 학습, 당신의 규칙</span>
+  </h2>
+  <p class="section-desc">
+    <span class="en">Projects are living, adaptive plans — not rigid syllabuses. Users can pivot, adjust, skip, and refocus at any time through natural conversation with Bloom.</span>
+    <span class="ko">프로젝트는 경직된 커리큘럼이 아닌 살아있는 적응형 계획입니다. 사용자는 Bloom과의 자연스러운 대화를 통해 언제든지 방향 전환, 조정, 건너뛰기, 재집중할 수 있습니다.</span>
+  </p>
+
+  <div class="card card-peach">
+    <h3><span class="en">💬 Natural Language Project Commands</span><span class="ko">💬 자연어 프로젝트 명령</span></h3>
+    <p><span class="en">Users can say things like:</span><span class="ko">사용자는 다음과 같이 말할 수 있습니다:</span></p>
+    <ul>
+      <li><span class="en"><em>"Skip Gynecologic Oncology for now — it's low-yield for me. Focus on Obstetrics instead."</em></span><span class="ko"><em>"부인과 종양학은 지금 건너뛰세요 — 저한테 효율이 낮아요. 산과에 집중해 주세요."</em></span></li>
+      <li><span class="en"><em>"I just realized I need to study preeclampsia way more. Add extra questions on that."</em></span><span class="ko"><em>"전자간증을 훨씬 더 공부해야 할 것 같아요. 그 주제에 추가 문제를 넣어주세요."</em></span></li>
+      <li><span class="en"><em>"Change my daily count from 15 to 10 — I'm burned out this week."</em></span><span class="ko"><em>"일일 문제 수를 15개에서 10개로 줄여주세요 — 이번 주 지쳤어요."</em></span></li>
+      <li><span class="en"><em>"I want more case simulations and less flashcards."</em></span><span class="ko"><em>"플래시카드는 줄이고 케이스 시뮬레이션을 더 주세요."</em></span></li>
+      <li><span class="en"><em>"Add a new topic: Fetal Echocardiography. Here's my reference PDF."</em></span><span class="ko"><em>"새 주제 추가: 태아 심초음파. 참고 PDF 여기 있어요."</em></span></li>
+      <li><span class="en"><em>"I nailed Labor & Delivery — reduce its frequency and rotate in more Gyn Onc."</em></span><span class="ko"><em>"분만 & 출산은 마스터했어요 — 빈도를 줄이고 부인과 종양학을 더 넣어주세요."</em></span></li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3><span class="en">🔧 How Pivoting Works</span><span class="ko">🔧 방향 전환 작동 방식</span></h3>
+    <ul>
+      <li><span class="en"><strong>In-session chat</strong> — a chat input at the bottom of the study screen. Type instructions anytime.</span><span class="ko"><strong>세션 내 채팅</strong> — 학습 화면 하단의 채팅 입력. 언제든지 지시 입력 가능.</span></li>
+      <li><span class="en"><strong>AI parses intent</strong> — understands "skip", "focus", "add", "reduce", "change" etc.</span><span class="ko"><strong>AI가 의도 파악</strong> — "건너뛰기", "집중", "추가", "줄이기", "변경" 등 이해.</span></li>
+      <li><span class="en"><strong>Confirms changes</strong> — "Got it! I'll deprioritize Gyn Onc and increase Obstetrics questions by 30%. Sound good?"</span><span class="ko"><strong>변경 확인</strong> — "알겠어요! 부인과 종양학 우선순위를 낮추고 산과 문제를 30% 늘릴게요. 괜찮나요?"</span></li>
+      <li><span class="en"><strong>Updates project config</strong> — topic weights, daily set composition, mode preferences all adjust</span><span class="ko"><strong>프로젝트 설정 업데이트</strong> — 주제 가중치, 일일 세트 구성, 모드 선호도 모두 조정</span></li>
+      <li><span class="en"><strong>Logged in memory</strong> — "On April 15, you asked to skip Gyn Onc. Ready to add it back?"</span><span class="ko"><strong>메모리에 기록</strong> — "4월 15일에 부인과 종양학 건너뛰기 요청. 다시 추가할 준비됐나요?"</span></li>
+    </ul>
+  </div>
+
+  <div class="card card-mint">
+    <h3><span class="en">🤖 AI Study Advisor</span><span class="ko">🤖 AI 학습 어드바이저</span></h3>
+    <p><span class="en">Bloom also proactively suggests pivots based on your performance data:</span><span class="ko">Bloom은 성과 데이터를 기반으로 방향 전환을 사전에 제안하기도 합니다:</span></p>
+    <ul>
+      <li><span class="en"><em>"You've scored 90%+ on Obstetrics for 2 weeks straight. I suggest reducing it to maintenance mode and shifting focus to REI where you're at 58%."</em></span><span class="ko"><em>"2주 연속 산과에서 90% 이상 득점했어요. 유지 모드로 전환하고 58%인 생식내분비학에 집중하는 것을 제안합니다."</em></span></li>
+      <li><span class="en"><em>"Your exam is 3 months away. Based on your current trajectory, I recommend adding one case simulation per day."</em></span><span class="ko"><em>"시험이 3개월 남았어요. 현재 궤적을 기반으로 하루에 케이스 시뮬레이션 하나를 추가하는 것을 권장합니다."</em></span></li>
+    </ul>
+  </div>
+</div>
+
 <!-- STUDY MODES -->
 <div class="section">
-  <div class="section-label">04 — Study Modes</div>
+  <div class="section-label">06 — Study Modes</div>
   <h2>
     <span class="en">10 Ways to Learn</span>
     <span class="ko">10가지 학습 방법</span>
@@ -681,7 +784,7 @@ user_memory
 
 <!-- SCHEDULING & CRON -->
 <div class="section">
-  <div class="section-label">05 — Scheduling</div>
+  <div class="section-label">07 — Scheduling</div>
   <h2>
     <span class="en">Daily & Weekly Automation</span>
     <span class="ko">일일 & 주간 자동화</span>
@@ -752,7 +855,7 @@ user_memory
 
 <!-- AI COST ANALYSIS -->
 <div class="section">
-  <div class="section-label">06 — AI Strategy</div>
+  <div class="section-label">08 — AI Strategy</div>
   <h2>
     <span class="en">Model Selection & Cost Analysis</span>
     <span class="ko">모델 선택 & 비용 분석</span>
@@ -811,9 +914,9 @@ user_memory
         </tr>
         <tr>
           <td><strong><span class="en">Text-to-Speech</span><span class="ko">텍스트 음성 변환</span></strong></td>
-          <td><span class="pill pill-orange">Edge TTS (free)</span></td>
-          <td><span class="en">Microsoft's free TTS. Great quality, zero cost. Upgrade to ElevenLabs if needed.</span><span class="ko">Microsoft의 무료 TTS. 우수한 품질, 비용 없음. 필요시 ElevenLabs로 업그레이드.</span></td>
-          <td class="cost-low">$0.00</td>
+          <td><span class="pill pill-orange">ElevenLabs</span></td>
+          <td><span class="en">ElevenLabs premium voices. Natural, expressive speech. Best-in-class quality for study feedback.</span><span class="ko">ElevenLabs 프리미엄 음성. 자연스럽고 표현력 풍부한 음성. 학습 피드백을 위한 최고 품질.</span></td>
+          <td class="cost-low">~$0.03/1K chars</td>
           <td><span class="en">All voice output</span><span class="ko">모든 음성 출력</span></td>
         </tr>
         <tr>
@@ -888,7 +991,7 @@ user_memory
 
 <!-- DESIGN SYSTEM -->
 <div class="section">
-  <div class="section-label">07 — Design</div>
+  <div class="section-label">09 — Design</div>
   <h2>
     <span class="en">Clean, Professional, Easy on the Eyes</span>
     <span class="ko">깔끔하고 전문적이며 눈이 편한</span>
@@ -965,7 +1068,7 @@ user_memory
 
 <!-- DATABASE SCHEMA -->
 <div class="section">
-  <div class="section-label">08 — Data Architecture</div>
+  <div class="section-label">10 — Data Architecture</div>
   <h2>
     <span class="en">Database Schema</span>
     <span class="ko">데이터베이스 스키마</span>
@@ -1067,6 +1170,31 @@ user_memory
     ├── completed_count
     └── generated_at
 
+── RAG / Sources ─────────────────────────────
+  sources               -- uploaded study materials
+    ├── id, user_id, project_id
+    ├── type (pdf/url/text/image)
+    ├── title, filename, storage_path
+    ├── raw_text, chunk_count
+    ├── topic_tags (auto-detected)
+    ├── status (processing/ready/error)
+    └── created_at
+
+  source_chunks         -- chunked + embedded content
+    ├── id, source_id
+    ├── chunk_text, chunk_index
+    ├── embedding (vector(1536))  -- pgvector
+    ├── topic_id (auto-linked)
+    └── metadata (jsonb)
+
+  project_directives    -- user's custom pivoting instructions
+    ├── id, user_id, project_id
+    ├── directive_text       -- "skip Gyn Onc, focus Obstetrics"
+    ├── ai_interpretation    -- parsed intent
+    ├── applied_changes      -- what was modified
+    ├── active (boolean)
+    └── created_at
+
 ── Scheduling ────────────────────────────────
   scheduled_tasks       -- cron job definitions
     ├── id, user_id, project_id
@@ -1079,7 +1207,7 @@ user_memory
 
 <!-- TECH STACK -->
 <div class="section">
-  <div class="section-label">09 — Tech Stack</div>
+  <div class="section-label">11 — Tech Stack</div>
   <h2>
     <span class="en">Technology Choices</span>
     <span class="ko">기술 선택</span>
@@ -1096,7 +1224,7 @@ user_memory
           </tr>
         </thead>
         <tbody>
-          <tr><td>Flutter 3.x</td><td><span class="en">Cross-platform framework (iOS-focused). Matches Fridgenie stack.</span><span class="ko">크로스 플랫폼 프레임워크 (iOS 중심). Fridgenie 스택과 일치.</span></td></tr>
+          <tr><td>Flutter 3.x</td><td><span class="en">Cross-platform framework (iOS + macOS). Same codebase, responsive layout. Matches Fridgenie stack.</span><span class="ko">크로스 플랫폼 프레임워크 (iOS + macOS). 동일 코드베이스, 반응형 레이아웃. Fridgenie 스택과 일치.</span></td></tr>
           <tr><td>Riverpod</td><td><span class="en">State management — reactive, testable, scalable</span><span class="ko">상태 관리 — 반응형, 테스트 가능, 확장 가능</span></td></tr>
           <tr><td>GoRouter</td><td><span class="en">Declarative routing with deep linking</span><span class="ko">딥 링크가 있는 선언적 라우팅</span></td></tr>
           <tr><td>flutter_tts + record</td><td><span class="en">Local TTS playback + audio recording for voice mode</span><span class="ko">로컬 TTS 재생 + 음성 모드용 오디오 녹음</span></td></tr>
@@ -1147,7 +1275,7 @@ user_memory
           <tr><td>Anthropic API</td><td>Claude Haiku 3.5</td><td><span class="en">Question generation, PDF parsing, audio scripts</span><span class="ko">문제 생성, PDF 파싱, 오디오 스크립트</span></td></tr>
           <tr><td>OpenAI API</td><td>GPT-4.1-nano</td><td><span class="en">Flashcards, memory context retrieval (cost-optimized)</span><span class="ko">플래시카드, 메모리 컨텍스트 검색 (비용 최적화)</span></td></tr>
           <tr><td>OpenAI API</td><td>Whisper</td><td><span class="en">Speech-to-text for voice mode</span><span class="ko">음성 모드용 음성-텍스트 변환</span></td></tr>
-          <tr><td>Edge TTS</td><td>—</td><td><span class="en">Free text-to-speech for all voice output</span><span class="ko">모든 음성 출력용 무료 텍스트-음성 변환</span></td></tr>
+          <tr><td>ElevenLabs</td><td>—</td><td><span class="en">Premium text-to-speech for natural voice output</span><span class="ko">자연스러운 음성 출력을 위한 프리미엄 텍스트-음성 변환</span></td></tr>
         </tbody>
       </table>
     </div>
@@ -1156,7 +1284,7 @@ user_memory
 
 <!-- EDGE FUNCTIONS -->
 <div class="section">
-  <div class="section-label">10 — Edge Functions</div>
+  <div class="section-label">12 — Edge Functions</div>
   <h2>
     <span class="en">Backend AI Functions</span>
     <span class="ko">백엔드 AI 함수</span>
@@ -1202,7 +1330,7 @@ user_memory
           <tr>
             <td><code>text-to-speech</code></td>
             <td><span class="en">Voice output</span><span class="ko">음성 출력</span></td>
-            <td>Edge TTS</td>
+            <td>ElevenLabs</td>
             <td><span class="en">Generates audio for questions, feedback, briefings.</span><span class="ko">문제, 피드백, 브리핑용 오디오 생성.</span></td>
           </tr>
           <tr>
@@ -1230,6 +1358,24 @@ user_memory
             <td><span class="en">Generates progress summary: scores, streaks, improvements, next week plan.</span><span class="ko">진도 요약 생성: 점수, 연속 기록, 개선, 다음 주 계획.</span></td>
           </tr>
           <tr>
+            <td><code>ingest-source</code></td>
+            <td><span class="en">Source upload</span><span class="ko">소스 업로드</span></td>
+            <td>Haiku + embed</td>
+            <td><span class="en">Parses source → chunks → embeds → stores in pgvector. Auto-tags topics.</span><span class="ko">소스 파싱 → 청킹 → 임베딩 → pgvector에 저장. 자동 주제 태깅.</span></td>
+          </tr>
+          <tr>
+            <td><code>rag-retrieve</code></td>
+            <td><span class="en">Per evaluation</span><span class="ko">평가마다</span></td>
+            <td>pgvector</td>
+            <td><span class="en">Semantic search over user's sources. Returns relevant chunks for AI context injection.</span><span class="ko">사용자 소스에 대한 시맨틱 검색. AI 컨텍스트 주입을 위한 관련 청크 반환.</span></td>
+          </tr>
+          <tr>
+            <td><code>apply-directive</code></td>
+            <td><span class="en">User pivot</span><span class="ko">사용자 방향 전환</span></td>
+            <td>Haiku</td>
+            <td><span class="en">Parses natural language instruction → updates project config (topic weights, modes, schedule).</span><span class="ko">자연어 지시 파싱 → 프로젝트 설정 업데이트 (주제 가중치, 모드, 일정).</span></td>
+          </tr>
+          <tr>
             <td><code>audio-briefing</code></td>
             <td><span class="en">On-demand / daily</span><span class="ko">요청 시 / 매일</span></td>
             <td>Haiku + TTS</td>
@@ -1243,7 +1389,7 @@ user_memory
 
 <!-- DEVELOPMENT ROADMAP -->
 <div class="section">
-  <div class="section-label">11 — Roadmap</div>
+  <div class="section-label">13 — Roadmap</div>
   <h2>
     <span class="en">Development Phases</span>
     <span class="ko">개발 단계</span>
@@ -1259,15 +1405,19 @@ user_memory
       <h3><span class="en">Core Study Loop</span><span class="ko">핵심 학습 루프</span></h3>
       <p><span class="en">Week 1-2 · Lucy can start answering daily questions with AI feedback</span><span class="ko">1-2주차 · Lucy가 AI 피드백과 함께 일일 문제 풀기 시작 가능</span></p>
       <ul class="timeline-tasks">
-        <li><span class="en">Flutter scaffolding (Riverpod + GoRouter + Supabase)</span><span class="ko">Flutter 스캐폴딩 (Riverpod + GoRouter + Supabase)</span></li>
-        <li><span class="en">New Supabase project + auth + RLS</span><span class="ko">새 Supabase 프로젝트 + 인증 + RLS</span></li>
+        <li><span class="en">Flutter scaffolding — iOS + macOS targets (Riverpod + GoRouter + Supabase)</span><span class="ko">Flutter 스캐폴딩 — iOS + macOS 타겟 (Riverpod + GoRouter + Supabase)</span></li>
+        <li><span class="en">Responsive layout system (mobile nav ↔ desktop sidebar)</span><span class="ko">반응형 레이아웃 시스템 (모바일 내비 ↔ 데스크톱 사이드바)</span></li>
+        <li><span class="en">New Supabase project + auth + RLS + pgvector extension</span><span class="ko">새 Supabase 프로젝트 + 인증 + RLS + pgvector 확장</span></li>
         <li><span class="en">Project creation flow (natural language → auto-setup)</span><span class="ko">프로젝트 생성 흐름 (자연어 → 자동 설정)</span></li>
         <li><span class="en">Free-form Q&A mode + evaluate-answer Edge Function</span><span class="ko">자유형 Q&A 모드 + evaluate-answer 엣지 함수</span></li>
         <li><span class="en">Feedback screen (score, key points, model answer)</span><span class="ko">피드백 화면 (점수, 핵심 포인트, 모범 답안)</span></li>
         <li><span class="en">Home dashboard (today's set, streak, progress)</span><span class="ko">홈 대시보드 (오늘의 세트, 연속 기록, 진도)</span></li>
+        <li><span class="en">Source upload (PDF + text) + ingest-source Edge Function</span><span class="ko">소스 업로드 (PDF + 텍스트) + ingest-source 엣지 함수</span></li>
+        <li><span class="en">Basic RAG retrieval for answer evaluation context</span><span class="ko">답변 평가 컨텍스트를 위한 기본 RAG 검색</span></li>
+        <li><span class="en">Interactive pivoting chat (natural language project adjustments)</span><span class="ko">대화형 방향 전환 채팅 (자연어 프로젝트 조정)</span></li>
         <li><span class="en">Seed 100 OB/GYN + 50 Digital Design questions</span><span class="ko">100개 산부인과 + 50개 디지털 설계 시드 문제</span></li>
         <li><span class="en">Basic daily scheduling (fixed # of questions/day)</span><span class="ko">기본 일일 스케줄링 (하루 고정 문제 수)</span></li>
-        <li><span class="en">TestFlight build</span><span class="ko">TestFlight 빌드</span></li>
+        <li><span class="en">TestFlight build (iOS) + macOS .app build</span><span class="ko">TestFlight 빌드 (iOS) + macOS .app 빌드</span></li>
       </ul>
     </div>
 
@@ -1293,7 +1443,7 @@ user_memory
       <p><span class="en">Week 5-6 · Oral board prep + interactive case simulations</span><span class="ko">5-6주차 · 구술 시험 준비 + 대화형 케이스 시뮬레이션</span></p>
       <ul class="timeline-tasks">
         <li><span class="en">Voice input (hold-to-talk → Whisper)</span><span class="ko">음성 입력 (길게 눌러 말하기 → Whisper)</span></li>
-        <li><span class="en">TTS feedback (Edge TTS)</span><span class="ko">TTS 피드백 (Edge TTS)</span></li>
+        <li><span class="en">TTS feedback (ElevenLabs — premium voices)</span><span class="ko">TTS 피드백 (ElevenLabs — 프리미엄 음성)</span></li>
         <li><span class="en">Voice Conversation mode (Socratic dialogue)</span><span class="ko">음성 대화 모드 (소크라틱 대화)</span></li>
         <li><span class="en">Oral Board Simulation (timed, examiner-style)</span><span class="ko">구술 시험 시뮬레이션 (시간 제한, 시험관 스타일)</span></li>
         <li><span class="en">Case Simulation mode (branching scenarios)</span><span class="ko">케이스 시뮬레이션 모드 (분기형 시나리오)</span></li>
@@ -1336,7 +1486,7 @@ user_memory
 
 <!-- COMPETITIVE COMPARISON -->
 <div class="section">
-  <div class="section-label">12 — Comparison</div>
+  <div class="section-label">14 — Comparison</div>
   <h2>
     <span class="en">Why Bloom AI Wins</span>
     <span class="ko">Bloom AI가 우월한 이유</span>
@@ -1372,7 +1522,7 @@ user_memory
 
 <!-- RISK ANALYSIS -->
 <div class="section">
-  <div class="section-label">13 — Risks</div>
+  <div class="section-label">15 — Risks</div>
   <h2>
     <span class="en">Risks & Mitigations</span>
     <span class="ko">리스크 & 완화</span>
@@ -1381,7 +1531,7 @@ user_memory
   <div class="card card-pink">
     <h3><span class="en">⚠️ AI Cost Overrun</span><span class="ko">⚠️ AI 비용 초과</span></h3>
     <p><span class="en"><strong>Risk:</strong> Heavy voice + case sim usage could push costs above $80/mo.</span><span class="ko"><strong>리스크:</strong> 음성 + 케이스 시뮬레이션 과다 사용 시 월 $80 이상 가능.</span></p>
-    <p><span class="en"><strong>Mitigation:</strong> (1) Smart caching — reuse eval context for similar answers. (2) Haiku/nano for non-critical paths. (3) Edge TTS (free) instead of ElevenLabs. (4) In-app usage monitor with monthly budget cap.</span><span class="ko"><strong>완화:</strong> (1) 스마트 캐싱 — 유사 답변에 평가 컨텍스트 재사용. (2) 비핵심 경로에 Haiku/nano. (3) ElevenLabs 대신 Edge TTS(무료). (4) 월간 예산 상한이 있는 앱 내 사용량 모니터.</span></p>
+    <p><span class="en"><strong>Mitigation:</strong> (1) Smart caching — reuse eval context for similar answers. (2) Haiku/nano for non-critical paths. (3) Cache TTS audio for repeated feedback phrases. (4) In-app usage monitor with monthly budget cap. (5) ElevenLabs Starter plan ($5/mo) covers ~30K chars — enough for moderate voice usage.</span><span class="ko"><strong>완화:</strong> (1) 스마트 캐싱 — 유사 답변에 평가 컨텍스트 재사용. (2) 비핵심 경로에 Haiku/nano. (3) 반복 피드백 문구에 TTS 오디오 캐시. (4) 월간 예산 상한이 있는 앱 내 사용량 모니터. (5) ElevenLabs Starter 플랜($5/월)은 ~30K 문자 제공 — 보통 음성 사용에 충분.</span></p>
   </div>
 
   <div class="card">
@@ -1399,7 +1549,7 @@ user_memory
 
 <!-- SUMMARY -->
 <div class="section">
-  <div class="section-label">14 — Summary</div>
+  <div class="section-label">16 — Summary</div>
   <h2>
     <span class="en">Let's Build This</span>
     <span class="ko">시작합시다</span>
