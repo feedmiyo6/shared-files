@@ -1,0 +1,1769 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bloom AI — Phase 6 Feature Spec + Study Mode Deep Dive</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #FAF7F5;
+  --text: #1A1A2E;
+  --accent: #E8457C;
+  --accent-light: #FDF0F4;
+  --lavender: #F3F0FF;
+  --mint: #EEFBF4;
+  --peach: #FFF5ED;
+  --sky: #EEF6FF;
+  --card-shadow: 0 2px 12px rgba(26,26,46,0.06);
+  --card-radius: 16px;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.7;
+  font-size: 16px;
+  padding: 0 0 80px;
+}
+.lang-toggle {
+  position: fixed; top: 16px; right: 16px; z-index: 1000;
+  background: var(--accent); color: #fff; border: none;
+  padding: 8px 18px; border-radius: 24px; cursor: pointer;
+  font-family: 'DM Sans', sans-serif; font-weight: 600; font-size: 14px;
+  box-shadow: 0 2px 8px rgba(232,69,124,0.3);
+  transition: transform 0.2s;
+}
+.lang-toggle:hover { transform: scale(1.05); }
+.ko { display: none; }
+.ko.show { display: inline !important; }
+.en.hide { display: none !important; }
+
+.hero {
+  background: linear-gradient(135deg, var(--accent-light) 0%, var(--lavender) 50%, var(--sky) 100%);
+  padding: 60px 24px 48px;
+  text-align: center;
+}
+.hero h1 {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(28px, 5vw, 48px);
+  margin-bottom: 12px;
+}
+.hero .subtitle {
+  font-size: 18px; color: #555; max-width: 700px; margin: 0 auto;
+}
+.hero .meta {
+  margin-top: 16px; font-size: 13px; color: #888;
+}
+.container { max-width: 900px; margin: 0 auto; padding: 0 20px; }
+
+/* TOC */
+.toc {
+  background: #fff; border-radius: var(--card-radius);
+  box-shadow: var(--card-shadow); padding: 32px;
+  margin: -24px auto 40px; position: relative; z-index: 1;
+}
+.toc h2 { font-family: 'DM Serif Display', serif; font-size: 22px; margin-bottom: 16px; }
+.toc ol { padding-left: 24px; }
+.toc li { margin-bottom: 6px; }
+.toc a { color: var(--accent); text-decoration: none; font-weight: 500; }
+.toc a:hover { text-decoration: underline; }
+.toc .sub { list-style: lower-alpha; margin-top: 4px; }
+
+/* Sections */
+.section { margin-bottom: 48px; }
+.section-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(22px, 4vw, 32px);
+  margin-bottom: 8px;
+  padding-top: 24px;
+}
+.section-badge {
+  display: inline-block;
+  background: var(--accent);
+  color: #fff;
+  font-size: 11px; font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 12px;
+  margin-bottom: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.card {
+  background: #fff;
+  border-radius: var(--card-radius);
+  box-shadow: var(--card-shadow);
+  padding: 28px;
+  margin-bottom: 24px;
+}
+.card h3 {
+  font-size: 20px; font-weight: 700; margin-bottom: 12px;
+  display: flex; align-items: center; gap: 10px;
+}
+.card h4 {
+  font-size: 16px; font-weight: 600; margin: 16px 0 8px;
+  color: var(--accent);
+}
+.card p, .card li { font-size: 15px; line-height: 1.7; }
+.card ul, .card ol { padding-left: 20px; margin: 8px 0; }
+.card li { margin-bottom: 4px; }
+
+.highlight-card {
+  border-left: 4px solid var(--accent);
+  background: var(--accent-light);
+}
+.tech-card {
+  border-left: 4px solid #6C63FF;
+  background: var(--lavender);
+}
+.green-card {
+  border-left: 4px solid #34D399;
+  background: var(--mint);
+}
+.peach-card {
+  border-left: 4px solid #F59E0B;
+  background: var(--peach);
+}
+.sky-card {
+  border-left: 4px solid #3B82F6;
+  background: var(--sky);
+}
+
+/* Tags */
+.tag {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+  margin-right: 6px;
+  margin-bottom: 4px;
+}
+.tag-mode { background: #E0D4FF; color: #4C3D99; }
+.tag-new { background: #D1FAE5; color: #065F46; }
+.tag-ai { background: #FDE68A; color: #92400E; }
+.tag-export { background: #BFDBFE; color: #1E40AF; }
+
+/* Code */
+code {
+  font-family: 'JetBrains Mono', monospace;
+  background: #F1F0F5;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 13px;
+}
+pre {
+  font-family: 'JetBrains Mono', monospace;
+  background: #1A1A2E;
+  color: #E2E8F0;
+  padding: 20px;
+  border-radius: 12px;
+  overflow-x: auto;
+  font-size: 13px;
+  line-height: 1.6;
+  margin: 12px 0;
+}
+
+/* Tables */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 12px 0;
+  font-size: 14px;
+}
+th {
+  background: var(--text);
+  color: #fff;
+  padding: 10px 14px;
+  text-align: left;
+  font-weight: 600;
+}
+td {
+  padding: 10px 14px;
+  border-bottom: 1px solid #E5E7EB;
+}
+tr:nth-child(even) { background: #F9FAFB; }
+
+/* Flow diagrams */
+.flow {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0;
+}
+.flow-step {
+  background: var(--lavender);
+  padding: 8px 16px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 600;
+}
+.flow-arrow { color: var(--accent); font-weight: 700; font-size: 18px; }
+
+/* Responsive */
+@media (max-width: 600px) {
+  .hero { padding: 48px 16px 36px; }
+  .card { padding: 20px; }
+  .toc { padding: 20px; }
+  pre { font-size: 12px; padding: 14px; }
+  .flow { flex-direction: column; }
+  .flow-arrow { transform: rotate(90deg); }
+}
+</style>
+</head>
+<body>
+
+<button class="lang-toggle" onclick="toggleLang()">한국어</button>
+
+<!-- HERO -->
+<div class="hero">
+  <h1>
+    <span class="en">🌸 Bloom AI — Phase 6 Spec</span>
+    <span class="ko">🌸 Bloom AI — 6단계 기능 명세</span>
+  </h1>
+  <p class="subtitle">
+    <span class="en">Weekly Review System + PDF Export + Voice Mode + Complete Study Mode Deep Dive</span>
+    <span class="ko">주간 복습 시스템 + PDF 내보내기 + 음성 모드 + 전체 학습 모드 심층 분석</span>
+  </p>
+  <p class="meta">
+    <span class="en">Version 1.0 — March 29, 2026 | Bloom AI PRD Addendum</span>
+    <span class="ko">버전 1.0 — 2026년 3월 29일 | Bloom AI PRD 부록</span>
+  </p>
+</div>
+
+<div class="container">
+
+<!-- TABLE OF CONTENTS -->
+<div class="toc">
+  <h2>
+    <span class="en">📑 Table of Contents</span>
+    <span class="ko">📑 목차</span>
+  </h2>
+  <ol>
+    <li><a href="#weekly-review"><span class="en">Weekly Review System</span><span class="ko">주간 복습 시스템</span></a></li>
+    <li><a href="#pdf-export"><span class="en">PDF Export Engine</span><span class="ko">PDF 내보내기 엔진</span></a></li>
+    <li><a href="#voice-mode"><span class="en">Voice Mode (OpenAI Realtime)</span><span class="ko">음성 모드 (OpenAI 실시간)</span></a></li>
+    <li><a href="#study-modes"><span class="en">Study Mode Deep Dives (All 10)</span><span class="ko">학습 모드 심층 분석 (전체 10개)</span></a>
+      <ol class="sub">
+        <li><a href="#mode-freeform"><span class="en">Free-Form Q&A</span><span class="ko">자유형 질의응답</span></a></li>
+        <li><a href="#mode-voice"><span class="en">Voice Conversation</span><span class="ko">음성 대화</span></a></li>
+        <li><a href="#mode-teachback"><span class="en">Teach-Back</span><span class="ko">설명하기 학습</span></a></li>
+        <li><a href="#mode-case"><span class="en">Case Simulation</span><span class="ko">사례 시뮬레이션</span></a></li>
+        <li><a href="#mode-rapid"><span class="en">Rapid Fire</span><span class="ko">빠른 응답</span></a></li>
+        <li><a href="#mode-flashcard"><span class="en">Smart Flashcards</span><span class="ko">스마트 플래시카드</span></a></li>
+        <li><a href="#mode-review"><span class="en">Review & Reflect</span><span class="ko">복습 & 성찰</span></a></li>
+        <li><a href="#mode-concept"><span class="en">Concept Map</span><span class="ko">개념 맵</span></a></li>
+        <li><a href="#mode-audio"><span class="en">Audio Briefing</span><span class="ko">오디오 브리핑</span></a></li>
+        <li><a href="#mode-mock"><span class="en">Mock Exam</span><span class="ko">모의시험</span></a></li>
+      </ol>
+    </li>
+    <li><a href="#db-schema"><span class="en">New Database Schema</span><span class="ko">신규 데이터베이스 스키마</span></a></li>
+    <li><a href="#edge-functions"><span class="en">New Edge Functions</span><span class="ko">신규 Edge Functions</span></a></li>
+    <li><a href="#timeline"><span class="en">Implementation Timeline</span><span class="ko">구현 타임라인</span></a></li>
+  </ol>
+</div>
+
+<!-- ============================================ -->
+<!-- SECTION 1: WEEKLY REVIEW SYSTEM -->
+<!-- ============================================ -->
+<div class="section" id="weekly-review">
+  <span class="section-badge">
+    <span class="en">NEW FEATURE</span>
+    <span class="ko">신규 기능</span>
+  </span>
+  <h2 class="section-title">
+    <span class="en">1. 📅 Weekly Review System</span>
+    <span class="ko">1. 📅 주간 복습 시스템</span>
+  </h2>
+
+  <div class="card highlight-card">
+    <h3>
+      <span class="en">🎯 Overview</span>
+      <span class="ko">🎯 개요</span>
+    </h3>
+    <p>
+      <span class="en">An automated weekend review that aggregates everything the user studied during the week — per project. It generates flashcards from weak areas, creates knowledge summaries, visualizes progress, and packages everything into exportable formats (PDF, shareable HTML).</span>
+      <span class="ko">사용자가 한 주 동안 공부한 모든 내용을 프로젝트별로 집계하는 자동 주말 복습 시스템입니다. 취약 분야에서 플래시카드를 생성하고, 지식 요약을 작성하며, 진행 상황을 시각화하고, 모든 것을 내보내기 가능한 형식(PDF, 공유 가능한 HTML)으로 패키징합니다.</span>
+    </p>
+  </div>
+
+  <div class="card">
+    <h3>
+      <span class="en">📐 Architecture</span>
+      <span class="ko">📐 아키텍처</span>
+    </h3>
+    <h4>
+      <span class="en">Data Flow</span>
+      <span class="ko">데이터 흐름</span>
+    </h4>
+    <div class="flow">
+      <span class="flow-step">
+        <span class="en">Weekly Cron (Sun 9AM)</span>
+        <span class="ko">주간 크론 (일 오전 9시)</span>
+      </span>
+      <span class="flow-arrow">→</span>
+      <span class="flow-step">
+        <span class="en">Aggregate week's data</span>
+        <span class="ko">주간 데이터 집계</span>
+      </span>
+      <span class="flow-arrow">→</span>
+      <span class="flow-step">
+        <span class="en">AI Analysis (Haiku)</span>
+        <span class="ko">AI 분석 (Haiku)</span>
+      </span>
+      <span class="flow-arrow">→</span>
+      <span class="flow-step">
+        <span class="en">Generate Review Package</span>
+        <span class="ko">복습 패키지 생성</span>
+      </span>
+      <span class="flow-arrow">→</span>
+      <span class="flow-step">
+        <span class="en">Push Notification</span>
+        <span class="ko">푸시 알림</span>
+      </span>
+    </div>
+
+    <h4>
+      <span class="en">What Gets Aggregated (Per Project)</span>
+      <span class="ko">집계 대상 (프로젝트별)</span>
+    </h4>
+    <ul>
+      <li><span class="en"><strong>Questions answered</strong> — total count, correct %, by topic</span><span class="ko"><strong>답변한 질문</strong> — 총 개수, 정답률, 주제별</span></li>
+      <li><span class="en"><strong>Study time</strong> — total minutes, by mode, by day</span><span class="ko"><strong>학습 시간</strong> — 총 시간(분), 모드별, 일별</span></li>
+      <li><span class="en"><strong>Topics covered</strong> — which ones, depth of coverage</span><span class="ko"><strong>다룬 주제</strong> — 어떤 주제를, 얼마나 깊이</span></li>
+      <li><span class="en"><strong>Weak areas</strong> — topics with &lt;70% accuracy or declining trend</span><span class="ko"><strong>취약 분야</strong> — 정답률 70% 미만 또는 하락 추세인 주제</span></li>
+      <li><span class="en"><strong>Breakthrough moments</strong> — topics that jumped from weak → strong</span><span class="ko"><strong>돌파구 순간</strong> — 취약에서 강점으로 도약한 주제</span></li>
+      <li><span class="en"><strong>Streak & consistency</strong> — daily study streak, missed days</span><span class="ko"><strong>연속 학습 & 일관성</strong> — 일일 학습 연속일, 미학습일</span></li>
+      <li><span class="en"><strong>Mode usage</strong> — which study modes used, variety score</span><span class="ko"><strong>모드 사용</strong> — 사용한 학습 모드, 다양성 점수</span></li>
+      <li><span class="en"><strong>SRS data</strong> — cards due, cards mastered, retention rate</span><span class="ko"><strong>SRS 데이터</strong> — 복습 예정 카드, 마스터 카드, 기억 유지율</span></li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>
+      <span class="en">📄 Review Page Components</span>
+      <span class="ko">📄 복습 페이지 구성 요소</span>
+    </h3>
+
+    <h4>
+      <span class="en">1. Executive Summary</span>
+      <span class="ko">1. 요약 개요</span>
+    </h4>
+    <p>
+      <span class="en">AI-generated paragraph summarizing the week in natural language. Tone: encouraging, specific, actionable. Example: <em>"This week you crushed Fetal Heart Rate Monitoring — you went from 45% to 88% accuracy! Your weak spot is still Placental Pathology (52%). Next week, we'll hit that hard with case simulations."</em></span>
+      <span class="ko">자연어로 한 주를 요약하는 AI 생성 단락. 톤: 격려적, 구체적, 실행 가능. 예시: <em>"이번 주에 태아 심박수 모니터링을 정복했어요 — 정답률이 45%에서 88%로 올랐습니다! 아직 태반 병리학이 취약점이에요(52%). 다음 주에는 사례 시뮬레이션으로 집중 공략합시다."</em></span>
+    </p>
+
+    <h4>
+      <span class="en">2. Stats Dashboard</span>
+      <span class="ko">2. 통계 대시보드</span>
+    </h4>
+    <ul>
+      <li><span class="en">Total questions answered (with week-over-week delta)</span><span class="ko">총 답변 수 (전주 대비 변화)</span></li>
+      <li><span class="en">Overall accuracy % (trend arrow ↑↓)</span><span class="ko">전체 정답률 % (추세 화살표 ↑↓)</span></li>
+      <li><span class="en">Study time (hours:minutes)</span><span class="ko">학습 시간 (시간:분)</span></li>
+      <li><span class="en">Streak count 🔥</span><span class="ko">연속 학습일 🔥</span></li>
+      <li><span class="en">Topics mastered this week</span><span class="ko">이번 주 마스터한 주제</span></li>
+      <li><span class="en">Exam countdown (days remaining)</span><span class="ko">시험 카운트다운 (남은 일수)</span></li>
+    </ul>
+
+    <h4>
+      <span class="en">3. Topic Mastery Heatmap</span>
+      <span class="ko">3. 주제 숙달도 히트맵</span>
+    </h4>
+    <p>
+      <span class="en">Visual grid showing all project topics, color-coded by mastery level (red → yellow → green). Each cell tappable to drill into that topic's week-over-week progress.</span>
+      <span class="ko">모든 프로젝트 주제를 숙달도별로 색상 코딩(빨강 → 노랑 → 초록)한 시각적 그리드. 각 셀을 탭하면 해당 주제의 주간 진행 상황을 볼 수 있습니다.</span>
+    </p>
+
+    <h4>
+      <span class="en">4. Auto-Generated Flashcards</span>
+      <span class="ko">4. 자동 생성 플래시카드</span>
+    </h4>
+    <p>
+      <span class="en">AI generates 10-20 flashcards focused on:</span>
+      <span class="ko">AI가 다음에 초점을 맞춰 10-20개 플래시카드를 생성합니다:</span>
+    </p>
+    <ul>
+      <li><span class="en">Questions the user got wrong this week</span><span class="ko">이번 주에 틀린 문제</span></li>
+      <li><span class="en">Key concepts from newly covered topics</span><span class="ko">새로 다룬 주제의 핵심 개념</span></li>
+      <li><span class="en">High-yield facts from weak areas</span><span class="ko">취약 분야의 핵심 사항</span></li>
+      <li><span class="en">Connections between topics (integrative cards)</span><span class="ko">주제 간 연결 (통합 카드)</span></li>
+    </ul>
+    <p><span class="en">Flashcards are reviewable in-app AND exportable as PDF.</span><span class="ko">플래시카드는 앱 내에서 복습 가능하며 PDF로 내보내기 가능합니다.</span></p>
+
+    <h4>
+      <span class="en">5. Knowledge Summary</span>
+      <span class="ko">5. 지식 요약</span>
+    </h4>
+    <p>
+      <span class="en">Clean, structured summary of everything learned this week, organized by topic. Each topic section includes:</span>
+      <span class="ko">이번 주에 배운 모든 내용의 깔끔하고 구조화된 요약으로, 주제별로 정리됩니다. 각 주제 섹션에는:</span>
+    </p>
+    <ul>
+      <li><span class="en">Key concepts covered</span><span class="ko">다룬 핵심 개념</span></li>
+      <li><span class="en">Important facts & mnemonics</span><span class="ko">중요 사항 & 암기법</span></li>
+      <li><span class="en">Common mistakes made</span><span class="ko">흔히 한 실수</span></li>
+      <li><span class="en">Recommended next steps</span><span class="ko">권장 다음 단계</span></li>
+    </ul>
+
+    <h4>
+      <span class="en">6. Next Week's Plan</span>
+      <span class="ko">6. 다음 주 계획</span>
+    </h4>
+    <p>
+      <span class="en">AI proposes a study plan for the upcoming week based on: SRS schedule, weak areas, exam countdown phase, and user's historical study patterns (preferred times, modes).</span>
+      <span class="ko">AI가 SRS 일정, 취약 분야, 시험 카운트다운 단계, 사용자의 과거 학습 패턴(선호 시간, 모드)을 기반으로 다음 주 학습 계획을 제안합니다.</span>
+    </p>
+  </div>
+
+  <div class="card green-card">
+    <h3>
+      <span class="en">🖥️ UI Design</span>
+      <span class="ko">🖥️ UI 디자인</span>
+    </h3>
+    <ul>
+      <li><span class="en"><strong>Access:</strong> Tab on Home screen → "Weekly Reviews" section; also accessible from Project detail page</span><span class="ko"><strong>접근:</strong> 홈 화면 탭 → "주간 복습" 섹션; 프로젝트 상세 페이지에서도 접근 가능</span></li>
+      <li><span class="en"><strong>Navigation:</strong> Swipeable week cards (current + past weeks archived)</span><span class="ko"><strong>탐색:</strong> 스와이프 가능한 주간 카드 (현재 + 과거 주간 보관)</span></li>
+      <li><span class="en"><strong>Project switcher:</strong> Top dropdown to switch between projects</span><span class="ko"><strong>프로젝트 전환:</strong> 상단 드롭다운으로 프로젝트 간 전환</span></li>
+      <li><span class="en"><strong>Export button:</strong> Floating action button → PDF / Share / Print</span><span class="ko"><strong>내보내기 버튼:</strong> 플로팅 액션 버튼 → PDF / 공유 / 인쇄</span></li>
+      <li><span class="en"><strong>Review quiz:</strong> Optional "Test Yourself" button → quick 10-question quiz from the week's weak spots</span><span class="ko"><strong>복습 퀴즈:</strong> 선택적 "테스트" 버튼 → 주간 취약점에서 빠른 10문제 퀴즈</span></li>
+    </ul>
+  </div>
+
+  <div class="card tech-card">
+    <h3>
+      <span class="en">⚙️ Technical Implementation</span>
+      <span class="ko">⚙️ 기술 구현</span>
+    </h3>
+    <h4>Edge Function: <code>generate-weekly-review</code></h4>
+    <pre>{
+  "trigger": "cron: Sunday 9:00 AM user timezone",
+  "input": {
+    "user_id": "uuid",
+    "project_id": "uuid",
+    "week_start": "2026-03-23",
+    "week_end": "2026-03-29"
+  },
+  "steps": [
+    "1. Query answers + evaluations for date range",
+    "2. Query study_sessions for time data",
+    "3. Query srs_state for retention metrics",
+    "4. Send to Claude Haiku with review_prompt",
+    "5. Generate flashcards (GPT-4.1-nano)",
+    "6. Store review in weekly_reviews table",
+    "7. Send push notification"
+  ],
+  "ai_models": {
+    "summary_analysis": "claude-haiku-3.5 (~$0.01)",
+    "flashcard_generation": "gpt-4.1-nano (~$0.002)",
+    "knowledge_summary": "claude-haiku-3.5 (~$0.008)"
+  },
+  "estimated_cost_per_review": "$0.02-0.04"
+}</pre>
+
+    <h4>
+      <span class="en">Database Table: <code>weekly_reviews</code></span>
+      <span class="ko">데이터베이스 테이블: <code>weekly_reviews</code></span>
+    </h4>
+    <pre>CREATE TABLE weekly_reviews (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID REFERENCES profiles(id),
+  project_id UUID REFERENCES projects(id),
+  week_start DATE NOT NULL,
+  week_end DATE NOT NULL,
+  summary TEXT,           -- AI executive summary
+  stats JSONB,            -- { questions_answered, accuracy, study_time_min, streak, ... }
+  topic_mastery JSONB,    -- { topic_id: { accuracy, delta, status } }
+  flashcards JSONB,       -- [{ front, back, topic_id, source }]
+  knowledge_summary JSONB,-- [{ topic, key_concepts, mistakes, next_steps }]
+  next_week_plan JSONB,   -- { daily_targets, focus_topics, recommended_modes }
+  created_at TIMESTAMPTZ DEFAULT now(),
+  UNIQUE(user_id, project_id, week_start)
+);</pre>
+  </div>
+</div>
+
+<!-- ============================================ -->
+<!-- SECTION 2: PDF EXPORT ENGINE -->
+<!-- ============================================ -->
+<div class="section" id="pdf-export">
+  <span class="section-badge">
+    <span class="en">NEW FEATURE</span>
+    <span class="ko">신규 기능</span>
+  </span>
+  <h2 class="section-title">
+    <span class="en">2. 📄 PDF Export Engine</span>
+    <span class="ko">2. 📄 PDF 내보내기 엔진</span>
+  </h2>
+
+  <div class="card highlight-card">
+    <h3>
+      <span class="en">🎯 Philosophy</span>
+      <span class="ko">🎯 철학</span>
+    </h3>
+    <p>
+      <span class="en">PDF export is a <strong>first-class feature</strong>, not an afterthought. Every piece of study content in Bloom AI should be exportable as a beautiful, print-ready PDF that users can study offline, share with study partners, or archive for future reference.</span>
+      <span class="ko">PDF 내보내기는 부가 기능이 아닌 <strong>핵심 기능</strong>입니다. Bloom AI의 모든 학습 콘텐츠는 사용자가 오프라인으로 공부하거나, 스터디 파트너와 공유하거나, 향후 참조용으로 보관할 수 있는 아름답고 인쇄 가능한 PDF로 내보내기 가능해야 합니다.</span>
+    </p>
+  </div>
+
+  <div class="card">
+    <h3>
+      <span class="en">📋 Exportable Content Types</span>
+      <span class="ko">📋 내보내기 가능한 콘텐츠 유형</span>
+    </h3>
+    <table>
+      <tr>
+        <th><span class="en">Content</span><span class="ko">콘텐츠</span></th>
+        <th><span class="en">PDF Layout</span><span class="ko">PDF 레이아웃</span></th>
+        <th><span class="en">Notes</span><span class="ko">비고</span></th>
+      </tr>
+      <tr>
+        <td><span class="en">Weekly Review</span><span class="ko">주간 복습</span></td>
+        <td><span class="en">Full report with charts</span><span class="ko">차트 포함 전체 보고서</span></td>
+        <td><span class="en">Stats, heatmap, summary, plan</span><span class="ko">통계, 히트맵, 요약, 계획</span></td>
+      </tr>
+      <tr>
+        <td><span class="en">Flashcards</span><span class="ko">플래시카드</span></td>
+        <td><span class="en">2-up cards (front/back)</span><span class="ko">2-업 카드 (앞/뒤)</span></td>
+        <td><span class="en">Print & cut, or digital review</span><span class="ko">인쇄 & 잘라내기, 또는 디지털 복습</span></td>
+      </tr>
+      <tr>
+        <td><span class="en">Knowledge Summary</span><span class="ko">지식 요약</span></td>
+        <td><span class="en">Structured notes format</span><span class="ko">구조화된 노트 형식</span></td>
+        <td><span class="en">Topic-organized, key facts highlighted</span><span class="ko">주제별 정리, 핵심 사항 강조</span></td>
+      </tr>
+      <tr>
+        <td><span class="en">Mock Exam Results</span><span class="ko">모의시험 결과</span></td>
+        <td><span class="en">Test paper + answer key</span><span class="ko">시험지 + 정답지</span></td>
+        <td><span class="en">Questions, user answers, correct answers, explanations</span><span class="ko">문제, 사용자 답변, 정답, 해설</span></td>
+      </tr>
+      <tr>
+        <td><span class="en">Case Simulation</span><span class="ko">사례 시뮬레이션</span></td>
+        <td><span class="en">Decision tree narrative</span><span class="ko">의사결정 트리 서술</span></td>
+        <td><span class="en">Scenario, choices made, outcomes, learning points</span><span class="ko">시나리오, 선택, 결과, 학습 포인트</span></td>
+      </tr>
+      <tr>
+        <td><span class="en">Concept Map</span><span class="ko">개념 맵</span></td>
+        <td><span class="en">Visual map as image</span><span class="ko">이미지로 된 시각 맵</span></td>
+        <td><span class="en">SVG → PNG → embedded in PDF</span><span class="ko">SVG → PNG → PDF에 삽입</span></td>
+      </tr>
+      <tr>
+        <td><span class="en">Progress Report</span><span class="ko">진행 보고서</span></td>
+        <td><span class="en">Analytics dashboard</span><span class="ko">분석 대시보드</span></td>
+        <td><span class="en">All-time stats, trends, predictions</span><span class="ko">전체 통계, 추세, 예측</span></td>
+      </tr>
+      <tr>
+        <td><span class="en">Study Session Log</span><span class="ko">학습 세션 기록</span></td>
+        <td><span class="en">Q&A transcript</span><span class="ko">질의응답 트랜스크립트</span></td>
+        <td><span class="en">Questions, answers, feedback — study log</span><span class="ko">문제, 답변, 피드백 — 학습 기록</span></td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="card tech-card">
+    <h3>
+      <span class="en">⚙️ Technical Approach</span>
+      <span class="ko">⚙️ 기술적 접근</span>
+    </h3>
+    <h4>
+      <span class="en">Option A: Client-Side (Recommended for v1)</span>
+      <span class="ko">옵션 A: 클라이언트 측 (v1 권장)</span>
+    </h4>
+    <p><span class="en">Use Flutter's <code>pdf</code> + <code>printing</code> packages for on-device PDF generation.</span><span class="ko">Flutter의 <code>pdf</code> + <code>printing</code> 패키지를 사용한 디바이스 내 PDF 생성.</span></p>
+    <pre>dependencies:
+  pdf: ^3.10.0        # PDF document creation
+  printing: ^5.12.0   # Print/share/save
+  screenshot: ^2.1.0  # Capture widgets as images (for charts)
+  path_provider: ...  # Local file storage</pre>
+
+    <h4>
+      <span class="en">PDF Generation Architecture</span>
+      <span class="ko">PDF 생성 아키텍처</span>
+    </h4>
+    <pre>class BloomPdfGenerator {
+  // Template registry — each content type has its own layout
+  static final Map&lt;ExportType, PdfTemplate&gt; templates = {
+    ExportType.weeklyReview: WeeklyReviewTemplate(),
+    ExportType.flashcards: FlashcardTemplate(),
+    ExportType.knowledgeSummary: KnowledgeSummaryTemplate(),
+    ExportType.mockExam: MockExamTemplate(),
+    ExportType.caseSimulation: CaseSimulationTemplate(),
+    ExportType.conceptMap: ConceptMapTemplate(),
+    ExportType.progressReport: ProgressReportTemplate(),
+    ExportType.studyLog: StudyLogTemplate(),
+  };
+
+  Future&lt;File&gt; generate(ExportType type, dynamic data) async {
+    final template = templates[type]!;
+    final doc = pw.Document();
+    
+    // Add cover page
+    doc.addPage(template.buildCoverPage(data));
+    
+    // Add content pages
+    for (final page in template.buildContentPages(data)) {
+      doc.addPage(page);
+    }
+    
+    // Save to device
+    final dir = await getApplicationDocumentsDirectory();
+    final file = File('${dir.path}/bloom_export_${DateTime.now().millisecondsSinceEpoch}.pdf');
+    await file.writeAsBytes(await doc.save());
+    return file;
+  }
+}</pre>
+
+    <h4>
+      <span class="en">Flashcard PDF Layout (Special)</span>
+      <span class="ko">플래시카드 PDF 레이아웃 (특별)</span>
+    </h4>
+    <p>
+      <span class="en">Flashcards get a unique "print & cut" layout:</span>
+      <span class="ko">플래시카드는 독특한 "인쇄 & 잘라내기" 레이아웃을 사용합니다:</span>
+    </p>
+    <ul>
+      <li><span class="en">Page 1: 4 card fronts in a 2×2 grid with cut lines</span><span class="ko">1페이지: 절단선이 있는 2×2 그리드의 카드 앞면 4장</span></li>
+      <li><span class="en">Page 2: Corresponding 4 card backs (mirrored for double-sided printing)</span><span class="ko">2페이지: 해당 카드 뒷면 4장 (양면 인쇄용 미러링)</span></li>
+      <li><span class="en">Also available in "list view" — front + back stacked vertically for digital review</span><span class="ko">"목록 보기"도 가능 — 디지털 복습용으로 앞면 + 뒷면 수직 배치</span></li>
+    </ul>
+
+    <h4>
+      <span class="en">Sharing Options</span>
+      <span class="ko">공유 옵션</span>
+    </h4>
+    <ul>
+      <li><span class="en"><strong>Save to Files</strong> — iOS Files app / macOS Finder</span><span class="ko"><strong>파일에 저장</strong> — iOS 파일 앱 / macOS Finder</span></li>
+      <li><span class="en"><strong>Share Sheet</strong> — AirDrop, Messages, Mail, etc.</span><span class="ko"><strong>공유 시트</strong> — AirDrop, 메시지, 메일 등</span></li>
+      <li><span class="en"><strong>Print</strong> — direct to AirPrint printer</span><span class="ko"><strong>인쇄</strong> — AirPrint 프린터로 직접</span></li>
+      <li><span class="en"><strong>Cloud backup</strong> — auto-save to iCloud Documents (optional)</span><span class="ko"><strong>클라우드 백업</strong> — iCloud 문서에 자동 저장 (선택)</span></li>
+    </ul>
+  </div>
+
+  <div class="card peach-card">
+    <h3>
+      <span class="en">🎨 PDF Design System</span>
+      <span class="ko">🎨 PDF 디자인 시스템</span>
+    </h3>
+    <ul>
+      <li><span class="en"><strong>Header:</strong> Bloom AI logo + project name + date range</span><span class="ko"><strong>헤더:</strong> Bloom AI 로고 + 프로젝트 이름 + 날짜 범위</span></li>
+      <li><span class="en"><strong>Fonts:</strong> DM Sans (body), DM Serif Display (headings) — embedded in PDF</span><span class="ko"><strong>폰트:</strong> DM Sans (본문), DM Serif Display (제목) — PDF에 내장</span></li>
+      <li><span class="en"><strong>Colors:</strong> Same pastel palette as app — pink accents, lavender sections</span><span class="ko"><strong>색상:</strong> 앱과 동일한 파스텔 팔레트 — 핑크 강조, 라벤더 섹션</span></li>
+      <li><span class="en"><strong>Footer:</strong> Page number + "Generated by Bloom AI" + timestamp</span><span class="ko"><strong>푸터:</strong> 페이지 번호 + "Generated by Bloom AI" + 타임스탬프</span></li>
+      <li><span class="en"><strong>Charts:</strong> Rendered as images (fl_chart → screenshot → embed)</span><span class="ko"><strong>차트:</strong> 이미지로 렌더링 (fl_chart → 스크린샷 → 삽입)</span></li>
+    </ul>
+  </div>
+</div>
+
+<!-- ============================================ -->
+<!-- SECTION 3: VOICE MODE -->
+<!-- ============================================ -->
+<div class="section" id="voice-mode">
+  <span class="section-badge">
+    <span class="en">NEW FEATURE</span>
+    <span class="ko">신규 기능</span>
+  </span>
+  <h2 class="section-title">
+    <span class="en">3. 🎙️ Voice Mode (OpenAI Realtime API)</span>
+    <span class="ko">3. 🎙️ 음성 모드 (OpenAI 실시간 API)</span>
+  </h2>
+
+  <div class="card highlight-card">
+    <h3>
+      <span class="en">🎯 Goal</span>
+      <span class="ko">🎯 목표</span>
+    </h3>
+    <p>
+      <span class="en">Lightning-fast, natural voice conversation for studying. Not the old "record → transcribe → send → wait → TTS" pipeline — actual real-time, back-and-forth voice interaction like talking to a tutor sitting next to you.</span>
+      <span class="ko">학습을 위한 초고속, 자연스러운 음성 대화. 기존의 "녹음 → 전사 → 전송 → 대기 → TTS" 파이프라인이 아닌, 옆에 앉아 있는 튜터와 대화하는 것 같은 실시간 양방향 음성 상호작용입니다.</span>
+    </p>
+  </div>
+
+  <div class="card">
+    <h3>
+      <span class="en">🔧 OpenAI Realtime API Architecture</span>
+      <span class="ko">🔧 OpenAI 실시간 API 아키텍처</span>
+    </h3>
+
+    <h4>
+      <span class="en">Why Realtime API (not Whisper + TTS pipeline)</span>
+      <span class="ko">왜 실시간 API인가 (Whisper + TTS 파이프라인 대신)</span>
+    </h4>
+    <table>
+      <tr>
+        <th><span class="en">Approach</span><span class="ko">접근 방식</span></th>
+        <th><span class="en">Latency</span><span class="ko">지연 시간</span></th>
+        <th><span class="en">Feel</span><span class="ko">체감</span></th>
+      </tr>
+      <tr>
+        <td><span class="en">Old: Whisper → GPT → ElevenLabs</span><span class="ko">기존: Whisper → GPT → ElevenLabs</span></td>
+        <td><span class="en">3-8 seconds total</span><span class="ko">총 3-8초</span></td>
+        <td><span class="en">Clunky, walkie-talkie</span><span class="ko">투박함, 무전기 느낌</span></td>
+      </tr>
+      <tr>
+        <td><span class="en">New: OpenAI Realtime API</span><span class="ko">신규: OpenAI 실시간 API</span></td>
+        <td><span class="en">~300-500ms</span><span class="ko">~300-500ms</span></td>
+        <td><span class="en">Natural conversation</span><span class="ko">자연스러운 대화</span></td>
+      </tr>
+    </table>
+
+    <h4>
+      <span class="en">How It Works</span>
+      <span class="ko">작동 방식</span>
+    </h4>
+    <div class="flow">
+      <span class="flow-step">
+        <span class="en">User speaks</span>
+        <span class="ko">사용자 발화</span>
+      </span>
+      <span class="flow-arrow">→</span>
+      <span class="flow-step">
+        <span class="en">Audio stream via WebSocket</span>
+        <span class="ko">WebSocket으로 오디오 스트리밍</span>
+      </span>
+      <span class="flow-arrow">→</span>
+      <span class="flow-step">
+        <span class="en">OpenAI processes (speech-to-speech)</span>
+        <span class="ko">OpenAI 처리 (음성-음성)</span>
+      </span>
+      <span class="flow-arrow">→</span>
+      <span class="flow-step">
+        <span class="en">Audio response streams back</span>
+        <span class="ko">오디오 응답 스트리밍</span>
+      </span>
+      <span class="flow-arrow">→</span>
+      <span class="flow-step">
+        <span class="en">Plays immediately</span>
+        <span class="ko">즉시 재생</span>
+      </span>
+    </div>
+
+    <h4>
+      <span class="en">Key Technical Details</span>
+      <span class="ko">핵심 기술 세부사항</span>
+    </h4>
+    <ul>
+      <li><span class="en"><strong>Protocol:</strong> WebSocket connection to <code>wss://api.openai.com/v1/realtime</code></span><span class="ko"><strong>프로토콜:</strong> <code>wss://api.openai.com/v1/realtime</code>로 WebSocket 연결</span></li>
+      <li><span class="en"><strong>Model:</strong> <code>gpt-4o-realtime-preview</code> (speech-to-speech, no intermediate text)</span><span class="ko"><strong>모델:</strong> <code>gpt-4o-realtime-preview</code> (음성-음성, 중간 텍스트 없음)</span></li>
+      <li><span class="en"><strong>Audio format:</strong> PCM 16-bit, 24kHz mono (input & output)</span><span class="ko"><strong>오디오 형식:</strong> PCM 16비트, 24kHz 모노 (입출력)</span></li>
+      <li><span class="en"><strong>VAD:</strong> Server-side Voice Activity Detection (auto turn-taking)</span><span class="ko"><strong>VAD:</strong> 서버 측 음성 활동 감지 (자동 턴 교대)</span></li>
+      <li><span class="en"><strong>Interruption:</strong> User can interrupt AI mid-response (natural conversation)</span><span class="ko"><strong>중단:</strong> 사용자가 AI 응답 중간에 끼어들기 가능 (자연스러운 대화)</span></li>
+      <li><span class="en"><strong>Transcript:</strong> Get text transcripts alongside audio for logging</span><span class="ko"><strong>트랜스크립트:</strong> 로깅을 위해 오디오와 함께 텍스트 트랜스크립트 수신</span></li>
+    </ul>
+  </div>
+
+  <div class="card tech-card">
+    <h3>
+      <span class="en">🏗️ Flutter Implementation</span>
+      <span class="ko">🏗️ Flutter 구현</span>
+    </h3>
+    <pre>// Connection via Supabase Edge Function (secure — no API key on client)
+class RealtimeVoiceService {
+  WebSocketChannel? _channel;
+  final AudioRecorder _recorder;
+  final AudioPlayer _player;
+
+  Future&lt;void&gt; connect(String projectId, String sessionContext) async {
+    // 1. Get ephemeral token from Edge Function
+    final token = await _getEphemeralToken(projectId);
+    
+    // 2. Connect WebSocket
+    _channel = WebSocketChannel.connect(
+      Uri.parse('wss://api.openai.com/v1/realtime?model=gpt-4o-realtime-preview'),
+      headers: {'Authorization': 'Bearer $token'},
+    );
+    
+    // 3. Send session config with study context
+    _channel!.sink.add(jsonEncode({
+      'type': 'session.update',
+      'session': {
+        'instructions': _buildStudyPrompt(sessionContext),
+        'voice': 'alloy',
+        'input_audio_format': 'pcm16',
+        'output_audio_format': 'pcm16',
+        'turn_detection': {
+          'type': 'server_vad',
+          'threshold': 0.5,
+          'silence_duration_ms': 500,
+        },
+        'input_audio_transcription': {'model': 'whisper-1'},
+      }
+    }));
+    
+    // 4. Listen for responses
+    _channel!.stream.listen(_handleServerEvent);
+  }
+
+  void _handleServerEvent(dynamic event) {
+    final data = jsonDecode(event);
+    switch (data['type']) {
+      case 'response.audio.delta':
+        // Stream audio chunks to player immediately
+        _player.feedAudioChunk(base64Decode(data['delta']));
+        break;
+      case 'response.audio_transcript.delta':
+        // Update live transcript on screen
+        _onTranscriptUpdate(data['delta']);
+        break;
+      case 'input_audio_buffer.speech_started':
+        // User started speaking — show visual indicator
+        _onUserSpeaking();
+        break;
+      case 'input_audio_buffer.speech_stopped':
+        // User stopped — processing
+        _onUserStoppedSpeaking();
+        break;
+    }
+  }
+}</pre>
+
+    <h4>
+      <span class="en">Security: Ephemeral Token Flow</span>
+      <span class="ko">보안: 임시 토큰 흐름</span>
+    </h4>
+    <div class="flow">
+      <span class="flow-step">
+        <span class="en">Client requests token</span>
+        <span class="ko">클라이언트 토큰 요청</span>
+      </span>
+      <span class="flow-arrow">→</span>
+      <span class="flow-step">
+        <span class="en">Edge Function validates auth</span>
+        <span class="ko">Edge Function 인증 검증</span>
+      </span>
+      <span class="flow-arrow">→</span>
+      <span class="flow-step">
+        <span class="en">Calls OpenAI /sessions</span>
+        <span class="ko">OpenAI /sessions 호출</span>
+      </span>
+      <span class="flow-arrow">→</span>
+      <span class="flow-step">
+        <span class="en">Returns ephemeral key (60s TTL)</span>
+        <span class="ko">임시 키 반환 (60초 TTL)</span>
+      </span>
+      <span class="flow-arrow">→</span>
+      <span class="flow-step">
+        <span class="en">Client connects directly</span>
+        <span class="ko">클라이언트 직접 연결</span>
+      </span>
+    </div>
+    <p><span class="en">No API keys on device. Edge Function handles token minting with rate limiting (max 5 sessions/hour/user).</span><span class="ko">디바이스에 API 키 없음. Edge Function이 속도 제한(사용자당 시간당 최대 5세션)과 함께 토큰 발급을 처리합니다.</span></p>
+  </div>
+
+  <div class="card peach-card">
+    <h3>
+      <span class="en">🎯 Voice Study Modes</span>
+      <span class="ko">🎯 음성 학습 모드</span>
+    </h3>
+    <p><span class="en">The Realtime API enables these upgraded voice experiences:</span><span class="ko">실시간 API가 가능하게 하는 업그레이드된 음성 경험:</span></p>
+    <ul>
+      <li><span class="en"><strong>Socratic Tutor:</strong> AI asks probing questions, follows up on your reasoning, challenges weak answers — all in real-time voice</span><span class="ko"><strong>소크라테스식 튜터:</strong> AI가 탐구 질문을 하고, 추론을 따라가고, 약한 답변에 도전 — 모두 실시간 음성으로</span></li>
+      <li><span class="en"><strong>Oral Board Sim:</strong> Timed clinical scenarios where you present and defend your diagnosis verbally</span><span class="ko"><strong>구술시험 시뮬레이션:</strong> 진단을 구두로 발표하고 방어하는 시간 제한 임상 시나리오</span></li>
+      <li><span class="en"><strong>Rapid Fire Voice:</strong> Quick verbal Q&A — AI asks, you answer, immediate feedback, next question</span><span class="ko"><strong>빠른 응답 음성:</strong> 빠른 구두 질의응답 — AI가 묻고, 답하고, 즉시 피드백, 다음 질문</span></li>
+      <li><span class="en"><strong>Teach-Back Voice:</strong> Explain a concept verbally, AI evaluates your explanation and asks follow-ups</span><span class="ko"><strong>설명하기 음성:</strong> 개념을 구두로 설명하면, AI가 설명을 평가하고 후속 질문</span></li>
+    </ul>
+
+    <h4>
+      <span class="en">Cost Estimate</span>
+      <span class="ko">비용 추정</span>
+    </h4>
+    <table>
+      <tr>
+        <th><span class="en">Usage</span><span class="ko">사용량</span></th>
+        <th><span class="en">Input (audio)</span><span class="ko">입력 (오디오)</span></th>
+        <th><span class="en">Output (audio)</span><span class="ko">출력 (오디오)</span></th>
+        <th><span class="en">Est. Cost</span><span class="ko">예상 비용</span></th>
+      </tr>
+      <tr>
+        <td><span class="en">5-min session</span><span class="ko">5분 세션</span></td>
+        <td>~2.5 min</td>
+        <td>~2.5 min</td>
+        <td>~$0.30-0.50</td>
+      </tr>
+      <tr>
+        <td><span class="en">15-min session</span><span class="ko">15분 세션</span></td>
+        <td>~7 min</td>
+        <td>~8 min</td>
+        <td>~$0.90-1.50</td>
+      </tr>
+      <tr>
+        <td><span class="en">30-min session</span><span class="ko">30분 세션</span></td>
+        <td>~15 min</td>
+        <td>~15 min</td>
+        <td>~$2.00-3.00</td>
+      </tr>
+    </table>
+    <p><span class="en"><strong>Budget control:</strong> Configurable session time limits (default: 15 min). Warning at 80% of limit. Auto-disconnect at limit with summary.</span><span class="ko"><strong>예산 관리:</strong> 구성 가능한 세션 시간 제한 (기본: 15분). 제한의 80%에서 경고. 제한 시 요약과 함께 자동 연결 해제.</span></p>
+  </div>
+
+  <div class="card green-card">
+    <h3>
+      <span class="en">🖥️ Voice Mode UI</span>
+      <span class="ko">🖥️ 음성 모드 UI</span>
+    </h3>
+    <ul>
+      <li><span class="en"><strong>Full-screen voice interface</strong> — minimal, beautiful, focused</span><span class="ko"><strong>전체 화면 음성 인터페이스</strong> — 미니멀, 아름답게, 집중</span></li>
+      <li><span class="en"><strong>Waveform visualizer</strong> — real-time audio visualization (user = pink, AI = lavender)</span><span class="ko"><strong>파형 시각화</strong> — 실시간 오디오 시각화 (사용자 = 핑크, AI = 라벤더)</span></li>
+      <li><span class="en"><strong>Live transcript</strong> — scrolling text below the waveform (toggleable)</span><span class="ko"><strong>실시간 트랜스크립트</strong> — 파형 아래 스크롤 텍스트 (토글 가능)</span></li>
+      <li><span class="en"><strong>Mute button</strong> — quick mic toggle</span><span class="ko"><strong>음소거 버튼</strong> — 빠른 마이크 토글</span></li>
+      <li><span class="en"><strong>End session</strong> — generates summary + saves transcript + offers export</span><span class="ko"><strong>세션 종료</strong> — 요약 생성 + 트랜스크립트 저장 + 내보내기 제안</span></li>
+      <li><span class="en"><strong>Timer</strong> — session duration + remaining budget display</span><span class="ko"><strong>타이머</strong> — 세션 시간 + 남은 예산 표시</span></li>
+    </ul>
+  </div>
+</div>
+
+<!-- ============================================ -->
+<!-- SECTION 4: STUDY MODE DEEP DIVES -->
+<!-- ============================================ -->
+<div class="section" id="study-modes">
+  <h2 class="section-title">
+    <span class="en">4. 📚 Study Mode Deep Dives</span>
+    <span class="ko">4. 📚 학습 모드 심층 분석</span>
+  </h2>
+  <p style="margin-bottom: 24px; color: #666;">
+    <span class="en">Complete technical and UX specification for all 10 study modes in Bloom AI.</span>
+    <span class="ko">Bloom AI의 모든 10개 학습 모드에 대한 완전한 기술 및 UX 명세.</span>
+  </p>
+
+  <!-- MODE 1: FREE-FORM Q&A -->
+  <div class="card" id="mode-freeform">
+    <h3><span class="tag tag-mode">MODE 1</span>
+      <span class="en">Free-Form Q&A</span>
+      <span class="ko">자유형 질의응답</span>
+    </h3>
+    <h4>
+      <span class="en">Purpose</span>
+      <span class="ko">목적</span>
+    </h4>
+    <p>
+      <span class="en">The core study loop. User receives a question, types a free-form answer, and gets AI-graded feedback with rubric scoring. This is the "daily practice" mode — what users do most.</span>
+      <span class="ko">핵심 학습 루프. 사용자가 질문을 받고, 자유 형식으로 답변을 입력하면, 채점 기준에 따른 AI 평가 피드백을 받습니다. 이것은 "일일 연습" 모드 — 사용자가 가장 많이 사용하는 모드입니다.</span>
+    </p>
+
+    <h4>
+      <span class="en">User Flow</span>
+      <span class="ko">사용자 흐름</span>
+    </h4>
+    <div class="flow">
+      <span class="flow-step">
+        <span class="en">Question presented</span>
+        <span class="ko">질문 제시</span>
+      </span>
+      <span class="flow-arrow">→</span>
+      <span class="flow-step">
+        <span class="en">User types answer</span>
+        <span class="ko">사용자 답변 입력</span>
+      </span>
+      <span class="flow-arrow">→</span>
+      <span class="flow-step">
+        <span class="en">Submit</span>
+        <span class="ko">제출</span>
+      </span>
+      <span class="flow-arrow">→</span>
+      <span class="flow-step">
+        <span class="en">AI evaluates (Sonnet)</span>
+        <span class="ko">AI 평가 (Sonnet)</span>
+      </span>
+      <span class="flow-arrow">→</span>
+      <span class="flow-step">
+        <span class="en">Feedback card</span>
+        <span class="ko">피드백 카드</span>
+      </span>
+      <span class="flow-arrow">→</span>
+      <span class="flow-step">
+        <span class="en">Next question</span>
+        <span class="ko">다음 질문</span>
+      </span>
+    </div>
+
+    <h4>
+      <span class="en">AI Evaluation Pipeline</span>
+      <span class="ko">AI 평가 파이프라인</span>
+    </h4>
+    <pre>// Edge Function: evaluate-answer
+{
+  "model": "claude-sonnet-4",
+  "system_prompt": "You are an expert examiner...",
+  "input": {
+    "question": { "text", "topic", "difficulty", "rubric_points" },
+    "user_answer": "...",
+    "rag_context": [ /* relevant source chunks */ ],
+    "memory_context": {
+      "past_attempts": [ /* previous answers to similar questions */ ],
+      "known_weaknesses": [ /* from learning_patterns */ ],
+      "study_level": "intermediate"
+    }
+  },
+  "output": {
+    "score": 7,           // out of 10
+    "grade": "B+",
+    "rubric_breakdown": [
+      { "criterion": "Key concepts", "score": 3, "max": 4, "feedback": "..." },
+      { "criterion": "Clinical reasoning", "score": 2, "max": 3, "feedback": "..." },
+      { "criterion": "Completeness", "score": 2, "max": 3, "feedback": "..." }
+    ],
+    "strengths": ["Good understanding of pathophysiology..."],
+    "improvements": ["Consider differential diagnoses..."],
+    "model_answer": "A comprehensive answer would include...",
+    "source_citations": [{ "chunk_id": "...", "text": "...", "source_name": "..." }],
+    "memory_note": "User improving on cardiac topics, still weak on dosages",
+    "follow_up_question": "Can you explain the mechanism of..."
+  }
+}</pre>
+
+    <h4>
+      <span class="en">UI Components</span>
+      <span class="ko">UI 구성 요소</span>
+    </h4>
+    <ul>
+      <li><span class="en"><strong>Question card:</strong> Topic badge, difficulty stars, question text (18px+), optional image/diagram</span><span class="ko"><strong>질문 카드:</strong> 주제 배지, 난이도 별, 질문 텍스트 (18px+), 선택적 이미지/다이어그램</span></li>
+      <li><span class="en"><strong>Answer area:</strong> Auto-expanding text field, word count, "I don't know" shortcut</span><span class="ko"><strong>답변 영역:</strong> 자동 확장 텍스트 필드, 단어 수, "모르겠어요" 단축키</span></li>
+      <li><span class="en"><strong>Feedback card:</strong> Score donut, rubric breakdown, strengths/improvements, model answer (expandable), source links</span><span class="ko"><strong>피드백 카드:</strong> 점수 도넛, 채점 기준 분석, 강점/개선사항, 모범 답안 (확장 가능), 출처 링크</span></li>
+      <li><span class="en"><strong>Actions:</strong> "Next Question", "Review Later", "Add to Flashcards", "Ask Follow-Up"</span><span class="ko"><strong>액션:</strong> "다음 질문", "나중에 복습", "플래시카드에 추가", "후속 질문"</span></li>
+    </ul>
+
+    <h4><span class="en">PDF Export Content</span><span class="ko">PDF 내보내기 내용</span></h4>
+    <p><span class="en">Question + user's answer + AI feedback + model answer + rubric scores. Can export single Q or batch (daily/weekly).</span><span class="ko">질문 + 사용자 답변 + AI 피드백 + 모범 답안 + 채점 기준 점수. 단일 또는 일괄(일별/주별) 내보내기 가능.</span></p>
+  </div>
+
+  <!-- MODE 2: VOICE CONVERSATION -->
+  <div class="card" id="mode-voice">
+    <h3><span class="tag tag-mode">MODE 2</span>
+      <span class="en">Voice Conversation</span>
+      <span class="ko">음성 대화</span>
+    </h3>
+    <h4><span class="en">Purpose</span><span class="ko">목적</span></h4>
+    <p><span class="en">Socratic dialogue and oral board simulation via real-time voice. Uses OpenAI Realtime API (see Section 3) for sub-second latency. Perfect for medical oral boards, interview prep, and deep concept exploration.</span><span class="ko">실시간 음성을 통한 소크라테스식 대화 및 구술 시험 시뮬레이션. OpenAI 실시간 API(섹션 3 참조)를 사용하여 1초 미만의 지연 시간. 의학 구술시험, 면접 준비, 깊은 개념 탐구에 적합합니다.</span></p>
+
+    <h4><span class="en">Sub-Modes</span><span class="ko">하위 모드</span></h4>
+    <ul>
+      <li><span class="en"><strong>Socratic Tutor:</strong> Open-ended exploration. AI guides you through a topic with probing questions, never gives the answer directly.</span><span class="ko"><strong>소크라테스식 튜터:</strong> 개방형 탐구. AI가 탐구 질문으로 주제를 안내하며, 직접 답을 주지 않습니다.</span></li>
+      <li><span class="en"><strong>Oral Board:</strong> Timed (7-10 min). Clinical scenario presented, you diagnose and manage verbally. AI plays examiner role — interrupts, challenges, asks for alternatives.</span><span class="ko"><strong>구술시험:</strong> 시간 제한 (7-10분). 임상 시나리오 제시, 구두로 진단 및 관리. AI가 시험관 역할 — 끼어들기, 도전, 대안 요구.</span></li>
+      <li><span class="en"><strong>Interview Prep:</strong> Technical interview simulation. AI asks progressively harder questions based on your field.</span><span class="ko"><strong>면접 준비:</strong> 기술 면접 시뮬레이션. AI가 분야에 따라 점진적으로 어려운 질문.</span></li>
+    </ul>
+
+    <h4><span class="en">Session Context Injection</span><span class="ko">세션 컨텍스트 주입</span></h4>
+    <pre>// System prompt sent to Realtime API
+const studyPrompt = `You are a ${mode} tutor for ${projectName}.
+Topic focus: ${currentTopics.join(', ')}
+User level: ${userLevel} (based on ${accuracy}% accuracy)
+Known weaknesses: ${weakAreas.join(', ')}
+Key facts from sources: ${ragContext}
+
+Rules:
+- Never give answers directly; guide through questions
+- Reference specific source material when relevant
+- Adjust difficulty based on response quality
+- If user is stuck for >10s, give a hint
+- Track topics covered for session summary`;</pre>
+
+    <h4><span class="en">Post-Session Output</span><span class="ko">세션 후 출력</span></h4>
+    <ul>
+      <li><span class="en">Full transcript (timestamped)</span><span class="ko">전체 트랜스크립트 (타임스탬프)</span></li>
+      <li><span class="en">Topics covered with accuracy assessment</span><span class="ko">다룬 주제와 정확도 평가</span></li>
+      <li><span class="en">Key moments highlighted (breakthroughs, mistakes)</span><span class="ko">주요 순간 하이라이트 (돌파구, 실수)</span></li>
+      <li><span class="en">Generated flashcards from weak points</span><span class="ko">취약점에서 생성된 플래시카드</span></li>
+      <li><span class="en">Exportable as PDF transcript</span><span class="ko">PDF 트랜스크립트로 내보내기 가능</span></li>
+    </ul>
+  </div>
+
+  <!-- MODE 3: TEACH-BACK -->
+  <div class="card" id="mode-teachback">
+    <h3><span class="tag tag-mode">MODE 3</span>
+      <span class="en">Teach-Back</span>
+      <span class="ko">설명하기 학습</span>
+    </h3>
+    <h4><span class="en">Purpose</span><span class="ko">목적</span></h4>
+    <p><span class="en">The Feynman Technique in action. User explains a concept as if teaching a student. AI evaluates the explanation for accuracy, completeness, clarity, and identifies gaps. Research shows teaching is the most effective form of learning.</span><span class="ko">파인만 기법의 실전 적용. 사용자가 학생을 가르치듯 개념을 설명합니다. AI가 정확성, 완전성, 명확성을 평가하고 빈틈을 식별합니다. 연구에 따르면 가르치기가 가장 효과적인 학습 형태입니다.</span></p>
+
+    <h4><span class="en">User Flow</span><span class="ko">사용자 흐름</span></h4>
+    <div class="flow">
+      <span class="flow-step">
+        <span class="en">Topic assigned</span>
+        <span class="ko">주제 배정</span>
+      </span>
+      <span class="flow-arrow">→</span>
+      <span class="flow-step">
+        <span class="en">"Explain this concept"</span>
+        <span class="ko">"이 개념을 설명하세요"</span>
+      </span>
+      <span class="flow-arrow">→</span>
+      <span class="flow-step">
+        <span class="en">User writes/speaks</span>
+        <span class="ko">사용자 작성/발화</span>
+      </span>
+      <span class="flow-arrow">→</span>
+      <span class="flow-step">
+        <span class="en">AI plays confused student</span>
+        <span class="ko">AI가 혼란스러운 학생 역할</span>
+      </span>
+      <span class="flow-arrow">→</span>
+      <span class="flow-step">
+        <span class="en">Follow-up questions</span>
+        <span class="ko">후속 질문</span>
+      </span>
+      <span class="flow-arrow">→</span>
+      <span class="flow-step">
+        <span class="en">Final assessment</span>
+        <span class="ko">최종 평가</span>
+      </span>
+    </div>
+
+    <h4><span class="en">AI Behavior</span><span class="ko">AI 행동</span></h4>
+    <ul>
+      <li><span class="en"><strong>Phase 1 — Listen:</strong> Accept the user's explanation without interruption</span><span class="ko"><strong>1단계 — 경청:</strong> 중단 없이 사용자의 설명을 수용</span></li>
+      <li><span class="en"><strong>Phase 2 — Clarify:</strong> Ask "confused student" questions targeting gaps. "Wait, I don't understand why X causes Y — can you explain that part again?"</span><span class="ko"><strong>2단계 — 명확화:</strong> 빈틈을 겨냥한 "혼란스러운 학생" 질문. "잠깐, X가 왜 Y를 유발하는지 이해가 안 돼요 — 그 부분 다시 설명해 줄 수 있어요?"</span></li>
+      <li><span class="en"><strong>Phase 3 — Challenge:</strong> Push on weak areas. "But what about edge case Z?" or "How does this differ from concept W?"</span><span class="ko"><strong>3단계 — 도전:</strong> 취약 분야 압박. "하지만 예외 상황 Z는요?" 또는 "개념 W와 어떻게 다른가요?"</span></li>
+      <li><span class="en"><strong>Phase 4 — Evaluate:</strong> Comprehensive feedback with rubric: Accuracy (0-10), Completeness (0-10), Clarity (0-10), Depth (0-10)</span><span class="ko"><strong>4단계 — 평가:</strong> 채점 기준에 따른 종합 피드백: 정확성 (0-10), 완전성 (0-10), 명확성 (0-10), 깊이 (0-10)</span></li>
+    </ul>
+
+    <h4><span class="en">Input Modes</span><span class="ko">입력 모드</span></h4>
+    <p><span class="en">Text (typed explanation) OR Voice (spoken — uses Realtime API for interactive follow-ups, or Whisper for single submission).</span><span class="ko">텍스트 (타이핑 설명) 또는 음성 (구두 — 상호작용 후속 질문은 실시간 API, 단일 제출은 Whisper 사용).</span></p>
+  </div>
+
+  <!-- MODE 4: CASE SIMULATION -->
+  <div class="card" id="mode-case">
+    <h3><span class="tag tag-mode">MODE 4</span>
+      <span class="en">Case Simulation</span>
+      <span class="ko">사례 시뮬레이션</span>
+    </h3>
+    <h4><span class="en">Purpose</span><span class="ko">목적</span></h4>
+    <p><span class="en">Branching decision-tree scenarios that simulate real clinical cases (for Lucy) or complex design debugging scenarios (for Minjun). Each decision leads to different outcomes, teaching consequence-based reasoning.</span><span class="ko">실제 임상 사례(Lucy용) 또는 복잡한 설계 디버깅 시나리오(Minjun용)를 시뮬레이션하는 분기형 의사결정 트리 시나리오. 각 결정이 다른 결과로 이어져 결과 기반 추론을 가르칩니다.</span></p>
+
+    <h4><span class="en">Case Structure</span><span class="ko">사례 구조</span></h4>
+    <pre>{
+  "case": {
+    "title": "Emergency C-Section Decision",
+    "initial_presentation": "32-year-old G2P1 at 38 weeks...",
+    "stages": [
+      {
+        "id": "stage_1",
+        "narrative": "Patient presents with...",
+        "vital_signs": { "BP": "160/100", "HR": 95, "FHR": "Category III" },
+        "options": [
+          { "text": "Immediate C-section", "next": "stage_2a", "score": 9 },
+          { "text": "Start magnesium, monitor", "next": "stage_2b", "score": 5 },
+          { "text": "Order additional labs", "next": "stage_2c", "score": 3 }
+        ],
+        "time_pressure": true,
+        "max_time_seconds": 120
+      }
+    ],
+    "debrief": {
+      "optimal_path": ["stage_1 → stage_2a → stage_3a"],
+      "learning_points": ["In category III tracing with..."],
+      "source_references": ["ACOG Practice Bulletin #116"]
+    }
+  }
+}</pre>
+
+    <h4><span class="en">Features</span><span class="ko">기능</span></h4>
+    <ul>
+      <li><span class="en"><strong>Dynamic generation:</strong> AI creates new cases from source material + topic focus (never exactly the same case twice)</span><span class="ko"><strong>동적 생성:</strong> AI가 출처 자료 + 주제 초점에서 새로운 사례 생성 (똑같은 사례가 두 번 나오지 않음)</span></li>
+      <li><span class="en"><strong>Time pressure:</strong> Optional countdown timer per decision (simulates real clinical urgency)</span><span class="ko"><strong>시간 압박:</strong> 결정마다 선택적 카운트다운 타이머 (실제 임상 긴급성 시뮬레이션)</span></li>
+      <li><span class="en"><strong>Information gathering:</strong> User can request additional info at each stage (labs, imaging) — costs time</span><span class="ko"><strong>정보 수집:</strong> 사용자가 각 단계에서 추가 정보 요청 가능 (검사, 영상) — 시간 소모</span></li>
+      <li><span class="en"><strong>Debrief:</strong> After completion, full walkthrough of optimal path, why each decision matters, and what the user missed</span><span class="ko"><strong>디브리핑:</strong> 완료 후, 최적 경로의 전체 설명, 각 결정의 중요성, 사용자가 놓친 부분</span></li>
+      <li><span class="en"><strong>Score:</strong> Overall case score based on decision quality + time management</span><span class="ko"><strong>점수:</strong> 결정 품질 + 시간 관리에 기반한 전체 사례 점수</span></li>
+    </ul>
+
+    <h4><span class="en">PDF Export</span><span class="ko">PDF 내보내기</span></h4>
+    <p><span class="en">Full case narrative with the user's decision path highlighted, outcomes, optimal path comparison, and learning points. Reads like a case study report.</span><span class="ko">사용자의 결정 경로가 강조된 전체 사례 서술, 결과, 최적 경로 비교, 학습 포인트. 사례 연구 보고서처럼 읽힙니다.</span></p>
+  </div>
+
+  <!-- MODE 5: RAPID FIRE -->
+  <div class="card" id="mode-rapid">
+    <h3><span class="tag tag-mode">MODE 5</span>
+      <span class="en">Rapid Fire</span>
+      <span class="ko">빠른 응답</span>
+    </h3>
+    <h4><span class="en">Purpose</span><span class="ko">목적</span></h4>
+    <p><span class="en">Fast-paced recall drills. 30-60 second timer per question. Tests quick retrieval of facts — not deep reasoning. Gamified with streaks, combos, and leaderboard (household).</span><span class="ko">빠른 속도의 암기 훈련. 질문당 30-60초 타이머. 깊은 추론이 아닌 빠른 사실 회상을 테스트합니다. 연속 정답, 콤보, 리더보드(가정)로 게임화.</span></p>
+
+    <h4><span class="en">Mechanics</span><span class="ko">메커니즘</span></h4>
+    <ul>
+      <li><span class="en"><strong>Question types:</strong> Short answer, fill-in-blank, true/false, single-word recall</span><span class="ko"><strong>질문 유형:</strong> 단답형, 빈칸 채우기, 참/거짓, 단어 회상</span></li>
+      <li><span class="en"><strong>Timer:</strong> Countdown bar at top, turns red at 10s</span><span class="ko"><strong>타이머:</strong> 상단 카운트다운 바, 10초에 빨간색으로 변환</span></li>
+      <li><span class="en"><strong>Scoring:</strong> Correct = +10pts, Fast correct (&lt;10s) = +15pts, Streak bonus = +5 per consecutive correct</span><span class="ko"><strong>점수:</strong> 정답 = +10점, 빠른 정답 (<10초) = +15점, 연속 보너스 = 연속 정답당 +5</span></li>
+      <li><span class="en"><strong>Round:</strong> 20 questions per round (configurable)</span><span class="ko"><strong>라운드:</strong> 라운드당 20문제 (구성 가능)</span></li>
+      <li><span class="en"><strong>AI grading:</strong> GPT-4.1-nano for fast, cheap evaluation (semantic matching, not exact string)</span><span class="ko"><strong>AI 채점:</strong> GPT-4.1-nano로 빠르고 저렴한 평가 (의미 매칭, 정확한 문자열 아님)</span></li>
+      <li><span class="en"><strong>Voice mode:</strong> Speak answers for hands-free rapid fire (Realtime API)</span><span class="ko"><strong>음성 모드:</strong> 핸즈프리 빠른 응답을 위해 답변 말하기 (실시간 API)</span></li>
+    </ul>
+
+    <h4><span class="en">Gamification</span><span class="ko">게임화</span></h4>
+    <ul>
+      <li><span class="en">🔥 Streak counter with haptic feedback</span><span class="ko">🔥 햅틱 피드백이 있는 연속 정답 카운터</span></li>
+      <li><span class="en">⚡ Combo multiplier (3x, 5x, 10x streaks)</span><span class="ko">⚡ 콤보 배수 (3x, 5x, 10x 연속)</span></li>
+      <li><span class="en">🏆 Personal best tracking per topic</span><span class="ko">🏆 주제별 개인 최고 기록 추적</span></li>
+      <li><span class="en">📊 Post-round stats: accuracy, avg response time, topics nailed vs missed</span><span class="ko">📊 라운드 후 통계: 정답률, 평균 응답 시간, 맞힌/놓친 주제</span></li>
+    </ul>
+  </div>
+
+  <!-- MODE 6: SMART FLASHCARDS -->
+  <div class="card" id="mode-flashcard">
+    <h3><span class="tag tag-mode">MODE 6</span>
+      <span class="en">Smart Flashcards</span>
+      <span class="ko">스마트 플래시카드</span>
+    </h3>
+    <h4><span class="en">Purpose</span><span class="ko">목적</span></h4>
+    <p><span class="en">Spaced Repetition System (SRS) powered flashcards — like Anki, but AI-generated and beautifully designed. Cards are created automatically from study sessions, wrong answers, and source materials. SM-2 algorithm schedules reviews at optimal intervals.</span><span class="ko">간격 반복 시스템(SRS) 기반 플래시카드 — Anki와 유사하지만 AI 생성 및 아름다운 디자인. 카드는 학습 세션, 오답, 출처 자료에서 자동 생성됩니다. SM-2 알고리즘이 최적 간격으로 복습을 예약합니다.</span></p>
+
+    <h4><span class="en">Card Types</span><span class="ko">카드 유형</span></h4>
+    <table>
+      <tr>
+        <th><span class="en">Type</span><span class="ko">유형</span></th>
+        <th><span class="en">Front</span><span class="ko">앞면</span></th>
+        <th><span class="en">Back</span><span class="ko">뒷면</span></th>
+      </tr>
+      <tr>
+        <td><span class="en">Basic</span><span class="ko">기본</span></td>
+        <td><span class="en">Question/term</span><span class="ko">질문/용어</span></td>
+        <td><span class="en">Answer/definition</span><span class="ko">답변/정의</span></td>
+      </tr>
+      <tr>
+        <td><span class="en">Cloze</span><span class="ko">빈칸</span></td>
+        <td><span class="en">"The _____ nerve innervates the diaphragm"</span><span class="ko">"_____ 신경이 횡격막을 지배한다"</span></td>
+        <td><span class="en">"phrenic"</span><span class="ko">"횡격막"</span></td>
+      </tr>
+      <tr>
+        <td><span class="en">Image</span><span class="ko">이미지</span></td>
+        <td><span class="en">Diagram/photo with "identify X"</span><span class="ko">"X를 식별하세요" 다이어그램/사진</span></td>
+        <td><span class="en">Labeled answer</span><span class="ko">라벨링된 답변</span></td>
+      </tr>
+      <tr>
+        <td><span class="en">Reversible</span><span class="ko">양방향</span></td>
+        <td><span class="en">Can be quizzed from either side</span><span class="ko">양쪽에서 퀴즈 가능</span></td>
+        <td><span class="en">Automatically creates reverse card</span><span class="ko">자동으로 역방향 카드 생성</span></td>
+      </tr>
+    </table>
+
+    <h4><span class="en">SRS Algorithm (SM-2)</span><span class="ko">SRS 알고리즘 (SM-2)</span></h4>
+    <pre>// Spaced Repetition scheduling
+class SM2 {
+  static SrsState update(SrsState current, int quality) {
+    // quality: 0-5 (0=blackout, 5=perfect)
+    double ef = current.easeFactor + (0.1 - (5 - quality) * (0.08 + (5 - quality) * 0.02));
+    ef = max(1.3, ef);
+    
+    int interval;
+    if (quality < 3) {
+      interval = 1; // Reset — review tomorrow
+    } else if (current.repetitions == 0) {
+      interval = 1;
+    } else if (current.repetitions == 1) {
+      interval = 6;
+    } else {
+      interval = (current.interval * ef).round();
+    }
+    
+    return SrsState(
+      interval: interval,
+      easeFactor: ef,
+      repetitions: quality < 3 ? 0 : current.repetitions + 1,
+      nextReview: DateTime.now().add(Duration(days: interval)),
+    );
+  }
+}</pre>
+
+    <h4><span class="en">UI Interaction</span><span class="ko">UI 상호작용</span></h4>
+    <ul>
+      <li><span class="en"><strong>Swipe cards:</strong> Tinder-style swipe — right = knew it, left = didn't know, up = easy (skip for longer)</span><span class="ko"><strong>스와이프 카드:</strong> 틴더 스타일 스와이프 — 오른쪽 = 알았음, 왼쪽 = 몰랐음, 위 = 쉬움 (더 오래 건너뛰기)</span></li>
+      <li><span class="en"><strong>Tap to flip:</strong> Tap card to reveal back</span><span class="ko"><strong>탭으로 뒤집기:</strong> 카드를 탭하면 뒷면 공개</span></li>
+      <li><span class="en"><strong>Self-rate:</strong> After flipping, rate 1-5 (maps to SM-2 quality)</span><span class="ko"><strong>자가 평가:</strong> 뒤집은 후 1-5 평가 (SM-2 품질에 매핑)</span></li>
+      <li><span class="en"><strong>Edit:</strong> Long-press to edit card content</span><span class="ko"><strong>편집:</strong> 길게 눌러 카드 내용 편집</span></li>
+      <li><span class="en"><strong>Stats:</strong> Cards due today, mastered, learning, new</span><span class="ko"><strong>통계:</strong> 오늘 복습 예정, 마스터, 학습 중, 신규</span></li>
+    </ul>
+
+    <h4><span class="en">Auto-Generation Sources</span><span class="ko">자동 생성 출처</span></h4>
+    <ul>
+      <li><span class="en">Wrong answers in Q&A → "What is X?" card generated</span><span class="ko">질의응답에서 오답 → "X는 무엇인가?" 카드 생성</span></li>
+      <li><span class="en">Source ingestion → key facts extracted as cards</span><span class="ko">출처 수집 → 핵심 사실을 카드로 추출</span></li>
+      <li><span class="en">Weekly Review → weak area cards</span><span class="ko">주간 복습 → 취약 분야 카드</span></li>
+      <li><span class="en">User manual creation (in-app card editor)</span><span class="ko">사용자 수동 생성 (앱 내 카드 편집기)</span></li>
+    </ul>
+  </div>
+
+  <!-- MODE 7: REVIEW & REFLECT -->
+  <div class="card" id="mode-review">
+    <h3><span class="tag tag-mode">MODE 7</span>
+      <span class="en">Review & Reflect</span>
+      <span class="ko">복습 & 성찰</span>
+    </h3>
+    <h4><span class="en">Purpose</span><span class="ko">목적</span></h4>
+    <p><span class="en">Side-by-side comparison of your past and current answers to the same question. Shows growth over time. Forces metacognition — "What did I know then vs now? What changed?"</span><span class="ko">같은 질문에 대한 과거와 현재 답변의 나란히 비교. 시간에 따른 성장을 보여줍니다. 메타인지를 강제합니다 — "그때 무엇을 알았고 지금은? 무엇이 바뀌었나?"</span></p>
+
+    <h4><span class="en">How It Works</span><span class="ko">작동 방식</span></h4>
+    <ul>
+      <li><span class="en"><strong>Question selection:</strong> AI picks questions the user answered 2+ weeks ago (prioritizes questions with low initial scores)</span><span class="ko"><strong>질문 선택:</strong> AI가 2주 이상 전에 답한 질문 선택 (초기 점수가 낮은 질문 우선)</span></li>
+      <li><span class="en"><strong>Fresh attempt:</strong> User answers the question again (without seeing old answer)</span><span class="ko"><strong>새로운 시도:</strong> 사용자가 다시 답변 (이전 답변을 보지 않고)</span></li>
+      <li><span class="en"><strong>Comparison view:</strong> Split screen — old answer (left, faded) vs new answer (right, highlighted)</span><span class="ko"><strong>비교 보기:</strong> 분할 화면 — 이전 답변 (왼쪽, 흐릿) vs 새 답변 (오른쪽, 강조)</span></li>
+      <li><span class="en"><strong>Growth analysis:</strong> AI highlights what improved, what regressed, and what's new in the answer</span><span class="ko"><strong>성장 분석:</strong> AI가 개선된 점, 퇴보한 점, 답변의 새로운 부분을 강조</span></li>
+      <li><span class="en"><strong>Reflection prompt:</strong> "Why do you think your understanding changed?" — optional written reflection saved to memory</span><span class="ko"><strong>성찰 프롬프트:</strong> "이해가 왜 변했다고 생각하나요?" — 선택적 서면 성찰을 메모리에 저장</span></li>
+    </ul>
+
+    <h4><span class="en">Memory Integration</span><span class="ko">메모리 통합</span></h4>
+    <p><span class="en">Review & Reflect heavily leverages the Memory Engine — it needs historical answer data, scoring trends, and the ability to identify "growth moments" that are psychologically reinforcing.</span><span class="ko">복습 & 성찰은 메모리 엔진을 집중 활용합니다 — 과거 답변 데이터, 점수 추세, 심리적으로 강화하는 "성장 순간"을 식별하는 능력이 필요합니다.</span></p>
+  </div>
+
+  <!-- MODE 8: CONCEPT MAP -->
+  <div class="card" id="mode-concept">
+    <h3><span class="tag tag-mode">MODE 8</span>
+      <span class="en">Concept Map</span>
+      <span class="ko">개념 맵</span>
+    </h3>
+    <h4><span class="en">Purpose</span><span class="ko">목적</span></h4>
+    <p><span class="en">Visual, interactive topic mastery explorer. Shows how concepts connect to each other, which ones the user has mastered, and where knowledge gaps exist. Think: a mind map that's alive with your study data.</span><span class="ko">시각적이고 대화형인 주제 숙달 탐색기. 개념들이 서로 어떻게 연결되는지, 사용자가 어떤 것을 마스터했는지, 지식 격차가 어디에 있는지 보여줍니다. 학습 데이터로 살아있는 마인드맵이라고 생각하세요.</span></p>
+
+    <h4><span class="en">Visualization</span><span class="ko">시각화</span></h4>
+    <ul>
+      <li><span class="en"><strong>Nodes:</strong> Each topic is a circle. Size = importance/question count. Color = mastery (red→yellow→green)</span><span class="ko"><strong>노드:</strong> 각 주제가 원. 크기 = 중요도/문제 수. 색상 = 숙달도 (빨강→노랑→초록)</span></li>
+      <li><span class="en"><strong>Edges:</strong> Lines connecting related topics. Thickness = strength of relationship</span><span class="ko"><strong>엣지:</strong> 관련 주제를 연결하는 선. 두께 = 관계 강도</span></li>
+      <li><span class="en"><strong>Clusters:</strong> Auto-grouped by subject area (e.g., Obstetrics, Gynecology, Pharmacology)</span><span class="ko"><strong>클러스터:</strong> 주제 영역별 자동 그룹화 (예: 산과, 부인과, 약리학)</span></li>
+      <li><span class="en"><strong>Interaction:</strong> Tap node → topic detail card (accuracy, questions answered, last studied, trend)</span><span class="ko"><strong>상호작용:</strong> 노드 탭 → 주제 상세 카드 (정답률, 답변한 문제, 마지막 학습, 추세)</span></li>
+      <li><span class="en"><strong>Zoom/Pan:</strong> Pinch to zoom, drag to pan. Double-tap to focus a cluster</span><span class="ko"><strong>줌/팬:</strong> 핀치로 줌, 드래그로 팬. 더블탭으로 클러스터 포커스</span></li>
+    </ul>
+
+    <h4><span class="en">Technical: Force-Directed Graph</span><span class="ko">기술: 힘-방향 그래프</span></h4>
+    <pre>// Using CustomPainter with force-directed layout
+class ConceptMapPainter extends CustomPainter {
+  final List&lt;TopicNode&gt; nodes;
+  final List&lt;TopicEdge&gt; edges;
+  
+  // Force simulation parameters
+  static const repulsionForce = 500.0;
+  static const attractionForce = 0.01;
+  static const damping = 0.9;
+  
+  // Color mapping
+  Color masteryColor(double accuracy) {
+    if (accuracy >= 0.8) return Color(0xFF34D399); // green
+    if (accuracy >= 0.5) return Color(0xFFFBBF24); // yellow
+    return Color(0xFFEF4444);                       // red
+  }
+}</pre>
+
+    <h4><span class="en">PDF Export</span><span class="ko">PDF 내보내기</span></h4>
+    <p><span class="en">Concept map rendered as high-res image (screenshot widget → PNG → embed in PDF). Includes legend and topic mastery table below the visual.</span><span class="ko">개념 맵을 고해상도 이미지로 렌더링 (스크린샷 위젯 → PNG → PDF에 삽입). 시각 아래에 범례와 주제 숙달도 표 포함.</span></p>
+  </div>
+
+  <!-- MODE 9: AUDIO BRIEFING -->
+  <div class="card" id="mode-audio">
+    <h3><span class="tag tag-mode">MODE 9</span>
+      <span class="en">Audio Briefing</span>
+      <span class="ko">오디오 브리핑</span>
+    </h3>
+    <h4><span class="en">Purpose</span><span class="ko">목적</span></h4>
+    <p><span class="en">NotebookLM-style audio summaries of study material. Perfect for commuting, exercising, or passive review. AI generates a 5-15 minute audio briefing covering key topics, recent weak areas, and upcoming exam focus.</span><span class="ko">학습 자료의 NotebookLM 스타일 오디오 요약. 출퇴근, 운동, 수동 복습에 완벽. AI가 핵심 주제, 최근 취약 분야, 다가오는 시험 초점을 다루는 5-15분 오디오 브리핑을 생성합니다.</span></p>
+
+    <h4><span class="en">Briefing Types</span><span class="ko">브리핑 유형</span></h4>
+    <ul>
+      <li><span class="en"><strong>Daily Recap:</strong> 5 min — what you studied today, key takeaways, tomorrow's preview</span><span class="ko"><strong>일일 요약:</strong> 5분 — 오늘 공부한 내용, 핵심 요점, 내일 미리보기</span></li>
+      <li><span class="en"><strong>Topic Deep Dive:</strong> 10-15 min — comprehensive audio lecture on a specific topic</span><span class="ko"><strong>주제 심층 분석:</strong> 10-15분 — 특정 주제에 대한 종합 오디오 강의</span></li>
+      <li><span class="en"><strong>Weak Area Focus:</strong> 8-10 min — concentrated review of struggling topics with examples</span><span class="ko"><strong>취약 분야 집중:</strong> 8-10분 — 예시와 함께 어려운 주제의 집중 복습</span></li>
+      <li><span class="en"><strong>Weekly Summary:</strong> 10-12 min — audio version of the Weekly Review (pairs with PDF)</span><span class="ko"><strong>주간 요약:</strong> 10-12분 — 주간 복습의 오디오 버전 (PDF와 함께)</span></li>
+    </ul>
+
+    <h4><span class="en">Generation Pipeline</span><span class="ko">생성 파이프라인</span></h4>
+    <div class="flow">
+      <span class="flow-step">
+        <span class="en">Select briefing type</span>
+        <span class="ko">브리핑 유형 선택</span>
+      </span>
+      <span class="flow-arrow">→</span>
+      <span class="flow-step">
+        <span class="en">Haiku generates script</span>
+        <span class="ko">Haiku 스크립트 생성</span>
+      </span>
+      <span class="flow-arrow">→</span>
+      <span class="flow-step">
+        <span class="en">ElevenLabs TTS</span>
+        <span class="ko">ElevenLabs TTS</span>
+      </span>
+      <span class="flow-arrow">→</span>
+      <span class="flow-step">
+        <span class="en">Audio stored in Supabase Storage</span>
+        <span class="ko">Supabase Storage에 오디오 저장</span>
+      </span>
+      <span class="flow-arrow">→</span>
+      <span class="flow-step">
+        <span class="en">Playback with transcript</span>
+        <span class="ko">트랜스크립트와 함께 재생</span>
+      </span>
+    </div>
+
+    <h4><span class="en">Player Features</span><span class="ko">플레이어 기능</span></h4>
+    <ul>
+      <li><span class="en">Play/pause, 15s skip forward/back</span><span class="ko">재생/일시정지, 15초 앞으로/뒤로 건너뛰기</span></li>
+      <li><span class="en">Playback speed (0.75x, 1x, 1.25x, 1.5x, 2x)</span><span class="ko">재생 속도 (0.75x, 1x, 1.25x, 1.5x, 2x)</span></li>
+      <li><span class="en">Synced transcript (highlights current sentence)</span><span class="ko">동기화된 트랜스크립트 (현재 문장 강조)</span></li>
+      <li><span class="en">Bookmark moments for later review</span><span class="ko">나중에 복습할 순간 북마크</span></li>
+      <li><span class="en">Background playback (lock screen controls)</span><span class="ko">백그라운드 재생 (잠금 화면 컨트롤)</span></li>
+      <li><span class="en">Download for offline listening</span><span class="ko">오프라인 청취를 위한 다운로드</span></li>
+    </ul>
+  </div>
+
+  <!-- MODE 10: MOCK EXAM -->
+  <div class="card" id="mode-mock">
+    <h3><span class="tag tag-mode">MODE 10</span>
+      <span class="en">Mock Exam</span>
+      <span class="ko">모의시험</span>
+    </h3>
+    <h4><span class="en">Purpose</span><span class="ko">목적</span></h4>
+    <p><span class="en">Full simulated exam conditions. Timed, no feedback during exam, realistic question distribution, and comprehensive post-exam analytics. The closest thing to the real test.</span><span class="ko">완전한 시험 조건 시뮬레이션. 시간 제한, 시험 중 피드백 없음, 현실적인 문제 분배, 종합적인 시험 후 분석. 실제 시험에 가장 가까운 경험.</span></p>
+
+    <h4><span class="en">Exam Configuration</span><span class="ko">시험 구성</span></h4>
+    <pre>{
+  "exam_config": {
+    "name": "OB/GYN Practice Exam #3",
+    "total_questions": 50,
+    "time_limit_minutes": 75,
+    "question_distribution": {
+      "obstetrics": 20,
+      "gynecology": 15,
+      "reproductive_endocrinology": 8,
+      "gynecologic_oncology": 7
+    },
+    "difficulty_mix": {
+      "easy": 0.2,
+      "medium": 0.5,
+      "hard": 0.3
+    },
+    "question_types": {
+      "multiple_choice": 0.6,
+      "short_answer": 0.3,
+      "case_based": 0.1
+    },
+    "allow_flagging": true,
+    "allow_review_before_submit": true,
+    "show_timer": true
+  }
+}</pre>
+
+    <h4><span class="en">During Exam</span><span class="ko">시험 중</span></h4>
+    <ul>
+      <li><span class="en"><strong>Clean UI:</strong> Question + answer area only. No distractions.</span><span class="ko"><strong>깔끔한 UI:</strong> 질문 + 답변 영역만. 방해 요소 없음.</span></li>
+      <li><span class="en"><strong>Navigation:</strong> Previous/Next buttons, question grid for jumping</span><span class="ko"><strong>탐색:</strong> 이전/다음 버튼, 점프를 위한 문제 그리드</span></li>
+      <li><span class="en"><strong>Flag:</strong> Mark questions for review before submission</span><span class="ko"><strong>플래그:</strong> 제출 전 복습할 문제 표시</span></li>
+      <li><span class="en"><strong>No feedback:</strong> No right/wrong indicators until exam is submitted</span><span class="ko"><strong>피드백 없음:</strong> 시험 제출 전까지 정답/오답 표시 없음</span></li>
+      <li><span class="en"><strong>Auto-save:</strong> Answers saved every 30s (crash-proof)</span><span class="ko"><strong>자동 저장:</strong> 30초마다 답변 저장 (크래시 방지)</span></li>
+    </ul>
+
+    <h4><span class="en">Post-Exam Analytics</span><span class="ko">시험 후 분석</span></h4>
+    <ul>
+      <li><span class="en"><strong>Score:</strong> Overall %, pass/fail prediction, percentile estimate</span><span class="ko"><strong>점수:</strong> 전체 %, 합격/불합격 예측, 백분위 추정</span></li>
+      <li><span class="en"><strong>Topic breakdown:</strong> Score per topic area with comparison to target</span><span class="ko"><strong>주제별 분석:</strong> 목표 대비 주제 영역별 점수</span></li>
+      <li><span class="en"><strong>Time analysis:</strong> Average time per question, which questions took longest</span><span class="ko"><strong>시간 분석:</strong> 문제당 평균 시간, 가장 오래 걸린 문제</span></li>
+      <li><span class="en"><strong>Question review:</strong> Go through each question — see correct answer, explanation, and your answer</span><span class="ko"><strong>문제 복습:</strong> 각 문제를 검토 — 정답, 해설, 본인 답변 확인</span></li>
+      <li><span class="en"><strong>Trend:</strong> Compare with previous mock exams (score trend line)</span><span class="ko"><strong>추세:</strong> 이전 모의시험과 비교 (점수 추세선)</span></li>
+      <li><span class="en"><strong>Recommendations:</strong> AI suggests what to focus on before next mock</span><span class="ko"><strong>권장사항:</strong> AI가 다음 모의시험 전 집중할 부분 제안</span></li>
+    </ul>
+
+    <h4><span class="en">PDF Export (Critical)</span><span class="ko">PDF 내보내기 (핵심)</span></h4>
+    <p><span class="en">Full exam paper exported as PDF with: all questions, user's answers, correct answers, detailed explanations, score breakdown, and time analytics. This is the most important PDF export — users will want to review exam results offline repeatedly.</span><span class="ko">전체 시험지를 PDF로 내보내기: 모든 문제, 사용자 답변, 정답, 상세 해설, 점수 분석, 시간 분석. 이것은 가장 중요한 PDF 내보내기 — 사용자는 시험 결과를 오프라인에서 반복적으로 복습하고 싶어합니다.</span></p>
+  </div>
+</div>
+
+<!-- ============================================ -->
+<!-- SECTION 5: NEW DATABASE SCHEMA -->
+<!-- ============================================ -->
+<div class="section" id="db-schema">
+  <h2 class="section-title">
+    <span class="en">5. 🗄️ New Database Schema</span>
+    <span class="ko">5. 🗄️ 신규 데이터베이스 스키마</span>
+  </h2>
+
+  <div class="card tech-card">
+    <pre>-- Weekly Review System
+CREATE TABLE weekly_reviews (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID REFERENCES profiles(id) ON DELETE CASCADE,
+  project_id UUID REFERENCES projects(id) ON DELETE CASCADE,
+  week_start DATE NOT NULL,
+  week_end DATE NOT NULL,
+  summary TEXT,
+  stats JSONB,
+  topic_mastery JSONB,
+  flashcards JSONB,
+  knowledge_summary JSONB,
+  next_week_plan JSONB,
+  created_at TIMESTAMPTZ DEFAULT now(),
+  UNIQUE(user_id, project_id, week_start)
+);
+
+-- Voice Sessions (Realtime API)
+CREATE TABLE voice_sessions (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID REFERENCES profiles(id) ON DELETE CASCADE,
+  project_id UUID REFERENCES projects(id) ON DELETE CASCADE,
+  mode TEXT NOT NULL, -- 'socratic', 'oral_board', 'interview', 'rapid_fire_voice'
+  duration_seconds INTEGER,
+  transcript JSONB,    -- [{ speaker, text, timestamp }]
+  topics_covered JSONB,
+  performance_score FLOAT,
+  generated_flashcards JSONB,
+  session_summary TEXT,
+  cost_usd FLOAT,
+  created_at TIMESTAMPTZ DEFAULT now()
+);
+
+-- PDF Exports (tracking)
+CREATE TABLE exports (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID REFERENCES profiles(id) ON DELETE CASCADE,
+  project_id UUID REFERENCES projects(id),
+  export_type TEXT NOT NULL, -- 'weekly_review', 'flashcards', 'mock_exam', etc.
+  source_id UUID,            -- ID of the source content (weekly_review.id, etc.)
+  file_path TEXT,
+  file_size_bytes INTEGER,
+  created_at TIMESTAMPTZ DEFAULT now()
+);
+
+-- Flashcard enhancements
+ALTER TABLE srs_state ADD COLUMN IF NOT EXISTS
+  source_type TEXT; -- 'auto_wrong_answer', 'auto_source', 'auto_weekly', 'manual'
+ALTER TABLE srs_state ADD COLUMN IF NOT EXISTS
+  source_ref UUID; -- reference to the originating answer/source/review
+
+-- Mock Exam Results
+CREATE TABLE mock_exams (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID REFERENCES profiles(id) ON DELETE CASCADE,
+  project_id UUID REFERENCES projects(id) ON DELETE CASCADE,
+  config JSONB NOT NULL,
+  questions JSONB NOT NULL,    -- [{ question_id, user_answer, correct_answer, score, time_seconds }]
+  total_score FLOAT,
+  topic_scores JSONB,
+  time_total_seconds INTEGER,
+  pass_prediction BOOLEAN,
+  percentile_estimate FLOAT,
+  ai_recommendations TEXT,
+  created_at TIMESTAMPTZ DEFAULT now()
+);
+
+-- RLS Policies
+ALTER TABLE weekly_reviews ENABLE ROW LEVEL SECURITY;
+ALTER TABLE voice_sessions ENABLE ROW LEVEL SECURITY;
+ALTER TABLE exports ENABLE ROW LEVEL SECURITY;
+ALTER TABLE mock_exams ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Users can only access their own data" ON weekly_reviews
+  FOR ALL USING (auth.uid() = user_id);
+CREATE POLICY "Users can only access their own data" ON voice_sessions
+  FOR ALL USING (auth.uid() = user_id);
+CREATE POLICY "Users can only access their own data" ON exports
+  FOR ALL USING (auth.uid() = user_id);
+CREATE POLICY "Users can only access their own data" ON mock_exams
+  FOR ALL USING (auth.uid() = user_id);</pre>
+  </div>
+</div>
+
+<!-- ============================================ -->
+<!-- SECTION 6: NEW EDGE FUNCTIONS -->
+<!-- ============================================ -->
+<div class="section" id="edge-functions">
+  <h2 class="section-title">
+    <span class="en">6. ⚡ New Edge Functions</span>
+    <span class="ko">6. ⚡ 신규 Edge Functions</span>
+  </h2>
+
+  <div class="card">
+    <table>
+      <tr>
+        <th><span class="en">Function</span><span class="ko">함수</span></th>
+        <th><span class="en">Model</span><span class="ko">모델</span></th>
+        <th><span class="en">Trigger</span><span class="ko">트리거</span></th>
+        <th><span class="en">Est. Cost</span><span class="ko">예상 비용</span></th>
+      </tr>
+      <tr>
+        <td><code>generate-weekly-review</code></td>
+        <td>Claude Haiku 3.5</td>
+        <td><span class="en">Cron: Sun 9AM</span><span class="ko">크론: 일 오전 9시</span></td>
+        <td>~$0.02/review</td>
+      </tr>
+      <tr>
+        <td><code>generate-review-flashcards</code></td>
+        <td>GPT-4.1-nano</td>
+        <td><span class="en">After weekly review</span><span class="ko">주간 복습 후</span></td>
+        <td>~$0.002</td>
+      </tr>
+      <tr>
+        <td><code>realtime-token</code></td>
+        <td>—</td>
+        <td><span class="en">On voice session start</span><span class="ko">음성 세션 시작 시</span></td>
+        <td><span class="en">Free (token minting)</span><span class="ko">무료 (토큰 발급)</span></td>
+      </tr>
+      <tr>
+        <td><code>voice-session-summary</code></td>
+        <td>Claude Haiku 3.5</td>
+        <td><span class="en">On voice session end</span><span class="ko">음성 세션 종료 시</span></td>
+        <td>~$0.01</td>
+      </tr>
+      <tr>
+        <td><code>generate-mock-exam</code></td>
+        <td>Claude Haiku 3.5</td>
+        <td><span class="en">User request</span><span class="ko">사용자 요청</span></td>
+        <td>~$0.03-0.06</td>
+      </tr>
+      <tr>
+        <td><code>grade-mock-exam</code></td>
+        <td>Claude Sonnet 4</td>
+        <td><span class="en">On exam submit</span><span class="ko">시험 제출 시</span></td>
+        <td>~$0.08-0.15</td>
+      </tr>
+      <tr>
+        <td><code>generate-case</code></td>
+        <td>Claude Sonnet 4</td>
+        <td><span class="en">User request</span><span class="ko">사용자 요청</span></td>
+        <td>~$0.04-0.08</td>
+      </tr>
+      <tr>
+        <td><code>generate-audio-briefing</code></td>
+        <td>Haiku + ElevenLabs</td>
+        <td><span class="en">User request / daily cron</span><span class="ko">사용자 요청 / 일일 크론</span></td>
+        <td>~$0.05-0.15</td>
+      </tr>
+    </table>
+
+    <h4><span class="en">Monthly Cost Estimate (2 Active Users)</span><span class="ko">월간 비용 추정 (활성 사용자 2명)</span></h4>
+    <table>
+      <tr>
+        <th><span class="en">Feature</span><span class="ko">기능</span></th>
+        <th><span class="en">Frequency</span><span class="ko">빈도</span></th>
+        <th><span class="en">Monthly Cost</span><span class="ko">월 비용</span></th>
+      </tr>
+      <tr>
+        <td><span class="en">Daily Q&A (eval)</span><span class="ko">일일 질의응답 (평가)</span></td>
+        <td><span class="en">~20 Q/day × 30 days</span><span class="ko">~20문제/일 × 30일</span></td>
+        <td>~$12-24</td>
+      </tr>
+      <tr>
+        <td><span class="en">Weekly Reviews</span><span class="ko">주간 복습</span></td>
+        <td><span class="en">4/month × 2 users</span><span class="ko">4회/월 × 2명</span></td>
+        <td>~$0.20</td>
+      </tr>
+      <tr>
+        <td><span class="en">Voice Sessions (Realtime)</span><span class="ko">음성 세션 (실시간)</span></td>
+        <td><span class="en">~10 sessions/month, 15 min avg</span><span class="ko">~10세션/월, 평균 15분</span></td>
+        <td>~$9-15</td>
+      </tr>
+      <tr>
+        <td><span class="en">Mock Exams</span><span class="ko">모의시험</span></td>
+        <td><span class="en">4/month</span><span class="ko">4회/월</span></td>
+        <td>~$0.50-1.00</td>
+      </tr>
+      <tr>
+        <td><span class="en">Audio Briefings</span><span class="ko">오디오 브리핑</span></td>
+        <td><span class="en">~15/month</span><span class="ko">~15회/월</span></td>
+        <td>~$1.50-3.00</td>
+      </tr>
+      <tr>
+        <td><span class="en">Flashcard Generation</span><span class="ko">플래시카드 생성</span></td>
+        <td><span class="en">Daily auto + weekly</span><span class="ko">일일 자동 + 주간</span></td>
+        <td>~$0.50</td>
+      </tr>
+      <tr style="font-weight: 700; background: var(--accent-light);">
+        <td><span class="en"><strong>TOTAL ESTIMATED</strong></span><span class="ko"><strong>총 추정</strong></span></td>
+        <td></td>
+        <td><strong>~$25-45/month</strong></td>
+      </tr>
+    </table>
+  </div>
+</div>
+
+<!-- ============================================ -->
+<!-- SECTION 7: TIMELINE -->
+<!-- ============================================ -->
+<div class="section" id="timeline">
+  <h2 class="section-title">
+    <span class="en">7. 🗓️ Implementation Timeline</span>
+    <span class="ko">7. 🗓️ 구현 타임라인</span>
+  </h2>
+
+  <div class="card sky-card">
+    <h3><span class="en">Phase 6A: PDF Export Engine (1 week)</span><span class="ko">6A단계: PDF 내보내기 엔진 (1주)</span></h3>
+    <ul>
+      <li><span class="en">PDF generation service + template system</span><span class="ko">PDF 생성 서비스 + 템플릿 시스템</span></li>
+      <li><span class="en">Flashcard PDF template (print & cut layout)</span><span class="ko">플래시카드 PDF 템플릿 (인쇄 & 잘라내기 레이아웃)</span></li>
+      <li><span class="en">Study session log PDF template</span><span class="ko">학습 세션 기록 PDF 템플릿</span></li>
+      <li><span class="en">Mock exam results PDF template</span><span class="ko">모의시험 결과 PDF 템플릿</span></li>
+      <li><span class="en">Share sheet integration (iOS + macOS)</span><span class="ko">공유 시트 통합 (iOS + macOS)</span></li>
+    </ul>
+  </div>
+
+  <div class="card green-card">
+    <h3><span class="en">Phase 6B: Weekly Review System (1 week)</span><span class="ko">6B단계: 주간 복습 시스템 (1주)</span></h3>
+    <ul>
+      <li><span class="en">Weekly review data aggregation queries</span><span class="ko">주간 복습 데이터 집계 쿼리</span></li>
+      <li><span class="en"><code>generate-weekly-review</code> Edge Function</span><span class="ko"><code>generate-weekly-review</code> Edge Function</span></li>
+      <li><span class="en">Review page UI (stats, heatmap, flashcards, summary)</span><span class="ko">복습 페이지 UI (통계, 히트맵, 플래시카드, 요약)</span></li>
+      <li><span class="en">Weekly review PDF template</span><span class="ko">주간 복습 PDF 템플릿</span></li>
+      <li><span class="en">Cron scheduling + push notification</span><span class="ko">크론 스케줄링 + 푸시 알림</span></li>
+      <li><span class="en">Review quiz (10-question weak area test)</span><span class="ko">복습 퀴즈 (10문제 취약 분야 테스트)</span></li>
+    </ul>
+  </div>
+
+  <div class="card highlight-card">
+    <h3><span class="en">Phase 6C: Voice Mode / Realtime API (1.5 weeks)</span><span class="ko">6C단계: 음성 모드 / 실시간 API (1.5주)</span></h3>
+    <ul>
+      <li><span class="en"><code>realtime-token</code> Edge Function (ephemeral key minting)</span><span class="ko"><code>realtime-token</code> Edge Function (임시 키 발급)</span></li>
+      <li><span class="en">WebSocket service for Realtime API</span><span class="ko">실시간 API용 WebSocket 서비스</span></li>
+      <li><span class="en">Audio recording + playback pipeline (PCM16 24kHz)</span><span class="ko">오디오 녹음 + 재생 파이프라인 (PCM16 24kHz)</span></li>
+      <li><span class="en">Voice mode UI (waveform, transcript, controls)</span><span class="ko">음성 모드 UI (파형, 트랜스크립트, 컨트롤)</span></li>
+      <li><span class="en">Socratic tutor + oral board system prompts</span><span class="ko">소크라테스식 튜터 + 구술시험 시스템 프롬프트</span></li>
+      <li><span class="en">Session summary + flashcard generation post-session</span><span class="ko">세션 요약 + 세션 후 플래시카드 생성</span></li>
+      <li><span class="en">Budget controls (time limits, usage tracking)</span><span class="ko">예산 관리 (시간 제한, 사용량 추적)</span></li>
+    </ul>
+  </div>
+
+  <div class="card peach-card">
+    <h3><span class="en">Phase 6D: Study Mode Enhancements (1 week)</span><span class="ko">6D단계: 학습 모드 개선 (1주)</span></h3>
+    <ul>
+      <li><span class="en">Upgrade all modes with PDF export buttons</span><span class="ko">모든 모드에 PDF 내보내기 버튼 추가</span></li>
+      <li><span class="en">Add voice input option to Teach-Back + Rapid Fire</span><span class="ko">설명하기 + 빠른 응답에 음성 입력 옵션 추가</span></li>
+      <li><span class="en">Case Simulation debrief + PDF export</span><span class="ko">사례 시뮬레이션 디브리핑 + PDF 내보내기</span></li>
+      <li><span class="en">Concept Map → image export → PDF</span><span class="ko">개념 맵 → 이미지 내보내기 → PDF</span></li>
+      <li><span class="en">Mock Exam analytics dashboard enhancement</span><span class="ko">모의시험 분석 대시보드 개선</span></li>
+      <li><span class="en">Audio Briefing weekly summary variant</span><span class="ko">오디오 브리핑 주간 요약 변형</span></li>
+    </ul>
+  </div>
+
+  <div class="card" style="text-align: center; padding: 32px;">
+    <h3>
+      <span class="en">📊 Total Phase 6 Timeline: ~4.5 weeks</span>
+      <span class="ko">📊 총 6단계 타임라인: ~4.5주</span>
+    </h3>
+    <p style="color: #888; margin-top: 8px;">
+      <span class="en">Estimated monthly API cost after Phase 6: ~$25-45/month for 2 active users</span>
+      <span class="ko">6단계 이후 예상 월간 API 비용: 활성 사용자 2명 기준 ~$25-45/월</span>
+    </p>
+  </div>
+</div>
+
+<!-- Footer -->
+<div style="text-align: center; padding: 40px 20px; color: #999; font-size: 13px;">
+  <p>
+    <span class="en">🌸 Bloom AI — Phase 6 Feature Spec v1.0</span>
+    <span class="ko">🌸 Bloom AI — 6단계 기능 명세 v1.0</span>
+  </p>
+  <p>
+    <span class="en">Generated March 29, 2026 by Totoro 🌳</span>
+    <span class="ko">2026년 3월 29일 토토로 생성 🌳</span>
+  </p>
+</div>
+
+</div><!-- /container -->
+
+<script>
+let isKorean = false;
+function toggleLang() {
+  isKorean = !isKorean;
+  document.querySelectorAll('.en').forEach(el => el.classList.toggle('hide', isKorean));
+  document.querySelectorAll('.ko').forEach(el => el.classList.toggle('show', isKorean));
+  document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+}
+</script>
+</body>
+</html>
