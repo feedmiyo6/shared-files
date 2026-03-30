@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 30: Bus Integration — Connecting Modules | Digital Design Study</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    background: linear-gradient(135deg, #fefae0 0%, #faedcd 100%);
+    color: #3d405b;
+    line-height: 1.8;
+    padding: 24px;
+    max-width: 920px;
+    margin: 0 auto;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+h1 {
+    color: #5d4037;
+    border-bottom: 3px solid #c4a77d;
+    padding-bottom: 12px;
+    margin-bottom: 24px;
+    font-size: 2em;
+}
+h2 {
+    color: #588157;
+    border-bottom: 2px solid #a3b18a;
+    padding-bottom: 8px;
+    margin: 32px 0 16px;
+}
+h3 {
+    color: #5d4037;
+    margin: 20px 0 12px;
+}
+p { margin: 12px 0; }
+ul, ol { margin: 12px 0 12px 24px; }
+li { margin: 6px 0; }
+pre {
+    background: #2d3436;
+    padding: 24px;
+    border-radius: 12px;
+    margin: 24px 0;
+    border: 3px solid #a3b18a;
+    overflow-x: auto;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+    font-size: 15px;
+    line-height: 1.6;
+    color: #f8f8f2;
+}
+code {
+    background: #e9f5db;
+    color: #3d405b;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+}
+pre code {
+    background: none;
+    color: #f8f8f2;
+    padding: 0;
+}
+.keyword { color: #ff79c6; font-weight: 600; }
+.type { color: #8be9fd; }
+.signal { color: #50fa7b; }
+.number { color: #ffb86c; }
+.comment { color: #6272a4; font-style: italic; }
+.string { color: #f1fa8c; }
+.concept-box {
+    background: #fff8f0;
+    border: 2px solid #c4a77d;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    color: #3d405b;
+}
+.concept-box h3 {
+    color: #5d4037;
+    margin-bottom: 12px;
+}
+.warning-box {
+    background: #fff8f0;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    border-left: 4px solid #ef4444;
+    color: #3d405b;
+}
+.warning-box h3 {
+    color: #c53030;
+    margin-bottom: 12px;
+}
+.tip-box {
+    background: #fff8f0;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    border-left: 4px solid #588157;
+    color: #3d405b;
+}
+.comparison-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+.comparison-table th {
+    background: #588157;
+    color: white;
+    padding: 12px;
+    text-align: left;
+}
+.comparison-table td {
+    background: #fff;
+    border: 1px solid #c4a77d;
+    padding: 12px;
+    color: #3d405b;
+}
+.comparison-table tr:nth-child(even) td {
+    background: #fff8f0;
+}
+.lang-toggle {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    background: #588157;
+    border: none;
+    border-radius: 24px;
+    padding: 10px 20px;
+    cursor: pointer;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    z-index: 1000;
+}
+.lang-toggle:hover { background: #3a5a40; }
+.ko { display: none; }
+.nav-links {
+    display: flex;
+    gap: 12px;
+    margin: 24px 0;
+    flex-wrap: wrap;
+}
+.nav-links a {
+    background: linear-gradient(135deg, #588157, #3a5a40);
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14px;
+}
+.nav-links a:hover { opacity: 0.9; }
+.diagram-box {
+    background: #fff;
+    border: 2px solid #a3b18a;
+    border-radius: 12px;
+    padding: 24px;
+    margin: 20px 0;
+    text-align: center;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+    font-size: 14px;
+    line-height: 1.6;
+    overflow-x: auto;
+    white-space: pre;
+    color: #3d405b;
+}
+@media (max-width: 768px) {
+    body { padding: 16px; }
+    h1 { font-size: 1.8em; }
+    pre { font-size: 14px; padding: 16px; }
+    .lang-toggle { padding: 8px 16px; font-size: 13px; }
+}
+</style>
+</head>
+<body>
+<button class="lang-toggle" onclick="toggleLang()">한국어</button>
+
+<h1>📦 Day 30: Bus Integration — Connecting Modules</h1>
+
+<div class="nav-links">
+    <a href="day-30-quiz.html">📝 Quiz</a>
+    <a href="day-30-practice.html">💻 Practice</a>
+    <a href="day-29-lesson.html">← Day 29</a>
+</div>
+
+<p class="en">Welcome to the final lesson of Week 6! Today we bring everything together — ready/valid handshakes, arbitration, flow control, and buffering — into a complete bus system that connects multiple modules. This is the capstone of bus protocol thinking.</p>
+<p class="ko" style="display:none;">Week 6의 마지막 수업에 오신 것을 환영합니다! 오늘은 지금까지 배운 모든 것 — ready/valid 핸드셰이크, 중재, 흐름 제어, 버퍼링 — 을 여러 모듈을 연결하는 완전한 버스 시스템으로 통합합니다. 버스 프로토콜 사고의 종합편입니다.</p>
+
+<h2>1. The Big Picture: System-on-Chip Bus Architecture</h2>
+
+<p class="en">In real SoC designs, you rarely have just one module talking to another. You have multiple initiators (CPUs, DMAs, accelerators) trying to access multiple targets (memory, peripherals, registers). A bus integration layer routes requests and manages traffic.</p>
+<p class="ko" style="display:none;">실제 SoC 설계에서는 하나의 모듈이 다른 하나와만 통신하는 경우는 드뭅니다. 여러 이니시에이터(CPU, DMA, 가속기)가 여러 타겟(메모리, 주변장치, 레지스터)에 접근하려 합니다. 버스 통합 레이어가 요청을 라우팅하고 트래픽을 관리합니다.</p>
+
+<div class="diagram-box">
+  ┌──────────┐  ┌──────────┐  ┌──────────┐
+  │  CPU     │  │  DMA     │  │  Accel   │
+  │(Initiator)│  │(Initiator)│  │(Initiator)│
+  └────┬─────┘  └────┬─────┘  └────┬─────┘
+       │              │              │
+  ═════╪══════════════╪══════════════╪════════
+  ║         INTERCONNECT / BUS FABRIC        ║
+  ═════╪══════════════╪══════════════╪════════
+       │              │              │
+  ┌────┴─────┐  ┌────┴─────┐  ┌────┴─────┐
+  │  Memory  │  │  UART    │  │  GPIO    │
+  │ (Target) │  │ (Target) │  │ (Target) │
+  └──────────┘  └──────────┘  └──────────┘
+</div>
+
+<div class="concept-box">
+    <h3>🔑 Key Integration Components</h3>
+    <p class="en">A complete bus integration needs these building blocks:</p>
+    <p class="ko" style="display:none;">완전한 버스 통합에는 다음 구성 요소가 필요합니다:</p>
+    <ul>
+        <li class="en"><strong>Address Decoder</strong> — routes requests to the correct target based on address</li>
+        <li class="ko" style="display:none;"><strong>주소 디코더</strong> — 주소를 기반으로 요청을 올바른 타겟으로 라우팅</li>
+        <li class="en"><strong>Arbiter</strong> — resolves conflicts when multiple initiators request the same target</li>
+        <li class="ko" style="display:none;"><strong>중재기</strong> — 여러 이니시에이터가 같은 타겟에 요청할 때 충돌 해결</li>
+        <li class="en"><strong>Multiplexers</strong> — select which initiator/target gets connected</li>
+        <li class="ko" style="display:none;"><strong>멀티플렉서</strong> — 어떤 이니시에이터/타겟이 연결될지 선택</li>
+        <li class="en"><strong>Response Router</strong> — sends target responses back to the correct initiator</li>
+        <li class="ko" style="display:none;"><strong>응답 라우터</strong> — 타겟 응답을 올바른 이니시에이터로 돌려보냄</li>
+        <li class="en"><strong>Pipeline Stages</strong> — optional registers to meet timing</li>
+        <li class="ko" style="display:none;"><strong>파이프라인 스테이지</strong> — 타이밍을 충족하기 위한 선택적 레지스터</li>
+    </ul>
+</div>
+
+<h2>2. Address Decoding</h2>
+
+<p class="en">The first step in bus integration: figuring out where each request should go. An address decoder examines the address and produces a select signal for the appropriate target.</p>
+<p class="ko" style="display:none;">버스 통합의 첫 번째 단계: 각 요청이 어디로 가야 하는지 파악하는 것입니다. 주소 디코더는 주소를 검사하고 적절한 타겟에 대한 선택 신호를 생성합니다.</p>
+
+<pre><code><span class="comment">// Address decoder — maps address ranges to target selects</span>
+<span class="keyword">module</span> <span class="type">addr_decoder</span> #(
+    <span class="keyword">parameter</span> <span class="type">ADDR_W</span> = <span class="number">32</span>,
+    <span class="keyword">parameter</span> <span class="type">N_TARGETS</span> = <span class="number">3</span>
+)(
+    <span class="keyword">input</span>  <span class="keyword">logic</span> [<span class="type">ADDR_W</span>-<span class="number">1</span>:<span class="number">0</span>] <span class="signal">addr</span>,
+    <span class="keyword">input</span>  <span class="keyword">logic</span>                <span class="signal">valid</span>,
+    <span class="keyword">output</span> <span class="keyword">logic</span> [<span class="type">N_TARGETS</span>-<span class="number">1</span>:<span class="number">0</span>] <span class="signal">target_sel</span>,
+    <span class="keyword">output</span> <span class="keyword">logic</span>                <span class="signal">addr_error</span>
+);
+
+    <span class="keyword">always_comb</span> <span class="keyword">begin</span>
+        <span class="signal">target_sel</span> = <span class="string">'0</span>;
+        <span class="signal">addr_error</span> = <span class="number">1'b0</span>;
+
+        <span class="keyword">if</span> (<span class="signal">valid</span>) <span class="keyword">begin</span>
+            <span class="keyword">casez</span> (<span class="signal">addr</span>[<span class="number">31</span>:<span class="number">28</span>])  <span class="comment">// Decode upper 4 bits</span>
+                <span class="number">4'h0</span>:    <span class="signal">target_sel</span>[<span class="number">0</span>] = <span class="number">1'b1</span>;  <span class="comment">// 0x0xxx_xxxx → Memory</span>
+                <span class="number">4'h4</span>:    <span class="signal">target_sel</span>[<span class="number">1</span>] = <span class="number">1'b1</span>;  <span class="comment">// 0x4xxx_xxxx → UART</span>
+                <span class="number">4'h8</span>:    <span class="signal">target_sel</span>[<span class="number">2</span>] = <span class="number">1'b1</span>;  <span class="comment">// 0x8xxx_xxxx → GPIO</span>
+                <span class="keyword">default</span>: <span class="signal">addr_error</span>    = <span class="number">1'b1</span>;  <span class="comment">// Unmapped!</span>
+            <span class="keyword">endcase</span>
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+
+<span class="keyword">endmodule</span></code></pre>
+
+<div class="tip-box">
+    <h3>💡 Design Tip</h3>
+    <p class="en">Always handle unmapped addresses! An <code>addr_error</code> signal lets the system respond with a bus error instead of silently dropping the transaction. In AXI, this becomes a DECERR response.</p>
+    <p class="ko" style="display:none;">매핑되지 않은 주소를 항상 처리하세요! <code>addr_error</code> 신호를 사용하면 트랜잭션을 조용히 무시하는 대신 버스 에러로 응답할 수 있습니다. AXI에서는 DECERR 응답이 됩니다.</p>
+</div>
+
+<h2>3. Request Multiplexer with Arbitration</h2>
+
+<p class="en">When multiple initiators want the same target, we need an arbiter to pick one and a mux to route its signals. Here's how they work together:</p>
+<p class="ko" style="display:none;">여러 이니시에이터가 같은 타겟을 원할 때, 하나를 선택하는 중재기와 그 신호를 라우팅하는 멀티플렉서가 필요합니다. 함께 작동하는 방법입니다:</p>
+
+<pre><code><span class="comment">// Request path: N initiators → 1 target</span>
+<span class="keyword">module</span> <span class="type">req_mux</span> #(
+    <span class="keyword">parameter</span> <span class="type">N_INIT</span> = <span class="number">2</span>,
+    <span class="keyword">parameter</span> <span class="type">DATA_W</span> = <span class="number">32</span>,
+    <span class="keyword">parameter</span> <span class="type">ADDR_W</span> = <span class="number">32</span>
+)(
+    <span class="keyword">input</span>  <span class="keyword">logic</span>                <span class="signal">clk</span>,
+    <span class="keyword">input</span>  <span class="keyword">logic</span>                <span class="signal">rst_n</span>,
+
+    <span class="comment">// From initiators</span>
+    <span class="keyword">input</span>  <span class="keyword">logic</span> [<span class="type">N_INIT</span>-<span class="number">1</span>:<span class="number">0</span>]   <span class="signal">init_valid</span>,
+    <span class="keyword">output</span> <span class="keyword">logic</span> [<span class="type">N_INIT</span>-<span class="number">1</span>:<span class="number">0</span>]   <span class="signal">init_ready</span>,
+    <span class="keyword">input</span>  <span class="keyword">logic</span> [<span class="type">ADDR_W</span>-<span class="number">1</span>:<span class="number">0</span>]  <span class="signal">init_addr</span>  [<span class="type">N_INIT</span>],
+    <span class="keyword">input</span>  <span class="keyword">logic</span> [<span class="type">DATA_W</span>-<span class="number">1</span>:<span class="number">0</span>]  <span class="signal">init_data</span>  [<span class="type">N_INIT</span>],
+    <span class="keyword">input</span>  <span class="keyword">logic</span>               <span class="signal">init_wr</span>    [<span class="type">N_INIT</span>],
+
+    <span class="comment">// To target</span>
+    <span class="keyword">output</span> <span class="keyword">logic</span>                <span class="signal">tgt_valid</span>,
+    <span class="keyword">input</span>  <span class="keyword">logic</span>                <span class="signal">tgt_ready</span>,
+    <span class="keyword">output</span> <span class="keyword">logic</span> [<span class="type">ADDR_W</span>-<span class="number">1</span>:<span class="number">0</span>]  <span class="signal">tgt_addr</span>,
+    <span class="keyword">output</span> <span class="keyword">logic</span> [<span class="type">DATA_W</span>-<span class="number">1</span>:<span class="number">0</span>]  <span class="signal">tgt_data</span>,
+    <span class="keyword">output</span> <span class="keyword">logic</span>                <span class="signal">tgt_wr</span>,
+    <span class="keyword">output</span> <span class="keyword">logic</span> [$clog2(<span class="type">N_INIT</span>)-<span class="number">1</span>:<span class="number">0</span>] <span class="signal">tgt_id</span>  <span class="comment">// Which initiator won</span>
+);
+
+    <span class="keyword">logic</span> [<span class="type">N_INIT</span>-<span class="number">1</span>:<span class="number">0</span>] <span class="signal">grant</span>;
+    <span class="keyword">logic</span> [$clog2(<span class="type">N_INIT</span>)-<span class="number">1</span>:<span class="number">0</span>] <span class="signal">grant_idx</span>;
+
+    <span class="comment">// Round-robin arbiter (from Day 28!)</span>
+    <span class="type">rr_arbiter</span> #(.<span class="type">N</span>(<span class="type">N_INIT</span>)) <span class="signal">u_arb</span> (
+        .<span class="signal">clk</span>     (<span class="signal">clk</span>),
+        .<span class="signal">rst_n</span>   (<span class="signal">rst_n</span>),
+        .<span class="signal">req</span>     (<span class="signal">init_valid</span>),
+        .<span class="signal">grant</span>   (<span class="signal">grant</span>),
+        .<span class="signal">advance</span> (<span class="signal">tgt_valid</span> & <span class="signal">tgt_ready</span>)  <span class="comment">// Rotate on handshake</span>
+    );
+
+    <span class="comment">// Encode grant to index</span>
+    <span class="keyword">always_comb</span> <span class="keyword">begin</span>
+        <span class="signal">grant_idx</span> = <span class="string">'0</span>;
+        <span class="keyword">for</span> (<span class="keyword">int</span> <span class="signal">i</span> = <span class="number">0</span>; <span class="signal">i</span> < <span class="type">N_INIT</span>; <span class="signal">i</span>++)
+            <span class="keyword">if</span> (<span class="signal">grant</span>[<span class="signal">i</span>]) <span class="signal">grant_idx</span> = <span class="signal">i</span>[$clog2(<span class="type">N_INIT</span>)-<span class="number">1</span>:<span class="number">0</span>];
+    <span class="keyword">end</span>
+
+    <span class="comment">// Mux: route the winning initiator to the target</span>
+    <span class="keyword">assign</span> <span class="signal">tgt_valid</span> = |<span class="signal">grant</span>;
+    <span class="keyword">assign</span> <span class="signal">tgt_addr</span>  = <span class="signal">init_addr</span>[<span class="signal">grant_idx</span>];
+    <span class="keyword">assign</span> <span class="signal">tgt_data</span>  = <span class="signal">init_data</span>[<span class="signal">grant_idx</span>];
+    <span class="keyword">assign</span> <span class="signal">tgt_wr</span>    = <span class="signal">init_wr</span>[<span class="signal">grant_idx</span>];
+    <span class="keyword">assign</span> <span class="signal">tgt_id</span>    = <span class="signal">grant_idx</span>;
+
+    <span class="comment">// Ready: only the granted initiator sees ready</span>
+    <span class="keyword">always_comb</span> <span class="keyword">begin</span>
+        <span class="signal">init_ready</span> = <span class="string">'0</span>;
+        <span class="signal">init_ready</span>[<span class="signal">grant_idx</span>] = <span class="signal">tgt_ready</span> & <span class="signal">grant</span>[<span class="signal">grant_idx</span>];
+    <span class="keyword">end</span>
+
+<span class="keyword">endmodule</span></code></pre>
+
+<h2>4. Response Routing</h2>
+
+<p class="en">Responses must travel back to the correct initiator. We use the transaction ID (<code>tgt_id</code>) that was stored with the request to route the response.</p>
+<p class="ko" style="display:none;">응답은 올바른 이니시에이터로 돌아가야 합니다. 요청과 함께 저장된 트랜잭션 ID(<code>tgt_id</code>)를 사용하여 응답을 라우팅합니다.</p>
+
+<pre><code><span class="comment">// Response demux: 1 target → N initiators</span>
+<span class="keyword">module</span> <span class="type">resp_demux</span> #(
+    <span class="keyword">parameter</span> <span class="type">N_INIT</span> = <span class="number">2</span>,
+    <span class="keyword">parameter</span> <span class="type">DATA_W</span> = <span class="number">32</span>
+)(
+    <span class="comment">// From target</span>
+    <span class="keyword">input</span>  <span class="keyword">logic</span>                <span class="signal">tgt_resp_valid</span>,
+    <span class="keyword">output</span> <span class="keyword">logic</span>                <span class="signal">tgt_resp_ready</span>,
+    <span class="keyword">input</span>  <span class="keyword">logic</span> [<span class="type">DATA_W</span>-<span class="number">1</span>:<span class="number">0</span>]  <span class="signal">tgt_resp_data</span>,
+    <span class="keyword">input</span>  <span class="keyword">logic</span>                <span class="signal">tgt_resp_err</span>,
+    <span class="keyword">input</span>  <span class="keyword">logic</span> [$clog2(<span class="type">N_INIT</span>)-<span class="number">1</span>:<span class="number">0</span>] <span class="signal">tgt_resp_id</span>,
+
+    <span class="comment">// To initiators</span>
+    <span class="keyword">output</span> <span class="keyword">logic</span> [<span class="type">N_INIT</span>-<span class="number">1</span>:<span class="number">0</span>]   <span class="signal">init_resp_valid</span>,
+    <span class="keyword">input</span>  <span class="keyword">logic</span> [<span class="type">N_INIT</span>-<span class="number">1</span>:<span class="number">0</span>]   <span class="signal">init_resp_ready</span>,
+    <span class="keyword">output</span> <span class="keyword">logic</span> [<span class="type">DATA_W</span>-<span class="number">1</span>:<span class="number">0</span>]  <span class="signal">init_resp_data</span>,
+    <span class="keyword">output</span> <span class="keyword">logic</span>                <span class="signal">init_resp_err</span>
+);
+
+    <span class="comment">// Data/error broadcast to all — only valid is selective</span>
+    <span class="keyword">assign</span> <span class="signal">init_resp_data</span> = <span class="signal">tgt_resp_data</span>;
+    <span class="keyword">assign</span> <span class="signal">init_resp_err</span>  = <span class="signal">tgt_resp_err</span>;
+
+    <span class="comment">// Steer valid to the correct initiator</span>
+    <span class="keyword">always_comb</span> <span class="keyword">begin</span>
+        <span class="signal">init_resp_valid</span> = <span class="string">'0</span>;
+        <span class="keyword">if</span> (<span class="signal">tgt_resp_valid</span>)
+            <span class="signal">init_resp_valid</span>[<span class="signal">tgt_resp_id</span>] = <span class="number">1'b1</span>;
+    <span class="keyword">end</span>
+
+    <span class="comment">// Ready from the correct initiator</span>
+    <span class="keyword">assign</span> <span class="signal">tgt_resp_ready</span> = <span class="signal">init_resp_ready</span>[<span class="signal">tgt_resp_id</span>];
+
+<span class="keyword">endmodule</span></code></pre>
+
+<div class="concept-box">
+    <h3>🔑 Transaction IDs Are Essential</h3>
+    <p class="en">The <code>tgt_id</code> field tags each request with its source. When the target responds, this ID routes the response back. Without it, you wouldn't know which initiator to send the response to. In AXI, this is the <strong>AWID/ARID</strong> field.</p>
+    <p class="ko" style="display:none;"><code>tgt_id</code> 필드는 각 요청에 출처를 태그합니다. 타겟이 응답할 때 이 ID가 응답을 올바르게 라우팅합니다. 이것이 없으면 어떤 이니시에이터에게 응답을 보내야 할지 알 수 없습니다. AXI에서는 <strong>AWID/ARID</strong> 필드입니다.</p>
+</div>
+
+<h2>5. Putting It All Together: Simple Bus Interconnect</h2>
+
+<p class="en">Now let's connect everything into a top-level bus interconnect — 2 initiators, 3 targets:</p>
+<p class="ko" style="display:none;">이제 모든 것을 최상위 버스 인터커넥트로 연결합시다 — 2개의 이니시에이터, 3개의 타겟:</p>
+
+<pre><code><span class="keyword">module</span> <span class="type">simple_bus</span> #(
+    <span class="keyword">parameter</span> <span class="type">ADDR_W</span>    = <span class="number">32</span>,
+    <span class="keyword">parameter</span> <span class="type">DATA_W</span>    = <span class="number">32</span>,
+    <span class="keyword">parameter</span> <span class="type">N_INIT</span>    = <span class="number">2</span>,
+    <span class="keyword">parameter</span> <span class="type">N_TARGETS</span> = <span class="number">3</span>
+)(
+    <span class="keyword">input</span>  <span class="keyword">logic</span> <span class="signal">clk</span>, <span class="signal">rst_n</span>,
+
+    <span class="comment">// Initiator interfaces (ready/valid)</span>
+    <span class="keyword">input</span>  <span class="keyword">logic</span> [<span class="type">N_INIT</span>-<span class="number">1</span>:<span class="number">0</span>]  <span class="signal">i_valid</span>,
+    <span class="keyword">output</span> <span class="keyword">logic</span> [<span class="type">N_INIT</span>-<span class="number">1</span>:<span class="number">0</span>]  <span class="signal">i_ready</span>,
+    <span class="keyword">input</span>  <span class="keyword">logic</span> [<span class="type">ADDR_W</span>-<span class="number">1</span>:<span class="number">0</span>] <span class="signal">i_addr</span> [<span class="type">N_INIT</span>],
+    <span class="keyword">input</span>  <span class="keyword">logic</span> [<span class="type">DATA_W</span>-<span class="number">1</span>:<span class="number">0</span>] <span class="signal">i_wdata</span>[<span class="type">N_INIT</span>],
+    <span class="keyword">input</span>  <span class="keyword">logic</span>              <span class="signal">i_wr</span>   [<span class="type">N_INIT</span>],
+
+    <span class="comment">// Target interfaces</span>
+    <span class="keyword">output</span> <span class="keyword">logic</span> [<span class="type">N_TARGETS</span>-<span class="number">1</span>:<span class="number">0</span>] <span class="signal">t_valid</span>,
+    <span class="keyword">input</span>  <span class="keyword">logic</span> [<span class="type">N_TARGETS</span>-<span class="number">1</span>:<span class="number">0</span>] <span class="signal">t_ready</span>,
+    <span class="keyword">output</span> <span class="keyword">logic</span> [<span class="type">ADDR_W</span>-<span class="number">1</span>:<span class="number">0</span>]    <span class="signal">t_addr</span>,
+    <span class="keyword">output</span> <span class="keyword">logic</span> [<span class="type">DATA_W</span>-<span class="number">1</span>:<span class="number">0</span>]    <span class="signal">t_wdata</span>,
+    <span class="keyword">output</span> <span class="keyword">logic</span>                  <span class="signal">t_wr</span>
+);
+
+    <span class="comment">// Internal signals</span>
+    <span class="keyword">logic</span> [<span class="type">N_TARGETS</span>-<span class="number">1</span>:<span class="number">0</span>] <span class="signal">target_sel</span>;
+    <span class="keyword">logic</span>                <span class="signal">addr_error</span>;
+    <span class="keyword">logic</span>                <span class="signal">arb_valid</span>;
+    <span class="keyword">logic</span>                <span class="signal">arb_ready</span>;
+    <span class="keyword">logic</span> [<span class="type">ADDR_W</span>-<span class="number">1</span>:<span class="number">0</span>]  <span class="signal">arb_addr</span>;
+    <span class="keyword">logic</span> [<span class="type">DATA_W</span>-<span class="number">1</span>:<span class="number">0</span>]  <span class="signal">arb_wdata</span>;
+    <span class="keyword">logic</span>                <span class="signal">arb_wr</span>;
+
+    <span class="comment">// Step 1: Arbitrate among initiators</span>
+    <span class="type">req_mux</span> #(.<span class="type">N_INIT</span>(<span class="type">N_INIT</span>)) <span class="signal">u_req_mux</span> (
+        .<span class="signal">clk</span>(<span class="signal">clk</span>), .<span class="signal">rst_n</span>(<span class="signal">rst_n</span>),
+        .<span class="signal">init_valid</span>(<span class="signal">i_valid</span>), .<span class="signal">init_ready</span>(<span class="signal">i_ready</span>),
+        .<span class="signal">init_addr</span>(<span class="signal">i_addr</span>),   .<span class="signal">init_data</span>(<span class="signal">i_wdata</span>),
+        .<span class="signal">init_wr</span>(<span class="signal">i_wr</span>),
+        .<span class="signal">tgt_valid</span>(<span class="signal">arb_valid</span>), .<span class="signal">tgt_ready</span>(<span class="signal">arb_ready</span>),
+        .<span class="signal">tgt_addr</span>(<span class="signal">arb_addr</span>),   .<span class="signal">tgt_data</span>(<span class="signal">arb_wdata</span>),
+        .<span class="signal">tgt_wr</span>(<span class="signal">arb_wr</span>),       .<span class="signal">tgt_id</span>()
+    );
+
+    <span class="comment">// Step 2: Decode address → target select</span>
+    <span class="type">addr_decoder</span> #(.<span class="type">ADDR_W</span>(<span class="type">ADDR_W</span>)) <span class="signal">u_dec</span> (
+        .<span class="signal">addr</span>(<span class="signal">arb_addr</span>), .<span class="signal">valid</span>(<span class="signal">arb_valid</span>),
+        .<span class="signal">target_sel</span>(<span class="signal">target_sel</span>), .<span class="signal">addr_error</span>(<span class="signal">addr_error</span>)
+    );
+
+    <span class="comment">// Step 3: Route to selected target</span>
+    <span class="keyword">assign</span> <span class="signal">t_valid</span> = <span class="signal">target_sel</span> & {<span class="type">N_TARGETS</span>{<span class="signal">arb_valid</span>}};
+    <span class="keyword">assign</span> <span class="signal">t_addr</span>  = <span class="signal">arb_addr</span>;
+    <span class="keyword">assign</span> <span class="signal">t_wdata</span> = <span class="signal">arb_wdata</span>;
+    <span class="keyword">assign</span> <span class="signal">t_wr</span>    = <span class="signal">arb_wr</span>;
+
+    <span class="comment">// Step 4: Collect ready from selected target</span>
+    <span class="keyword">assign</span> <span class="signal">arb_ready</span> = |(<span class="signal">target_sel</span> & <span class="signal">t_ready</span>);
+
+<span class="keyword">endmodule</span></code></pre>
+
+<h2>6. Integration Checklist: Connecting Any Two Modules</h2>
+
+<p class="en">When you need to connect modules in practice, follow this systematic checklist:</p>
+<p class="ko" style="display:none;">실제로 모듈을 연결해야 할 때 이 체계적인 체크리스트를 따르세요:</p>
+
+<table class="comparison-table">
+    <tr>
+        <th>#</th>
+        <th class="en">Step</th>
+        <th class="ko" style="display:none;">단계</th>
+        <th class="en">Details</th>
+        <th class="ko" style="display:none;">세부사항</th>
+    </tr>
+    <tr>
+        <td>1</td>
+        <td class="en">Define the interface</td>
+        <td class="ko" style="display:none;">인터페이스 정의</td>
+        <td class="en">What signals? Ready/valid? Address width? Data width?</td>
+        <td class="ko" style="display:none;">어떤 신호? Ready/valid? 주소 폭? 데이터 폭?</td>
+    </tr>
+    <tr>
+        <td>2</td>
+        <td class="en">Check clock domains</td>
+        <td class="ko" style="display:none;">클럭 도메인 확인</td>
+        <td class="en">Same clock? If not → add synchronizers (Week 4!)</td>
+        <td class="ko" style="display:none;">같은 클럭? 아니면 → 동기화기 추가 (Week 4!)</td>
+    </tr>
+    <tr>
+        <td>3</td>
+        <td class="en">Match data widths</td>
+        <td class="ko" style="display:none;">데이터 폭 맞추기</td>
+        <td class="en">Width converter if widths differ (e.g., 64→32)</td>
+        <td class="ko" style="display:none;">폭이 다르면 변환기 필요 (예: 64→32)</td>
+    </tr>
+    <tr>
+        <td>4</td>
+        <td class="en">Add arbitration if N:1</td>
+        <td class="ko" style="display:none;">N:1이면 중재 추가</td>
+        <td class="en">Round-robin or priority arbiter for shared resources</td>
+        <td class="ko" style="display:none;">공유 리소스에 라운드로빈 또는 우선순위 중재기</td>
+    </tr>
+    <tr>
+        <td>5</td>
+        <td class="en">Buffer if needed</td>
+        <td class="ko" style="display:none;">필요시 버퍼 추가</td>
+        <td class="en">FIFO between producer/consumer at different rates</td>
+        <td class="ko" style="display:none;">다른 속도의 생산자/소비자 사이에 FIFO</td>
+    </tr>
+    <tr>
+        <td>6</td>
+        <td class="en">Pipeline for timing</td>
+        <td class="ko" style="display:none;">타이밍을 위한 파이프라인</td>
+        <td class="en">Add register stages on long paths</td>
+        <td class="ko" style="display:none;">긴 경로에 레지스터 스테이지 추가</td>
+    </tr>
+    <tr>
+        <td>7</td>
+        <td class="en">Handle errors</td>
+        <td class="ko" style="display:none;">에러 처리</td>
+        <td class="en">Unmapped addresses, timeouts, protocol violations</td>
+        <td class="ko" style="display:none;">매핑되지 않은 주소, 타임아웃, 프로토콜 위반</td>
+    </tr>
+</table>
+
+<h2>7. Real-World Example: Register Block Integration</h2>
+
+<p class="en">One of the most common bus integration tasks: connecting a configuration register block to the bus. Let's build a simple one with ready/valid interface:</p>
+<p class="ko" style="display:none;">가장 흔한 버스 통합 작업 중 하나: 구성 레지스터 블록을 버스에 연결하기. Ready/valid 인터페이스로 간단한 것을 만들어 봅시다:</p>
+
+<pre><code><span class="comment">// Simple register block — bus target</span>
+<span class="keyword">module</span> <span class="type">reg_block</span> #(
+    <span class="keyword">parameter</span> <span class="type">ADDR_W</span> = <span class="number">8</span>,
+    <span class="keyword">parameter</span> <span class="type">DATA_W</span> = <span class="number">32</span>
+)(
+    <span class="keyword">input</span>  <span class="keyword">logic</span>               <span class="signal">clk</span>,
+    <span class="keyword">input</span>  <span class="keyword">logic</span>               <span class="signal">rst_n</span>,
+
+    <span class="comment">// Bus interface (target side)</span>
+    <span class="keyword">input</span>  <span class="keyword">logic</span>               <span class="signal">req_valid</span>,
+    <span class="keyword">output</span> <span class="keyword">logic</span>               <span class="signal">req_ready</span>,
+    <span class="keyword">input</span>  <span class="keyword">logic</span> [<span class="type">ADDR_W</span>-<span class="number">1</span>:<span class="number">0</span>] <span class="signal">req_addr</span>,
+    <span class="keyword">input</span>  <span class="keyword">logic</span> [<span class="type">DATA_W</span>-<span class="number">1</span>:<span class="number">0</span>] <span class="signal">req_wdata</span>,
+    <span class="keyword">input</span>  <span class="keyword">logic</span>               <span class="signal">req_wr</span>,
+
+    <span class="comment">// Response</span>
+    <span class="keyword">output</span> <span class="keyword">logic</span>               <span class="signal">resp_valid</span>,
+    <span class="keyword">input</span>  <span class="keyword">logic</span>               <span class="signal">resp_ready</span>,
+    <span class="keyword">output</span> <span class="keyword">logic</span> [<span class="type">DATA_W</span>-<span class="number">1</span>:<span class="number">0</span>] <span class="signal">resp_rdata</span>,
+
+    <span class="comment">// Register outputs (functional)</span>
+    <span class="keyword">output</span> <span class="keyword">logic</span> [<span class="type">DATA_W</span>-<span class="number">1</span>:<span class="number">0</span>] <span class="signal">ctrl_reg</span>,
+    <span class="keyword">output</span> <span class="keyword">logic</span> [<span class="type">DATA_W</span>-<span class="number">1</span>:<span class="number">0</span>] <span class="signal">cfg_reg</span>,
+    <span class="keyword">input</span>  <span class="keyword">logic</span> [<span class="type">DATA_W</span>-<span class="number">1</span>:<span class="number">0</span>] <span class="signal">status_reg</span>  <span class="comment">// Read-only from HW</span>
+);
+
+    <span class="comment">// Register map</span>
+    <span class="keyword">localparam</span> <span class="type">CTRL_ADDR</span>   = <span class="number">8'h00</span>;
+    <span class="keyword">localparam</span> <span class="type">CFG_ADDR</span>    = <span class="number">8'h04</span>;
+    <span class="keyword">localparam</span> <span class="type">STATUS_ADDR</span> = <span class="number">8'h08</span>;
+
+    <span class="comment">// Always ready — single-cycle access</span>
+    <span class="keyword">assign</span> <span class="signal">req_ready</span> = <span class="number">1'b1</span>;
+
+    <span class="comment">// Write logic</span>
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span> <span class="keyword">or</span> <span class="keyword">negedge</span> <span class="signal">rst_n</span>) <span class="keyword">begin</span>
+        <span class="keyword">if</span> (!<span class="signal">rst_n</span>) <span class="keyword">begin</span>
+            <span class="signal">ctrl_reg</span> <= <span class="string">'0</span>;
+            <span class="signal">cfg_reg</span>  <= <span class="string">'0</span>;
+        <span class="keyword">end</span> <span class="keyword">else</span> <span class="keyword">if</span> (<span class="signal">req_valid</span> & <span class="signal">req_ready</span> & <span class="signal">req_wr</span>) <span class="keyword">begin</span>
+            <span class="keyword">case</span> (<span class="signal">req_addr</span>)
+                <span class="type">CTRL_ADDR</span>: <span class="signal">ctrl_reg</span> <= <span class="signal">req_wdata</span>;
+                <span class="type">CFG_ADDR</span>:  <span class="signal">cfg_reg</span>  <= <span class="signal">req_wdata</span>;
+                <span class="comment">// STATUS_ADDR is read-only — write ignored</span>
+                <span class="keyword">default</span>:   ; <span class="comment">// Ignore writes to unknown addresses</span>
+            <span class="keyword">endcase</span>
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+
+    <span class="comment">// Read logic — 1-cycle response</span>
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span> <span class="keyword">or</span> <span class="keyword">negedge</span> <span class="signal">rst_n</span>) <span class="keyword">begin</span>
+        <span class="keyword">if</span> (!<span class="signal">rst_n</span>) <span class="keyword">begin</span>
+            <span class="signal">resp_valid</span> <= <span class="number">1'b0</span>;
+            <span class="signal">resp_rdata</span> <= <span class="string">'0</span>;
+        <span class="keyword">end</span> <span class="keyword">else</span> <span class="keyword">begin</span>
+            <span class="signal">resp_valid</span> <= <span class="signal">req_valid</span> & <span class="signal">req_ready</span> & !<span class="signal">req_wr</span>;
+            <span class="keyword">case</span> (<span class="signal">req_addr</span>)
+                <span class="type">CTRL_ADDR</span>:   <span class="signal">resp_rdata</span> <= <span class="signal">ctrl_reg</span>;
+                <span class="type">CFG_ADDR</span>:    <span class="signal">resp_rdata</span> <= <span class="signal">cfg_reg</span>;
+                <span class="type">STATUS_ADDR</span>: <span class="signal">resp_rdata</span> <= <span class="signal">status_reg</span>;
+                <span class="keyword">default</span>:     <span class="signal">resp_rdata</span> <= <span class="number">32'hDEAD_BEEF</span>;
+            <span class="keyword">endcase</span>
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+
+<span class="keyword">endmodule</span></code></pre>
+
+<div class="warning-box">
+    <h3>⚠️ Common Integration Mistakes</h3>
+    <ul>
+        <li class="en"><strong>Forgetting to connect ready/valid correctly</strong> — A dangling <code>ready</code> (not driven) keeps the initiator stalled forever. Always check both directions.</li>
+        <li class="ko" style="display:none;"><strong>Ready/valid를 올바르게 연결하지 않음</strong> — 연결되지 않은 <code>ready</code>는 이니시에이터를 영원히 정지시킵니다. 항상 양방향을 확인하세요.</li>
+        <li class="en"><strong>Missing default in address decode</strong> — Unmapped address accesses hang the bus. Always have a default path.</li>
+        <li class="ko" style="display:none;"><strong>주소 디코드에서 default 누락</strong> — 매핑되지 않은 주소 접근이 버스를 멈춥니다. 항상 기본 경로를 만드세요.</li>
+        <li class="en"><strong>ID width mismatch</strong> — If you have 4 initiators, you need at least 2-bit IDs. Off-by-one errors here cause wrong responses.</li>
+        <li class="ko" style="display:none;"><strong>ID 폭 불일치</strong> — 4개의 이니시에이터가 있으면 최소 2비트 ID가 필요합니다. 여기서의 오프바이원 에러는 잘못된 응답을 유발합니다.</li>
+        <li class="en"><strong>Combinational loops</strong> — If ready depends on valid which depends on ready... deadlock! Break loops with registers.</li>
+        <li class="ko" style="display:none;"><strong>조합 논리 루프</strong> — ready가 valid에 의존하고 valid가 ready에 의존하면... 교착상태! 레지스터로 루프를 끊으세요.</li>
+    </ul>
+</div>
+
+<h2>8. Week 6 Recap: Bus Protocol Thinking</h2>
+
+<p class="en">Let's connect all five days of this week into a complete picture:</p>
+<p class="ko" style="display:none;">이번 주 5일간의 내용을 완전한 그림으로 연결해 봅시다:</p>
+
+<div class="concept-box">
+    <h3>🔗 Week 6 — How It All Fits Together</h3>
+    <table class="comparison-table">
+        <tr>
+            <th>Day</th>
+            <th class="en">Topic</th>
+            <th class="ko" style="display:none;">주제</th>
+            <th class="en">Role in Integration</th>
+            <th class="ko" style="display:none;">통합에서의 역할</th>
+        </tr>
+        <tr>
+            <td>26</td>
+            <td class="en">Ready/Valid Deep Dive</td>
+            <td class="ko" style="display:none;">Ready/Valid 심화</td>
+            <td class="en">The handshake protocol every module uses</td>
+            <td class="ko" style="display:none;">모든 모듈이 사용하는 핸드셰이크 프로토콜</td>
+        </tr>
+        <tr>
+            <td>27</td>
+            <td class="en">AXI Basics</td>
+            <td class="ko" style="display:none;">AXI 기초</td>
+            <td class="en">The industry-standard bus protocol</td>
+            <td class="ko" style="display:none;">업계 표준 버스 프로토콜</td>
+        </tr>
+        <tr>
+            <td>28</td>
+            <td class="en">Arbitration</td>
+            <td class="ko" style="display:none;">중재</td>
+            <td class="en">Resolving conflicts at shared resources</td>
+            <td class="ko" style="display:none;">공유 리소스에서의 충돌 해결</td>
+        </tr>
+        <tr>
+            <td>29</td>
+            <td class="en">Flow Control</td>
+            <td class="ko" style="display:none;">흐름 제어</td>
+            <td class="en">Managing data rate between fast/slow modules</td>
+            <td class="ko" style="display:none;">빠른/느린 모듈 간의 데이터 속도 관리</td>
+        </tr>
+        <tr>
+            <td>30</td>
+            <td class="en">Bus Integration</td>
+            <td class="ko" style="display:none;">버스 통합</td>
+            <td class="en">Wiring it all together into a working system!</td>
+            <td class="ko" style="display:none;">모든 것을 작동하는 시스템으로 연결!</td>
+        </tr>
+    </table>
+</div>
+
+<div class="tip-box">
+    <h3>🎯 What's Next: Week 7 — Synthesis Thinking</h3>
+    <p class="en">Next week we shift from <em>what</em> we design to <em>how it becomes hardware</em>. You'll learn what the synthesis tool actually does with your RTL code, what hardware gets inferred from common patterns, and how to think about area vs. performance tradeoffs. This is where the code meets silicon!</p>
+    <p class="ko" style="display:none;">다음 주에는 우리가 <em>무엇을</em> 설계하는지에서 <em>어떻게 하드웨어가 되는지</em>로 전환합니다. 합성 도구가 실제로 RTL 코드로 무엇을 하는지, 일반적인 패턴에서 어떤 하드웨어가 추론되는지, 면적 대 성능 트레이드오프를 어떻게 생각하는지 배울 것입니다. 코드가 실리콘을 만나는 지점입니다!</p>
+</div>
+
+<div class="nav-links">
+    <a href="day-30-quiz.html">📝 Take the Quiz</a>
+    <a href="day-30-practice.html">💻 Practice Exercise</a>
+    <a href="day-29-lesson.html">← Day 29</a>
+</div>
+
+<script>
+let isKorean = false;
+function toggleLang() {
+    isKorean = !isKorean;
+    document.querySelectorAll('.en').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'none' : 'revert', 'important');
+    });
+    document.querySelectorAll('.ko').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'revert' : 'none', 'important');
+    });
+    document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+}
+</script>
+</body>
+</html>

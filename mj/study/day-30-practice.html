@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 30 Practice: Bus Integration | Digital Design Study</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    background: linear-gradient(135deg, #fefae0 0%, #faedcd 100%);
+    color: #3d405b;
+    line-height: 1.8;
+    padding: 24px;
+    max-width: 920px;
+    margin: 0 auto;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+h1 {
+    color: #5d4037;
+    border-bottom: 3px solid #c4a77d;
+    padding-bottom: 12px;
+    margin-bottom: 24px;
+    font-size: 2em;
+}
+h2 {
+    color: #588157;
+    border-bottom: 2px solid #a3b18a;
+    padding-bottom: 8px;
+    margin: 32px 0 16px;
+}
+h3 { color: #5d4037; margin: 20px 0 12px; }
+p { margin: 12px 0; }
+ul, ol { margin: 12px 0 12px 24px; }
+li { margin: 6px 0; }
+pre {
+    background: #2d3436;
+    padding: 24px;
+    border-radius: 12px;
+    margin: 24px 0;
+    border: 3px solid #a3b18a;
+    overflow-x: auto;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+    font-size: 15px;
+    line-height: 1.6;
+    color: #f8f8f2;
+}
+code {
+    background: #e9f5db;
+    color: #3d405b;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+}
+pre code { background: none; color: #f8f8f2; padding: 0; }
+.keyword { color: #ff79c6; font-weight: 600; }
+.type { color: #8be9fd; }
+.signal { color: #50fa7b; }
+.number { color: #ffb86c; }
+.comment { color: #6272a4; font-style: italic; }
+.string { color: #f1fa8c; }
+.concept-box {
+    background: #fff8f0;
+    border: 2px solid #c4a77d;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    color: #3d405b;
+}
+.concept-box h3 { color: #5d4037; margin-bottom: 12px; }
+.warning-box {
+    background: #fff8f0;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    border-left: 4px solid #ef4444;
+    color: #3d405b;
+}
+.warning-box h3 { color: #c53030; margin-bottom: 12px; }
+.tip-box {
+    background: #fff8f0;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    border-left: 4px solid #588157;
+    color: #3d405b;
+}
+.hint-box {
+    background: #fff8f0;
+    border-radius: 8px;
+    padding: 15px;
+    margin: 15px 0;
+    border-left: 4px solid #5d4037;
+    color: #3d405b;
+}
+.lang-toggle {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    background: #588157;
+    border: none;
+    border-radius: 24px;
+    padding: 10px 20px;
+    cursor: pointer;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    z-index: 1000;
+}
+.lang-toggle:hover { background: #3a5a40; }
+.ko { display: none; }
+.nav-links {
+    display: flex;
+    gap: 12px;
+    margin: 24px 0;
+    flex-wrap: wrap;
+}
+.nav-links a {
+    background: linear-gradient(135deg, #588157, #3a5a40);
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14px;
+}
+.nav-links a:hover { opacity: 0.9; }
+.reveal-btn {
+    background: linear-gradient(135deg, #588157, #3a5a40);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    margin: 12px 0;
+}
+.reveal-btn:hover { opacity: 0.9; }
+.solution { display: none; }
+.comparison-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+.comparison-table th {
+    background: #588157;
+    color: white;
+    padding: 12px;
+    text-align: left;
+}
+.comparison-table td {
+    background: #fff;
+    border: 1px solid #c4a77d;
+    padding: 12px;
+    color: #3d405b;
+}
+.comparison-table tr:nth-child(even) td { background: #fff8f0; }
+@media (max-width: 768px) {
+    body { padding: 16px; }
+    h1 { font-size: 1.8em; }
+    pre { font-size: 14px; padding: 16px; }
+    .lang-toggle { padding: 8px 16px; font-size: 13px; }
+}
+</style>
+</head>
+<body>
+<button class="lang-toggle" onclick="toggleLang()">한국어</button>
+
+<h1>💻 Day 30 Practice: Bus Integration</h1>
+
+<div class="nav-links">
+    <a href="day-30-lesson.html">📖 Lesson</a>
+    <a href="day-30-quiz.html">📝 Quiz</a>
+</div>
+
+<div class="concept-box">
+    <h3>🎯 Today's Goal</h3>
+    <p class="en">Build a complete mini bus system: 2 initiators, address decoder, arbiter, and 2 register-block targets. This ties together everything from Week 6 into a working integration.</p>
+    <p class="ko" style="display:none;">완전한 미니 버스 시스템 구축: 2개의 이니시에이터, 주소 디코더, 중재기, 2개의 레지스터 블록 타겟. Week 6의 모든 것을 작동하는 통합으로 묶습니다.</p>
+    <p><strong>🔗 <a href="https://www.edaplayground.com/x/VPbS" target="_blank" style="color: #588157;">Open in EDA Playground →</a></strong></p>
+</div>
+
+<h2>Exercise 1: Address Decoder with Error Handling</h2>
+
+<p class="en">Write an address decoder that maps two address ranges and flags errors for unmapped addresses:</p>
+<p class="ko" style="display:none;">두 개의 주소 범위를 매핑하고 매핑되지 않은 주소에 대한 에러를 플래그하는 주소 디코더를 작성하세요:</p>
+
+<table class="comparison-table">
+    <tr><th>Address Range</th><th>Target</th></tr>
+    <tr><td><code>0x0000_0000</code> – <code>0x0FFF_FFFF</code></td><td>Target 0 (Registers A)</td></tr>
+    <tr><td><code>0x4000_0000</code> – <code>0x4FFF_FFFF</code></td><td>Target 1 (Registers B)</td></tr>
+    <tr><td>Everything else</td><td>Error</td></tr>
+</table>
+
+<pre><code><span class="comment">// Exercise 1: Fill in the address decoder</span>
+<span class="keyword">module</span> <span class="type">addr_decoder</span> (
+    <span class="keyword">input</span>  <span class="keyword">logic</span> [<span class="number">31</span>:<span class="number">0</span>] <span class="signal">addr</span>,
+    <span class="keyword">input</span>  <span class="keyword">logic</span>        <span class="signal">valid</span>,
+    <span class="keyword">output</span> <span class="keyword">logic</span> [<span class="number">1</span>:<span class="number">0</span>]  <span class="signal">target_sel</span>,
+    <span class="keyword">output</span> <span class="keyword">logic</span>        <span class="signal">addr_error</span>
+);
+
+    <span class="keyword">always_comb</span> <span class="keyword">begin</span>
+        <span class="signal">target_sel</span> = <span class="number">2'b00</span>;
+        <span class="signal">addr_error</span> = <span class="number">1'b0</span>;
+
+        <span class="keyword">if</span> (<span class="signal">valid</span>) <span class="keyword">begin</span>
+            <span class="comment">// TODO: Decode addr[31:28] to select target</span>
+            <span class="comment">// 4'h0 → target_sel[0]</span>
+            <span class="comment">// 4'h4 → target_sel[1]</span>
+            <span class="comment">// default → addr_error</span>
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+
+<span class="keyword">endmodule</span></code></pre>
+
+<div class="hint-box">
+    <strong>💡 Hint:</strong>
+    <span class="en">Use <code>casez</code> on <code>addr[31:28]</code>. Remember that each target_sel bit is one-hot — only one should be high at a time.</span>
+    <span class="ko" style="display:none;"><code>addr[31:28]</code>에 <code>casez</code>를 사용하세요. 각 target_sel 비트는 원핫입니다 — 한 번에 하나만 high여야 합니다.</span>
+</div>
+
+<button class="reveal-btn" onclick="document.getElementById('sol1').style.display='block'">Show Solution</button>
+<div class="solution" id="sol1">
+<pre><code><span class="keyword">module</span> <span class="type">addr_decoder</span> (
+    <span class="keyword">input</span>  <span class="keyword">logic</span> [<span class="number">31</span>:<span class="number">0</span>] <span class="signal">addr</span>,
+    <span class="keyword">input</span>  <span class="keyword">logic</span>        <span class="signal">valid</span>,
+    <span class="keyword">output</span> <span class="keyword">logic</span> [<span class="number">1</span>:<span class="number">0</span>]  <span class="signal">target_sel</span>,
+    <span class="keyword">output</span> <span class="keyword">logic</span>        <span class="signal">addr_error</span>
+);
+
+    <span class="keyword">always_comb</span> <span class="keyword">begin</span>
+        <span class="signal">target_sel</span> = <span class="number">2'b00</span>;
+        <span class="signal">addr_error</span> = <span class="number">1'b0</span>;
+
+        <span class="keyword">if</span> (<span class="signal">valid</span>) <span class="keyword">begin</span>
+            <span class="keyword">casez</span> (<span class="signal">addr</span>[<span class="number">31</span>:<span class="number">28</span>])
+                <span class="number">4'h0</span>:    <span class="signal">target_sel</span>[<span class="number">0</span>] = <span class="number">1'b1</span>;  <span class="comment">// 0x0xxx → Target 0</span>
+                <span class="number">4'h4</span>:    <span class="signal">target_sel</span>[<span class="number">1</span>] = <span class="number">1'b1</span>;  <span class="comment">// 0x4xxx → Target 1</span>
+                <span class="keyword">default</span>: <span class="signal">addr_error</span>    = <span class="number">1'b1</span>;  <span class="comment">// Unmapped!</span>
+            <span class="keyword">endcase</span>
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+
+<span class="keyword">endmodule</span></code></pre>
+</div>
+
+<h2>Exercise 2: Simple 2-to-1 Request Arbiter + Mux</h2>
+
+<p class="en">Build a simple priority arbiter with a mux that selects between two initiators. Initiator 0 has higher priority, but if only initiator 1 is requesting, it gets access.</p>
+<p class="ko" style="display:none;">두 이니시에이터 사이에서 선택하는 간단한 우선순위 중재기와 멀티플렉서를 구축하세요. 이니시에이터 0이 더 높은 우선순위를 가지지만, 이니시에이터 1만 요청하면 접근 권한을 얻습니다.</p>
+
+<pre><code><span class="comment">// Exercise 2: 2-to-1 priority arbiter + mux</span>
+<span class="keyword">module</span> <span class="type">arb_mux</span> (
+    <span class="comment">// Initiator 0</span>
+    <span class="keyword">input</span>  <span class="keyword">logic</span>        <span class="signal">i0_valid</span>,
+    <span class="keyword">output</span> <span class="keyword">logic</span>        <span class="signal">i0_ready</span>,
+    <span class="keyword">input</span>  <span class="keyword">logic</span> [<span class="number">31</span>:<span class="number">0</span>] <span class="signal">i0_addr</span>,
+    <span class="keyword">input</span>  <span class="keyword">logic</span> [<span class="number">31</span>:<span class="number">0</span>] <span class="signal">i0_data</span>,
+
+    <span class="comment">// Initiator 1</span>
+    <span class="keyword">input</span>  <span class="keyword">logic</span>        <span class="signal">i1_valid</span>,
+    <span class="keyword">output</span> <span class="keyword">logic</span>        <span class="signal">i1_ready</span>,
+    <span class="keyword">input</span>  <span class="keyword">logic</span> [<span class="number">31</span>:<span class="number">0</span>] <span class="signal">i1_addr</span>,
+    <span class="keyword">input</span>  <span class="keyword">logic</span> [<span class="number">31</span>:<span class="number">0</span>] <span class="signal">i1_data</span>,
+
+    <span class="comment">// To target</span>
+    <span class="keyword">output</span> <span class="keyword">logic</span>        <span class="signal">t_valid</span>,
+    <span class="keyword">input</span>  <span class="keyword">logic</span>        <span class="signal">t_ready</span>,
+    <span class="keyword">output</span> <span class="keyword">logic</span> [<span class="number">31</span>:<span class="number">0</span>] <span class="signal">t_addr</span>,
+    <span class="keyword">output</span> <span class="keyword">logic</span> [<span class="number">31</span>:<span class="number">0</span>] <span class="signal">t_data</span>,
+    <span class="keyword">output</span> <span class="keyword">logic</span>        <span class="signal">t_id</span>       <span class="comment">// 0 = init0, 1 = init1</span>
+);
+
+    <span class="keyword">always_comb</span> <span class="keyword">begin</span>
+        <span class="comment">// TODO: Priority arbiter — i0 has priority</span>
+        <span class="comment">// If i0_valid → select i0</span>
+        <span class="comment">// Else if i1_valid → select i1</span>
+        <span class="comment">// Route addr, data, valid to target</span>
+        <span class="comment">// Route ready back to only the winning initiator</span>
+    <span class="keyword">end</span>
+
+<span class="keyword">endmodule</span></code></pre>
+
+<button class="reveal-btn" onclick="document.getElementById('sol2').style.display='block'">Show Solution</button>
+<div class="solution" id="sol2">
+<pre><code><span class="keyword">module</span> <span class="type">arb_mux</span> (
+    <span class="keyword">input</span>  <span class="keyword">logic</span>        <span class="signal">i0_valid</span>,
+    <span class="keyword">output</span> <span class="keyword">logic</span>        <span class="signal">i0_ready</span>,
+    <span class="keyword">input</span>  <span class="keyword">logic</span> [<span class="number">31</span>:<span class="number">0</span>] <span class="signal">i0_addr</span>,
+    <span class="keyword">input</span>  <span class="keyword">logic</span> [<span class="number">31</span>:<span class="number">0</span>] <span class="signal">i0_data</span>,
+    <span class="keyword">input</span>  <span class="keyword">logic</span>        <span class="signal">i1_valid</span>,
+    <span class="keyword">output</span> <span class="keyword">logic</span>        <span class="signal">i1_ready</span>,
+    <span class="keyword">input</span>  <span class="keyword">logic</span> [<span class="number">31</span>:<span class="number">0</span>] <span class="signal">i1_addr</span>,
+    <span class="keyword">input</span>  <span class="keyword">logic</span> [<span class="number">31</span>:<span class="number">0</span>] <span class="signal">i1_data</span>,
+    <span class="keyword">output</span> <span class="keyword">logic</span>        <span class="signal">t_valid</span>,
+    <span class="keyword">input</span>  <span class="keyword">logic</span>        <span class="signal">t_ready</span>,
+    <span class="keyword">output</span> <span class="keyword">logic</span> [<span class="number">31</span>:<span class="number">0</span>] <span class="signal">t_addr</span>,
+    <span class="keyword">output</span> <span class="keyword">logic</span> [<span class="number">31</span>:<span class="number">0</span>] <span class="signal">t_data</span>,
+    <span class="keyword">output</span> <span class="keyword">logic</span>        <span class="signal">t_id</span>
+);
+
+    <span class="keyword">always_comb</span> <span class="keyword">begin</span>
+        <span class="comment">// Default: nothing granted</span>
+        <span class="signal">i0_ready</span> = <span class="number">1'b0</span>;
+        <span class="signal">i1_ready</span> = <span class="number">1'b0</span>;
+        <span class="signal">t_valid</span>  = <span class="number">1'b0</span>;
+        <span class="signal">t_addr</span>   = <span class="number">32'h0</span>;
+        <span class="signal">t_data</span>   = <span class="number">32'h0</span>;
+        <span class="signal">t_id</span>     = <span class="number">1'b0</span>;
+
+        <span class="keyword">if</span> (<span class="signal">i0_valid</span>) <span class="keyword">begin</span>
+            <span class="comment">// Initiator 0 wins (higher priority)</span>
+            <span class="signal">t_valid</span>  = <span class="number">1'b1</span>;
+            <span class="signal">t_addr</span>   = <span class="signal">i0_addr</span>;
+            <span class="signal">t_data</span>   = <span class="signal">i0_data</span>;
+            <span class="signal">t_id</span>     = <span class="number">1'b0</span>;
+            <span class="signal">i0_ready</span> = <span class="signal">t_ready</span>;  <span class="comment">// Pass back ready</span>
+        <span class="keyword">end</span> <span class="keyword">else</span> <span class="keyword">if</span> (<span class="signal">i1_valid</span>) <span class="keyword">begin</span>
+            <span class="comment">// Initiator 1 gets access when 0 is idle</span>
+            <span class="signal">t_valid</span>  = <span class="number">1'b1</span>;
+            <span class="signal">t_addr</span>   = <span class="signal">i1_addr</span>;
+            <span class="signal">t_data</span>   = <span class="signal">i1_data</span>;
+            <span class="signal">t_id</span>     = <span class="number">1'b1</span>;
+            <span class="signal">i1_ready</span> = <span class="signal">t_ready</span>;  <span class="comment">// Pass back ready</span>
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+
+<span class="keyword">endmodule</span></code></pre>
+</div>
+
+<h2>Exercise 3: Complete Mini Bus System</h2>
+
+<p class="en">Now the big one! Wire together the address decoder, arbiter/mux, and two register-block targets into a complete system. Fill in the <code>simple_bus_top</code> module that instantiates and connects everything:</p>
+<p class="ko" style="display:none;">이제 큰 것입니다! 주소 디코더, 중재기/멀티플렉서, 두 개의 레지스터 블록 타겟을 완전한 시스템으로 연결하세요. 모든 것을 인스턴스화하고 연결하는 <code>simple_bus_top</code> 모듈을 완성하세요:</p>
+
+<pre><code><span class="comment">// Exercise 3: Wire up the complete mini bus</span>
+<span class="keyword">module</span> <span class="type">simple_bus_top</span> (
+    <span class="keyword">input</span>  <span class="keyword">logic</span>        <span class="signal">clk</span>, <span class="signal">rst_n</span>,
+
+    <span class="comment">// Initiator 0 interface</span>
+    <span class="keyword">input</span>  <span class="keyword">logic</span>        <span class="signal">i0_valid</span>,
+    <span class="keyword">output</span> <span class="keyword">logic</span>        <span class="signal">i0_ready</span>,
+    <span class="keyword">input</span>  <span class="keyword">logic</span> [<span class="number">31</span>:<span class="number">0</span>] <span class="signal">i0_addr</span>,
+    <span class="keyword">input</span>  <span class="keyword">logic</span> [<span class="number">31</span>:<span class="number">0</span>] <span class="signal">i0_wdata</span>,
+    <span class="keyword">input</span>  <span class="keyword">logic</span>        <span class="signal">i0_wr</span>,
+
+    <span class="comment">// Initiator 1 interface</span>
+    <span class="keyword">input</span>  <span class="keyword">logic</span>        <span class="signal">i1_valid</span>,
+    <span class="keyword">output</span> <span class="keyword">logic</span>        <span class="signal">i1_ready</span>,
+    <span class="keyword">input</span>  <span class="keyword">logic</span> [<span class="number">31</span>:<span class="number">0</span>] <span class="signal">i1_addr</span>,
+    <span class="keyword">input</span>  <span class="keyword">logic</span> [<span class="number">31</span>:<span class="number">0</span>] <span class="signal">i1_wdata</span>,
+    <span class="keyword">input</span>  <span class="keyword">logic</span>        <span class="signal">i1_wr</span>,
+
+    <span class="comment">// Register outputs from targets</span>
+    <span class="keyword">output</span> <span class="keyword">logic</span> [<span class="number">31</span>:<span class="number">0</span>] <span class="signal">tgt0_ctrl</span>, <span class="signal">tgt0_cfg</span>,
+    <span class="keyword">output</span> <span class="keyword">logic</span> [<span class="number">31</span>:<span class="number">0</span>] <span class="signal">tgt1_ctrl</span>, <span class="signal">tgt1_cfg</span>
+);
+
+    <span class="comment">// TODO: Declare internal wires</span>
+    <span class="comment">// arb → decoder → target mux signals</span>
+
+    <span class="comment">// TODO: Instantiate arb_mux (Exercise 2)</span>
+
+    <span class="comment">// TODO: Instantiate addr_decoder (Exercise 1)</span>
+
+    <span class="comment">// TODO: Instantiate two reg_block targets</span>
+    <span class="comment">// Route arb output to selected target</span>
+    <span class="comment">// Collect ready from selected target</span>
+
+<span class="keyword">endmodule</span></code></pre>
+
+<div class="hint-box">
+    <strong>💡 Hints:</strong>
+    <ul>
+        <li class="en">The arbiter mux output goes to BOTH targets (broadcast), but only the selected target's <code>valid</code> is asserted (using <code>target_sel</code>).</li>
+        <li class="ko" style="display:none;">중재기 멀티플렉서 출력은 두 타겟 모두에 가지만(브로드캐스트), 선택된 타겟의 <code>valid</code>만 assert됩니다(<code>target_sel</code> 사용).</li>
+        <li class="en">Collect <code>ready</code> back from the selected target: <code>arb_ready = (target_sel[0] & t0_ready) | (target_sel[1] & t1_ready)</code></li>
+        <li class="ko" style="display:none;">선택된 타겟에서 <code>ready</code>를 수집: <code>arb_ready = (target_sel[0] & t0_ready) | (target_sel[1] & t1_ready)</code></li>
+        <li class="en">Don't forget to handle the <code>addr_error</code> case — you can generate ready immediately with an error response.</li>
+        <li class="ko" style="display:none;"><code>addr_error</code> 케이스를 잊지 마세요 — 에러 응답과 함께 즉시 ready를 생성할 수 있습니다.</li>
+    </ul>
+</div>
+
+<button class="reveal-btn" onclick="document.getElementById('sol3').style.display='block'">Show Solution</button>
+<div class="solution" id="sol3">
+<pre><code><span class="keyword">module</span> <span class="type">simple_bus_top</span> (
+    <span class="keyword">input</span>  <span class="keyword">logic</span>        <span class="signal">clk</span>, <span class="signal">rst_n</span>,
+    <span class="keyword">input</span>  <span class="keyword">logic</span>        <span class="signal">i0_valid</span>,
+    <span class="keyword">output</span> <span class="keyword">logic</span>        <span class="signal">i0_ready</span>,
+    <span class="keyword">input</span>  <span class="keyword">logic</span> [<span class="number">31</span>:<span class="number">0</span>] <span class="signal">i0_addr</span>,
+    <span class="keyword">input</span>  <span class="keyword">logic</span> [<span class="number">31</span>:<span class="number">0</span>] <span class="signal">i0_wdata</span>,
+    <span class="keyword">input</span>  <span class="keyword">logic</span>        <span class="signal">i0_wr</span>,
+    <span class="keyword">input</span>  <span class="keyword">logic</span>        <span class="signal">i1_valid</span>,
+    <span class="keyword">output</span> <span class="keyword">logic</span>        <span class="signal">i1_ready</span>,
+    <span class="keyword">input</span>  <span class="keyword">logic</span> [<span class="number">31</span>:<span class="number">0</span>] <span class="signal">i1_addr</span>,
+    <span class="keyword">input</span>  <span class="keyword">logic</span> [<span class="number">31</span>:<span class="number">0</span>] <span class="signal">i1_wdata</span>,
+    <span class="keyword">input</span>  <span class="keyword">logic</span>        <span class="signal">i1_wr</span>,
+    <span class="keyword">output</span> <span class="keyword">logic</span> [<span class="number">31</span>:<span class="number">0</span>] <span class="signal">tgt0_ctrl</span>, <span class="signal">tgt0_cfg</span>,
+    <span class="keyword">output</span> <span class="keyword">logic</span> [<span class="number">31</span>:<span class="number">0</span>] <span class="signal">tgt1_ctrl</span>, <span class="signal">tgt1_cfg</span>
+);
+
+    <span class="comment">// Internal wires: arbiter → targets</span>
+    <span class="keyword">logic</span>        <span class="signal">arb_valid</span>, <span class="signal">arb_ready</span>;
+    <span class="keyword">logic</span> [<span class="number">31</span>:<span class="number">0</span>] <span class="signal">arb_addr</span>, <span class="signal">arb_data</span>;
+    <span class="keyword">logic</span>        <span class="signal">arb_id</span>;
+
+    <span class="comment">// Decoder outputs</span>
+    <span class="keyword">logic</span> [<span class="number">1</span>:<span class="number">0</span>]  <span class="signal">target_sel</span>;
+    <span class="keyword">logic</span>        <span class="signal">addr_error</span>;
+
+    <span class="comment">// Target ready signals</span>
+    <span class="keyword">logic</span>        <span class="signal">t0_ready</span>, <span class="signal">t1_ready</span>;
+
+    <span class="comment">// 1. Arbitrate between initiators</span>
+    <span class="type">arb_mux</span> <span class="signal">u_arb</span> (
+        .<span class="signal">i0_valid</span>(<span class="signal">i0_valid</span>), .<span class="signal">i0_ready</span>(<span class="signal">i0_ready</span>),
+        .<span class="signal">i0_addr</span>(<span class="signal">i0_addr</span>),   .<span class="signal">i0_data</span>(<span class="signal">i0_wdata</span>),
+        .<span class="signal">i1_valid</span>(<span class="signal">i1_valid</span>), .<span class="signal">i1_ready</span>(<span class="signal">i1_ready</span>),
+        .<span class="signal">i1_addr</span>(<span class="signal">i1_addr</span>),   .<span class="signal">i1_data</span>(<span class="signal">i1_wdata</span>),
+        .<span class="signal">t_valid</span>(<span class="signal">arb_valid</span>), .<span class="signal">t_ready</span>(<span class="signal">arb_ready</span>),
+        .<span class="signal">t_addr</span>(<span class="signal">arb_addr</span>),   .<span class="signal">t_data</span>(<span class="signal">arb_data</span>),
+        .<span class="signal">t_id</span>(<span class="signal">arb_id</span>)
+    );
+
+    <span class="comment">// 2. Decode address</span>
+    <span class="type">addr_decoder</span> <span class="signal">u_dec</span> (
+        .<span class="signal">addr</span>(<span class="signal">arb_addr</span>),
+        .<span class="signal">valid</span>(<span class="signal">arb_valid</span>),
+        .<span class="signal">target_sel</span>(<span class="signal">target_sel</span>),
+        .<span class="signal">addr_error</span>(<span class="signal">addr_error</span>)
+    );
+
+    <span class="comment">// 3. Target 0 — register block</span>
+    <span class="type">reg_block</span> <span class="signal">u_tgt0</span> (
+        .<span class="signal">clk</span>(<span class="signal">clk</span>), .<span class="signal">rst_n</span>(<span class="signal">rst_n</span>),
+        .<span class="signal">req_valid</span>(<span class="signal">arb_valid</span> & <span class="signal">target_sel</span>[<span class="number">0</span>]),
+        .<span class="signal">req_ready</span>(<span class="signal">t0_ready</span>),
+        .<span class="signal">req_addr</span>(<span class="signal">arb_addr</span>[<span class="number">7</span>:<span class="number">0</span>]),
+        .<span class="signal">req_wdata</span>(<span class="signal">arb_data</span>),
+        .<span class="signal">req_wr</span>(<span class="signal">i0_wr</span>),  <span class="comment">// Simplified: use wr from arb</span>
+        .<span class="signal">resp_valid</span>(), .<span class="signal">resp_ready</span>(<span class="number">1'b1</span>),
+        .<span class="signal">resp_rdata</span>(),
+        .<span class="signal">ctrl_reg</span>(<span class="signal">tgt0_ctrl</span>), .<span class="signal">cfg_reg</span>(<span class="signal">tgt0_cfg</span>),
+        .<span class="signal">status_reg</span>(<span class="number">32'hAAAA_BBBB</span>)
+    );
+
+    <span class="comment">// 4. Target 1 — register block</span>
+    <span class="type">reg_block</span> <span class="signal">u_tgt1</span> (
+        .<span class="signal">clk</span>(<span class="signal">clk</span>), .<span class="signal">rst_n</span>(<span class="signal">rst_n</span>),
+        .<span class="signal">req_valid</span>(<span class="signal">arb_valid</span> & <span class="signal">target_sel</span>[<span class="number">1</span>]),
+        .<span class="signal">req_ready</span>(<span class="signal">t1_ready</span>),
+        .<span class="signal">req_addr</span>(<span class="signal">arb_addr</span>[<span class="number">7</span>:<span class="number">0</span>]),
+        .<span class="signal">req_wdata</span>(<span class="signal">arb_data</span>),
+        .<span class="signal">req_wr</span>(<span class="signal">i1_wr</span>),
+        .<span class="signal">resp_valid</span>(), .<span class="signal">resp_ready</span>(<span class="number">1'b1</span>),
+        .<span class="signal">resp_rdata</span>(),
+        .<span class="signal">ctrl_reg</span>(<span class="signal">tgt1_ctrl</span>), .<span class="signal">cfg_reg</span>(<span class="signal">tgt1_cfg</span>),
+        .<span class="signal">status_reg</span>(<span class="number">32'hCCCC_DDDD</span>)
+    );
+
+    <span class="comment">// 5. Collect ready from selected target (or error)</span>
+    <span class="keyword">assign</span> <span class="signal">arb_ready</span> = (<span class="signal">target_sel</span>[<span class="number">0</span>] & <span class="signal">t0_ready</span>)
+                     | (<span class="signal">target_sel</span>[<span class="number">1</span>] & <span class="signal">t1_ready</span>)
+                     | <span class="signal">addr_error</span>;  <span class="comment">// Error → ack immediately</span>
+
+<span class="keyword">endmodule</span></code></pre>
+</div>
+
+<h2>🧪 Testbench: Verify Your Bus</h2>
+
+<p class="en">Use this testbench to check your integration works correctly:</p>
+<p class="ko" style="display:none;">이 테스트벤치를 사용하여 통합이 올바르게 작동하는지 확인하세요:</p>
+
+<pre><code><span class="keyword">module</span> <span class="type">tb_simple_bus</span>;
+    <span class="keyword">logic</span> <span class="signal">clk</span>, <span class="signal">rst_n</span>;
+    <span class="keyword">logic</span> <span class="signal">i0_valid</span>, <span class="signal">i0_ready</span>, <span class="signal">i0_wr</span>;
+    <span class="keyword">logic</span> [<span class="number">31</span>:<span class="number">0</span>] <span class="signal">i0_addr</span>, <span class="signal">i0_wdata</span>;
+    <span class="keyword">logic</span> <span class="signal">i1_valid</span>, <span class="signal">i1_ready</span>, <span class="signal">i1_wr</span>;
+    <span class="keyword">logic</span> [<span class="number">31</span>:<span class="number">0</span>] <span class="signal">i1_addr</span>, <span class="signal">i1_wdata</span>;
+    <span class="keyword">logic</span> [<span class="number">31</span>:<span class="number">0</span>] <span class="signal">tgt0_ctrl</span>, <span class="signal">tgt0_cfg</span>;
+    <span class="keyword">logic</span> [<span class="number">31</span>:<span class="number">0</span>] <span class="signal">tgt1_ctrl</span>, <span class="signal">tgt1_cfg</span>;
+
+    <span class="type">simple_bus_top</span> <span class="signal">dut</span> (.*);
+
+    <span class="keyword">always</span> #<span class="number">5</span> <span class="signal">clk</span> = ~<span class="signal">clk</span>;
+
+    <span class="keyword">initial</span> <span class="keyword">begin</span>
+        <span class="signal">clk</span> = <span class="number">0</span>; <span class="signal">rst_n</span> = <span class="number">0</span>;
+        <span class="signal">i0_valid</span> = <span class="number">0</span>; <span class="signal">i1_valid</span> = <span class="number">0</span>;
+        #<span class="number">20</span> <span class="signal">rst_n</span> = <span class="number">1</span>;
+
+        <span class="comment">// Test 1: Init0 writes to Target 0, CTRL register</span>
+        @(<span class="keyword">posedge</span> <span class="signal">clk</span>);
+        <span class="signal">i0_valid</span> = <span class="number">1</span>; <span class="signal">i0_addr</span> = <span class="number">32'h0000_0000</span>;
+        <span class="signal">i0_wdata</span> = <span class="number">32'hCAFE_BABE</span>; <span class="signal">i0_wr</span> = <span class="number">1</span>;
+        @(<span class="keyword">posedge</span> <span class="signal">clk</span>);
+        <span class="signal">i0_valid</span> = <span class="number">0</span>;
+        #<span class="number">10</span>;
+        $display(<span class="string">"Test 1 — tgt0_ctrl = %h (expect CAFE_BABE)"</span>, <span class="signal">tgt0_ctrl</span>);
+
+        <span class="comment">// Test 2: Init1 writes to Target 1, CFG register</span>
+        @(<span class="keyword">posedge</span> <span class="signal">clk</span>);
+        <span class="signal">i1_valid</span> = <span class="number">1</span>; <span class="signal">i1_addr</span> = <span class="number">32'h4000_0004</span>;
+        <span class="signal">i1_wdata</span> = <span class="number">32'hDEAD_C0DE</span>; <span class="signal">i1_wr</span> = <span class="number">1</span>;
+        @(<span class="keyword">posedge</span> <span class="signal">clk</span>);
+        <span class="signal">i1_valid</span> = <span class="number">0</span>;
+        #<span class="number">10</span>;
+        $display(<span class="string">"Test 2 — tgt1_cfg = %h (expect DEAD_C0DE)"</span>, <span class="signal">tgt1_cfg</span>);
+
+        <span class="comment">// Test 3: Both request simultaneously (i0 wins)</span>
+        @(<span class="keyword">posedge</span> <span class="signal">clk</span>);
+        <span class="signal">i0_valid</span> = <span class="number">1</span>; <span class="signal">i0_addr</span> = <span class="number">32'h0000_0004</span>;
+        <span class="signal">i0_wdata</span> = <span class="number">32'h1111_2222</span>; <span class="signal">i0_wr</span> = <span class="number">1</span>;
+        <span class="signal">i1_valid</span> = <span class="number">1</span>; <span class="signal">i1_addr</span> = <span class="number">32'h4000_0000</span>;
+        <span class="signal">i1_wdata</span> = <span class="number">32'h3333_4444</span>; <span class="signal">i1_wr</span> = <span class="number">1</span>;
+        @(<span class="keyword">posedge</span> <span class="signal">clk</span>);
+        $display(<span class="string">"Test 3 — i0_ready=%b i1_ready=%b (expect 1, 0)"</span>,
+                 <span class="signal">i0_ready</span>, <span class="signal">i1_ready</span>);
+        <span class="signal">i0_valid</span> = <span class="number">0</span>; <span class="signal">i1_valid</span> = <span class="number">0</span>;
+
+        #<span class="number">50</span>;
+        $display(<span class="string">"✅ All tests complete!"</span>);
+        $finish;
+    <span class="keyword">end</span>
+
+<span class="keyword">endmodule</span></code></pre>
+
+<div class="concept-box">
+    <h3>🎉 Week 6 Complete!</h3>
+    <p class="en">Congratulations! You've completed the Bus Protocol Thinking week. You now understand:</p>
+    <p class="ko" style="display:none;">축하합니다! 버스 프로토콜 사고 주간을 완료했습니다. 이제 이해하고 있는 것:</p>
+    <ul>
+        <li class="en">✅ Ready/valid handshake protocol (the foundation)</li>
+        <li class="ko" style="display:none;">✅ Ready/valid 핸드셰이크 프로토콜 (기초)</li>
+        <li class="en">✅ AXI bus architecture (industry standard)</li>
+        <li class="ko" style="display:none;">✅ AXI 버스 아키텍처 (업계 표준)</li>
+        <li class="en">✅ Arbitration strategies (priority, round-robin)</li>
+        <li class="ko" style="display:none;">✅ 중재 전략 (우선순위, 라운드로빈)</li>
+        <li class="en">✅ Flow control (buffering, credits, backpressure)</li>
+        <li class="ko" style="display:none;">✅ 흐름 제어 (버퍼링, 크레딧, 백프레셔)</li>
+        <li class="en">✅ Bus integration (putting it all together!)</li>
+        <li class="ko" style="display:none;">✅ 버스 통합 (모든 것을 합치기!)</li>
+    </ul>
+    <p class="en"><strong>Next week:</strong> Synthesis Thinking — where your RTL code meets real hardware! 🔧</p>
+    <p class="ko" style="display:none;"><strong>다음 주:</strong> 합성 사고 — RTL 코드가 실제 하드웨어를 만나는 곳! 🔧</p>
+</div>
+
+<div class="nav-links">
+    <a href="day-30-lesson.html">📖 Review Lesson</a>
+    <a href="day-30-quiz.html">📝 Quiz</a>
+</div>
+
+<script>
+let isKorean = false;
+function toggleLang() {
+    isKorean = !isKorean;
+    document.querySelectorAll('.en').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'none' : 'revert', 'important');
+    });
+    document.querySelectorAll('.ko').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'revert' : 'none', 'important');
+    });
+    document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+}
+</script>
+</body>
+</html>

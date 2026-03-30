@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 30 Quiz: Bus Integration | Digital Design Study</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    background: linear-gradient(135deg, #fefae0 0%, #faedcd 100%);
+    color: #3d405b;
+    line-height: 1.8;
+    padding: 24px;
+    max-width: 920px;
+    margin: 0 auto;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+h1 {
+    color: #5d4037;
+    border-bottom: 3px solid #c4a77d;
+    padding-bottom: 12px;
+    margin-bottom: 24px;
+    font-size: 2em;
+}
+h2 {
+    color: #588157;
+    border-bottom: 2px solid #a3b18a;
+    padding-bottom: 8px;
+    margin: 32px 0 16px;
+}
+h3 { color: #5d4037; margin: 20px 0 12px; }
+p { margin: 12px 0; }
+code {
+    background: #e9f5db;
+    color: #3d405b;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+}
+.lang-toggle {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    background: #588157;
+    border: none;
+    border-radius: 24px;
+    padding: 10px 20px;
+    cursor: pointer;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    z-index: 1000;
+}
+.lang-toggle:hover { background: #3a5a40; }
+.ko { display: none; }
+.nav-links {
+    display: flex;
+    gap: 12px;
+    margin: 24px 0;
+    flex-wrap: wrap;
+}
+.nav-links a {
+    background: linear-gradient(135deg, #588157, #3a5a40);
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14px;
+}
+.nav-links a:hover { opacity: 0.9; }
+.question {
+    background: #fff8f0;
+    border: 2px solid #c4a77d;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+}
+.question h3 { color: #5d4037; margin-bottom: 12px; }
+.options { list-style: none; padding: 0; margin: 12px 0; }
+.options li {
+    padding: 10px 16px;
+    margin: 6px 0;
+    border-radius: 8px;
+    cursor: pointer;
+    border: 2px solid #a3b18a;
+    background: #fff;
+    transition: all 0.2s;
+}
+.options li:hover { background: #e9f5db; }
+.options li.correct {
+    background: #d4edda;
+    border-color: #10b981;
+    color: #155724;
+}
+.options li.wrong {
+    background: #f8d7da;
+    border-color: #ef4444;
+    color: #721c24;
+}
+.options li.disabled { pointer-events: none; }
+.explanation {
+    display: none;
+    background: #fff;
+    border-left: 4px solid #588157;
+    padding: 15px;
+    margin-top: 12px;
+    border-radius: 8px;
+    color: #3d405b;
+}
+.score-box {
+    background: #fff8f0;
+    border: 3px solid #588157;
+    border-radius: 12px;
+    padding: 24px;
+    margin: 24px 0;
+    text-align: center;
+}
+.score-box h2 { border: none; margin: 0 0 12px; }
+#scoreDisplay { font-size: 2em; color: #588157; font-weight: 700; }
+pre {
+    background: #2d3436;
+    padding: 24px;
+    border-radius: 12px;
+    margin: 16px 0;
+    border: 3px solid #a3b18a;
+    overflow-x: auto;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+    font-size: 15px;
+    line-height: 1.6;
+    color: #f8f8f2;
+}
+pre code { background: none; color: #f8f8f2; padding: 0; }
+.keyword { color: #ff79c6; font-weight: 600; }
+.type { color: #8be9fd; }
+.signal { color: #50fa7b; }
+.number { color: #ffb86c; }
+.comment { color: #6272a4; font-style: italic; }
+@media (max-width: 768px) {
+    body { padding: 16px; }
+    h1 { font-size: 1.8em; }
+    pre { font-size: 14px; padding: 16px; }
+    .lang-toggle { padding: 8px 16px; font-size: 13px; }
+}
+</style>
+</head>
+<body>
+<button class="lang-toggle" onclick="toggleLang()">한국어</button>
+
+<h1>📝 Day 30 Quiz: Bus Integration</h1>
+
+<div class="nav-links">
+    <a href="day-30-lesson.html">📖 Lesson</a>
+    <a href="day-30-practice.html">💻 Practice</a>
+</div>
+
+<div class="score-box">
+    <h2>Score</h2>
+    <div id="scoreDisplay">0 / 12</div>
+</div>
+
+<!-- Q1 -->
+<div class="question" id="q1">
+    <h3>Q1. What is the primary role of an address decoder in a bus interconnect?</h3>
+    <p class="ko" style="display:none;">버스 인터커넥트에서 주소 디코더의 주요 역할은?</p>
+    <ul class="options">
+        <li onclick="check(this,'q1',false)">A) Arbitrate between multiple initiators</li>
+        <li onclick="check(this,'q1',true)">B) Route requests to the correct target based on address</li>
+        <li onclick="check(this,'q1',false)">C) Buffer data between fast and slow modules</li>
+        <li onclick="check(this,'q1',false)">D) Convert between different data widths</li>
+    </ul>
+    <div class="explanation" id="q1-exp">
+        <p class="en">✅ The address decoder looks at the address field and generates a select signal for the appropriate target. Arbitration is handled by the arbiter, buffering by FIFOs, and width conversion by separate adapters.</p>
+        <p class="ko" style="display:none;">✅ 주소 디코더는 주소 필드를 보고 적절한 타겟에 대한 선택 신호를 생성합니다. 중재는 중재기가, 버퍼링은 FIFO가, 폭 변환은 별도의 어댑터가 처리합니다.</p>
+    </div>
+</div>
+
+<!-- Q2 -->
+<div class="question" id="q2">
+    <h3>Q2. What happens if an address decoder has no default case for unmapped addresses?</h3>
+    <p class="ko" style="display:none;">주소 디코더에 매핑되지 않은 주소에 대한 default case가 없으면?</p>
+    <ul class="options">
+        <li onclick="check(this,'q2',false)">A) The request is silently discarded</li>
+        <li onclick="check(this,'q2',true)">B) The bus may hang because no target asserts ready</li>
+        <li onclick="check(this,'q2',false)">C) The request goes to target 0 by default</li>
+        <li onclick="check(this,'q2',false)">D) A synthesis error occurs</li>
+    </ul>
+    <div class="explanation" id="q2-exp">
+        <p class="en">✅ If no target is selected, no target will assert <code>ready</code>, and the initiator will wait forever — the bus hangs. Always include a default path that generates an error response.</p>
+        <p class="ko" style="display:none;">✅ 타겟이 선택되지 않으면 어떤 타겟도 <code>ready</code>를 assert하지 않아 이니시에이터가 영원히 대기합니다 — 버스가 멈춥니다. 항상 에러 응답을 생성하는 기본 경로를 포함하세요.</p>
+    </div>
+</div>
+
+<!-- Q3 -->
+<div class="question" id="q3">
+    <h3>Q3. In the request multiplexer, when should the round-robin arbiter advance to the next initiator?</h3>
+    <p class="ko" style="display:none;">요청 멀티플렉서에서 라운드로빈 중재기는 언제 다음 이니시에이터로 전진해야 하나요?</p>
+    <ul class="options">
+        <li onclick="check(this,'q3',false)">A) Every clock cycle</li>
+        <li onclick="check(this,'q3',false)">B) When a new request arrives</li>
+        <li onclick="check(this,'q3',true)">C) When a handshake completes (valid & ready)</li>
+        <li onclick="check(this,'q3',false)">D) After a fixed timeout</li>
+    </ul>
+    <div class="explanation" id="q3-exp">
+        <p class="en">✅ The arbiter should advance on successful handshake (<code>tgt_valid & tgt_ready</code>). This ensures the current transaction completes before switching to another initiator, preventing partial transfers.</p>
+        <p class="ko" style="display:none;">✅ 중재기는 성공적인 핸드셰이크(<code>tgt_valid & tgt_ready</code>)에서 전진해야 합니다. 이렇게 하면 다른 이니시에이터로 전환하기 전에 현재 트랜잭션이 완료되어 부분 전송을 방지합니다.</p>
+    </div>
+</div>
+
+<!-- Q4 -->
+<div class="question" id="q4">
+    <h3>Q4. What is the purpose of a transaction ID (e.g., <code>tgt_id</code>) in bus integration?</h3>
+    <p class="ko" style="display:none;">버스 통합에서 트랜잭션 ID(예: <code>tgt_id</code>)의 목적은?</p>
+    <ul class="options">
+        <li onclick="check(this,'q4',false)">A) To prioritize certain requests over others</li>
+        <li onclick="check(this,'q4',false)">B) To count the total number of transactions</li>
+        <li onclick="check(this,'q4',true)">C) To route responses back to the correct initiator</li>
+        <li onclick="check(this,'q4',false)">D) To encrypt the data payload</li>
+    </ul>
+    <div class="explanation" id="q4-exp">
+        <p class="en">✅ Transaction IDs tag each request with its source. When the target responds, the ID is used to demux the response back to the originating initiator. In AXI, these are the AWID/ARID fields.</p>
+        <p class="ko" style="display:none;">✅ 트랜잭션 ID는 각 요청에 출처를 태그합니다. 타겟이 응답할 때 ID를 사용하여 응답을 원래 이니시에이터로 역다중화합니다. AXI에서는 AWID/ARID 필드입니다.</p>
+    </div>
+</div>
+
+<!-- Q5 -->
+<div class="question" id="q5">
+    <h3>Q5. In the response demux, why can data be "broadcast" to all initiators?</h3>
+    <p class="ko" style="display:none;">응답 역다중화기에서 데이터를 모든 이니시에이터에 "브로드캐스트"할 수 있는 이유는?</p>
+    <ul class="options">
+        <li onclick="check(this,'q5',false)">A) All initiators need to see every response for caching</li>
+        <li onclick="check(this,'q5',true)">B) Only the initiator with valid asserted will latch the data</li>
+        <li onclick="check(this,'q5',false)">C) Broadcasting reduces wire count</li>
+        <li onclick="check(this,'q5',false)">D) It improves bus throughput</li>
+    </ul>
+    <div class="explanation" id="q5-exp">
+        <p class="en">✅ The data bus goes to all initiators, but <code>resp_valid</code> is only asserted for the correct one. Since initiators only latch data when their valid is high, the broadcast is safe and simplifies wiring.</p>
+        <p class="ko" style="display:none;">✅ 데이터 버스는 모든 이니시에이터에 연결되지만, <code>resp_valid</code>는 올바른 것에 대해서만 assert됩니다. 이니시에이터는 valid가 high일 때만 데이터를 래치하므로 브로드캐스트는 안전하고 배선을 단순화합니다.</p>
+    </div>
+</div>
+
+<!-- Q6 -->
+<div class="question" id="q6">
+    <h3>Q6. When connecting two modules in different clock domains, what must you add?</h3>
+    <p class="ko" style="display:none;">서로 다른 클럭 도메인의 두 모듈을 연결할 때 무엇을 추가해야 하나요?</p>
+    <ul class="options">
+        <li onclick="check(this,'q6',false)">A) A priority arbiter</li>
+        <li onclick="check(this,'q6',false)">B) A width converter</li>
+        <li onclick="check(this,'q6',true)">C) Clock domain crossing synchronizers (e.g., async FIFO)</li>
+        <li onclick="check(this,'q6',false)">D) Pipeline registers only</li>
+    </ul>
+    <div class="explanation" id="q6-exp">
+        <p class="en">✅ Different clock domains require CDC synchronizers to prevent metastability. For multi-bit data, an async FIFO (with Gray code pointers) is the standard solution — exactly what we studied in Week 4!</p>
+        <p class="ko" style="display:none;">✅ 서로 다른 클럭 도메인은 메타스태빌리티를 방지하기 위해 CDC 동기화기가 필요합니다. 멀티비트 데이터의 경우 비동기 FIFO(그레이 코드 포인터 포함)가 표준 솔루션입니다 — Week 4에서 배운 것입니다!</p>
+    </div>
+</div>
+
+<!-- Q7 -->
+<div class="question" id="q7">
+    <h3>Q7. In the register block example, what value is returned when reading an unknown address?</h3>
+    <p class="ko" style="display:none;">레지스터 블록 예제에서 알 수 없는 주소를 읽을 때 어떤 값이 반환되나요?</p>
+    <ul class="options">
+        <li onclick="check(this,'q7',false)">A) All zeros (0x00000000)</li>
+        <li onclick="check(this,'q7',true)">B) 0xDEAD_BEEF</li>
+        <li onclick="check(this,'q7',false)">C) All ones (0xFFFFFFFF)</li>
+        <li onclick="check(this,'q7',false)">D) The last written value</li>
+    </ul>
+    <div class="explanation" id="q7-exp">
+        <p class="en">✅ The default case returns <code>32'hDEAD_BEEF</code>, a recognizable debug pattern. This makes it easy to spot when software accidentally reads from an unimplemented register address.</p>
+        <p class="ko" style="display:none;">✅ 기본 케이스는 인식하기 쉬운 디버그 패턴인 <code>32'hDEAD_BEEF</code>를 반환합니다. 소프트웨어가 실수로 구현되지 않은 레지스터 주소에서 읽을 때 쉽게 발견할 수 있습니다.</p>
+    </div>
+</div>
+
+<!-- Q8 -->
+<div class="question" id="q8">
+    <h3>Q8. Why does the register block set <code>req_ready = 1'b1</code> always?</h3>
+    <p class="ko" style="display:none;">레지스터 블록이 <code>req_ready = 1'b1</code>을 항상 설정하는 이유는?</p>
+    <ul class="options">
+        <li onclick="check(this,'q8',false)">A) To prevent bus errors</li>
+        <li onclick="check(this,'q8',true)">B) Because register access is single-cycle and never needs to stall</li>
+        <li onclick="check(this,'q8',false)">C) To maximize arbitration fairness</li>
+        <li onclick="check(this,'q8',false)">D) Because targets cannot deassert ready</li>
+    </ul>
+    <div class="explanation" id="q8-exp">
+        <p class="en">✅ Simple register blocks can handle a request every clock cycle — there's no latency or processing delay. So <code>ready</code> is always high. More complex targets (like memory controllers) may deassert ready when busy.</p>
+        <p class="ko" style="display:none;">✅ 간단한 레지스터 블록은 매 클럭 사이클마다 요청을 처리할 수 있어 지연이나 처리 딜레이가 없습니다. 따라서 <code>ready</code>는 항상 high입니다. 메모리 컨트롤러와 같은 복잡한 타겟은 바쁠 때 ready를 deassert할 수 있습니다.</p>
+    </div>
+</div>
+
+<!-- Q9 -->
+<div class="question" id="q9">
+    <h3>Q9. What causes a combinational loop in bus integration, and how do you fix it?</h3>
+    <p class="ko" style="display:none;">버스 통합에서 조합 논리 루프의 원인과 해결 방법은?</p>
+    <ul class="options">
+        <li onclick="check(this,'q9',false)">A) Using too many pipeline stages; remove some</li>
+        <li onclick="check(this,'q9',true)">B) Ready depends on valid which depends on ready; break with registers</li>
+        <li onclick="check(this,'q9',false)">C) Having more initiators than targets; add more targets</li>
+        <li onclick="check(this,'q9',false)">D) Using round-robin instead of priority arbitration</li>
+    </ul>
+    <div class="explanation" id="q9-exp">
+        <p class="en">✅ A classic integration bug: module A's valid depends on module B's ready, but module B's ready depends on A's valid. This creates a combinational loop that causes simulation oscillation or synthesis failure. Break it by registering one of the signals.</p>
+        <p class="ko" style="display:none;">✅ 고전적인 통합 버그: 모듈 A의 valid가 모듈 B의 ready에 의존하고, B의 ready가 A의 valid에 의존합니다. 이것은 시뮬레이션 발진이나 합성 실패를 유발하는 조합 논리 루프를 생성합니다. 신호 중 하나를 레지스터로 끊어 해결합니다.</p>
+    </div>
+</div>
+
+<!-- Q10 -->
+<div class="question" id="q10">
+    <h3>Q10. In AXI, what is the equivalent of the <code>addr_error</code> signal from the address decoder?</h3>
+    <p class="ko" style="display:none;">AXI에서 주소 디코더의 <code>addr_error</code> 신호에 해당하는 것은?</p>
+    <ul class="options">
+        <li onclick="check(this,'q10',false)">A) BRESP = OKAY</li>
+        <li onclick="check(this,'q10',true)">B) BRESP/RRESP = DECERR</li>
+        <li onclick="check(this,'q10',false)">C) ARREADY = 0</li>
+        <li onclick="check(this,'q10',false)">D) AWVALID = 0</li>
+    </ul>
+    <div class="explanation" id="q10-exp">
+        <p class="en">✅ In AXI, when a request goes to an unmapped address, the interconnect generates a DECERR (decode error) response. This is returned on BRESP (for writes) or RRESP (for reads).</p>
+        <p class="ko" style="display:none;">✅ AXI에서 요청이 매핑되지 않은 주소로 갈 때 인터커넥트는 DECERR(디코드 에러) 응답을 생성합니다. 이것은 BRESP(쓰기용) 또는 RRESP(읽기용)에서 반환됩니다.</p>
+    </div>
+</div>
+
+<!-- Q11 -->
+<div class="question" id="q11">
+    <h3>Q11. If you have 4 initiators, what is the minimum width of the transaction ID?</h3>
+    <p class="ko" style="display:none;">이니시에이터가 4개일 때 트랜잭션 ID의 최소 폭은?</p>
+    <ul class="options">
+        <li onclick="check(this,'q11',false)">A) 1 bit</li>
+        <li onclick="check(this,'q11',true)">B) 2 bits</li>
+        <li onclick="check(this,'q11',false)">C) 3 bits</li>
+        <li onclick="check(this,'q11',false)">D) 4 bits</li>
+    </ul>
+    <div class="explanation" id="q11-exp">
+        <p class="en">✅ You need $clog2(4) = 2 bits to uniquely identify 4 initiators (values 0-3). Using fewer bits means you can't distinguish all sources; using more wastes silicon.</p>
+        <p class="ko" style="display:none;">✅ 4개의 이니시에이터를 고유하게 식별하려면 $clog2(4) = 2비트가 필요합니다 (값 0-3). 더 적은 비트를 사용하면 모든 출처를 구분할 수 없고, 더 많으면 실리콘을 낭비합니다.</p>
+    </div>
+</div>
+
+<!-- Q12 -->
+<div class="question" id="q12">
+    <h3>Q12. Which Week 6 concept would you apply when a fast CPU writes to a slow peripheral?</h3>
+    <p class="ko" style="display:none;">빠른 CPU가 느린 주변장치에 쓸 때 어떤 Week 6 개념을 적용하시겠습니까?</p>
+    <ul class="options">
+        <li onclick="check(this,'q12',false)">A) Address decoding (Day 30)</li>
+        <li onclick="check(this,'q12',false)">B) Round-robin arbitration (Day 28)</li>
+        <li onclick="check(this,'q12',true)">C) Flow control with buffering (Day 29)</li>
+        <li onclick="check(this,'q12',false)">D) AXI channel ordering (Day 27)</li>
+    </ul>
+    <div class="explanation" id="q12-exp">
+        <p class="en">✅ When a fast producer (CPU) writes to a slow consumer (peripheral), you need flow control — typically a FIFO buffer that absorbs bursts and lets the peripheral drain at its own pace. This is exactly the Day 29 material!</p>
+        <p class="ko" style="display:none;">✅ 빠른 생산자(CPU)가 느린 소비자(주변장치)에 쓸 때 흐름 제어가 필요합니다 — 일반적으로 버스트를 흡수하고 주변장치가 자체 속도로 소비할 수 있게 하는 FIFO 버퍼입니다. 이것이 바로 Day 29 자료입니다!</p>
+    </div>
+</div>
+
+<div class="score-box" style="margin-top: 32px;">
+    <h2>Final Score</h2>
+    <div id="finalScore">Answer all questions to see your score!</div>
+</div>
+
+<div class="nav-links">
+    <a href="day-30-lesson.html">📖 Review Lesson</a>
+    <a href="day-30-practice.html">💻 Practice</a>
+</div>
+
+<script>
+let score = 0;
+let answered = 0;
+const total = 12;
+let isKorean = false;
+
+function check(el, qId, correct) {
+    const options = el.parentElement.querySelectorAll('li');
+    if (options[0].classList.contains('disabled')) return;
+    
+    options.forEach(li => {
+        li.classList.add('disabled');
+        if (li === el && !correct) li.classList.add('wrong');
+    });
+    
+    // Highlight correct answer
+    options.forEach(li => {
+        if (li.onclick && li.onclick.toString().includes('true')) li.classList.add('correct');
+    });
+    // Simpler: mark correct based on the clicked one
+    if (correct) el.classList.add('correct');
+    
+    if (correct) score++;
+    answered++;
+    
+    document.getElementById(qId + '-exp').style.display = 'block';
+    document.getElementById('scoreDisplay').textContent = score + ' / ' + total;
+    
+    if (answered === total) {
+        let msg = score === total ? '🏆 Perfect! You\'ve mastered bus integration!' :
+                  score >= 10 ? '🌟 Excellent! Almost perfect!' :
+                  score >= 8 ? '👍 Great job! Solid understanding!' :
+                  score >= 6 ? '📚 Good effort! Review the lesson for the ones you missed.' :
+                  '💪 Keep studying! Re-read the lesson and try again.';
+        document.getElementById('finalScore').textContent = score + ' / ' + total + ' — ' + msg;
+    }
+}
+
+function toggleLang() {
+    isKorean = !isKorean;
+    document.querySelectorAll('.en').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'none' : 'revert', 'important');
+    });
+    document.querySelectorAll('.ko').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'revert' : 'none', 'important');
+    });
+    document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+}
+</script>
+</body>
+</html>
