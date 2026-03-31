@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fridgenie — Admin Dashboard Guide + Launch Playbook</title>
+<style>
+:root {
+  --bg: #faf9f6;
+  --card: #ffffff;
+  --border: #e8e4df;
+  --text: #2d3436;
+  --muted: #636e72;
+  --accent: #2d6a4f;
+  --accent-light: #d8f3dc;
+  --green: #2d6a4f;
+  --orange: #e17055;
+  --blue: #0984e3;
+  --purple: #6c5ce7;
+  --pink: #fd79a8;
+  --cream: #f5f0e8;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'Nunito', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.7;
+}
+.container { max-width: 860px; margin: 0 auto; padding: 20px 16px; }
+
+.lang-toggle {
+  position: fixed; top: 12px; right: 12px; z-index: 1000;
+  background: var(--accent); color: #fff; border: none; padding: 8px 16px;
+  border-radius: 20px; font-weight: 700; cursor: pointer; font-size: 13px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+.ko { display: none; }
+.ko.show { display: inline !important; }
+.en.hide { display: none !important; }
+
+.hero {
+  text-align: center; padding: 40px 20px 30px;
+  background: linear-gradient(135deg, #d8f3dc 0%, #f5f0e8 100%);
+  border-radius: 16px; margin-bottom: 24px;
+  border: 1px solid var(--border);
+}
+.hero h1 { font-family: 'Fredoka', sans-serif; font-size: 28px; color: var(--green); }
+.hero .subtitle { color: var(--muted); font-size: 14px; margin-top: 4px; }
+
+.toc {
+  background: var(--cream); border: 1px solid var(--border); border-radius: 12px;
+  padding: 20px 24px; margin-bottom: 24px;
+}
+.toc h3 { font-size: 14px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
+.toc a { color: var(--accent); text-decoration: none; display: block; padding: 4px 0; font-size: 14px; }
+.toc a:hover { text-decoration: underline; }
+.toc .indent { padding-left: 16px; }
+
+.section {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 20px;
+}
+.section h2 { font-size: 20px; color: var(--green); margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+.section h3 { font-size: 16px; color: var(--text); margin: 18px 0 8px; }
+.section h4 { font-size: 14px; color: var(--accent); margin: 14px 0 6px; }
+p { margin: 8px 0; font-size: 15px; }
+ul, ol { padding-left: 20px; margin: 8px 0; }
+li { margin: 4px 0; font-size: 14px; }
+
+.badge {
+  display: inline-block; padding: 2px 10px; border-radius: 12px;
+  font-size: 11px; font-weight: 700;
+}
+.badge-green { background: var(--accent-light); color: var(--green); }
+.badge-orange { background: #ffeaa7; color: #d35400; }
+.badge-blue { background: #dfe6e9; color: var(--blue); }
+.badge-purple { background: #e8daef; color: var(--purple); }
+.badge-pink { background: #fce4ec; color: #c0392b; }
+
+.step-box {
+  background: var(--cream); border-left: 3px solid var(--accent);
+  padding: 14px 16px; border-radius: 0 8px 8px 0; margin: 10px 0;
+  font-size: 14px;
+}
+.step-box code { background: #e8e4df; padding: 2px 6px; border-radius: 4px; font-size: 13px; }
+
+.callout {
+  background: rgba(45,106,79,0.06); border-left: 3px solid var(--accent);
+  padding: 14px 16px; border-radius: 0 8px 8px 0; margin: 12px 0; font-size: 14px;
+}
+.callout-orange { background: rgba(225,112,85,0.06); border-left-color: var(--orange); }
+
+table {
+  width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 13px;
+}
+th, td { padding: 8px 10px; text-align: left; border-bottom: 1px solid var(--border); }
+th { color: var(--muted); font-weight: 700; font-size: 11px; text-transform: uppercase; }
+
+.timeline {
+  border-left: 3px solid var(--accent);
+  margin: 16px 0 16px 12px;
+  padding-left: 20px;
+}
+.timeline .week {
+  position: relative; margin-bottom: 20px;
+}
+.timeline .week::before {
+  content: ''; position: absolute; left: -26px; top: 4px;
+  width: 12px; height: 12px; background: var(--accent);
+  border-radius: 50%; border: 2px solid var(--bg);
+}
+.timeline .week h4 { color: var(--accent); margin: 0 0 4px; font-size: 14px; }
+.timeline .week p, .timeline .week li { font-size: 13px; }
+
+.channel-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 10px; margin: 12px 0;
+}
+.channel-card {
+  background: var(--cream); border: 1px solid var(--border);
+  border-radius: 10px; padding: 14px; font-size: 13px;
+}
+.channel-card .name { font-weight: 700; font-size: 14px; margin-bottom: 4px; }
+
+.checklist { list-style: none; padding: 0; }
+.checklist li { padding: 4px 0 4px 24px; position: relative; font-size: 13px; }
+.checklist li::before { content: '☐'; position: absolute; left: 0; color: var(--accent); font-size: 14px; }
+
+.footer { text-align: center; padding: 30px 0; color: var(--muted); font-size: 12px; }
+
+@media (max-width: 600px) {
+  .container { padding: 12px 10px; }
+  .hero h1 { font-size: 22px; }
+  .channel-grid { grid-template-columns: 1fr; }
+}
+</style>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<button class="lang-toggle" onclick="toggleLang()">한국어</button>
+
+<div class="container">
+  <div class="hero">
+    <h1>🧞 Fridgenie — <span class="en">Launch Playbook</span><span class="ko">런칭 플레이북</span></h1>
+    <div class="subtitle">
+      <span class="en">Admin Dashboard Setup + Complete Marketing & Launch Strategy</span>
+      <span class="ko">어드민 대시보드 설정 + 완전한 마케팅 & 런칭 전략</span>
+    </div>
+    <div style="color: var(--accent); font-size: 12px; margin-top: 6px;">March 31, 2026 · Totoro 🌳</div>
+  </div>
+
+  <!-- TABLE OF CONTENTS -->
+  <div class="toc">
+    <h3><span class="en">Contents</span><span class="ko">목차</span></h3>
+    <a href="#admin"><span class="en">Part 1: Admin Dashboard Setup Guide</span><span class="ko">파트 1: 어드민 대시보드 설정 가이드</span></a>
+    <a href="#pre-launch" class="indent"><span class="en">Part 2: Pre-Launch Checklist</span><span class="ko">파트 2: 런칭 전 체크리스트</span></a>
+    <a href="#channels"><span class="en">Part 3: Marketing Channels — Every Platform & Community</span><span class="ko">파트 3: 마케팅 채널 — 모든 플랫폼 & 커뮤니티</span></a>
+    <a href="#timeline" class="indent"><span class="en">Part 4: 8-Week Launch Timeline</span><span class="ko">파트 4: 8주 런칭 타임라인</span></a>
+    <a href="#producthunt"><span class="en">Part 5: Product Hunt Launch Day Playbook</span><span class="ko">파트 5: 프로덕트 헌트 런칭 데이 플레이북</span></a>
+    <a href="#aso"><span class="en">Part 6: App Store Optimization (ASO)</span><span class="ko">파트 6: 앱 스토어 최적화 (ASO)</span></a>
+    <a href="#content"><span class="en">Part 7: Content & Social Media Strategy</span><span class="ko">파트 7: 콘텐츠 & 소셜 미디어 전략</span></a>
+    <a href="#accounts"><span class="en">Part 8: Accounts to Create NOW</span><span class="ko">파트 8: 지금 만들어야 할 계정들</span></a>
+    <a href="#budget"><span class="en">Part 9: Budget & Monetization Timeline</span><span class="ko">파트 9: 예산 & 수익화 타임라인</span></a>
+  </div>
+
+  <!-- PART 1: ADMIN DASHBOARD -->
+  <div class="section" id="admin">
+    <h2>📊 <span class="en">Part 1: Admin Dashboard Setup</span><span class="ko">파트 1: 어드민 대시보드 설정</span></h2>
+
+    <div class="callout">
+      <strong><span class="en">Strategy:</span><span class="ko">전략:</span></strong>
+      <span class="en">Use <strong>Supabase Dashboard</strong> (already have it) for user/data analytics + <strong>Firebase Analytics</strong> (free tier) for in-app behavior tracking. No rush — low user count now, monetization comes later at beta launch.</span>
+      <span class="ko"><strong>Supabase 대시보드</strong> (이미 보유) + <strong>Firebase Analytics</strong> (무료) 조합. 급할 필요 없음 — 현재 사용자 수 적고, 수익화는 베타 런칭 때.</span>
+    </div>
+
+    <h3><span class="en">Step 1: Supabase Analytics (Already Available)</span><span class="ko">1단계: Supabase 분석 (이미 사용 가능)</span></h3>
+    <div class="step-box">
+      <span class="en">You already have Supabase project <code>rhhaojpsqfbapltcvsbz</code>. The dashboard at <code>supabase.com/dashboard</code> shows:</span>
+      <span class="ko">Supabase 프로젝트 <code>rhhaojpsqfbapltcvsbz</code> 이미 보유. <code>supabase.com/dashboard</code>에서 확인 가능:</span>
+      <ul>
+        <li><span class="en"><strong>Auth → Users</strong> — Total signups, daily active, last sign-in</span><span class="ko"><strong>Auth → Users</strong> — 총 가입자, 일일 활성, 마지막 로그인</span></li>
+        <li><span class="en"><strong>Database → Tables</strong> — Row counts for households, pantry_items, recipes, shopping_items</span><span class="ko"><strong>Database → Tables</strong> — 가구, 식료품, 레시피, 쇼핑 항목 행 수</span></li>
+        <li><span class="en"><strong>Edge Functions → Logs</strong> — API call counts for voice-transcribe, receipt-ocr, recipe-suggest</span><span class="ko"><strong>Edge Functions → Logs</strong> — voice-transcribe, receipt-ocr, recipe-suggest API 호출 수</span></li>
+        <li><span class="en"><strong>Reports</strong> — API requests, bandwidth, storage usage</span><span class="ko"><strong>Reports</strong> — API 요청, 대역폭, 스토리지 사용량</span></li>
+      </ul>
+    </div>
+
+    <h3><span class="en">Step 2: Add Firebase Analytics (Free)</span><span class="ko">2단계: Firebase Analytics 추가 (무료)</span></h3>
+    <div class="step-box">
+      <ol>
+        <li><span class="en">Go to <code>console.firebase.google.com</code> → Create project "Fridgenie"</span><span class="ko"><code>console.firebase.google.com</code> → "Fridgenie" 프로젝트 생성</span></li>
+        <li><span class="en">Add iOS app → Bundle ID: <code>com.fridgenie.app</code></span><span class="ko">iOS 앱 추가 → 번들 ID: <code>com.fridgenie.app</code></span></li>
+        <li><span class="en">Download <code>GoogleService-Info.plist</code> → add to <code>ios/Runner/</code></span><span class="ko"><code>GoogleService-Info.plist</code> 다운로드 → <code>ios/Runner/</code>에 추가</span></li>
+        <li><span class="en">Add Flutter packages:</span><span class="ko">Flutter 패키지 추가:</span>
+          <br><code>flutter pub add firebase_core firebase_analytics</code>
+        </li>
+        <li><span class="en">Run: <code>flutterfire configure</code> (auto-generates config)</span><span class="ko">실행: <code>flutterfire configure</code> (자동 설정 생성)</span></li>
+        <li><span class="en">Initialize in <code>main.dart</code>:</span><span class="ko"><code>main.dart</code>에서 초기화:</span>
+          <br><code>await Firebase.initializeApp();</code>
+        </li>
+        <li><span class="en">Log events where it matters:</span><span class="ko">중요한 곳에 이벤트 로깅:</span>
+          <br><code>FirebaseAnalytics.instance.logEvent(name: 'recipe_generated');</code>
+        </li>
+      </ol>
+    </div>
+
+    <h3><span class="en">Step 3: Key Events to Track</span><span class="ko">3단계: 추적할 핵심 이벤트</span></h3>
+    <table>
+      <tr><th><span class="en">Event</span><span class="ko">이벤트</span></th><th><span class="en">Where</span><span class="ko">위치</span></th><th><span class="en">Why</span><span class="ko">이유</span></th></tr>
+      <tr><td>signup_complete</td><td><span class="en">After onboarding</span><span class="ko">온보딩 후</span></td><td><span class="en">Funnel start</span><span class="ko">퍼널 시작</span></td></tr>
+      <tr><td>item_added</td><td><span class="en">Pantry/Fridge add</span><span class="ko">식료품 추가</span></td><td><span class="en">Core engagement</span><span class="ko">핵심 참여</span></td></tr>
+      <tr><td>voice_input_used</td><td><span class="en">Voice button</span><span class="ko">음성 버튼</span></td><td><span class="en">Feature adoption</span><span class="ko">기능 채택</span></td></tr>
+      <tr><td>receipt_scanned</td><td><span class="en">Receipt OCR</span><span class="ko">영수증 OCR</span></td><td><span class="en">Feature adoption</span><span class="ko">기능 채택</span></td></tr>
+      <tr><td>recipe_generated</td><td><span class="en">Recipe AI call</span><span class="ko">레시피 AI 호출</span></td><td><span class="en">Core value metric</span><span class="ko">핵심 가치 지표</span></td></tr>
+      <tr><td>recipe_favorited</td><td><span class="en">Favorite tap</span><span class="ko">즐겨찾기 탭</span></td><td><span class="en">Stickiness</span><span class="ko">유지력</span></td></tr>
+      <tr><td>shopping_item_checked</td><td><span class="en">Shopping list</span><span class="ko">쇼핑 리스트</span></td><td><span class="en">Active use</span><span class="ko">활성 사용</span></td></tr>
+      <tr><td>household_created</td><td><span class="en">Household setup</span><span class="ko">가구 설정</span></td><td><span class="en">Viral loop</span><span class="ko">바이럴 루프</span></td></tr>
+      <tr><td>pro_upgrade_tapped</td><td><span class="en">Paywall shown</span><span class="ko">페이월 표시</span></td><td><span class="en">Monetization intent</span><span class="ko">수익화 의도</span></td></tr>
+    </table>
+
+    <h3><span class="en">Step 4: Simple Admin View (Later)</span><span class="ko">4단계: 간단한 어드민 뷰 (나중에)</span></h3>
+    <div class="step-box">
+      <span class="en">When you have 100+ users, build a simple admin page:</span>
+      <span class="ko">100명 이상 사용자가 되면 간단한 어드민 페이지 구축:</span>
+      <ul>
+        <li><span class="en"><strong>Option A:</strong> Supabase SQL views → Next.js dashboard (our default web stack)</span><span class="ko"><strong>옵션 A:</strong> Supabase SQL 뷰 → Next.js 대시보드 (기본 웹 스택)</span></li>
+        <li><span class="en"><strong>Option B:</strong> Firebase Dashboard (free, built-in charts)</span><span class="ko"><strong>옵션 B:</strong> Firebase 대시보드 (무료, 내장 차트)</span></li>
+        <li><span class="en"><strong>Option C:</strong> Mixpanel free tier (10K events/month) for deeper funnels</span><span class="ko"><strong>옵션 C:</strong> Mixpanel 무료 (월 10K 이벤트) 더 깊은 퍼널 분석</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- PART 2: PRE-LAUNCH CHECKLIST -->
+  <div class="section" id="pre-launch">
+    <h2>✅ <span class="en">Part 2: Pre-Launch Checklist</span><span class="ko">파트 2: 런칭 전 체크리스트</span></h2>
+    <p class="en">Things that MUST be done before any public marketing:</p>
+    <p class="ko">공개 마케팅 전에 반드시 완료해야 할 것들:</p>
+
+    <h4><span class="en">Business Setup</span><span class="ko">사업 설정</span></h4>
+    <ul class="checklist">
+      <li><span class="en">Arizona LLC filed ($50 at azcc.gov) → get EIN from IRS (free, instant)</span><span class="ko">Arizona LLC 등록 ($50, azcc.gov) → IRS에서 EIN 취득 (무료, 즉시)</span></li>
+      <li><span class="en">Business bank account (Mercury or Relay — both free, startup-friendly)</span><span class="ko">비즈니스 은행 계좌 (Mercury 또는 Relay — 둘 다 무료, 스타트업 친화적)</span></li>
+      <li><span class="en">Update Apple Developer to Organization (optional but looks more legit)</span><span class="ko">Apple Developer를 조직으로 업데이트 (선택이지만 더 신뢰감)</span></li>
+    </ul>
+
+    <h4><span class="en">App Store Ready</span><span class="ko">앱 스토어 준비</span></h4>
+    <ul class="checklist">
+      <li><span class="en">App Store screenshots (6.7" iPhone 15 Pro Max — 5-8 screenshots)</span><span class="ko">앱 스토어 스크린샷 (6.7" iPhone 15 Pro Max — 5-8장)</span></li>
+      <li><span class="en">App Store description (EN + KO, ~4000 chars)</span><span class="ko">앱 스토어 설명 (EN + KO, ~4000자)</span></li>
+      <li><span class="en">Keywords researched (100 chars, comma-separated)</span><span class="ko">키워드 리서치 (100자, 쉼표 구분)</span></li>
+      <li><span class="en">Privacy nutrition labels configured</span><span class="ko">개인정보 영양 라벨 설정</span></li>
+      <li><span class="en">App Review submitted + approved</span><span class="ko">앱 리뷰 제출 + 승인</span></li>
+    </ul>
+
+    <h4><span class="en">Marketing Assets</span><span class="ko">마케팅 자산</span></h4>
+    <ul class="checklist">
+      <li><span class="en">30-sec demo video (screen recording + voiceover or text overlay)</span><span class="ko">30초 데모 영상 (화면 녹화 + 나레이션 또는 텍스트 오버레이)</span></li>
+      <li><span class="en">Product Hunt assets prepared (logo, tagline, gallery, description)</span><span class="ko">프로덕트 헌트 자산 준비 (로고, 태그라인, 갤러리, 설명)</span></li>
+      <li><span class="en">Landing page updated (fridgenie.app) with App Store link + demo video</span><span class="ko">랜딩 페이지 업데이트 (fridgenie.app) 앱 스토어 링크 + 데모 영상</span></li>
+      <li><span class="en">Press kit (logo, screenshots, description, founder bio)</span><span class="ko">프레스 킷 (로고, 스크린샷, 설명, 파운더 소개)</span></li>
+    </ul>
+  </div>
+
+  <!-- PART 3: ALL MARKETING CHANNELS -->
+  <div class="section" id="channels">
+    <h2>📢 <span class="en">Part 3: Marketing Channels — Complete List</span><span class="ko">파트 3: 마케팅 채널 — 완전한 목록</span></h2>
+
+    <h3>🏆 <span class="en">Tier 1: HIGH Impact (Do These First)</span><span class="ko">티어 1: 높은 영향력 (먼저 실행)</span></h3>
+
+    <div class="channel-grid">
+      <div class="channel-card">
+        <div class="name">🚀 Product Hunt</div>
+        <span class="en">THE launch platform. Aim for Top 5 Product of the Day. Can bring 2,000-10,000+ visitors in 24 hours. Food & Drink / AI category.</span>
+        <span class="ko">런칭 플랫폼. Top 5 목표. 24시간에 2,000-10,000+ 방문자. Food & Drink / AI 카테고리.</span>
+        <br><strong>URL:</strong> producthunt.com
+      </div>
+      <div class="channel-card">
+        <div class="name">🐦 X (Twitter)</div>
+        <span class="en">Build in public. Share dev journey, screenshots, milestones. #buildinpublic #indiehacker #foodtech. Amplifies all other channels.</span>
+        <span class="ko">공개 개발. 개발 여정, 스크린샷, 마일스톤 공유. #buildinpublic #indiehacker #foodtech.</span>
+        <br><strong>Handle:</strong> <span class="en">Create @fridgenie or @fridgenieapp</span><span class="ko">@fridgenie 또는 @fridgenieapp 생성</span>
+      </div>
+      <div class="channel-card">
+        <div class="name">📱 Reddit</div>
+        <span class="en">Multiple subreddits are goldmines. Post VALUE first (tips, stories), not just links. Redditors hate self-promo but love genuine makers.</span>
+        <span class="ko">여러 서브레딧이 금광. 링크가 아닌 가치(팁, 이야기)를 먼저. 레딧 유저는 자기 홍보를 싫어하지만 진정한 메이커를 좋아함.</span>
+      </div>
+      <div class="channel-card">
+        <div class="name">📸 Instagram</div>
+        <span class="en">Reels showing the app in action (voice input, receipt scan, recipe gen). Food content is HUGE on IG. #mealprep #foodwaste #smartkitchen</span>
+        <span class="ko">앱 작동 보여주는 릴스 (음성 입력, 영수증 스캔, 레시피 생성). 음식 콘텐츠는 IG에서 엄청남.</span>
+        <br><strong>Handle:</strong> @fridgenieapp
+      </div>
+    </div>
+
+    <h3>🎯 <span class="en">Tier 2: MEDIUM Impact (Do Within First Month)</span><span class="ko">티어 2: 중간 영향력 (첫 달 내 실행)</span></h3>
+
+    <div class="channel-grid">
+      <div class="channel-card">
+        <div class="name">💼 LinkedIn</div>
+        <span class="en">Your founder story + engineering journey. Tech + food intersection is interesting to VCs and engineers. Post 2-3x/week pre-launch.</span>
+        <span class="ko">파운더 스토리 + 엔지니어링 여정. 기술 + 음식 교차점은 VC와 엔지니어에게 흥미로움.</span>
+      </div>
+      <div class="channel-card">
+        <div class="name">🔧 Indie Hackers</div>
+        <span class="en">Post in "Show IH" section. Share revenue, user metrics, building story. This community LOVES solo founders. indiemakers.com too.</span>
+        <span class="ko">"Show IH" 섹션에 포스트. 매출, 사용자 지표, 빌딩 스토리 공유. 솔로 파운더를 사랑하는 커뮤니티.</span>
+        <br><strong>URL:</strong> indiehackers.com
+      </div>
+      <div class="channel-card">
+        <div class="name">🧡 Hacker News</div>
+        <span class="en">"Show HN" post. Title: "Show HN: Fridgenie — AI kitchen assistant that turns your fridge into recipes." Keep it technical, focus on AI/engineering.</span>
+        <span class="ko">"Show HN" 포스트. 기술적으로, AI/엔지니어링에 초점.</span>
+        <br><strong>URL:</strong> news.ycombinator.com
+      </div>
+      <div class="channel-card">
+        <div class="name">🎬 TikTok</div>
+        <span class="en">Short demos: "I built an app that tells you what to cook from your fridge." Food + AI + tech content is trending. #techtok #foodtok #aiapp</span>
+        <span class="ko">짧은 데모: "냉장고 재료로 뭘 요리할지 알려주는 앱을 만들었다." 음식+AI+기술 콘텐츠 트렌딩.</span>
+      </div>
+      <div class="channel-card">
+        <div class="name">📰 Dev.to / Medium</div>
+        <span class="en">"How I built an AI-powered kitchen app with Flutter + Supabase" — technical deep dives drive devs + SEO traffic.</span>
+        <span class="ko">"Flutter + Supabase로 AI 주방 앱을 만든 방법" — 기술 심층 분석으로 개발자 + SEO 트래픽.</span>
+      </div>
+      <div class="channel-card">
+        <div class="name">🎙️ YouTube</div>
+        <span class="en">App demo walkthrough (3-5 min). Also pitch to food/tech YouTubers for reviews. "My AI kitchen assistant" video format.</span>
+        <span class="ko">앱 데모 워크스루 (3-5분). 음식/기술 유튜버에게 리뷰 요청.</span>
+      </div>
+    </div>
+
+    <h3>🌟 <span class="en">Tier 3: NICHE Communities (High Conversion, Small Volume)</span><span class="ko">티어 3: 니치 커뮤니티 (높은 전환율, 적은 양)</span></h3>
+
+    <h4><span class="en">Reddit Subreddits (Specific)</span><span class="ko">레딧 서브레딧 (구체적)</span></h4>
+    <table>
+      <tr><th>Subreddit</th><th><span class="en">Members</span><span class="ko">멤버</span></th><th><span class="en">Approach</span><span class="ko">접근법</span></th></tr>
+      <tr><td>r/mealprep</td><td>~3.5M</td><td><span class="en">"I built an app that reduces food waste by suggesting recipes from what you already have"</span><span class="ko">"이미 있는 재료로 레시피를 제안해 음식 낭비를 줄이는 앱을 만들었습니다"</span></td></tr>
+      <tr><td>r/EatCheapAndHealthy</td><td>~4.5M</td><td><span class="en">Budget angle — use what you have, stop wasting food</span><span class="ko">예산 관점 — 있는 것 활용, 음식 낭비 중단</span></td></tr>
+      <tr><td>r/Cooking</td><td>~5M</td><td><span class="en">Recipe discovery angle, voice input for fast logging</span><span class="ko">레시피 발견 관점, 빠른 기록을 위한 음성 입력</span></td></tr>
+      <tr><td>r/ZeroWaste</td><td>~1.5M</td><td><span class="en">Sustainability angle — expiry tracking prevents food waste</span><span class="ko">지속가능성 관점 — 유통기한 추적으로 음식 낭비 방지</span></td></tr>
+      <tr><td>r/flutterdev</td><td>~120K</td><td><span class="en">Technical deep dive — "Built with Flutter + Riverpod + Supabase"</span><span class="ko">기술 심층 — "Flutter + Riverpod + Supabase로 구축"</span></td></tr>
+      <tr><td>r/SideProject</td><td>~200K</td><td><span class="en">Building story + demo</span><span class="ko">빌딩 스토리 + 데모</span></td></tr>
+      <tr><td>r/startups</td><td>~1.2M</td><td><span class="en">Share metrics, learnings, growth strategy</span><span class="ko">지표, 교훈, 성장 전략 공유</span></td></tr>
+      <tr><td>r/indiehackers</td><td>~50K</td><td><span class="en">Solo founder journey</span><span class="ko">솔로 파운더 여정</span></td></tr>
+      <tr><td>r/iOSProgramming</td><td>~120K</td><td><span class="en">Technical angle</span><span class="ko">기술적 관점</span></td></tr>
+      <tr><td>r/Korean</td><td>~250K</td><td><span class="en">Korean-language support angle, bilingual app</span><span class="ko">한국어 지원 관점, 이중 언어 앱</span></td></tr>
+    </table>
+
+    <h4><span class="en">Other Communities</span><span class="ko">기타 커뮤니티</span></h4>
+    <table>
+      <tr><th><span class="en">Platform</span><span class="ko">플랫폼</span></th><th><span class="en">Where</span><span class="ko">어디</span></th><th><span class="en">Notes</span><span class="ko">참고</span></th></tr>
+      <tr><td>Discord</td><td><span class="en">Flutter Community, Supabase Discord, r/SideProject Discord</span><span class="ko">Flutter 커뮤니티, Supabase Discord, r/SideProject Discord</span></td><td><span class="en">Share in #showcase channels</span><span class="ko">#showcase 채널에 공유</span></td></tr>
+      <tr><td>Indie App Santa</td><td>indieappsanta.com/submit-your-app</td><td><span class="en">Flat fee promo, no commissions. Creates download velocity for ASO boost.</span><span class="ko">정액 프로모, 수수료 없음. ASO 부스트를 위한 다운로드 속도 생성.</span></td></tr>
+      <tr><td>BetaList</td><td>betalist.com</td><td><span class="en">Pre-launch listing for early adopters. Free tier available.</span><span class="ko">얼리어답터를 위한 사전 런칭 리스팅. 무료 티어.</span></td></tr>
+      <tr><td>AlternativeTo</td><td>alternativeto.net</td><td><span class="en">List as alternative to Yummly, Mealime, SuperCook</span><span class="ko">Yummly, Mealime, SuperCook 대안으로 등록</span></td></tr>
+      <tr><td>AppAdvice</td><td>appadvice.com</td><td><span class="en">iOS app review site, submit for coverage</span><span class="ko">iOS 앱 리뷰 사이트, 커버리지 신청</span></td></tr>
+      <tr><td>네이버 카페</td><td><span class="en">Korean food/cooking communities</span><span class="ko">한국 음식/요리 커뮤니티</span></td><td><span class="en">Korean market — bilingual app is a differentiator</span><span class="ko">한국 시장 — 이중 언어 앱이 차별화 요소</span></td></tr>
+      <tr><td>한인 커뮤니티</td><td><span class="en">Korean-American Facebook groups, KakaoTalk groups</span><span class="ko">한인 페이스북 그룹, 카카오톡 그룹</span></td><td><span class="en">Korean diaspora is your built-in bilingual market</span><span class="ko">해외 한인이 기본 이중 언어 시장</span></td></tr>
+    </table>
+  </div>
+
+  <!-- PART 4: TIMELINE -->
+  <div class="section" id="timeline">
+    <h2>📅 <span class="en">Part 4: 8-Week Launch Timeline</span><span class="ko">파트 4: 8주 런칭 타임라인</span></h2>
+
+    <div class="callout">
+      <span class="en"><strong>Assumption:</strong> App Store approval ~mid-April. LLC + accounts set up in parallel. Product Hunt launch in May.</span>
+      <span class="ko"><strong>가정:</strong> 앱 스토어 승인 ~4월 중순. LLC + 계정 설정은 병렬로. 프로덕트 헌트 런칭은 5월.</span>
+    </div>
+
+    <div class="timeline">
+      <div class="week">
+        <h4><span class="en">Week 1-2 (April 1-14): Foundation</span><span class="ko">1-2주차 (4월 1-14): 기반 구축</span></h4>
+        <ul>
+          <li><span class="en">File Arizona LLC + get EIN</span><span class="ko">Arizona LLC 등록 + EIN 취득</span></li>
+          <li><span class="en">Create ALL accounts (see Part 8)</span><span class="ko">모든 계정 생성 (파트 8 참조)</span></li>
+          <li><span class="en">Submit app to App Store Review</span><span class="ko">앱 스토어 리뷰 제출</span></li>
+          <li><span class="en">Add Firebase Analytics to app</span><span class="ko">앱에 Firebase Analytics 추가</span></li>
+          <li><span class="en">Record 30-sec demo video</span><span class="ko">30초 데모 영상 촬영</span></li>
+          <li><span class="en">Update fridgenie.app landing page with video + "Coming to App Store" badge</span><span class="ko">fridgenie.app 랜딩 페이지에 영상 + "Coming to App Store" 뱃지 추가</span></li>
+        </ul>
+      </div>
+      <div class="week">
+        <h4><span class="en">Week 3-4 (April 15-28): Build Audience</span><span class="ko">3-4주차 (4월 15-28): 오디언스 구축</span></h4>
+        <ul>
+          <li><span class="en">Start posting on X/Twitter 3x/week (#buildinpublic)</span><span class="ko">X/트위터에 주 3회 포스팅 (#buildinpublic)</span></li>
+          <li><span class="en">Post first LinkedIn article: "Why I built Fridgenie"</span><span class="ko">첫 LinkedIn 글: "Why I built Fridgenie"</span></li>
+          <li><span class="en">Write dev.to article: "Building an AI kitchen app with Flutter"</span><span class="ko">dev.to 글 작성: "Flutter로 AI 주방 앱 만들기"</span></li>
+          <li><span class="en">Submit to BetaList</span><span class="ko">BetaList 제출</span></li>
+          <li><span class="en">Start engaging on relevant Reddit subs (comment value, don't just post)</span><span class="ko">관련 레딧 서브에서 활동 시작 (가치 있는 코멘트, 단순 포스트 X)</span></li>
+          <li><span class="en">Create first Instagram Reel showing voice input → recipe</span><span class="ko">첫 인스타그램 릴스: 음성 입력 → 레시피</span></li>
+          <li><span class="en">App Store approval expected ✅</span><span class="ko">앱 스토어 승인 예상 ✅</span></li>
+        </ul>
+      </div>
+      <div class="week">
+        <h4><span class="en">Week 5-6 (April 29 - May 12): Pre-Launch Momentum</span><span class="ko">5-6주차 (4월 29 - 5월 12): 런칭 전 모멘텀</span></h4>
+        <ul>
+          <li><span class="en">App LIVE on App Store → update landing page with download link</span><span class="ko">앱 스토어 라이브 → 랜딩 페이지에 다운로드 링크 업데이트</span></li>
+          <li><span class="en">Prepare Product Hunt listing (logo, tagline, gallery, maker comment)</span><span class="ko">프로덕트 헌트 리스팅 준비 (로고, 태그라인, 갤러리, 메이커 코멘트)</span></li>
+          <li><span class="en">Post on r/SideProject, r/flutterdev (building story + link)</span><span class="ko">r/SideProject, r/flutterdev에 포스트 (빌딩 스토리 + 링크)</span></li>
+          <li><span class="en">Daily X posts counting down to Product Hunt launch</span><span class="ko">프로덕트 헌트 런칭 카운트다운 매일 X 포스트</span></li>
+          <li><span class="en">Reach out to 5-10 people to support on PH launch day</span><span class="ko">PH 런칭 데이에 지원해줄 5-10명에게 연락</span></li>
+          <li><span class="en">Register on AlternativeTo</span><span class="ko">AlternativeTo에 등록</span></li>
+        </ul>
+      </div>
+      <div class="week">
+        <h4><span class="en">Week 7: LAUNCH WEEK 🚀 (May 13-19)</span><span class="ko">7주차: 런칭 위크 🚀 (5월 13-19)</span></h4>
+        <ul>
+          <li><span class="en"><strong>Tuesday:</strong> Soft launch email to beta users + LinkedIn post</span><span class="ko"><strong>화요일:</strong> 베타 사용자에게 소프트 런칭 이메일 + LinkedIn 포스트</span></li>
+          <li><span class="en"><strong>Wednesday 12:01 AM PST:</strong> Product Hunt launch (see Part 5)</span><span class="ko"><strong>수요일 12:01 AM PST:</strong> 프로덕트 헌트 런칭 (파트 5 참조)</span></li>
+          <li><span class="en"><strong>Wednesday:</strong> Post to HN "Show HN", Indie Hackers "Show IH"</span><span class="ko"><strong>수요일:</strong> HN "Show HN", Indie Hackers "Show IH" 포스트</span></li>
+          <li><span class="en"><strong>Thursday:</strong> Reddit posts across food subs (r/mealprep, r/Cooking, r/ZeroWaste)</span><span class="ko"><strong>목요일:</strong> 음식 서브에 레딧 포스트 (r/mealprep, r/Cooking, r/ZeroWaste)</span></li>
+          <li><span class="en"><strong>Friday:</strong> Results analysis + thank-you posts everywhere</span><span class="ko"><strong>금요일:</strong> 결과 분석 + 모든 곳에 감사 포스트</span></li>
+        </ul>
+      </div>
+      <div class="week">
+        <h4><span class="en">Week 8 (May 20-26): Post-Launch Momentum</span><span class="ko">8주차 (5월 20-26): 런칭 후 모멘텀</span></h4>
+        <ul>
+          <li><span class="en">Share launch metrics on LinkedIn/X ("We hit X users on launch day!")</span><span class="ko">LinkedIn/X에 런칭 지표 공유 ("런칭 데이에 X명 달성!")</span></li>
+          <li><span class="en">Follow up with every PH commenter personally</span><span class="ko">모든 PH 코멘터에게 개인적으로 후속 조치</span></li>
+          <li><span class="en">Submit to Indie App Santa for download velocity boost</span><span class="ko">다운로드 속도 부스트를 위해 Indie App Santa 제출</span></li>
+          <li><span class="en">Post Korean community (네이버 카페, 한인 Facebook groups)</span><span class="ko">한국 커뮤니티 포스트 (네이버 카페, 한인 Facebook 그룹)</span></li>
+          <li><span class="en">Analyze Firebase analytics → double down on what works</span><span class="ko">Firebase 분석 → 효과있는 것에 집중</span></li>
+          <li><span class="en">Consider Apple Search Ads (small $50-100 budget to test)</span><span class="ko">Apple Search Ads 고려 ($50-100 소액 예산 테스트)</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- PART 5: PRODUCT HUNT -->
+  <div class="section" id="producthunt">
+    <h2>🏆 <span class="en">Part 5: Product Hunt Launch Playbook</span><span class="ko">파트 5: 프로덕트 헌트 런칭 플레이북</span></h2>
+
+    <h4><span class="en">Assets to Prepare</span><span class="ko">준비할 자산</span></h4>
+    <table>
+      <tr><th><span class="en">Asset</span><span class="ko">자산</span></th><th><span class="en">Spec</span><span class="ko">사양</span></th></tr>
+      <tr><td>Tagline</td><td><span class="en">"AI kitchen companion that turns your fridge into delicious recipes" (under 60 chars)</span><span class="ko">"냉장고를 맛있는 레시피로 바꿔주는 AI 주방 도우미" (60자 미만)</span></td></tr>
+      <tr><td>Logo</td><td>512×512px, clean, readable at small size</td></tr>
+      <tr><td>Gallery</td><td><span class="en">4-5 images or 1 video + 3 images. Show: voice input, recipe results, pantry tracking, receipt scan</span><span class="ko">4-5 이미지 또는 1 영상 + 3 이미지. 보여줄 것: 음성 입력, 레시피 결과, 식료품 추적, 영수증 스캔</span></td></tr>
+      <tr><td><span class="en">Description</span><span class="ko">설명</span></td><td><span class="en">2-3 paragraphs: Problem → Solution → Key features → Who it's for. Under 300 words.</span><span class="ko">2-3 단락: 문제 → 해결 → 핵심 기능 → 대상. 300단어 미만.</span></td></tr>
+      <tr><td><span class="en">First Comment</span><span class="ko">첫 코멘트</span></td><td><span class="en">Your story. "Hey PH! I'm Minjun, a validation engineer who hates food waste..." Personal, authentic.</span><span class="ko">당신의 이야기. "안녕하세요 PH! 음식 낭비를 싫어하는 엔지니어입니다..." 개인적, 진정성.</span></td></tr>
+    </table>
+
+    <h4><span class="en">Launch Day Schedule (Phoenix time)</span><span class="ko">런칭 데이 스케줄 (피닉스 시간)</span></h4>
+    <div class="step-box">
+      <ul>
+        <li><strong>12:01 AM PST (midnight):</strong> <span class="en">Product goes live (PH resets daily at midnight PST)</span><span class="ko">프로덕트 라이브 (PH는 매일 자정 PST에 리셋)</span></li>
+        <li><strong>~5:00 AM MST:</strong> <span class="en">Post first comment immediately. Share link on X/Twitter.</span><span class="ko">첫 코멘트 즉시 포스트. X/트위터에 링크 공유.</span></li>
+        <li><strong>7:00 AM:</strong> <span class="en">LinkedIn launch post. Email to beta users list. iMessage to friends/family.</span><span class="ko">LinkedIn 런칭 포스트. 베타 사용자에게 이메일. 친구/가족에게 iMessage.</span></li>
+        <li><strong>9:00 AM - 6:00 PM:</strong> <span class="en">RESPOND TO EVERY COMMENT within 1-2 hours. This is #1 factor for ranking.</span><span class="ko">모든 코멘트에 1-2시간 내 응답. 랭킹에 가장 중요한 요소.</span></li>
+        <li><strong>12:00 PM:</strong> <span class="en">Second X post with progress update ("We're #X on Product Hunt!")</span><span class="ko">두 번째 X 포스트 + 진행 업데이트 ("PH에서 #X위!")</span></li>
+        <li><strong>6:00 PM:</strong> <span class="en">Thank-you post on X. Final push to network.</span><span class="ko">X에 감사 포스트. 네트워크에 최종 푸시.</span></li>
+      </ul>
+    </div>
+
+    <div class="callout">
+      <strong>Pro Tips:</strong>
+      <ul>
+        <li><span class="en"><strong>Best day: Tuesday or Wednesday.</strong> Highest engagement. Avoid weekends.</span><span class="ko"><strong>최적 요일: 화요일 또는 수요일.</strong> 최고 참여도. 주말 피하기.</span></li>
+        <li><span class="en"><strong>Don't ask for upvotes explicitly</strong> — PH penalizes this. Say "would love your support" or "check it out"</span><span class="ko"><strong>업보트를 명시적으로 요청하지 마세요</strong> — PH가 패널티. "지원해주시면 감사" 또는 "확인해보세요"로 표현</span></li>
+        <li><span class="en"><strong>Hunter:</strong> You can self-hunt, or find a hunter in PH community with >500 followers</span><span class="ko"><strong>헌터:</strong> 셀프 헌팅 가능, 또는 PH 커뮤니티에서 500+ 팔로워 헌터 찾기</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- PART 6: ASO -->
+  <div class="section" id="aso">
+    <h2>🔍 <span class="en">Part 6: App Store Optimization</span><span class="ko">파트 6: 앱 스토어 최적화</span></h2>
+
+    <p class="en">~65% of downloads come from App Store search. ASO is your highest-ROI marketing channel.</p>
+    <p class="ko">다운로드의 ~65%가 앱 스토어 검색에서 발생. ASO가 최고 ROI 마케팅 채널.</p>
+
+    <h4><span class="en">App Name (30 chars max)</span><span class="ko">앱 이름 (최대 30자)</span></h4>
+    <div class="step-box">
+      <span class="en">Options:</span><span class="ko">옵션:</span>
+      <ul>
+        <li>"Fridgenie — Smart Kitchen AI" (27 chars) ✅</li>
+        <li>"Fridgenie: Recipe & Pantry" (26 chars)</li>
+        <li>"Fridgenie — Cook What You Have" (30 chars)</li>
+      </ul>
+    </div>
+
+    <h4><span class="en">Subtitle (30 chars max)</span><span class="ko">부제목 (최대 30자)</span></h4>
+    <div class="step-box">"Track ingredients, find recipes" (32 → trim to 30)<br>"AI recipes from your kitchen" (29 chars) ✅</div>
+
+    <h4><span class="en">Keywords (100 chars, comma-separated)</span><span class="ko">키워드 (100자, 쉼표 구분)</span></h4>
+    <div class="step-box">
+      <code>pantry,fridge,recipe,meal prep,food waste,grocery,shopping list,kitchen,cook,ingredients,AI recipe,what to cook</code>
+      <br><span class="en">(Research competitors: SuperCook, Mealime, Yummly, Paprika, AnyList)</span>
+      <span class="ko">(경쟁사 리서치: SuperCook, Mealime, Yummly, Paprika, AnyList)</span>
+    </div>
+
+    <h4><span class="en">Screenshots Strategy</span><span class="ko">스크린샷 전략</span></h4>
+    <div class="step-box">
+      <span class="en">5 screenshots, each with text overlay:</span><span class="ko">5장 스크린샷, 각각 텍스트 오버레이:</span>
+      <ol>
+        <li><span class="en">"Say what's in your fridge" — Voice input screen</span><span class="ko">"냉장고에 뭐 있는지 말해보세요" — 음성 입력 화면</span></li>
+        <li><span class="en">"AI recipes just for you" — Recipe results with match %</span><span class="ko">"당신만을 위한 AI 레시피" — 매치 %와 레시피 결과</span></li>
+        <li><span class="en">"Track every ingredient" — Pantry/Fridge overview</span><span class="ko">"모든 재료 추적" — 식료품실/냉장고 개요</span></li>
+        <li><span class="en">"Scan receipts instantly" — Receipt OCR in action</span><span class="ko">"영수증 즉시 스캔" — 영수증 OCR 작동</span></li>
+        <li><span class="en">"Smart shopping list" — Shopping list with magic shop</span><span class="ko">"스마트 쇼핑 리스트" — 매직 쇼핑 기능</span></li>
+      </ol>
+    </div>
+  </div>
+
+  <!-- PART 7: CONTENT STRATEGY -->
+  <div class="section" id="content">
+    <h2>📝 <span class="en">Part 7: Content & Social Media Strategy</span><span class="ko">파트 7: 콘텐츠 & 소셜 미디어 전략</span></h2>
+
+    <h4><span class="en">Content Angles (Rotate These)</span><span class="ko">콘텐츠 앵글 (이것들을 로테이션)</span></h4>
+    <table>
+      <tr><th><span class="en">Angle</span><span class="ko">앵글</span></th><th><span class="en">Example Post</span><span class="ko">예시 포스트</span></th><th><span class="en">Platform</span><span class="ko">플랫폼</span></th></tr>
+      <tr><td>🔧 <span class="en">Build in Public</span><span class="ko">공개 개발</span></td><td><span class="en">"Day 47 of building Fridgenie. Today I shipped receipt scanning with OCR..."</span><span class="ko">"Fridgenie 개발 47일차. 오늘 OCR로 영수증 스캔 기능을 출시했습니다..."</span></td><td>X, LinkedIn</td></tr>
+      <tr><td>🌱 <span class="en">Food Waste</span><span class="ko">음식 낭비</span></td><td><span class="en">"The average American throws away $1,500 of food per year. I built an app to fix that."</span><span class="ko">"미국인은 연평균 $1,500의 음식을 버립니다. 이를 해결하는 앱을 만들었습니다."</span></td><td>Reddit, IG, TikTok</td></tr>
+      <tr><td>🎤 <span class="en">Demo Magic</span><span class="ko">데모 매직</span></td><td><span class="en">Screen recording: speak ingredients → AI generates 3 recipes in seconds</span><span class="ko">화면 녹화: 재료 말하기 → AI가 몇 초 만에 3개 레시피 생성</span></td><td>IG Reels, TikTok, YouTube</td></tr>
+      <tr><td>👨‍💻 <span class="en">Technical</span><span class="ko">기술적</span></td><td><span class="en">"How I used Whisper + GPT for voice-powered kitchen inventory"</span><span class="ko">"Whisper + GPT를 사용해 음성 기반 주방 재고 관리를 만든 방법"</span></td><td>dev.to, HN, r/flutterdev</td></tr>
+      <tr><td>💰 <span class="en">Founder Journey</span><span class="ko">파운더 여정</span></td><td><span class="en">"Engineer by day, indie hacker by night. Month 3 building Fridgenie..."</span><span class="ko">"낮에는 엔지니어, 밤에는 인디 해커. Fridgenie 개발 3개월차..."</span></td><td>LinkedIn, IH</td></tr>
+      <tr><td>🇰🇷 <span class="en">Korean Market</span><span class="ko">한국 시장</span></td><td><span class="en">"Built a bilingual EN/KO kitchen app for Korean-Americans"</span><span class="ko">"한국계 미국인을 위한 이중 언어 EN/KO 주방 앱을 만들었습니다"</span></td><td><span class="en">Korean communities, r/Korean</span><span class="ko">한인 커뮤니티, r/Korean</span></td></tr>
+    </table>
+
+    <h4><span class="en">Posting Cadence</span><span class="ko">포스팅 주기</span></h4>
+    <ul>
+      <li><strong>X/Twitter:</strong> <span class="en">3-5x/week (short, punchy, screenshots)</span><span class="ko">주 3-5회 (짧고, 강렬하게, 스크린샷)</span></li>
+      <li><strong>LinkedIn:</strong> <span class="en">2x/week (longer founder stories)</span><span class="ko">주 2회 (긴 파운더 스토리)</span></li>
+      <li><strong>Instagram:</strong> <span class="en">2-3 Reels/week (demo clips, food content)</span><span class="ko">주 2-3 릴스 (데모 클립, 음식 콘텐츠)</span></li>
+      <li><strong>Reddit:</strong> <span class="en">1-2 posts/week across different subs (stagger, don't spam)</span><span class="ko">주 1-2 포스트 다른 서브에 분산 (스팸 X)</span></li>
+      <li><strong>dev.to/Medium:</strong> <span class="en">1 article every 2 weeks (deep technical or story)</span><span class="ko">2주마다 1 글 (기술 심층 또는 스토리)</span></li>
+    </ul>
+  </div>
+
+  <!-- PART 8: ACCOUNTS TO CREATE -->
+  <div class="section" id="accounts">
+    <h2>🔑 <span class="en">Part 8: Accounts to Create NOW</span><span class="ko">파트 8: 지금 만들어야 할 계정들</span></h2>
+
+    <div class="callout-orange callout">
+      <span class="en"><strong>Do this TODAY or this week.</strong> Accounts need age/history before launch. The earlier the better.</span>
+      <span class="ko"><strong>오늘 또는 이번 주에 하세요.</strong> 계정은 런칭 전에 기간/히스토리가 필요합니다. 빠를수록 좋습니다.</span>
+    </div>
+
+    <table>
+      <tr><th><span class="en">Account</span><span class="ko">계정</span></th><th><span class="en">Username</span><span class="ko">유저네임</span></th><th><span class="en">Priority</span><span class="ko">우선순위</span></th><th><span class="en">Notes</span><span class="ko">참고</span></th></tr>
+      <tr><td>Product Hunt</td><td>@minjun or @fridgenie</td><td><span class="badge badge-pink">NOW</span></td><td><span class="en">Start upvoting/commenting on other products ASAP (builds credibility)</span><span class="ko">다른 제품에 업보트/코멘트 시작 (신뢰도 구축)</span></td></tr>
+      <tr><td>X / Twitter</td><td>@fridgenieapp</td><td><span class="badge badge-pink">NOW</span></td><td><span class="en">Personal @minjun_kim or use existing. App account for brand.</span><span class="ko">개인 @minjun_kim 또는 기존 사용. 브랜드용 앱 계정.</span></td></tr>
+      <tr><td>Instagram</td><td>@fridgenieapp</td><td><span class="badge badge-pink">NOW</span></td><td><span class="en">Business account. Link to fridgenie.app in bio.</span><span class="ko">비즈니스 계정. 바이오에 fridgenie.app 링크.</span></td></tr>
+      <tr><td>LinkedIn</td><td><span class="en">(your personal)</span><span class="ko">(개인 계정)</span></td><td><span class="badge badge-orange">SOON</span></td><td><span class="en">Update headline to "Building Fridgenie — AI Kitchen Assistant"</span><span class="ko">헤드라인 업데이트: "Building Fridgenie — AI Kitchen Assistant"</span></td></tr>
+      <tr><td>Reddit</td><td>u/fridgenie or personal</td><td><span class="badge badge-pink">NOW</span></td><td><span class="en">START COMMENTING in food subs now. Need karma/history before posting.</span><span class="ko">지금 음식 서브에서 코멘트 시작. 포스팅 전에 카르마/히스토리 필요.</span></td></tr>
+      <tr><td>Indie Hackers</td><td>@minjun</td><td><span class="badge badge-orange">SOON</span></td><td><span class="en">Create product page on IH</span><span class="ko">IH에 제품 페이지 생성</span></td></tr>
+      <tr><td>Hacker News</td><td><span class="en">(any username)</span><span class="ko">(아무 유저네임)</span></td><td><span class="badge badge-orange">SOON</span></td><td><span class="en">Comment on tech posts to build karma before Show HN</span><span class="ko">Show HN 전에 기술 포스트에 코멘트하여 카르마 구축</span></td></tr>
+      <tr><td>TikTok</td><td>@fridgenieapp</td><td><span class="badge badge-blue">LATER</span></td><td><span class="en">Optional but food content does incredibly well</span><span class="ko">선택이지만 음식 콘텐츠가 엄청 잘됨</span></td></tr>
+      <tr><td>YouTube</td><td>Fridgenie</td><td><span class="badge badge-blue">LATER</span></td><td><span class="en">For demo videos and tutorials</span><span class="ko">데모 영상 및 튜토리얼용</span></td></tr>
+      <tr><td>dev.to</td><td>@minjun</td><td><span class="badge badge-orange">SOON</span></td><td><span class="en">Technical blog for SEO + developer audience</span><span class="ko">SEO + 개발자 오디언스를 위한 기술 블로그</span></td></tr>
+      <tr><td>BetaList</td><td>—</td><td><span class="badge badge-orange">SOON</span></td><td><span class="en">Submit product listing (free tier, 2-3 week queue)</span><span class="ko">제품 리스팅 제출 (무료 티어, 2-3주 대기)</span></td></tr>
+    </table>
+  </div>
+
+  <!-- PART 9: BUDGET -->
+  <div class="section" id="budget">
+    <h2>💰 <span class="en">Part 9: Budget & Monetization Timeline</span><span class="ko">파트 9: 예산 & 수익화 타임라인</span></h2>
+
+    <h4><span class="en">Launch Budget (Minimal)</span><span class="ko">런칭 예산 (최소)</span></h4>
+    <table>
+      <tr><th><span class="en">Item</span><span class="ko">항목</span></th><th><span class="en">Cost</span><span class="ko">비용</span></th><th><span class="en">Notes</span><span class="ko">참고</span></th></tr>
+      <tr><td>Arizona LLC</td><td>$50</td><td>azcc.gov</td></tr>
+      <tr><td>EIN</td><td><span class="en">Free</span><span class="ko">무료</span></td><td>IRS.gov</td></tr>
+      <tr><td>Apple Developer</td><td><span class="en">$99/yr (already have)</span><span class="ko">$99/년 (이미 보유)</span></td><td>—</td></tr>
+      <tr><td>Domain (fridgenie.app)</td><td><span class="en">Already owned</span><span class="ko">이미 소유</span></td><td>—</td></tr>
+      <tr><td>Apple Search Ads</td><td>$50-100</td><td><span class="en">Optional test budget post-launch</span><span class="ko">런칭 후 선택적 테스트 예산</span></td></tr>
+      <tr><td>Indie App Santa</td><td>~$100-200</td><td><span class="en">Optional promo for download velocity</span><span class="ko">다운로드 속도를 위한 선택적 프로모</span></td></tr>
+      <tr><td><strong>Total</strong></td><td><strong>$50-400</strong></td><td><span class="en">Everything else is FREE (organic channels)</span><span class="ko">나머지는 전부 무료 (오가닉 채널)</span></td></tr>
+    </table>
+
+    <h4><span class="en">Monetization Phases</span><span class="ko">수익화 단계</span></h4>
+    <div class="timeline">
+      <div class="week">
+        <h4><span class="en">Phase 1: Free (Now → 500 users)</span><span class="ko">1단계: 무료 (지금 → 500명)</span></h4>
+        <p class="en">Current promo code system. Focus on growth and product-market fit. No paywall yet.</p>
+        <p class="ko">현재 프로모 코드 시스템. 성장과 제품-시장 적합성에 집중. 아직 페이월 없음.</p>
+      </div>
+      <div class="week">
+        <h4><span class="en">Phase 2: Freemium (500 → 2,000 users)</span><span class="ko">2단계: 프리미엄 (500 → 2,000명)</span></h4>
+        <p class="en">Free: Basic pantry + 3 recipes/day. Pro ($3.99/mo or $29.99/yr): Unlimited recipes, voice, receipt scan, household sharing. RevenueCat for subscription management.</p>
+        <p class="ko">무료: 기본 식료품실 + 일 3개 레시피. Pro ($3.99/월 또는 $29.99/년): 무제한 레시피, 음성, 영수증 스캔, 가구 공유. RevenueCat으로 구독 관리.</p>
+      </div>
+      <div class="week">
+        <h4><span class="en">Phase 3: Scale (2,000+ users)</span><span class="ko">3단계: 스케일 (2,000명 이상)</span></h4>
+        <p class="en">Add: meal planning, weekly grocery optimization, recipe collections, family meal plans. Consider brand partnerships (grocery delivery, meal kits).</p>
+        <p class="ko">추가: 식단 계획, 주간 식료품 최적화, 레시피 컬렉션, 가족 식단. 브랜드 파트너십 고려 (식료품 배달, 밀키트).</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <span class="en">🌳 Prepared by Totoro for Minjun · March 31, 2026</span>
+    <span class="ko">🌳 민준을 위해 토토로가 준비 · 2026년 3월 31일</span>
+    <br><span class="en">Sources: ProductHunt, Postiv.ai, CalmOps, IndieAppSanta, Moburst, AppGrowthStudio</span>
+    <span class="ko">출처: ProductHunt, Postiv.ai, CalmOps, IndieAppSanta, Moburst, AppGrowthStudio</span>
+  </div>
+</div>
+
+<script>
+let isKorean = false;
+function toggleLang() {
+  isKorean = !isKorean;
+  document.querySelectorAll('.en').forEach(el => el.classList.toggle('hide', isKorean));
+  document.querySelectorAll('.ko').forEach(el => el.classList.toggle('show', isKorean));
+  document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+}
+</script>
+</body>
+</html>
