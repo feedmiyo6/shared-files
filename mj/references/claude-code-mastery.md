@@ -4,6 +4,7 @@
 > Derived from Claude Code's architecture (exposed March 31, 2026 via npm source map leak),
 > official best practices, and community analysis.
 > Last updated: 2026-03-31
+> Best organized mirror: github.com/nirholas/claude-code (has docs/, MCP server, architecture guides)
 
 ---
 
@@ -152,19 +153,47 @@ Background memory maintenance triggered when ALL conditions met:
 
 ## Tool System & Built-in Tools
 
-### ~40 Built-in Tools
-Each tool is a discrete, permission-gated module:
+### Complete Tool Catalog (~40+ Tools)
+Each tool is a self-contained module (`src/tools/<ToolName>/`) with:
+- Input schema (Zod-validated), Permission model, Execution logic, UI components, Concurrency safety flag
 
-| Category | Tools |
-|----------|-------|
-| **File Ops** | FileReadTool, FileEditTool, FileWriteTool, GlobTool, GrepTool |
-| **Execution** | BashTool (2,500+ lines of validation logic) |
-| **Search** | WebFetchTool, WebSearchTool |
-| **Agent** | AgentTool (sub-agent spawning), Task tool |
-| **IDE** | LSPTool (Language Server Protocol integration) |
-| **Integration** | MCPTool (Model Context Protocol) |
-| **User** | AskUserQuestionTool |
-| **Planning** | TodoWrite (task tracking) |
+| Category | Tools | Read-Only |
+|----------|-------|-----------|
+| **File I/O** | FileReadTool (text/images/PDFs/notebooks), FileWriteTool, FileEditTool, NotebookEditTool, GlobTool, GrepTool (ripgrep), TodoWriteTool | Read/Write mix |
+| **Execution** | BashTool (2,500+ lines validation), PowerShellTool (Windows), REPLTool (Python/Node) | No |
+| **Agents & Teams** | AgentTool (sub-agent spawn), SendMessageTool (inter-agent), TeamCreateTool, TeamDeleteTool | No |
+| **Tasks** | TaskCreateTool, TaskUpdateTool, TaskGetTool, TaskListTool, TaskOutputTool, TaskStopTool | Mix |
+| **Mode & State** | EnterPlanModeTool, ExitPlanModeTool, EnterWorktreeTool, ExitWorktreeTool, SleepTool, SyntheticOutputTool | Mix |
+| **Web** | WebFetchTool, WebSearchTool | Yes |
+| **MCP** | MCPTool, ListMcpResourcesTool, ReadMcpResourceTool, McpAuthTool, ToolSearchTool | Mix |
+| **Integration** | LSPTool (go-to-def, find refs), SkillTool | Mix |
+| **Scheduling** | ScheduleCronTool, RemoteTriggerTool | No |
+| **User** | AskUserQuestionTool, BriefTool, ConfigTool | Mix |
+
+### Tool Architecture Pattern
+```typescript
+export const MyTool = buildTool({
+  name: 'MyTool',
+  aliases: ['my_tool'],
+  description: 'What this tool does',
+  inputSchema: z.object({ param: z.string() }),
+  async call(args, context, canUseTool, parentMessage, onProgress) { ... },
+  async checkPermissions(input, context) { /* → { granted, reason?, prompt? } */ },
+  isConcurrencySafe(input) { /* Can run in parallel? */ },
+  isReadOnly(input) { /* Non-destructive? */ },
+  prompt(options) { /* System prompt injection */ },
+  renderToolUseMessage(input, options) { /* UI for invocation */ },
+  renderToolResultMessage(content, progressMessages, options) { /* UI for result */ },
+})
+```
+
+### Permission Rules (Wildcard Patterns)
+```
+Bash(git *)           # Allow all git commands
+FileEdit(/src/*)      # Allow edits to anything in src/
+FileRead(*)           # Allow reading any file
+Bash(npm test)        # Allow specific command
+```
 
 ### Tool Usage Rules
 - **Use specialized tools over bash** — better UX and safety
@@ -432,6 +461,54 @@ claude /review-pr <PR-number>
 3. Conversation-only instructions will be summarized
 4. Recently accessed files re-injected (5K tokens each)
 ```
+
+---
+
+## Subsystems Deep Dive
+
+### Task System (src/tasks/)
+Background/parallel work items with distinct task types:
+| Type | Purpose |
+|------|---------|
+| **LocalShellTask** | Background shell command execution |
+| **LocalAgentTask** | Sub-agent running locally |
+| **RemoteAgentTask** | Agent running on remote machine |
+| **InProcessTeammateTask** | Parallel teammate agent |
+| **DreamTask** | Background "dreaming" / memory consolidation |
+
+### Skill System (src/skills/)
+Reusable named workflows. Key built-in skills:
+- `batch` — Batch operations across files
+- `debug` — Debugging workflows
+- `loop` — Iterative refinement loops
+- `remember` — Persist info to memory
+- `verify` / `verifyContent` — Verify code correctness
+- `simplify` — Simplify complex code
+- `stuck` — Get unstuck when blocked
+- `skillify` — Create new skills from workflows
+
+### Bridge System (src/bridge/)
+IDE integration via JWT-authenticated bidirectional channel:
+- `bridgeMain.ts` — Main loop
+- `bridgeMessaging.ts` — Protocol (serialize/deserialize)
+- `bridgePermissionCallbacks.ts` — Routes permission prompts to IDE
+- Gated behind `BRIDGE_MODE` feature flag
+
+### Voice System (src/voice/)
+- Speech-to-text streaming (`voiceStreamSTT.ts`)
+- Domain-specific key terms (`voiceKeyterms.ts`)
+- Gated behind `VOICE_MODE` feature flag
+
+### Service Layer Highlights
+| Service | Purpose |
+|---------|---------|
+| `compact/` | Conversation context compression |
+| `extractMemories/` | Auto-extracted from conversations |
+| `teamMemorySync/` | Shared team knowledge |
+| `autoDream/` | Background ideation/memory consolidation |
+| `policyLimits/` | Organization rate limits/quota |
+| `tokenEstimation.ts` | Token count estimation |
+| `x402/` | x402 payment protocol |
 
 ---
 
