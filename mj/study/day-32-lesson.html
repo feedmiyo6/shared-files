@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 32: Inferred Hardware — What Code Becomes</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    background: linear-gradient(135deg, #fefae0 0%, #faedcd 100%);
+    color: #3d405b;
+    line-height: 1.8;
+    padding: 24px;
+    max-width: 920px;
+    margin: 0 auto;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+h1 {
+    color: #5d4037;
+    border-bottom: 3px solid #c4a77d;
+    padding-bottom: 12px;
+    margin-bottom: 24px;
+    font-size: 2em;
+}
+h2 {
+    color: #588157;
+    border-bottom: 2px solid #a3b18a;
+    padding-bottom: 8px;
+    margin: 32px 0 16px;
+}
+h3 {
+    color: #5d4037;
+    margin: 20px 0 10px;
+}
+p { margin: 12px 0; }
+ul, ol { margin: 12px 0 12px 24px; }
+li { margin: 6px 0; }
+pre {
+    background: #2d3436;
+    padding: 24px;
+    border-radius: 12px;
+    margin: 24px 0;
+    border: 3px solid #a3b18a;
+    overflow-x: auto;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+    font-size: 15px;
+    line-height: 1.6;
+    color: #f8f8f2;
+}
+code {
+    background: #e9f5db;
+    color: #3d405b;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+}
+pre code {
+    background: none;
+    color: inherit;
+    padding: 0;
+}
+.keyword { color: #ff79c6; font-weight: 600; }
+.type { color: #8be9fd; }
+.signal { color: #50fa7b; }
+.number { color: #ffb86c; }
+.comment { color: #6272a4; font-style: italic; }
+.string { color: #f1fa8c; }
+.concept-box {
+    background: #fff8f0;
+    border: 2px solid #c4a77d;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    color: #3d405b;
+}
+.concept-box h3 { color: #5d4037; margin-bottom: 12px; }
+.warning-box {
+    background: #fff8f0;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    border-left: 4px solid #ef4444;
+    color: #3d405b;
+}
+.warning-box h3 { color: #c53030; margin-bottom: 12px; }
+.tip-box {
+    background: #fff8f0;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    border-left: 4px solid #588157;
+    color: #3d405b;
+}
+.comparison-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+.comparison-table th {
+    background: #588157;
+    color: white;
+    padding: 12px;
+    text-align: left;
+}
+.comparison-table td {
+    background: #fff;
+    border: 1px solid #c4a77d;
+    padding: 12px;
+    color: #3d405b;
+}
+.comparison-table tr:nth-child(even) td {
+    background: #fff8f0;
+}
+.section {
+    background: #fff;
+    border-radius: 12px;
+    padding: 24px;
+    margin: 24px 0;
+    border: 1px solid #c4a77d;
+}
+.nav-links {
+    display: flex;
+    gap: 12px;
+    margin: 24px 0;
+    flex-wrap: wrap;
+}
+.nav-links a {
+    background: linear-gradient(135deg, #588157, #3a5a40);
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 24px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14px;
+}
+.nav-links a:hover { opacity: 0.9; }
+.lang-toggle {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    background: #588157;
+    border: none;
+    border-radius: 24px;
+    padding: 10px 20px;
+    cursor: pointer;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    z-index: 1000;
+}
+.lang-toggle:hover { background: #3a5a40; }
+.ko { display: none; }
+.day-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, #588157, #3a5a40);
+    color: #fff;
+    padding: 4px 14px;
+    border-radius: 16px;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 12px;
+}
+@media (max-width: 768px) {
+    body { padding: 16px; }
+    h1 { font-size: 1.8em; }
+    pre { font-size: 14px; padding: 16px; }
+    .lang-toggle { padding: 8px 16px; font-size: 13px; }
+}
+</style>
+</head>
+<body>
+
+<button class="lang-toggle" onclick="toggleLang()">한국어</button>
+
+<span class="day-badge">📅 Day 32 / 40</span>
+<h1>
+    <span class="en">🔧 Inferred Hardware — What Code Becomes</span>
+    <span class="ko" style="display:none;">🔧 추론 하드웨어 — 코드가 무엇이 되는가</span>
+</h1>
+
+<div class="nav-links">
+    <a href="day-32-quiz.html">📝 Quiz</a>
+    <a href="day-32-practice.html">💻 Practice</a>
+    <a href="day-31-lesson.html">← Day 31</a>
+</div>
+
+<p class="en">Yesterday you learned <strong>what synthesis does</strong> at a high level. Today we zoom in: every line of RTL code you write maps to <strong>specific hardware structures</strong>. Understanding this mapping is what separates someone who writes code from someone who designs hardware.</p>
+<p class="ko" style="display:none;">어제는 합성(synthesis)이 <strong>무엇을 하는지</strong> 높은 수준에서 배웠습니다. 오늘은 더 깊이 들어갑니다: 여러분이 작성하는 RTL 코드의 모든 줄은 <strong>특정 하드웨어 구조</strong>에 매핑됩니다. 이 매핑을 이해하는 것이 코드를 작성하는 사람과 하드웨어를 설계하는 사람의 차이입니다.</p>
+
+<!-- Section 1: The Mental Model -->
+<div class="section">
+<h2>
+    <span class="en">1. The Code → Hardware Mental Model</span>
+    <span class="ko" style="display:none;">1. 코드 → 하드웨어 멘탈 모델</span>
+</h2>
+
+<div class="concept-box">
+<h3>🧠 Key Insight</h3>
+<p class="en">When you write SystemVerilog, you're not writing software instructions. You're <strong>describing circuits</strong>. The synthesis tool's job is to figure out what circuit you described and build it from the standard cells in its library.</p>
+<p class="ko" style="display:none;">SystemVerilog를 작성할 때, 소프트웨어 명령어를 작성하는 것이 아닙니다. <strong>회로를 설명</strong>하는 것입니다. 합성 도구의 역할은 여러분이 설명한 회로가 무엇인지 파악하고 라이브러리의 표준 셀로 그것을 구축하는 것입니다.</p>
+</div>
+
+<p class="en">Here's the fundamental mapping every digital designer must know:</p>
+<p class="ko" style="display:none;">모든 디지털 설계자가 알아야 할 기본 매핑입니다:</p>
+
+<table class="comparison-table">
+<tr><th>RTL Pattern</th><th>Inferred Hardware</th><th>Example</th></tr>
+<tr><td><code>always_ff</code> + clock edge</td><td>Flip-flops (registers)</td><td>D flip-flop, register bank</td></tr>
+<tr><td><code>always_comb</code> + if/else</td><td>Multiplexers</td><td>2:1 mux, priority mux chain</td></tr>
+<tr><td><code>always_comb</code> + case</td><td>Decoder / mux</td><td>Instruction decoder</td></tr>
+<tr><td><code>+</code>, <code>-</code> operators</td><td>Adder / subtractor</td><td>Ripple carry, CLA</td></tr>
+<tr><td><code>*</code> operator</td><td>Multiplier</td><td>Array multiplier (LARGE!)</td></tr>
+<tr><td><code>&</code>, <code>|</code>, <code>^</code></td><td>AND, OR, XOR gates</td><td>Basic logic</td></tr>
+<tr><td><code>==</code>, <code>!=</code></td><td>Comparator</td><td>Equality checker</td></tr>
+<tr><td><code>? :</code> ternary</td><td>Multiplexer</td><td>2:1 mux</td></tr>
+<tr><td><code>{a, b}</code> concatenation</td><td>Wires (free!)</td><td>Just routing</td></tr>
+<tr><td><code>a[3:0]</code> slicing</td><td>Wires (free!)</td><td>Just routing</td></tr>
+</table>
+</div>
+
+<!-- Section 2: Registers / Flip-Flops -->
+<div class="section">
+<h2>
+    <span class="en">2. Flip-Flops: The Storage Elements</span>
+    <span class="ko" style="display:none;">2. 플립플롭: 저장 요소</span>
+</h2>
+
+<p class="en">Any signal assigned inside <code>always_ff @(posedge clk)</code> becomes a <strong>flip-flop</strong>. Every bit = one flip-flop. This is the #1 rule of inferred hardware.</p>
+<p class="ko" style="display:none;"><code>always_ff @(posedge clk)</code> 내부에서 할당된 모든 신호는 <strong>플립플롭</strong>이 됩니다. 모든 비트 = 하나의 플립플롭. 이것이 추론 하드웨어의 #1 규칙입니다.</p>
+
+<h3>
+    <span class="en">Simple Register</span>
+    <span class="ko" style="display:none;">단순 레지스터</span>
+</h3>
+<pre><code><span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span> <span class="keyword">or posedge</span> <span class="signal">rst</span>) <span class="keyword">begin</span>
+    <span class="keyword">if</span> (<span class="signal">rst</span>)
+        <span class="signal">q</span> &lt;= <span class="number">8'h00</span>;        <span class="comment">// Reset value</span>
+    <span class="keyword">else</span>
+        <span class="signal">q</span> &lt;= <span class="signal">d</span>;             <span class="comment">// D input → Q output</span>
+<span class="keyword">end</span>
+<span class="comment">// Infers: 8 flip-flops with async reset</span></code></pre>
+
+<h3>
+    <span class="en">Register with Enable</span>
+    <span class="ko" style="display:none;">인에이블이 있는 레지스터</span>
+</h3>
+<pre><code><span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span>) <span class="keyword">begin</span>
+    <span class="keyword">if</span> (<span class="signal">rst</span>)
+        <span class="signal">q</span> &lt;= <span class="number">'0</span>;
+    <span class="keyword">else if</span> (<span class="signal">en</span>)          <span class="comment">// Enable signal</span>
+        <span class="signal">q</span> &lt;= <span class="signal">d</span>;
+    <span class="comment">// else: q holds its value (implicit)</span>
+<span class="keyword">end</span>
+<span class="comment">// Infers: flip-flops + mux on D input (enable gating)</span></code></pre>
+
+<div class="tip-box">
+<h3>💡 Cost Awareness</h3>
+<p class="en"><strong>Each bit</strong> of a registered signal = one flip-flop. A <code>logic [31:0] data_reg</code> = 32 flip-flops. A <code>logic [7:0] mem [0:255]</code> = 2,048 flip-flops! Always think about how many bits you're registering.</p>
+<p class="ko" style="display:none;">등록된 신호의 <strong>각 비트</strong> = 하나의 플립플롭. <code>logic [31:0] data_reg</code> = 32개의 플립플롭. <code>logic [7:0] mem [0:255]</code> = 2,048개의 플립플롭! 몇 비트를 등록하고 있는지 항상 생각하세요.</p>
+</div>
+</div>
+
+<!-- Section 3: Muxes -->
+<div class="section">
+<h2>
+    <span class="en">3. Multiplexers: The Decision Makers</span>
+    <span class="ko" style="display:none;">3. 멀티플렉서: 의사 결정기</span>
+</h2>
+
+<p class="en">Every <code>if/else</code> and <code>? :</code> in combinational logic becomes a <strong>multiplexer</strong>. Nested if/else chains create <strong>priority mux chains</strong> — which have timing implications.</p>
+<p class="ko" style="display:none;">조합 논리에서 모든 <code>if/else</code>와 <code>? :</code>는 <strong>멀티플렉서</strong>가 됩니다. 중첩된 if/else 체인은 <strong>우선순위 멀티플렉서 체인</strong>을 생성합니다 — 이는 타이밍에 영향을 미칩니다.</p>
+
+<h3>
+    <span class="en">If/Else → Priority Mux</span>
+    <span class="ko" style="display:none;">If/Else → 우선순위 멀티플렉서</span>
+</h3>
+<pre><code><span class="keyword">always_comb</span> <span class="keyword">begin</span>
+    <span class="keyword">if</span> (<span class="signal">sel_a</span>)
+        <span class="signal">out</span> = <span class="signal">data_a</span>;        <span class="comment">// Highest priority</span>
+    <span class="keyword">else if</span> (<span class="signal">sel_b</span>)
+        <span class="signal">out</span> = <span class="signal">data_b</span>;        <span class="comment">// Second priority</span>
+    <span class="keyword">else if</span> (<span class="signal">sel_c</span>)
+        <span class="signal">out</span> = <span class="signal">data_c</span>;        <span class="comment">// Third priority</span>
+    <span class="keyword">else</span>
+        <span class="signal">out</span> = <span class="signal">data_d</span>;        <span class="comment">// Default</span>
+<span class="keyword">end</span>
+<span class="comment">// Infers: chain of 2:1 muxes — sel_a checked first!</span>
+<span class="comment">// Critical path: sel_c → out (deepest in chain)</span></code></pre>
+
+<h3>
+    <span class="en">Case → Balanced Mux</span>
+    <span class="ko" style="display:none;">Case → 균형 멀티플렉서</span>
+</h3>
+<pre><code><span class="keyword">always_comb</span> <span class="keyword">begin</span>
+    <span class="keyword">case</span> (<span class="signal">sel</span>)
+        <span class="number">2'b00</span>: <span class="signal">out</span> = <span class="signal">data_a</span>;
+        <span class="number">2'b01</span>: <span class="signal">out</span> = <span class="signal">data_b</span>;
+        <span class="number">2'b10</span>: <span class="signal">out</span> = <span class="signal">data_c</span>;
+        <span class="number">2'b11</span>: <span class="signal">out</span> = <span class="signal">data_d</span>;
+    <span class="keyword">endcase</span>
+<span class="keyword">end</span>
+<span class="comment">// Infers: 4:1 mux — all paths equal priority</span>
+<span class="comment">// Better timing than if/else chain!</span></code></pre>
+
+<div class="warning-box">
+<h3>⚠️ If/Else vs Case — Timing Impact</h3>
+<p class="en">A chain of 8 <code>if/else</code> creates 8 levels of muxes in series (long critical path). A <code>case</code> with 8 options creates a single wide mux (shorter path). <strong>Use <code>case</code> when conditions are mutually exclusive</strong> — it gives the synthesizer freedom to optimize.</p>
+<p class="ko" style="display:none;">8개의 <code>if/else</code> 체인은 직렬로 8단계의 멀티플렉서를 생성합니다 (긴 크리티컬 패스). 8개 옵션의 <code>case</code>는 단일 넓은 멀티플렉서를 생성합니다 (짧은 경로). <strong>조건이 상호 배타적일 때 <code>case</code>를 사용하세요</strong> — 합성기에게 최적화의 자유를 줍니다.</p>
+</div>
+</div>
+
+<!-- Section 4: Arithmetic -->
+<div class="section">
+<h2>
+    <span class="en">4. Arithmetic: Adders, Subtractors, Multipliers</span>
+    <span class="ko" style="display:none;">4. 산술: 가산기, 감산기, 곱셈기</span>
+</h2>
+
+<p class="en">Arithmetic operators map directly to dedicated hardware. But their <strong>cost varies enormously</strong>.</p>
+<p class="ko" style="display:none;">산술 연산자는 전용 하드웨어에 직접 매핑됩니다. 그러나 <strong>비용은 크게 다릅니다</strong>.</p>
+
+<table class="comparison-table">
+<tr><th>Operator</th><th>Hardware</th><th>Area Cost</th><th>Timing Cost</th></tr>
+<tr><td><code>a + b</code></td><td>Adder</td><td>Low (linear with width)</td><td>Moderate</td></tr>
+<tr><td><code>a - b</code></td><td>Subtractor (adder + invert)</td><td>Low</td><td>Moderate</td></tr>
+<tr><td><code>a * b</code></td><td>Multiplier</td><td>HIGH (quadratic!)</td><td>HIGH</td></tr>
+<tr><td><code>a / b</code></td><td>Divider</td><td>VERY HIGH</td><td>VERY HIGH</td></tr>
+<tr><td><code>a % b</code></td><td>Modulo (divider)</td><td>VERY HIGH</td><td>VERY HIGH</td></tr>
+<tr><td><code>a << n</code> (constant)</td><td>Wires only!</td><td>FREE</td><td>FREE</td></tr>
+<tr><td><code>a << b</code> (variable)</td><td>Barrel shifter</td><td>Moderate</td><td>Moderate</td></tr>
+</table>
+
+<h3>
+    <span class="en">The Multiplication Trap</span>
+    <span class="ko" style="display:none;">곱셈의 함정</span>
+</h3>
+<pre><code><span class="comment">// This looks innocent...</span>
+<span class="keyword">assign</span> <span class="signal">result</span> = <span class="signal">a</span> * <span class="signal">b</span>;  <span class="comment">// 32-bit * 32-bit</span>
+
+<span class="comment">// But it infers a HUGE multiplier:</span>
+<span class="comment">//   - ~1000+ gates</span>
+<span class="comment">//   - Multiple clock cycles of combinational delay</span>
+<span class="comment">//   - May need pipelining to meet timing</span>
+
+<span class="comment">// Power-of-2 multiply is FREE:</span>
+<span class="keyword">assign</span> <span class="signal">times_8</span> = <span class="signal">a</span> &lt;&lt; <span class="number">3</span>;   <span class="comment">// Just wires! a * 8</span>
+
+<span class="comment">// Constant multiply is cheaper:</span>
+<span class="keyword">assign</span> <span class="signal">times_5</span> = (<span class="signal">a</span> &lt;&lt; <span class="number">2</span>) + <span class="signal">a</span>;  <span class="comment">// a*4 + a = a*5</span></code></pre>
+
+<div class="tip-box">
+<h3>💡 Shift Tricks</h3>
+<p class="en">Shifting by a <strong>constant</strong> is free — it's just rewiring. <code>a << 3</code> = multiply by 8 with zero gates. Always prefer shifts for power-of-2 operations. Division by power-of-2: <code>a >> 2</code> = divide by 4 (for unsigned).</p>
+<p class="ko" style="display:none;"><strong>상수</strong>만큼의 시프트는 무료입니다 — 단순히 배선 변경입니다. <code>a << 3</code> = 게이트 제로로 8을 곱합니다. 2의 거듭제곱 연산에는 항상 시프트를 선호하세요. 2의 거듭제곱으로 나누기: <code>a >> 2</code> = 4로 나누기 (부호 없는 경우).</p>
+</div>
+</div>
+
+<!-- Section 5: Free Operations -->
+<div class="section">
+<h2>
+    <span class="en">5. Free Operations: Wires Are Just Routing</span>
+    <span class="ko" style="display:none;">5. 무료 연산: 와이어는 단순한 라우팅</span>
+</h2>
+
+<p class="en">Some operations that look like they "do something" are actually <strong>free</strong> — they just rearrange wires:</p>
+<p class="ko" style="display:none;">무언가를 "하는 것처럼" 보이는 일부 연산은 실제로 <strong>무료</strong>입니다 — 단순히 와이어를 재배열합니다:</p>
+
+<pre><code><span class="comment">// All of these are FREE — just wire routing:</span>
+
+<span class="comment">// Concatenation — merging wires</span>
+<span class="keyword">assign</span> <span class="signal">word</span> = {<span class="signal">upper</span>, <span class="signal">lower</span>};
+
+<span class="comment">// Bit slicing — selecting wires</span>
+<span class="keyword">assign</span> <span class="signal">nibble</span> = <span class="signal">byte_val</span>[<span class="number">3</span>:<span class="number">0</span>];
+
+<span class="comment">// Constant shift — rewiring</span>
+<span class="keyword">assign</span> <span class="signal">shifted</span> = <span class="signal">data</span> &lt;&lt; <span class="number">4</span>;
+
+<span class="comment">// Replication — fanning out wires</span>
+<span class="keyword">assign</span> <span class="signal">sign_ext</span> = {<span class="number">24</span>{<span class="signal">val</span>[<span class="number">7</span>]}, <span class="signal">val</span>};
+
+<span class="comment">// Bit reversal — just routing</span>
+<span class="keyword">assign</span> <span class="signal">reversed</span>[<span class="number">7</span>:<span class="number">0</span>] = {<span class="signal">data</span>[<span class="number">0</span>], <span class="signal">data</span>[<span class="number">1</span>], <span class="signal">data</span>[<span class="number">2</span>], <span class="signal">data</span>[<span class="number">3</span>],
+                          <span class="signal">data</span>[<span class="number">4</span>], <span class="signal">data</span>[<span class="number">5</span>], <span class="signal">data</span>[<span class="number">6</span>], <span class="signal">data</span>[<span class="number">7</span>]};</code></pre>
+
+<div class="concept-box">
+<h3>🎯 Why This Matters</h3>
+<p class="en">When optimizing for area or timing, know what's free and what costs gates. Restructuring <code>a * 6</code> as <code>(a << 2) + (a << 1)</code> replaces a multiplier with two shifts (free) and one adder (cheap). That's a massive savings!</p>
+<p class="ko" style="display:none;">면적이나 타이밍을 최적화할 때, 무엇이 무료이고 무엇이 게이트를 소비하는지 알아야 합니다. <code>a * 6</code>을 <code>(a << 2) + (a << 1)</code>로 재구성하면 곱셈기를 두 개의 시프트(무료)와 하나의 가산기(저렴)로 대체합니다. 엄청난 절약입니다!</p>
+</div>
+</div>
+
+<!-- Section 6: Common Patterns -->
+<div class="section">
+<h2>
+    <span class="en">6. Common Inference Patterns</span>
+    <span class="ko" style="display:none;">6. 일반적인 추론 패턴</span>
+</h2>
+
+<h3>
+    <span class="en">Counter → Adder + Register</span>
+    <span class="ko" style="display:none;">카운터 → 가산기 + 레지스터</span>
+</h3>
+<pre><code><span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span>) <span class="keyword">begin</span>
+    <span class="keyword">if</span> (<span class="signal">rst</span>)
+        <span class="signal">count</span> &lt;= <span class="number">'0</span>;
+    <span class="keyword">else</span>
+        <span class="signal">count</span> &lt;= <span class="signal">count</span> + <span class="number">1</span>;  <span class="comment">// Adder feeds back into register</span>
+<span class="keyword">end</span>
+<span class="comment">// Infers: N-bit adder → N flip-flops → feedback loop</span></code></pre>
+
+<h3>
+    <span class="en">Shift Register → Chain of Flip-Flops</span>
+    <span class="ko" style="display:none;">시프트 레지스터 → 플립플롭 체인</span>
+</h3>
+<pre><code><span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span>) <span class="keyword">begin</span>
+    <span class="signal">pipe</span>[<span class="number">0</span>] &lt;= <span class="signal">data_in</span>;
+    <span class="signal">pipe</span>[<span class="number">1</span>] &lt;= <span class="signal">pipe</span>[<span class="number">0</span>];
+    <span class="signal">pipe</span>[<span class="number">2</span>] &lt;= <span class="signal">pipe</span>[<span class="number">1</span>];
+<span class="keyword">end</span>
+<span class="comment">// Infers: 3-stage pipeline (FF → FF → FF)</span>
+<span class="comment">// Each pipe[n] = W flip-flops (W = data width)</span></code></pre>
+
+<h3>
+    <span class="en">Decoder → AND/OR Logic</span>
+    <span class="ko" style="display:none;">디코더 → AND/OR 로직</span>
+</h3>
+<pre><code><span class="keyword">always_comb</span> <span class="keyword">begin</span>
+    <span class="signal">enable</span> = <span class="number">'0</span>;         <span class="comment">// Default all bits to 0</span>
+    <span class="keyword">case</span> (<span class="signal">addr</span>)
+        <span class="number">2'b00</span>: <span class="signal">enable</span>[<span class="number">0</span>] = <span class="number">1'b1</span>;
+        <span class="number">2'b01</span>: <span class="signal">enable</span>[<span class="number">1</span>] = <span class="number">1'b1</span>;
+        <span class="number">2'b10</span>: <span class="signal">enable</span>[<span class="number">2</span>] = <span class="number">1'b1</span>;
+        <span class="number">2'b11</span>: <span class="signal">enable</span>[<span class="number">3</span>] = <span class="number">1'b1</span>;
+    <span class="keyword">endcase</span>
+<span class="keyword">end</span>
+<span class="comment">// Infers: 2-to-4 decoder (a few AND gates)</span></code></pre>
+
+<h3>
+    <span class="en">Tri-state → Mux (in modern synthesis)</span>
+    <span class="ko" style="display:none;">트라이스테이트 → 멀티플렉서 (현대 합성에서)</span>
+</h3>
+<pre><code><span class="comment">// You write this:</span>
+<span class="keyword">assign</span> <span class="signal">bus</span> = <span class="signal">en</span> ? <span class="signal">data</span> : <span class="number">'z</span>;
+
+<span class="comment">// Synthesis maps it to:</span>
+<span class="comment">// For internal signals → MUX (no tri-state inside ASIC/FPGA)</span>
+<span class="comment">// For I/O pads → actual tri-state buffer</span></code></pre>
+</div>
+
+<!-- Section 7: Dangerous Inferences -->
+<div class="section">
+<h2>
+    <span class="en">7. Dangerous Inferences to Watch For</span>
+    <span class="ko" style="display:none;">7. 주의해야 할 위험한 추론</span>
+</h2>
+
+<div class="warning-box">
+<h3>⚠️ Unintentional Latches</h3>
+<p class="en">If you forget a default assignment or miss a branch in <code>always_comb</code>, synthesis infers a <strong>latch</strong> — almost always a bug. We'll cover this in depth on Day 33!</p>
+<p class="ko" style="display:none;"><code>always_comb</code>에서 기본 할당을 잊거나 분기를 놓치면 합성이 <strong>래치</strong>를 추론합니다 — 거의 항상 버그입니다. Day 33에서 이것을 자세히 다룹니다!</p>
+</div>
+
+<pre><code><span class="comment">// 🚫 BAD: Missing else → latch!</span>
+<span class="keyword">always_comb</span> <span class="keyword">begin</span>
+    <span class="keyword">if</span> (<span class="signal">sel</span>)
+        <span class="signal">out</span> = <span class="signal">data_a</span>;
+    <span class="comment">// No else! What is 'out' when sel=0?</span>
+    <span class="comment">// → Must hold previous value → LATCH inferred!</span>
+<span class="keyword">end</span>
+
+<span class="comment">// ✅ GOOD: Default assignment prevents latch</span>
+<span class="keyword">always_comb</span> <span class="keyword">begin</span>
+    <span class="signal">out</span> = <span class="signal">data_b</span>;       <span class="comment">// Default value</span>
+    <span class="keyword">if</span> (<span class="signal">sel</span>)
+        <span class="signal">out</span> = <span class="signal">data_a</span>;
+<span class="keyword">end</span></code></pre>
+
+<div class="warning-box">
+<h3>⚠️ Combinational Loops</h3>
+<p class="en">If a signal depends on itself without a clock edge, you get a <strong>combinational loop</strong> — the circuit oscillates or settles to an unknown value. Synthesis tools will flag this as an error.</p>
+<p class="ko" style="display:none;">클록 에지 없이 신호가 자기 자신에 의존하면 <strong>조합 루프</strong>가 발생합니다 — 회로가 진동하거나 알 수 없는 값으로 정착합니다. 합성 도구가 이를 오류로 표시합니다.</p>
+</div>
+
+<pre><code><span class="comment">// 🚫 COMBINATIONAL LOOP — never do this!</span>
+<span class="keyword">always_comb</span> <span class="keyword">begin</span>
+    <span class="signal">a</span> = <span class="signal">b</span> + <span class="number">1</span>;
+    <span class="signal">b</span> = <span class="signal">a</span> + <span class="number">1</span>;  <span class="comment">// a depends on b, b depends on a!</span>
+<span class="keyword">end</span></code></pre>
+</div>
+
+<!-- Section 8: Visualization -->
+<div class="section">
+<h2>
+    <span class="en">8. Thinking in Hardware: A Complete Example</span>
+    <span class="ko" style="display:none;">8. 하드웨어로 생각하기: 완전한 예제</span>
+</h2>
+
+<p class="en">Let's trace through a real module and identify every piece of hardware it infers:</p>
+<p class="ko" style="display:none;">실제 모듈을 추적하며 추론하는 모든 하드웨어를 식별해봅시다:</p>
+
+<pre><code><span class="keyword">module</span> <span class="type">alu_simple</span> (
+    <span class="keyword">input</span>  <span class="type">logic</span>        <span class="signal">clk</span>, <span class="signal">rst</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span> [<span class="number">7</span>:<span class="number">0</span>]  <span class="signal">a</span>, <span class="signal">b</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span> [<span class="number">1</span>:<span class="number">0</span>]  <span class="signal">op</span>,
+    <span class="keyword">output</span> <span class="type">logic</span> [<span class="number">7</span>:<span class="number">0</span>]  <span class="signal">result</span>
+);
+    <span class="type">logic</span> [<span class="number">7</span>:<span class="number">0</span>] <span class="signal">alu_out</span>;  <span class="comment">// Combinational wire</span>
+
+    <span class="comment">// Combinational: 4:1 mux + adder + AND + XOR</span>
+    <span class="keyword">always_comb</span> <span class="keyword">begin</span>
+        <span class="keyword">case</span> (<span class="signal">op</span>)
+            <span class="number">2'b00</span>: <span class="signal">alu_out</span> = <span class="signal">a</span> + <span class="signal">b</span>;  <span class="comment">// → Adder</span>
+            <span class="number">2'b01</span>: <span class="signal">alu_out</span> = <span class="signal">a</span> - <span class="signal">b</span>;  <span class="comment">// → Subtractor</span>
+            <span class="number">2'b10</span>: <span class="signal">alu_out</span> = <span class="signal">a</span> & <span class="signal">b</span>;  <span class="comment">// → AND gates</span>
+            <span class="number">2'b11</span>: <span class="signal">alu_out</span> = <span class="signal">a</span> ^ <span class="signal">b</span>;  <span class="comment">// → XOR gates</span>
+        <span class="keyword">endcase</span>
+    <span class="keyword">end</span>
+
+    <span class="comment">// Sequential: 8 flip-flops for output register</span>
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span>) <span class="keyword">begin</span>
+        <span class="keyword">if</span> (<span class="signal">rst</span>)
+            <span class="signal">result</span> &lt;= <span class="number">8'h00</span>;
+        <span class="keyword">else</span>
+            <span class="signal">result</span> &lt;= <span class="signal">alu_out</span>;  <span class="comment">// Register the output</span>
+    <span class="keyword">end</span>
+<span class="keyword">endmodule</span></code></pre>
+
+<div class="concept-box">
+<h3>📦 Hardware Breakdown</h3>
+<ul>
+<li class="en"><strong>8-bit adder</strong> — for <code>a + b</code></li>
+<li class="en"><strong>8-bit subtractor</strong> — for <code>a - b</code></li>
+<li class="en"><strong>8x AND gates</strong> — for <code>a & b</code></li>
+<li class="en"><strong>8x XOR gates</strong> — for <code>a ^ b</code></li>
+<li class="en"><strong>4:1 mux (8-bit wide)</strong> — the case statement selects one of four results</li>
+<li class="en"><strong>8 flip-flops</strong> — the output register</li>
+<li class="en"><strong>8 muxes</strong> — reset path (rst ? 0 : alu_out)</li>
+<li class="ko" style="display:none;"><strong>8비트 가산기</strong> — <code>a + b</code>용</li>
+<li class="ko" style="display:none;"><strong>8비트 감산기</strong> — <code>a - b</code>용</li>
+<li class="ko" style="display:none;"><strong>8개 AND 게이트</strong> — <code>a & b</code>용</li>
+<li class="ko" style="display:none;"><strong>8개 XOR 게이트</strong> — <code>a ^ b</code>용</li>
+<li class="ko" style="display:none;"><strong>4:1 멀티플렉서 (8비트 폭)</strong> — case문이 4개 결과 중 하나를 선택</li>
+<li class="ko" style="display:none;"><strong>8개 플립플롭</strong> — 출력 레지스터</li>
+<li class="ko" style="display:none;"><strong>8개 멀티플렉서</strong> — 리셋 경로 (rst ? 0 : alu_out)</li>
+</ul>
+</div>
+</div>
+
+<!-- Summary -->
+<div class="section">
+<h2>
+    <span class="en">📋 Today's Key Takeaways</span>
+    <span class="ko" style="display:none;">📋 오늘의 핵심 요약</span>
+</h2>
+<ol>
+<li class="en"><strong>always_ff → flip-flops</strong>. Every bit = one FF. Know your bit counts.</li>
+<li class="en"><strong>if/else → priority mux chain</strong>. Use <code>case</code> when possible for better timing.</li>
+<li class="en"><strong>Multiplication is expensive</strong>. Prefer shifts and adds for constants.</li>
+<li class="en"><strong>Concatenation, slicing, constant shifts are FREE</strong>. Just wire routing.</li>
+<li class="en"><strong>Missing branches → latches</strong>. Always provide defaults in combinational logic.</li>
+<li class="en"><strong>Think in hardware</strong>. Every line of RTL maps to gates, muxes, or flip-flops.</li>
+<li class="ko" style="display:none;"><strong>always_ff → 플립플롭</strong>. 모든 비트 = 하나의 FF. 비트 수를 파악하세요.</li>
+<li class="ko" style="display:none;"><strong>if/else → 우선순위 멀티플렉서 체인</strong>. 가능하면 더 나은 타이밍을 위해 <code>case</code>를 사용하세요.</li>
+<li class="ko" style="display:none;"><strong>곱셈은 비용이 높습니다</strong>. 상수에는 시프트와 덧셈을 선호하세요.</li>
+<li class="ko" style="display:none;"><strong>연결, 슬라이싱, 상수 시프트는 무료</strong>. 단순한 와이어 라우팅입니다.</li>
+<li class="ko" style="display:none;"><strong>빠진 분기 → 래치</strong>. 조합 논리에서 항상 기본값을 제공하세요.</li>
+<li class="ko" style="display:none;"><strong>하드웨어로 생각하세요</strong>. RTL의 모든 줄은 게이트, 멀티플렉서 또는 플립플롭에 매핑됩니다.</li>
+</ol>
+</div>
+
+<div class="nav-links">
+    <a href="day-32-quiz.html">📝 Take the Quiz →</a>
+    <a href="day-32-practice.html">💻 Practice Exercises →</a>
+</div>
+
+<script>
+let isKorean = false;
+function toggleLang() {
+    isKorean = !isKorean;
+    document.querySelectorAll('.en').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'none' : 'revert', 'important');
+    });
+    document.querySelectorAll('.ko').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'revert' : 'none', 'important');
+    });
+    document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+}
+</script>
+</body>
+</html>

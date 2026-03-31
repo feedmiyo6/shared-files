@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 32 Quiz: Inferred Hardware</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    background: linear-gradient(135deg, #fefae0 0%, #faedcd 100%);
+    color: #3d405b;
+    line-height: 1.8;
+    padding: 24px;
+    max-width: 920px;
+    margin: 0 auto;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+h1 {
+    color: #5d4037;
+    border-bottom: 3px solid #c4a77d;
+    padding-bottom: 12px;
+    margin-bottom: 24px;
+    font-size: 2em;
+}
+h2 {
+    color: #588157;
+    border-bottom: 2px solid #a3b18a;
+    padding-bottom: 8px;
+    margin: 32px 0 16px;
+}
+h3 { color: #5d4037; margin: 20px 0 10px; }
+p { margin: 12px 0; }
+pre {
+    background: #2d3436;
+    padding: 24px;
+    border-radius: 12px;
+    margin: 24px 0;
+    border: 3px solid #a3b18a;
+    overflow-x: auto;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+    font-size: 15px;
+    line-height: 1.6;
+    color: #f8f8f2;
+}
+code {
+    background: #e9f5db;
+    color: #3d405b;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+}
+pre code { background: none; color: inherit; padding: 0; }
+.keyword { color: #ff79c6; font-weight: 600; }
+.type { color: #8be9fd; }
+.signal { color: #50fa7b; }
+.number { color: #ffb86c; }
+.comment { color: #6272a4; font-style: italic; }
+.section {
+    background: #fff;
+    border-radius: 12px;
+    padding: 24px;
+    margin: 24px 0;
+    border: 1px solid #c4a77d;
+}
+.question {
+    background: #fff8f0;
+    border: 2px solid #c4a77d;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+}
+.question h3 { margin-bottom: 12px; }
+.options { list-style: none; padding: 0; margin: 12px 0; }
+.options li {
+    padding: 10px 16px;
+    margin: 6px 0;
+    border-radius: 8px;
+    cursor: pointer;
+    border: 2px solid #c4a77d;
+    background: #fff;
+    transition: all 0.2s;
+}
+.options li:hover { border-color: #588157; background: #e9f5db; }
+.options li.correct { background: #d4edda; border-color: #10b981; }
+.options li.wrong { background: #fde8e8; border-color: #ef4444; }
+.options li.disabled { pointer-events: none; opacity: 0.7; }
+.explanation {
+    display: none;
+    background: #fff8f0;
+    border-left: 4px solid #588157;
+    padding: 15px;
+    margin-top: 12px;
+    border-radius: 8px;
+}
+.explanation.show { display: block; }
+.score-box {
+    background: #fff8f0;
+    border: 2px solid #c4a77d;
+    border-radius: 12px;
+    padding: 24px;
+    margin: 24px 0;
+    text-align: center;
+    display: none;
+}
+.score-box.show { display: block; }
+.score-box .score { font-size: 2.5em; color: #588157; font-weight: 700; }
+.nav-links {
+    display: flex;
+    gap: 12px;
+    margin: 24px 0;
+    flex-wrap: wrap;
+}
+.nav-links a {
+    background: linear-gradient(135deg, #588157, #3a5a40);
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 24px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14px;
+}
+.nav-links a:hover { opacity: 0.9; }
+.btn {
+    background: linear-gradient(135deg, #588157, #3a5a40);
+    color: #fff;
+    border: none;
+    padding: 12px 28px;
+    border-radius: 24px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    margin-top: 20px;
+}
+.btn:hover { opacity: 0.9; }
+.lang-toggle {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    background: #588157;
+    border: none;
+    border-radius: 24px;
+    padding: 10px 20px;
+    cursor: pointer;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    z-index: 1000;
+}
+.lang-toggle:hover { background: #3a5a40; }
+.ko { display: none; }
+.day-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, #588157, #3a5a40);
+    color: #fff;
+    padding: 4px 14px;
+    border-radius: 16px;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 12px;
+}
+@media (max-width: 768px) {
+    body { padding: 16px; }
+    h1 { font-size: 1.8em; }
+    pre { font-size: 14px; padding: 16px; }
+    .lang-toggle { padding: 8px 16px; font-size: 13px; }
+}
+</style>
+</head>
+<body>
+
+<button class="lang-toggle" onclick="toggleLang()">한국어</button>
+
+<span class="day-badge">📅 Day 32 / 40</span>
+<h1>
+    <span class="en">📝 Quiz: Inferred Hardware</span>
+    <span class="ko" style="display:none;">📝 퀴즈: 추론 하드웨어</span>
+</h1>
+
+<div class="nav-links">
+    <a href="day-32-lesson.html">📖 Lesson</a>
+    <a href="day-32-practice.html">💻 Practice</a>
+</div>
+
+<div id="quiz">
+
+<!-- Q1 -->
+<div class="question" data-answer="1">
+<h3>Q1. What hardware does <code>always_ff @(posedge clk)</code> with an assignment infer?</h3>
+<ul class="options">
+<li onclick="checkAnswer(this, 0)">A) Multiplexer</li>
+<li onclick="checkAnswer(this, 1)">B) Flip-flops (registers)</li>
+<li onclick="checkAnswer(this, 2)">C) Latches</li>
+<li onclick="checkAnswer(this, 3)">D) AND gates</li>
+</ul>
+<div class="explanation">
+<p class="en"><strong>B) Flip-flops.</strong> Every signal assigned inside an <code>always_ff</code> block triggered by a clock edge infers flip-flops. Each bit of the signal = one flip-flop.</p>
+<p class="ko" style="display:none;"><strong>B) 플립플롭.</strong> 클록 에지에 의해 트리거되는 <code>always_ff</code> 블록 내에서 할당된 모든 신호는 플립플롭을 추론합니다. 신호의 각 비트 = 하나의 플립플롭.</p>
+</div>
+</div>
+
+<!-- Q2 -->
+<div class="question" data-answer="2">
+<h3>Q2. How many flip-flops does <code>logic [15:0] counter</code> in an <code>always_ff</code> block infer?</h3>
+<ul class="options">
+<li onclick="checkAnswer(this, 0)">A) 1</li>
+<li onclick="checkAnswer(this, 1)">B) 8</li>
+<li onclick="checkAnswer(this, 2)">C) 16</li>
+<li onclick="checkAnswer(this, 3)">D) 32</li>
+</ul>
+<div class="explanation">
+<p class="en"><strong>C) 16.</strong> A 16-bit signal registered in <code>always_ff</code> infers 16 flip-flops — one per bit.</p>
+<p class="ko" style="display:none;"><strong>C) 16.</strong> <code>always_ff</code>에서 등록된 16비트 신호는 16개의 플립플롭을 추론합니다 — 비트당 하나.</p>
+</div>
+</div>
+
+<!-- Q3 -->
+<div class="question" data-answer="0">
+<h3>Q3. An <code>if/else</code> chain in <code>always_comb</code> infers:</h3>
+<ul class="options">
+<li onclick="checkAnswer(this, 0)">A) Priority multiplexer chain</li>
+<li onclick="checkAnswer(this, 1)">B) Decoder</li>
+<li onclick="checkAnswer(this, 2)">C) Flip-flops</li>
+<li onclick="checkAnswer(this, 3)">D) RAM</li>
+</ul>
+<div class="explanation">
+<p class="en"><strong>A) Priority mux chain.</strong> Each <code>if</code> creates a 2:1 mux. The first condition has highest priority (checked first), creating a cascaded chain of muxes.</p>
+<p class="ko" style="display:none;"><strong>A) 우선순위 멀티플렉서 체인.</strong> 각 <code>if</code>는 2:1 멀티플렉서를 생성합니다. 첫 번째 조건이 가장 높은 우선순위(먼저 검사)를 가지며, 멀티플렉서의 연쇄 체인을 만듭니다.</p>
+</div>
+</div>
+
+<!-- Q4 -->
+<div class="question" data-answer="1">
+<h3>Q4. Why is <code>case</code> often better than <code>if/else</code> for mutually exclusive conditions?</h3>
+<ul class="options">
+<li onclick="checkAnswer(this, 0)">A) It uses fewer flip-flops</li>
+<li onclick="checkAnswer(this, 1)">B) It creates a balanced mux with shorter critical path</li>
+<li onclick="checkAnswer(this, 2)">C) It avoids using any gates</li>
+<li onclick="checkAnswer(this, 3)">D) It always runs faster at simulation</li>
+</ul>
+<div class="explanation">
+<p class="en"><strong>B) Balanced mux.</strong> A <code>case</code> statement tells the synthesizer all conditions are mutually exclusive, allowing it to build a single wide mux instead of a priority chain. Shorter critical path = better timing.</p>
+<p class="ko" style="display:none;"><strong>B) 균형 멀티플렉서.</strong> <code>case</code> 문은 합성기에게 모든 조건이 상호 배타적임을 알려주어 우선순위 체인 대신 단일 넓은 멀티플렉서를 구축할 수 있게 합니다. 더 짧은 크리티컬 패스 = 더 나은 타이밍.</p>
+</div>
+</div>
+
+<!-- Q5 -->
+<div class="question" data-answer="3">
+<h3>Q5. Which operation is the MOST expensive in terms of area?</h3>
+<ul class="options">
+<li onclick="checkAnswer(this, 0)">A) <code>a + b</code> (addition)</li>
+<li onclick="checkAnswer(this, 1)">B) <code>a & b</code> (AND)</li>
+<li onclick="checkAnswer(this, 2)">C) <code>a << 3</code> (constant shift)</li>
+<li onclick="checkAnswer(this, 3)">D) <code>a * b</code> (multiplication)</li>
+</ul>
+<div class="explanation">
+<p class="en"><strong>D) Multiplication.</strong> Multiplier area grows quadratically with bit width. A 32×32 multiplier requires ~1000+ gates. Shifts are free, AND is cheap, addition is moderate.</p>
+<p class="ko" style="display:none;"><strong>D) 곱셈.</strong> 곱셈기 면적은 비트 폭에 따라 이차적으로 증가합니다. 32×32 곱셈기는 ~1000개 이상의 게이트가 필요합니다. 시프트는 무료, AND는 저렴, 덧셈은 보통입니다.</p>
+</div>
+</div>
+
+<!-- Q6 -->
+<div class="question" data-answer="0">
+<h3>Q6. What hardware does <code>a << 3</code> (constant shift) become?</h3>
+<ul class="options">
+<li onclick="checkAnswer(this, 0)">A) Just wires — zero gates (free!)</li>
+<li onclick="checkAnswer(this, 1)">B) A barrel shifter</li>
+<li onclick="checkAnswer(this, 2)">C) A multiplier</li>
+<li onclick="checkAnswer(this, 3)">D) An adder</li>
+</ul>
+<div class="explanation">
+<p class="en"><strong>A) Just wires.</strong> A constant shift is simply reconnecting wires at different positions. No gates needed! This is why <code>a << 3</code> (multiply by 8) is preferred over <code>a * 8</code>.</p>
+<p class="ko" style="display:none;"><strong>A) 단순 와이어.</strong> 상수 시프트는 단순히 다른 위치에서 와이어를 다시 연결하는 것입니다. 게이트가 필요 없습니다! 이것이 <code>a << 3</code> (8을 곱하기)이 <code>a * 8</code>보다 선호되는 이유입니다.</p>
+</div>
+</div>
+
+<!-- Q7 -->
+<div class="question" data-answer="2">
+<h3>Q7. What does this code infer?</h3>
+<pre><code><span class="keyword">always_comb</span> <span class="keyword">begin</span>
+    <span class="keyword">if</span> (<span class="signal">sel</span>)
+        <span class="signal">out</span> = <span class="signal">data_a</span>;
+    <span class="comment">// no else clause</span>
+<span class="keyword">end</span></code></pre>
+<ul class="options">
+<li onclick="checkAnswer(this, 0)">A) A multiplexer</li>
+<li onclick="checkAnswer(this, 1)">B) A flip-flop</li>
+<li onclick="checkAnswer(this, 2)">C) An unintentional latch</li>
+<li onclick="checkAnswer(this, 3)">D) An AND gate</li>
+</ul>
+<div class="explanation">
+<p class="en"><strong>C) Unintentional latch.</strong> Without an else clause, <code>out</code> must hold its previous value when <code>sel=0</code>. In combinational logic, this requires a latch — almost always a bug.</p>
+<p class="ko" style="display:none;"><strong>C) 의도치 않은 래치.</strong> else 절이 없으면 <code>sel=0</code>일 때 <code>out</code>이 이전 값을 유지해야 합니다. 조합 논리에서 이것은 래치가 필요합니다 — 거의 항상 버그입니다.</p>
+</div>
+</div>
+
+<!-- Q8 -->
+<div class="question" data-answer="1">
+<h3>Q8. How would you efficiently implement <code>a * 5</code> without a multiplier?</h3>
+<ul class="options">
+<li onclick="checkAnswer(this, 0)">A) <code>a + a + a + a + a</code></li>
+<li onclick="checkAnswer(this, 1)">B) <code>(a << 2) + a</code></li>
+<li onclick="checkAnswer(this, 2)">C) <code>a << 5</code></li>
+<li onclick="checkAnswer(this, 3)">D) <code>a & 5</code></li>
+</ul>
+<div class="explanation">
+<p class="en"><strong>B) <code>(a << 2) + a</code>.</strong> Shift left by 2 = multiply by 4 (free, just wires). Then add the original value. Total cost: one adder. Much cheaper than a full multiplier!</p>
+<p class="ko" style="display:none;"><strong>B) <code>(a << 2) + a</code>.</strong> 왼쪽으로 2비트 시프트 = 4 곱하기 (무료, 단순 와이어). 그런 다음 원래 값을 더합니다. 총 비용: 가산기 하나. 전체 곱셈기보다 훨씬 저렴합니다!</p>
+</div>
+</div>
+
+<!-- Q9 -->
+<div class="question" data-answer="0">
+<h3>Q9. In the ALU example, the <code>case(op)</code> statement with 4 options infers:</h3>
+<ul class="options">
+<li onclick="checkAnswer(this, 0)">A) Four separate operations + a 4:1 mux to select</li>
+<li onclick="checkAnswer(this, 1)">B) Only the selected operation runs</li>
+<li onclick="checkAnswer(this, 2)">C) A single adder that changes modes</li>
+<li onclick="checkAnswer(this, 3)">D) Four flip-flops</li>
+</ul>
+<div class="explanation">
+<p class="en"><strong>A) All four operations + mux.</strong> In hardware, ALL operations compute simultaneously — the adder, subtractor, AND, and XOR all run in parallel. The mux then selects which result to pass through based on <code>op</code>. This is fundamentally different from software!</p>
+<p class="ko" style="display:none;"><strong>A) 네 가지 연산 모두 + 멀티플렉서.</strong> 하드웨어에서 모든 연산은 동시에 계산됩니다 — 가산기, 감산기, AND, XOR이 모두 병렬로 실행됩니다. 그런 다음 멀티플렉서가 <code>op</code>를 기반으로 어떤 결과를 통과시킬지 선택합니다. 이것은 소프트웨어와 근본적으로 다릅니다!</p>
+</div>
+</div>
+
+<!-- Q10 -->
+<div class="question" data-answer="2">
+<h3>Q10. Which of these operations is NOT free (requires actual gates)?</h3>
+<ul class="options">
+<li onclick="checkAnswer(this, 0)">A) <code>{a, b}</code> concatenation</li>
+<li onclick="checkAnswer(this, 1)">B) <code>data[7:4]</code> bit slicing</li>
+<li onclick="checkAnswer(this, 2)">C) <code>a << b</code> variable shift</li>
+<li onclick="checkAnswer(this, 3)">D) <code>a << 4</code> constant shift</li>
+</ul>
+<div class="explanation">
+<p class="en"><strong>C) Variable shift.</strong> When the shift amount is a variable (not a constant), synthesis must build a <strong>barrel shifter</strong> — a real circuit with muxes. Constant shifts, concatenation, and slicing are all just wire routing (free).</p>
+<p class="ko" style="display:none;"><strong>C) 변수 시프트.</strong> 시프트 양이 변수(상수가 아닌)일 때, 합성은 멀티플렉서가 있는 실제 회로인 <strong>배럴 시프터</strong>를 구축해야 합니다. 상수 시프트, 연결, 슬라이싱은 모두 와이어 라우팅(무료)입니다.</p>
+</div>
+</div>
+
+<!-- Q11 -->
+<div class="question" data-answer="3">
+<h3>Q11. A counter (<code>count <= count + 1</code> in <code>always_ff</code>) infers:</h3>
+<ul class="options">
+<li onclick="checkAnswer(this, 0)">A) Just flip-flops</li>
+<li onclick="checkAnswer(this, 1)">B) Just an adder</li>
+<li onclick="checkAnswer(this, 2)">C) A multiplexer</li>
+<li onclick="checkAnswer(this, 3)">D) An adder feeding back into flip-flops</li>
+</ul>
+<div class="explanation">
+<p class="en"><strong>D) Adder + flip-flops with feedback.</strong> The <code>+ 1</code> creates an adder, the <code>always_ff</code> creates flip-flops, and the <code>count <= count + 1</code> creates a feedback path from the FF output through the adder back to the FF input.</p>
+<p class="ko" style="display:none;"><strong>D) 피드백이 있는 가산기 + 플립플롭.</strong> <code>+ 1</code>은 가산기를 생성하고, <code>always_ff</code>는 플립플롭을 생성하며, <code>count <= count + 1</code>은 FF 출력에서 가산기를 통해 FF 입력으로 돌아가는 피드백 경로를 만듭니다.</p>
+</div>
+</div>
+
+<!-- Q12 -->
+<div class="question" data-answer="1">
+<h3>Q12. What happens to <code>assign bus = en ? data : 'z</code> inside an ASIC?</h3>
+<ul class="options">
+<li onclick="checkAnswer(this, 0)">A) Creates a tri-state buffer</li>
+<li onclick="checkAnswer(this, 1)">B) Synthesized as a multiplexer (no internal tri-state)</li>
+<li onclick="checkAnswer(this, 2)">C) Creates a latch</li>
+<li onclick="checkAnswer(this, 3)">D) Causes a synthesis error</li>
+</ul>
+<div class="explanation">
+<p class="en"><strong>B) Mux.</strong> Modern ASICs and FPGAs don't have internal tri-state buffers. Synthesis converts tri-state assignments on internal signals into multiplexers. Only I/O pads get actual tri-state buffers.</p>
+<p class="ko" style="display:none;"><strong>B) 멀티플렉서.</strong> 현대 ASIC과 FPGA에는 내부 트라이스테이트 버퍼가 없습니다. 합성은 내부 신호의 트라이스테이트 할당을 멀티플렉서로 변환합니다. I/O 패드만 실제 트라이스테이트 버퍼를 받습니다.</p>
+</div>
+</div>
+
+</div>
+
+<div class="score-box" id="scoreBox">
+<p class="en">Your Score:</p>
+<p class="ko" style="display:none;">당신의 점수:</p>
+<div class="score" id="scoreValue">0 / 12</div>
+<p id="scoreMsg"></p>
+</div>
+
+<button class="btn" onclick="showScore()">
+    <span class="en">Show Score</span>
+    <span class="ko" style="display:none;">점수 보기</span>
+</button>
+
+<div class="nav-links" style="margin-top: 24px;">
+    <a href="day-32-lesson.html">📖 Review Lesson</a>
+    <a href="day-32-practice.html">💻 Practice →</a>
+</div>
+
+<script>
+let isKorean = false;
+let score = 0;
+let answered = 0;
+
+function toggleLang() {
+    isKorean = !isKorean;
+    document.querySelectorAll('.en').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'none' : 'revert', 'important');
+    });
+    document.querySelectorAll('.ko').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'revert' : 'none', 'important');
+    });
+    document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+}
+
+function checkAnswer(el, idx) {
+    const question = el.closest('.question');
+    if (question.classList.contains('answered')) return;
+    question.classList.add('answered');
+    answered++;
+    const correct = parseInt(question.dataset.answer);
+    const options = question.querySelectorAll('.options li');
+    if (idx === correct) {
+        el.classList.add('correct');
+        score++;
+    } else {
+        el.classList.add('wrong');
+        options[correct].classList.add('correct');
+    }
+    options.forEach(li => li.classList.add('disabled'));
+    question.querySelector('.explanation').classList.add('show');
+}
+
+function showScore() {
+    const box = document.getElementById('scoreBox');
+    box.classList.add('show');
+    document.getElementById('scoreValue').textContent = score + ' / 12';
+    const pct = Math.round((score / 12) * 100);
+    const msg = document.getElementById('scoreMsg');
+    if (pct >= 90) msg.textContent = '🌟 Excellent! You really understand hardware inference!';
+    else if (pct >= 70) msg.textContent = '👍 Good job! Review the ones you missed.';
+    else msg.textContent = '📖 Review the lesson and try again — you\'ll get there!';
+}
+</script>
+</body>
+</html>
