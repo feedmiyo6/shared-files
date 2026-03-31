@@ -28,7 +28,7 @@ h2 {
     padding-bottom: 8px;
     margin: 32px 0 16px;
 }
-h3 { color: #5d4037; margin: 20px 0 10px; }
+h3 { color: #5d4037; margin: 20px 0 12px; }
 p { margin: 12px 0; }
 ul, ol { margin: 12px 0 12px 24px; }
 li { margin: 6px 0; }
@@ -39,9 +39,9 @@ pre {
     margin: 24px 0;
     border: 3px solid #a3b18a;
     overflow-x: auto;
-    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
     font-size: 15px;
     line-height: 1.6;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
     color: #f8f8f2;
 }
 code {
@@ -58,13 +58,6 @@ pre code { background: none; color: inherit; padding: 0; }
 .number { color: #ffb86c; }
 .comment { color: #6272a4; font-style: italic; }
 .string { color: #f1fa8c; }
-.section {
-    background: #fff;
-    border-radius: 12px;
-    padding: 24px;
-    margin: 24px 0;
-    border: 1px solid #c4a77d;
-}
 .concept-box {
     background: #fff8f0;
     border: 2px solid #c4a77d;
@@ -99,26 +92,6 @@ pre code { background: none; color: inherit; padding: 0; }
     border-left: 4px solid #5d4037;
     color: #3d405b;
 }
-.solution {
-    background: #fff8f0;
-    border: 2px solid #a3b18a;
-    border-radius: 12px;
-    padding: 20px;
-    margin: 20px 0;
-    display: none;
-}
-.solution.show { display: block; }
-.btn {
-    background: linear-gradient(135deg, #588157, #3a5a40);
-    color: #fff;
-    border: none;
-    padding: 10px 24px;
-    border-radius: 24px;
-    cursor: pointer;
-    font-size: 14px;
-    font-weight: 600;
-}
-.btn:hover { opacity: 0.9; }
 .nav-links {
     display: flex;
     gap: 12px;
@@ -128,9 +101,9 @@ pre code { background: none; color: inherit; padding: 0; }
 .nav-links a {
     background: linear-gradient(135deg, #588157, #3a5a40);
     color: #fff;
+    text-decoration: none;
     padding: 10px 20px;
     border-radius: 24px;
-    text-decoration: none;
     font-weight: 600;
     font-size: 14px;
 }
@@ -156,11 +129,48 @@ pre code { background: none; color: inherit; padding: 0; }
     background: linear-gradient(135deg, #588157, #3a5a40);
     color: #fff;
     padding: 4px 14px;
-    border-radius: 16px;
+    border-radius: 20px;
     font-size: 14px;
     font-weight: 600;
     margin-bottom: 12px;
 }
+.exercise {
+    background: #fff;
+    border-radius: 12px;
+    padding: 24px;
+    margin: 24px 0;
+    border: 1px solid #c4a77d;
+}
+.exercise-num {
+    display: inline-block;
+    background: #588157;
+    color: #fff;
+    padding: 4px 14px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 12px;
+}
+.solution {
+    background: #fff8f0;
+    border: 2px solid #a3b18a;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 16px 0;
+    display: none;
+}
+.reveal-btn {
+    background: linear-gradient(135deg, #588157, #3a5a40);
+    color: #fff;
+    border: none;
+    border-radius: 24px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 14px;
+    margin: 12px 0;
+}
+.reveal-btn:hover { opacity: 0.9; }
 .comparison-table {
     width: 100%;
     border-collapse: collapse;
@@ -193,10 +203,11 @@ pre code { background: none; color: inherit; padding: 0; }
 
 <button class="lang-toggle" onclick="toggleLang()">한국어</button>
 
-<span class="day-badge">📅 Day 32 / 40</span>
+<span class="day-badge">💻 Day 32 Practice</span>
+
 <h1>
-    <span class="en">💻 Practice: Inferred Hardware</span>
-    <span class="ko" style="display:none;">💻 실습: 추론 하드웨어</span>
+<span class="en">Inferred Hardware — Practice Exercises</span>
+<span class="ko" style="display:none;">추론된 하드웨어 — 실습 문제</span>
 </h1>
 
 <div class="nav-links">
@@ -204,371 +215,358 @@ pre code { background: none; color: inherit; padding: 0; }
     <a href="day-32-quiz.html">📝 Quiz</a>
 </div>
 
-<p class="en">These exercises build your ability to <strong>read code and see hardware</strong>. For each exercise, think about what gates, muxes, and flip-flops would be created before revealing the solution.</p>
-<p class="ko" style="display:none;">이 실습은 <strong>코드를 읽고 하드웨어를 보는</strong> 능력을 키웁니다. 각 실습에서 솔루션을 공개하기 전에 어떤 게이트, 멀티플렉서, 플립플롭이 생성될지 생각해보세요.</p>
-
-<!-- Exercise 1 -->
-<div class="section">
-<h2>
-    <span class="en">Exercise 1: Hardware Inventory</span>
-    <span class="ko" style="display:none;">실습 1: 하드웨어 인벤토리</span>
-</h2>
-
-<p class="en">For the following module, list <strong>every piece of hardware</strong> that synthesis will create. Count flip-flops, muxes, adders, and gates.</p>
-<p class="ko" style="display:none;">다음 모듈에 대해 합성이 생성할 <strong>모든 하드웨어</strong>를 나열하세요. 플립플롭, 멀티플렉서, 가산기, 게이트를 세어보세요.</p>
-
-<pre><code><span class="keyword">module</span> <span class="type">data_path</span> (
-    <span class="keyword">input</span>  <span class="type">logic</span>        <span class="signal">clk</span>, <span class="signal">rst</span>,
-    <span class="keyword">input</span>  <span class="type">logic</span>        <span class="signal">load</span>, <span class="signal">add_en</span>,
-    <span class="keyword">input</span>  <span class="type">logic</span> [<span class="number">7</span>:<span class="number">0</span>]  <span class="signal">data_in</span>,
-    <span class="keyword">output</span> <span class="type">logic</span> [<span class="number">7</span>:<span class="number">0</span>]  <span class="signal">result</span>
-);
-    <span class="type">logic</span> [<span class="number">7</span>:<span class="number">0</span>] <span class="signal">acc</span>;
-    <span class="type">logic</span> [<span class="number">7</span>:<span class="number">0</span>] <span class="signal">next_acc</span>;
-
-    <span class="comment">// Combinational logic</span>
-    <span class="keyword">always_comb</span> <span class="keyword">begin</span>
-        <span class="keyword">if</span> (<span class="signal">load</span>)
-            <span class="signal">next_acc</span> = <span class="signal">data_in</span>;
-        <span class="keyword">else if</span> (<span class="signal">add_en</span>)
-            <span class="signal">next_acc</span> = <span class="signal">acc</span> + <span class="signal">data_in</span>;
-        <span class="keyword">else</span>
-            <span class="signal">next_acc</span> = <span class="signal">acc</span>;
-    <span class="keyword">end</span>
-
-    <span class="comment">// Sequential logic</span>
-    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span>) <span class="keyword">begin</span>
-        <span class="keyword">if</span> (<span class="signal">rst</span>)
-            <span class="signal">acc</span> &lt;= <span class="number">8'h00</span>;
-        <span class="keyword">else</span>
-            <span class="signal">acc</span> &lt;= <span class="signal">next_acc</span>;
-    <span class="keyword">end</span>
-
-    <span class="keyword">assign</span> <span class="signal">result</span> = <span class="signal">acc</span>;
-<span class="keyword">endmodule</span></code></pre>
-
-<div class="hint-box">
-<h3>💡 Hint</h3>
-<p class="en">Count the registered bits first. Then identify each operation in the combinational block. Remember, <code>if/else if/else</code> creates a priority mux chain.</p>
-<p class="ko" style="display:none;">먼저 등록된 비트를 세세요. 그런 다음 조합 블록의 각 연산을 식별하세요. <code>if/else if/else</code>는 우선순위 멀티플렉서 체인을 생성합니다.</p>
+<div class="tip-box">
+<p class="en"><strong>🎯 Goal:</strong> Look at SystemVerilog code and predict exactly what hardware the synthesis tool will create. This is the most important skill for writing efficient RTL!</p>
+<p class="ko" style="display:none;"><strong>🎯 목표:</strong> SystemVerilog 코드를 보고 합성 도구가 생성할 하드웨어를 정확히 예측하세요. 이것이 효율적인 RTL을 작성하는 가장 중요한 기술입니다!</p>
 </div>
 
-<button class="btn" onclick="toggleSolution('sol1')">Show Solution</button>
-<div class="solution" id="sol1">
-<h3>Hardware Inventory:</h3>
-<table class="comparison-table">
-<tr><th>Hardware</th><th>Count</th><th>Source</th></tr>
-<tr><td>Flip-flops</td><td>8</td><td><code>acc</code> is 8-bit, registered in <code>always_ff</code></td></tr>
-<tr><td>8-bit Adder</td><td>1</td><td><code>acc + data_in</code></td></tr>
-<tr><td>8-bit 2:1 Mux</td><td>2</td><td>Priority chain: <code>load</code> selects first, then <code>add_en</code></td></tr>
-<tr><td>8-bit 2:1 Mux</td><td>1</td><td>Reset path: <code>rst ? 0 : next_acc</code></td></tr>
-<tr><td>Wires</td><td>—</td><td><code>result = acc</code> is just a wire</td></tr>
-</table>
-<p class="en"><strong>Total:</strong> 8 flip-flops, 1 adder, 3 muxes (8-bit wide each). The <code>assign result = acc</code> is free — just naming the same wire.</p>
-<p class="ko" style="display:none;"><strong>총:</strong> 8개 플립플롭, 1개 가산기, 3개 멀티플렉서 (각각 8비트 폭). <code>assign result = acc</code>는 무료 — 같은 와이어에 이름을 붙이는 것뿐입니다.</p>
-</div>
-</div>
+<!-- Exercise 1: Code-to-Hardware Mapping -->
+<div class="exercise">
+<span class="exercise-num">Exercise 1: Code → Hardware Inventory</span>
+<h3>
+<span class="en">Analyze this module and list ALL inferred hardware</span>
+<span class="ko" style="display:none;">이 모듈을 분석하고 추론된 모든 하드웨어를 나열하세요</span>
+</h3>
 
-<!-- Exercise 2 -->
-<div class="section">
-<h2>
-    <span class="en">Exercise 2: Optimize the Multiplications</span>
-    <span class="ko" style="display:none;">실습 2: 곱셈 최적화</span>
-</h2>
+<p class="en">For each line of this module, identify what hardware is created:</p>
+<p class="ko" style="display:none;">이 모듈의 각 줄에 대해 생성되는 하드웨어를 식별하세요:</p>
 
-<p class="en">Rewrite each multiplication to use <strong>only shifts and adds</strong> — no <code>*</code> operator. This eliminates expensive multiplier hardware.</p>
-<p class="ko" style="display:none;">각 곱셈을 <strong>시프트와 덧셈만</strong> 사용하도록 다시 작성하세요 — <code>*</code> 연산자를 사용하지 않습니다. 비용이 높은 곱셈기 하드웨어를 제거합니다.</p>
-
-<pre><code><span class="comment">// Rewrite each without using *</span>
-<span class="keyword">assign</span> <span class="signal">y1</span> = <span class="signal">x</span> * <span class="number">4</span>;     <span class="comment">// #1</span>
-<span class="keyword">assign</span> <span class="signal">y2</span> = <span class="signal">x</span> * <span class="number">3</span>;     <span class="comment">// #2</span>
-<span class="keyword">assign</span> <span class="signal">y3</span> = <span class="signal">x</span> * <span class="number">10</span>;    <span class="comment">// #3</span>
-<span class="keyword">assign</span> <span class="signal">y4</span> = <span class="signal">x</span> * <span class="number">7</span>;     <span class="comment">// #4</span>
-<span class="keyword">assign</span> <span class="signal">y5</span> = <span class="signal">x</span> * <span class="number">12</span>;    <span class="comment">// #5</span></code></pre>
-
-<div class="hint-box">
-<h3>💡 Hint</h3>
-<p class="en">Break each constant into powers of 2. For example: 10 = 8 + 2 = 2³ + 2¹. So <code>x * 10 = (x << 3) + (x << 1)</code>. Subtraction works too: 7 = 8 - 1.</p>
-<p class="ko" style="display:none;">각 상수를 2의 거듭제곱으로 분해하세요. 예: 10 = 8 + 2 = 2³ + 2¹. 따라서 <code>x * 10 = (x << 3) + (x << 1)</code>. 빼기도 가능합니다: 7 = 8 - 1.</p>
-</div>
-
-<button class="btn" onclick="toggleSolution('sol2')">Show Solution</button>
-<div class="solution" id="sol2">
-<pre><code><span class="comment">// #1: 4 = 2² → just shift</span>
-<span class="keyword">assign</span> <span class="signal">y1</span> = <span class="signal">x</span> &lt;&lt; <span class="number">2</span>;                    <span class="comment">// FREE! Just wires</span>
-
-<span class="comment">// #2: 3 = 2 + 1 → shift + add</span>
-<span class="keyword">assign</span> <span class="signal">y2</span> = (<span class="signal">x</span> &lt;&lt; <span class="number">1</span>) + <span class="signal">x</span>;             <span class="comment">// 1 adder</span>
-
-<span class="comment">// #3: 10 = 8 + 2 → two shifts + add</span>
-<span class="keyword">assign</span> <span class="signal">y3</span> = (<span class="signal">x</span> &lt;&lt; <span class="number">3</span>) + (<span class="signal">x</span> &lt;&lt; <span class="number">1</span>);     <span class="comment">// 1 adder</span>
-
-<span class="comment">// #4: 7 = 8 - 1 → shift + subtract</span>
-<span class="keyword">assign</span> <span class="signal">y4</span> = (<span class="signal">x</span> &lt;&lt; <span class="number">3</span>) - <span class="signal">x</span>;             <span class="comment">// 1 subtractor</span>
-
-<span class="comment">// #5: 12 = 8 + 4 → two shifts + add</span>
-<span class="keyword">assign</span> <span class="signal">y5</span> = (<span class="signal">x</span> &lt;&lt; <span class="number">3</span>) + (<span class="signal">x</span> &lt;&lt; <span class="number">2</span>);     <span class="comment">// 1 adder</span></code></pre>
-<p class="en"><strong>Key insight:</strong> All shifts by constants are free (just wires). So the total cost is just 3 adders and 1 subtractor — instead of 5 full multipliers!</p>
-<p class="ko" style="display:none;"><strong>핵심 인사이트:</strong> 상수에 의한 모든 시프트는 무료(단순 와이어)입니다. 따라서 총 비용은 3개의 가산기와 1개의 감산기뿐 — 5개의 전체 곱셈기 대신!</p>
-</div>
-</div>
-
-<!-- Exercise 3 -->
-<div class="section">
-<h2>
-    <span class="en">Exercise 3: Fix the Bugs</span>
-    <span class="ko" style="display:none;">실습 3: 버그 수정</span>
-</h2>
-
-<p class="en">Each of these code snippets has a hardware inference bug. Identify the problem and write the fix.</p>
-<p class="ko" style="display:none;">다음 코드 스니펫에는 하드웨어 추론 버그가 있습니다. 문제를 식별하고 수정하세요.</p>
-
-<h3>Bug A: Mystery Latch</h3>
-<pre><code><span class="keyword">always_comb</span> <span class="keyword">begin</span>
-    <span class="keyword">case</span> (<span class="signal">mode</span>)
-        <span class="number">2'b00</span>: <span class="signal">out</span> = <span class="signal">a</span>;
-        <span class="number">2'b01</span>: <span class="signal">out</span> = <span class="signal">b</span>;
-        <span class="number">2'b10</span>: <span class="signal">out</span> = <span class="signal">c</span>;
-        <span class="comment">// What about 2'b11?</span>
-    <span class="keyword">endcase</span>
-<span class="keyword">end</span></code></pre>
-
-<h3>Bug B: Accidental Priority</h3>
-<pre><code><span class="comment">// Designer wants equal-priority decode, but wrote:</span>
-<span class="keyword">always_comb</span> <span class="keyword">begin</span>
-    <span class="signal">grant</span> = <span class="number">4'b0000</span>;
-    <span class="keyword">if</span> (<span class="signal">req</span>[<span class="number">0</span>]) <span class="signal">grant</span> = <span class="number">4'b0001</span>;
-    <span class="keyword">else if</span> (<span class="signal">req</span>[<span class="number">1</span>]) <span class="signal">grant</span> = <span class="number">4'b0010</span>;
-    <span class="keyword">else if</span> (<span class="signal">req</span>[<span class="number">2</span>]) <span class="signal">grant</span> = <span class="number">4'b0100</span>;
-    <span class="keyword">else if</span> (<span class="signal">req</span>[<span class="number">3</span>]) <span class="signal">grant</span> = <span class="number">4'b1000</span>;
-<span class="keyword">end</span></code></pre>
-
-<h3>Bug C: Expensive Comparison</h3>
-<pre><code><span class="comment">// Check if value equals a power of 2 (1, 2, 4, 8, 16...)</span>
-<span class="keyword">always_comb</span> <span class="keyword">begin</span>
-    <span class="signal">is_pow2</span> = (<span class="signal">val</span> == <span class="number">1</span>) || (<span class="signal">val</span> == <span class="number">2</span>) || (<span class="signal">val</span> == <span class="number">4</span>) ||
-              (<span class="signal">val</span> == <span class="number">8</span>) || (<span class="signal">val</span> == <span class="number">16</span>) || (<span class="signal">val</span> == <span class="number">32</span>) ||
-              (<span class="signal">val</span> == <span class="number">64</span>) || (<span class="signal">val</span> == <span class="number">128</span>);
-<span class="keyword">end</span></code></pre>
-
-<button class="btn" onclick="toggleSolution('sol3')">Show Solutions</button>
-<div class="solution" id="sol3">
-<h3>Fix A: Add default case</h3>
-<pre><code><span class="keyword">always_comb</span> <span class="keyword">begin</span>
-    <span class="keyword">case</span> (<span class="signal">mode</span>)
-        <span class="number">2'b00</span>: <span class="signal">out</span> = <span class="signal">a</span>;
-        <span class="number">2'b01</span>: <span class="signal">out</span> = <span class="signal">b</span>;
-        <span class="number">2'b10</span>: <span class="signal">out</span> = <span class="signal">c</span>;
-        <span class="keyword">default</span>: <span class="signal">out</span> = <span class="number">'0</span>;  <span class="comment">// ✅ Prevents latch!</span>
-    <span class="keyword">endcase</span>
-<span class="keyword">end</span></code></pre>
-<p class="en"><strong>Problem:</strong> Missing <code>2'b11</code> case means <code>out</code> must hold its value → latch. Always include <code>default</code> in case statements.</p>
-<p class="ko" style="display:none;"><strong>문제:</strong> <code>2'b11</code> 케이스가 없으면 <code>out</code>이 값을 유지해야 합니다 → 래치. case문에 항상 <code>default</code>를 포함하세요.</p>
-
-<h3>Fix B: Use round-robin or case</h3>
-<pre><code><span class="comment">// If truly equal priority is needed, this if/else</span>
-<span class="comment">// creates priority (req[0] always wins). Options:</span>
-
-<span class="comment">// Option 1: Acknowledge it's priority (document intent)</span>
-<span class="comment">// The if/else IS the design — just document that req[0]</span>
-<span class="comment">// has highest priority.</span>
-
-<span class="comment">// Option 2: Implement actual round-robin (needs state)</span>
-<span class="comment">// This requires a registered "last_grant" and rotating</span>
-<span class="comment">// priority — a fundamentally different design.</span></code></pre>
-<p class="en"><strong>Problem:</strong> <code>if/else</code> creates priority — <code>req[0]</code> always wins over <code>req[3]</code>. If equal access is needed, you need a round-robin arbiter (Day 28!), not just if/else.</p>
-<p class="ko" style="display:none;"><strong>문제:</strong> <code>if/else</code>는 우선순위를 생성합니다 — <code>req[0]</code>이 항상 <code>req[3]</code>보다 이깁니다. 동등한 접근이 필요하면 if/else가 아닌 라운드 로빈 중재기(Day 28!)가 필요합니다.</p>
-
-<h3>Fix C: Use bitwise trick</h3>
-<pre><code><span class="comment">// Power of 2 check: val has exactly one bit set</span>
-<span class="comment">// val & (val - 1) clears the lowest set bit</span>
-<span class="comment">// If result is 0, only one bit was set!</span>
-<span class="keyword">always_comb</span> <span class="keyword">begin</span>
-    <span class="signal">is_pow2</span> = (<span class="signal">val</span> != <span class="number">'0</span>) && ((<span class="signal">val</span> & (<span class="signal">val</span> - <span class="number">1</span>)) == <span class="number">'0</span>);
-<span class="keyword">end</span>
-<span class="comment">// Infers: 1 subtractor + AND gate + comparator</span>
-<span class="comment">// vs original: 8 comparators + 7 OR gates!</span></code></pre>
-<p class="en"><strong>Problem:</strong> 8 separate equality comparators + OR chain is expensive. The bitwise trick <code>val & (val - 1) == 0</code> does the same with far less hardware. This is a classic interview question!</p>
-<p class="ko" style="display:none;"><strong>문제:</strong> 8개의 개별 등가 비교기 + OR 체인은 비용이 높습니다. 비트 트릭 <code>val & (val - 1) == 0</code>은 훨씬 적은 하드웨어로 동일한 작업을 수행합니다. 이것은 고전적인 면접 질문입니다!</p>
-</div>
-</div>
-
-<!-- Exercise 4 -->
-<div class="section">
-<h2>
-    <span class="en">Exercise 4: Predict the Hardware (EDA Playground)</span>
-    <span class="ko" style="display:none;">실습 4: 하드웨어 예측 (EDA Playground)</span>
-</h2>
-
-<p class="en">Copy this module to <a href="https://www.edaplayground.com" target="_blank" style="color: #588157;">EDA Playground</a>. Before running, <strong>predict</strong> how many flip-flops and what combinational logic will be inferred. Then run the testbench to verify behavior.</p>
-<p class="ko" style="display:none;">이 모듈을 <a href="https://www.edaplayground.com" target="_blank" style="color: #588157;">EDA Playground</a>에 복사하세요. 실행하기 전에 몇 개의 플립플롭과 어떤 조합 논리가 추론될지 <strong>예측</strong>하세요. 그런 다음 테스트벤치를 실행하여 동작을 확인하세요.</p>
-
-<h3>Design: Configurable Shift-Add Unit</h3>
-<pre><code><span class="keyword">module</span> <span class="type">shift_add</span> (
-    <span class="keyword">input</span>  <span class="type">logic</span>        <span class="signal">clk</span>, <span class="signal">rst</span>,
+<pre><code><span class="keyword">module</span> <span class="type">data_processor</span> (
+    <span class="keyword">input</span>  <span class="type">logic</span>        <span class="signal">clk</span>, <span class="signal">rst_n</span>, <span class="signal">enable</span>,
     <span class="keyword">input</span>  <span class="type">logic</span> [<span class="number">7</span>:<span class="number">0</span>]  <span class="signal">data_in</span>,
     <span class="keyword">input</span>  <span class="type">logic</span> [<span class="number">1</span>:<span class="number">0</span>]  <span class="signal">mode</span>,
     <span class="keyword">output</span> <span class="type">logic</span> [<span class="number">15</span>:<span class="number">0</span>] <span class="signal">result</span>
 );
-    <span class="type">logic</span> [<span class="number">15</span>:<span class="number">0</span>] <span class="signal">accum</span>;
-    <span class="type">logic</span> [<span class="number">15</span>:<span class="number">0</span>] <span class="signal">next_val</span>;
 
-    <span class="keyword">always_comb</span> <span class="keyword">begin</span>
-        <span class="keyword">case</span> (<span class="signal">mode</span>)
-            <span class="number">2'b00</span>: <span class="signal">next_val</span> = <span class="signal">accum</span>;                             <span class="comment">// Hold</span>
-            <span class="number">2'b01</span>: <span class="signal">next_val</span> = {<span class="number">8'b0</span>, <span class="signal">data_in</span>};                  <span class="comment">// Load</span>
-            <span class="number">2'b10</span>: <span class="signal">next_val</span> = <span class="signal">accum</span> + {<span class="number">8'b0</span>, <span class="signal">data_in</span>};       <span class="comment">// Add</span>
-            <span class="number">2'b11</span>: <span class="signal">next_val</span> = {<span class="signal">accum</span>[<span class="number">14</span>:<span class="number">0</span>], <span class="number">1'b0</span>};           <span class="comment">// Shift left</span>
-        <span class="keyword">endcase</span>
-    <span class="keyword">end</span>
+<span class="type">logic</span> [<span class="number">7</span>:<span class="number">0</span>]  <span class="signal">data_reg</span>;
+<span class="type">logic</span> [<span class="number">15</span>:<span class="number">0</span>] <span class="signal">computed</span>;
 
-    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span>) <span class="keyword">begin</span>
-        <span class="keyword">if</span> (<span class="signal">rst</span>)
-            <span class="signal">accum</span> &lt;= <span class="number">16'h0000</span>;
-        <span class="keyword">else</span>
-            <span class="signal">accum</span> &lt;= <span class="signal">next_val</span>;
-    <span class="keyword">end</span>
+<span class="comment">// Block A</span>
+<span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span> <span class="keyword">or</span> <span class="keyword">negedge</span> <span class="signal">rst_n</span>) <span class="keyword">begin</span>
+    <span class="keyword">if</span> (!<span class="signal">rst_n</span>)
+        <span class="signal">data_reg</span> &lt;= <span class="number">8'b0</span>;
+    <span class="keyword">else if</span> (<span class="signal">enable</span>)
+        <span class="signal">data_reg</span> &lt;= <span class="signal">data_in</span>;
+<span class="keyword">end</span>
 
-    <span class="keyword">assign</span> <span class="signal">result</span> = <span class="signal">accum</span>;
+<span class="comment">// Block B</span>
+<span class="keyword">always_comb</span> <span class="keyword">begin</span>
+    <span class="keyword">case</span> (<span class="signal">mode</span>)
+        <span class="number">2'b00</span>: <span class="signal">computed</span> = {<span class="number">8'b0</span>, <span class="signal">data_reg</span>};
+        <span class="number">2'b01</span>: <span class="signal">computed</span> = <span class="signal">data_reg</span> * <span class="number">3</span>;
+        <span class="number">2'b10</span>: <span class="signal">computed</span> = <span class="signal">data_reg</span> + <span class="number">16'd100</span>;
+        <span class="number">2'b11</span>: <span class="signal">computed</span> = {<span class="signal">data_reg</span>, <span class="number">8'b0</span>};
+        <span class="keyword">default</span>: <span class="signal">computed</span> = <span class="number">16'b0</span>;
+    <span class="keyword">endcase</span>
+<span class="keyword">end</span>
+
+<span class="comment">// Block C</span>
+<span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span>) <span class="keyword">begin</span>
+    <span class="signal">result</span> &lt;= <span class="signal">computed</span>;
+<span class="keyword">end</span>
+
 <span class="keyword">endmodule</span></code></pre>
 
-<h3>Testbench:</h3>
-<pre><code><span class="keyword">module</span> <span class="type">tb_shift_add</span>;
-    <span class="type">logic</span> <span class="signal">clk</span>, <span class="signal">rst</span>;
-    <span class="type">logic</span> [<span class="number">7</span>:<span class="number">0</span>] <span class="signal">data_in</span>;
-    <span class="type">logic</span> [<span class="number">1</span>:<span class="number">0</span>] <span class="signal">mode</span>;
-    <span class="type">logic</span> [<span class="number">15</span>:<span class="number">0</span>] <span class="signal">result</span>;
+<p class="en"><strong>Your task:</strong> Fill in a table like this for each block:</p>
+<p class="ko" style="display:none;"><strong>과제:</strong> 각 블록에 대해 이런 표를 채우세요:</p>
 
-    <span class="type">shift_add</span> <span class="signal">dut</span> (.*);
-
-    <span class="keyword">always</span> #<span class="number">5</span> <span class="signal">clk</span> = ~<span class="signal">clk</span>;
-
-    <span class="keyword">initial</span> <span class="keyword">begin</span>
-        <span class="signal">clk</span> = <span class="number">0</span>; <span class="signal">rst</span> = <span class="number">1</span>; <span class="signal">mode</span> = <span class="number">2'b00</span>; <span class="signal">data_in</span> = <span class="number">0</span>;
-        #<span class="number">20</span> <span class="signal">rst</span> = <span class="number">0</span>;
-
-        <span class="comment">// Load 5</span>
-        <span class="signal">mode</span> = <span class="number">2'b01</span>; <span class="signal">data_in</span> = <span class="number">8'd5</span>;
-        #<span class="number">10</span> $<span class="signal">display</span>(<span class="string">"Load 5:   result=%0d (expect 5)"</span>, <span class="signal">result</span>);
-
-        <span class="comment">// Add 3</span>
-        <span class="signal">mode</span> = <span class="number">2'b10</span>; <span class="signal">data_in</span> = <span class="number">8'd3</span>;
-        #<span class="number">10</span> $<span class="signal">display</span>(<span class="string">"Add 3:    result=%0d (expect 8)"</span>, <span class="signal">result</span>);
-
-        <span class="comment">// Shift left (×2)</span>
-        <span class="signal">mode</span> = <span class="number">2'b11</span>;
-        #<span class="number">10</span> $<span class="signal">display</span>(<span class="string">"Shift:    result=%0d (expect 16)"</span>, <span class="signal">result</span>);
-
-        <span class="comment">// Hold</span>
-        <span class="signal">mode</span> = <span class="number">2'b00</span>;
-        #<span class="number">10</span> $<span class="signal">display</span>(<span class="string">"Hold:     result=%0d (expect 16)"</span>, <span class="signal">result</span>);
-
-        <span class="comment">// Add 10, then shift = (16+10)*2 = 52</span>
-        <span class="signal">mode</span> = <span class="number">2'b10</span>; <span class="signal">data_in</span> = <span class="number">8'd10</span>;
-        #<span class="number">10</span>;
-        <span class="signal">mode</span> = <span class="number">2'b11</span>;
-        #<span class="number">10</span> $<span class="signal">display</span>(<span class="string">"Add+Shift: result=%0d (expect 52)"</span>, <span class="signal">result</span>);
-
-        $<span class="signal">finish</span>;
-    <span class="keyword">end</span>
-<span class="keyword">endmodule</span></code></pre>
-
-<button class="btn" onclick="toggleSolution('sol4')">Show Hardware Analysis</button>
-<div class="solution" id="sol4">
-<h3>Hardware Inventory:</h3>
 <table class="comparison-table">
-<tr><th>Component</th><th>Details</th></tr>
-<tr><td><strong>16 flip-flops</strong></td><td><code>accum[15:0]</code> — the accumulator register</td></tr>
-<tr><td><strong>16-bit adder</strong></td><td>For <code>accum + {8'b0, data_in}</code></td></tr>
-<tr><td><strong>4:1 mux (16-bit)</strong></td><td>The <code>case</code> statement selects between hold/load/add/shift</td></tr>
-<tr><td><strong>2:1 mux (16-bit)</strong></td><td>Reset path: <code>rst ? 0 : next_val</code></td></tr>
-<tr><td><strong>Wires only</strong></td><td><code>{8'b0, data_in}</code> = zero-extend (free)</td></tr>
-<tr><td><strong>Wires only</strong></td><td><code>{accum[14:0], 1'b0}</code> = shift left by 1 (free)</td></tr>
-<tr><td><strong>Wires only</strong></td><td><code>result = accum</code> (free)</td></tr>
+<tr><th>Block</th><th>Hardware Inferred</th><th>Count/Details</th></tr>
+<tr><td>Block A</td><td>???</td><td>???</td></tr>
+<tr><td>Block B</td><td>???</td><td>???</td></tr>
+<tr><td>Block C</td><td>???</td><td>???</td></tr>
 </table>
-<p class="en"><strong>Notice:</strong> The shift-left (mode 2'b11) uses <code>{accum[14:0], 1'b0}</code> which is just rewiring — no shifter hardware! Concatenation tricks like this make RTL very efficient.</p>
-<p class="ko" style="display:none;"><strong>주목:</strong> 왼쪽 시프트(모드 2'b11)는 <code>{accum[14:0], 1'b0}</code>를 사용하는데 이는 단순 재배선입니다 — 시프터 하드웨어가 없습니다! 이런 연결 트릭이 RTL을 매우 효율적으로 만듭니다.</p>
+
+<button class="reveal-btn" onclick="this.nextElementSibling.style.display='block'; this.style.display='none';">Show Solution</button>
+<div class="solution">
+<h3>✅ Solution</h3>
+<table class="comparison-table">
+<tr><th>Block</th><th>Hardware Inferred</th><th>Count/Details</th></tr>
+<tr><td>Block A</td><td>8 D-FFs with async reset + clock enable</td><td>8 flip-flops, 1 enable mux, async reset</td></tr>
+<tr><td>Block B — case</td><td>4:1 Mux (16-bit wide)</td><td>Parallel mux on <code>mode</code></td></tr>
+<tr><td>Block B — mode 01</td><td>Shift + Add (<code>(data_reg << 1) + data_reg</code>)</td><td>Constant multiply optimization</td></tr>
+<tr><td>Block B — mode 10</td><td>8-bit Adder</td><td>Adds constant 100</td></tr>
+<tr><td>Block B — mode 00,11</td><td>Just wires!</td><td>Zero-extend and shift-left-8 are free</td></tr>
+<tr><td>Block C</td><td>16 D-FFs (output register)</td><td>16 flip-flops, no reset</td></tr>
+</table>
+<p class="en"><strong>Total:</strong> 24 flip-flops + 1 adder + 1 shift+add unit + 4:1 mux (16-bit) + clock enable logic</p>
+<p class="ko" style="display:none;"><strong>합계:</strong> 24개의 플립플롭 + 1개의 가산기 + 1개의 시프트+가산 유닛 + 4:1 멀티플렉서 (16비트) + 클록 인에이블 로직</p>
 </div>
 </div>
 
-<!-- Exercise 5 -->
-<div class="section">
-<h2>
-    <span class="en">Exercise 5: Interview Challenge — Code Reading</span>
-    <span class="ko" style="display:none;">실습 5: 면접 챌린지 — 코드 읽기</span>
-</h2>
+<!-- Exercise 2: Optimize the Code -->
+<div class="exercise">
+<span class="exercise-num">Exercise 2: Spot the Expensive Hardware</span>
+<h3>
+<span class="en">Identify and fix the wasteful patterns</span>
+<span class="ko" style="display:none;">낭비적인 패턴을 식별하고 수정하세요</span>
+</h3>
 
-<p class="en">A common interview question: "Look at this code and tell me what hardware it creates." Practice talking through your answer out loud.</p>
-<p class="ko" style="display:none;">일반적인 면접 질문: "이 코드를 보고 어떤 하드웨어를 생성하는지 말해주세요." 답변을 소리 내어 연습하세요.</p>
+<p class="en">This module works in simulation but creates very expensive hardware. Find ALL the problems:</p>
+<p class="ko" style="display:none;">이 모듈은 시뮬레이션에서 작동하지만 매우 비싼 하드웨어를 생성합니다. 모든 문제를 찾으세요:</p>
 
-<pre><code><span class="keyword">module</span> <span class="type">mystery</span> (
-    <span class="keyword">input</span>  <span class="type">logic</span>       <span class="signal">clk</span>, <span class="signal">rst</span>, <span class="signal">en</span>,
-    <span class="keyword">input</span>  <span class="type">logic</span> [<span class="number">3</span>:<span class="number">0</span>] <span class="signal">din</span>,
-    <span class="keyword">output</span> <span class="type">logic</span>       <span class="signal">match</span>
+<pre><code><span class="keyword">module</span> <span class="type">wasteful_design</span> (
+    <span class="keyword">input</span>  <span class="type">logic</span>        <span class="signal">clk</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span> [<span class="number">7</span>:<span class="number">0</span>]  <span class="signal">addr</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span> [<span class="number">7</span>:<span class="number">0</span>]  <span class="signal">wr_data</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span>        <span class="signal">wr_en</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span> [<span class="number">15</span>:<span class="number">0</span>] <span class="signal">dividend</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span> [<span class="number">3</span>:<span class="number">0</span>]  <span class="signal">divisor</span>,
+    <span class="keyword">output</span> <span class="type">logic</span> [<span class="number">7</span>:<span class="number">0</span>]  <span class="signal">rd_data</span>,
+    <span class="keyword">output</span> <span class="type">logic</span> [<span class="number">15</span>:<span class="number">0</span>] <span class="signal">quotient</span>
 );
-    <span class="type">logic</span> [<span class="number">3</span>:<span class="number">0</span>] <span class="signal">r1</span>, <span class="signal">r2</span>, <span class="signal">r3</span>;
 
-    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span>) <span class="keyword">begin</span>
-        <span class="keyword">if</span> (<span class="signal">rst</span>) <span class="keyword">begin</span>
-            <span class="signal">r1</span> &lt;= <span class="number">'0</span>;
-            <span class="signal">r2</span> &lt;= <span class="number">'0</span>;
-            <span class="signal">r3</span> &lt;= <span class="number">'0</span>;
-        <span class="keyword">end else if</span> (<span class="signal">en</span>) <span class="keyword">begin</span>
-            <span class="signal">r1</span> &lt;= <span class="signal">din</span>;
-            <span class="signal">r2</span> &lt;= <span class="signal">r1</span>;
-            <span class="signal">r3</span> &lt;= <span class="signal">r2</span>;
-        <span class="keyword">end</span>
-    <span class="keyword">end</span>
+<span class="comment">// Problem 1: Memory</span>
+<span class="type">logic</span> [<span class="number">7</span>:<span class="number">0</span>] <span class="signal">mem</span> [<span class="number">0</span>:<span class="number">255</span>];
 
-    <span class="keyword">assign</span> <span class="signal">match</span> = (<span class="signal">r1</span> == <span class="number">4'hA</span>) && (<span class="signal">r2</span> == <span class="number">4'hB</span>) && (<span class="signal">r3</span> == <span class="number">4'hC</span>);
+<span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span>) <span class="keyword">begin</span>
+    <span class="keyword">if</span> (<span class="signal">wr_en</span>)
+        <span class="signal">mem</span>[<span class="signal">addr</span>] &lt;= <span class="signal">wr_data</span>;
+<span class="keyword">end</span>
+
+<span class="keyword">assign</span> <span class="signal">rd_data</span> = <span class="signal">mem</span>[<span class="signal">addr</span>];  <span class="comment">// ← What's wrong here?</span>
+
+<span class="comment">// Problem 2: Arithmetic</span>
+<span class="keyword">assign</span> <span class="signal">quotient</span> = <span class="signal">dividend</span> / <span class="signal">divisor</span>;  <span class="comment">// ← What's wrong here?</span>
+
 <span class="keyword">endmodule</span></code></pre>
+
+<div class="hint-box">
+<p class="en"><strong>🔍 Hint:</strong> Think about: (1) How is the memory read happening? (2) What's the cost of division in combinational logic?</p>
+<p class="ko" style="display:none;"><strong>🔍 힌트:</strong> 생각해보세요: (1) 메모리 읽기가 어떻게 일어나는가? (2) 조합 논리에서 나눗셈의 비용은?</p>
+</div>
+
+<button class="reveal-btn" onclick="this.nextElementSibling.style.display='block'; this.style.display='none';">Show Solution</button>
+<div class="solution">
+<h3>✅ Problems & Fixes</h3>
+
+<p><strong>Problem 1: Asynchronous memory read → 2,048 flip-flops!</strong></p>
+<p class="en"><code>assign rd_data = mem[addr]</code> is an async read. The synthesis tool cannot use block RAM — it must implement the entire 256×8 array as flip-flops. Fix: make the read synchronous.</p>
+<p class="ko" style="display:none;"><code>assign rd_data = mem[addr]</code>는 비동기 읽기입니다. 합성 도구가 블록 RAM을 사용할 수 없어 전체 256×8 배열을 플립플롭으로 구현해야 합니다.</p>
+
+<pre><code><span class="comment">// ✅ Fixed: Synchronous read → Block RAM</span>
+<span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span>) <span class="keyword">begin</span>
+    <span class="keyword">if</span> (<span class="signal">wr_en</span>)
+        <span class="signal">mem</span>[<span class="signal">addr</span>] &lt;= <span class="signal">wr_data</span>;
+    <span class="signal">rd_data</span> &lt;= <span class="signal">mem</span>[<span class="signal">addr</span>];  <span class="comment">// Now synchronous!</span>
+<span class="keyword">end</span></code></pre>
+
+<p><strong>Problem 2: Combinational division → massive area!</strong></p>
+<p class="en">Division in a single <code>assign</code> creates a huge combinational divider. For 16/4 bits, this is a large, slow circuit. Fix: use a multi-cycle divider or avoid division.</p>
+<p class="ko" style="display:none;">단일 <code>assign</code>에서의 나눗셈은 거대한 조합 나눗셈기를 만듭니다. 다중 사이클 나눗셈기를 사용하거나 나눗셈을 피하세요.</p>
+
+<pre><code><span class="comment">// ✅ If dividing by power-of-2, use shift instead!</span>
+<span class="comment">// If divisor is always 2: assign quotient = dividend >> 1;</span>
+<span class="comment">// If divisor is always 4: assign quotient = dividend >> 2;</span>
+
+<span class="comment">// For variable divisor, use a multi-cycle approach:</span>
+<span class="comment">// Implement a sequential divider FSM instead</span></code></pre>
+</div>
+</div>
+
+<!-- Exercise 3: Hardware Counting -->
+<div class="exercise">
+<span class="exercise-num">Exercise 3: Count the Hardware</span>
+<h3>
+<span class="en">Calculate exact flip-flop and mux counts</span>
+<span class="ko" style="display:none;">정확한 플립플롭 및 멀티플렉서 수 계산</span>
+</h3>
+
+<p class="en">For each snippet, count the exact number of flip-flops and muxes:</p>
+<p class="ko" style="display:none;">각 코드 조각에 대해 정확한 플립플롭 및 멀티플렉서 수를 세세요:</p>
+
+<h3>Snippet A:</h3>
+<pre><code><span class="type">logic</span> [<span class="number">31</span>:<span class="number">0</span>] <span class="signal">accumulator</span>;
+<span class="type">logic</span>        <span class="signal">overflow</span>;
+
+<span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span>) <span class="keyword">begin</span>
+    <span class="keyword">if</span> (<span class="signal">reset</span>)
+        {<span class="signal">overflow</span>, <span class="signal">accumulator</span>} &lt;= <span class="number">33'b0</span>;
+    <span class="keyword">else if</span> (<span class="signal">load</span>)
+        {<span class="signal">overflow</span>, <span class="signal">accumulator</span>} &lt;= {<span class="number">1'b0</span>, <span class="signal">data_in</span>};
+    <span class="keyword">else if</span> (<span class="signal">add_en</span>)
+        {<span class="signal">overflow</span>, <span class="signal">accumulator</span>} &lt;= <span class="signal">accumulator</span> + <span class="signal">data_in</span>;
+<span class="keyword">end</span></code></pre>
+
+<h3>Snippet B:</h3>
+<pre><code><span class="type">logic</span> [<span class="number">7</span>:<span class="number">0</span>] <span class="signal">out</span>;
+
+<span class="keyword">always_comb</span> <span class="keyword">begin</span>
+    <span class="keyword">if</span> (<span class="signal">sel_a</span>)
+        <span class="signal">out</span> = <span class="signal">in_a</span>;
+    <span class="keyword">else if</span> (<span class="signal">sel_b</span>)
+        <span class="signal">out</span> = <span class="signal">in_b</span>;
+    <span class="keyword">else if</span> (<span class="signal">sel_c</span>)
+        <span class="signal">out</span> = <span class="signal">in_c</span>;
+    <span class="keyword">else</span>
+        <span class="signal">out</span> = <span class="number">8'b0</span>;
+<span class="keyword">end</span></code></pre>
+
+<button class="reveal-btn" onclick="this.nextElementSibling.style.display='block'; this.style.display='none';">Show Solution</button>
+<div class="solution">
+<h3>✅ Hardware Counts</h3>
+
+<p><strong>Snippet A:</strong></p>
+<ul>
+<li><strong>Flip-flops:</strong> 33 (32 for accumulator + 1 for overflow)</li>
+<li><strong>Muxes:</strong> Priority chain with 3 conditions → 3 levels of 33-bit 2:1 muxes (reset → load → add_en → hold)</li>
+<li><strong>Adder:</strong> 1× 33-bit adder (for the accumulate operation)</li>
+<li><strong>Clock enable:</strong> Combined from reset, load, add_en</li>
+</ul>
+
+<p><strong>Snippet B:</strong></p>
+<ul>
+<li><strong>Flip-flops:</strong> 0 (purely combinational — <code>always_comb</code>!)</li>
+<li><strong>Muxes:</strong> 3× 8-bit 2:1 muxes in a priority chain</li>
+<li class="en">The chain: <code>mux(sel_a, in_a, mux(sel_b, in_b, mux(sel_c, in_c, 8'b0)))</code></li>
+<li class="ko" style="display:none;">체인: <code>mux(sel_a, in_a, mux(sel_b, in_b, mux(sel_c, in_c, 8'b0)))</code></li>
+<li class="en">Critical path goes through all 3 mux levels!</li>
+<li class="ko" style="display:none;">크리티컬 패스가 3개의 멀티플렉서 레벨을 모두 통과합니다!</li>
+</ul>
+</div>
+</div>
+
+<!-- Exercise 4: Write Optimized RTL -->
+<div class="exercise">
+<span class="exercise-num">Exercise 4: Write Hardware-Aware RTL</span>
+<h3>
+<span class="en">Design an ALU with known hardware cost</span>
+<span class="ko" style="display:none;">알려진 하드웨어 비용으로 ALU 설계</span>
+</h3>
+
+<p class="en">Write a simple 8-bit ALU that performs 4 operations. Before writing the code, predict what hardware each operation will create. Then write the code.</p>
+<p class="ko" style="display:none;">4개의 연산을 수행하는 간단한 8비트 ALU를 작성하세요. 코드를 작성하기 전에 각 연산이 어떤 하드웨어를 생성할지 예측하세요.</p>
 
 <div class="concept-box">
-<h3>🎤 Practice Your Answer</h3>
-<p class="en">Before revealing the solution, try explaining out loud: "This module creates..." — as if you're in an interview. Cover: (1) what structure it is, (2) how many FFs, (3) what the combinational logic does, (4) what the module's purpose is.</p>
-<p class="ko" style="display:none;">솔루션을 공개하기 전에 소리 내어 설명해보세요: "이 모듈은..." — 면접에서처럼. 다루어야 할 내용: (1) 어떤 구조인지, (2) 몇 개의 FF인지, (3) 조합 논리가 무엇을 하는지, (4) 모듈의 목적이 무엇인지.</p>
-</div>
-
-<button class="btn" onclick="toggleSolution('sol5')">Show Analysis</button>
-<div class="solution" id="sol5">
-<h3>Complete Hardware Analysis:</h3>
-<p class="en"><strong>Structure:</strong> A 3-stage <strong>shift register</strong> (pipeline) with enable, feeding a <strong>sequence detector</strong>.</p>
-<p class="ko" style="display:none;"><strong>구조:</strong> 인에이블이 있는 3단계 <strong>시프트 레지스터</strong>(파이프라인)로, <strong>시퀀스 감지기</strong>에 공급됩니다.</p>
+<h3>📋 Requirements</h3>
 <ul>
-<li class="en"><strong>12 flip-flops:</strong> r1[3:0] + r2[3:0] + r3[3:0] = 12 FFs with sync reset and enable</li>
-<li class="en"><strong>12 muxes:</strong> The enable creates a 2:1 mux on each FF input (en ? new : hold)</li>
-<li class="en"><strong>12 muxes:</strong> Reset creates another mux layer (rst ? 0 : enabled_value)</li>
-<li class="en"><strong>3 comparators:</strong> r1==4'hA, r2==4'hB, r3==4'hC (each is a 4-bit equality check)</li>
-<li class="en"><strong>2 AND gates:</strong> Combining the three comparator outputs</li>
-<li class="ko" style="display:none;"><strong>12개 플립플롭:</strong> r1[3:0] + r2[3:0] + r3[3:0] = 동기 리셋과 인에이블이 있는 12개 FF</li>
-<li class="ko" style="display:none;"><strong>12개 멀티플렉서:</strong> 인에이블이 각 FF 입력에 2:1 멀티플렉서를 생성 (en ? 새값 : 유지)</li>
-<li class="ko" style="display:none;"><strong>12개 멀티플렉서:</strong> 리셋이 또 다른 멀티플렉서 레이어를 생성 (rst ? 0 : 인에이블된 값)</li>
-<li class="ko" style="display:none;"><strong>3개 비교기:</strong> r1==4'hA, r2==4'hB, r3==4'hC (각각 4비트 등가 검사)</li>
-<li class="ko" style="display:none;"><strong>2개 AND 게이트:</strong> 세 비교기 출력을 결합</li>
+<li>Inputs: <code>a[7:0]</code>, <code>b[7:0]</code>, <code>op[1:0]</code></li>
+<li>Output: <code>result[7:0]</code>, <code>zero_flag</code></li>
+<li>Operations: 00=ADD, 01=AND, 10=XOR, 11=PASS-A</li>
+<li>Use <code>always_comb</code> (combinational)</li>
+<li>The <code>zero_flag</code> should be 1 when result is all zeros</li>
 </ul>
-<p class="en"><strong>Purpose:</strong> Detects the sequence <code>C → B → A</code> on the <code>din</code> input (most recent = A in r1). When enabled, it shifts data through a 3-deep history and checks if the last three values were 0xC, 0xB, 0xA in that order. This is a <strong>sequence detector</strong> — a very common pattern!</p>
-<p class="ko" style="display:none;"><strong>목적:</strong> <code>din</code> 입력에서 시퀀스 <code>C → B → A</code>를 감지합니다 (가장 최근 = r1의 A). 인에이블되면 데이터를 3단계 히스토리에 시프트하고 마지막 세 값이 순서대로 0xC, 0xB, 0xA였는지 확인합니다. 이것은 <strong>시퀀스 감지기</strong> — 매우 일반적인 패턴입니다!</p>
+</div>
+
+<div class="hint-box">
+<p class="en"><strong>🔍 Hint:</strong> Predict: ADD → adder, AND → AND gates, XOR → XOR gates, PASS → wires, case → 4:1 mux, zero_flag → NOR reduction. Then write the code!</p>
+<p class="ko" style="display:none;"><strong>🔍 힌트:</strong> 예측: ADD → 가산기, AND → AND 게이트, XOR → XOR 게이트, PASS → 와이어, case → 4:1 멀티플렉서, zero_flag → NOR 축소. 그런 다음 코드를 작성하세요!</p>
+</div>
+
+<button class="reveal-btn" onclick="this.nextElementSibling.style.display='block'; this.style.display='none';">Show Solution</button>
+<div class="solution">
+<h3>✅ Solution</h3>
+
+<p><strong>Hardware Prediction:</strong></p>
+<table class="comparison-table">
+<tr><th>Operation</th><th>Hardware</th><th>Cost</th></tr>
+<tr><td>ADD (a + b)</td><td>8-bit carry-chain adder</td><td>Low</td></tr>
+<tr><td>AND (a & b)</td><td>8 AND gates</td><td>Minimal</td></tr>
+<tr><td>XOR (a ^ b)</td><td>8 XOR gates</td><td>Minimal</td></tr>
+<tr><td>PASS (a)</td><td>Wires</td><td>Zero</td></tr>
+<tr><td>case(op)</td><td>4:1 Mux (8-bit)</td><td>Low</td></tr>
+<tr><td>zero_flag</td><td>8-input NOR (OR reduction + invert)</td><td>Minimal</td></tr>
+</table>
+
+<pre><code><span class="keyword">module</span> <span class="type">alu_8bit</span> (
+    <span class="keyword">input</span>  <span class="type">logic</span> [<span class="number">7</span>:<span class="number">0</span>] <span class="signal">a</span>, <span class="signal">b</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span> [<span class="number">1</span>:<span class="number">0</span>] <span class="signal">op</span>,
+    <span class="keyword">output</span> <span class="type">logic</span> [<span class="number">7</span>:<span class="number">0</span>] <span class="signal">result</span>,
+    <span class="keyword">output</span> <span class="type">logic</span>       <span class="signal">zero_flag</span>
+);
+
+<span class="keyword">always_comb</span> <span class="keyword">begin</span>
+    <span class="keyword">case</span> (<span class="signal">op</span>)              <span class="comment">// → 4:1 Mux</span>
+        <span class="number">2'b00</span>: <span class="signal">result</span> = <span class="signal">a</span> + <span class="signal">b</span>;   <span class="comment">// → 8-bit adder</span>
+        <span class="number">2'b01</span>: <span class="signal">result</span> = <span class="signal">a</span> &amp; <span class="signal">b</span>;   <span class="comment">// → 8 AND gates</span>
+        <span class="number">2'b10</span>: <span class="signal">result</span> = <span class="signal">a</span> ^ <span class="signal">b</span>;   <span class="comment">// → 8 XOR gates</span>
+        <span class="number">2'b11</span>: <span class="signal">result</span> = <span class="signal">a</span>;       <span class="comment">// → wires (free)</span>
+        <span class="keyword">default</span>: <span class="signal">result</span> = <span class="number">8'b0</span>;
+    <span class="keyword">endcase</span>
+<span class="keyword">end</span>
+
+<span class="keyword">assign</span> <span class="signal">zero_flag</span> = ~|<span class="signal">result</span>;  <span class="comment">// → NOR reduction tree</span>
+
+<span class="keyword">endmodule</span></code></pre>
+
+<p class="en"><strong>Total hardware:</strong> 1 adder + 8 AND gates + 8 XOR gates + 1 four-input mux (8-bit) + 1 NOR tree. Very efficient!</p>
+<p class="ko" style="display:none;"><strong>총 하드웨어:</strong> 가산기 1개 + AND 게이트 8개 + XOR 게이트 8개 + 4입력 멀티플렉서 1개 (8비트) + NOR 트리 1개. 매우 효율적입니다!</p>
 </div>
 </div>
 
-<!-- Summary -->
-<div class="tip-box">
-<h3>🎯 Today's Practice Takeaways</h3>
-<ol>
-<li class="en"><strong>Always count your flip-flops</strong> — bits × registered signals = total FFs</li>
-<li class="en"><strong>Shift + add</strong> replaces multipliers for constant factors</li>
-<li class="en"><strong>Default cases</strong> prevent accidental latches</li>
-<li class="en"><strong>Read code as hardware</strong> — practice describing circuits from RTL</li>
-<li class="ko" style="display:none;"><strong>항상 플립플롭을 세세요</strong> — 비트 × 등록된 신호 = 총 FF</li>
-<li class="ko" style="display:none;"><strong>시프트 + 덧셈</strong>은 상수 인수에 대해 곱셈기를 대체합니다</li>
-<li class="ko" style="display:none;"><strong>기본 케이스</strong>는 우발적 래치를 방지합니다</li>
-<li class="ko" style="display:none;"><strong>코드를 하드웨어로 읽으세요</strong> — RTL에서 회로를 설명하는 연습을 하세요</li>
-</ol>
+<!-- Exercise 5: Predict & Compare -->
+<div class="exercise">
+<span class="exercise-num">Exercise 5: Which Is Better?</span>
+<h3>
+<span class="en">Compare two implementations — predict hardware cost</span>
+<span class="ko" style="display:none;">두 구현을 비교하고 하드웨어 비용을 예측하세요</span>
+</h3>
+
+<p class="en">Both snippets compute the same output. Which produces more efficient hardware and why?</p>
+<p class="ko" style="display:none;">두 코드 조각은 동일한 출력을 계산합니다. 어느 것이 더 효율적인 하드웨어를 생성하고 왜 그런가요?</p>
+
+<h3>Version A:</h3>
+<pre><code><span class="keyword">always_comb</span> <span class="keyword">begin</span>
+    <span class="keyword">if</span> (<span class="signal">sel</span> == <span class="number">2'b00</span>)
+        <span class="signal">out</span> = <span class="signal">a</span>;
+    <span class="keyword">else if</span> (<span class="signal">sel</span> == <span class="number">2'b01</span>)
+        <span class="signal">out</span> = <span class="signal">b</span>;
+    <span class="keyword">else if</span> (<span class="signal">sel</span> == <span class="number">2'b10</span>)
+        <span class="signal">out</span> = <span class="signal">c</span>;
+    <span class="keyword">else</span>
+        <span class="signal">out</span> = <span class="signal">d</span>;
+<span class="keyword">end</span></code></pre>
+
+<h3>Version B:</h3>
+<pre><code><span class="keyword">always_comb</span> <span class="keyword">begin</span>
+    <span class="keyword">unique case</span> (<span class="signal">sel</span>)
+        <span class="number">2'b00</span>: <span class="signal">out</span> = <span class="signal">a</span>;
+        <span class="number">2'b01</span>: <span class="signal">out</span> = <span class="signal">b</span>;
+        <span class="number">2'b10</span>: <span class="signal">out</span> = <span class="signal">c</span>;
+        <span class="number">2'b11</span>: <span class="signal">out</span> = <span class="signal">d</span>;
+    <span class="keyword">endcase</span>
+<span class="keyword">end</span></code></pre>
+
+<button class="reveal-btn" onclick="this.nextElementSibling.style.display='block'; this.style.display='none';">Show Solution</button>
+<div class="solution">
+<h3>✅ Version B is better!</h3>
+
+<p><strong>Version A:</strong> Creates a <strong>priority mux chain</strong> — 3 levels of 2:1 muxes. Each <code>if</code> comparison also needs equality comparators. Critical path: comparator → mux → comparator → mux → comparator → mux.</p>
+
+<p><strong>Version B:</strong> <code>unique case</code> tells the synthesis tool all conditions are mutually exclusive. It builds a <strong>flat 4:1 mux</strong> — just 1 level of selection. Much shorter critical path!</p>
+
+<table class="comparison-table">
+<tr><th>Metric</th><th>Version A (if-else)</th><th>Version B (unique case)</th></tr>
+<tr><td>Mux Levels</td><td>3 (cascaded)</td><td>1 (flat)</td></tr>
+<tr><td>Comparators</td><td>3 equality checks</td><td>Direct decode</td></tr>
+<tr><td>Critical Path</td><td>Longer</td><td>Shorter ✅</td></tr>
+<tr><td>Area</td><td>Slightly more</td><td>Slightly less ✅</td></tr>
+</table>
+
+<p class="en"><strong>Lesson:</strong> When conditions are mutually exclusive, always prefer <code>case</code> (or <code>unique case</code>) over <code>if-else if</code> chains. Modern tools may optimize both to the same result, but <code>unique case</code> <em>guarantees</em> it and is clearer intent.</p>
+<p class="ko" style="display:none;"><strong>교훈:</strong> 조건이 상호 배타적일 때는 <code>if-else if</code> 체인보다 <code>case</code>(또는 <code>unique case</code>)를 항상 선호하세요.</p>
+</div>
+</div>
+
+<div class="concept-box">
+<h3>🏆 Key Takeaways</h3>
+<ul>
+<li class="en">Always ask: "What hardware does this line create?"</li>
+<li class="ko" style="display:none;">항상 물어보세요: "이 줄은 어떤 하드웨어를 생성하는가?"</li>
+<li class="en">Sync reads → RAM; Async reads → flip-flop arrays (expensive!)</li>
+<li class="ko" style="display:none;">동기식 읽기 → RAM; 비동기식 읽기 → 플립플롭 배열 (비용이 큼!)</li>
+<li class="en">Constant shifts are free; variable shifts cost muxes</li>
+<li class="ko" style="display:none;">상수 시프트는 무료; 가변 시프트는 멀티플렉서 비용이 발생</li>
+<li class="en">Use <code>case</code> over <code>if-else if</code> for mutually exclusive conditions</li>
+<li class="ko" style="display:none;">상호 배타적 조건에는 <code>if-else if</code>보다 <code>case</code>를 사용</li>
+<li class="en">Avoid division in combinational logic — it's the most expensive operator!</li>
+<li class="ko" style="display:none;">조합 논리에서 나눗셈을 피하세요 — 가장 비싼 연산자입니다!</li>
+</ul>
 </div>
 
 <div class="nav-links">
     <a href="day-32-lesson.html">📖 Review Lesson</a>
-    <a href="day-32-quiz.html">📝 Take Quiz</a>
+    <a href="day-32-quiz.html">📝 Take the Quiz</a>
 </div>
 
 <script>
@@ -583,10 +581,7 @@ function toggleLang() {
     });
     document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
 }
-function toggleSolution(id) {
-    const el = document.getElementById(id);
-    el.classList.toggle('show');
-}
 </script>
+
 </body>
 </html>
