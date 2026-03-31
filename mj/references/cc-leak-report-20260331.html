@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Claude Code Source Leak — Analysis & Actionable Insights</title>
+<style>
+:root {
+  --bg: #0d1117;
+  --card: #161b22;
+  --border: #30363d;
+  --text: #e6edf3;
+  --muted: #8b949e;
+  --accent: #58a6ff;
+  --green: #3fb950;
+  --orange: #d29922;
+  --red: #f85149;
+  --purple: #bc8cff;
+  --pink: #f778ba;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  padding: 0;
+}
+.container { max-width: 900px; margin: 0 auto; padding: 20px 16px; }
+
+/* Lang toggle */
+.lang-toggle {
+  position: fixed; top: 16px; right: 16px; z-index: 1000;
+  background: var(--accent); color: #000; border: none; padding: 8px 16px;
+  border-radius: 20px; font-weight: 600; cursor: pointer; font-size: 14px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+.lang-toggle:hover { opacity: 0.9; }
+.ko { display: none; }
+.ko.show { display: inline !important; }
+.en.hide { display: none !important; }
+
+/* Header */
+.hero {
+  text-align: center; padding: 40px 20px 30px;
+  background: linear-gradient(135deg, #0d1117 0%, #1a1e2e 50%, #0d1117 100%);
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 30px;
+  border-radius: 12px;
+}
+.hero h1 { font-size: 28px; margin-bottom: 8px; }
+.hero .subtitle { color: var(--muted); font-size: 15px; }
+.hero .date { color: var(--accent); font-size: 13px; margin-top: 8px; }
+
+/* Sections */
+.section {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 20px;
+}
+.section h2 {
+  font-size: 20px;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.section h2 .emoji { font-size: 24px; }
+.section h3 { font-size: 16px; color: var(--accent); margin: 16px 0 8px; }
+
+/* Stats grid */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 12px;
+  margin: 16px 0;
+}
+.stat {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px;
+  text-align: center;
+}
+.stat .number { font-size: 28px; font-weight: 700; color: var(--accent); }
+.stat .label { font-size: 12px; color: var(--muted); margin-top: 4px; }
+
+/* Lists */
+ul { list-style: none; padding: 0; }
+ul li { padding: 6px 0; padding-left: 20px; position: relative; }
+ul li::before { content: '▸'; position: absolute; left: 0; color: var(--accent); }
+
+/* Badges */
+.badge {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+}
+.badge-green { background: rgba(63,185,80,0.15); color: var(--green); }
+.badge-orange { background: rgba(210,153,34,0.15); color: var(--orange); }
+.badge-red { background: rgba(248,81,73,0.15); color: var(--red); }
+.badge-purple { background: rgba(188,140,255,0.15); color: var(--purple); }
+.badge-blue { background: rgba(88,166,255,0.15); color: var(--accent); }
+
+/* Tables */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 12px 0;
+  font-size: 14px;
+}
+th, td {
+  padding: 10px 12px;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+}
+th { color: var(--muted); font-weight: 600; font-size: 12px; text-transform: uppercase; }
+
+/* Code blocks */
+.code-block {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px;
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  font-size: 13px;
+  overflow-x: auto;
+  margin: 12px 0;
+  color: var(--muted);
+}
+.code-block .highlight { color: var(--accent); }
+.code-block .comment { color: #484f58; }
+
+/* Callout */
+.callout {
+  background: rgba(88,166,255,0.08);
+  border-left: 3px solid var(--accent);
+  padding: 16px;
+  border-radius: 0 8px 8px 0;
+  margin: 16px 0;
+  font-size: 14px;
+}
+.callout-orange {
+  background: rgba(210,153,34,0.08);
+  border-left-color: var(--orange);
+}
+.callout-green {
+  background: rgba(63,185,80,0.08);
+  border-left-color: var(--green);
+}
+
+/* Accordion */
+details {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  margin: 8px 0;
+}
+details summary {
+  padding: 12px 16px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
+}
+details summary:hover { color: var(--accent); }
+details > div { padding: 0 16px 16px; font-size: 14px; }
+
+/* Footer */
+.footer {
+  text-align: center;
+  padding: 30px 0;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+/* Priority label */
+.priority {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+@media (max-width: 600px) {
+  .container { padding: 12px 10px; }
+  .hero h1 { font-size: 22px; }
+  .stats { grid-template-columns: repeat(2, 1fr); }
+  .stat .number { font-size: 22px; }
+}
+</style>
+</head>
+<body>
+<button class="lang-toggle" onclick="toggleLang()">한국어</button>
+
+<div class="container">
+  <div class="hero">
+    <h1>
+      <span class="en">🔓 Claude Code Source Leak — Analysis</span>
+      <span class="ko">🔓 Claude Code 소스 유출 — 분석 보고서</span>
+    </h1>
+    <div class="subtitle">
+      <span class="en">What happened, what we learned, and how Totoro will use it</span>
+      <span class="ko">무슨 일이 있었고, 무엇을 배웠고, 토토로가 어떻게 활용할지</span>
+    </div>
+    <div class="date">March 31, 2026 · Prepared by Totoro 🌳</div>
+  </div>
+
+  <!-- WHAT HAPPENED -->
+  <div class="section">
+    <h2><span class="emoji">💥</span>
+      <span class="en">What Happened</span>
+      <span class="ko">무슨 일이 있었나</span>
+    </h2>
+
+    <div class="stats">
+      <div class="stat">
+        <div class="number">512K+</div>
+        <div class="label"><span class="en">Lines of Code</span><span class="ko">코드 라인 수</span></div>
+      </div>
+      <div class="stat">
+        <div class="number">1,900</div>
+        <div class="label"><span class="en">TypeScript Files</span><span class="ko">타입스크립트 파일</span></div>
+      </div>
+      <div class="stat">
+        <div class="number">~40</div>
+        <div class="label"><span class="en">Built-in Tools</span><span class="ko">내장 도구</span></div>
+      </div>
+      <div class="stat">
+        <div class="number">~85</div>
+        <div class="label"><span class="en">Slash Commands</span><span class="ko">슬래시 커맨드</span></div>
+      </div>
+    </div>
+
+    <p class="en">On March 31, 2026, security researcher Chaofan Shou discovered that Anthropic's Claude Code CLI had its <strong>entire source code</strong> exposed via a source map file (<code>.map</code>) accidentally bundled in npm package version 2.1.88. The source map referenced an R2 storage bucket containing the full, unobfuscated TypeScript source.</p>
+    <p class="ko">2026년 3월 31일, 보안 연구원 Chaofan Shou가 Anthropic의 Claude Code CLI의 <strong>전체 소스 코드</strong>가 npm 패키지 버전 2.1.88에 실수로 포함된 소스맵 파일(<code>.map</code>)을 통해 노출된 것을 발견했습니다. 소스맵은 전체 비난독화 TypeScript 소스가 포함된 R2 스토리지 버킷을 참조하고 있었습니다.</p>
+
+    <div class="callout-orange callout">
+      <strong><span class="en">Key Clarification:</span><span class="ko">핵심 정리:</span></strong>
+      <span class="en">Only the <strong>CLI tool</strong> source was leaked — NOT the Claude AI model weights, training data, or infrastructure. You cannot "run Claude" from this code. It's the interface layer, not the intelligence.</span>
+      <span class="ko"><strong>CLI 도구</strong>의 소스만 유출되었습니다 — Claude AI 모델 가중치, 학습 데이터, 인프라는 유출되지 않았습니다. 이 코드로 Claude를 "실행"할 수 없습니다. 인터페이스 레이어이지 지능 자체가 아닙니다.</span>
+    </div>
+  </div>
+
+  <!-- ARCHITECTURE INSIGHTS -->
+  <div class="section">
+    <h2><span class="emoji">🏛️</span>
+      <span class="en">Architecture Insights</span>
+      <span class="ko">아키텍처 인사이트</span>
+    </h2>
+
+    <p class="en">Claude Code is a production-grade agentic system, not a simple API wrapper:</p>
+    <p class="ko">Claude Code는 단순 API 래퍼가 아닌 프로덕션급 에이전틱 시스템입니다:</p>
+
+    <table>
+      <tr><th><span class="en">Component</span><span class="ko">컴포넌트</span></th><th><span class="en">Details</span><span class="ko">세부사항</span></th></tr>
+      <tr><td><span class="en">Runtime</span><span class="ko">런타임</span></td><td>Bun (not Node) — <span class="en">faster startup, feature flags via dead code elimination</span><span class="ko">더 빠른 시작, 데드 코드 제거를 통한 기능 플래그</span></td></tr>
+      <tr><td><span class="en">UI Framework</span><span class="ko">UI 프레임워크</span></td><td>React + Ink — <span class="en">component-based terminal rendering</span><span class="ko">컴포넌트 기반 터미널 렌더링</span></td></tr>
+      <tr><td><span class="en">Validation</span><span class="ko">검증</span></td><td>Zod v4 — <span class="en">schemas everywhere (tools, API, config)</span><span class="ko">모든 곳에 스키마 (도구, API, 설정)</span></td></tr>
+      <tr><td>QueryEngine</td><td>46K lines — <span class="en">LLM calls, streaming, caching, tool loops</span><span class="ko">LLM 호출, 스트리밍, 캐싱, 도구 루프</span></td></tr>
+      <tr><td>Tool.ts</td><td>29K lines — <span class="en">tool definitions, permission schemas</span><span class="ko">도구 정의, 권한 스키마</span></td></tr>
+    </table>
+  </div>
+
+  <!-- TOP LEARNINGS -->
+  <div class="section">
+    <h2><span class="emoji">🧠</span>
+      <span class="en">Top 6 Learnings for Our Development</span>
+      <span class="ko">우리 개발에 활용할 6가지 핵심 학습</span>
+    </h2>
+
+    <!-- Learning 1 -->
+    <details open>
+      <summary>
+        <span class="badge badge-green">HIGH IMPACT</span>
+        <span class="en"> 1. Three-Layer Context Compression</span>
+        <span class="ko"> 1. 3단계 컨텍스트 압축 전략</span>
+      </summary>
+      <div>
+        <p class="en">Claude Code uses a sophisticated three-layer compression system to manage long sessions:</p>
+        <p class="ko">Claude Code는 긴 세션 관리를 위해 정교한 3단계 압축 시스템을 사용합니다:</p>
+        <ul>
+          <li><strong>MicroCompact</strong> — <span class="en">No API calls. Locally edits cached content, removes old tool outputs. Lightest, most frequent.</span><span class="ko">API 호출 없음. 캐시된 콘텐츠를 로컬에서 편집, 이전 도구 출력 제거. 가장 가볍고 자주 실행.</span></li>
+          <li><strong>AutoCompact</strong> — <span class="en">Triggers near context limit. 13K token buffer, generates 20K summary. Circuit breaker after 3 failures.</span><span class="ko">컨텍스트 한계 근처에서 트리거. 13K 토큰 버퍼, 20K 요약 생성. 3회 실패 후 서킷 브레이커.</span></li>
+          <li><strong>Full Compact</strong> — <span class="en">Compresses entire conversation. Re-injects recent files (5K/file), plans, skills. Post-compression: 50K tokens.</span><span class="ko">전체 대화 압축. 최근 파일(5K/파일), 계획, 스킬 재주입. 압축 후: 50K 토큰.</span></li>
+        </ul>
+        <div class="callout-green callout">
+          <strong><span class="en">Action:</span><span class="ko">적용:</span></strong>
+          <span class="en">Run <code>/compact</code> proactively before starting new phases. CLAUDE.md survives fully — conversation instructions don't!</span>
+          <span class="ko">새 단계 시작 전에 선제적으로 <code>/compact</code> 실행. CLAUDE.md는 완전히 유지됨 — 대화 중 지시사항은 유지되지 않음!</span>
+        </div>
+      </div>
+    </details>
+
+    <!-- Learning 2 -->
+    <details>
+      <summary>
+        <span class="badge badge-green">HIGH IMPACT</span>
+        <span class="en"> 2. Self-Healing Memory Architecture</span>
+        <span class="ko"> 2. 자가 치유 메모리 아키텍처</span>
+      </summary>
+      <div>
+        <p class="en">Claude Code's memory isn't a simple store-everything system. It uses "skeptical memory":</p>
+        <p class="ko">Claude Code의 메모리는 단순히 모든 것을 저장하는 시스템이 아닙니다. "회의적 메모리"를 사용합니다:</p>
+        <ul>
+          <li><span class="en"><strong>MEMORY.md</strong> is a lightweight index of pointers (~150 chars/line), NOT a data store</span><span class="ko"><strong>MEMORY.md</strong>는 경량 포인터 인덱스(~150자/줄), 데이터 저장소가 아님</span></li>
+          <li><span class="en">Actual knowledge distributed across topic files, fetched on-demand</span><span class="ko">실제 지식은 주제 파일에 분산, 필요시 가져옴</span></li>
+          <li><span class="en">Agent treats memory as a "hint" — verifies against actual codebase before acting</span><span class="ko">에이전트는 메모리를 "힌트"로 취급 — 행동 전 실제 코드베이스와 검증</span></li>
+          <li><span class="en"><strong>AutoDream</strong> consolidation: runs background memory maintenance (orient → gather → consolidate → prune)</span><span class="ko"><strong>AutoDream</strong> 통합: 백그라운드 메모리 유지보수 실행 (탐색 → 수집 → 통합 → 정리)</span></li>
+        </ul>
+        <div class="callout-green callout">
+          <strong><span class="en">Action:</span><span class="ko">적용:</span></strong>
+          <span class="en">Apply this to our MEMORY.md — keep it as a pointer index, not a data dump. Verify before acting on memory.</span>
+          <span class="ko">우리 MEMORY.md에 적용 — 데이터 덤프가 아닌 포인터 인덱스로 유지. 메모리에 따라 행동하기 전 검증.</span>
+        </div>
+      </div>
+    </details>
+
+    <!-- Learning 3 -->
+    <details>
+      <summary>
+        <span class="badge badge-green">HIGH IMPACT</span>
+        <span class="en"> 3. Multi-Agent Orchestration Patterns</span>
+        <span class="ko"> 3. 멀티 에이전트 오케스트레이션 패턴</span>
+      </summary>
+      <div>
+        <ul>
+          <li><span class="en"><strong>Coordinator Mode:</strong> Main agent assigns tasks to workers, workers execute in parallel</span><span class="ko"><strong>코디네이터 모드:</strong> 메인 에이전트가 작업자에게 태스크 할당, 작업자는 병렬 실행</span></li>
+          <li><span class="en"><strong>Permission Mailbox:</strong> Workers request permission for dangerous ops via queue</span><span class="ko"><strong>권한 메일박스:</strong> 작업자가 큐를 통해 위험한 작업에 대한 권한 요청</span></li>
+          <li><span class="en"><strong>Atomic Claim:</strong> <code>createResolveOnce</code> prevents duplicate permission handling</span><span class="ko"><strong>원자적 클레임:</strong> <code>createResolveOnce</code>로 중복 권한 처리 방지</span></li>
+          <li><span class="en"><strong>Team Memory:</strong> Shared memory space across agents</span><span class="ko"><strong>팀 메모리:</strong> 에이전트 간 공유 메모리 공간</span></li>
+        </ul>
+        <div class="callout-green callout">
+          <strong><span class="en">Action:</span><span class="ko">적용:</span></strong>
+          <span class="en">Use Task tool with sub-agents for all large exploration tasks. Keep main context lean. This directly applies to our Luna/Atlas/Kai/Nova agent architecture!</span>
+          <span class="ko">모든 대규모 탐색 작업에 서브 에이전트와 Task 도구 사용. 메인 컨텍스트를 가볍게 유지. 우리 Luna/Atlas/Kai/Nova 에이전트 아키텍처에 직접 적용!</span>
+        </div>
+      </div>
+    </details>
+
+    <!-- Learning 4 -->
+    <details>
+      <summary>
+        <span class="badge badge-orange">MEDIUM IMPACT</span>
+        <span class="en"> 4. System Prompt Engineering</span>
+        <span class="ko"> 4. 시스템 프롬프트 엔지니어링</span>
+      </summary>
+      <div>
+        <p class="en">Anthropic doesn't use vague instructions. Their prompts are <strong>engineered constraints</strong>:</p>
+        <p class="ko">Anthropic은 모호한 지시사항을 사용하지 않습니다. 그들의 프롬프트는 <strong>엔지니어링된 제약조건</strong>입니다:</p>
+        <ul>
+          <li><span class="en"><strong>Tool constraints:</strong> "Must use FileReadTool, bash not allowed"</span><span class="ko"><strong>도구 제약:</strong> "FileReadTool 사용 필수, bash 불허"</span></li>
+          <li><span class="en"><strong>Risk controls:</strong> "Must double-confirm before deleting"</span><span class="ko"><strong>리스크 제어:</strong> "삭제 전 이중 확인 필수"</span></li>
+          <li><span class="en"><strong>Output specs:</strong> "Conclusion first, then explain"</span><span class="ko"><strong>출력 사양:</strong> "결론 먼저, 그 다음 설명"</span></li>
+          <li><span class="en"><strong>Anti-patterns explicitly banned:</strong> No over-engineering, no hypothetical design</span><span class="ko"><strong>안티패턴 명시적 금지:</strong> 과도한 설계 금지, 가상 설계 금지</span></li>
+        </ul>
+        <div class="callout-green callout">
+          <strong><span class="en">Action:</span><span class="ko">적용:</span></strong>
+          <span class="en">Apply this to our CLAUDE.md files — specific constraints > vague guidance. Use "IMPORTANT" and "YOU MUST" for critical rules.</span>
+          <span class="ko">우리 CLAUDE.md 파일에 적용 — 구체적 제약 > 모호한 가이드. 중요한 규칙에 "IMPORTANT"와 "YOU MUST" 사용.</span>
+        </div>
+      </div>
+    </details>
+
+    <!-- Learning 5 -->
+    <details>
+      <summary>
+        <span class="badge badge-orange">MEDIUM IMPACT</span>
+        <span class="en"> 5. CLAUDE.md as Instruction Budget</span>
+        <span class="ko"> 5. CLAUDE.md 지시사항 예산 관리</span>
+      </summary>
+      <div>
+        <ul>
+          <li><span class="en">LLMs reliably follow ~150-200 distinct instructions</span><span class="ko">LLM은 약 150-200개의 고유 지시사항을 안정적으로 따름</span></li>
+          <li><span class="en">System prompt already uses ~50 instructions → your budget is <strong>~100-150</strong></span><span class="ko">시스템 프롬프트가 이미 ~50개 지시사항 사용 → 당신의 예산은 <strong>~100-150개</strong></span></li>
+          <li><span class="en">Over 200 lines = Claude starts losing/ignoring instructions</span><span class="ko">200줄 초과 = Claude가 지시사항을 잃거나 무시하기 시작</span></li>
+          <li><span class="en">CLAUDE.md content is prompt-cached (90% cheaper on subsequent turns)</span><span class="ko">CLAUDE.md 콘텐츠는 프롬프트 캐시됨 (후속 턴에서 90% 저렴)</span></li>
+        </ul>
+        <div class="callout-green callout">
+          <strong><span class="en">Action:</span><span class="ko">적용:</span></strong>
+          <span class="en">Keep CLAUDE.md under 200 lines. For each line ask: "Would removing this cause mistakes?" Use @imports for detailed docs.</span>
+          <span class="ko">CLAUDE.md를 200줄 미만으로 유지. 각 줄마다 물어보기: "이걸 제거하면 실수가 생길까?" 상세 문서는 @imports 사용.</span>
+        </div>
+      </div>
+    </details>
+
+    <!-- Learning 6 -->
+    <details>
+      <summary>
+        <span class="badge badge-purple">STRATEGIC</span>
+        <span class="en"> 6. KAIROS: The Autonomous Daemon Future</span>
+        <span class="ko"> 6. KAIROS: 자율 데몬의 미래</span>
+      </summary>
+      <div>
+        <p class="en">A feature flag mentioned 150+ times — an always-on background agent mode:</p>
+        <p class="ko">150회 이상 언급된 기능 플래그 — 항상 켜져있는 백그라운드 에이전트 모드:</p>
+        <ul>
+          <li><span class="en">Background sessions with autonomous task handling</span><span class="ko">자율 작업 처리가 가능한 백그라운드 세션</span></li>
+          <li><span class="en"><strong>AutoDream:</strong> Memory consolidation while user is idle (merge observations, remove contradictions, convert to facts)</span><span class="ko"><strong>AutoDream:</strong> 사용자가 유휴 상태일 때 메모리 통합 (관찰 병합, 모순 제거, 사실로 변환)</span></li>
+          <li><span class="en">Forked sub-agent prevents main "train of thought" corruption</span><span class="ko">포크된 서브 에이전트가 메인 "사고의 흐름" 오염 방지</span></li>
+        </ul>
+        <div class="callout callout">
+          <strong><span class="en">Insight:</span><span class="ko">인사이트:</span></strong>
+          <span class="en">This is exactly what we're doing with OpenClaw heartbeats + cron jobs. We're already ahead of the curve! The AutoDream pattern maps perfectly to our MEMORY.md consolidation workflow.</span>
+          <span class="ko">이것은 우리가 OpenClaw 하트비트 + 크론 작업으로 하고 있는 것과 정확히 같습니다. 우리가 이미 앞서가고 있습니다! AutoDream 패턴은 우리 MEMORY.md 통합 워크플로우에 완벽하게 매핑됩니다.</span>
+        </div>
+      </div>
+    </details>
+  </div>
+
+  <!-- WHAT I CREATED -->
+  <div class="section">
+    <h2><span class="emoji">📄</span>
+      <span class="en">Reference Document Created</span>
+      <span class="ko">생성된 참조 문서</span>
+    </h2>
+    <p class="en">I've created a comprehensive <strong>Claude Code Mastery Guide</strong> (<code>claude-code-mastery.md</code>) that I'll reference every time I use Claude Code for development. It covers:</p>
+    <p class="ko">Claude Code를 사용할 때마다 참조할 종합 <strong>Claude Code Mastery Guide</strong> (<code>claude-code-mastery.md</code>)를 생성했습니다. 내용:</p>
+    <ul>
+      <li><span class="en">Full architecture overview + core module breakdown</span><span class="ko">전체 아키텍처 개요 + 핵심 모듈 분석</span></li>
+      <li><span class="en">Context window management rules</span><span class="ko">컨텍스트 윈도우 관리 규칙</span></li>
+      <li><span class="en">CLAUDE.md writing best practices with examples</span><span class="ko">CLAUDE.md 작성 모범 사례 (예시 포함)</span></li>
+      <li><span class="en">Memory system deep-dive (Self-Healing + AutoDream)</span><span class="ko">메모리 시스템 심층 분석 (자가 치유 + AutoDream)</span></li>
+      <li><span class="en">All ~40 tools categorized with usage rules</span><span class="ko">~40개 도구 분류 및 사용 규칙</span></li>
+      <li><span class="en">Multi-agent orchestration patterns</span><span class="ko">멀티 에이전트 오케스트레이션 패턴</span></li>
+      <li><span class="en">All key slash commands</span><span class="ko">모든 핵심 슬래시 커맨드</span></li>
+      <li><span class="en">Three-layer compression strategy</span><span class="ko">3단계 압축 전략</span></li>
+      <li><span class="en">Anti-patterns to avoid</span><span class="ko">피해야 할 안티패턴</span></li>
+      <li><span class="en">Practical workflow recipes (bug fix, feature, refactor, exploration)</span><span class="ko">실용 워크플로우 레시피 (버그 수정, 기능 추가, 리팩터, 탐색)</span></li>
+    </ul>
+    <p class="en" style="margin-top: 12px;"><strong>Location:</strong> <code>~/.openclaw/workspace/references/claude-code-mastery.md</code> (local) + pushed to GitHub repo</p>
+    <p class="ko" style="margin-top: 12px;"><strong>위치:</strong> <code>~/.openclaw/workspace/references/claude-code-mastery.md</code> (로컬) + GitHub 레포에 푸시</p>
+  </div>
+
+  <!-- HOW I'LL APPLY THIS -->
+  <div class="section">
+    <h2><span class="emoji">🚀</span>
+      <span class="en">How Totoro Will Apply This</span>
+      <span class="ko">토토로가 이것을 적용하는 방법</span>
+    </h2>
+
+    <table>
+      <tr>
+        <th><span class="en">Area</span><span class="ko">영역</span></th>
+        <th><span class="en">Before</span><span class="ko">이전</span></th>
+        <th><span class="en">After</span><span class="ko">이후</span></th>
+      </tr>
+      <tr>
+        <td><span class="en">Context Management</span><span class="ko">컨텍스트 관리</span></td>
+        <td><span class="en">Ad-hoc compaction</span><span class="ko">임시 압축</span></td>
+        <td><span class="en">Proactive /compact between phases, Task tool for exploration</span><span class="ko">단계 간 선제적 /compact, 탐색에 Task 도구 사용</span></td>
+      </tr>
+      <tr>
+        <td>CLAUDE.md</td>
+        <td><span class="en">Basic project info</span><span class="ko">기본 프로젝트 정보</span></td>
+        <td><span class="en">Engineered constraints under 200 lines with @imports</span><span class="ko">@imports와 함께 200줄 미만의 엔지니어링된 제약조건</span></td>
+      </tr>
+      <tr>
+        <td><span class="en">Memory</span><span class="ko">메모리</span></td>
+        <td><span class="en">Data dump approach</span><span class="ko">데이터 덤프 방식</span></td>
+        <td><span class="en">Pointer index + topic files + periodic consolidation</span><span class="ko">포인터 인덱스 + 주제 파일 + 주기적 통합</span></td>
+      </tr>
+      <tr>
+        <td><span class="en">Sub-agents</span><span class="ko">서브 에이전트</span></td>
+        <td><span class="en">Sometimes used</span><span class="ko">가끔 사용</span></td>
+        <td><span class="en">Default for exploration + parallel independent tasks</span><span class="ko">탐색 + 병렬 독립 작업의 기본값</span></td>
+      </tr>
+      <tr>
+        <td><span class="en">Verification</span><span class="ko">검증</span></td>
+        <td><span class="en">Post-hoc testing</span><span class="ko">사후 테스팅</span></td>
+        <td><span class="en">Test cases upfront in every prompt</span><span class="ko">모든 프롬프트에 사전 테스트 케이스</span></td>
+      </tr>
+      <tr>
+        <td><span class="en">Workflow</span><span class="ko">워크플로우</span></td>
+        <td><span class="en">Jump to coding</span><span class="ko">바로 코딩 시작</span></td>
+        <td><span class="en">Explore → Plan → Implement → Verify → Commit</span><span class="ko">탐색 → 계획 → 구현 → 검증 → 커밋</span></td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- INTERESTING EASTER EGGS -->
+  <div class="section">
+    <h2><span class="emoji">🥚</span>
+      <span class="en">Interesting Discoveries</span>
+      <span class="ko">흥미로운 발견들</span>
+    </h2>
+    <ul>
+      <li><strong>Buddy</strong> 🐾 — <span class="en">A hidden Tamagotchi-style digital pet with rarity tiers, shiny variants, and stats like CHAOS and SNARK. Launch window: April 1-7 teaser, full May release.</span><span class="ko">희귀도 등급, 빛나는 변종, CHAOS와 SNARK 같은 스탯이 있는 숨겨진 다마고치 스타일 디지털 펫. 출시: 4월 1-7일 티저, 5월 정식 출시.</span></li>
+      <li><strong>Undercover Mode</strong> 🕵️ — <span class="en">Stealth mode for contributing to open-source repos without revealing AI involvement. Scrubs model names from commits.</span><span class="ko">AI 참여를 드러내지 않고 오픈소스에 기여하기 위한 스텔스 모드. 커밋에서 모델 이름 제거.</span></li>
+      <li><strong>Internal Benchmarks</strong> 📊 — <span class="en">Capybara v8 has 29-30% false claims rate (regression from v4's 16.7%). They're still actively fighting model hallucination.</span><span class="ko">Capybara v8은 29-30% 거짓 주장 비율 (v4의 16.7%에서 퇴보). 여전히 모델 환각과 싸우는 중.</span></li>
+      <li><strong>$2.5B ARR</strong> 💰 — <span class="en">Claude Code alone generates $2.5B annualized revenue. Total Anthropic: $19B run-rate.</span><span class="ko">Claude Code 단독으로 연간 $25억 매출. 전체 Anthropic: $190억 런레이트.</span></li>
+    </ul>
+  </div>
+
+  <div class="footer">
+    <span class="en">Prepared with 🌳 by Totoro · Sources: VentureBeat, dev.to, CyberNews, Claude Code docs, community analysis</span>
+    <span class="ko">🌳 토토로가 준비 · 출처: VentureBeat, dev.to, CyberNews, Claude Code 문서, 커뮤니티 분석</span>
+    <br>March 31, 2026
+  </div>
+</div>
+
+<script>
+let isKorean = false;
+function toggleLang() {
+  isKorean = !isKorean;
+  document.querySelectorAll('.en').forEach(el => el.classList.toggle('hide', isKorean));
+  document.querySelectorAll('.ko').forEach(el => el.classList.toggle('show', isKorean));
+  document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+}
+</script>
+</body>
+</html>
