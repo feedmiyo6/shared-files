@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 34: Area vs Performance — Optimization Tradeoffs</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    background: linear-gradient(135deg, #fefae0 0%, #faedcd 100%);
+    color: #3d405b;
+    line-height: 1.8;
+    padding: 24px;
+    max-width: 920px;
+    margin: 0 auto;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+h1 {
+    color: #5d4037;
+    border-bottom: 3px solid #c4a77d;
+    padding-bottom: 12px;
+    margin-bottom: 24px;
+    font-size: 2em;
+}
+h2 {
+    color: #588157;
+    border-bottom: 2px solid #a3b18a;
+    padding-bottom: 8px;
+    margin: 32px 0 16px;
+}
+h3 {
+    color: #5d4037;
+    margin: 20px 0 12px;
+}
+p { margin: 12px 0; }
+ul, ol { margin: 12px 0 12px 24px; }
+li { margin: 6px 0; }
+pre {
+    background: #2d3436;
+    padding: 24px;
+    border-radius: 12px;
+    margin: 24px 0;
+    border: 3px solid #a3b18a;
+    overflow-x: auto;
+    font-size: 15px;
+    line-height: 1.6;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+    color: #f8f8f2;
+}
+code {
+    background: #e9f5db;
+    color: #3d405b;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+}
+pre code {
+    background: none;
+    color: inherit;
+    padding: 0;
+}
+.keyword { color: #ff79c6; font-weight: 600; }
+.type { color: #8be9fd; }
+.signal { color: #50fa7b; }
+.number { color: #ffb86c; }
+.comment { color: #6272a4; font-style: italic; }
+.string { color: #f1fa8c; }
+.concept-box {
+    background: #fff8f0;
+    border: 2px solid #c4a77d;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    color: #3d405b;
+}
+.concept-box h3 { color: #5d4037; margin-bottom: 12px; }
+.warning-box {
+    background: #fff8f0;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    border-left: 4px solid #ef4444;
+    color: #3d405b;
+}
+.warning-box h3 { color: #c53030; margin-bottom: 12px; }
+.tip-box {
+    background: #fff8f0;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    border-left: 4px solid #588157;
+    color: #3d405b;
+}
+.comparison-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+.comparison-table th {
+    background: #588157;
+    color: white;
+    padding: 12px;
+    text-align: left;
+}
+.comparison-table td {
+    background: #fff;
+    border: 1px solid #c4a77d;
+    padding: 12px;
+    color: #3d405b;
+}
+.comparison-table tr:nth-child(even) td {
+    background: #fff8f0;
+}
+.lang-toggle {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    background: #588157;
+    border: none;
+    border-radius: 24px;
+    padding: 10px 20px;
+    cursor: pointer;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    z-index: 1000;
+}
+.lang-toggle:hover { background: #3a5a40; }
+.ko { display: none; }
+.nav-links {
+    display: flex;
+    gap: 12px;
+    margin: 24px 0;
+    flex-wrap: wrap;
+}
+.nav-links a {
+    background: linear-gradient(135deg, #588157, #3a5a40);
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14px;
+}
+.nav-links a:hover { opacity: 0.9; }
+.section {
+    background: #fff;
+    border-radius: 12px;
+    padding: 24px;
+    margin: 24px 0;
+    border: 1px solid #a3b18a;
+}
+.diagram-box {
+    background: #fff8f0;
+    border: 2px solid #a3b18a;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    text-align: center;
+    font-family: 'SF Mono', monospace;
+    line-height: 1.4;
+    overflow-x: auto;
+    white-space: pre;
+    color: #3d405b;
+}
+@media (max-width: 768px) {
+    body { padding: 16px; }
+    h1 { font-size: 1.8em; }
+    pre { font-size: 14px; padding: 16px; }
+    .lang-toggle { padding: 8px 16px; font-size: 13px; }
+}
+</style>
+</head>
+<body>
+
+<button class="lang-toggle" onclick="toggleLang()">한국어</button>
+
+<h1>📐 Day 34: Area vs Performance</h1>
+<p class="en"><strong>Week 7, Lesson 4</strong> — Understanding the fundamental tradeoff between chip area and performance, and how to make smart optimization decisions in RTL design.</p>
+<p class="ko" style="display:none;"><strong>7주차, 4번째 수업</strong> — 칩 면적과 성능 사이의 근본적인 트레이드오프를 이해하고, RTL 설계에서 현명한 최적화 결정을 내리는 방법을 배웁니다.</p>
+
+<div class="nav-links">
+    <a href="day-34-quiz.html">📝 Quiz</a>
+    <a href="day-34-practice.html">💻 Practice</a>
+    <a href="day-33-lesson.html">← Day 33</a>
+</div>
+
+<div class="section">
+<h2>1. The Fundamental Tradeoff</h2>
+
+<p class="en">In digital design, <strong>area</strong> and <strong>performance</strong> are often at odds. Making a design faster usually requires more hardware (more area), while minimizing area often means sharing resources (slower). This is the most important optimization decision you'll face as a digital designer.</p>
+<p class="ko" style="display:none;">디지털 설계에서 <strong>면적</strong>과 <strong>성능</strong>은 종종 상충합니다. 설계를 더 빠르게 만들려면 보통 더 많은 하드웨어(더 많은 면적)가 필요하고, 면적을 최소화하려면 자원을 공유해야 해서 속도가 느려집니다. 이것이 디지털 설계자로서 직면할 가장 중요한 최적화 결정입니다.</p>
+
+<div class="concept-box">
+<h3>🎯 The Core Tension</h3>
+<ul>
+<li class="en"><strong>More Area → Higher Performance:</strong> Parallel hardware, dedicated units, wider datapaths</li>
+<li class="ko" style="display:none;"><strong>면적 증가 → 성능 향상:</strong> 병렬 하드웨어, 전용 유닛, 더 넓은 데이터 경로</li>
+<li class="en"><strong>Less Area → Lower Performance:</strong> Shared resources, serialized operations, narrower paths</li>
+<li class="ko" style="display:none;"><strong>면적 감소 → 성능 저하:</strong> 공유 자원, 직렬화된 연산, 좁은 경로</li>
+<li class="en"><strong>Sweet Spot:</strong> The designer's job is finding the right balance for the application</li>
+<li class="ko" style="display:none;"><strong>최적점:</strong> 설계자의 역할은 애플리케이션에 맞는 적절한 균형점을 찾는 것입니다</li>
+</ul>
+</div>
+
+<table class="comparison-table">
+<tr><th>Optimize For</th><th>Technique</th><th>Cost</th></tr>
+<tr><td>Max Performance</td><td>Dedicated hardware per operation</td><td>Large area, more power</td></tr>
+<tr><td>Min Area</td><td>Time-multiplex shared hardware</td><td>Lower throughput, more control logic</td></tr>
+<tr><td>Balanced</td><td>Pipeline + selective sharing</td><td>Moderate area, good throughput</td></tr>
+</table>
+</div>
+
+<div class="section">
+<h2>2. Resource Sharing — Trading Performance for Area</h2>
+
+<p class="en">Resource sharing is the primary technique for reducing area. Instead of duplicating hardware, you use one unit for multiple operations across different clock cycles.</p>
+<p class="ko" style="display:none;">자원 공유는 면적을 줄이기 위한 주요 기법입니다. 하드웨어를 복제하는 대신, 서로 다른 클록 사이클에서 하나의 유닛을 여러 연산에 사용합니다.</p>
+
+<h3>Before: Parallel (High Performance, Large Area)</h3>
+<pre><code><span class="comment">// 4 separate multipliers — fast but area-expensive</span>
+<span class="keyword">module</span> <span class="type">parallel_compute</span> (
+    <span class="keyword">input</span>  <span class="keyword">logic</span> [<span class="number">15</span>:<span class="number">0</span>] <span class="signal">a</span>, <span class="signal">b</span>, <span class="signal">c</span>, <span class="signal">d</span>,
+    <span class="keyword">input</span>  <span class="keyword">logic</span> [<span class="number">15</span>:<span class="number">0</span>] <span class="signal">w</span>, <span class="signal">x</span>, <span class="signal">y</span>, <span class="signal">z</span>,
+    <span class="keyword">output</span> <span class="keyword">logic</span> [<span class="number">31</span>:<span class="number">0</span>] <span class="signal">p0</span>, <span class="signal">p1</span>, <span class="signal">p2</span>, <span class="signal">p3</span>
+);
+    <span class="comment">// All 4 multiplications happen in ONE cycle</span>
+    <span class="keyword">assign</span> <span class="signal">p0</span> = <span class="signal">a</span> * <span class="signal">w</span>;  <span class="comment">// Multiplier 1</span>
+    <span class="keyword">assign</span> <span class="signal">p1</span> = <span class="signal">b</span> * <span class="signal">x</span>;  <span class="comment">// Multiplier 2</span>
+    <span class="keyword">assign</span> <span class="signal">p2</span> = <span class="signal">c</span> * <span class="signal">y</span>;  <span class="comment">// Multiplier 3</span>
+    <span class="keyword">assign</span> <span class="signal">p3</span> = <span class="signal">d</span> * <span class="signal">z</span>;  <span class="comment">// Multiplier 4</span>
+<span class="keyword">endmodule</span>
+<span class="comment">// Area: 4 multipliers | Latency: 1 cycle | Throughput: 4 results/cycle</span></code></pre>
+
+<h3>After: Shared (Small Area, Lower Throughput)</h3>
+<pre><code><span class="comment">// 1 shared multiplier — small but takes 4 cycles</span>
+<span class="keyword">module</span> <span class="type">shared_compute</span> (
+    <span class="keyword">input</span>  <span class="keyword">logic</span>        <span class="signal">clk</span>, <span class="signal">rst_n</span>, <span class="signal">start</span>,
+    <span class="keyword">input</span>  <span class="keyword">logic</span> [<span class="number">15</span>:<span class="number">0</span>] <span class="signal">operands_a</span> [<span class="number">4</span>],  <span class="comment">// 4 pairs of inputs</span>
+    <span class="keyword">input</span>  <span class="keyword">logic</span> [<span class="number">15</span>:<span class="number">0</span>] <span class="signal">operands_b</span> [<span class="number">4</span>],
+    <span class="keyword">output</span> <span class="keyword">logic</span> [<span class="number">31</span>:<span class="number">0</span>] <span class="signal">results</span> [<span class="number">4</span>],
+    <span class="keyword">output</span> <span class="keyword">logic</span>        <span class="signal">done</span>
+);
+    <span class="keyword">logic</span> [<span class="number">1</span>:<span class="number">0</span>] <span class="signal">idx</span>;
+    <span class="keyword">logic</span>        <span class="signal">busy</span>;
+
+    <span class="comment">// Single shared multiplier</span>
+    <span class="keyword">wire</span> [<span class="number">31</span>:<span class="number">0</span>] <span class="signal">product</span> = <span class="signal">operands_a</span>[<span class="signal">idx</span>] * <span class="signal">operands_b</span>[<span class="signal">idx</span>];
+
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span> <span class="keyword">or negedge</span> <span class="signal">rst_n</span>) <span class="keyword">begin</span>
+        <span class="keyword">if</span> (!<span class="signal">rst_n</span>) <span class="keyword">begin</span>
+            <span class="signal">idx</span>  &lt;= <span class="number">0</span>;
+            <span class="signal">busy</span> &lt;= <span class="number">0</span>;
+            <span class="signal">done</span> &lt;= <span class="number">0</span>;
+        <span class="keyword">end else if</span> (<span class="signal">start</span> && !<span class="signal">busy</span>) <span class="keyword">begin</span>
+            <span class="signal">idx</span>  &lt;= <span class="number">0</span>;
+            <span class="signal">busy</span> &lt;= <span class="number">1</span>;
+            <span class="signal">done</span> &lt;= <span class="number">0</span>;
+        <span class="keyword">end else if</span> (<span class="signal">busy</span>) <span class="keyword">begin</span>
+            <span class="signal">results</span>[<span class="signal">idx</span>] &lt;= <span class="signal">product</span>;
+            <span class="keyword">if</span> (<span class="signal">idx</span> == <span class="number">2'd3</span>) <span class="keyword">begin</span>
+                <span class="signal">busy</span> &lt;= <span class="number">0</span>;
+                <span class="signal">done</span> &lt;= <span class="number">1</span>;
+            <span class="keyword">end else</span>
+                <span class="signal">idx</span> &lt;= <span class="signal">idx</span> + <span class="number">1</span>;
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+<span class="keyword">endmodule</span>
+<span class="comment">// Area: 1 multiplier + control | Latency: 4 cycles | Throughput: 1 result/cycle</span></code></pre>
+
+<div class="tip-box">
+<h3>💡 When to Share Resources</h3>
+<p class="en">Share when: (1) the resource is expensive (multipliers, dividers, memories), (2) operations don't need to happen simultaneously, (3) you can afford the extra latency. Don't share: cheap resources like adders or muxes — the control overhead isn't worth it.</p>
+<p class="ko" style="display:none;">공유할 때: (1) 자원이 비쌀 때 (곱셈기, 나눗셈기, 메모리), (2) 연산이 동시에 일어날 필요가 없을 때, (3) 추가 지연을 감당할 수 있을 때. 공유하지 않을 때: 가산기나 먹스 같은 저렴한 자원 — 제어 오버헤드가 가치가 없습니다.</p>
+</div>
+</div>
+
+<div class="section">
+<h2>3. Parallelism — Trading Area for Performance</h2>
+
+<p class="en">When performance is critical, we duplicate hardware to process multiple data elements simultaneously. This is the opposite of resource sharing.</p>
+<p class="ko" style="display:none;">성능이 중요할 때, 여러 데이터 요소를 동시에 처리하기 위해 하드웨어를 복제합니다. 이는 자원 공유의 반대입니다.</p>
+
+<h3>Example: Serial vs Parallel CRC Computation</h3>
+<pre><code><span class="comment">// SERIAL: 1-bit-at-a-time CRC — minimal area</span>
+<span class="keyword">module</span> <span class="type">crc8_serial</span> (
+    <span class="keyword">input</span>  <span class="keyword">logic</span>       <span class="signal">clk</span>, <span class="signal">rst_n</span>,
+    <span class="keyword">input</span>  <span class="keyword">logic</span>       <span class="signal">bit_in</span>,
+    <span class="keyword">input</span>  <span class="keyword">logic</span>       <span class="signal">valid</span>,
+    <span class="keyword">output</span> <span class="keyword">logic</span> [<span class="number">7</span>:<span class="number">0</span>] <span class="signal">crc</span>
+);
+    <span class="keyword">logic</span> <span class="signal">feedback</span>;
+    <span class="keyword">assign</span> <span class="signal">feedback</span> = <span class="signal">crc</span>[<span class="number">7</span>] ^ <span class="signal">bit_in</span>;
+
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span> <span class="keyword">or negedge</span> <span class="signal">rst_n</span>)
+        <span class="keyword">if</span> (!<span class="signal">rst_n</span>)       <span class="signal">crc</span> &lt;= <span class="number">8'hFF</span>;
+        <span class="keyword">else if</span> (<span class="signal">valid</span>)  <span class="signal">crc</span> &lt;= {<span class="signal">crc</span>[<span class="number">6</span>:<span class="number">0</span>], <span class="number">1'b0</span>} ^ (<span class="signal">feedback</span> ? <span class="number">8'h07</span> : <span class="number">8'h00</span>);
+<span class="keyword">endmodule</span>
+<span class="comment">// Processes 1 bit/cycle — needs 8 cycles per byte</span></code></pre>
+
+<pre><code><span class="comment">// PARALLEL: 8-bits-at-a-time CRC — more gates, 8x faster</span>
+<span class="keyword">module</span> <span class="type">crc8_parallel</span> (
+    <span class="keyword">input</span>  <span class="keyword">logic</span>       <span class="signal">clk</span>, <span class="signal">rst_n</span>,
+    <span class="keyword">input</span>  <span class="keyword">logic</span> [<span class="number">7</span>:<span class="number">0</span>] <span class="signal">data_in</span>,
+    <span class="keyword">input</span>  <span class="keyword">logic</span>       <span class="signal">valid</span>,
+    <span class="keyword">output</span> <span class="keyword">logic</span> [<span class="number">7</span>:<span class="number">0</span>] <span class="signal">crc</span>
+);
+    <span class="keyword">logic</span> [<span class="number">7</span>:<span class="number">0</span>] <span class="signal">next_crc</span>;
+
+    <span class="comment">// Unrolled XOR tree — processes full byte in 1 cycle</span>
+    <span class="keyword">always_comb</span> <span class="keyword">begin</span>
+        <span class="signal">next_crc</span>[<span class="number">0</span>] = <span class="signal">crc</span>[<span class="number">0</span>] ^ <span class="signal">crc</span>[<span class="number">6</span>] ^ <span class="signal">crc</span>[<span class="number">7</span>] ^ <span class="signal">data_in</span>[<span class="number">0</span>] ^ <span class="signal">data_in</span>[<span class="number">6</span>] ^ <span class="signal">data_in</span>[<span class="number">7</span>];
+        <span class="signal">next_crc</span>[<span class="number">1</span>] = <span class="signal">crc</span>[<span class="number">0</span>] ^ <span class="signal">crc</span>[<span class="number">1</span>] ^ <span class="signal">crc</span>[<span class="number">6</span>] ^ <span class="signal">data_in</span>[<span class="number">0</span>] ^ <span class="signal">data_in</span>[<span class="number">1</span>] ^ <span class="signal">data_in</span>[<span class="number">6</span>];
+        <span class="signal">next_crc</span>[<span class="number">2</span>] = <span class="signal">crc</span>[<span class="number">1</span>] ^ <span class="signal">crc</span>[<span class="number">2</span>] ^ <span class="signal">crc</span>[<span class="number">7</span>] ^ <span class="signal">data_in</span>[<span class="number">1</span>] ^ <span class="signal">data_in</span>[<span class="number">2</span>] ^ <span class="signal">data_in</span>[<span class="number">7</span>];
+        <span class="comment">// ... remaining bits follow same pattern</span>
+        <span class="signal">next_crc</span>[<span class="number">7</span>] = <span class="signal">crc</span>[<span class="number">5</span>] ^ <span class="signal">crc</span>[<span class="number">6</span>] ^ <span class="signal">crc</span>[<span class="number">7</span>] ^ <span class="signal">data_in</span>[<span class="number">5</span>] ^ <span class="signal">data_in</span>[<span class="number">6</span>] ^ <span class="signal">data_in</span>[<span class="number">7</span>];
+    <span class="keyword">end</span>
+
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span> <span class="keyword">or negedge</span> <span class="signal">rst_n</span>)
+        <span class="keyword">if</span> (!<span class="signal">rst_n</span>)      <span class="signal">crc</span> &lt;= <span class="number">8'hFF</span>;
+        <span class="keyword">else if</span> (<span class="signal">valid</span>) <span class="signal">crc</span> &lt;= <span class="signal">next_crc</span>;
+<span class="keyword">endmodule</span>
+<span class="comment">// Processes 8 bits/cycle — 8x throughput, ~4x more gates</span></code></pre>
+</div>
+
+<div class="section">
+<h2>4. Pipelining — The "Best of Both Worlds"</h2>
+
+<p class="en">Pipelining doesn't reduce area or increase single-operation speed — it increases <strong>throughput</strong> by letting multiple operations overlap. It adds area (pipeline registers) but keeps each stage's combinational logic short, enabling higher clock frequencies.</p>
+<p class="ko" style="display:none;">파이프라이닝은 면적을 줄이거나 단일 연산 속도를 높이지 않습니다 — 여러 연산이 겹치게 하여 <strong>처리량</strong>을 증가시킵니다. 면적(파이프라인 레지스터)이 추가되지만, 각 단계의 조합 논리를 짧게 유지하여 더 높은 클록 주파수를 가능하게 합니다.</p>
+
+<h3>Unpipelined vs Pipelined Multiplier-Accumulator</h3>
+<pre><code><span class="comment">// UNPIPELINED: Long critical path, lower Fmax</span>
+<span class="keyword">module</span> <span class="type">mac_unpipelined</span> (
+    <span class="keyword">input</span>  <span class="keyword">logic</span>         <span class="signal">clk</span>, <span class="signal">rst_n</span>,
+    <span class="keyword">input</span>  <span class="keyword">logic</span> [<span class="number">15</span>:<span class="number">0</span>]  <span class="signal">a</span>, <span class="signal">b</span>,
+    <span class="keyword">output</span> <span class="keyword">logic</span> [<span class="number">39</span>:<span class="number">0</span>]  <span class="signal">acc</span>
+);
+    <span class="comment">// Multiply + Add in ONE cycle — long path!</span>
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span> <span class="keyword">or negedge</span> <span class="signal">rst_n</span>)
+        <span class="keyword">if</span> (!<span class="signal">rst_n</span>) <span class="signal">acc</span> &lt;= <span class="number">'0</span>;
+        <span class="keyword">else</span>        <span class="signal">acc</span> &lt;= <span class="signal">acc</span> + (<span class="signal">a</span> * <span class="signal">b</span>);  <span class="comment">// Critical path: mult + add</span>
+<span class="keyword">endmodule</span>
+<span class="comment">// Fmax limited by: multiply delay + add delay</span></code></pre>
+
+<pre><code><span class="comment">// PIPELINED: Split into 2 stages — higher Fmax</span>
+<span class="keyword">module</span> <span class="type">mac_pipelined</span> (
+    <span class="keyword">input</span>  <span class="keyword">logic</span>         <span class="signal">clk</span>, <span class="signal">rst_n</span>,
+    <span class="keyword">input</span>  <span class="keyword">logic</span> [<span class="number">15</span>:<span class="number">0</span>]  <span class="signal">a</span>, <span class="signal">b</span>,
+    <span class="keyword">output</span> <span class="keyword">logic</span> [<span class="number">39</span>:<span class="number">0</span>]  <span class="signal">acc</span>
+);
+    <span class="comment">// Stage 1: Multiply only</span>
+    <span class="keyword">logic</span> [<span class="number">31</span>:<span class="number">0</span>] <span class="signal">product_reg</span>;
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span> <span class="keyword">or negedge</span> <span class="signal">rst_n</span>)
+        <span class="keyword">if</span> (!<span class="signal">rst_n</span>) <span class="signal">product_reg</span> &lt;= <span class="number">'0</span>;
+        <span class="keyword">else</span>        <span class="signal">product_reg</span> &lt;= <span class="signal">a</span> * <span class="signal">b</span>;
+
+    <span class="comment">// Stage 2: Accumulate only</span>
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span> <span class="keyword">or negedge</span> <span class="signal">rst_n</span>)
+        <span class="keyword">if</span> (!<span class="signal">rst_n</span>) <span class="signal">acc</span> &lt;= <span class="number">'0</span>;
+        <span class="keyword">else</span>        <span class="signal">acc</span> &lt;= <span class="signal">acc</span> + <span class="signal">product_reg</span>;
+<span class="keyword">endmodule</span>
+<span class="comment">// Fmax limited by: max(multiply delay, add delay) — MUCH better!</span>
+<span class="comment">// Cost: 32 extra flip-flops + 1 cycle more latency</span></code></pre>
+
+<div class="concept-box">
+<h3>📊 Pipelining Summary</h3>
+<table class="comparison-table">
+<tr><th>Metric</th><th>Unpipelined</th><th>2-Stage Pipelined</th></tr>
+<tr><td>Critical Path</td><td>Multiply + Add</td><td>max(Multiply, Add)</td></tr>
+<tr><td>Fmax</td><td>Lower</td><td>~2x Higher</td></tr>
+<tr><td>Latency</td><td>1 cycle</td><td>2 cycles</td></tr>
+<tr><td>Throughput</td><td>1/cycle</td><td>1/cycle (same!)</td></tr>
+<tr><td>Area Overhead</td><td>None</td><td>Pipeline registers</td></tr>
+</table>
+</div>
+</div>
+
+<div class="section">
+<h2>5. Width Optimization — Bit-Level Area Control</h2>
+
+<p class="en">One of the simplest area optimizations: use only as many bits as you need. Every extra bit means extra flip-flops, wider adders, and bigger muxes.</p>
+<p class="ko" style="display:none;">가장 간단한 면적 최적화 중 하나: 필요한 만큼의 비트만 사용하세요. 여분의 비트 하나마다 추가 플립플롭, 더 넓은 가산기, 더 큰 먹스가 필요합니다.</p>
+
+<pre><code><span class="comment">// BAD: Wasteful — 32-bit counter for values 0-99</span>
+<span class="keyword">logic</span> [<span class="number">31</span>:<span class="number">0</span>] <span class="signal">counter</span>;  <span class="comment">// Uses 32 FFs, only needs 7!</span>
+
+<span class="comment">// GOOD: Right-sized — 7 bits covers 0-127</span>
+<span class="keyword">logic</span> [<span class="number">6</span>:<span class="number">0</span>]  <span class="signal">counter</span>;  <span class="comment">// 7 FFs — saves 25 flip-flops!</span>
+
+<span class="comment">// ALSO GOOD: Use typedef for clarity</span>
+<span class="keyword">typedef</span> <span class="keyword">logic</span> [<span class="number">6</span>:<span class="number">0</span>] <span class="type">count_t</span>;  <span class="comment">// Max 127, enough for 0-99</span>
+<span class="type">count_t</span> <span class="signal">counter</span>;</code></pre>
+
+<div class="warning-box">
+<h3>⚠️ Common Width Mistakes</h3>
+<ul>
+<li class="en">Using <code>int</code> (32-bit) for small counters or state variables</li>
+<li class="ko" style="display:none;">작은 카운터나 상태 변수에 <code>int</code> (32비트) 사용</li>
+<li class="en">Not truncating intermediate results: <code>a[15:0] * b[15:0]</code> produces 32 bits — do you need all of them?</li>
+<li class="ko" style="display:none;">중간 결과를 잘라내지 않음: <code>a[15:0] * b[15:0]</code>은 32비트를 생성 — 전부 필요한가요?</li>
+<li class="en">Parameterizing width too generously — match to actual data requirements</li>
+<li class="ko" style="display:none;">폭을 너무 여유있게 파라미터화 — 실제 데이터 요구사항에 맞추세요</li>
+</ul>
+</div>
+</div>
+
+<div class="section">
+<h2>6. Memory vs Logic Tradeoff</h2>
+
+<p class="en">Sometimes you can replace combinational logic with a lookup table (ROM/memory), or vice versa. Each approach has different area and timing characteristics.</p>
+<p class="ko" style="display:none;">때로는 조합 논리를 룩업 테이블(ROM/메모리)로 대체하거나, 그 반대가 가능합니다. 각 접근 방식은 서로 다른 면적과 타이밍 특성을 가집니다.</p>
+
+<pre><code><span class="comment">// APPROACH 1: Compute with logic — small inputs only</span>
+<span class="keyword">function</span> <span class="keyword">automatic logic</span> [<span class="number">7</span>:<span class="number">0</span>] <span class="type">sin_lut_logic</span>(<span class="keyword">input logic</span> [<span class="number">3</span>:<span class="number">0</span>] <span class="signal">angle</span>);
+    <span class="keyword">case</span> (<span class="signal">angle</span>)
+        <span class="number">4'd0</span>:  <span class="keyword">return</span> <span class="number">8'd0</span>;
+        <span class="number">4'd1</span>:  <span class="keyword">return</span> <span class="number">8'd25</span>;
+        <span class="number">4'd2</span>:  <span class="keyword">return</span> <span class="number">8'd49</span>;
+        <span class="number">4'd3</span>:  <span class="keyword">return</span> <span class="number">8'd71</span>;
+        <span class="comment">// ... 16 entries total</span>
+        <span class="keyword">default</span>: <span class="keyword">return</span> <span class="number">8'd0</span>;
+    <span class="keyword">endcase</span>
+<span class="keyword">endfunction</span>
+<span class="comment">// Synthesizes to: combinational mux tree (good for small tables)</span>
+
+<span class="comment">// APPROACH 2: Store in ROM — scales to large tables</span>
+<span class="keyword">logic</span> [<span class="number">7</span>:<span class="number">0</span>] <span class="signal">sin_rom</span> [<span class="number">256</span>];  <span class="comment">// 256-entry ROM</span>
+<span class="keyword">initial</span> $readmemh(<span class="string">"sin_table.hex"</span>, <span class="signal">sin_rom</span>);
+
+<span class="keyword">assign</span> <span class="signal">sin_value</span> = <span class="signal">sin_rom</span>[<span class="signal">angle</span>];
+<span class="comment">// Synthesizes to: Block RAM or distributed RAM</span></code></pre>
+
+<table class="comparison-table">
+<tr><th>Approach</th><th>Best When</th><th>Area</th><th>Timing</th></tr>
+<tr><td>Combinational Logic</td><td>Small tables (&lt;32 entries)</td><td>Gates (LUTs)</td><td>Purely combinational</td></tr>
+<tr><td>ROM / Memory</td><td>Large tables (&gt;32 entries)</td><td>Block RAM</td><td>1 cycle read latency</td></tr>
+<tr><td>Compute on-the-fly</td><td>Simple formulas</td><td>Minimal</td><td>Depends on complexity</td></tr>
+</table>
+</div>
+
+<div class="section">
+<h2>7. Real-World Design Decision Framework</h2>
+
+<p class="en">When optimizing your design, ask these questions in order:</p>
+<p class="ko" style="display:none;">설계를 최적화할 때, 다음 질문을 순서대로 하세요:</p>
+
+<div class="concept-box">
+<h3>🧭 The Optimization Checklist</h3>
+<ol>
+<li class="en"><strong>What's the constraint?</strong> — Is this area-limited (ASIC cost, FPGA size) or performance-limited (timing closure, throughput)?</li>
+<li class="ko" style="display:none;"><strong>제약 조건은 무엇인가?</strong> — 면적 제한(ASIC 비용, FPGA 크기)인가 성능 제한(타이밍 클로저, 처리량)인가?</li>
+<li class="en"><strong>Where's the bottleneck?</strong> — Profile first! Don't optimize what doesn't matter.</li>
+<li class="ko" style="display:none;"><strong>병목은 어디인가?</strong> — 먼저 프로파일링! 중요하지 않은 것을 최적화하지 마세요.</li>
+<li class="en"><strong>Can you pipeline?</strong> — Often the cheapest way to meet timing (just add registers).</li>
+<li class="ko" style="display:none;"><strong>파이프라이닝이 가능한가?</strong> — 종종 타이밍을 맞추는 가장 저렴한 방법 (레지스터만 추가).</li>
+<li class="en"><strong>Can you share expensive resources?</strong> — Multipliers, dividers, memories.</li>
+<li class="ko" style="display:none;"><strong>비싼 자원을 공유할 수 있는가?</strong> — 곱셈기, 나눗셈기, 메모리.</li>
+<li class="en"><strong>Are your bit widths right?</strong> — Every unnecessary bit costs area.</li>
+<li class="ko" style="display:none;"><strong>비트 폭이 적절한가?</strong> — 불필요한 비트 하나마다 면적이 소모됩니다.</li>
+<li class="en"><strong>Logic vs memory?</strong> — Trade computation for storage or vice versa.</li>
+<li class="ko" style="display:none;"><strong>논리 vs 메모리?</strong> — 계산을 저장으로 교환하거나 그 반대로.</li>
+</ol>
+</div>
+
+<div class="tip-box">
+<h3>💡 Automotive Ethernet Connection</h3>
+<p class="en">In Minjun's T1 PHY/Switch work: Ethernet MAC/PHY designs face these exact tradeoffs. The CRC-32 engine must be parallel (line-rate processing), while diagnostic registers can be area-optimized (accessed rarely). Pipeline stages in the packet processing path are essential for meeting 100/1000 Mbps timing at the target clock frequency.</p>
+<p class="ko" style="display:none;">Minjun의 T1 PHY/Switch 작업에서: 이더넷 MAC/PHY 설계는 이러한 트레이드오프를 정확히 직면합니다. CRC-32 엔진은 병렬이어야 하고 (라인 레이트 처리), 진단 레지스터는 면적 최적화가 가능합니다 (드물게 접근). 패킷 처리 경로의 파이프라인 단계는 목표 클록 주파수에서 100/1000 Mbps 타이밍을 맞추는 데 필수적입니다.</p>
+</div>
+</div>
+
+<div class="section">
+<h2>8. Summary: Area vs Performance Spectrum</h2>
+
+<div class="diagram-box">
+Min Area ◄──────────────────────────────► Max Performance
+
+  Shared        Time-         Balanced      Fully         Unrolled
+  Resources     Multiplexed   Pipeline      Parallel      + Parallel
+  ┃             ┃             ┃             ┃             ┃
+  1 mult        2 mults       Pipelined     4 mults       4 pipelined
+  4 cycles      2 cycles      4 mults       1 cycle       mults
+                              1 result/clk                1 cycle
+
+  Smallest ◄──── Area ────► Largest
+  Slowest  ◄── Throughput ──► Fastest
+</div>
+
+<div class="concept-box">
+<h3>🔑 Key Takeaways</h3>
+<ul>
+<li class="en"><strong>No free lunch</strong> — every optimization has a cost somewhere else</li>
+<li class="ko" style="display:none;"><strong>공짜 점심은 없다</strong> — 모든 최적화는 다른 곳에서 비용이 발생합니다</li>
+<li class="en"><strong>Resource sharing</strong> saves area at the cost of throughput and control complexity</li>
+<li class="ko" style="display:none;"><strong>자원 공유</strong>는 처리량과 제어 복잡성의 비용으로 면적을 절약합니다</li>
+<li class="en"><strong>Parallelism</strong> increases throughput at the cost of area</li>
+<li class="ko" style="display:none;"><strong>병렬성</strong>은 면적의 비용으로 처리량을 증가시킵니다</li>
+<li class="en"><strong>Pipelining</strong> increases Fmax with moderate area cost (pipeline registers)</li>
+<li class="ko" style="display:none;"><strong>파이프라이닝</strong>은 적당한 면적 비용(파이프라인 레지스터)으로 Fmax를 증가시킵니다</li>
+<li class="en"><strong>Right-size everything</strong> — bit widths, memories, resources</li>
+<li class="ko" style="display:none;"><strong>모든 것을 적절히 크기 조정</strong> — 비트 폭, 메모리, 자원</li>
+<li class="en"><strong>Profile first, optimize second</strong> — know where your bottleneck is</li>
+<li class="ko" style="display:none;"><strong>먼저 프로파일링, 나중에 최적화</strong> — 병목이 어디인지 파악하세요</li>
+</ul>
+</div>
+</div>
+
+<div class="nav-links">
+    <a href="day-34-quiz.html">📝 Take the Quiz →</a>
+    <a href="day-34-practice.html">💻 Practice Exercises →</a>
+</div>
+
+<script>
+let isKorean = false;
+function toggleLang() {
+    isKorean = !isKorean;
+    document.querySelectorAll('.en').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'none' : 'revert', 'important');
+    });
+    document.querySelectorAll('.ko').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'revert' : 'none', 'important');
+    });
+    document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 34 Practice: Area vs Performance</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    background: linear-gradient(135deg, #fefae0 0%, #faedcd 100%);
+    color: #3d405b;
+    line-height: 1.8;
+    padding: 24px;
+    max-width: 920px;
+    margin: 0 auto;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+h1 {
+    color: #5d4037;
+    border-bottom: 3px solid #c4a77d;
+    padding-bottom: 12px;
+    margin-bottom: 24px;
+    font-size: 2em;
+}
+h2 {
+    color: #588157;
+    border-bottom: 2px solid #a3b18a;
+    padding-bottom: 8px;
+    margin: 32px 0 16px;
+}
+h3 { color: #5d4037; margin: 20px 0 12px; }
+p { margin: 12px 0; }
+ul, ol { margin: 12px 0 12px 24px; }
+li { margin: 6px 0; }
+pre {
+    background: #2d3436;
+    padding: 24px;
+    border-radius: 12px;
+    margin: 24px 0;
+    border: 3px solid #a3b18a;
+    overflow-x: auto;
+    font-size: 15px;
+    line-height: 1.6;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+    color: #f8f8f2;
+}
+code {
+    background: #e9f5db;
+    color: #3d405b;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+}
+pre code { background: none; color: inherit; padding: 0; }
+.keyword { color: #ff79c6; font-weight: 600; }
+.type { color: #8be9fd; }
+.signal { color: #50fa7b; }
+.number { color: #ffb86c; }
+.comment { color: #6272a4; font-style: italic; }
+.string { color: #f1fa8c; }
+.concept-box {
+    background: #fff8f0;
+    border: 2px solid #c4a77d;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    color: #3d405b;
+}
+.concept-box h3 { color: #5d4037; margin-bottom: 12px; }
+.warning-box {
+    background: #fff8f0;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    border-left: 4px solid #ef4444;
+    color: #3d405b;
+}
+.warning-box h3 { color: #c53030; margin-bottom: 12px; }
+.tip-box {
+    background: #fff8f0;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    border-left: 4px solid #588157;
+    color: #3d405b;
+}
+.hint-box {
+    background: #fff8f0;
+    border-radius: 8px;
+    padding: 15px;
+    margin: 15px 0;
+    border-left: 4px solid #5d4037;
+    color: #3d405b;
+}
+.lang-toggle {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    background: #588157;
+    border: none;
+    border-radius: 24px;
+    padding: 10px 20px;
+    cursor: pointer;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    z-index: 1000;
+}
+.lang-toggle:hover { background: #3a5a40; }
+.nav-links {
+    display: flex;
+    gap: 12px;
+    margin: 24px 0;
+    flex-wrap: wrap;
+}
+.nav-links a {
+    background: linear-gradient(135deg, #588157, #3a5a40);
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14px;
+}
+.nav-links a:hover { opacity: 0.9; }
+.section {
+    background: #fff;
+    border-radius: 12px;
+    padding: 24px;
+    margin: 24px 0;
+    border: 1px solid #a3b18a;
+}
+.reveal-btn {
+    background: linear-gradient(135deg, #588157, #3a5a40);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 14px;
+    margin: 12px 0;
+}
+.reveal-btn:hover { opacity: 0.9; }
+.solution {
+    display: none;
+    background: #fff8f0;
+    border: 2px solid #a3b18a;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 16px 0;
+}
+.comparison-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+.comparison-table th {
+    background: #588157;
+    color: white;
+    padding: 12px;
+    text-align: left;
+}
+.comparison-table td {
+    background: #fff;
+    border: 1px solid #c4a77d;
+    padding: 12px;
+    color: #3d405b;
+}
+.comparison-table tr:nth-child(even) td { background: #fff8f0; }
+@media (max-width: 768px) {
+    body { padding: 16px; }
+    h1 { font-size: 1.8em; }
+    pre { font-size: 14px; padding: 16px; }
+    .lang-toggle { padding: 8px 16px; font-size: 13px; }
+}
+</style>
+</head>
+<body>
+
+<button class="lang-toggle" onclick="toggleLang()">한국어</button>
+
+<h1>💻 Day 34 Practice: Area vs Performance</h1>
+<p class="en">Hands-on exercises to apply area-performance tradeoff techniques. Try each exercise before revealing the solution!</p>
+<p class="ko" style="display:none;">면적-성능 트레이드오프 기법을 적용하는 실습 연습. 솔루션을 보기 전에 각 연습을 시도해보세요!</p>
+
+<div class="nav-links">
+    <a href="day-34-lesson.html">📖 Lesson</a>
+    <a href="day-34-quiz.html">📝 Quiz</a>
+</div>
+
+<!-- Exercise 1 -->
+<div class="section">
+<h2>Exercise 1: Resource Sharing — Shared ALU</h2>
+
+<p class="en">Convert this parallel design with 3 separate adders into a shared design using 1 adder with a selection FSM. The design computes <code>sum = (a+b) + (c+d) + (e+f)</code>.</p>
+<p class="ko" style="display:none;">3개의 별도 가산기가 있는 이 병렬 설계를 선택 FSM을 사용하는 1개의 공유 가산기 설계로 변환하세요. 설계는 <code>sum = (a+b) + (c+d) + (e+f)</code>를 계산합니다.</p>
+
+<h3>Starting Code (Parallel — 3 Adders)</h3>
+<pre><code><span class="keyword">module</span> <span class="type">triple_add_parallel</span> (
+    <span class="keyword">input</span>  <span class="keyword">logic</span> [<span class="number">15</span>:<span class="number">0</span>] <span class="signal">a</span>, <span class="signal">b</span>, <span class="signal">c</span>, <span class="signal">d</span>, <span class="signal">e</span>, <span class="signal">f</span>,
+    <span class="keyword">output</span> <span class="keyword">logic</span> [<span class="number">17</span>:<span class="number">0</span>] <span class="signal">sum</span>
+);
+    <span class="keyword">wire</span> [<span class="number">16</span>:<span class="number">0</span>] <span class="signal">ab</span> = <span class="signal">a</span> + <span class="signal">b</span>;   <span class="comment">// Adder 1</span>
+    <span class="keyword">wire</span> [<span class="number">16</span>:<span class="number">0</span>] <span class="signal">cd</span> = <span class="signal">c</span> + <span class="signal">d</span>;   <span class="comment">// Adder 2</span>
+    <span class="keyword">wire</span> [<span class="number">16</span>:<span class="number">0</span>] <span class="signal">ef</span> = <span class="signal">e</span> + <span class="signal">f</span>;   <span class="comment">// Adder 3</span>
+    <span class="keyword">assign</span> <span class="signal">sum</span> = <span class="signal">ab</span> + <span class="signal">cd</span> + <span class="signal">ef</span>; <span class="comment">// Adder 4+5 (reduction)</span>
+<span class="keyword">endmodule</span>
+<span class="comment">// Total: 5 adders, 1 cycle latency</span></code></pre>
+
+<div class="hint-box">
+<h3>💡 Hints</h3>
+<ul>
+<li class="en">Use a 2-bit state counter (IDLE, ADD_AB, ADD_CD, ADD_EF, REDUCE)</li>
+<li class="ko" style="display:none;">2비트 상태 카운터 사용 (IDLE, ADD_AB, ADD_CD, ADD_EF, REDUCE)</li>
+<li class="en">Store intermediate results in registers</li>
+<li class="ko" style="display:none;">중간 결과를 레지스터에 저장</li>
+<li class="en">Mux the adder inputs based on state</li>
+<li class="ko" style="display:none;">상태에 따라 가산기 입력을 먹스</li>
+</ul>
+</div>
+
+<button class="reveal-btn" onclick="toggleSolution('sol1')">Show Solution</button>
+<div class="solution" id="sol1">
+<pre><code><span class="keyword">module</span> <span class="type">triple_add_shared</span> (
+    <span class="keyword">input</span>  <span class="keyword">logic</span>         <span class="signal">clk</span>, <span class="signal">rst_n</span>, <span class="signal">start</span>,
+    <span class="keyword">input</span>  <span class="keyword">logic</span> [<span class="number">15</span>:<span class="number">0</span>]  <span class="signal">a</span>, <span class="signal">b</span>, <span class="signal">c</span>, <span class="signal">d</span>, <span class="signal">e</span>, <span class="signal">f</span>,
+    <span class="keyword">output</span> <span class="keyword">logic</span> [<span class="number">17</span>:<span class="number">0</span>]  <span class="signal">sum</span>,
+    <span class="keyword">output</span> <span class="keyword">logic</span>         <span class="signal">done</span>
+);
+    <span class="keyword">typedef enum logic</span> [<span class="number">2</span>:<span class="number">0</span>] {
+        <span class="type">IDLE</span>, <span class="type">ADD_AB</span>, <span class="type">ADD_CD</span>, <span class="type">ADD_EF</span>, <span class="type">REDUCE</span>
+    } <span class="type">state_t</span>;
+    <span class="type">state_t</span> <span class="signal">state</span>;
+
+    <span class="comment">// Shared adder inputs (muxed by state)</span>
+    <span class="keyword">logic</span> [<span class="number">17</span>:<span class="number">0</span>] <span class="signal">add_a</span>, <span class="signal">add_b</span>;
+    <span class="keyword">wire</span>  [<span class="number">17</span>:<span class="number">0</span>] <span class="signal">add_result</span> = <span class="signal">add_a</span> + <span class="signal">add_b</span>; <span class="comment">// THE shared adder</span>
+
+    <span class="comment">// Intermediate storage</span>
+    <span class="keyword">logic</span> [<span class="number">16</span>:<span class="number">0</span>] <span class="signal">ab_reg</span>, <span class="signal">cd_reg</span>, <span class="signal">ef_reg</span>;
+
+    <span class="comment">// Mux adder inputs based on state</span>
+    <span class="keyword">always_comb</span> <span class="keyword">begin</span>
+        <span class="signal">add_a</span> = <span class="number">'0</span>;
+        <span class="signal">add_b</span> = <span class="number">'0</span>;
+        <span class="keyword">case</span> (<span class="signal">state</span>)
+            <span class="type">ADD_AB</span>:  <span class="keyword">begin</span> <span class="signal">add_a</span> = <span class="signal">a</span>; <span class="signal">add_b</span> = <span class="signal">b</span>; <span class="keyword">end</span>
+            <span class="type">ADD_CD</span>:  <span class="keyword">begin</span> <span class="signal">add_a</span> = <span class="signal">c</span>; <span class="signal">add_b</span> = <span class="signal">d</span>; <span class="keyword">end</span>
+            <span class="type">ADD_EF</span>:  <span class="keyword">begin</span> <span class="signal">add_a</span> = <span class="signal">e</span>; <span class="signal">add_b</span> = <span class="signal">f</span>; <span class="keyword">end</span>
+            <span class="type">REDUCE</span>:  <span class="keyword">begin</span> <span class="signal">add_a</span> = <span class="signal">ab_reg</span> + <span class="signal">cd_reg</span>; <span class="signal">add_b</span> = <span class="signal">ef_reg</span>; <span class="keyword">end</span>
+            <span class="keyword">default</span>: <span class="keyword">begin</span> <span class="signal">add_a</span> = <span class="number">'0</span>; <span class="signal">add_b</span> = <span class="number">'0</span>; <span class="keyword">end</span>
+        <span class="keyword">endcase</span>
+    <span class="keyword">end</span>
+
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span> <span class="keyword">or negedge</span> <span class="signal">rst_n</span>) <span class="keyword">begin</span>
+        <span class="keyword">if</span> (!<span class="signal">rst_n</span>) <span class="keyword">begin</span>
+            <span class="signal">state</span> &lt;= <span class="type">IDLE</span>;
+            <span class="signal">done</span>  &lt;= <span class="number">0</span>;
+        <span class="keyword">end else begin</span>
+            <span class="signal">done</span> &lt;= <span class="number">0</span>;
+            <span class="keyword">case</span> (<span class="signal">state</span>)
+                <span class="type">IDLE</span>:   <span class="keyword">if</span> (<span class="signal">start</span>) <span class="signal">state</span> &lt;= <span class="type">ADD_AB</span>;
+                <span class="type">ADD_AB</span>: <span class="keyword">begin</span> <span class="signal">ab_reg</span> &lt;= <span class="signal">add_result</span>[<span class="number">16</span>:<span class="number">0</span>]; <span class="signal">state</span> &lt;= <span class="type">ADD_CD</span>;  <span class="keyword">end</span>
+                <span class="type">ADD_CD</span>: <span class="keyword">begin</span> <span class="signal">cd_reg</span> &lt;= <span class="signal">add_result</span>[<span class="number">16</span>:<span class="number">0</span>]; <span class="signal">state</span> &lt;= <span class="type">ADD_EF</span>;  <span class="keyword">end</span>
+                <span class="type">ADD_EF</span>: <span class="keyword">begin</span> <span class="signal">ef_reg</span> &lt;= <span class="signal">add_result</span>[<span class="number">16</span>:<span class="number">0</span>]; <span class="signal">state</span> &lt;= <span class="type">REDUCE</span>;  <span class="keyword">end</span>
+                <span class="type">REDUCE</span>: <span class="keyword">begin</span> <span class="signal">sum</span>    &lt;= <span class="signal">add_result</span>;       <span class="signal">done</span> &lt;= <span class="number">1</span>; <span class="signal">state</span> &lt;= <span class="type">IDLE</span>; <span class="keyword">end</span>
+            <span class="keyword">endcase</span>
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+<span class="keyword">endmodule</span>
+<span class="comment">// Area: 1 adder + muxes + FSM | Latency: 4 cycles</span>
+<span class="comment">// Tradeoff: ~75% less adder area, but 4x slower</span></code></pre>
+
+<div class="concept-box">
+<h3>📊 Analysis</h3>
+<table class="comparison-table">
+<tr><th>Metric</th><th>Parallel</th><th>Shared</th></tr>
+<tr><td>Adders</td><td>5</td><td>1 + muxes</td></tr>
+<tr><td>Latency</td><td>1 cycle</td><td>4 cycles</td></tr>
+<tr><td>Extra Registers</td><td>None</td><td>3 × 17-bit</td></tr>
+<tr><td>Control Logic</td><td>None</td><td>FSM + mux</td></tr>
+</table>
+<p class="en"><strong>Note:</strong> For adders, sharing is usually NOT worth it (adders are cheap). This exercise demonstrates the technique — in practice, share expensive resources like multipliers and dividers.</p>
+<p class="ko" style="display:none;"><strong>참고:</strong> 가산기의 경우, 공유는 보통 가치가 없습니다 (가산기는 저렴함). 이 연습은 기법을 시연합니다 — 실제로는 곱셈기, 나눗셈기 같은 비싼 자원을 공유하세요.</p>
+</div>
+</div>
+</div>
+
+<!-- Exercise 2 -->
+<div class="section">
+<h2>Exercise 2: Pipelining a Multi-Stage Computation</h2>
+
+<p class="en">This unpipelined design computes <code>result = (a * b) + (c * d) + offset</code> in one cycle. Pipeline it into 3 stages to improve Fmax.</p>
+<p class="ko" style="display:none;">이 파이프라인 없는 설계는 <code>result = (a * b) + (c * d) + offset</code>을 한 사이클에 계산합니다. Fmax를 개선하기 위해 3단계로 파이프라이닝하세요.</p>
+
+<pre><code><span class="comment">// UNPIPELINED: Everything in one cycle</span>
+<span class="keyword">module</span> <span class="type">compute_unpipelined</span> (
+    <span class="keyword">input</span>  <span class="keyword">logic</span>         <span class="signal">clk</span>, <span class="signal">rst_n</span>,
+    <span class="keyword">input</span>  <span class="keyword">logic</span> [<span class="number">15</span>:<span class="number">0</span>]  <span class="signal">a</span>, <span class="signal">b</span>, <span class="signal">c</span>, <span class="signal">d</span>,
+    <span class="keyword">input</span>  <span class="keyword">logic</span> [<span class="number">31</span>:<span class="number">0</span>]  <span class="signal">offset</span>,
+    <span class="keyword">input</span>  <span class="keyword">logic</span>         <span class="signal">valid_in</span>,
+    <span class="keyword">output</span> <span class="keyword">logic</span> [<span class="number">33</span>:<span class="number">0</span>]  <span class="signal">result</span>,
+    <span class="keyword">output</span> <span class="keyword">logic</span>         <span class="signal">valid_out</span>
+);
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span> <span class="keyword">or negedge</span> <span class="signal">rst_n</span>)
+        <span class="keyword">if</span> (!<span class="signal">rst_n</span>) <span class="keyword">begin</span>
+            <span class="signal">result</span>    &lt;= <span class="number">'0</span>;
+            <span class="signal">valid_out</span> &lt;= <span class="number">0</span>;
+        <span class="keyword">end else begin</span>
+            <span class="signal">result</span>    &lt;= (<span class="signal">a</span> * <span class="signal">b</span>) + (<span class="signal">c</span> * <span class="signal">d</span>) + <span class="signal">offset</span>;
+            <span class="signal">valid_out</span> &lt;= <span class="signal">valid_in</span>;
+        <span class="keyword">end</span>
+<span class="keyword">endmodule</span>
+<span class="comment">// Critical path: multiply + add + add (VERY long!)</span></code></pre>
+
+<div class="hint-box">
+<h3>💡 Hints</h3>
+<ul>
+<li class="en">Stage 1: Both multiplications (parallel — they're independent!)</li>
+<li class="ko" style="display:none;">1단계: 두 곱셈 (병렬 — 독립적!)</li>
+<li class="en">Stage 2: Add the two products</li>
+<li class="ko" style="display:none;">2단계: 두 곱 더하기</li>
+<li class="en">Stage 3: Add the offset</li>
+<li class="ko" style="display:none;">3단계: 오프셋 더하기</li>
+<li class="en">Don't forget to pipeline the <code>valid</code> signal and the <code>offset</code>!</li>
+<li class="ko" style="display:none;"><code>valid</code> 신호와 <code>offset</code>도 파이프라이닝하는 것을 잊지 마세요!</li>
+</ul>
+</div>
+
+<button class="reveal-btn" onclick="toggleSolution('sol2')">Show Solution</button>
+<div class="solution" id="sol2">
+<pre><code><span class="keyword">module</span> <span class="type">compute_pipelined</span> (
+    <span class="keyword">input</span>  <span class="keyword">logic</span>         <span class="signal">clk</span>, <span class="signal">rst_n</span>,
+    <span class="keyword">input</span>  <span class="keyword">logic</span> [<span class="number">15</span>:<span class="number">0</span>]  <span class="signal">a</span>, <span class="signal">b</span>, <span class="signal">c</span>, <span class="signal">d</span>,
+    <span class="keyword">input</span>  <span class="keyword">logic</span> [<span class="number">31</span>:<span class="number">0</span>]  <span class="signal">offset</span>,
+    <span class="keyword">input</span>  <span class="keyword">logic</span>         <span class="signal">valid_in</span>,
+    <span class="keyword">output</span> <span class="keyword">logic</span> [<span class="number">33</span>:<span class="number">0</span>]  <span class="signal">result</span>,
+    <span class="keyword">output</span> <span class="keyword">logic</span>         <span class="signal">valid_out</span>
+);
+    <span class="comment">// ===== STAGE 1: Parallel Multiplications =====</span>
+    <span class="keyword">logic</span> [<span class="number">31</span>:<span class="number">0</span>] <span class="signal">s1_ab</span>, <span class="signal">s1_cd</span>;
+    <span class="keyword">logic</span> [<span class="number">31</span>:<span class="number">0</span>] <span class="signal">s1_offset</span>;    <span class="comment">// Pipeline offset forward!</span>
+    <span class="keyword">logic</span>        <span class="signal">s1_valid</span>;
+
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span> <span class="keyword">or negedge</span> <span class="signal">rst_n</span>)
+        <span class="keyword">if</span> (!<span class="signal">rst_n</span>) <span class="keyword">begin</span>
+            <span class="signal">s1_ab</span>     &lt;= <span class="number">'0</span>;
+            <span class="signal">s1_cd</span>     &lt;= <span class="number">'0</span>;
+            <span class="signal">s1_offset</span> &lt;= <span class="number">'0</span>;
+            <span class="signal">s1_valid</span>  &lt;= <span class="number">0</span>;
+        <span class="keyword">end else begin</span>
+            <span class="signal">s1_ab</span>     &lt;= <span class="signal">a</span> * <span class="signal">b</span>;       <span class="comment">// Multiplier 1</span>
+            <span class="signal">s1_cd</span>     &lt;= <span class="signal">c</span> * <span class="signal">d</span>;       <span class="comment">// Multiplier 2</span>
+            <span class="signal">s1_offset</span> &lt;= <span class="signal">offset</span>;       <span class="comment">// Forward to stage 3</span>
+            <span class="signal">s1_valid</span>  &lt;= <span class="signal">valid_in</span>;
+        <span class="keyword">end</span>
+
+    <span class="comment">// ===== STAGE 2: Add Products =====</span>
+    <span class="keyword">logic</span> [<span class="number">32</span>:<span class="number">0</span>] <span class="signal">s2_sum</span>;
+    <span class="keyword">logic</span> [<span class="number">31</span>:<span class="number">0</span>] <span class="signal">s2_offset</span>;    <span class="comment">// Keep forwarding offset!</span>
+    <span class="keyword">logic</span>        <span class="signal">s2_valid</span>;
+
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span> <span class="keyword">or negedge</span> <span class="signal">rst_n</span>)
+        <span class="keyword">if</span> (!<span class="signal">rst_n</span>) <span class="keyword">begin</span>
+            <span class="signal">s2_sum</span>    &lt;= <span class="number">'0</span>;
+            <span class="signal">s2_offset</span> &lt;= <span class="number">'0</span>;
+            <span class="signal">s2_valid</span>  &lt;= <span class="number">0</span>;
+        <span class="keyword">end else begin</span>
+            <span class="signal">s2_sum</span>    &lt;= <span class="signal">s1_ab</span> + <span class="signal">s1_cd</span>;  <span class="comment">// Add products</span>
+            <span class="signal">s2_offset</span> &lt;= <span class="signal">s1_offset</span>;        <span class="comment">// Forward offset</span>
+            <span class="signal">s2_valid</span>  &lt;= <span class="signal">s1_valid</span>;
+        <span class="keyword">end</span>
+
+    <span class="comment">// ===== STAGE 3: Add Offset =====</span>
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span> <span class="keyword">or negedge</span> <span class="signal">rst_n</span>)
+        <span class="keyword">if</span> (!<span class="signal">rst_n</span>) <span class="keyword">begin</span>
+            <span class="signal">result</span>    &lt;= <span class="number">'0</span>;
+            <span class="signal">valid_out</span> &lt;= <span class="number">0</span>;
+        <span class="keyword">end else begin</span>
+            <span class="signal">result</span>    &lt;= <span class="signal">s2_sum</span> + <span class="signal">s2_offset</span>;  <span class="comment">// Final add</span>
+            <span class="signal">valid_out</span> &lt;= <span class="signal">s2_valid</span>;
+        <span class="keyword">end</span>
+<span class="keyword">endmodule</span>
+<span class="comment">// Critical path: max(multiply, add, add) — MUCH shorter!</span>
+<span class="comment">// Latency: 3 cycles | Throughput: 1 result/cycle</span>
+<span class="comment">// Extra area: ~96 FFs for pipeline registers</span></code></pre>
+
+<div class="warning-box">
+<h3>⚠️ Common Pipelining Mistake</h3>
+<p class="en">Forgetting to pipeline <strong>all signals</strong> that are used in later stages! The <code>offset</code> is needed in Stage 3 but enters at Stage 1 — it must be registered through each intermediate stage. Same for <code>valid</code>. Missing this creates timing paths that bypass pipeline stages.</p>
+<p class="ko" style="display:none;">나중 단계에서 사용되는 <strong>모든 신호</strong>를 파이프라이닝하는 것을 잊는 것! <code>offset</code>은 3단계에서 필요하지만 1단계에서 입력됩니다 — 각 중간 단계를 통해 레지스터되어야 합니다. <code>valid</code>도 마찬가지입니다.</p>
+</div>
+</div>
+</div>
+
+<!-- Exercise 3 -->
+<div class="section">
+<h2>Exercise 3: Width Optimization Audit</h2>
+
+<p class="en">Find and fix ALL the width inefficiencies in this code. Calculate how many flip-flops you save.</p>
+<p class="ko" style="display:none;">이 코드의 모든 폭 비효율성을 찾아 수정하세요. 몇 개의 플립플롭을 절약하는지 계산하세요.</p>
+
+<pre><code><span class="keyword">module</span> <span class="type">wasteful_design</span> (
+    <span class="keyword">input</span>  <span class="keyword">logic</span>         <span class="signal">clk</span>, <span class="signal">rst_n</span>,
+    <span class="keyword">input</span>  <span class="keyword">logic</span> [<span class="number">7</span>:<span class="number">0</span>]   <span class="signal">data_in</span>,     <span class="comment">// 8-bit input</span>
+    <span class="keyword">output</span> <span class="keyword">logic</span> [<span class="number">31</span>:<span class="number">0</span>]  <span class="signal">packet_count</span>,<span class="comment">// Counts 0-999 max</span>
+    <span class="keyword">output</span> <span class="keyword">logic</span> [<span class="number">31</span>:<span class="number">0</span>]  <span class="signal">byte_count</span>,  <span class="comment">// Counts 0-1518 max (Ethernet)</span>
+    <span class="keyword">output</span> <span class="keyword">logic</span> [<span class="number">15</span>:<span class="number">0</span>]  <span class="signal">checksum</span>,    <span class="comment">// 8-bit checksum</span>
+    <span class="keyword">output</span> <span class="keyword">logic</span> [<span class="number">31</span>:<span class="number">0</span>]  <span class="signal">state</span>        <span class="comment">// FSM with 5 states</span>
+);
+    <span class="keyword">logic</span> [<span class="number">31</span>:<span class="number">0</span>] <span class="signal">temp_sum</span>;  <span class="comment">// Intermediate: max value 510 (255+255)</span>
+
+    <span class="comment">// ... implementation ...</span>
+<span class="keyword">endmodule</span></code></pre>
+
+<button class="reveal-btn" onclick="toggleSolution('sol3')">Show Solution</button>
+<div class="solution" id="sol3">
+<pre><code><span class="keyword">module</span> <span class="type">optimized_design</span> (
+    <span class="keyword">input</span>  <span class="keyword">logic</span>         <span class="signal">clk</span>, <span class="signal">rst_n</span>,
+    <span class="keyword">input</span>  <span class="keyword">logic</span> [<span class="number">7</span>:<span class="number">0</span>]   <span class="signal">data_in</span>,
+    <span class="keyword">output</span> <span class="keyword">logic</span> [<span class="number">9</span>:<span class="number">0</span>]   <span class="signal">packet_count</span>,<span class="comment">// 10 bits: 0-1023 covers 0-999</span>
+    <span class="keyword">output</span> <span class="keyword">logic</span> [<span class="number">10</span>:<span class="number">0</span>]  <span class="signal">byte_count</span>,  <span class="comment">// 11 bits: 0-2047 covers 0-1518</span>
+    <span class="keyword">output</span> <span class="keyword">logic</span> [<span class="number">7</span>:<span class="number">0</span>]   <span class="signal">checksum</span>,    <span class="comment">// 8 bits: matches actual width</span>
+    <span class="keyword">output</span> <span class="keyword">logic</span> [<span class="number">2</span>:<span class="number">0</span>]   <span class="signal">state</span>        <span class="comment">// 3 bits: covers 5 states (0-7)</span>
+);
+    <span class="keyword">logic</span> [<span class="number">8</span>:<span class="number">0</span>]  <span class="signal">temp_sum</span>;   <span class="comment">// 9 bits: covers 0-510</span>
+
+    <span class="comment">// ... same implementation ...</span>
+<span class="keyword">endmodule</span></code></pre>
+
+<table class="comparison-table">
+<tr><th>Signal</th><th>Before</th><th>After</th><th>Saved FFs</th></tr>
+<tr><td>packet_count</td><td>32 bits</td><td>10 bits</td><td>22</td></tr>
+<tr><td>byte_count</td><td>32 bits</td><td>11 bits</td><td>21</td></tr>
+<tr><td>checksum</td><td>16 bits</td><td>8 bits</td><td>8</td></tr>
+<tr><td>state</td><td>32 bits</td><td>3 bits</td><td>29</td></tr>
+<tr><td>temp_sum</td><td>32 bits</td><td>9 bits</td><td>23</td></tr>
+<tr><td colspan="3"><strong>Total Saved</strong></td><td><strong>103 FFs!</strong></td></tr>
+</table>
+<p class="en">That's 103 flip-flops saved — and this is a tiny module! In a full chip with hundreds of modules, these savings compound massively.</p>
+<p class="ko" style="display:none;">103개의 플립플롭이 절약되었습니다 — 그리고 이것은 작은 모듈입니다! 수백 개의 모듈이 있는 전체 칩에서 이러한 절약은 엄청나게 누적됩니다.</p>
+</div>
+</div>
+
+<!-- Exercise 4 -->
+<div class="section">
+<h2>Exercise 4: Design Decision Challenge</h2>
+
+<p class="en">You're designing a packet processor for a 100BASE-T1 Ethernet switch. Answer these tradeoff questions:</p>
+<p class="ko" style="display:none;">100BASE-T1 이더넷 스위치용 패킷 프로세서를 설계하고 있습니다. 다음 트레이드오프 질문에 답하세요:</p>
+
+<div class="concept-box">
+<h3>Scenario</h3>
+<ul>
+<li>Clock: 125 MHz</li>
+<li>Data bus: 8 bits (1 byte/cycle = 1 Gbps at 125 MHz? No! 100 Mbps = 1 byte per 10 cycles at 12.5 MHz effective)</li>
+<li>4 ports, each needs: CRC check, MAC address lookup, VLAN tag processing</li>
+<li>FPGA: 50% utilized currently</li>
+</ul>
+</div>
+
+<h3>Questions:</h3>
+<ol>
+<li class="en">Should the CRC engine be shared across all 4 ports or dedicated per-port?</li>
+<li class="ko" style="display:none;">CRC 엔진을 4개 포트에서 공유해야 하나요 아니면 포트별 전용이어야 하나요?</li>
+<li class="en">The MAC lookup table has 1024 entries. Logic-based or BRAM?</li>
+<li class="ko" style="display:none;">MAC 룩업 테이블에 1024개 항목이 있습니다. 논리 기반 또는 BRAM?</li>
+<li class="en">Should the VLAN processing be pipelined?</li>
+<li class="ko" style="display:none;">VLAN 처리를 파이프라이닝해야 하나요?</li>
+</ol>
+
+<button class="reveal-btn" onclick="toggleSolution('sol4')">Show Solution</button>
+<div class="solution" id="sol4">
+<div class="concept-box">
+<h3>Answer 1: CRC — Dedicated Per Port ✅</h3>
+<p class="en">At 100 Mbps, each port generates 1 byte every ~10 cycles (at 125 MHz clock). With 4 ports, that's potentially 4 simultaneous bytes. A shared CRC would need complex arbitration and buffering. Since FPGA is only 50% utilized and CRC-8 is small, <strong>dedicate one per port</strong> — simpler design, no contention. If it were 1000BASE-T1 (line-rate every cycle), sharing would require careful scheduling.</p>
+<p class="ko" style="display:none;">100 Mbps에서 각 포트는 ~10 사이클마다 1바이트를 생성합니다 (125 MHz 클록). 4개 포트로 동시에 4바이트가 가능합니다. 공유 CRC는 복잡한 중재와 버퍼링이 필요합니다. FPGA가 50%만 사용되고 CRC가 작으므로, <strong>포트당 전용</strong>이 합리적입니다.</p>
+</div>
+
+<div class="concept-box">
+<h3>Answer 2: MAC Lookup — BRAM ✅</h3>
+<p class="en">1024 entries × 48-bit MAC + port info = lots of data. A case statement would consume thousands of LUTs. <strong>Use BRAM</strong> — it's designed for exactly this. One dual-port BRAM can serve 2 lookups/cycle, or use 2 BRAMs for 4 simultaneous lookups. The 1-cycle read latency is fine since packets take many cycles to process.</p>
+<p class="ko" style="display:none;">1024 항목 × 48비트 MAC + 포트 정보 = 많은 데이터. Case문은 수천 개의 LUT를 소비합니다. <strong>BRAM 사용</strong> — 정확히 이를 위해 설계되었습니다. 1사이클 읽기 지연은 패킷 처리에 여러 사이클이 걸리므로 괜찮습니다.</p>
+</div>
+
+<div class="concept-box">
+<h3>Answer 3: VLAN Processing — Probably Not ✅</h3>
+<p class="en">VLAN tag insertion/removal is simple (read a 12-bit VID, compare, modify). At 100 Mbps with a 125 MHz clock, there's plenty of time. <strong>No pipelining needed</strong> — the operations are simple enough to complete in one cycle. Save the pipeline registers. If timing analysis later shows it's on the critical path, THEN add a pipeline stage.</p>
+<p class="ko" style="display:none;">VLAN 태그 삽입/제거는 간단합니다 (12비트 VID 읽기, 비교, 수정). 125 MHz 클록으로 100 Mbps에서는 시간이 충분합니다. <strong>파이프라이닝 불필요</strong> — 연산이 한 사이클에 완료될 만큼 간단합니다.</p>
+</div>
+
+<div class="tip-box">
+<h3>💡 Key Lesson</h3>
+<p class="en">The "right" answer depends on your specific constraints. With 50% FPGA utilization, you can afford dedicated resources. At 90% utilization, you'd share more aggressively. Always consider your actual constraints — don't over-optimize prematurely!</p>
+<p class="ko" style="display:none;">정답은 특정 제약에 따라 달라집니다. 50% FPGA 활용률에서는 전용 자원을 감당할 수 있습니다. 90% 활용률에서는 더 적극적으로 공유합니다. 항상 실제 제약을 고려하세요 — 조기에 과도하게 최적화하지 마세요!</p>
+</div>
+</div>
+</div>
+
+<div class="nav-links">
+    <a href="day-34-lesson.html">📖 Review Lesson</a>
+    <a href="day-34-quiz.html">📝 Take the Quiz</a>
+</div>
+
+<script>
+let isKorean = false;
+function toggleLang() {
+    isKorean = !isKorean;
+    document.querySelectorAll('.en').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'none' : 'revert', 'important');
+    });
+    document.querySelectorAll('.ko').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'revert' : 'none', 'important');
+    });
+    document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+}
+
+function toggleSolution(id) {
+    const sol = document.getElementById(id);
+    const btn = sol.previousElementSibling;
+    if (sol.style.display === 'block') {
+        sol.style.display = 'none';
+        btn.textContent = 'Show Solution';
+    } else {
+        sol.style.display = 'block';
+        btn.textContent = 'Hide Solution';
+    }
+}
+</script>
+</body>
+</html>

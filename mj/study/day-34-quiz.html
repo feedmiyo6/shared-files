@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 34 Quiz: Area vs Performance</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    background: linear-gradient(135deg, #fefae0 0%, #faedcd 100%);
+    color: #3d405b;
+    line-height: 1.8;
+    padding: 24px;
+    max-width: 920px;
+    margin: 0 auto;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+h1 {
+    color: #5d4037;
+    border-bottom: 3px solid #c4a77d;
+    padding-bottom: 12px;
+    margin-bottom: 24px;
+    font-size: 2em;
+}
+h2 {
+    color: #588157;
+    border-bottom: 2px solid #a3b18a;
+    padding-bottom: 8px;
+    margin: 32px 0 16px;
+}
+h3 { color: #5d4037; margin: 20px 0 12px; }
+p { margin: 12px 0; }
+code {
+    background: #e9f5db;
+    color: #3d405b;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+}
+pre {
+    background: #2d3436;
+    padding: 24px;
+    border-radius: 12px;
+    margin: 24px 0;
+    border: 3px solid #a3b18a;
+    overflow-x: auto;
+    font-size: 15px;
+    line-height: 1.6;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+    color: #f8f8f2;
+}
+pre code { background: none; color: inherit; padding: 0; }
+.keyword { color: #ff79c6; font-weight: 600; }
+.type { color: #8be9fd; }
+.signal { color: #50fa7b; }
+.number { color: #ffb86c; }
+.comment { color: #6272a4; font-style: italic; }
+.lang-toggle {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    background: #588157;
+    border: none;
+    border-radius: 24px;
+    padding: 10px 20px;
+    cursor: pointer;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    z-index: 1000;
+}
+.lang-toggle:hover { background: #3a5a40; }
+.nav-links {
+    display: flex;
+    gap: 12px;
+    margin: 24px 0;
+    flex-wrap: wrap;
+}
+.nav-links a {
+    background: linear-gradient(135deg, #588157, #3a5a40);
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14px;
+}
+.nav-links a:hover { opacity: 0.9; }
+.question {
+    background: #fff;
+    border-radius: 12px;
+    padding: 24px;
+    margin: 20px 0;
+    border: 1px solid #a3b18a;
+}
+.question h3 { margin-top: 0; }
+.options { list-style: none; padding: 0; margin: 12px 0; }
+.options li {
+    background: #fff8f0;
+    border: 2px solid #c4a77d;
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin: 8px 0;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.options li:hover { border-color: #588157; background: #e9f5db; }
+.options li.correct {
+    border-color: #10b981;
+    background: #d1fae5;
+}
+.options li.wrong {
+    border-color: #ef4444;
+    background: #fee2e2;
+}
+.options li.disabled { pointer-events: none; opacity: 0.7; }
+.explanation {
+    display: none;
+    background: #fff8f0;
+    border-left: 4px solid #588157;
+    border-radius: 8px;
+    padding: 15px;
+    margin-top: 12px;
+    color: #3d405b;
+}
+.score-box {
+    background: #fff;
+    border: 2px solid #588157;
+    border-radius: 12px;
+    padding: 24px;
+    margin: 24px 0;
+    text-align: center;
+    display: none;
+}
+.score-box h2 { border: none; }
+.score-num { font-size: 3em; color: #588157; font-weight: 700; }
+.comparison-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+.comparison-table th {
+    background: #588157;
+    color: white;
+    padding: 12px;
+    text-align: left;
+}
+.comparison-table td {
+    background: #fff;
+    border: 1px solid #c4a77d;
+    padding: 12px;
+    color: #3d405b;
+}
+.comparison-table tr:nth-child(even) td { background: #fff8f0; }
+@media (max-width: 768px) {
+    body { padding: 16px; }
+    h1 { font-size: 1.8em; }
+    pre { font-size: 14px; padding: 16px; }
+    .lang-toggle { padding: 8px 16px; font-size: 13px; }
+}
+</style>
+</head>
+<body>
+
+<button class="lang-toggle" onclick="toggleLang()">한국어</button>
+
+<h1>📝 Day 34 Quiz: Area vs Performance</h1>
+<p class="en">Test your understanding of area-performance optimization tradeoffs. Click an answer to check!</p>
+<p class="ko" style="display:none;">면적-성능 최적화 트레이드오프에 대한 이해를 테스트하세요. 답을 클릭하여 확인하세요!</p>
+
+<div class="nav-links">
+    <a href="day-34-lesson.html">📖 Lesson</a>
+    <a href="day-34-practice.html">💻 Practice</a>
+</div>
+
+<div id="quiz-container">
+
+<!-- Q1 -->
+<div class="question" data-correct="b">
+<h3>Q1. Resource Sharing</h3>
+<p class="en">You have a design with 4 independent multiplications. If you share a single multiplier using time-multiplexing, what changes?</p>
+<p class="ko" style="display:none;">4개의 독립적인 곱셈이 있는 설계가 있습니다. 시간 다중화를 사용하여 단일 곱셈기를 공유하면 무엇이 변하나요?</p>
+<ul class="options">
+<li data-value="a">Area decreases, latency stays the same</li>
+<li data-value="b">Area decreases, latency increases to 4 cycles</li>
+<li data-value="c">Area increases, latency decreases</li>
+<li data-value="d">Both area and latency decrease</li>
+</ul>
+<div class="explanation">
+<p class="en">✅ <strong>B is correct.</strong> Sharing replaces 4 multipliers with 1 (area ↓) but now processes sequentially, taking 4 cycles (latency ↑). You also need a small control FSM and muxes, but net area still decreases since multipliers are expensive.</p>
+<p class="ko" style="display:none;">✅ <strong>B가 정답.</strong> 공유는 4개의 곱셈기를 1개로 대체(면적 ↓)하지만 순차적으로 처리하여 4 사이클이 걸립니다(지연 ↑). 작은 제어 FSM과 먹스도 필요하지만, 곱셈기가 비싸므로 순 면적은 여전히 감소합니다.</p>
+</div>
+</div>
+
+<!-- Q2 -->
+<div class="question" data-correct="c">
+<h3>Q2. Pipelining Effect</h3>
+<p class="en">Adding a pipeline register between a multiplier and adder in a MAC unit will:</p>
+<p class="ko" style="display:none;">MAC 유닛에서 곱셈기와 가산기 사이에 파이프라인 레지스터를 추가하면:</p>
+<ul class="options">
+<li data-value="a">Reduce area and increase Fmax</li>
+<li data-value="b">Increase throughput and decrease latency</li>
+<li data-value="c">Increase Fmax and add 1 cycle of latency</li>
+<li data-value="d">Decrease Fmax but improve area efficiency</li>
+</ul>
+<div class="explanation">
+<p class="en">✅ <strong>C is correct.</strong> Pipelining splits the critical path: instead of Mult+Add in one cycle, each stage runs independently. This allows a higher clock frequency (Fmax ↑), but the total latency increases by 1 cycle. Throughput remains the same (1 result/cycle once the pipeline is full).</p>
+<p class="ko" style="display:none;">✅ <strong>C가 정답.</strong> 파이프라이닝은 임계 경로를 분할합니다: 한 사이클에서 곱셈+덧셈 대신, 각 단계가 독립적으로 실행됩니다. 이를 통해 더 높은 클록 주파수(Fmax ↑)가 가능하지만, 총 지연은 1 사이클 증가합니다.</p>
+</div>
+</div>
+
+<!-- Q3 -->
+<div class="question" data-correct="a">
+<h3>Q3. Width Optimization</h3>
+<p class="en">A counter counts from 0 to 59 (for seconds). What's the minimum bit width needed?</p>
+<p class="ko" style="display:none;">카운터가 0에서 59까지 셉니다(초). 필요한 최소 비트 폭은?</p>
+<ul class="options">
+<li data-value="a">6 bits (covers 0-63)</li>
+<li data-value="b">5 bits (covers 0-31)</li>
+<li data-value="c">7 bits (covers 0-127)</li>
+<li data-value="d">8 bits (covers 0-255)</li>
+</ul>
+<div class="explanation">
+<p class="en">✅ <strong>A is correct.</strong> 2⁶ = 64, which covers 0-63 and thus 0-59. 5 bits only covers 0-31 (not enough). 7 or 8 bits would work but waste flip-flops. Always right-size your widths!</p>
+<p class="ko" style="display:none;">✅ <strong>A가 정답.</strong> 2⁶ = 64로, 0-63을 커버하므로 0-59를 포함합니다. 5비트는 0-31만 커버(부족). 7 또는 8비트는 작동하지만 플립플롭을 낭비합니다.</p>
+</div>
+</div>
+
+<!-- Q4 -->
+<div class="question" data-correct="d">
+<h3>Q4. When to Share</h3>
+<p class="en">Which resource is the BEST candidate for sharing?</p>
+<p class="ko" style="display:none;">어떤 자원이 공유에 가장 적합한 후보인가요?</p>
+<ul class="options">
+<li data-value="a">2-input AND gate</li>
+<li data-value="b">4-to-1 multiplexer</li>
+<li data-value="c">8-bit adder</li>
+<li data-value="d">32-bit integer divider</li>
+</ul>
+<div class="explanation">
+<p class="en">✅ <strong>D is correct.</strong> Dividers are extremely expensive in area (hundreds to thousands of gates). Sharing one divider across multiple operations makes sense because: (1) it's costly to duplicate, (2) division is rarely needed every cycle. AND gates, muxes, and small adders are cheap — sharing them would add more control overhead than it saves.</p>
+<p class="ko" style="display:none;">✅ <strong>D가 정답.</strong> 나눗셈기는 면적이 매우 비쌉니다(수백~수천 게이트). 여러 연산에 하나의 나눗셈기를 공유하는 것은 합리적입니다: (1) 복제 비용이 높고, (2) 매 사이클마다 나눗셈이 필요하지 않습니다.</p>
+</div>
+</div>
+
+<!-- Q5 -->
+<div class="question" data-correct="b">
+<h3>Q5. Parallel vs Serial</h3>
+<p class="en">A serial CRC engine processes 1 bit/cycle. A parallel version processes 8 bits/cycle. For a 64-byte Ethernet frame, how many cycles does each need?</p>
+<p class="ko" style="display:none;">직렬 CRC 엔진은 1비트/사이클을 처리합니다. 병렬 버전은 8비트/사이클을 처리합니다. 64바이트 이더넷 프레임에 각각 몇 사이클이 필요한가요?</p>
+<ul class="options">
+<li data-value="a">Serial: 64 cycles, Parallel: 8 cycles</li>
+<li data-value="b">Serial: 512 cycles, Parallel: 64 cycles</li>
+<li data-value="c">Serial: 512 cycles, Parallel: 512 cycles</li>
+<li data-value="d">Serial: 64 cycles, Parallel: 64 cycles</li>
+</ul>
+<div class="explanation">
+<p class="en">✅ <strong>B is correct.</strong> 64 bytes = 512 bits. Serial: 512 bits × 1 bit/cycle = 512 cycles. Parallel: 512 bits ÷ 8 bits/cycle = 64 cycles. The parallel version is 8x faster but uses significantly more combinational logic (XOR trees).</p>
+<p class="ko" style="display:none;">✅ <strong>B가 정답.</strong> 64바이트 = 512비트. 직렬: 512비트 × 1비트/사이클 = 512사이클. 병렬: 512비트 ÷ 8비트/사이클 = 64사이클. 병렬 버전이 8배 빠르지만 훨씬 더 많은 조합 논리를 사용합니다.</p>
+</div>
+</div>
+
+<!-- Q6 -->
+<div class="question" data-correct="a">
+<h3>Q6. Logic vs Memory</h3>
+<p class="en">You need a lookup table with 1024 entries of 16 bits each. What's the most area-efficient implementation?</p>
+<p class="ko" style="display:none;">16비트씩 1024개 항목의 룩업 테이블이 필요합니다. 가장 면적 효율적인 구현은?</p>
+<ul class="options">
+<li data-value="a">Block RAM (BRAM) on FPGA</li>
+<li data-value="b">Case statement with 1024 entries</li>
+<li data-value="c">Combinational mux tree</li>
+<li data-value="d">1024 parallel comparators</li>
+</ul>
+<div class="explanation">
+<p class="en">✅ <strong>A is correct.</strong> At 1024 entries, a case statement would generate a massive mux tree consuming thousands of LUTs. Block RAM is purpose-built for this — it stores the data efficiently with 1-cycle read latency. The tradeoff: you "spend" a BRAM resource but save enormous amounts of logic.</p>
+<p class="ko" style="display:none;">✅ <strong>A가 정답.</strong> 1024개 항목에서 case문은 수천 개의 LUT를 소비하는 거대한 먹스 트리를 생성합니다. Block RAM은 이를 위해 만들어졌으며 — 1사이클 읽기 지연으로 데이터를 효율적으로 저장합니다.</p>
+</div>
+</div>
+
+<!-- Q7 -->
+<div class="question" data-correct="c">
+<h3>Q7. Pipeline Throughput</h3>
+<p class="en">A 5-stage pipeline processes one instruction per stage per cycle. After the pipeline is full, how many clock cycles does it take to process 100 instructions?</p>
+<p class="ko" style="display:none;">5단계 파이프라인이 사이클당 단계별 하나의 명령어를 처리합니다. 파이프라인이 가득 찬 후, 100개의 명령어를 처리하는 데 몇 클록 사이클이 필요한가요?</p>
+<ul class="options">
+<li data-value="a">500 cycles</li>
+<li data-value="b">100 cycles</li>
+<li data-value="c">104 cycles</li>
+<li data-value="d">105 cycles</li>
+</ul>
+<div class="explanation">
+<p class="en">✅ <strong>C is correct.</strong> Total cycles = pipeline depth + (N-1) = 5 + 99 = 104. The first instruction takes 5 cycles (fill the pipeline), then each subsequent instruction finishes 1 cycle later. Without pipelining, 100 instructions × 5 cycles = 500 cycles. Pipelining gives ~5x speedup!</p>
+<p class="ko" style="display:none;">✅ <strong>C가 정답.</strong> 총 사이클 = 파이프라인 깊이 + (N-1) = 5 + 99 = 104. 첫 번째 명령어가 5사이클 걸린 후, 각 후속 명령어는 1사이클 후에 완료됩니다. 파이프라이닝 없이는 500사이클이 필요합니다.</p>
+</div>
+</div>
+
+<!-- Q8 -->
+<div class="question" data-correct="b">
+<h3>Q8. Optimization Priority</h3>
+<p class="en">Your design fails timing closure by 2ns on the critical path. Which optimization should you try FIRST?</p>
+<p class="ko" style="display:none;">설계가 임계 경로에서 2ns 타이밍 클로저에 실패합니다. 어떤 최적화를 먼저 시도해야 하나요?</p>
+<ul class="options">
+<li data-value="a">Reduce all signal widths by 50%</li>
+<li data-value="b">Add a pipeline register in the critical path</li>
+<li data-value="c">Replace all multipliers with serial implementations</li>
+<li data-value="d">Double the clock frequency</li>
+</ul>
+<div class="explanation">
+<p class="en">✅ <strong>B is correct.</strong> Pipelining is the first thing to try when failing timing — it directly breaks up the critical path with minimal impact. Reducing widths may not help if the critical path isn't width-related. Serializing multipliers would make timing worse. Doubling clock frequency would make the problem worse, not better!</p>
+<p class="ko" style="display:none;">✅ <strong>B가 정답.</strong> 타이밍 실패 시 파이프라이닝이 가장 먼저 시도할 것입니다 — 최소한의 영향으로 임계 경로를 직접 분할합니다. 폭 감소는 임계 경로가 폭과 관련없으면 도움이 안 됩니다.</p>
+</div>
+</div>
+
+<!-- Q9 -->
+<div class="question" data-correct="d">
+<h3>Q9. Area Cost Awareness</h3>
+<p class="en">Rank these operations from LEAST to MOST expensive in gate area: addition, comparison, multiplication, division.</p>
+<p class="ko" style="display:none;">게이트 면적에서 가장 저렴한 것부터 가장 비싼 것까지 순서를 매기세요: 덧셈, 비교, 곱셈, 나눗셈.</p>
+<ul class="options">
+<li data-value="a">Division &lt; Multiplication &lt; Addition &lt; Comparison</li>
+<li data-value="b">Comparison &lt; Addition &lt; Division &lt; Multiplication</li>
+<li data-value="c">Addition &lt; Comparison &lt; Multiplication &lt; Division</li>
+<li data-value="d">Comparison &lt; Addition &lt; Multiplication &lt; Division</li>
+</ul>
+<div class="explanation">
+<p class="en">✅ <strong>D is correct.</strong> Comparison is essentially subtraction with only the flags (cheapest). Addition uses a carry chain. Multiplication requires partial products and addition trees (much larger). Division is iterative or uses massive combinational logic (most expensive). A 32-bit divider can be 10-50x the area of a 32-bit adder!</p>
+<p class="ko" style="display:none;">✅ <strong>D가 정답.</strong> 비교는 본질적으로 플래그만 있는 뺄셈(가장 저렴). 덧셈은 캐리 체인 사용. 곱셈은 부분곱과 덧셈 트리 필요(훨씬 큼). 나눗셈은 반복적이거나 거대한 조합 논리 사용(가장 비쌈).</p>
+</div>
+</div>
+
+<!-- Q10 -->
+<div class="question" data-correct="a">
+<h3>Q10. Automotive Ethernet Application</h3>
+<p class="en">In a 1000BASE-T1 Ethernet PHY, the CRC-32 engine processes data at line rate. Why must this be a PARALLEL implementation rather than serial?</p>
+<p class="ko" style="display:none;">1000BASE-T1 이더넷 PHY에서 CRC-32 엔진은 라인 레이트로 데이터를 처리합니다. 왜 직렬이 아닌 병렬 구현이어야 하나요?</p>
+<ul class="options">
+<li data-value="a">Serial processing would be too slow to keep up with the data rate</li>
+<li data-value="b">Serial CRC is not mathematically possible for CRC-32</li>
+<li data-value="c">Parallel CRC uses less area than serial</li>
+<li data-value="d">Serial CRC would cause clock domain crossing issues</li>
+</ul>
+<div class="explanation">
+<p class="en">✅ <strong>A is correct.</strong> At 1 Gbps, data arrives at very high rates (e.g., 8 bits per clock at 125 MHz). A serial 1-bit CRC engine would need a clock 8x faster (1 GHz) to keep up — impractical. Parallel CRC processes 8+ bits per cycle at 125 MHz, matching the data rate. This is a classic case where performance requirements DEMAND the area cost of parallelism.</p>
+<p class="ko" style="display:none;">✅ <strong>A가 정답.</strong> 1 Gbps에서 데이터가 매우 빠르게 도착합니다 (예: 125 MHz에서 클록당 8비트). 직렬 1비트 CRC 엔진은 따라잡기 위해 8배 빠른 클록(1 GHz)이 필요 — 비실용적입니다. 병렬 CRC는 125 MHz에서 사이클당 8+ 비트를 처리하여 데이터 속도에 맞춥니다.</p>
+</div>
+</div>
+
+<!-- Q11 -->
+<div class="question" data-correct="c">
+<h3>Q11. Pipeline Register Cost</h3>
+<p class="en">You add pipeline registers to split a 64-bit datapath into 3 stages. Approximately how many extra flip-flops do you add?</p>
+<p class="ko" style="display:none;">64비트 데이터 경로를 3단계로 분할하기 위해 파이프라인 레지스터를 추가합니다. 대략 몇 개의 추가 플립플롭이 필요한가요?</p>
+<ul class="options">
+<li data-value="a">64 flip-flops (one set of pipeline registers)</li>
+<li data-value="b">192 flip-flops (3 sets)</li>
+<li data-value="c">128 flip-flops (2 sets of pipeline registers)</li>
+<li data-value="d">3 flip-flops (one per stage)</li>
+</ul>
+<div class="explanation">
+<p class="en">✅ <strong>C is correct.</strong> 3 stages need 2 boundaries (between stages 1-2 and 2-3). Each boundary needs 64 flip-flops to capture the full datapath width. Total: 2 × 64 = 128 flip-flops. Note: in practice you may also need to pipeline control signals, adding more FFs.</p>
+<p class="ko" style="display:none;">✅ <strong>C가 정답.</strong> 3단계는 2개의 경계(1-2단계, 2-3단계 사이)가 필요합니다. 각 경계는 전체 데이터 경로 폭을 캡처하기 위해 64개의 플립플롭이 필요합니다. 총: 2 × 64 = 128개.</p>
+</div>
+</div>
+
+<!-- Q12 -->
+<div class="question" data-correct="b">
+<h3>Q12. Design Tradeoff Scenario</h3>
+<p class="en">Your FPGA is 90% full but meets timing easily with 5ns slack. A new feature needs ~15% more logic. What's the best approach?</p>
+<p class="ko" style="display:none;">FPGA가 90% 찼지만 5ns 슬랙으로 타이밍을 쉽게 충족합니다. 새 기능에 ~15% 더 많은 논리가 필요합니다. 가장 좋은 접근법은?</p>
+<ul class="options">
+<li data-value="a">Move to a larger FPGA</li>
+<li data-value="b">Time-multiplex existing resources to free area, trading some timing slack</li>
+<li data-value="c">Reduce clock frequency to save power</li>
+<li data-value="d">Remove the existing pipeline stages</li>
+</ul>
+<div class="explanation">
+<p class="en">✅ <strong>B is correct.</strong> You have timing slack to spend! Time-multiplexing (resource sharing) trades performance for area — exactly what you need. With 5ns slack, you can afford extra mux delays from sharing. Moving to a larger FPGA is expensive and a last resort. Removing pipelines would hurt timing unnecessarily.</p>
+<p class="ko" style="display:none;">✅ <strong>B가 정답.</strong> 사용할 타이밍 슬랙이 있습니다! 시간 다중화(자원 공유)는 성능을 면적으로 교환합니다 — 정확히 필요한 것입니다. 5ns 슬랙으로 공유로 인한 추가 먹스 지연을 감당할 수 있습니다.</p>
+</div>
+</div>
+
+</div>
+
+<div class="score-box" id="score-box">
+<h2>Quiz Complete! 🎉</h2>
+<div class="score-num" id="score-display"></div>
+<p id="score-message"></p>
+</div>
+
+<div class="nav-links">
+    <a href="day-34-lesson.html">📖 Review Lesson</a>
+    <a href="day-34-practice.html">💻 Practice Exercises →</a>
+</div>
+
+<script>
+let isKorean = false;
+let answered = 0;
+let correct = 0;
+const total = document.querySelectorAll('.question').length;
+
+function toggleLang() {
+    isKorean = !isKorean;
+    document.querySelectorAll('.en').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'none' : 'revert', 'important');
+    });
+    document.querySelectorAll('.ko').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'revert' : 'none', 'important');
+    });
+    document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+}
+
+document.querySelectorAll('.question').forEach(q => {
+    const correctAnswer = q.dataset.correct;
+    q.querySelectorAll('.options li').forEach(li => {
+        li.addEventListener('click', () => {
+            if (q.classList.contains('answered')) return;
+            q.classList.add('answered');
+            answered++;
+            const selected = li.dataset.value;
+            if (selected === correctAnswer) {
+                li.classList.add('correct');
+                correct++;
+            } else {
+                li.classList.add('wrong');
+                q.querySelector(`li[data-value="${correctAnswer}"]`).classList.add('correct');
+            }
+            q.querySelectorAll('.options li').forEach(l => l.classList.add('disabled'));
+            q.querySelector('.explanation').style.display = 'block';
+            if (answered === total) {
+                const box = document.getElementById('score-box');
+                box.style.display = 'block';
+                document.getElementById('score-display').textContent = `${correct} / ${total}`;
+                const pct = Math.round((correct / total) * 100);
+                let msg = pct >= 90 ? '🌟 Outstanding! You really understand area-performance tradeoffs!' :
+                          pct >= 70 ? '👍 Great job! Review the ones you missed.' :
+                          '📖 Good effort! Review the lesson and try again.';
+                document.getElementById('score-message').textContent = msg;
+                box.scrollIntoView({ behavior: 'smooth' });
+            }
+        });
+    });
+});
+</script>
+</body>
+</html>
