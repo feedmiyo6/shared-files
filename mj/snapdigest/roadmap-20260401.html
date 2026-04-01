@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SnapDigest — Product Roadmap</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: #fafafa;
+    color: #1e293b;
+    line-height: 1.6;
+    padding: 0;
+  }
+  .container { max-width: 720px; margin: 0 auto; padding: 32px 20px 60px; }
+
+  /* Header */
+  .header {
+    text-align: center;
+    padding: 48px 20px 40px;
+    background: linear-gradient(135deg, #fef5f4 0%, #f0f7fb 50%, #f5f4fa 100%);
+    border-bottom: 1px solid #f1f5f9;
+    margin-bottom: 32px;
+  }
+  .header h1 {
+    font-family: 'Newsreader', Georgia, serif;
+    font-size: 32px;
+    font-weight: 600;
+    color: #0f172a;
+    margin-bottom: 8px;
+  }
+  .header .subtitle {
+    font-size: 15px;
+    color: #64748b;
+    font-weight: 400;
+  }
+  .header .date {
+    display: inline-block;
+    margin-top: 16px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #ef6461;
+    background: #fde8e7;
+    padding: 4px 14px;
+    border-radius: 99px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+
+  /* Lang toggle */
+  .lang-toggle {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    z-index: 100;
+    background: #1e293b;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 99px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  }
+  .lang-toggle:hover { background: #334155; }
+  .ko { display: none; }
+  .ko.show { display: inline !important; }
+  .en.hide { display: none !important; }
+
+  /* Section */
+  .section {
+    margin-bottom: 36px;
+  }
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 16px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #f1f5f9;
+  }
+  .section-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+  .section-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #0f172a;
+  }
+  .section-count {
+    font-size: 12px;
+    font-weight: 600;
+    color: #94a3b8;
+    background: #f1f5f9;
+    padding: 2px 10px;
+    border-radius: 99px;
+    margin-left: auto;
+  }
+
+  /* Cards */
+  .card {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+    padding: 18px;
+    margin-bottom: 10px;
+    transition: all 0.2s;
+  }
+  .card:hover { border-color: #cbd5e1; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+  .card-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 8px;
+  }
+  .card-number {
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 700;
+    flex-shrink: 0;
+    color: white;
+  }
+  .card-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: #0f172a;
+    line-height: 1.4;
+  }
+  .card-desc {
+    font-size: 13px;
+    color: #64748b;
+    line-height: 1.6;
+    margin-left: 40px;
+  }
+  .card-tag {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 6px;
+    margin-left: 40px;
+    margin-top: 8px;
+  }
+
+  /* Priority colors */
+  .critical .section-icon { background: #fde8e7; }
+  .critical .card-number { background: #ef6461; }
+  .critical .section-title { color: #dc4a3f; }
+
+  .should .section-icon { background: #fcf7eb; }
+  .should .card-number { background: #d4a843; }
+  .should .section-title { color: #b8922a; }
+
+  .nice .section-icon { background: #e2ede3; }
+  .nice .card-number { background: #7a9e7e; }
+  .nice .section-title { color: #5a7e5e; }
+
+  .rethink .section-icon { background: #eae7f3; }
+  .rethink .card-number { background: #9b8ec4; }
+  .rethink .section-title { color: #7b6eaa; }
+
+  .tag-quick { background: #e2ede3; color: #5a7e5e; }
+  .tag-medium { background: #fcf7eb; color: #b8922a; }
+  .tag-heavy { background: #fde8e7; color: #dc4a3f; }
+  .tag-design { background: #eae7f3; color: #7b6eaa; }
+  .tag-decision { background: #f0f7fb; color: #4a7d96; }
+
+  /* Proposal box */
+  .proposal {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-left: 4px solid #9b8ec4;
+    border-radius: 0 12px 12px 0;
+    padding: 20px;
+    margin: 24px 0;
+  }
+  .proposal h3 {
+    font-size: 16px;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 10px;
+  }
+  .proposal p, .proposal li {
+    font-size: 13px;
+    color: #475569;
+    line-height: 1.7;
+  }
+  .proposal ul { padding-left: 18px; margin-top: 8px; }
+  .proposal li { margin-bottom: 4px; }
+
+  /* Status bar */
+  .status-bar {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-bottom: 36px;
+  }
+  .status-item {
+    text-align: center;
+    padding: 14px 8px;
+    border-radius: 12px;
+    background: white;
+    border: 1px solid #e2e8f0;
+  }
+  .status-num {
+    font-size: 24px;
+    font-weight: 800;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .status-label {
+    font-size: 11px;
+    font-weight: 500;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  /* Build info */
+  .build-info {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin-bottom: 32px;
+    font-size: 13px;
+    color: #64748b;
+  }
+  .build-info strong { color: #1e293b; }
+  .build-row { display: flex; justify-content: space-between; padding: 3px 0; }
+
+  /* Footer */
+  .footer {
+    text-align: center;
+    padding-top: 32px;
+    border-top: 1px solid #f1f5f9;
+    font-size: 12px;
+    color: #94a3b8;
+  }
+
+  @media (max-width: 480px) {
+    .container { padding: 20px 16px 40px; }
+    .header h1 { font-size: 26px; }
+    .status-bar { grid-template-columns: repeat(2, 1fr); }
+    .card-desc { margin-left: 0; margin-top: 6px; }
+    .card-tag { margin-left: 0; }
+  }
+</style>
+</head>
+<body>
+
+<button class="lang-toggle" onclick="toggleLang()">한국어</button>
+
+<div class="header">
+  <h1>
+    <span class="en">SnapDigest — Product Roadmap</span>
+    <span class="ko">SnapDigest — 제품 로드맵</span>
+  </h1>
+  <div class="subtitle">
+    <span class="en">What's next for the AI news reader</span>
+    <span class="ko">AI 뉴스 리더의 다음 단계</span>
+  </div>
+  <div class="date">
+    <span class="en">April 1, 2026</span>
+    <span class="ko">2026년 4월 1일</span>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- Build Info -->
+  <div class="build-info">
+    <div class="build-row"><span><strong>Current Build:</strong></span><span>v1.0.0 Build 12</span></div>
+    <div class="build-row"><span><strong>Stack:</strong></span><span>Flutter + Riverpod + Supabase</span></div>
+    <div class="build-row"><span><strong>Design:</strong></span><span>Editorial (Playfair Display + Inter)</span></div>
+    <div class="build-row"><span><strong>AI:</strong></span><span>GPT-4.1-mini/nano (curation + TTS)</span></div>
+    <div class="build-row"><span><strong>Repo:</strong></span><span>feedmiyo6/snapdigest (private)</span></div>
+  </div>
+
+  <!-- Status -->
+  <div class="status-bar">
+    <div class="status-item">
+      <div class="status-num" style="color:#ef6461;">4</div>
+      <div class="status-label">
+        <span class="en">Critical</span>
+        <span class="ko">필수</span>
+      </div>
+    </div>
+    <div class="status-item">
+      <div class="status-num" style="color:#d4a843;">5</div>
+      <div class="status-label">
+        <span class="en">Should Do</span>
+        <span class="ko">해야 함</span>
+      </div>
+    </div>
+    <div class="status-item">
+      <div class="status-num" style="color:#7a9e7e;">5</div>
+      <div class="status-label">
+        <span class="en">Nice to Have</span>
+        <span class="ko">있으면 좋음</span>
+      </div>
+    </div>
+    <div class="status-item">
+      <div class="status-num" style="color:#9b8ec4;">1</div>
+      <div class="status-label">
+        <span class="en">Rethink</span>
+        <span class="ko">재설계</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- RETHINK: Saved Section -->
+  <div class="section rethink">
+    <div class="section-header">
+      <div class="section-icon">🔄</div>
+      <div class="section-title">
+        <span class="en">Rethink: "Saved" Tab</span>
+        <span class="ko">재설계: "저장됨" 탭</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="proposal">
+    <h3>
+      <span class="en">💡 Proposal: Replace "Saved" → "Export & Share"</span>
+      <span class="ko">💡 제안: "저장됨" → "내보내기 & 공유"로 변경</span>
+    </h3>
+    <p>
+      <span class="en"><strong>The problem:</strong> Story Mode swipe/double-tap = selecting articles for your daily digest. That's NOT bookmarking. "Saved" creates confusion — it's just a redundant list of stuff users already chose to read. Nobody's going back to old articles.</span>
+      <span class="ko"><strong>문제:</strong> 스토리 모드 스와이프/더블탭 = 오늘의 다이제스트 선택. 이건 북마크가 아님. "저장됨"은 혼란을 줌 — 이미 읽기로 선택한 기사의 중복 목록일 뿐. 아무도 오래된 기사를 다시 보지 않음.</span>
+    </p>
+    <p style="margin-top: 12px;">
+      <span class="en"><strong>The fix:</strong> Replace the Saved tab with an "Export" feature:</span>
+      <span class="ko"><strong>해결:</strong> 저장됨 탭을 "내보내기" 기능으로 교체:</span>
+    </p>
+    <ul>
+      <li>
+        <span class="en"><strong>Export to PDF</strong> — Generate a beautiful digest PDF of your selected stories (today's picks). Share via AirDrop, email, Messages.</span>
+        <span class="ko"><strong>PDF 내보내기</strong> — 선택한 기사들의 아름다운 다이제스트 PDF 생성 (오늘의 선택). AirDrop, 이메일, 메시지로 공유.</span>
+      </li>
+      <li>
+        <span class="en"><strong>Share Cards</strong> — One-tap beautiful social cards (Instagram story size, Twitter card size) for individual articles.</span>
+        <span class="ko"><strong>공유 카드</strong> — 개별 기사용 아름다운 소셜 카드 원탭 생성 (인스타 스토리, 트위터 카드 크기).</span>
+      </li>
+      <li>
+        <span class="en"><strong>Weekly Digest Email</strong> — Auto-send yourself a summary of your week's reading.</span>
+        <span class="ko"><strong>주간 다이제스트 이메일</strong> — 이번 주 읽은 기사 요약을 자동 발송.</span>
+      </li>
+    </ul>
+    <p style="margin-top: 12px;">
+      <span class="en"><strong>Bottom nav becomes:</strong> Stories | Browse | Export | Settings (or Stories | Browse | Settings with Export accessible from article actions)</span>
+      <span class="ko"><strong>하단 내비:</strong> 스토리 | 브라우즈 | 내보내기 | 설정 (또는 스토리 | 브라우즈 | 설정 + 기사 액션에서 내보내기 접근)</span>
+    </p>
+  </div>
+
+  <!-- CRITICAL -->
+  <div class="section critical">
+    <div class="section-header">
+      <div class="section-icon">🔴</div>
+      <div class="section-title">
+        <span class="en">Critical — Before Public Beta</span>
+        <span class="ko">필수 — 공개 베타 전</span>
+      </div>
+      <div class="section-count">4</div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-number">1</div>
+        <div class="card-title">
+          <span class="en">Splash Screen (Use Existing App Icon)</span>
+          <span class="ko">스플래시 화면 (기존 앱 아이콘 사용)</span>
+        </div>
+      </div>
+      <div class="card-desc">
+        <span class="en">We have the icon — just need to wire it into flutter_native_splash for a polished launch experience. White background + centered icon + fade into app.</span>
+        <span class="ko">아이콘은 있음 — flutter_native_splash에 연결만 하면 됨. 흰 배경 + 중앙 아이콘 + 앱으로 페이드인.</span>
+      </div>
+      <span class="card-tag tag-quick">
+        <span class="en">⚡ Quick fix (30 min)</span>
+        <span class="ko">⚡ 빠른 수정 (30분)</span>
+      </span>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-number">2</div>
+        <div class="card-title">
+          <span class="en">"Read Full Article" Button Broken</span>
+          <span class="ko">"전체 기사 읽기" 버튼 미작동</span>
+        </div>
+      </div>
+      <div class="card-desc">
+        <span class="en">Article detail screen has a TODO where "Open URL" should launch the source article in Safari. Currently does nothing. Users need to read the original.</span>
+        <span class="ko">기사 상세 화면에서 "URL 열기"가 Safari에서 원본 기사를 열어야 하는데 현재 아무것도 안 함. 사용자가 원본을 읽을 수 있어야 함.</span>
+      </div>
+      <span class="card-tag tag-quick">
+        <span class="en">⚡ Quick fix (15 min)</span>
+        <span class="ko">⚡ 빠른 수정 (15분)</span>
+      </span>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-number">3</div>
+        <div class="card-title">
+          <span class="en">Graceful API Key Fallback</span>
+          <span class="ko">API 키 없을 때 안전한 폴백</span>
+        </div>
+      </div>
+      <div class="card-desc">
+        <span class="en">If OPENAI_API_KEY is missing, AI curation + TTS crash. Need: show articles without AI ranking, show "Audio unavailable" gracefully. Beta testers shouldn't see errors.</span>
+        <span class="ko">OPENAI_API_KEY 없으면 AI 큐레이션 + TTS 충돌. 필요: AI 없이 기사 표시, "오디오 사용 불가" 우아하게 표시. 베타 테스터가 오류를 보면 안 됨.</span>
+      </div>
+      <span class="card-tag tag-medium">
+        <span class="en">🔧 Medium (2-3 hrs)</span>
+        <span class="ko">🔧 중간 (2-3시간)</span>
+      </span>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-number">4</div>
+        <div class="card-title">
+          <span class="en">Remove or Replace "Saved" Tab</span>
+          <span class="ko">"저장됨" 탭 제거 또는 교체</span>
+        </div>
+      </div>
+      <div class="card-desc">
+        <span class="en">Current "Saved" is confusing — swiping in Story Mode isn't bookmarking, it's selecting for digest. Either remove the tab entirely (3-tab nav: Stories | Browse | Settings) or replace with Export/Share functionality.</span>
+        <span class="ko">현재 "저장됨"은 혼란스러움 — 스토리 모드 스와이프는 북마크가 아니라 다이제스트 선택. 탭을 완전히 제거(3탭: 스토리 | 브라우즈 | 설정)하거나 내보내기/공유로 교체.</span>
+      </div>
+      <span class="card-tag tag-decision">
+        <span class="en">🤔 Decision needed</span>
+        <span class="ko">🤔 결정 필요</span>
+      </span>
+    </div>
+  </div>
+
+  <!-- SHOULD DO -->
+  <div class="section should">
+    <div class="section-header">
+      <div class="section-icon">🟡</div>
+      <div class="section-title">
+        <span class="en">Should Do — Before Inviting More Testers</span>
+        <span class="ko">해야 함 — 추가 테스터 초대 전</span>
+      </div>
+      <div class="section-count">5</div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-number">5</div>
+        <div class="card-title">
+          <span class="en">Export to PDF Feature</span>
+          <span class="ko">PDF 내보내기 기능</span>
+        </div>
+      </div>
+      <div class="card-desc">
+        <span class="en">Generate a beautiful, shareable PDF of today's digest (selected articles from Story Mode). Include article summaries, source links, and the SnapDigest branding. Share via iOS share sheet.</span>
+        <span class="ko">오늘의 다이제스트(스토리 모드에서 선택한 기사)의 아름답고 공유 가능한 PDF 생성. 기사 요약, 소스 링크, SnapDigest 브랜딩 포함. iOS 공유 시트로 공유.</span>
+      </div>
+      <span class="card-tag tag-heavy">
+        <span class="en">🏗 Heavy (4-6 hrs)</span>
+        <span class="ko">🏗 대형 (4-6시간)</span>
+      </span>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-number">6</div>
+        <div class="card-title">
+          <span class="en">Onboarding Flow Polish</span>
+          <span class="ko">온보딩 플로우 다듬기</span>
+        </div>
+      </div>
+      <div class="card-desc">
+        <span class="en">Test full signup → category picks → time preference → app flow with new editorial design. Any jank here kills first impressions. Ensure animations are smooth and data persists.</span>
+        <span class="ko">새 에디토리얼 디자인으로 전체 가입 → 카테고리 선택 → 시간 설정 → 앱 플로우 테스트. 여기서 버벅이면 첫인상 망함. 애니메이션 부드럽고 데이터 유지 확인.</span>
+      </div>
+      <span class="card-tag tag-medium">
+        <span class="en">🔧 Medium (2 hrs)</span>
+        <span class="ko">🔧 중간 (2시간)</span>
+      </span>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-number">7</div>
+        <div class="card-title">
+          <span class="en">Push Notifications (Breaking News)</span>
+          <span class="ko">푸시 알림 (속보)</span>
+        </div>
+      </div>
+      <div class="card-desc">
+        <span class="en">Without push, "Breaking News" is just a screen users manually check. Need Firebase Cloud Messaging for real-time alerts. Makes the app feel alive.</span>
+        <span class="ko">푸시 없으면 "속보"는 사용자가 수동으로 확인하는 화면일 뿐. 실시간 알림을 위한 Firebase Cloud Messaging 필요. 앱이 살아있는 느낌.</span>
+      </div>
+      <span class="card-tag tag-heavy">
+        <span class="en">🏗 Heavy (4-5 hrs)</span>
+        <span class="ko">🏗 대형 (4-5시간)</span>
+      </span>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-number">8</div>
+        <div class="card-title">
+          <span class="en">Share Cards (Social Media)</span>
+          <span class="ko">공유 카드 (소셜 미디어)</span>
+        </div>
+      </div>
+      <div class="card-desc">
+        <span class="en">Beautiful, auto-generated image cards for sharing articles on Instagram Stories, Twitter, etc. Widget already exists (share_card_widget.dart) — needs deprecation fixes and new editorial design.</span>
+        <span class="ko">인스타그램 스토리, 트위터 등에 기사 공유를 위한 아름다운 자동 생성 이미지 카드. 위젯 이미 있음 — deprecated 수정과 새 에디토리얼 디자인 필요.</span>
+      </div>
+      <span class="card-tag tag-medium">
+        <span class="en">🔧 Medium (2-3 hrs)</span>
+        <span class="ko">🔧 중간 (2-3시간)</span>
+      </span>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-number">9</div>
+        <div class="card-title">
+          <span class="en">AdMob Decision</span>
+          <span class="ko">AdMob 결정</span>
+        </div>
+      </div>
+      <div class="card-desc">
+        <span class="en">google_mobile_ads isn't even in pubspec — all ad code errors out. Decision: launch beta ad-free (recommended — cleaner UX, add ads later when we have users) or wire up production AdMob IDs now.</span>
+        <span class="ko">google_mobile_ads가 pubspec에 없음 — 모든 광고 코드 에러. 결정: 베타를 광고 없이 출시(추천 — 깔끔한 UX, 사용자 생기면 나중에 추가) 또는 지금 프로덕션 AdMob ID 연결.</span>
+      </div>
+      <span class="card-tag tag-decision">
+        <span class="en">🤔 Decision needed</span>
+        <span class="ko">🤔 결정 필요</span>
+      </span>
+    </div>
+  </div>
+
+  <!-- NICE TO HAVE -->
+  <div class="section nice">
+    <div class="section-header">
+      <div class="section-icon">🟢</div>
+      <div class="section-title">
+        <span class="en">Nice to Have — Post-Launch Polish</span>
+        <span class="ko">있으면 좋음 — 출시 후 다듬기</span>
+      </div>
+      <div class="section-count">5</div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-number">10</div>
+        <div class="card-title">
+          <span class="en">iOS Home Screen Widget</span>
+          <span class="ko">iOS 홈 화면 위젯</span>
+        </div>
+      </div>
+      <div class="card-desc">
+        <span class="en">widget_service.dart exists. Show today's top 3 headlines on the home screen. Great for engagement — users see SnapDigest without opening the app.</span>
+        <span class="ko">widget_service.dart 있음. 홈 화면에 오늘의 상위 3개 헤드라인 표시. 참여도에 좋음 — 앱 열지 않아도 SnapDigest 보임.</span>
+      </div>
+      <span class="card-tag tag-medium">
+        <span class="en">🔧 Medium (3 hrs)</span>
+        <span class="ko">🔧 중간 (3시간)</span>
+      </span>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-number">11</div>
+        <div class="card-title">
+          <span class="en">Dark Mode Fine-Tuning</span>
+          <span class="ko">다크 모드 미세 조정</span>
+        </div>
+      </div>
+      <div class="card-desc">
+        <span class="en">New editorial design has dark mode colors defined but needs end-to-end testing. Premium dark mode should feel intentional, not just inverted.</span>
+        <span class="ko">새 에디토리얼 디자인에 다크 모드 색상 정의됨 — 종단 간 테스트 필요. 프리미엄 다크 모드는 단순 반전이 아닌 의도적이어야 함.</span>
+      </div>
+      <span class="card-tag tag-medium">
+        <span class="en">🔧 Medium (2 hrs)</span>
+        <span class="ko">🔧 중간 (2시간)</span>
+      </span>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-number">12</div>
+        <div class="card-title">
+          <span class="en">Analytics Events</span>
+          <span class="ko">분석 이벤트</span>
+        </div>
+      </div>
+      <div class="card-desc">
+        <span class="en">Zero tracking right now. Need: articles read, story swipes, audio plays, time spent, categories preferred. Essential for understanding what users actually use.</span>
+        <span class="ko">현재 추적 제로. 필요: 읽은 기사, 스토리 스와이프, 오디오 재생, 체류 시간, 선호 카테고리. 사용자가 실제로 무엇을 사용하는지 이해하는 데 필수.</span>
+      </div>
+      <span class="card-tag tag-medium">
+        <span class="en">🔧 Medium (3 hrs)</span>
+        <span class="ko">🔧 중간 (3시간)</span>
+      </span>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-number">13</div>
+        <div class="card-title">
+          <span class="en">Localization Completeness (EN/KO/ES)</span>
+          <span class="ko">현지화 완성도 (EN/KO/ES)</span>
+        </div>
+      </div>
+      <div class="card-desc">
+        <span class="en">l10n files exist but the redesigned UI probably has hardcoded English strings. Audit all screens and move text to ARB files.</span>
+        <span class="ko">l10n 파일 있지만 리디자인된 UI에 영어 하드코딩 있을 수 있음. 모든 화면 감사하고 텍스트를 ARB 파일로 이동.</span>
+      </div>
+      <span class="card-tag tag-medium">
+        <span class="en">🔧 Medium (2-3 hrs)</span>
+        <span class="ko">🔧 중간 (2-3시간)</span>
+      </span>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-number">14</div>
+        <div class="card-title">
+          <span class="en">Haptic Feedback</span>
+          <span class="ko">햅틱 피드백</span>
+        </div>
+      </div>
+      <div class="card-desc">
+        <span class="en">haptics.dart utility exists. Add subtle haptics to: story mode swipe, save/bookmark, audio play, pull-to-refresh. Makes the app feel premium.</span>
+        <span class="ko">haptics.dart 유틸리티 있음. 추가: 스토리 스와이프, 저장/북마크, 오디오 재생, 당겨서 새로고침에 미묘한 햅틱. 앱이 프리미엄 느낌.</span>
+      </div>
+      <span class="card-tag tag-quick">
+        <span class="en">⚡ Quick (1 hr)</span>
+        <span class="ko">⚡ 빠른 (1시간)</span>
+      </span>
+    </div>
+  </div>
+
+  <!-- What's Done -->
+  <div class="section" style="margin-top: 40px;">
+    <div class="section-header">
+      <div class="section-icon" style="background: #e2ede3;">✅</div>
+      <div class="section-title" style="color: #5a7e5e;">
+        <span class="en">Completed Today (April 1)</span>
+        <span class="ko">오늘 완료 (4월 1일)</span>
+      </div>
+    </div>
+    <div style="font-size: 13px; color: #64748b; line-height: 1.8; padding-left: 8px;">
+      <span class="en">
+        ✅ Full UI/UX redesign: Ghibli → Editorial (49 files, +4,863 lines)<br>
+        ✅ New typography: Playfair Display + Inter<br>
+        ✅ New color palette: Editorial Crimson + premium dark mode<br>
+        ✅ Landing page rebuilt: pastel, clean, professional<br>
+        ✅ Landing page live at feedmiyo6.github.io/snapdigest-landing<br>
+        ✅ UI UX Pro Max skill installed<br>
+        ✅ 7 bugs fixed: story position, images, audio player, mini player, lock screen<br>
+        ✅ TestFlight Build 12 uploaded
+      </span>
+      <span class="ko">
+        ✅ 전체 UI/UX 리디자인: 지브리 → 에디토리얼 (49개 파일, +4,863줄)<br>
+        ✅ 새 타이포그래피: Playfair Display + Inter<br>
+        ✅ 새 색상 팔레트: 에디토리얼 크림슨 + 프리미엄 다크 모드<br>
+        ✅ 랜딩 페이지 재구축: 파스텔, 깔끔, 전문적<br>
+        ✅ 랜딩 페이지 라이브: feedmiyo6.github.io/snapdigest-landing<br>
+        ✅ UI UX Pro Max 스킬 설치<br>
+        ✅ 7개 버그 수정: 스토리 위치, 이미지, 오디오 플레이어, 미니 플레이어, 잠금 화면<br>
+        ✅ TestFlight 빌드 12 업로드
+      </span>
+    </div>
+  </div>
+
+  <div class="footer">
+    <span class="en">SnapDigest Roadmap • Generated by Totoro 🌳 • April 1, 2026</span>
+    <span class="ko">SnapDigest 로드맵 • Totoro 생성 🌳 • 2026년 4월 1일</span>
+  </div>
+
+</div>
+
+<script>
+  let isKorean = false;
+  function toggleLang() {
+    isKorean = !isKorean;
+    document.querySelectorAll('.en').forEach(el => el.classList.toggle('hide', isKorean));
+    document.querySelectorAll('.ko').forEach(el => el.classList.toggle('show', isKorean));
+    document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+  }
+</script>
+
+</body>
+</html>
