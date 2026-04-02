@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 35: Synthesis Constraints — Timing & Area Targets</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    background: linear-gradient(135deg, #fefae0 0%, #faedcd 100%);
+    color: #3d405b;
+    line-height: 1.8;
+    padding: 24px;
+    max-width: 920px;
+    margin: 0 auto;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+h1 {
+    color: #5d4037;
+    border-bottom: 3px solid #c4a77d;
+    padding-bottom: 12px;
+    margin-bottom: 24px;
+    font-size: 2em;
+}
+h2 {
+    color: #588157;
+    border-bottom: 2px solid #a3b18a;
+    padding-bottom: 8px;
+    margin: 32px 0 16px;
+}
+h3 {
+    color: #5d4037;
+    margin: 20px 0 12px;
+}
+p { margin: 12px 0; }
+ul, ol { margin: 12px 0 12px 24px; }
+li { margin: 4px 0; }
+code {
+    background: #e9f5db;
+    color: #3d405b;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+}
+pre {
+    background: #2d3436;
+    padding: 24px;
+    border-radius: 12px;
+    margin: 24px 0;
+    border: 3px solid #a3b18a;
+    overflow-x: auto;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+    font-size: 15px;
+    line-height: 1.6;
+    color: #f8f8f2;
+}
+.keyword { color: #ff79c6; font-weight: 600; }
+.type { color: #8be9fd; }
+.signal { color: #50fa7b; }
+.number { color: #ffb86c; }
+.comment { color: #6272a4; font-style: italic; }
+.string { color: #f1fa8c; }
+.concept-box {
+    background: #fff8f0;
+    border: 2px solid #c4a77d;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    color: #3d405b;
+}
+.concept-box h3 { color: #5d4037; margin-bottom: 12px; }
+.warning-box {
+    background: #fff8f0;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    border-left: 4px solid #ef4444;
+    color: #3d405b;
+}
+.warning-box h3 { color: #c53030; margin-bottom: 12px; }
+.tip-box {
+    background: #fff8f0;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    border-left: 4px solid #588157;
+    color: #3d405b;
+}
+.comparison-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+.comparison-table th {
+    background: #588157;
+    color: white;
+    padding: 12px;
+    text-align: left;
+}
+.comparison-table td {
+    background: #fff;
+    border: 1px solid #c4a77d;
+    padding: 12px;
+    color: #3d405b;
+}
+.comparison-table tr:nth-child(even) td {
+    background: #fff8f0;
+}
+.lang-toggle {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    background: #588157;
+    border: none;
+    border-radius: 24px;
+    padding: 10px 20px;
+    cursor: pointer;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    z-index: 1000;
+}
+.lang-toggle:hover { background: #3a5a40; }
+.ko { display: none; }
+.nav-links {
+    display: flex;
+    gap: 12px;
+    margin: 24px 0;
+    flex-wrap: wrap;
+}
+.nav-links a {
+    background: linear-gradient(135deg, #588157, #3a5a40);
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14px;
+}
+.nav-links a:hover { opacity: 0.9; }
+.section {
+    background: #fff;
+    border-radius: 12px;
+    padding: 24px;
+    margin: 24px 0;
+    border: 1px solid #c4a77d;
+}
+@media (max-width: 768px) {
+    body { padding: 16px; }
+    h1 { font-size: 1.8em; }
+    pre { font-size: 14px; padding: 16px; }
+    .lang-toggle { padding: 8px 16px; font-size: 13px; }
+}
+</style>
+</head>
+<body>
+
+<button class="lang-toggle" onclick="toggleLang()">한국어</button>
+
+<h1>📅 Day 35: Synthesis Constraints</h1>
+<p class="en"><strong>Week 7, Lesson 5</strong> — Timing constraints, area targets, and guiding the synthesis tool to produce the hardware you actually want.</p>
+<p class="ko" style="display:none;"><strong>7주차, 5번째 수업</strong> — 타이밍 제약조건, 면적 목표, 그리고 합성 도구가 원하는 하드웨어를 만들도록 안내하기.</p>
+
+<div class="nav-links">
+    <a href="day-35-quiz.html">📝 Quiz</a>
+    <a href="day-35-practice.html">🔧 Practice</a>
+    <a href="day-34-lesson.html">← Day 34</a>
+</div>
+
+<!-- Section 1: Why Constraints Matter -->
+<div class="section">
+<h2>1. Why Synthesis Constraints Matter</h2>
+
+<p class="en">Synthesis tools are powerful optimizers — but they need <strong>direction</strong>. Without constraints, the tool doesn't know if you want the fastest, smallest, or most power-efficient circuit. Constraints are how you communicate your design intent to the tool.</p>
+<p class="ko" style="display:none;">합성 도구는 강력한 최적화 프로그램이지만, <strong>방향</strong>이 필요합니다. 제약조건 없이는 가장 빠른, 가장 작은, 또는 가장 전력 효율적인 회로 중 무엇을 원하는지 도구가 알 수 없습니다. 제약조건은 설계 의도를 도구에 전달하는 방법입니다.</p>
+
+<div class="concept-box">
+<h3>🎯 The Three Pillars of Constraints</h3>
+<p class="en"><strong>Timing</strong> — How fast must signals propagate?<br>
+<strong>Area</strong> — How much silicon can we use?<br>
+<strong>Power</strong> — How much energy can we consume?</p>
+<p class="ko" style="display:none;"><strong>타이밍</strong> — 신호가 얼마나 빨리 전파되어야 하는가?<br>
+<strong>면적</strong> — 실리콘을 얼마나 사용할 수 있는가?<br>
+<strong>전력</strong> — 에너지를 얼마나 소비할 수 있는가?</p>
+</div>
+
+<p class="en">These three are often in tension: making a circuit faster usually means more area and power. The synthesis tool navigates this tradeoff space based on your constraints.</p>
+<p class="ko" style="display:none;">이 세 가지는 종종 상충합니다: 회로를 더 빠르게 만들면 보통 면적과 전력이 증가합니다. 합성 도구는 여러분의 제약조건에 따라 이 트레이드오프 공간을 탐색합니다.</p>
+</div>
+
+<!-- Section 2: Timing Constraints -->
+<div class="section">
+<h2>2. Timing Constraints — The Clock</h2>
+
+<p class="en">The most fundamental constraint is the <strong>clock period</strong>. It defines the maximum time available for combinational logic between registers.</p>
+<p class="ko" style="display:none;">가장 기본적인 제약조건은 <strong>클럭 주기</strong>입니다. 레지스터 사이 조합 논리에 허용되는 최대 시간을 정의합니다.</p>
+
+<h3>Clock Definition (SDC Format)</h3>
+<p class="en">Industry-standard constraints use <strong>SDC (Synopsys Design Constraints)</strong> format. This is used across Synopsys, Cadence, and FPGA tools (Vivado, Quartus).</p>
+<p class="ko" style="display:none;">산업 표준 제약조건은 <strong>SDC (Synopsys Design Constraints)</strong> 형식을 사용합니다. Synopsys, Cadence, 그리고 FPGA 도구(Vivado, Quartus)에서 모두 사용됩니다.</p>
+
+<pre><span class="comment"># Define a 100 MHz clock (10 ns period)</span>
+<span class="keyword">create_clock</span> <span class="signal">-name</span> clk <span class="signal">-period</span> <span class="number">10.0</span> [<span class="keyword">get_ports</span> clk]
+
+<span class="comment"># Define a 250 MHz clock</span>
+<span class="keyword">create_clock</span> <span class="signal">-name</span> fast_clk <span class="signal">-period</span> <span class="number">4.0</span> [<span class="keyword">get_ports</span> fast_clk]
+
+<span class="comment"># Generated clock (PLL output, 2x frequency)</span>
+<span class="keyword">create_generated_clock</span> <span class="signal">-name</span> pll_clk \
+    <span class="signal">-source</span> [<span class="keyword">get_ports</span> clk] \
+    <span class="signal">-multiply_by</span> <span class="number">2</span> \
+    [<span class="keyword">get_pins</span> pll_inst/clk_out]</pre>
+
+<div class="concept-box">
+<h3>📐 Timing Budget Breakdown</h3>
+<p class="en">For a 10 ns clock period, the timing budget is:</p>
+<p class="ko" style="display:none;">10 ns 클럭 주기의 경우, 타이밍 예산은:</p>
+<pre><span class="comment">Clock Period = T_clk-to-q + T_comb + T_setup + T_skew</span>
+
+<span class="comment">Example at 100 MHz (10 ns):</span>
+<span class="type">T_clk-to-q</span> = <span class="number">0.3 ns</span>   <span class="comment">// FF output delay</span>
+<span class="type">T_setup</span>    = <span class="number">0.2 ns</span>   <span class="comment">// FF setup requirement</span>
+<span class="type">T_skew</span>     = <span class="number">0.1 ns</span>   <span class="comment">// Clock uncertainty</span>
+<span class="comment">─────────────────────────────</span>
+<span class="type">T_comb</span>     = <span class="number">9.4 ns</span>   <span class="comment">// Available for your logic!</span></pre>
+</div>
+</div>
+
+<!-- Section 3: Input/Output Delays -->
+<div class="section">
+<h2>3. I/O Delay Constraints</h2>
+
+<p class="en">Your design doesn't live in isolation — it connects to other chips and blocks. I/O constraints tell the tool how much of the timing budget is consumed <em>outside</em> your module.</p>
+<p class="ko" style="display:none;">여러분의 설계는 독립적으로 존재하지 않습니다 — 다른 칩과 블록에 연결됩니다. I/O 제약조건은 타이밍 예산의 얼마가 모듈 <em>외부</em>에서 소비되는지 도구에 알려줍니다.</p>
+
+<pre><span class="comment"># Input arrives 3ns after clock edge (from external source)</span>
+<span class="keyword">set_input_delay</span> <span class="number">3.0</span> <span class="signal">-clock</span> clk [<span class="keyword">get_ports</span> data_in*]
+
+<span class="comment"># Output must be stable 2ns before next clock edge (at receiver)</span>
+<span class="keyword">set_output_delay</span> <span class="number">2.0</span> <span class="signal">-clock</span> clk [<span class="keyword">get_ports</span> data_out*]
+
+<span class="comment"># Max transition time on ports (slew rate)</span>
+<span class="keyword">set_max_transition</span> <span class="number">0.5</span> [<span class="keyword">get_ports</span> *]
+
+<span class="comment"># Load capacitance on outputs</span>
+<span class="keyword">set_load</span> <span class="number">0.05</span> [<span class="keyword">get_ports</span> data_out*]</pre>
+
+<div class="tip-box">
+<h3>💡 Rule of Thumb for I/O Delays</h3>
+<p class="en">A common starting point: set input delay and output delay each to <strong>40-60% of the clock period</strong>. This leaves enough margin for your internal logic. For a 10 ns clock: <code>set_input_delay 4.0</code> and <code>set_output_delay 4.0</code> leaves 2 ns for internal paths.</p>
+<p class="ko" style="display:none;">일반적인 시작점: 입력 지연과 출력 지연을 각각 <strong>클럭 주기의 40-60%</strong>로 설정합니다. 이렇게 하면 내부 논리에 충분한 여유가 남습니다. 10 ns 클럭의 경우: <code>set_input_delay 4.0</code>과 <code>set_output_delay 4.0</code>으로 내부 경로에 2 ns가 남습니다.</p>
+</div>
+</div>
+
+<!-- Section 4: Clock Uncertainty & Groups -->
+<div class="section">
+<h2>4. Clock Uncertainty & Clock Groups</h2>
+
+<p class="en">Real clocks aren't perfect. Jitter and skew must be accounted for.</p>
+<p class="ko" style="display:none;">실제 클럭은 완벽하지 않습니다. 지터와 스큐를 고려해야 합니다.</p>
+
+<pre><span class="comment"># Clock uncertainty (jitter + skew)</span>
+<span class="keyword">set_clock_uncertainty</span> <span class="number">0.2</span> <span class="signal">-setup</span> [<span class="keyword">get_clocks</span> clk]
+<span class="keyword">set_clock_uncertainty</span> <span class="number">0.05</span> <span class="signal">-hold</span> [<span class="keyword">get_clocks</span> clk]
+
+<span class="comment"># Mark asynchronous clock domains</span>
+<span class="comment"># Tells tool NOT to check timing between these domains</span>
+<span class="keyword">set_clock_groups</span> <span class="signal">-asynchronous</span> \
+    <span class="signal">-group</span> [<span class="keyword">get_clocks</span> clk_a] \
+    <span class="signal">-group</span> [<span class="keyword">get_clocks</span> clk_b]</pre>
+
+<div class="warning-box">
+<h3>⚠️ Common Mistake: Forgetting Clock Groups</h3>
+<p class="en">If you have multiple asynchronous clocks and don't define <code>set_clock_groups</code>, the tool will try to meet timing between them — wasting effort on impossible paths and potentially making other paths worse. Always declare your CDC boundaries!</p>
+<p class="ko" style="display:none;">여러 비동기 클럭이 있는데 <code>set_clock_groups</code>를 정의하지 않으면, 도구는 그들 사이의 타이밍을 맞추려고 시도합니다 — 불가능한 경로에 노력을 낭비하고 다른 경로를 더 나쁘게 만들 수 있습니다. 항상 CDC 경계를 선언하세요!</p>
+</div>
+</div>
+
+<!-- Section 5: False Paths & Multicycle -->
+<div class="section">
+<h2>5. False Paths & Multicycle Paths</h2>
+
+<p class="en">Not every path needs to meet the single-cycle clock constraint. Some paths are never sensitized, and others are designed to take multiple cycles.</p>
+<p class="ko" style="display:none;">모든 경로가 단일 사이클 클럭 제약조건을 만족할 필요는 없습니다. 일부 경로는 활성화되지 않으며, 다른 경로는 여러 사이클에 걸쳐 동작하도록 설계됩니다.</p>
+
+<pre><span class="comment"># False path: reset is async, don't time it</span>
+<span class="keyword">set_false_path</span> <span class="signal">-from</span> [<span class="keyword">get_ports</span> rst_n]
+
+<span class="comment"># False path: static config registers (set once at boot)</span>
+<span class="keyword">set_false_path</span> <span class="signal">-from</span> [<span class="keyword">get_cells</span> config_reg*]
+
+<span class="comment"># Multicycle path: this operation takes 3 clock cycles</span>
+<span class="keyword">set_multicycle_path</span> <span class="number">3</span> <span class="signal">-setup</span> \
+    <span class="signal">-from</span> [<span class="keyword">get_cells</span> mult_stage1*] \
+    <span class="signal">-to</span> [<span class="keyword">get_cells</span> mult_result*]
+<span class="keyword">set_multicycle_path</span> <span class="number">2</span> <span class="signal">-hold</span> \
+    <span class="signal">-from</span> [<span class="keyword">get_cells</span> mult_stage1*] \
+    <span class="signal">-to</span> [<span class="keyword">get_cells</span> mult_result*]</pre>
+
+<div class="concept-box">
+<h3>📋 When to Use Each</h3>
+<table class="comparison-table">
+<tr><th>Constraint</th><th>When to Use</th><th>Example</th></tr>
+<tr><td><code>set_false_path</code></td><td class="en">Path will never be active in real operation</td><td class="en">Async reset, static config, test pins</td></tr>
+<tr><td class="ko" style="display:none;" colspan="2">경로가 실제 동작에서 활성화되지 않음 — 비동기 리셋, 정적 설정, 테스트 핀</td></tr>
+<tr><td><code>set_multicycle_path</code></td><td class="en">Logic intentionally takes N cycles</td><td class="en">Multipliers, dividers, slow interfaces</td></tr>
+<tr><td class="ko" style="display:none;" colspan="2">논리가 의도적으로 N 사이클 소요 — 곱셈기, 나눗셈기, 느린 인터페이스</td></tr>
+</table>
+</div>
+
+<div class="warning-box">
+<h3>⚠️ Multicycle Hold Rule</h3>
+<p class="en">When setting a multicycle path of N for setup, <strong>always set hold to N-1</strong>. Otherwise the hold check moves to the wrong edge and you get hold violations.</p>
+<p class="ko" style="display:none;">셋업에 대해 N의 멀티사이클 경로를 설정할 때, <strong>항상 홀드를 N-1로 설정</strong>하세요. 그렇지 않으면 홀드 체크가 잘못된 에지로 이동하여 홀드 위반이 발생합니다.</p>
+<pre><span class="comment"># CORRECT: 3-cycle setup, 2-cycle hold</span>
+<span class="keyword">set_multicycle_path</span> <span class="number">3</span> <span class="signal">-setup</span> <span class="signal">-from</span> A <span class="signal">-to</span> B
+<span class="keyword">set_multicycle_path</span> <span class="number">2</span> <span class="signal">-hold</span>  <span class="signal">-from</span> A <span class="signal">-to</span> B
+
+<span class="comment"># WRONG: Missing hold — will cause hold violations!</span>
+<span class="keyword">set_multicycle_path</span> <span class="number">3</span> <span class="signal">-setup</span> <span class="signal">-from</span> A <span class="signal">-to</span> B
+<span class="comment">// ← hold defaults to 0, checks at wrong edge!</span></pre>
+</div>
+</div>
+
+<!-- Section 6: Area Constraints -->
+<div class="section">
+<h2>6. Area Constraints</h2>
+
+<p class="en">Area constraints limit how much silicon your design can consume. This is critical when you're part of a larger SoC — each block has a "budget."</p>
+<p class="ko" style="display:none;">면적 제약조건은 설계가 소비할 수 있는 실리콘 양을 제한합니다. 더 큰 SoC의 일부일 때 중요합니다 — 각 블록은 "예산"이 있습니다.</p>
+
+<pre><span class="comment"># Set maximum area (in library units, usually µm²)</span>
+<span class="keyword">set_max_area</span> <span class="number">50000</span>
+
+<span class="comment"># In Design Compiler:</span>
+<span class="comment"># Prioritize area over timing (after timing is met)</span>
+<span class="keyword">set_cost_priority</span> <span class="signal">-delay</span>  <span class="comment">// Default: timing first</span>
+
+<span class="comment"># Or optimize for minimum area</span>
+<span class="keyword">compile_ultra</span> <span class="signal">-area</span></pre>
+
+<div class="concept-box">
+<h3>📊 Area Units</h3>
+<p class="en"><strong>ASIC</strong>: Area measured in µm² or "gate equivalents" (GE). 1 GE = area of a 2-input NAND gate.<br>
+<strong>FPGA</strong>: Area measured in LUTs (Look-Up Tables), FFs, BRAMs, DSP slices.<br>
+A design using "10K gates" means ~10,000 NAND2-equivalent gates.</p>
+<p class="ko" style="display:none;"><strong>ASIC</strong>: 면적을 µm² 또는 "게이트 등가" (GE)로 측정. 1 GE = 2입력 NAND 게이트 면적.<br>
+<strong>FPGA</strong>: 면적을 LUT (Look-Up Table), FF, BRAM, DSP 슬라이스로 측정.<br>
+"10K 게이트" 사용 설계 = ~10,000 NAND2 등가 게이트.</p>
+</div>
+</div>
+
+<!-- Section 7: Practical Constraint File -->
+<div class="section">
+<h2>7. A Complete SDC Constraint File</h2>
+
+<p class="en">Here's a realistic constraint file you might see in a real project:</p>
+<p class="ko" style="display:none;">실제 프로젝트에서 볼 수 있는 현실적인 제약조건 파일입니다:</p>
+
+<pre><span class="comment">################################################################</span>
+<span class="comment"># design_constraints.sdc</span>
+<span class="comment"># Ethernet MAC block — 125 MHz operation</span>
+<span class="comment">################################################################</span>
+
+<span class="comment"># ---- Clock Definitions ----</span>
+<span class="keyword">create_clock</span> <span class="signal">-name</span> sys_clk <span class="signal">-period</span> <span class="number">8.0</span> [<span class="keyword">get_ports</span> clk_125m]
+<span class="keyword">create_clock</span> <span class="signal">-name</span> mgmt_clk <span class="signal">-period</span> <span class="number">40.0</span> [<span class="keyword">get_ports</span> clk_25m]
+
+<span class="comment"># ---- Clock Relationships ----</span>
+<span class="keyword">set_clock_groups</span> <span class="signal">-asynchronous</span> \
+    <span class="signal">-group</span> [<span class="keyword">get_clocks</span> sys_clk] \
+    <span class="signal">-group</span> [<span class="keyword">get_clocks</span> mgmt_clk]
+
+<span class="comment"># ---- Clock Uncertainty ----</span>
+<span class="keyword">set_clock_uncertainty</span> <span class="number">0.15</span> <span class="signal">-setup</span> [<span class="keyword">get_clocks</span> sys_clk]
+<span class="keyword">set_clock_uncertainty</span> <span class="number">0.05</span> <span class="signal">-hold</span> [<span class="keyword">get_clocks</span> sys_clk]
+
+<span class="comment"># ---- I/O Delays ----</span>
+<span class="keyword">set_input_delay</span> <span class="number">3.0</span> <span class="signal">-clock</span> sys_clk [<span class="keyword">get_ports</span> {rx_data* rx_valid}]
+<span class="keyword">set_output_delay</span> <span class="number">2.5</span> <span class="signal">-clock</span> sys_clk [<span class="keyword">get_ports</span> {tx_data* tx_valid}]
+
+<span class="comment"># ---- False Paths ----</span>
+<span class="keyword">set_false_path</span> <span class="signal">-from</span> [<span class="keyword">get_ports</span> rst_n]
+<span class="keyword">set_false_path</span> <span class="signal">-from</span> [<span class="keyword">get_cells</span> cfg_regs/reg_*]
+
+<span class="comment"># ---- Multicycle Paths ----</span>
+<span class="comment"># CRC computation takes 2 cycles</span>
+<span class="keyword">set_multicycle_path</span> <span class="number">2</span> <span class="signal">-setup</span> \
+    <span class="signal">-from</span> [<span class="keyword">get_cells</span> crc_gen/*] \
+    <span class="signal">-to</span> [<span class="keyword">get_cells</span> crc_result*]
+<span class="keyword">set_multicycle_path</span> <span class="number">1</span> <span class="signal">-hold</span> \
+    <span class="signal">-from</span> [<span class="keyword">get_cells</span> crc_gen/*] \
+    <span class="signal">-to</span> [<span class="keyword">get_cells</span> crc_result*]
+
+<span class="comment"># ---- Area Target ----</span>
+<span class="keyword">set_max_area</span> <span class="number">75000</span>
+
+<span class="comment"># ---- Design Rule Constraints ----</span>
+<span class="keyword">set_max_transition</span> <span class="number">0.4</span> [<span class="keyword">current_design</span>]
+<span class="keyword">set_max_fanout</span> <span class="number">32</span> [<span class="keyword">current_design</span>]</pre>
+</div>
+
+<!-- Section 8: Reading Timing Reports -->
+<div class="section">
+<h2>8. Reading Timing Reports</h2>
+
+<p class="en">After synthesis, the tool generates timing reports. Here's how to read the critical information:</p>
+<p class="ko" style="display:none;">합성 후, 도구는 타이밍 리포트를 생성합니다. 중요한 정보를 읽는 방법은 다음과 같습니다:</p>
+
+<pre><span class="comment">Startpoint: rx_data_reg[0] (rising edge-triggered flip-flop clocked by sys_clk)</span>
+<span class="comment">Endpoint:   tx_fifo/wr_data_reg[0] (rising edge-triggered flip-flop clocked by sys_clk)</span>
+<span class="comment">Path Group:  sys_clk</span>
+<span class="comment">Path Type:   max (setup check)</span>
+
+<span class="type">Point                              Incr       Path</span>
+<span class="comment">──────────────────────────────────────────────────────</span>
+<span class="signal">clock sys_clk (rise edge)</span>          <span class="number">0.000</span>      <span class="number">0.000</span>
+<span class="signal">rx_data_reg[0]/CK (DFF)</span>           <span class="number">0.000</span>      <span class="number">0.000</span>
+<span class="signal">rx_data_reg[0]/Q (DFF)</span>            <span class="number">0.280</span>      <span class="number">0.280</span>   <span class="comment">← clk-to-q</span>
+<span class="signal">U45/Y (AND2)</span>                      <span class="number">0.150</span>      <span class="number">0.430</span>   <span class="comment">← logic delay</span>
+<span class="signal">U67/Y (OR3)</span>                       <span class="number">0.220</span>      <span class="number">0.650</span>
+<span class="signal">U89/Y (MUX2)</span>                      <span class="number">0.310</span>      <span class="number">0.960</span>
+<span class="signal">tx_fifo/wr_data_reg[0]/D</span>          <span class="number">0.050</span>      <span class="number">1.010</span>   <span class="comment">← wire delay</span>
+<span class="comment">──────────────────────────────────────────────────────</span>
+<span class="type">data arrival time</span>                                <span class="number">1.010</span>
+
+<span class="signal">clock sys_clk (rise edge)</span>          <span class="number">8.000</span>      <span class="number">8.000</span>
+<span class="signal">clock uncertainty</span>                  <span class="number">-0.150</span>     <span class="number">7.850</span>
+<span class="signal">library setup time</span>                 <span class="number">-0.080</span>     <span class="number">7.770</span>
+<span class="comment">──────────────────────────────────────────────────────</span>
+<span class="type">data required time</span>                               <span class="number">7.770</span>
+<span class="comment">──────────────────────────────────────────────────────</span>
+<span class="keyword">slack (MET)</span>                                       <span class="signal">6.760</span></pre>
+
+<div class="concept-box">
+<h3>🔑 Key Terms in Timing Reports</h3>
+<table class="comparison-table">
+<tr><th>Term</th><th>Meaning</th></tr>
+<tr><td class="en"><strong>Slack</strong></td><td class="en">Required time − Arrival time. Positive = good (met). Negative = violation (fail).</td></tr>
+<tr class="ko" style="display:none;"><td><strong>Slack</strong></td><td>요구 시간 − 도착 시간. 양수 = 충족. 음수 = 위반(실패).</td></tr>
+<tr><td class="en"><strong>WNS</strong></td><td class="en">Worst Negative Slack — the most critical path. Target: ≥ 0.</td></tr>
+<tr class="ko" style="display:none;"><td><strong>WNS</strong></td><td>최악 음수 슬랙 — 가장 중요한 경로. 목표: ≥ 0.</td></tr>
+<tr><td class="en"><strong>TNS</strong></td><td class="en">Total Negative Slack — sum of all negative slacks. Shows overall health.</td></tr>
+<tr class="ko" style="display:none;"><td><strong>TNS</strong></td><td>총 음수 슬랙 — 모든 음수 슬랙의 합. 전체 상태를 보여줌.</td></tr>
+<tr><td class="en"><strong>FEP</strong></td><td class="en">Failing Endpoint count — how many paths violate timing.</td></tr>
+<tr class="ko" style="display:none;"><td><strong>FEP</strong></td><td>실패 종단점 수 — 타이밍을 위반하는 경로 수.</td></tr>
+</table>
+</div>
+</div>
+
+<!-- Section 9: Optimization Strategies -->
+<div class="section">
+<h2>9. When Timing Doesn't Meet — Strategies</h2>
+
+<p class="en">Timing closure is iterative. Here's your playbook when paths violate:</p>
+<p class="ko" style="display:none;">타이밍 클로저는 반복적입니다. 경로가 위반할 때의 전략입니다:</p>
+
+<table class="comparison-table">
+<tr><th>Strategy</th><th class="en">When to Use</th><th class="en">Effect</th></tr>
+<tr class="ko" style="display:none;"><th>전략</th><th>사용 시기</th><th>효과</th></tr>
+<tr><td class="en"><strong>Pipeline</strong></td><td class="en">Long combinational path</td><td class="en">↑ Throughput, ↑ Latency, ↑ Area</td></tr>
+<tr class="ko" style="display:none;"><td><strong>파이프라인</strong></td><td>긴 조합 경로</td><td>↑ 처리량, ↑ 지연, ↑ 면적</td></tr>
+<tr><td class="en"><strong>Restructure logic</strong></td><td class="en">Unbalanced fan-in</td><td class="en">Balances delay, minimal area impact</td></tr>
+<tr class="ko" style="display:none;"><td><strong>논리 재구조화</strong></td><td>불균형한 팬인</td><td>지연 균형, 최소 면적 영향</td></tr>
+<tr><td class="en"><strong>Reduce fanout</strong></td><td class="en">High fanout nets</td><td class="en">Clones drivers, ↑ Area slightly</td></tr>
+<tr class="ko" style="display:none;"><td><strong>팬아웃 감소</strong></td><td>높은 팬아웃 넷</td><td>드라이버 복제, 면적 약간 증가</td></tr>
+<tr><td class="en"><strong>Relax constraint</strong></td><td class="en">Overconstrained path</td><td class="en">Use multicycle_path or false_path</td></tr>
+<tr class="ko" style="display:none;"><td><strong>제약 완화</strong></td><td>과도하게 제약된 경로</td><td>multicycle_path 또는 false_path 사용</td></tr>
+<tr><td class="en"><strong>Upsize cells</strong></td><td class="en">Specific slow gates</td><td class="en">↑ Drive strength, ↑ Area + Power</td></tr>
+<tr class="ko" style="display:none;"><td><strong>셀 크기 증가</strong></td><td>특정 느린 게이트</td><td>↑ 구동 강도, ↑ 면적 + 전력</td></tr>
+</table>
+
+<div class="tip-box">
+<h3>💡 Interview Gold: "How do you close timing?"</h3>
+<p class="en"><strong>Answer framework:</strong> "First, I check the timing report to identify the critical path. I look at whether it's a real path or can be constrained away (false path, multicycle). If it's real, I consider pipelining, restructuring the logic to reduce depth, or reducing fanout. Upsizing cells is a last resort as it increases area and power."</p>
+<p class="ko" style="display:none;"><strong>답변 프레임워크:</strong> "먼저 타이밍 리포트를 확인하여 크리티컬 패스를 식별합니다. 실제 경로인지 또는 제약으로 제거할 수 있는지(false path, multicycle) 확인합니다. 실제 경로면 파이프라이닝, 깊이 감소를 위한 논리 재구조화, 또는 팬아웃 감소를 고려합니다. 셀 크기 증가는 면적과 전력이 증가하므로 최후의 수단입니다."</p>
+</div>
+</div>
+
+<!-- Section 10: Week 7 Recap -->
+<div class="section">
+<h2>10. Week 7 Complete! 🎉</h2>
+
+<p class="en">You've completed the <strong>Synthesis Thinking</strong> week! Here's what you've learned:</p>
+<p class="ko" style="display:none;"><strong>합성 사고</strong> 주차를 완료했습니다! 배운 내용입니다:</p>
+
+<table class="comparison-table">
+<tr><th>Day</th><th>Topic</th><th class="en">Key Takeaway</th></tr>
+<tr class="ko" style="display:none;"><th>일차</th><th>주제</th><th>핵심 내용</th></tr>
+<tr><td>31</td><td class="en">What Synthesis Does</td><td class="en">RTL → gates → optimized netlist</td></tr>
+<tr class="ko" style="display:none;"><td>31</td><td>합성이 하는 일</td><td>RTL → 게이트 → 최적화된 넷리스트</td></tr>
+<tr><td>32</td><td class="en">Inferred Hardware</td><td class="en">Code patterns map to specific hardware</td></tr>
+<tr class="ko" style="display:none;"><td>32</td><td>추론된 하드웨어</td><td>코드 패턴이 특정 하드웨어에 매핑</td></tr>
+<tr><td>33</td><td class="en">Latch Avoidance</td><td class="en">Incomplete assignments → unintended latches</td></tr>
+<tr class="ko" style="display:none;"><td>33</td><td>래치 방지</td><td>불완전한 할당 → 의도하지 않은 래치</td></tr>
+<tr><td>34</td><td class="en">Area vs Performance</td><td class="en">Every optimization is a tradeoff</td></tr>
+<tr class="ko" style="display:none;"><td>34</td><td>면적 vs 성능</td><td>모든 최적화는 트레이드오프</td></tr>
+<tr><td>35</td><td class="en">Synthesis Constraints</td><td class="en">SDC guides the tool to build what you want</td></tr>
+<tr class="ko" style="display:none;"><td>35</td><td>합성 제약조건</td><td>SDC가 도구를 안내하여 원하는 것을 구축</td></tr>
+</table>
+
+<p class="en"><strong>Next week:</strong> Week 8 — Mini Projects! You'll build a FIFO, pipeline stage, and arbiter from scratch. 🚀</p>
+<p class="ko" style="display:none;"><strong>다음 주:</strong> 8주차 — 미니 프로젝트! FIFO, 파이프라인 스테이지, 아비터를 처음부터 만듭니다. 🚀</p>
+</div>
+
+<div class="nav-links">
+    <a href="day-35-quiz.html">📝 Take the Quiz</a>
+    <a href="day-35-practice.html">🔧 Practice Exercises</a>
+    <a href="day-34-lesson.html">← Day 34</a>
+</div>
+
+<script>
+let isKorean = false;
+function toggleLang() {
+    isKorean = !isKorean;
+    document.querySelectorAll('.en').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'none' : 'revert', 'important');
+    });
+    document.querySelectorAll('.ko').forEach(el => {
+        el.style.setProperty('display', isKorean ? 'revert' : 'none', 'important');
+    });
+    document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+}
+</script>
+</body>
+</html>

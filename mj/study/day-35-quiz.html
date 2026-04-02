@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 35 Quiz: Synthesis Constraints</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    background: linear-gradient(135deg, #fefae0 0%, #faedcd 100%);
+    color: #3d405b;
+    line-height: 1.8;
+    padding: 24px;
+    max-width: 920px;
+    margin: 0 auto;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+h1 {
+    color: #5d4037;
+    border-bottom: 3px solid #c4a77d;
+    padding-bottom: 12px;
+    margin-bottom: 24px;
+    font-size: 2em;
+}
+h2 {
+    color: #588157;
+    border-bottom: 2px solid #a3b18a;
+    padding-bottom: 8px;
+    margin: 32px 0 16px;
+}
+h3 { color: #5d4037; margin: 20px 0 12px; }
+p { margin: 12px 0; }
+code {
+    background: #e9f5db;
+    color: #3d405b;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+}
+pre {
+    background: #2d3436;
+    padding: 24px;
+    border-radius: 12px;
+    margin: 24px 0;
+    border: 3px solid #a3b18a;
+    overflow-x: auto;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+    font-size: 15px;
+    line-height: 1.6;
+    color: #f8f8f2;
+}
+.keyword { color: #ff79c6; font-weight: 600; }
+.type { color: #8be9fd; }
+.signal { color: #50fa7b; }
+.number { color: #ffb86c; }
+.comment { color: #6272a4; font-style: italic; }
+.lang-toggle {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    background: #588157;
+    border: none;
+    border-radius: 24px;
+    padding: 10px 20px;
+    cursor: pointer;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    z-index: 1000;
+}
+.lang-toggle:hover { background: #3a5a40; }
+.ko { display: none; }
+.nav-links {
+    display: flex;
+    gap: 12px;
+    margin: 24px 0;
+    flex-wrap: wrap;
+}
+.nav-links a {
+    background: linear-gradient(135deg, #588157, #3a5a40);
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14px;
+}
+.nav-links a:hover { opacity: 0.9; }
+.question {
+    background: #fff;
+    border-radius: 12px;
+    padding: 24px;
+    margin: 20px 0;
+    border: 1px solid #c4a77d;
+}
+.question h3 { margin-bottom: 16px; }
+.options { list-style: none; padding: 0; }
+.options li {
+    background: #fff8f0;
+    border: 2px solid #c4a77d;
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin: 8px 0;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.options li:hover { border-color: #588157; background: #e9f5db; }
+.options li.correct { background: #d4edda; border-color: #10b981; }
+.options li.incorrect { background: #fde8e8; border-color: #ef4444; }
+.options li.disabled { pointer-events: none; opacity: 0.7; }
+.explanation {
+    background: #fff8f0;
+    border-left: 4px solid #588157;
+    border-radius: 8px;
+    padding: 15px;
+    margin-top: 12px;
+    display: none;
+    color: #3d405b;
+}
+.score-box {
+    background: #fff8f0;
+    border: 2px solid #c4a77d;
+    border-radius: 12px;
+    padding: 24px;
+    margin: 24px 0;
+    text-align: center;
+}
+.score-box h2 { border: none; }
+.score-display { font-size: 2.5em; color: #588157; font-weight: 700; margin: 12px 0; }
+@media (max-width: 768px) {
+    body { padding: 16px; }
+    h1 { font-size: 1.8em; }
+    pre { font-size: 14px; padding: 16px; }
+    .lang-toggle { padding: 8px 16px; font-size: 13px; }
+}
+</style>
+</head>
+<body>
+
+<button class="lang-toggle" onclick="toggleLang()">한국어</button>
+
+<h1>📝 Day 35 Quiz: Synthesis Constraints</h1>
+<p class="en">Test your knowledge of SDC constraints, timing budgets, and synthesis optimization.</p>
+<p class="ko" style="display:none;">SDC 제약조건, 타이밍 예산, 합성 최적화에 대한 지식을 테스트하세요.</p>
+
+<div class="nav-links">
+    <a href="day-35-lesson.html">📖 Lesson</a>
+    <a href="day-35-practice.html">🔧 Practice</a>
+</div>
+
+<div id="score-box" class="score-box" style="display:none;">
+    <h2>Quiz Complete! 🎉</h2>
+    <div class="score-display" id="score-display"></div>
+    <p id="score-message"></p>
+</div>
+
+<!-- Q1 -->
+<div class="question" id="q1">
+<h3 class="en">Q1: What format is the industry standard for synthesis constraints?</h3>
+<h3 class="ko" style="display:none;">Q1: 합성 제약조건의 산업 표준 형식은 무엇인가?</h3>
+<ul class="options">
+<li onclick="checkAnswer(1, this, 'C')">A) <span class="en">UCF (User Constraint File)</span><span class="ko" style="display:none;">UCF (사용자 제약 파일)</span></li>
+<li onclick="checkAnswer(1, this, 'C')">B) <span class="en">XDC (Xilinx Design Constraints)</span><span class="ko" style="display:none;">XDC (Xilinx 설계 제약)</span></li>
+<li onclick="checkAnswer(1, this, 'C')">C) <span class="en">SDC (Synopsys Design Constraints)</span><span class="ko" style="display:none;">SDC (Synopsys 설계 제약)</span></li>
+<li onclick="checkAnswer(1, this, 'C')">D) <span class="en">TCL (Tool Command Language)</span><span class="ko" style="display:none;">TCL (도구 명령 언어)</span></li>
+</ul>
+<div class="explanation" id="exp1">
+<p class="en">✅ <strong>SDC</strong> is the industry standard, used across Synopsys, Cadence, and FPGA tools (Vivado uses XDC which is SDC-compatible). TCL is the scripting language SDC is written in, not the constraint format itself.</p>
+<p class="ko" style="display:none;">✅ <strong>SDC</strong>는 Synopsys, Cadence 및 FPGA 도구 전반에서 사용되는 산업 표준입니다(Vivado는 SDC 호환 XDC 사용). TCL은 SDC가 작성되는 스크립팅 언어이지 제약 형식 자체가 아닙니다.</p>
+</div>
+</div>
+
+<!-- Q2 -->
+<div class="question" id="q2">
+<h3 class="en">Q2: What does <code>create_clock -name clk -period 8.0 [get_ports clk]</code> define?</h3>
+<h3 class="ko" style="display:none;">Q2: <code>create_clock -name clk -period 8.0 [get_ports clk]</code>는 무엇을 정의하는가?</h3>
+<ul class="options">
+<li onclick="checkAnswer(2, this, 'B')">A) <span class="en">An 8 MHz clock</span><span class="ko" style="display:none;">8 MHz 클럭</span></li>
+<li onclick="checkAnswer(2, this, 'B')">B) <span class="en">A 125 MHz clock (8 ns period)</span><span class="ko" style="display:none;">125 MHz 클럭 (8 ns 주기)</span></li>
+<li onclick="checkAnswer(2, this, 'B')">C) <span class="en">A clock with 8 ns duty cycle</span><span class="ko" style="display:none;">8 ns 듀티 사이클의 클럭</span></li>
+<li onclick="checkAnswer(2, this, 'B')">D) <span class="en">An 800 MHz clock</span><span class="ko" style="display:none;">800 MHz 클럭</span></li>
+</ul>
+<div class="explanation" id="exp2">
+<p class="en">✅ Period is in nanoseconds. 1/8ns = 125 MHz. The <code>-period</code> flag specifies the full clock cycle time.</p>
+<p class="ko" style="display:none;">✅ 주기는 나노초 단위입니다. 1/8ns = 125 MHz. <code>-period</code> 플래그는 전체 클럭 주기 시간을 지정합니다.</p>
+</div>
+</div>
+
+<!-- Q3 -->
+<div class="question" id="q3">
+<h3 class="en">Q3: What is "slack" in a timing report?</h3>
+<h3 class="ko" style="display:none;">Q3: 타이밍 리포트에서 "slack"이란 무엇인가?</h3>
+<ul class="options">
+<li onclick="checkAnswer(3, this, 'A')">A) <span class="en">Required time − Arrival time</span><span class="ko" style="display:none;">요구 시간 − 도착 시간</span></li>
+<li onclick="checkAnswer(3, this, 'A')">B) <span class="en">Arrival time − Required time</span><span class="ko" style="display:none;">도착 시간 − 요구 시간</span></li>
+<li onclick="checkAnswer(3, this, 'A')">C) <span class="en">Clock period − Setup time</span><span class="ko" style="display:none;">클럭 주기 − 셋업 시간</span></li>
+<li onclick="checkAnswer(3, this, 'A')">D) <span class="en">Total path delay</span><span class="ko" style="display:none;">총 경로 지연</span></li>
+</ul>
+<div class="explanation" id="exp3">
+<p class="en">✅ Slack = Data Required Time − Data Arrival Time. Positive slack means timing is met; negative slack means violation.</p>
+<p class="ko" style="display:none;">✅ Slack = 데이터 요구 시간 − 데이터 도착 시간. 양수 슬랙은 타이밍 충족, 음수 슬랙은 위반을 의미합니다.</p>
+</div>
+</div>
+
+<!-- Q4 -->
+<div class="question" id="q4">
+<h3 class="en">Q4: When should you use <code>set_false_path</code>?</h3>
+<h3 class="ko" style="display:none;">Q4: <code>set_false_path</code>를 언제 사용해야 하는가?</h3>
+<ul class="options">
+<li onclick="checkAnswer(4, this, 'C')">A) <span class="en">When a path is slow but still needs to work</span><span class="ko" style="display:none;">경로가 느리지만 여전히 작동해야 할 때</span></li>
+<li onclick="checkAnswer(4, this, 'C')">B) <span class="en">When a path takes multiple clock cycles</span><span class="ko" style="display:none;">경로가 여러 클럭 사이클을 소요할 때</span></li>
+<li onclick="checkAnswer(4, this, 'C')">C) <span class="en">When a path will never be active in real operation</span><span class="ko" style="display:none;">경로가 실제 동작에서 절대 활성화되지 않을 때</span></li>
+<li onclick="checkAnswer(4, this, 'C')">D) <span class="en">When you want to ignore all timing</span><span class="ko" style="display:none;">모든 타이밍을 무시하고 싶을 때</span></li>
+</ul>
+<div class="explanation" id="exp4">
+<p class="en">✅ False paths are for paths that are structurally present but never functionally exercised — like async reset, static config registers, or test-only pins. For multi-cycle paths, use <code>set_multicycle_path</code> instead.</p>
+<p class="ko" style="display:none;">✅ False path는 구조적으로 존재하지만 기능적으로 활성화되지 않는 경로용입니다 — 비동기 리셋, 정적 구성 레지스터, 테스트 전용 핀 등. 다중 사이클 경로는 <code>set_multicycle_path</code>를 사용하세요.</p>
+</div>
+</div>
+
+<!-- Q5 -->
+<div class="question" id="q5">
+<h3 class="en">Q5: For a 3-cycle multicycle setup path, what should the hold value be?</h3>
+<h3 class="ko" style="display:none;">Q5: 3사이클 멀티사이클 셋업 경로의 경우, 홀드 값은 얼마여야 하는가?</h3>
+<ul class="options">
+<li onclick="checkAnswer(5, this, 'C')">A) <span class="en">0</span><span class="ko" style="display:none;">0</span></li>
+<li onclick="checkAnswer(5, this, 'C')">B) <span class="en">1</span><span class="ko" style="display:none;">1</span></li>
+<li onclick="checkAnswer(5, this, 'C')">C) <span class="en">2 (N − 1)</span><span class="ko" style="display:none;">2 (N − 1)</span></li>
+<li onclick="checkAnswer(5, this, 'C')">D) <span class="en">3 (same as setup)</span><span class="ko" style="display:none;">3 (셋업과 동일)</span></li>
+</ul>
+<div class="explanation" id="exp5">
+<p class="en">✅ The hold value should be N−1 where N is the setup multicycle count. For setup=3, hold=2. This ensures the hold check stays at the correct launch edge.</p>
+<p class="ko" style="display:none;">✅ 홀드 값은 N−1이어야 합니다 (N = 셋업 멀티사이클 수). 셋업=3이면 홀드=2. 이렇게 해야 홀드 체크가 올바른 발사 에지에 유지됩니다.</p>
+</div>
+</div>
+
+<!-- Q6 -->
+<div class="question" id="q6">
+<h3 class="en">Q6: What does <code>set_clock_groups -asynchronous</code> do?</h3>
+<h3 class="ko" style="display:none;">Q6: <code>set_clock_groups -asynchronous</code>는 무엇을 하는가?</h3>
+<ul class="options">
+<li onclick="checkAnswer(6, this, 'B')">A) <span class="en">Creates new clock domains automatically</span><span class="ko" style="display:none;">자동으로 새 클럭 도메인 생성</span></li>
+<li onclick="checkAnswer(6, this, 'B')">B) <span class="en">Tells the tool not to check timing between those clock domains</span><span class="ko" style="display:none;">도구에게 해당 클럭 도메인 사이의 타이밍을 확인하지 않도록 지시</span></li>
+<li onclick="checkAnswer(6, this, 'B')">C) <span class="en">Inserts synchronizers between clock domains</span><span class="ko" style="display:none;">클럭 도메인 사이에 동기화기 삽입</span></li>
+<li onclick="checkAnswer(6, this, 'B')">D) <span class="en">Makes all clocks run at the same frequency</span><span class="ko" style="display:none;">모든 클럭을 동일 주파수로 실행</span></li>
+</ul>
+<div class="explanation" id="exp6">
+<p class="en">✅ <code>set_clock_groups -asynchronous</code> declares that timing paths between the specified clock groups should NOT be analyzed. This prevents the tool from wasting effort on impossible cross-domain paths. You still need to handle CDC properly in your RTL!</p>
+<p class="ko" style="display:none;">✅ <code>set_clock_groups -asynchronous</code>는 지정된 클럭 그룹 간의 타이밍 경로를 분석하지 않도록 선언합니다. 도구가 불가능한 크로스 도메인 경로에 노력을 낭비하는 것을 방지합니다. RTL에서 CDC를 적절히 처리하는 것은 여전히 필요합니다!</p>
+</div>
+</div>
+
+<!-- Q7 -->
+<div class="question" id="q7">
+<h3 class="en">Q7: What does <code>set_input_delay 3.0 -clock clk [get_ports data_in]</code> specify?</h3>
+<h3 class="ko" style="display:none;">Q7: <code>set_input_delay 3.0 -clock clk [get_ports data_in]</code>는 무엇을 지정하는가?</h3>
+<ul class="options">
+<li onclick="checkAnswer(7, this, 'A')">A) <span class="en">data_in arrives 3 ns after the clock edge (external delay)</span><span class="ko" style="display:none;">data_in이 클럭 에지 후 3 ns에 도착 (외부 지연)</span></li>
+<li onclick="checkAnswer(7, this, 'A')">B) <span class="en">data_in must be delayed by 3 ns inside the design</span><span class="ko" style="display:none;">data_in이 설계 내부에서 3 ns 지연되어야 함</span></li>
+<li onclick="checkAnswer(7, this, 'A')">C) <span class="en">The input buffer has 3 ns delay</span><span class="ko" style="display:none;">입력 버퍼의 지연이 3 ns</span></li>
+<li onclick="checkAnswer(7, this, 'A')">D) <span class="en">data_in is sampled 3 ns before the clock edge</span><span class="ko" style="display:none;">data_in이 클럭 에지 3 ns 전에 샘플링됨</span></li>
+</ul>
+<div class="explanation" id="exp7">
+<p class="en">✅ <code>set_input_delay</code> tells the tool that the input data arrives 3 ns after the clock edge — this is the delay from the external source. It reduces the available time for internal logic.</p>
+<p class="ko" style="display:none;">✅ <code>set_input_delay</code>는 입력 데이터가 클럭 에지 후 3 ns에 도착한다고 도구에 알려줍니다 — 이것은 외부 소스의 지연입니다. 내부 논리에 사용 가능한 시간이 줄어듭니다.</p>
+</div>
+</div>
+
+<!-- Q8 -->
+<div class="question" id="q8">
+<h3 class="en">Q8: What does WNS stand for and what is the target value?</h3>
+<h3 class="ko" style="display:none;">Q8: WNS는 무엇을 의미하며 목표 값은 무엇인가?</h3>
+<ul class="options">
+<li onclick="checkAnswer(8, this, 'D')">A) <span class="en">Worst Net Slack — target is negative</span><span class="ko" style="display:none;">최악 넷 슬랙 — 목표는 음수</span></li>
+<li onclick="checkAnswer(8, this, 'D')">B) <span class="en">Wire Network Slack — target is zero</span><span class="ko" style="display:none;">와이어 네트워크 슬랙 — 목표는 0</span></li>
+<li onclick="checkAnswer(8, this, 'D')">C) <span class="en">Worst Negative Slack — target is as negative as possible</span><span class="ko" style="display:none;">최악 음수 슬랙 — 목표는 가능한 한 음수</span></li>
+<li onclick="checkAnswer(8, this, 'D')">D) <span class="en">Worst Negative Slack — target is ≥ 0 (positive or zero)</span><span class="ko" style="display:none;">최악 음수 슬랙 — 목표는 ≥ 0 (양수 또는 0)</span></li>
+</ul>
+<div class="explanation" id="exp8">
+<p class="en">✅ WNS = Worst Negative Slack. It shows the timing of the most critical path. Target is ≥ 0 (met). When WNS is negative, your design has timing violations.</p>
+<p class="ko" style="display:none;">✅ WNS = 최악 음수 슬랙. 가장 중요한 경로의 타이밍을 보여줍니다. 목표는 ≥ 0 (충족). WNS가 음수이면 설계에 타이밍 위반이 있습니다.</p>
+</div>
+</div>
+
+<!-- Q9 -->
+<div class="question" id="q9">
+<h3 class="en">Q9: In FPGA, how is design area typically measured?</h3>
+<h3 class="ko" style="display:none;">Q9: FPGA에서 설계 면적은 일반적으로 어떻게 측정되는가?</h3>
+<ul class="options">
+<li onclick="checkAnswer(9, this, 'B')">A) <span class="en">µm² (micrometers squared)</span><span class="ko" style="display:none;">µm² (마이크로미터 제곱)</span></li>
+<li onclick="checkAnswer(9, this, 'B')">B) <span class="en">LUTs, FFs, BRAMs, and DSP slices</span><span class="ko" style="display:none;">LUT, FF, BRAM 및 DSP 슬라이스</span></li>
+<li onclick="checkAnswer(9, this, 'B')">C) <span class="en">Transistor count</span><span class="ko" style="display:none;">트랜지스터 수</span></li>
+<li onclick="checkAnswer(9, this, 'B')">D) <span class="en">mm² (millimeters squared)</span><span class="ko" style="display:none;">mm² (밀리미터 제곱)</span></li>
+</ul>
+<div class="explanation" id="exp9">
+<p class="en">✅ FPGAs measure area in resource utilization: LUTs (Look-Up Tables), FFs (Flip-Flops), BRAMs (Block RAMs), and DSP slices. ASIC designs use µm² or gate equivalents.</p>
+<p class="ko" style="display:none;">✅ FPGA는 리소스 사용률로 면적을 측정합니다: LUT (Look-Up Table), FF (플립플롭), BRAM (블록 RAM), DSP 슬라이스. ASIC 설계는 µm² 또는 게이트 등가를 사용합니다.</p>
+</div>
+</div>
+
+<!-- Q10 -->
+<div class="question" id="q10">
+<h3 class="en">Q10: For a 10 ns clock period with T_clk-to-q=0.3ns, T_setup=0.2ns, and T_skew=0.1ns, how much time is available for combinational logic?</h3>
+<h3 class="ko" style="display:none;">Q10: 10 ns 클럭 주기에서 T_clk-to-q=0.3ns, T_setup=0.2ns, T_skew=0.1ns인 경우, 조합 논리에 사용 가능한 시간은?</h3>
+<ul class="options">
+<li onclick="checkAnswer(10, this, 'C')">A) <span class="en">9.7 ns</span><span class="ko" style="display:none;">9.7 ns</span></li>
+<li onclick="checkAnswer(10, this, 'C')">B) <span class="en">9.5 ns</span><span class="ko" style="display:none;">9.5 ns</span></li>
+<li onclick="checkAnswer(10, this, 'C')">C) <span class="en">9.4 ns</span><span class="ko" style="display:none;">9.4 ns</span></li>
+<li onclick="checkAnswer(10, this, 'C')">D) <span class="en">9.8 ns</span><span class="ko" style="display:none;">9.8 ns</span></li>
+</ul>
+<div class="explanation" id="exp10">
+<p class="en">✅ T_comb = T_period − T_clk-to-q − T_setup − T_skew = 10 − 0.3 − 0.2 − 0.1 = <strong>9.4 ns</strong></p>
+<p class="ko" style="display:none;">✅ T_comb = T_period − T_clk-to-q − T_setup − T_skew = 10 − 0.3 − 0.2 − 0.1 = <strong>9.4 ns</strong></p>
+</div>
+</div>
+
+<!-- Q11 -->
+<div class="question" id="q11">
+<h3 class="en">Q11: Which strategy should you try FIRST when a path fails timing?</h3>
+<h3 class="ko" style="display:none;">Q11: 경로가 타이밍에 실패할 때 먼저 시도해야 할 전략은?</h3>
+<ul class="options">
+<li onclick="checkAnswer(11, this, 'A')">A) <span class="en">Check if it's a real path — can it be constrained as false/multicycle?</span><span class="ko" style="display:none;">실제 경로인지 확인 — false/multicycle로 제약할 수 있는가?</span></li>
+<li onclick="checkAnswer(11, this, 'A')">B) <span class="en">Increase the clock period</span><span class="ko" style="display:none;">클럭 주기 증가</span></li>
+<li onclick="checkAnswer(11, this, 'A')">C) <span class="en">Upsize all cells in the path</span><span class="ko" style="display:none;">경로의 모든 셀 크기 증가</span></li>
+<li onclick="checkAnswer(11, this, 'A')">D) <span class="en">Remove the constraint</span><span class="ko" style="display:none;">제약 제거</span></li>
+</ul>
+<div class="explanation" id="exp11">
+<p class="en">✅ Always check if the path is actually valid first. Many timing violations come from over-constraining paths that don't need single-cycle timing (static config, test pins, CDC paths). Upsizing cells is a last resort.</p>
+<p class="ko" style="display:none;">✅ 항상 먼저 경로가 실제로 유효한지 확인하세요. 많은 타이밍 위반은 단일 사이클 타이밍이 필요하지 않은 경로를 과도하게 제약해서 발생합니다 (정적 구성, 테스트 핀, CDC 경로). 셀 크기 증가는 최후의 수단입니다.</p>
+</div>
+</div>
+
+<!-- Q12 -->
+<div class="question" id="q12">
+<h3 class="en">Q12: What does <code>set_max_fanout 32 [current_design]</code> do?</h3>
+<h3 class="ko" style="display:none;">Q12: <code>set_max_fanout 32 [current_design]</code>는 무엇을 하는가?</h3>
+<ul class="options">
+<li onclick="checkAnswer(12, this, 'B')">A) <span class="en">Limits each module to 32 outputs</span><span class="ko" style="display:none;">각 모듈의 출력을 32개로 제한</span></li>
+<li onclick="checkAnswer(12, this, 'B')">B) <span class="en">Limits any single net to drive at most 32 loads — tool will buffer/clone if exceeded</span><span class="ko" style="display:none;">단일 넷이 최대 32개의 로드만 구동하도록 제한 — 초과시 도구가 버퍼/복제</span></li>
+<li onclick="checkAnswer(12, this, 'B')">C) <span class="en">Sets the maximum number of flip-flops to 32</span><span class="ko" style="display:none;">최대 플립플롭 수를 32개로 설정</span></li>
+<li onclick="checkAnswer(12, this, 'B')">D) <span class="en">Limits the number of inputs to any gate to 32</span><span class="ko" style="display:none;">게이트 입력 수를 32개로 제한</span></li>
+</ul>
+<div class="explanation" id="exp12">
+<p class="en">✅ <code>set_max_fanout</code> limits how many loads a single driver can have. When exceeded, the synthesis tool will automatically clone or buffer the driver to reduce fanout, which helps with timing but increases area slightly.</p>
+<p class="ko" style="display:none;">✅ <code>set_max_fanout</code>은 단일 드라이버가 가질 수 있는 로드 수를 제한합니다. 초과하면 합성 도구가 자동으로 드라이버를 복제하거나 버퍼를 추가하여 팬아웃을 줄입니다. 타이밍에 도움이 되지만 면적이 약간 증가합니다.</p>
+</div>
+</div>
+
+<div id="final-score" class="score-box" style="display:none; margin-top: 32px;">
+    <h2>🏆 Final Score</h2>
+    <div class="score-display" id="final-score-display"></div>
+    <p id="final-message"></p>
+</div>
+
+<div class="nav-links" style="margin-top: 32px;">
+    <a href="day-35-lesson.html">📖 Review Lesson</a>
+    <a href="day-35-practice.html">🔧 Practice</a>
+</div>
+
+<script>
+let score = 0;
+let answered = 0;
+const total = 12;
+
+function checkAnswer(qNum, el, correct) {
+    const options = el.parentElement.querySelectorAll('li');
+    if (el.classList.contains('correct') || el.classList.contains('incorrect')) return;
+
+    const letter = String.fromCharCode(65 + Array.from(options).indexOf(el));
+    answered++;
+
+    options.forEach(opt => opt.classList.add('disabled'));
+
+    if (letter === correct) {
+        el.classList.add('correct');
+        score++;
+    } else {
+        el.classList.add('incorrect');
+        options[correct.charCodeAt(0) - 65].classList.add('correct');
+    }
+
+    document.getElementById('exp' + qNum).style.display = 'block';
+
+    if (answered === total) {
+        const pct = Math.round((score / total) * 100);
+        const finalBox = document.getElementById('final-score');
+        finalBox.style.display = 'block';
+        document.getElementById('final-score-display').textContent = score + '/' + total + ' (' + pct + '%)';
+        const msg = pct >= 90 ? '🌟 Outstanding! You\'ve mastered synthesis constraints!' :
+                    pct >= 70 ? '👏 Great job! Review the missed topics in the lesson.' :
+                    '📚 Keep studying! Re-read the lesson and try again.';
+        document.getElementById('final-message').textContent = msg;
+        finalBox.scrollIntoView({ behavior: 'smooth' });
+    }
+}
+</script>
+</body>
+</html>
