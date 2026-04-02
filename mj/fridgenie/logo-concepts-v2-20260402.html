@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fridgenie Logo Concepts v2</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #111;
+    color: #e0e0e0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    padding: 40px 20px;
+  }
+  h1 { text-align: center; font-size: 26px; margin-bottom: 6px; color: #fff; }
+  .subtitle { text-align: center; color: #666; margin-bottom: 40px; font-size: 13px; }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 28px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .card {
+    background: #1a1a1a;
+    border-radius: 20px;
+    overflow: hidden;
+  }
+  .logo-area {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+    padding: 32px;
+  }
+  .icon-box {
+    width: 140px;
+    height: 140px;
+    border-radius: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .icon-box svg { width: 75%; height: 75%; }
+  .bg-red { background: #B85450; }
+  .bg-dark { background: #2a2a2a; }
+  .variants {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .var-small {
+    width: 56px;
+    height: 56px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .var-small svg { width: 65%; height: 65%; }
+  .info { padding: 0 24px 24px; }
+  .tag {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    color: #B85450;
+    margin-bottom: 6px;
+  }
+  .info h3 { font-size: 17px; color: #fff; margin-bottom: 6px; font-weight: 600; }
+  .info p { font-size: 12.5px; color: #777; line-height: 1.6; }
+  .rationale { font-style: italic; color: #999; font-size: 11.5px; margin-top: 8px; }
+</style>
+</head>
+<body>
+
+<h1>Fridgenie — Logo Exploration v2</h1>
+<p class="subtitle">Professional concepts · Same palette (#B85450 + #F5E6E0) · Stroke-fill hybrid style</p>
+
+<div class="grid">
+
+<!-- CONCEPT A: Fridge + Lightbulb (Negative Space) -->
+<div class="card">
+  <div class="logo-area">
+    <div class="icon-box bg-red">
+      <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- Fridge body -->
+        <rect x="52" y="32" width="80" height="140" rx="14" stroke="#F5E6E0" stroke-width="10" fill="none"/>
+        <!-- Fridge divider -->
+        <line x1="52" y1="82" x2="132" y2="82" stroke="#F5E6E0" stroke-width="8"/>
+        <!-- Handle top -->
+        <line x1="118" y1="50" x2="118" y2="68" stroke="#F5E6E0" stroke-width="8" stroke-linecap="round"/>
+        <!-- Lightbulb shape as negative space window in lower door -->
+        <!-- Bulb circle -->
+        <circle cx="92" cy="115" r="18" stroke="#F5E6E0" stroke-width="7" fill="none"/>
+        <!-- Bulb base (screw part) -->
+        <line x1="84" y1="131" x2="84" y2="144" stroke="#F5E6E0" stroke-width="7" stroke-linecap="round"/>
+        <line x1="100" y1="131" x2="100" y2="144" stroke="#F5E6E0" stroke-width="7" stroke-linecap="round"/>
+        <line x1="82" y1="144" x2="102" y2="144" stroke="#F5E6E0" stroke-width="5" stroke-linecap="round"/>
+        <!-- Rays (subtle, inside top section) -->
+        <line x1="92" y1="42" x2="92" y2="52" stroke="#F5E6E0" stroke-width="5" stroke-linecap="round" opacity="0.5"/>
+        <line x1="74" y1="52" x2="80" y2="58" stroke="#F5E6E0" stroke-width="5" stroke-linecap="round" opacity="0.4"/>
+        <line x1="110" y1="52" x2="104" y2="58" stroke="#F5E6E0" stroke-width="5" stroke-linecap="round" opacity="0.4"/>
+      </svg>
+    </div>
+    <div class="variants">
+      <div class="var-small bg-dark">
+        <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="52" y="32" width="80" height="140" rx="14" stroke="#F5E6E0" stroke-width="10" fill="none"/>
+          <line x1="52" y1="82" x2="132" y2="82" stroke="#F5E6E0" stroke-width="8"/>
+          <line x1="118" y1="50" x2="118" y2="68" stroke="#F5E6E0" stroke-width="8" stroke-linecap="round"/>
+          <circle cx="92" cy="115" r="18" stroke="#F5E6E0" stroke-width="7" fill="none"/>
+          <line x1="84" y1="131" x2="84" y2="144" stroke="#F5E6E0" stroke-width="7" stroke-linecap="round"/>
+          <line x1="100" y1="131" x2="100" y2="144" stroke="#F5E6E0" stroke-width="7" stroke-linecap="round"/>
+          <line x1="82" y1="144" x2="102" y2="144" stroke="#F5E6E0" stroke-width="5" stroke-linecap="round"/>
+          <line x1="92" y1="42" x2="92" y2="52" stroke="#F5E6E0" stroke-width="5" stroke-linecap="round" opacity="0.5"/>
+          <line x1="74" y1="52" x2="80" y2="58" stroke="#F5E6E0" stroke-width="5" stroke-linecap="round" opacity="0.4"/>
+          <line x1="110" y1="52" x2="104" y2="58" stroke="#F5E6E0" stroke-width="5" stroke-linecap="round" opacity="0.4"/>
+        </svg>
+      </div>
+      <div class="var-small bg-red" style="opacity:0.7">
+        <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="52" y="32" width="80" height="140" rx="14" stroke="#fff" stroke-width="10" fill="none"/>
+          <line x1="52" y1="82" x2="132" y2="82" stroke="#fff" stroke-width="8"/>
+          <line x1="118" y1="50" x2="118" y2="68" stroke="#fff" stroke-width="8" stroke-linecap="round"/>
+          <circle cx="92" cy="115" r="18" stroke="#fff" stroke-width="7" fill="none"/>
+          <line x1="84" y1="131" x2="84" y2="144" stroke="#fff" stroke-width="7" stroke-linecap="round"/>
+          <line x1="100" y1="131" x2="100" y2="144" stroke="#fff" stroke-width="7" stroke-linecap="round"/>
+          <line x1="82" y1="144" x2="102" y2="144" stroke="#fff" stroke-width="5" stroke-linecap="round"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+  <div class="info">
+    <div class="tag">Concept A</div>
+    <h3>Smart Fridge — Lightbulb</h3>
+    <p>Lightbulb embedded in the lower door = "bright ideas from your fridge." The upper section gets subtle rays suggesting the fridge is "thinking."</p>
+    <p class="rationale">Why it works: Universal symbol for intelligence. Reads instantly at any size. The bulb replaces the handle, keeping it minimal.</p>
+  </div>
+</div>
+
+<!-- CONCEPT B: Fridge + Magic Lamp Silhouette -->
+<div class="card">
+  <div class="logo-area">
+    <div class="icon-box bg-red">
+      <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- Fridge body that morphs into lamp at bottom -->
+        <!-- Main fridge rectangle with lamp-curve bottom -->
+        <path d="M62 46 L62 148 Q62 162 72 166 L82 170 Q90 173 92 173 L92 173 Q94 173 102 170 L112 166 Q122 162 122 148 L122 46 Q122 34 110 34 L74 34 Q62 34 62 46 Z"
+              stroke="#F5E6E0" stroke-width="9" fill="none" stroke-linejoin="round"/>
+        <!-- Spout (lamp spout coming from right side) -->
+        <path d="M122 70 Q140 65 150 55 Q155 50 158 52"
+              stroke="#F5E6E0" stroke-width="8" fill="none" stroke-linecap="round"/>
+        <!-- Steam/magic wisps from spout -->
+        <path d="M158 48 Q155 38 160 32" stroke="#F5E6E0" stroke-width="5" fill="none" stroke-linecap="round" opacity="0.6"/>
+        <path d="M162 50 Q165 40 162 33" stroke="#F5E6E0" stroke-width="4" fill="none" stroke-linecap="round" opacity="0.4"/>
+        <!-- Fridge divider -->
+        <line x1="62" y1="85" x2="122" y2="85" stroke="#F5E6E0" stroke-width="7"/>
+        <!-- Handle -->
+        <line x1="109" y1="52" x2="109" y2="72" stroke="#F5E6E0" stroke-width="7" stroke-linecap="round"/>
+        <!-- Handle lower -->
+        <line x1="109" y1="100" x2="109" y2="130" stroke="#F5E6E0" stroke-width="7" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <div class="variants">
+      <div class="var-small bg-dark">
+        <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M62 46 L62 148 Q62 162 72 166 L82 170 Q90 173 92 173 L92 173 Q94 173 102 170 L112 166 Q122 162 122 148 L122 46 Q122 34 110 34 L74 34 Q62 34 62 46 Z" stroke="#F5E6E0" stroke-width="9" fill="none" stroke-linejoin="round"/>
+          <path d="M122 70 Q140 65 150 55 Q155 50 158 52" stroke="#F5E6E0" stroke-width="8" fill="none" stroke-linecap="round"/>
+          <path d="M158 48 Q155 38 160 32" stroke="#F5E6E0" stroke-width="5" fill="none" stroke-linecap="round" opacity="0.6"/>
+          <line x1="62" y1="85" x2="122" y2="85" stroke="#F5E6E0" stroke-width="7"/>
+          <line x1="109" y1="52" x2="109" y2="72" stroke="#F5E6E0" stroke-width="7" stroke-linecap="round"/>
+          <line x1="109" y1="100" x2="109" y2="130" stroke="#F5E6E0" stroke-width="7" stroke-linecap="round"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+  <div class="info">
+    <div class="tag">Concept B</div>
+    <h3>Fridge-Lamp Hybrid — "Genie"</h3>
+    <p>The fridge silhouette subtly morphs into a magic lamp shape at the base, with a spout and wisps. It IS a genie lamp — but it's also unmistakably a fridge.</p>
+    <p class="rationale">Why it works: "Fridgenie" = fridge + genie. This makes the name literal in the logo without a cartoon character. The double-read is the whole point.</p>
+  </div>
+</div>
+
+<!-- CONCEPT C: Fridge + Infinity Handle -->
+<div class="card">
+  <div class="logo-area">
+    <div class="icon-box bg-red">
+      <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- Fridge body -->
+        <rect x="55" y="32" width="76" height="140" rx="14" stroke="#F5E6E0" stroke-width="9" fill="none"/>
+        <!-- Fridge divider -->
+        <line x1="55" y1="88" x2="131" y2="88" stroke="#F5E6E0" stroke-width="8"/>
+        <!-- Infinity/loop as the handle spanning both doors -->
+        <!-- Top loop -->
+        <path d="M118 62 Q130 52 130 62 Q130 72 118 72 Q106 72 106 62 Q106 52 118 62 Z"
+              stroke="#F5E6E0" stroke-width="7" fill="none" stroke-linecap="round"/>
+        <!-- Bottom loop (continuing) -->
+        <path d="M118 108 Q130 98 130 108 Q130 118 118 118 Q106 118 106 108 Q106 98 118 108 Z"
+              stroke="#F5E6E0" stroke-width="7" fill="none" stroke-linecap="round"/>
+        <!-- Connecting line through divider -->
+        <line x1="118" y1="72" x2="118" y2="108" stroke="#F5E6E0" stroke-width="7" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <div class="variants">
+      <div class="var-small bg-dark">
+        <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="55" y="32" width="76" height="140" rx="14" stroke="#F5E6E0" stroke-width="9" fill="none"/>
+          <line x1="55" y1="88" x2="131" y2="88" stroke="#F5E6E0" stroke-width="8"/>
+          <path d="M118 62 Q130 52 130 62 Q130 72 118 72 Q106 72 106 62 Q106 52 118 62 Z" stroke="#F5E6E0" stroke-width="7" fill="none"/>
+          <path d="M118 108 Q130 98 130 108 Q130 118 118 118 Q106 118 106 108 Q106 98 118 108 Z" stroke="#F5E6E0" stroke-width="7" fill="none"/>
+          <line x1="118" y1="72" x2="118" y2="108" stroke="#F5E6E0" stroke-width="7" stroke-linecap="round"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+  <div class="info">
+    <div class="tag">Concept C</div>
+    <h3>Infinite Loop Handle</h3>
+    <p>The fridge handle becomes a continuous loop flowing through both doors — an infinity symbol turned vertical. Suggests endless possibilities, continuous cycle of cook-store-repeat.</p>
+    <p class="rationale">Why it works: Elegant detail that differentiates from generic fridge icons. Works at favicon size. The loop is the only decorative element — everything else stays minimal.</p>
+  </div>
+</div>
+
+<!-- CONCEPT D: Fridge Door Ajar + Glow -->
+<div class="card">
+  <div class="logo-area">
+    <div class="icon-box bg-red">
+      <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- Fridge back body -->
+        <rect x="65" y="30" width="72" height="144" rx="13" stroke="#F5E6E0" stroke-width="9" fill="none"/>
+        <!-- Door slightly ajar (perspective) -->
+        <path d="M65 30 L48 40 L48 164 L65 174"
+              stroke="#F5E6E0" stroke-width="8" fill="none" stroke-linejoin="round"/>
+        <!-- Glow lines emanating from the crack -->
+        <line x1="46" y1="75" x2="32" y2="70" stroke="#F5E6E0" stroke-width="5" stroke-linecap="round" opacity="0.7"/>
+        <line x1="46" y1="95" x2="28" y2="95" stroke="#F5E6E0" stroke-width="6" stroke-linecap="round" opacity="0.9"/>
+        <line x1="46" y1="115" x2="30" y2="120" stroke="#F5E6E0" stroke-width="5" stroke-linecap="round" opacity="0.7"/>
+        <line x1="46" y1="135" x2="34" y2="142" stroke="#F5E6E0" stroke-width="4" stroke-linecap="round" opacity="0.5"/>
+        <line x1="46" y1="55" x2="36" y2="48" stroke="#F5E6E0" stroke-width="4" stroke-linecap="round" opacity="0.5"/>
+        <!-- Divider on back face -->
+        <line x1="65" y1="90" x2="137" y2="90" stroke="#F5E6E0" stroke-width="7"/>
+        <!-- Handle -->
+        <line x1="125" y1="48" x2="125" y2="74" stroke="#F5E6E0" stroke-width="7" stroke-linecap="round"/>
+        <line x1="125" y1="106" x2="125" y2="140" stroke="#F5E6E0" stroke-width="7" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <div class="variants">
+      <div class="var-small bg-dark">
+        <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="65" y="30" width="72" height="144" rx="13" stroke="#F5E6E0" stroke-width="9" fill="none"/>
+          <path d="M65 30 L48 40 L48 164 L65 174" stroke="#F5E6E0" stroke-width="8" fill="none" stroke-linejoin="round"/>
+          <line x1="46" y1="75" x2="32" y2="70" stroke="#F5E6E0" stroke-width="5" stroke-linecap="round" opacity="0.7"/>
+          <line x1="46" y1="95" x2="28" y2="95" stroke="#F5E6E0" stroke-width="6" stroke-linecap="round" opacity="0.9"/>
+          <line x1="46" y1="115" x2="30" y2="120" stroke="#F5E6E0" stroke-width="5" stroke-linecap="round" opacity="0.7"/>
+          <line x1="65" y1="90" x2="137" y2="90" stroke="#F5E6E0" stroke-width="7"/>
+          <line x1="125" y1="48" x2="125" y2="74" stroke="#F5E6E0" stroke-width="7" stroke-linecap="round"/>
+          <line x1="125" y1="106" x2="125" y2="140" stroke="#F5E6E0" stroke-width="7" stroke-linecap="round"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+  <div class="info">
+    <div class="tag">Concept D</div>
+    <h3>Door Ajar — The Glow</h3>
+    <p>Fridge door cracked open with light rays spilling out. That iconic "midnight fridge glow" everyone recognizes. Suggests discovery, magic inside, something waiting for you.</p>
+    <p class="rationale">Why it works: Universally relatable moment. The light = intelligence/magic without being literal. Creates depth with minimal perspective shift. This is a story in one icon.</p>
+  </div>
+</div>
+
+<!-- CONCEPT E: Fridge + Wand Spark (Minimal Magic) -->
+<div class="card">
+  <div class="logo-area">
+    <div class="icon-box bg-red">
+      <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- Fridge body -->
+        <rect x="52" y="42" width="76" height="132" rx="13" stroke="#F5E6E0" stroke-width="9" fill="none"/>
+        <!-- Fridge divider -->
+        <line x1="52" y1="92" x2="128" y2="92" stroke="#F5E6E0" stroke-width="8"/>
+        <!-- Handle top -->
+        <line x1="115" y1="58" x2="115" y2="78" stroke="#F5E6E0" stroke-width="7" stroke-linecap="round"/>
+        <!-- Handle bottom -->
+        <line x1="115" y1="108" x2="115" y2="140" stroke="#F5E6E0" stroke-width="7" stroke-linecap="round"/>
+        <!-- Magic wand (diagonal, top right, elegant) -->
+        <line x1="128" y1="52" x2="162" y2="18" stroke="#F5E6E0" stroke-width="7" stroke-linecap="round"/>
+        <!-- 4-point star at wand tip -->
+        <path d="M162 18 L162 8 M162 18 L162 28 M162 18 L152 18 M162 18 L172 18"
+              stroke="#F5E6E0" stroke-width="5" stroke-linecap="round" opacity="0.0"/>
+        <!-- Proper 4-point star -->
+        <line x1="162" y1="6" x2="162" y2="30" stroke="#F5E6E0" stroke-width="5" stroke-linecap="round"/>
+        <line x1="150" y1="18" x2="174" y2="18" stroke="#F5E6E0" stroke-width="5" stroke-linecap="round"/>
+        <!-- Small sparkle dots -->
+        <circle cx="148" cy="28" r="2.5" fill="#F5E6E0" opacity="0.6"/>
+        <circle cx="170" cy="32" r="2" fill="#F5E6E0" opacity="0.4"/>
+        <circle cx="145" cy="12" r="2" fill="#F5E6E0" opacity="0.5"/>
+      </svg>
+    </div>
+    <div class="variants">
+      <div class="var-small bg-dark">
+        <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="52" y="42" width="76" height="132" rx="13" stroke="#F5E6E0" stroke-width="9" fill="none"/>
+          <line x1="52" y1="92" x2="128" y2="92" stroke="#F5E6E0" stroke-width="8"/>
+          <line x1="115" y1="58" x2="115" y2="78" stroke="#F5E6E0" stroke-width="7" stroke-linecap="round"/>
+          <line x1="115" y1="108" x2="115" y2="140" stroke="#F5E6E0" stroke-width="7" stroke-linecap="round"/>
+          <line x1="128" y1="52" x2="162" y2="18" stroke="#F5E6E0" stroke-width="7" stroke-linecap="round"/>
+          <line x1="162" y1="6" x2="162" y2="30" stroke="#F5E6E0" stroke-width="5" stroke-linecap="round"/>
+          <line x1="150" y1="18" x2="174" y2="18" stroke="#F5E6E0" stroke-width="5" stroke-linecap="round"/>
+          <circle cx="148" cy="28" r="2.5" fill="#F5E6E0" opacity="0.6"/>
+          <circle cx="170" cy="32" r="2" fill="#F5E6E0" opacity="0.4"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+  <div class="info">
+    <div class="tag">Concept E</div>
+    <h3>Magic Wand Touch</h3>
+    <p>A wand taps the fridge corner with a starburst. Minimal, elegant — "one touch and your fridge becomes magical." Direct genie reference without the character.</p>
+    <p class="rationale">Why it works: The wand is a single diagonal line. Zero complexity added but immediately communicates "magic." The sparkle at the tip is the payoff. Works great as app icon and favicon.</p>
+  </div>
+</div>
+
+<!-- CONCEPT F: Fridge with Smile (Friendly AI) -->
+<div class="card">
+  <div class="logo-area">
+    <div class="icon-box bg-red">
+      <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- Fridge body -->
+        <rect x="52" y="30" width="80" height="144" rx="14" stroke="#F5E6E0" stroke-width="9" fill="none"/>
+        <!-- Fridge divider (higher up — small freezer) -->
+        <line x1="52" y1="72" x2="132" y2="72" stroke="#F5E6E0" stroke-width="8"/>
+        <!-- Handle top -->
+        <line x1="120" y1="44" x2="120" y2="60" stroke="#F5E6E0" stroke-width="7" stroke-linecap="round"/>
+        <!-- "Eyes" — two dots on lower door -->
+        <circle cx="78" cy="106" r="6" fill="#F5E6E0"/>
+        <circle cx="106" cy="106" r="6" fill="#F5E6E0"/>
+        <!-- Gentle smile curve -->
+        <path d="M78 128 Q92 142 106 128" stroke="#F5E6E0" stroke-width="7" fill="none" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <div class="variants">
+      <div class="var-small bg-dark">
+        <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="52" y="30" width="80" height="144" rx="14" stroke="#F5E6E0" stroke-width="9" fill="none"/>
+          <line x1="52" y1="72" x2="132" y2="72" stroke="#F5E6E0" stroke-width="8"/>
+          <line x1="120" y1="44" x2="120" y2="60" stroke="#F5E6E0" stroke-width="7" stroke-linecap="round"/>
+          <circle cx="78" cy="106" r="6" fill="#F5E6E0"/>
+          <circle cx="106" cy="106" r="6" fill="#F5E6E0"/>
+          <path d="M78 128 Q92 142 106 128" stroke="#F5E6E0" stroke-width="7" fill="none" stroke-linecap="round"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+  <div class="info">
+    <div class="tag">Concept F</div>
+    <h3>Friendly Fridge — The Face</h3>
+    <p>Two eyes and a smile on the lower door. Your fridge is alive, friendly, and looking at you. Instant personality, instant brand character without a separate mascot.</p>
+    <p class="rationale">Why it works: Character-driven brands stick. Think Duolingo's owl, Notion's emoji. This gives Fridgenie a face people remember. And it's just 5 shapes total.</p>
+  </div>
+</div>
+
+</div>
+
+<p style="text-align:center; color:#444; margin-top:40px; font-size:11px;">Fridgenie Logo Exploration v2 — April 2026 · All concepts use identical palette & stroke weight as original</p>
+
+</body>
+</html>
