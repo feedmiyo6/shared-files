@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fridgenie Logo — Right Page Variations</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #111;
+    color: #e0e0e0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    padding: 40px 20px;
+  }
+  h1 { text-align: center; font-size: 24px; margin-bottom: 6px; color: #fff; }
+  .subtitle { text-align: center; color: #666; margin-bottom: 10px; font-size: 13px; }
+  .note { text-align: center; color: #555; margin-bottom: 36px; font-size: 12px; font-style: italic; }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 28px;
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+  .card {
+    background: #1a1a1a;
+    border-radius: 20px;
+    overflow: hidden;
+    text-align: center;
+  }
+  .logo-wrap {
+    width: 220px;
+    height: 220px;
+    margin: 24px auto 0;
+    border-radius: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #BE5B52;
+  }
+  .logo-wrap svg { width: 72%; height: 72%; }
+  .info { padding: 16px 20px 22px; }
+  .tag {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    color: #BE5B52;
+    margin-bottom: 4px;
+  }
+  .info h3 { font-size: 16px; color: #fff; margin-bottom: 6px; }
+  .info p { font-size: 12.5px; color: #888; line-height: 1.6; }
+
+  /* Original for reference */
+  .ref-section {
+    max-width: 1000px;
+    margin: 0 auto 36px;
+    text-align: center;
+  }
+  .ref-section h2 { font-size: 14px; color: #555; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 2px; }
+  .ref-logo {
+    width: 160px; height: 160px;
+    border-radius: 28px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: #BE5B52;
+  }
+  .ref-logo svg { width: 72%; height: 72%; }
+</style>
+</head>
+<body>
+
+<h1>Fridgenie — Right Page Variations</h1>
+<p class="subtitle">Same fridge-book base · 3 new treatments for the right page</p>
+<p class="note">Left side (fridge door) stays exactly the same</p>
+
+<!-- ORIGINAL REFERENCE -->
+<div class="ref-section">
+  <h2>Current (Reference)</h2>
+  <div class="ref-logo">
+    <svg viewBox="0 0 240 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- Book spine/binding -->
+      <ellipse cx="120" cy="100" rx="6" ry="70" fill="#F0DDD6" opacity="0.6"/>
+
+      <!-- Left page (fridge door) - outlined with red showing through -->
+      <path d="M118 32 Q90 28 68 32 Q56 35 52 40 L52 158 Q56 162 68 166 Q90 170 118 168 Z"
+            stroke="#F0DDD6" stroke-width="8" fill="none" stroke-linejoin="round"/>
+      <!-- Fridge divider on left page -->
+      <path d="M58 105 Q88 108 116 105" stroke="#F0DDD6" stroke-width="7" fill="none" stroke-linecap="round"/>
+      <!-- Fridge handle -->
+      <line x1="100" y1="58" x2="100" y2="78" stroke="#F0DDD6" stroke-width="7" stroke-linecap="round"/>
+      <!-- Fridge handle lower -->
+      <line x1="100" y1="120" x2="100" y2="148" stroke="#F0DDD6" stroke-width="7" stroke-linecap="round"/>
+
+      <!-- Right page - solid filled (the part we're changing) -->
+      <path d="M122 32 Q150 28 172 32 Q184 35 188 40 L188 158 Q184 162 172 166 Q150 170 122 168 Z"
+            fill="#F0DDD6" stroke="#F0DDD6" stroke-width="4"/>
+
+      <!-- Book top curve left -->
+      <path d="M52 40 Q85 30 118 32" stroke="#F0DDD6" stroke-width="8" fill="none" stroke-linecap="round"/>
+      <!-- Book top curve right -->
+      <path d="M122 32 Q155 30 188 40" stroke="#F0DDD6" stroke-width="8" fill="none" stroke-linecap="round"/>
+      <!-- Book bottom curve left -->
+      <path d="M52 158 Q85 168 118 168" stroke="#F0DDD6" stroke-width="8" fill="none" stroke-linecap="round"/>
+      <!-- Book bottom curve right -->
+      <path d="M122 168 Q155 168 188 158" stroke="#F0DDD6" stroke-width="8" fill="none" stroke-linecap="round"/>
+    </svg>
+  </div>
+</div>
+
+<div class="grid">
+
+<!-- OPTION 1: Right page with text lines (recipe page) -->
+<div class="card">
+  <div class="logo-wrap">
+    <svg viewBox="0 0 240 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- Book spine -->
+      <ellipse cx="120" cy="100" rx="6" ry="70" fill="#F0DDD6" opacity="0.6"/>
+
+      <!-- LEFT PAGE (fridge door) - identical -->
+      <path d="M118 32 Q90 28 68 32 Q56 35 52 40 L52 158 Q56 162 68 166 Q90 170 118 168 Z"
+            stroke="#F0DDD6" stroke-width="8" fill="none" stroke-linejoin="round"/>
+      <path d="M58 105 Q88 108 116 105" stroke="#F0DDD6" stroke-width="7" fill="none" stroke-linecap="round"/>
+      <line x1="100" y1="58" x2="100" y2="78" stroke="#F0DDD6" stroke-width="7" stroke-linecap="round"/>
+      <line x1="100" y1="120" x2="100" y2="148" stroke="#F0DDD6" stroke-width="7" stroke-linecap="round"/>
+
+      <!-- RIGHT PAGE - outlined only (no fill) with recipe lines -->
+      <path d="M122 32 Q150 28 172 32 Q184 35 188 40 L188 158 Q184 162 172 166 Q150 170 122 168 Z"
+            stroke="#F0DDD6" stroke-width="8" fill="none" stroke-linejoin="round"/>
+
+      <!-- Recipe text lines -->
+      <line x1="134" y1="58" x2="176" y2="56" stroke="#F0DDD6" stroke-width="5" stroke-linecap="round"/>
+      <line x1="134" y1="76" x2="178" y2="74" stroke="#F0DDD6" stroke-width="5" stroke-linecap="round"/>
+      <line x1="134" y1="94" x2="176" y2="93" stroke="#F0DDD6" stroke-width="5" stroke-linecap="round"/>
+      <line x1="134" y1="112" x2="170" y2="111" stroke="#F0DDD6" stroke-width="5" stroke-linecap="round"/>
+      <line x1="134" y1="130" x2="174" y2="130" stroke="#F0DDD6" stroke-width="5" stroke-linecap="round"/>
+      <line x1="134" y1="148" x2="162" y2="148" stroke="#F0DDD6" stroke-width="5" stroke-linecap="round"/>
+
+      <!-- Book curves -->
+      <path d="M52 40 Q85 30 118 32" stroke="#F0DDD6" stroke-width="8" fill="none" stroke-linecap="round"/>
+      <path d="M122 32 Q155 30 188 40" stroke="#F0DDD6" stroke-width="8" fill="none" stroke-linecap="round"/>
+      <path d="M52 158 Q85 168 118 168" stroke="#F0DDD6" stroke-width="8" fill="none" stroke-linecap="round"/>
+      <path d="M122 168 Q155 168 188 158" stroke="#F0DDD6" stroke-width="8" fill="none" stroke-linecap="round"/>
+    </svg>
+  </div>
+  <div class="info">
+    <div class="tag">Option 1</div>
+    <h3>Recipe Lines</h3>
+    <p>Right page is outlined (not filled) with horizontal text lines — like an actual recipe page. Fridge on one side, recipe on the other. Both sides now feel balanced.</p>
+  </div>
+</div>
+
+<!-- OPTION 2: Right page outlined with a fork/spoon icon inside -->
+<div class="card">
+  <div class="logo-wrap">
+    <svg viewBox="0 0 240 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- Book spine -->
+      <ellipse cx="120" cy="100" rx="6" ry="70" fill="#F0DDD6" opacity="0.6"/>
+
+      <!-- LEFT PAGE (fridge door) - identical -->
+      <path d="M118 32 Q90 28 68 32 Q56 35 52 40 L52 158 Q56 162 68 166 Q90 170 118 168 Z"
+            stroke="#F0DDD6" stroke-width="8" fill="none" stroke-linejoin="round"/>
+      <path d="M58 105 Q88 108 116 105" stroke="#F0DDD6" stroke-width="7" fill="none" stroke-linecap="round"/>
+      <line x1="100" y1="58" x2="100" y2="78" stroke="#F0DDD6" stroke-width="7" stroke-linecap="round"/>
+      <line x1="100" y1="120" x2="100" y2="148" stroke="#F0DDD6" stroke-width="7" stroke-linecap="round"/>
+
+      <!-- RIGHT PAGE - outlined with fork & spoon -->
+      <path d="M122 32 Q150 28 172 32 Q184 35 188 40 L188 158 Q184 162 172 166 Q150 170 122 168 Z"
+            stroke="#F0DDD6" stroke-width="8" fill="none" stroke-linejoin="round"/>
+
+      <!-- Fork (left of center on right page) -->
+      <!-- Fork handle -->
+      <line x1="146" y1="88" x2="146" y2="148" stroke="#F0DDD6" stroke-width="6" stroke-linecap="round"/>
+      <!-- Fork tines -->
+      <line x1="138" y1="56" x2="138" y2="82" stroke="#F0DDD6" stroke-width="5" stroke-linecap="round"/>
+      <line x1="146" y1="56" x2="146" y2="82" stroke="#F0DDD6" stroke-width="5" stroke-linecap="round"/>
+      <line x1="154" y1="56" x2="154" y2="82" stroke="#F0DDD6" stroke-width="5" stroke-linecap="round"/>
+      <!-- Fork bridge -->
+      <path d="M138 82 Q146 90 154 82" stroke="#F0DDD6" stroke-width="5" fill="none"/>
+
+      <!-- Spoon (right of center) -->
+      <line x1="168" y1="88" x2="168" y2="148" stroke="#F0DDD6" stroke-width="6" stroke-linecap="round"/>
+      <!-- Spoon head -->
+      <ellipse cx="168" cy="68" rx="10" ry="16" stroke="#F0DDD6" stroke-width="5" fill="none"/>
+
+      <!-- Book curves -->
+      <path d="M52 40 Q85 30 118 32" stroke="#F0DDD6" stroke-width="8" fill="none" stroke-linecap="round"/>
+      <path d="M122 32 Q155 30 188 40" stroke="#F0DDD6" stroke-width="8" fill="none" stroke-linecap="round"/>
+      <path d="M52 158 Q85 168 118 168" stroke="#F0DDD6" stroke-width="8" fill="none" stroke-linecap="round"/>
+      <path d="M122 168 Q155 168 188 158" stroke="#F0DDD6" stroke-width="8" fill="none" stroke-linecap="round"/>
+    </svg>
+  </div>
+  <div class="info">
+    <div class="tag">Option 2</div>
+    <h3>Fork & Spoon</h3>
+    <p>Right page outlined with a fork and spoon inside. Left = fridge (storage), right = dining (cooking). Clean visual duality. Both sides are now stroke-only — perfectly balanced.</p>
+  </div>
+</div>
+
+<!-- OPTION 3: Right page outlined with grocery/checklist -->
+<div class="card">
+  <div class="logo-wrap">
+    <svg viewBox="0 0 240 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- Book spine -->
+      <ellipse cx="120" cy="100" rx="6" ry="70" fill="#F0DDD6" opacity="0.6"/>
+
+      <!-- LEFT PAGE (fridge door) - identical -->
+      <path d="M118 32 Q90 28 68 32 Q56 35 52 40 L52 158 Q56 162 68 166 Q90 170 118 168 Z"
+            stroke="#F0DDD6" stroke-width="8" fill="none" stroke-linejoin="round"/>
+      <path d="M58 105 Q88 108 116 105" stroke="#F0DDD6" stroke-width="7" fill="none" stroke-linecap="round"/>
+      <line x1="100" y1="58" x2="100" y2="78" stroke="#F0DDD6" stroke-width="7" stroke-linecap="round"/>
+      <line x1="100" y1="120" x2="100" y2="148" stroke="#F0DDD6" stroke-width="7" stroke-linecap="round"/>
+
+      <!-- RIGHT PAGE - outlined with checklist -->
+      <path d="M122 32 Q150 28 172 32 Q184 35 188 40 L188 158 Q184 162 172 166 Q150 170 122 168 Z"
+            stroke="#F0DDD6" stroke-width="8" fill="none" stroke-linejoin="round"/>
+
+      <!-- Checklist items -->
+      <!-- Check 1 (checked) -->
+      <path d="M135 58 L139 63 L147 53" stroke="#F0DDD6" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+      <line x1="153" y1="58" x2="178" y2="57" stroke="#F0DDD6" stroke-width="5" stroke-linecap="round"/>
+
+      <!-- Check 2 (checked) -->
+      <path d="M135 82 L139 87 L147 77" stroke="#F0DDD6" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+      <line x1="153" y1="82" x2="174" y2="81" stroke="#F0DDD6" stroke-width="5" stroke-linecap="round"/>
+
+      <!-- Check 3 (unchecked - just box) -->
+      <rect x="134" y="98" width="14" height="14" rx="3" stroke="#F0DDD6" stroke-width="4" fill="none"/>
+      <line x1="153" y1="105" x2="176" y2="105" stroke="#F0DDD6" stroke-width="5" stroke-linecap="round"/>
+
+      <!-- Check 4 (unchecked) -->
+      <rect x="134" y="122" width="14" height="14" rx="3" stroke="#F0DDD6" stroke-width="4" fill="none"/>
+      <line x1="153" y1="129" x2="170" y2="129" stroke="#F0DDD6" stroke-width="5" stroke-linecap="round"/>
+
+      <!-- Check 5 (unchecked) -->
+      <rect x="134" y="146" width="14" height="14" rx="3" stroke="#F0DDD6" stroke-width="4" fill="none"/>
+      <line x1="153" y1="153" x2="168" y2="153" stroke="#F0DDD6" stroke-width="5" stroke-linecap="round"/>
+
+      <!-- Book curves -->
+      <path d="M52 40 Q85 30 118 32" stroke="#F0DDD6" stroke-width="8" fill="none" stroke-linecap="round"/>
+      <path d="M122 32 Q155 30 188 40" stroke="#F0DDD6" stroke-width="8" fill="none" stroke-linecap="round"/>
+      <path d="M52 158 Q85 168 118 168" stroke="#F0DDD6" stroke-width="8" fill="none" stroke-linecap="round"/>
+      <path d="M122 168 Q155 168 188 158" stroke="#F0DDD6" stroke-width="8" fill="none" stroke-linecap="round"/>
+    </svg>
+  </div>
+  <div class="info">
+    <div class="tag">Option 3</div>
+    <h3>Shopping Checklist</h3>
+    <p>Right page shows a grocery checklist — two items checked off, three remaining. Left = what's in your fridge, right = what you need. Tells the whole Fridgenie story in one icon.</p>
+  </div>
+</div>
+
+</div>
+
+<p style="text-align:center; color:#444; margin-top:40px; font-size:11px;">Fridgenie Logo v3 — April 2026 · Right page variations</p>
+
+</body>
+</html>
