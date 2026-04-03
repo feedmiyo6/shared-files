@@ -3869,10 +3869,11 @@ Apps.snake = function() {
     width: W + 20, height: H + 80, minWidth: W + 20, minHeight: H + 80,
     body: `
       <div style="text-align:center;padding:4px;">
-        <div style="display:flex;justify-content:space-between;padding:2px 8px;font-size:12px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:2px 8px;font-size:12px;">
           <span>Score: <b id="snake-score">0</b></span>
           <span>High: <b id="snake-high">0</b></span>
           <span>Speed: <b id="snake-speed">1</b></span>
+          <button class="retro-btn" id="snake-newgame" style="font-size:11px;padding:2px 8px;">New Game</button>
         </div>
         <div style="position:relative;display:inline-block;">
           <canvas class="snake-canvas" id="snake-canvas" width="${W}" height="${H}"></canvas>
@@ -4037,7 +4038,7 @@ Apps.snake = function() {
   }
 
   // Controls
-  document.addEventListener('keydown', function snakeKeys(e) {
+  function snakeKeys(e) {
     const wd = WM.windows.find(w => w.appType === 'snake');
     if (!wd || wd.id !== WM.activeWindowId) return;
 
@@ -4054,7 +4055,8 @@ Apps.snake = function() {
       case 'ArrowLeft':  case 'a': case 'A': e.preventDefault(); if (dir.x !== 1) nextDir = { x: -1, y: 0 }; break;
       case 'ArrowRight': case 'd': case 'D': e.preventDefault(); if (dir.x !== -1) nextDir = { x: 1, y: 0 }; break;
     }
-  });
+  }
+  document.addEventListener('keydown', snakeKeys);
 
   // Touch swipe support
   let touchStartX = 0, touchStartY = 0;
@@ -4075,8 +4077,21 @@ Apps.snake = function() {
     }
   });
 
-  win.data.onClose = () => { running = false; clearInterval(gameInterval); };
+  win.data.onClose = () => { running = false; clearInterval(gameInterval); document.removeEventListener('keydown', snakeKeys); };
   win.body.querySelector('#snake-start').addEventListener('click', init);
+  win.body.querySelector('#snake-newgame').addEventListener('click', () => {
+    if (paused) togglePause();
+    running = false;
+    clearInterval(gameInterval);
+    overlay.innerHTML = `
+      <div>🐍 SNAKE</div>
+      <div style="font-size:13px;">Arrow keys or swipe to move</div>
+      <button class="retro-btn" id="snake-start">Start Game</button>
+    `;
+    overlay.style.display = 'flex';
+    overlay.querySelector('#snake-start').addEventListener('click', init);
+    draw();
+  });
   draw();
 };
 
@@ -4102,10 +4117,11 @@ Apps.minesweeper = function() {
     width: 300, height: 400, minWidth: 250, minHeight: 300,
     body: `
       <div style="text-align:center;padding:4px;">
-        <div class="ms-difficulty" id="ms-diff">
+        <div class="ms-difficulty" id="ms-diff" style="display:flex;justify-content:center;align-items:center;gap:4px;flex-wrap:wrap;">
           <button class="retro-btn" data-diff="easy">Easy</button>
           <button class="retro-btn" data-diff="medium">Medium</button>
           <button class="retro-btn" data-diff="hard">Hard</button>
+          <button class="retro-btn" id="ms-newgame" style="font-weight:bold;">New Game</button>
         </div>
         <div class="ms-header">
           <div class="ms-counter" id="ms-mines">010</div>
@@ -4192,10 +4208,12 @@ Apps.minesweeper = function() {
         cell.addEventListener('mousedown', (e) => {
           if (e.button === 0) faceBtn.textContent = '😮';
         });
-        cell.addEventListener('mouseup', (e) => {
+        cell.addEventListener('mouseup', () => {
+          if (!gameOver) faceBtn.textContent = '😀';
+        });
+        cell.addEventListener('click', (e) => {
           if (gameOver) return;
           if (e.button === 0) {
-            faceBtn.textContent = '😀';
             handleClick(r, c);
           }
         });
@@ -4337,6 +4355,7 @@ Apps.minesweeper = function() {
   });
 
   faceBtn.addEventListener('click', initGame);
+  win.body.querySelector('#ms-newgame').addEventListener('click', initGame);
   win.data.onClose = () => { clearInterval(timer); };
 
   // Chord clicking (click revealed number with correct flags around it to reveal neighbors)
