@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FAB Star Designs</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: #F4EFE7; font-family: Inter, -apple-system, sans-serif; padding: 20px; }
+h1 { text-align: center; color: #B63F39; font-size: 22px; margin: 20px 0 8px; font-weight: 600; }
+p.sub { text-align: center; color: #888; font-size: 13px; margin-bottom: 30px; }
+.grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 24px; }
+.option { text-align: center; }
+.option .label { margin-top: 10px; font-size: 14px; font-weight: 600; color: #333; }
+.option .desc { font-size: 11px; color: #888; margin-top: 4px; max-width: 140px; margin-inline: auto; }
+canvas { border-radius: 50%; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+</style>
+</head>
+<body>
+<h1>FAB Star Options</h1>
+<p class="sub">4-point star, hollow center, points touching circle edge</p>
+<div class="grid">
+  <div class="option">
+    <canvas id="c1" width="112" height="112"></canvas>
+    <div class="label">A — Thin Sparkle</div>
+    <div class="desc">Thin stroke (2px), elegant & minimal</div>
+  </div>
+  <div class="option">
+    <canvas id="c2" width="112" height="112"></canvas>
+    <div class="label">B — Medium Sparkle</div>
+    <div class="desc">Medium stroke (2.5px), balanced</div>
+  </div>
+  <div class="option">
+    <canvas id="c3" width="112" height="112"></canvas>
+    <div class="label">C — Bold Sparkle</div>
+    <div class="desc">Thicker stroke (3px), confident presence</div>
+  </div>
+  <div class="option">
+    <canvas id="c4" width="112" height="112"></canvas>
+    <div class="label">D — Pinched Sparkle</div>
+    <div class="desc">Tighter curves, sharper pinch at center</div>
+  </div>
+  <div class="option">
+    <canvas id="c5" width="112" height="112"></canvas>
+    <div class="label">E — Wide Sparkle</div>
+    <div class="desc">Wider curves, softer feel</div>
+  </div>
+  <div class="option">
+    <canvas id="c6" width="112" height="112"></canvas>
+    <div class="label">F — Classic Star</div>
+    <div class="desc">Straight edges (no curves), clean geometric</div>
+  </div>
+</div>
+
+<script>
+const RED = '#B63F39';
+const BG = '#F6E2DF';
+
+function drawStar(canvasId, { outerR, innerR, strokeWidth, useCurves = true }) {
+  const canvas = document.getElementById(canvasId);
+  const ctx = canvas.getContext('2d');
+  const s = canvas.width;
+  const cx = s / 2;
+  const cy = s / 2;
+
+  // Background circle
+  ctx.beginPath();
+  ctx.arc(cx, cy, s / 2 - 1, 0, Math.PI * 2);
+  ctx.fillStyle = BG;
+  ctx.fill();
+
+  // Scale radii relative to canvas
+  const oR = s * outerR;
+  const iR = s * innerR;
+
+  ctx.strokeStyle = RED;
+  ctx.lineWidth = strokeWidth;
+  ctx.lineCap = 'round';
+  ctx.lineJoin = 'round';
+
+  ctx.beginPath();
+  if (useCurves) {
+    // Top point
+    ctx.moveTo(cx, cy - oR);
+    // To right
+    ctx.quadraticBezierTo(cx + iR, cy - iR, cx + oR, cy);
+    // To bottom
+    ctx.quadraticBezierTo(cx + iR, cy + iR, cx, cy + oR);
+    // To left
+    ctx.quadraticBezierTo(cx - iR, cy + iR, cx - oR, cy);
+    // Back to top
+    ctx.quadraticBezierTo(cx - iR, cy - iR, cx, cy - oR);
+  } else {
+    // Straight 4-point star
+    ctx.moveTo(cx, cy - oR);
+    ctx.lineTo(cx + iR, cy - iR);
+    ctx.lineTo(cx + oR, cy);
+    ctx.lineTo(cx + iR, cy + iR);
+    ctx.lineTo(cx, cy + oR);
+    ctx.lineTo(cx - iR, cy + iR);
+    ctx.lineTo(cx - oR, cy);
+    ctx.lineTo(cx - iR, cy - iR);
+    ctx.closePath();
+  }
+  ctx.stroke();
+}
+
+// A — Thin Sparkle
+drawStar('c1', { outerR: 0.42, innerR: 0.10, strokeWidth: 2 });
+
+// B — Medium Sparkle
+drawStar('c2', { outerR: 0.42, innerR: 0.10, strokeWidth: 2.5 });
+
+// C — Bold Sparkle
+drawStar('c3', { outerR: 0.42, innerR: 0.10, strokeWidth: 3 });
+
+// D — Pinched Sparkle (tighter inner radius)
+drawStar('c4', { outerR: 0.42, innerR: 0.06, strokeWidth: 2.5 });
+
+// E — Wide Sparkle (wider inner radius, softer)
+drawStar('c5', { outerR: 0.42, innerR: 0.15, strokeWidth: 2.5 });
+
+// F — Classic Star (straight edges)
+drawStar('c6', { outerR: 0.42, innerR: 0.12, strokeWidth: 2.5, useCurves: false });
+</script>
+</body>
+</html>
