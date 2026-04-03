@@ -6,92 +6,87 @@
 <title>FAB Star Designs</title>
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
-body { background: #F4EFE7; font-family: Inter, -apple-system, sans-serif; padding: 20px; }
-h1 { text-align: center; color: #B63F39; font-size: 22px; margin: 20px 0 8px; font-weight: 600; }
-p.sub { text-align: center; color: #888; font-size: 13px; margin-bottom: 30px; }
+body { background: #F4EFE7; font-family: Inter, -apple-system, sans-serif; padding: 24px 16px; }
+h1 { text-align: center; color: #B63F39; font-size: 22px; margin: 16px 0 6px; font-weight: 600; }
+p.sub { text-align: center; color: #888; font-size: 13px; margin-bottom: 32px; }
 .grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 28px; }
-.option { text-align: center; }
-.option .label { margin-top: 12px; font-size: 14px; font-weight: 600; color: #333; }
-.option .desc { font-size: 11px; color: #888; margin-top: 4px; max-width: 140px; margin-inline: auto; }
+.option { text-align: center; width: 120px; }
+.circle { width: 100px; height: 100px; border-radius: 50%; background: #F6E2DF; display: flex; align-items: center; justify-content: center; margin: 0 auto; box-shadow: 0 4px 14px rgba(0,0,0,0.1); }
+.label { margin-top: 12px; font-size: 13px; font-weight: 700; color: #333; }
+.desc { font-size: 11px; color: #888; margin-top: 4px; line-height: 1.4; }
 </style>
 </head>
 <body>
 <h1>FAB Star Options</h1>
-<p class="sub">4-point star, hollow center, points touching circle edge</p>
-<div class="grid" id="grid"></div>
+<p class="sub">4-point sparkle star · hollow · points touch circle edge</p>
+<div class="grid">
 
-<script>
-const RED = '#B63F39';
-const BG = '#F6E2DF';
-const SIZE = 120; // canvas pixels (2x for retina)
-const DISPLAY = 100; // CSS display size
+<!-- A — Thin Sparkle -->
+<div class="option">
+  <div class="circle">
+    <svg width="60" height="60" viewBox="0 0 60 60" fill="none">
+      <path d="M30 3 Q33 27, 57 30 Q33 33, 30 57 Q27 33, 3 30 Q27 27, 30 3Z" stroke="#B63F39" stroke-width="1.8" fill="none" stroke-linejoin="round"/>
+    </svg>
+  </div>
+  <div class="label">A — Thin</div>
+  <div class="desc">1.8px stroke, elegant & minimal</div>
+</div>
 
-const options = [
-  { id: 'A', name: 'Thin Sparkle', desc: 'Thin stroke (2px), elegant', outerR: 0.44, innerR: 0.08, sw: 2.5, curves: true },
-  { id: 'B', name: 'Medium Sparkle', desc: 'Medium stroke (3px), balanced', outerR: 0.44, innerR: 0.09, sw: 3.5, curves: true },
-  { id: 'C', name: 'Bold Sparkle', desc: 'Thicker stroke (4px), confident', outerR: 0.44, innerR: 0.09, sw: 5, curves: true },
-  { id: 'D', name: 'Pinched Sparkle', desc: 'Tight pinch, sharp center', outerR: 0.44, innerR: 0.04, sw: 3.5, curves: true },
-  { id: 'E', name: 'Wide Sparkle', desc: 'Wider curves, soft & round', outerR: 0.44, innerR: 0.16, sw: 3.5, curves: true },
-  { id: 'F', name: 'Classic Star', desc: 'Straight edges, geometric', outerR: 0.44, innerR: 0.10, sw: 3.5, curves: false },
-];
+<!-- B — Medium Sparkle -->
+<div class="option">
+  <div class="circle">
+    <svg width="60" height="60" viewBox="0 0 60 60" fill="none">
+      <path d="M30 3 Q33 27, 57 30 Q33 33, 30 57 Q27 33, 3 30 Q27 27, 30 3Z" stroke="#B63F39" stroke-width="2.5" fill="none" stroke-linejoin="round"/>
+    </svg>
+  </div>
+  <div class="label">B — Medium</div>
+  <div class="desc">2.5px stroke, balanced</div>
+</div>
 
-const grid = document.getElementById('grid');
+<!-- C — Bold Sparkle -->
+<div class="option">
+  <div class="circle">
+    <svg width="60" height="60" viewBox="0 0 60 60" fill="none">
+      <path d="M30 3 Q33 27, 57 30 Q33 33, 30 57 Q27 33, 3 30 Q27 27, 30 3Z" stroke="#B63F39" stroke-width="3.5" fill="none" stroke-linejoin="round"/>
+    </svg>
+  </div>
+  <div class="label">C — Bold</div>
+  <div class="desc">3.5px stroke, confident</div>
+</div>
 
-options.forEach(opt => {
-  const div = document.createElement('div');
-  div.className = 'option';
+<!-- D — Pinched (tighter center) -->
+<div class="option">
+  <div class="circle">
+    <svg width="60" height="60" viewBox="0 0 60 60" fill="none">
+      <path d="M30 3 Q31 29, 57 30 Q31 31, 30 57 Q29 31, 3 30 Q29 29, 30 3Z" stroke="#B63F39" stroke-width="2.5" fill="none" stroke-linejoin="round"/>
+    </svg>
+  </div>
+  <div class="label">D — Pinched</div>
+  <div class="desc">Sharp pinch, needle-like points</div>
+</div>
 
-  const canvas = document.createElement('canvas');
-  canvas.width = SIZE * 2;  // retina
-  canvas.height = SIZE * 2;
-  canvas.style.width = DISPLAY + 'px';
-  canvas.style.height = DISPLAY + 'px';
-  canvas.style.borderRadius = '50%';
-  canvas.style.boxShadow = '0 4px 14px rgba(0,0,0,0.12)';
+<!-- E — Soft Wide -->
+<div class="option">
+  <div class="circle">
+    <svg width="60" height="60" viewBox="0 0 60 60" fill="none">
+      <path d="M30 3 Q38 22, 57 30 Q38 38, 30 57 Q22 38, 3 30 Q22 22, 30 3Z" stroke="#B63F39" stroke-width="2.5" fill="none" stroke-linejoin="round"/>
+    </svg>
+  </div>
+  <div class="label">E — Soft</div>
+  <div class="desc">Wider curves, rounder feel</div>
+</div>
 
-  const ctx = canvas.getContext('2d');
-  const s = SIZE * 2;
-  const cx = s / 2;
-  const cy = s / 2;
+<!-- F — Geometric (straight) -->
+<div class="option">
+  <div class="circle">
+    <svg width="60" height="60" viewBox="0 0 60 60" fill="none">
+      <path d="M30 3 L34 26 L57 30 L34 34 L30 57 L26 34 L3 30 L26 26 Z" stroke="#B63F39" stroke-width="2.5" fill="none" stroke-linejoin="round"/>
+    </svg>
+  </div>
+  <div class="label">F — Geometric</div>
+  <div class="desc">Straight edges, no curves</div>
+</div>
 
-  // Background circle
-  ctx.beginPath();
-  ctx.arc(cx, cy, s / 2, 0, Math.PI * 2);
-  ctx.fillStyle = BG;
-  ctx.fill();
-
-  // Star
-  const oR = s * opt.outerR;
-  const iR = s * opt.innerR;
-  ctx.strokeStyle = RED;
-  ctx.lineWidth = opt.sw * 2; // scale for retina
-  ctx.lineCap = 'round';
-  ctx.lineJoin = 'round';
-
-  ctx.beginPath();
-  if (opt.curves) {
-    ctx.moveTo(cx, cy - oR);
-    ctx.quadraticBezierTo(cx + iR, cy - iR, cx + oR, cy);
-    ctx.quadraticBezierTo(cx + iR, cy + iR, cx, cy + oR);
-    ctx.quadraticBezierTo(cx - iR, cy + iR, cx - oR, cy);
-    ctx.quadraticBezierTo(cx - iR, cy - iR, cx, cy - oR);
-  } else {
-    ctx.moveTo(cx, cy - oR);
-    ctx.lineTo(cx + iR, cy - iR);
-    ctx.lineTo(cx + oR, cy);
-    ctx.lineTo(cx + iR, cy + iR);
-    ctx.lineTo(cx, cy + oR);
-    ctx.lineTo(cx - iR, cy + iR);
-    ctx.lineTo(cx - oR, cy);
-    ctx.lineTo(cx - iR, cy - iR);
-    ctx.closePath();
-  }
-  ctx.stroke();
-
-  div.appendChild(canvas);
-  div.innerHTML += `<div class="label">${opt.id} — ${opt.name}</div><div class="desc">${opt.desc}</div>`;
-  grid.appendChild(div);
-});
-</script>
+</div>
 </body>
 </html>
