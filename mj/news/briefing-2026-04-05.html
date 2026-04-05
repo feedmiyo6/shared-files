@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Tech Briefing - April 5, 2026</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #e0e0e0;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            padding: 30px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 30px;
+        }
+        
+        h1 {
+            font-size: 1.8rem;
+            background: linear-gradient(90deg, #00d4ff, #7b2cbf);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+        
+        .date {
+            color: #888;
+            font-size: 0.9rem;
+        }
+        
+        .lang-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: #fff;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+        }
+        
+        .lang-toggle:hover {
+            background: rgba(255,255,255,0.2);
+        }
+        
+        .section {
+            margin-bottom: 40px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 16px;
+            padding: 24px;
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+        
+        .section-title {
+            font-size: 1.3rem;
+            color: #00d4ff;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .section-title::before {
+            content: '';
+            width: 4px;
+            height: 24px;
+            background: linear-gradient(180deg, #00d4ff, #7b2cbf);
+            border-radius: 2px;
+        }
+        
+        .story {
+            background: rgba(0,0,0,0.2);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 16px;
+            border-left: 3px solid #00d4ff;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        
+        .story:hover {
+            transform: translateX(4px);
+            box-shadow: 0 4px 20px rgba(0,212,255,0.1);
+        }
+        
+        .story:last-child {
+            margin-bottom: 0;
+        }
+        
+        .story-headline {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #fff;
+        }
+        
+        .story-headline a {
+            color: inherit;
+            text-decoration: none;
+        }
+        
+        .story-headline a:hover {
+            color: #00d4ff;
+        }
+        
+        .story-source {
+            font-size: 0.75rem;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+        
+        .story-summary {
+            font-size: 0.95rem;
+            color: #b0b0b0;
+            line-height: 1.7;
+        }
+        
+        .story-link {
+            display: inline-block;
+            margin-top: 12px;
+            color: #00d4ff;
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+        
+        .story-link:hover {
+            text-decoration: underline;
+        }
+        
+        /* Korean language styles */
+        .ko {
+            display: none;
+        }
+        
+        .ko.show {
+            display: block !important;
+        }
+        
+        .en.hide {
+            display: none !important;
+        }
+        
+        .ko .story-headline {
+            font-size: 1.05rem;
+        }
+        
+        .ko .story-summary {
+            font-size: 0.9rem;
+            line-height: 1.8;
+        }
+        
+        @media (max-width: 600px) {
+            .container {
+                padding: 15px;
+            }
+            
+            h1 {
+                font-size: 1.4rem;
+            }
+            
+            .section {
+                padding: 18px;
+            }
+            
+            .lang-toggle {
+                position: static;
+                display: block;
+                margin: 0 auto 20px;
+                width: fit-content;
+            }
+            
+            header {
+                position: relative;
+            }
+        }
+        
+        footer {
+            text-align: center;
+            padding: 30px 0;
+            color: #666;
+            font-size: 0.8rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <button class="lang-toggle" onclick="toggleLang()">한국어</button>
+        
+        <header>
+            <h1 class="en">🚀 Daily Tech Briefing</h1>
+            <h1 class="ko">🚀 데일리 테크 브리핑</h1>
+            <p class="date">April 5, 2026 | Sunday</p>
+        </header>
+
+        <!-- AI & Tech Section -->
+        <div class="section">
+            <h2 class="section-title en">🤖 AI & Tech</h2>
+            <h2 class="section-title ko">🤖 AI & 테크</h2>
+            
+            <div class="story">
+                <div class="en">
+                    <div class="story-headline"><a href="https://www.theverge.com/ai-artificial-intelligence/907166/teens-are-torturing-ai-chatbots-confiding-in-them-and-sometimes-dating-them">Teens Are Torturing AI Chatbots, Confiding in Them, and Sometimes Dating Them</a></div>
+                    <div class="story-source">The Verge</div>
+                    <div class="story-summary">A New York Times investigation reveals how teenagers are engaging with role-playing chatbots like Character.ai in unexpected ways—from "funny violence" and elaborate storylines to forming emotional attachments. While concerns about AI's impact on youth mental health have focused on major models like ChatGPT, these smaller platforms have quietly exploded in popularity among teens.</div>
+                </div>
+                <div class="ko">
+                    <div class="story-headline"><a href="https://www.theverge.com/ai-artificial-intelligence/907166/teens-are-torturing-ai-chatbots-confiding-in-them-and-sometimes-dating-them">청소년들이 AI 챗봇을 괴롭히고, 고민을 털어놓으며, 때로는 데이트까지</a></div>
+                    <div class="story-source">The Verge</div>
+                    <div class="story-summary">뉴욕타임스 조사에 따륻 청소년들이 Character.ai 같은 롤플레이 챗봇과 예상치 못한 방식으로 상호작용하고 있습니다. "재미있는 폭력"과 정교한 스토리라인부터 감정적 유대 형성까지. ChatGPT 같은 주요 모델에 대한 우려가 집중된 가운데, 이런 소규모 플랫폼들은 청소년 사이에서 조용히 인기를 끌고 있습니다.</div>
+                </div>
+            </div>
+            
+            <div class="story">
+                <div class="en">
+                    <div class="story-headline"><a href="https://www.theverge.com/ai-artificial-intelligence/907074/anthropic-openclaw-claude-subscription-ban">Anthropic Essentially Bans OpenClaw from Claude by Making Subscribers Pay Extra</a></div>
+                    <div class="story-source">The Verge</div>
+                    <div class="story-summary">Anthropic is changing its API pricing structure in a move that effectively blocks third-party clients like OpenClaw from accessing Claude. The company now requires subscribers to pay extra for API access, making it economically unviable for many wrapper applications that have built businesses around Claude's capabilities.</div>
+                </div>
+                <div class="ko">
+                    <div class="story-headline"><a href="https://www.theverge.com/ai-artificial-intelligence/907074/anthropic-openclaw-claude-subscription-ban">Anthropic, 추가 요금으로 OpenClaw 등의 Claude 접근 사실상 차단</a></div>
+                    <div class="story-source">The Verge</div>
+                    <div class="story-summary">Anthropic이 API 가격 구조를 변경하여 OpenClaw 같은 서드파티 클라이언트의 Claude 접근을 효과적으로 차단했습니다. 이제 API 접근을 위해 추가 요금을 지불해야 하며, Claude 기능을 기반으로 비즈니스를 구축한 많은 래퍼 애플리케이션에 경제적으로 실행 불가능하게 만들었습니다.</div>
+                </div>
+            </div>
+            
+            <div class="story">
+                <div class="en">
+                    <div class="story-headline"><a href="https://www.theverge.com/ai-artificial-intelligence/907083/a-company-that-makes-ai-training-data-has-been-hit-by-a-security-breach">AI Training Data Company Mercor Hit by Security Breach</a></div>
+                    <div class="story-source">Wired / The Verge</div>
+                    <div class="story-summary">Mercor, a company that provides AI training data, has suffered a security breach that puts industry secrets at risk. Meta has paused work with the company while OpenAI investigates the incident. The breach highlights the vulnerability of the AI supply chain and the sensitive nature of training data.</div>
+                </div>
+                <div class="ko">
+                    <div class="story-headline"><a href="https://www.theverge.com/ai-artificial-intelligence/907083/a-company-that-makes-ai-training-data-has-been-hit-by-a-security-breach">AI 훈련 데이터 회사 Mercor, 보안 침해 피해</a></div>
+                    <div class="story-source">Wired / The Verge</div>
+                    <div class="story-summary">AI 훈련 데이터를 제공하는 Mercor 회사가 업계 기밀이 유출될 위험이 있는 보안 침해를 당했습니다. Meta는 해당 회사와의 작업을 중단했고 OpenAI는 사건을 조사 중입니다. 이번 침해는 AI 공급망의 취약성과 훈련 데이터의 민감한 특성을 보여줍니다.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Markets Section -->
+        <div class="section">
+            <h2 class="section-title en">📈 Markets</h2>
+            <h2 class="section-title ko">📈 시장</h2>
+            
+            <div class="story">
+                <div class="en">
+                    <div class="story-headline"><a href="https://finance.yahoo.com/news/wouldnt-be-shocked-if-bull-market-continues-wall-street-aims-to-look-past-iran-conflict-150025546.html">Wall Street Aims to Look Past Iran Conflict</a></div>
+                    <div class="story-source">Yahoo Finance</div>
+                    <div class="story-summary">Despite escalating tensions in the Middle East, markets are showing resilience. The S&P 500 closed up 0.11% at 6,582.69, while the Nasdaq gained 0.18%. Analysts suggest the bull market may continue as investors weigh geopolitical risks against strong corporate fundamentals and potential tariff refunds signaled by the Trump administration.</div>
+                </div>
+                <div class="ko">
+                    <div class="story-headline"><a href="https://finance.yahoo.com/news/wouldnt-be-shocked-if-bull-market-continues-wall-street-aims-to-look-past-iran-conflict-150025546.html">월스트리트, 이란 분쟁 넘어서려 해</a></div>
+                    <div class="story-source">Yahoo Finance</div>
+                    <div class="story-summary">중동의 긴장이 고조되고 있음에도 시장은 탄력성을 보이고 있습니다. S&P 500은 0.11% 상승한 6,582.69에 마감했고 나스닥은 0.18% 올랐습니다. 분석가들은 투자자들이 지정학적 리스크와 견고한 기업 펀더멘털, 트럼프 행정부의 관세 환급 가능성을 저울질하면서 강세장이 계속될 수 있다고 제안합니다.</div>
+                </div>
+            </div>
+            
+            <div class="story">
+                <div class="en">
+                    <div class="story-headline"><a href="https://finance.yahoo.com/markets/commodities/article/trump-administration-signals-it-will-offer-broad-tariff-refunds-that-could-mean-millions-for-companies-124645811.html">Trump Admin Signals Broad Tariff Refunds</a></div>
+                    <div class="story-source">Yahoo Finance</div>
+                    <div class="story-summary">The Trump administration has indicated it will offer broad tariff refunds that could mean millions for companies. This development comes as businesses have been grappling with increased costs from trade policies, and the potential refunds could provide significant relief and boost corporate earnings.</div>
+                </div>
+                <div class="ko">
+                    <div class="story-headline"><a href="https://finance.yahoo.com/markets/commodities/article/trump-administration-signals-it-will-offer-broad-tariff-refunds-that-could-mean-millions-for-companies-124645811.html">트럼프 행정부, 광범위한 관세 환급 신호</a></div>
+                    <div class="story-source">Yahoo Finance</div>
+                    <div class="story-summary">트럼프 행정부는 기업들에게 수백만 달러를 의미할 수 있는 광범위한 관세 환급을 제공할 것을 시사했습니다. 기업들이 무역 정책으로 인한 비용 상승에 어려움을 겪어온 가운데, 잠재적 환급은 상당한 완화를 제공하고 기업 수익을 높일 수 있습니다.</div>
+                </div>
+            </div>
+            
+            <div class="story">
+                <div class="en">
+                    <div class="story-headline"><a href="https://finance.yahoo.com/markets/stocks/articles/foxconn-first-quarter-revenue-jumps-074035924.html">Foxconn Q1 Revenue Jumps, Cautions on Geopolitics</a></div>
+                    <div class="story-source">Reuters / Yahoo Finance</div>
+                    <div class="story-summary">Foxconn reported strong first-quarter revenue growth but warned about ongoing geopolitical uncertainties. The world's largest electronics manufacturer, which assembles iPhones and other major tech products, continues to navigate supply chain challenges while expanding its manufacturing footprint beyond China.</div>
+                </div>
+                <div class="ko">
+                    <div class="story-headline"><a href="https://finance.yahoo.com/markets/stocks/articles/foxconn-first-quarter-revenue-jumps-074035924.html">폭스콘 1분기 매출 급증, 지정학적 우려 경고</a></div>
+                    <div class="story-source">Reuters / Yahoo Finance</div>
+                    <div class="story-summary">폭스콘이 강력한 1분기 매출 성장을 보고했으나 지속적인 지정학적 불확실성에 대해 경고했습니다. 아이폰과 기타 주요 기술 제품을 조립하는 세계 최대 전자제품 제조업체는 중국 외 제조 기지를 확장하면서 공급망 과제를 계속 해결하고 있습니다.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Semiconductors Section -->
+        <div class="section">
+            <h2 class="section-title en">💻 Semiconductors</h2>
+            <h2 class="section-title ko">💻 반도체</h2>
+            
+            <div class="story">
+                <div class="en">
+                    <div class="story-headline"><a href="https://www.theverge.com/tech/907003/apple-approves-driver-that-lets-nvidia-egpus-work-with-arm-macs">Apple Approves Driver for Nvidia eGPUs on Arm Macs</a></div>
+                    <div class="story-source">The Verge</div>
+                    <div class="story-summary">In a surprising move, Apple has approved a driver that allows Nvidia eGPUs to work with Apple Silicon Macs. Developed by Tiny Corp rather than Nvidia directly, the driver enables users to run LLMs and other GPU-intensive tasks without disabling Apple's System Integrity Protection. This marks a significant shift in Apple's traditionally closed ecosystem approach.</div>
+                </div>
+                <div class="ko">
+                    <div class="story-headline"><a href="https://www.theverge.com/tech/907003/apple-approves-driver-that-lets-nvidia-egpus-work-with-arm-macs">애플, Arm Mac에서 Nvidia eGPU 작동 허용하는 드라이버 승인</a></div>
+                    <div class="story-source">The Verge</div>
+                    <div class="story-summary">놀라운 움직임으로 애플이 애플 실리콘 Mac에서 Nvidia eGPU가 작동할 수 있도록 드라이버를 승인했습니다. Nvidia가 아닌 Tiny Corp이 개발한 이 드라이버는 사용자가 애플의 시스템 무결성 보호를 비활성화하지 않고도 LLM과 기타 GPU 집약적 작업을 실행할 수 있게 합니다. 이는 애플의 전통적으로 폐쇄적인 생태계 접근 방식의 상당한 변화를 의미합니다.</div>
+                </div>
+            </div>
+            
+            <div class="story">
+                <div class="en">
+                    <div class="story-headline"><a href="https://www.theverge.com/games/906752/lenovo-legion-go-2-suddenly-costs-650-more-as-ramageddon-lays-waste-to-gaming-hardware">"RAMageddon" Hits Gaming Hardware Prices</a></div>
+                    <div class="story-source">The Verge</div>
+                    <div class="story-summary">The Lenovo Legion Go 2 suddenly costs $650 more as memory supply constraints drive up prices across the gaming hardware industry. This "RAMageddon" is affecting multiple manufacturers and highlights the ongoing volatility in the semiconductor memory market, with implications for console and PC gaming markets.</div>
+                </div>
+                <div class="ko">
+                    <div class="story-headline"><a href="https://www.theverge.com/games/906752/lenovo-legion-go-2-suddenly-costs-650-more-as-ramageddon-lays-waste-to-gaming-hardware">"RAMageddon" 게이밍 하드웨어 가격 타격</a></div>
+                    <div class="story-source">The Verge</div>
+                    <div class="story-summary">Lenovo Legion Go 2가 갑자기 $650 더 비싸졌는데, 이는 메모리 공급 제약이 게이밍 하드웨어 업계 전반의 가격을 끌어올리고 있기 때문입니다. 이 "RAMageddon"은 여러 제조업체에 영향을 미치고 있으며 콘솔 및 PC 게이밍 시장에 영향을 미치는 반도체 메모리 시장의 지속적인 변동성을 보여줍니다.</div>
+                </div>
+            </div>
+            
+            <div class="story">
+                <div class="en">
+                    <div class="story-headline"><a href="https://www.theverge.com/games/906771/somebody-got-an-m-2-ssd-connected-to-their-switch-2-through-the-microsd-express-slot">Modder Connects M.2 SSD to Nintendo Switch 2</a></div>
+                    <div class="story-source">The Verge</div>
+                    <div class="story-summary">A clever modder has successfully connected an M.2 SSD to their Nintendo Switch 2 through the microSD Express slot. While the setup looks completely impractical, it demonstrates the potential for expanded storage solutions on Nintendo's newest console and has sparked interest in the modding community.</div>
+                </div>
+                <div class="ko">
+                    <div class="story-headline"><a href="https://www.theverge.com/games/906771/somebody-got-an-m-2-ssd-connected-to-their-switch-2-through-the-microsd-express-slot">모더가 닌텐도 스위치 2에 M.2 SSD 연결 성공</a></div>
+                    <div class="story-source">The Verge</div>
+                    <div class="story-summary">영리한 모더가 microSD Express 슬롯을 통해 닌텐도 스위치 2에 M.2 SSD를 성공적으로 연결했습니다. 설정이 완전히 비실용적으로 보이지만, 닌텐도의 최신 콘솔에서 확장된 저장 솔루션의 가능성을 보여주며 모딩 커뮤니티의 관심을 불러일으켰습니다.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Wild Card Section -->
+        <div class="section">
+            <h2 class="section-title en">🎲 Wild Card</h2>
+            <h2 class="section-title ko">🎲 와일드 카드</h2>
+            
+            <div class="story">
+                <div class="en">
+                    <div class="story-headline"><a href="https://www.theverge.com/science/904458/nasa-artemis-ii-mission-moon-astronauts">Artemis II: iPhones in Space</a></div>
+                    <div class="story-source">The Verge / New York Times</div>
+                    <div class="story-summary">NASA's Artemis II astronauts are carrying iPhones on their journey to the Moon—but not for doomscrolling. The devices, provided during quarantine, can't connect to the internet or use Bluetooth. They're primarily for taking photos and videos, marking one of the first times NASA has allowed smartphones on a space mission.</div>
+                </div>
+                <div class="ko">
+                    <div class="story-headline"><a href="https://www.theverge.com/science/904458/nasa-artemis-ii-mission-moon-astronauts">아르테미스 II: 우주의 아이폰</a></div>
+                    <div class="story-source">The Verge / New York Times</div>
+                    <div class="story-summary">NASA의 아르테미스 II 우주비행사들이 달 여정에 아이폰을 가지고 갔지만, 둠스크롤링용은 아닙니다. 격리 기간에 제공된 이 기기는 인터넷이나 블루투스를 사용할 수 없습니다. 주로 사진과 영상 촬영용이며, NASA가 우주 임무에 스마트폰을 허용한 첫 사례 중 하나입니다.</div>
+                </div>
+            </div>
+            
+            <div class="story">
+                <div class="en">
+                    <div class="story-headline"><a href="https://www.theverge.com/entertainment/907137/the-writers-guild-reached-a-four-year-deal-with-the-studios-with-increased-ai-protections">Writers Guild Secures 4-Year Deal with AI Protections</a></div>
+                    <div class="story-source">The Hollywood Reporter / The Verge</div>
+                    <div class="story-summary">The Writers Guild has reached a tentative four-year deal with studios that includes increased protections against AI. The contract bolsters safeguards against works being used to train AI models, alongside increases to health plan funding and streaming residuals. The deal still needs to be ratified by union members.</div>
+                </div>
+                <div class="ko">
+                    <div class="story-headline"><a href="https://www.theverge.com/entertainment/907137/the-writers-guild-reached-a-four-year-deal-with-the-studios-with-increased-ai-protections">작가 길드, AI 보호 조항 포함 4년 계약 체결</a></div>
+                    <div class="story-source">The Hollywood Reporter / The Verge</div>
+                    <div class="story-summary">작가 길드가 AI에 대한 보호를 강화한 4년 임시 계약을 스튜디오와 체결했습니다. 이 계약은 AI 모델 훈련에 사용되는 작품에 대한 보호를 강화하고 건강 보험 기금과 스트리밍 잔여금을 증액합니다. 계약은 여전히 조합원의 비준을 받아야 합니다.</div>
+                </div>
+            </div>
+            
+            <div class="story">
+                <div class="en">
+                    <div class="story-headline"><a href="https://www.theverge.com/tech/906453/human-made-ai-free-logo-creative-content">The "Human-Made" Certification Movement</a></div>
+                    <div class="story-source">The Verge</div>
+                    <div class="story-summary">A growing movement is pushing for "human-made, AI-free" certification for creative content. As AI-generated material floods the market, artists and creators are seeking ways to prove their work is genuinely human-created. This has sparked 112+ comments in one discussion, showing the passionate divide in the creative community.</div>
+                </div>
+                <div class="ko">
+                    <div class="story-headline"><a href="https://www.theverge.com/tech/906453/human-made-ai-free-logo-creative-content">"휴먼메이드" 인증 운동</a></div>
+                    <div class="story-source">The Verge</div>
+                    <div class="story-summary">창작 콘텐츠를 위한 "휴먼메이드, AI-free" 인증을 추진하는 운동이 성장하고 있습니다. AI 생성 콘텐츠가 시장에 넘쳐나면서 예술가와 창작자들은 자신의 작품이 진정으로 인간이 만든 것임을 증명할 방법을 찾고 있습니다. 이는 한 논의에서 112개 이상의 댓글을 불러일으켜 창작 커뮤니티의 열정적인 분열을 보여줍니다.</div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p class="en">Compiled by Totoro 🌳 | Sources: The Verge, Yahoo Finance, Wired, NYT</p>
+            <p class="ko">토토로가 작성 🌳 | 출처: The Verge, Yahoo Finance, Wired, NYT</p>
+        </footer>
+    </div>
+
+    <script>
+        let isKorean = false;
+        
+        function toggleLang() {
+            isKorean = !isKorean;
+            
+            // Toggle English elements
+            document.querySelectorAll('.en').forEach(el => {
+                el.classList.toggle('hide', isKorean);
+            });
+            
+            // Toggle Korean elements
+            document.querySelectorAll('.ko').forEach(el => {
+                el.classList.toggle('show', isKorean);
+            });
+            
+            // Update button text
+            document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+        }
+    </script>
+</body>
+</html>
