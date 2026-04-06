@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Day 36: FIFO Design Part 1 — Read/Write Pointers</title>
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #fefae0 0%, #faedcd 100%);
+            color: #3d405b;
+            line-height: 1.8;
+            padding: 24px;
+            max-width: 920px;
+            margin: 0 auto;
+        }
+        h1 {
+            color: #5d4037;
+            border-bottom: 3px solid #c4a77d;
+            padding-bottom: 12px;
+        }
+        h2 {
+            color: #588157;
+            border-bottom: 2px solid #a3b18a;
+            margin-top: 32px;
+        }
+        h3 {
+            color: #5d4037;
+            margin-top: 24px;
+        }
+        .concept-box {
+            background: #fff8f0;
+            border: 2px solid #c4a77d;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            color: #3d405b;
+        }
+        .concept-box h3 {
+            color: #5d4037;
+            margin-bottom: 12px;
+            margin-top: 0;
+        }
+        .tip-box {
+            background: #fff8f0;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 4px solid #588157;
+            color: #3d405b;
+        }
+        .warning-box {
+            background: #fff8f0;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 4px solid #ef4444;
+            color: #3d405b;
+        }
+        .warning-box h3 {
+            color: #c53030;
+            margin-bottom: 12px;
+            margin-top: 0;
+        }
+        pre {
+            background: #2d3436;
+            padding: 24px;
+            border-radius: 12px;
+            margin: 24px 0;
+            border: 3px solid #a3b18a;
+            overflow-x: auto;
+        }
+        code {
+            font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        .keyword { color: #ff79c6; font-weight: 600; }
+        .type { color: #8be9fd; }
+        .signal { color: #50fa7b; }
+        .number { color: #ffb86c; }
+        .comment { color: #6272a4; font-style: italic; }
+        .string { color: #f1fa8c; }
+        .inline-code {
+            background: #e9f5db;
+            color: #3d405b;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+            font-size: 0.9em;
+        }
+        .lang-toggle {
+            position: fixed;
+            top: 16px;
+            right: 16px;
+            background: #588157;
+            border: none;
+            border-radius: 24px;
+            padding: 10px 20px;
+            cursor: pointer;
+            color: #fff;
+            font-size: 14px;
+            font-weight: 600;
+            z-index: 1000;
+        }
+        .lang-toggle:hover { background: #3a5a40; }
+        .day-badge {
+            display: inline-block;
+            background: #588157;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 16px;
+            font-size: 0.85em;
+            margin-bottom: 12px;
+        }
+        ul { padding-left: 24px; }
+        li { margin: 8px 0; }
+        @media (max-width: 768px) {
+            body { padding: 16px; }
+            h1 { font-size: 1.8em; }
+            pre { font-size: 14px; padding: 16px; }
+            .lang-toggle { padding: 8px 16px; font-size: 13px; }
+        }
+    </style>
+</head>
+<body>
+    <button class="lang-toggle" onclick="toggleLang()">한국어</button>
+    
+    <span class="day-badge">Day 36 / Week 8</span>
+    <h1>
+        <span class="en">FIFO Design Part 1 — Read/Write Pointers</span>
+        <span class="ko" style="display:none;">FIFO 설계 Part 1 — 읽기/쓰기 포인터</span>
+    </h1>
+
+    <div class="concept-box">
+        <h3>
+            <span class="en">🎯 Learning Objectives</span>
+            <span class="ko" style="display:none;">🎯 학습 목표</span>
+        </h3>
+        <ul>
+            <li class="en">Understand what a FIFO is and why we need it</li>
+            <li class="ko" style="display:none;">FIFO가 무엇이고 왜 필요한지 이해하기</li>
+            <li class="en">Learn how read and write pointers work</li>
+            <li class="ko" style="display:none;">읽기 및 쓰기 포인터의 작동 방식 배우기</li>
+            <li class="en">Implement a basic FIFO with pointer logic</li>
+            <li class="ko" style="display:none;">포인터 로직을 사용하여 기본 FIFO 구현하기</li>
+        </ul>
+    </div>
+
+    <h2>
+        <span class="en">What is a FIFO?</span>
+        <span class="ko" style="display:none;">FIFO란 무엇인가?</span>
+    </h2>
+    
+    <p class="en">
+        <strong>FIFO</strong> stands for <strong>First In, First Out</strong>. It's a fundamental data structure in digital design that acts as a buffer between two clock domains or between components with different data rates.
+    </p>
+    <p class="ko" style="display:none;">
+        <strong>FIFO</strong>는 <strong>First In, First Out(선입선출)</strong>의 약자입니다. 두 개의 클럭 도메인 사이나 서로 다른 데이터 속도를 가진 컴포넌트 사이에서 버퍼 역할을 하는 디지털 설계의 기본 데이터 구조입니다.
+    </p>
+
+    <div class="concept-box">
+        <h3>
+            <span class="en">Real-World Analogy</span>
+            <span class="ko" style="display:none;">실제 세계 비유</span>
+        </h3>
+        <p class="en">
+            Think of a FIFO like a line at a coffee shop. The first person in line (first in) is the first to get their coffee (first out). The line can grow when people arrive faster than they're served, and shrink when the barista works faster than customers arrive.
+        </p>
+        <p class="ko" style="display:none;">
+            FIFO를 커피숍의 줄에 비유해 보세요. 줄의 첫 번째 사람(선입)이 가장 먼저 커피를 받습니다(선출). 사람들이 제공되는 것보다 빨리 도착할 때 줄이 길어지고, 바리스타가 고객보다 빨리 일할 때 줄이 짧아집니다.
+        </p>
+    </div>
+
+    <h2>
+        <span class="en">Why Do We Need FIFOs?</span>
+        <span class="ko" style="display:none;">왜 FIFO가 필요한가?</span>
+    </h2>
+
+    <p class="en">FIFOs solve several common problems in digital systems:</p>
+    <p class="ko" style="display:none;">FIFO는 디지털 시스템의 여러 일반적인 문제를 해결합니다:</p>
+
+    <ul>
+        <li class="en"><strong>Clock Domain Crossing (CDC):</strong> Transfer data safely between different clock domains</li>
+        <li class="ko" style="display:none;"><strong>클럭 도메인 교차(CDC):</strong> 서로 다른 클럭 도메인 간에 데이터를 안전하게 전송</li>
+        <li class="en"><strong>Rate Matching:</strong> Buffer data when producer and consumer have different speeds</li>
+        <li class="ko" style="display:none;"><strong>속도 매칭:</strong> 생산자와 소비자의 속도가 다를 때 데이터 버퍼링</li>
+        <li class="en"><strong>Burst Handling:</strong> Absorb temporary bursts of data without loss</li>
+        <li class="ko" style="display:none;"><strong>버스트 처리:</strong> 데이터 손실 없이 일시적인 데이터 버스트 흡수</li>
+        <li class="en"><strong>Decoupling:</strong> Allow producer and consumer to operate independently</li>
+        <li class="ko" style="display:none;"><strong>디커플링:</strong> 생산자와 소비자가 독립적으로 작동할 수 있도록 함</li>
+    </ul>
+
+    <h2>
+        <span class="en">FIFO Structure: The Two Pointers</span>
+        <span class="ko" style="display:none;">FIFO 구조: 두 개의 포인터</span>
+    </h2>
+
+    <p class="en">
+        At the heart of every FIFO are two pointers:
+    </p>
+    <p class="ko" style="display:none;">
+        모든 FIFO의 핵심에는 두 개의 포인터가 있습니다:
+    </p>
+
+    <div class="concept-box">
+        <h3>
+            <span class="en">1. Write Pointer (wr_ptr)</span>
+            <span class="ko" style="display:none;">1. 쓰기 포인터 (wr_ptr)</span>
+        </h3>
+        <p class="en">
+            Points to the next location where data will be written. Incremented on every successful write operation.
+        </p>
+        <p class="ko" style="display:none;">
+            데이터가 쓰여질 다음 위치를 가리킵니다. 모든 성공적인 쓰기 작업에서 증가합니다.
+        </p>
+    </div>
+
+    <div class="concept-box">
+        <h3>
+            <span class="en">2. Read Pointer (rd_ptr)</span>
+            <span class="ko" style="display:none;">2. 읽기 포인터 (rd_ptr)</span>
+        </h3>
+        <p class="en">
+            Points to the next location where data will be read. Incremented on every successful read operation.
+        </p>
+        <p class="ko" style="display:none;">
+            데이터가 읽혀질 다음 위치를 가리킵니다. 모든 성공적인 읽기 작업에서 증가합니다.
+        </p>
+    </div>
+
+    <h2>
+        <span class="en">Basic FIFO Implementation</span>
+        <span class="ko" style="display:none;">기본 FIFO 구현</span>
+    </h2>
+
+    <p class="en">Here's a synchronous FIFO with read and write pointers:</p>
+    <p class="ko" style="display:none;">읽기 및 쓰기 포인터가 있는 동기식 FIFO입니다:</p>
+
+<pre><code><span class="comment">// Synchronous FIFO - Single Clock Domain</span>
+<span class="comment">// 동기식 FIFO - 단일 클럭 도메인</span>
+<span class="keyword">module</span> <span class="signal">sync_fifo</span> #(
+    <span class="keyword">parameter</span> <span class="type">DATA_WIDTH</span> = <span class="number">8</span>,
+    <span class="keyword">parameter</span> <span class="type">DEPTH</span> = <span class="number">16</span>,
+    <span class="keyword">parameter</span> <span class="type">ADDR_WIDTH</span> = <span class="number">4</span>  <span class="comment">// log2(DEPTH)</span>
+)(
+    <span class="keyword">input</span>  <span class="type">logic</span> <span class="signal">clk</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span> <span class="signal">rst_n</span>,
+    
+    <span class="comment">// Write interface</span>
+    <span class="keyword">input</span>  <span class="type">logic</span> <span class="signal">wr_en</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span> [<span class="type">DATA_WIDTH</span>-<span class="number">1</span>:<span class="number">0</span>] <span class="signal">wr_data</span>,
+    
+    <span class="comment">// Read interface</span>
+    <span class="keyword">input</span>  <span class="type">logic</span> <span class="signal">rd_en</span>,
+    <span class="keyword">output</span> <span class="type">logic</span> [<span class="type">DATA_WIDTH</span>-<span class="number">1</span>:<span class="number">0</span>] <span class="signal">rd_data</span>,
+    
+    <span class="comment">// Status</span>
+    <span class="keyword">output</span> <span class="type">logic</span> <span class="signal">full</span>,
+    <span class="keyword">output</span> <span class="type">logic</span> <span class="signal">empty</span>
+);
+
+    <span class="comment">// Memory array</span>
+    <span class="type">logic</span> [<span class="type">DATA_WIDTH</span>-<span class="number">1</span>:<span class="number">0</span>] <span class="signal">mem</span> [<span class="number">0</span>:<span class="type">DEPTH</span>-<span class="number">1</span>];
+    
+    <span class="comment">// Pointers</span>
+    <span class="type">logic</span> [<span class="type">ADDR_WIDTH</span>-<span class="number">1</span>:<span class="number">0</span>] <span class="signal">wr_ptr</span>, <span class="signal">rd_ptr</span>;
+    
+    <span class="comment">// Write operation</span>
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span> <span class="keyword">or negedge</span> <span class="signal">rst_n</span>) <span class="keyword">begin</span>
+        <span class="keyword">if</span> (!<span class="signal">rst_n</span>) <span class="keyword">begin</span>
+            <span class="signal">wr_ptr</span> <= <span class="number">0</span>;
+        <span class="keyword">end</span> <span class="keyword">else if</span> (<span class="signal">wr_en</span> && !<span class="signal">full</span>) <span class="keyword">begin</span>
+            <span class="signal">mem</span>[<span class="signal">wr_ptr</span>] <= <span class="signal">wr_data</span>;
+            <span class="signal">wr_ptr</span> <= <span class="signal">wr_ptr</span> + <span class="number">1</span>;
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+    
+    <span class="comment">// Read operation</span>
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span> <span class="keyword">or negedge</span> <span class="signal">rst_n</span>) <span class="keyword">begin</span>
+        <span class="keyword">if</span> (!<span class="signal">rst_n</span>) <span class="keyword">begin</span>
+            <span class="signal">rd_ptr</span> <= <span class="number">0</span>;
+        <span class="keyword">end</span> <span class="keyword">else if</span> (<span class="signal">rd_en</span> && !<span class="signal">empty</span>) <span class="keyword">begin</span>
+            <span class="signal">rd_ptr</span> <= <span class="signal">rd_ptr</span> + <span class="number">1</span>;
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+    
+    <span class="comment">// Combinational read data</span>
+    <span class="keyword">assign</span> <span class="signal">rd_data</span> = <span class="signal">mem</span>[<span class="signal">rd_ptr</span>];
+    
+    <span class="comment">// Status flags</span>
+    <span class="keyword">assign</span> <span class="signal">empty</span> = (<span class="signal">wr_ptr</span> == <span class="signal">rd_ptr</span>);
+    <span class="keyword">assign</span> <span class="signal">full</span>  = (<span class="signal">wr_ptr</span> == <span class="signal">rd_ptr</span> - <span class="number">1</span>);
+
+<span class="keyword">endmodule</span></code></pre>
+
+    <h2>
+        <span class="en">Pointer Arithmetic: The Key Insight</span>
+        <span class="ko" style="display:none;">포인터 연산: 핵심 통찰</span>
+    </h2>
+
+    <p class="en">
+        The pointers wrap around using modulo arithmetic. For a FIFO with <span class="inline-code">DEPTH = 16</span>:
+    </p>
+    <p class="ko" style="display:none;">
+        포인터는 모듈로 연산을 사용하여 래핑됩니다. <span class="inline-code">DEPTH = 16</span>인 FIFO의 경우:
+    </p>
+
+    <ul>
+        <li class="en"><span class="inline-code">wr_ptr</span> goes: 0 → 1 → 2 → ... → 15 → 0 → 1 ...</li>
+        <li class="ko" style="display:none;"><span class="inline-code">wr_ptr</span>는 다음과 같이 이동: 0 → 1 → 2 → ... → 15 → 0 → 1 ...</li>
+        <li class="en"><span class="inline-code">rd_ptr</span> follows the same pattern</li>
+        <li class="ko" style="display:none;"><span class="inline-code">rd_ptr</span>도 동일한 패턴을 따름</li>
+    </ul>
+
+    <div class="tip-box">
+        <p class="en">
+            <strong>💡 Tip:</strong> In SystemVerilog, adding 1 to a 4-bit pointer that holds 15 results in 0 automatically due to overflow. This gives us "free" wrapping!
+        </p>
+        <p class="ko" style="display:none;">
+            <strong>💡 팁:</strong> SystemVerilog에서 15를 보유한 4비트 포인터에 1을 더하면 오버플로우로 인해 자동으로 0이 됩니다. 이것이 "무료" 래핑입니다!
+        </p>
+    </div>
+
+    <h2>
+        <span class="en">Full and Empty Conditions</span>
+        <span class="ko" style="display:none;">Full 및 Empty 조건</span>
+    </h2>
+
+    <p class="en">Here's the tricky part: how do we distinguish between full and empty?</p>
+    <p class="ko" style="display:none;">여기가 까다로운 부분입니다: full과 empty를 어떻게 구분할까요?</p>
+
+    <div class="concept-box">
+        <h3>
+            <span class="en">Empty Condition</span>
+            <span class="ko" style="display:none;">Empty 조건</span>
+        </h3>
+        <p class="en">
+            <span class="inline-code">empty = (wr_ptr == rd_ptr)</span>
+        </p>
+        <p class="en">
+            When both pointers are equal, the FIFO is empty. This makes intuitive sense — we've read everything we've written.
+        </p>
+        <p class="ko" style="display:none;">
+            <span class="inline-code">empty = (wr_ptr == rd_ptr)</span>
+        </p>
+        <p class="ko" style="display:none;">
+            두 포인터가 같을 때 FIFO는 비어 있습니다. 직관적으로 이해할 수 있습니다 — 쓴 모든 것을 읽었습니다.
+        </p>
+    </div>
+
+    <div class="concept-box">
+        <h3>
+            <span class="en">Full Condition (Simple Version)</span>
+            <span class="ko" style="display:none;">Full 조건 (간단한 버전)</span>
+        </h3>
+        <p class="en">
+            <span class="inline-code">full = (wr_ptr == rd_ptr - 1)</span>
+        </p>
+        <p class="en">
+            The FIFO is full when the write pointer is just behind the read pointer (with wrap-around). However, this wastes one location!
+        </p>
+        <p class="ko" style="display:none;">
+            <span class="inline-code">full = (wr_ptr == rd_ptr - 1)</span>
+        </p>
+        <p class="ko" style="display:none;">
+            쓰기 포인터가 읽기 포인터 바로 뒤에 있을 때(래핑 포함) FIFO는 꽉 찹니다. 그러나 이것은 하나의 위치를 낭비합니다!
+        </p>
+    </div>
+
+    <div class="warning-box">
+        <h3>
+            <span class="en">⚠️ The Full/Empty Ambiguity Problem</span>
+            <span class="ko" style="display:none;">⚠️ Full/Empty 모호성 문제</span>
+        </h3>
+        <p class="en">
+            If <span class="inline-code">wr_ptr == rd_ptr</span> means empty, and we want to use all locations, how do we detect full? 
+            Tomorrow we'll learn about using an extra bit to solve this!
+        </p>
+        <p class="ko" style="display:none;">
+            <span class="inline-code">wr_ptr == rd_ptr</span>가 empty를 의미하고 모든 위치를 사용하려면 어떻게 full을 감지할까요?
+            내일 추가 비트를 사용하여 이를 해결하는 방법을 배우겠습니다!
+        </p>
+    </div>
+
+    <h2>
+        <span class="en">Visual FIFO Operation</span>
+        <span class="ko" style="display:none;">시각적 FIFO 작동</span>
+    </h2>
+
+    <div class="concept-box">
+        <h3>
+            <span class="en">Initial State (Empty)</span>
+            <span class="ko" style="display:none;">초기 상태 (Empty)</span>
+        </h3>
+        <pre style="background: #2d3436; padding: 16px; border-radius: 8px;"><code>Memory:  [__] [__] [__] [__] [__] [__] [__] [__]
+Index:     0    1    2    3    4    5    6    7
+
+wr_ptr = 0, rd_ptr = 0
+empty = 1, full = 0</code></pre>
+    </div>
+
+    <div class="concept-box">
+        <h3>
+            <span class="en">After Writing A, B, C</span>
+            <span class="ko" style="display:none;">A, B, C 쓴 후</span>
+        </h3>
+        <pre style="background: #2d3436; padding: 16px; border-radius: 8px;"><code>Memory:  [A]  [B]  [C]  [__] [__] [__] [__] [__]
+Index:     0    1    2    3    4    5    6    7
+          ↑              ↑
+        rd_ptr         wr_ptr
+
+wr_ptr = 3, rd_ptr = 0
+empty = 0, full = 0</code></pre>
+    </div>
+
+    <div class="concept-box">
+        <h3>
+            <span class="en">After Reading One Item</span>
+            <span class="ko" style="display:none;">하나 읽은 후</span>
+        </h3>
+        <pre style="background: #2d3436; padding: 16px; border-radius: 8px;"><code>Memory:  [A]  [B]  [C]  [__] [__] [__] [__] [__]
+Index:     0    1    2    3    4    5    6    7
+               ↑         ↑
+             rd_ptr    wr_ptr
+
+rd_data = A (but A still in memory until overwritten)
+wr_ptr = 3, rd_ptr = 1</code></pre>
+    </div>
+
+    <h2>
+        <span class="en">Summary</span>
+        <span class="ko" style="display:none;">요약</span>
+    </h2>
+
+    <div class="concept-box">
+        <h3>
+            <span class="en">Key Takeaways</span>
+            <span class="ko" style="display:none;">핵심 정리</span>
+        </h3>
+        <ul>
+            <li class="en">FIFO = First In, First Out buffer for data transfer</li>
+            <li class="ko" style="display:none;">FIFO = 데이터 전송을 위한 선입선출 버퍼</li>
+            <li class="en">Two pointers: <span class="inline-code">wr_ptr</span> (where to write) and <span class="inline-code">rd_ptr</span> (where to read)</li>
+            <li class="ko" style="display:none;">두 개의 포인터: <span class="inline-code">wr_ptr</span>(쓸 위치)와 <span class="inline-code">rd_ptr</span>(읽을 위치)</li>
+            <li class="en">Pointers wrap around automatically using overflow</li>
+            <li class="ko" style="display:none;">포인터는 오버플로우를 사용하여 자동으로 래핑</li>
+            <li class="en"><span class="inline-code">empty = (wr_ptr == rd_ptr)</span></li>
+            <li class="ko" style="display:none;"><span class="inline-code">empty = (wr_ptr == rd_ptr)</span></li>
+            <li class="en">Full detection requires special handling (extra bit — coming tomorrow!)</li>
+            <li class="ko" style="display:none;">Full 감지는 특별한 처리가 필요함 (추가 비트 — 내일!)</li>
+        </ul>
+    </div>
+
+    <script>
+        let isKorean = false;
+        function toggleLang() {
+            isKorean = !isKorean;
+            document.querySelectorAll('.en').forEach(el => {
+                el.style.setProperty('display', isKorean ? 'none' : 'revert', 'important');
+            });
+            document.querySelectorAll('.ko').forEach(el => {
+                el.style.setProperty('display', isKorean ? 'revert' : 'none', 'important');
+            });
+            document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+        }
+    </script>
+</body>
+</html>

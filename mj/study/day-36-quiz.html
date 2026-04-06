@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Day 36 Quiz: FIFO Design Part 1</title>
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #fefae0 0%, #faedcd 100%);
+            color: #3d405b;
+            line-height: 1.8;
+            padding: 24px;
+            max-width: 920px;
+            margin: 0 auto;
+        }
+        h1 {
+            color: #5d4037;
+            border-bottom: 3px solid #c4a77d;
+            padding-bottom: 12px;
+        }
+        h2 {
+            color: #588157;
+            border-bottom: 2px solid #a3b18a;
+            margin-top: 32px;
+        }
+        .lang-toggle {
+            position: fixed;
+            top: 16px;
+            right: 16px;
+            background: #588157;
+            border: none;
+            border-radius: 24px;
+            padding: 10px 20px;
+            cursor: pointer;
+            color: #fff;
+            font-size: 14px;
+            font-weight: 600;
+            z-index: 1000;
+        }
+        .lang-toggle:hover { background: #3a5a40; }
+        .day-badge {
+            display: inline-block;
+            background: #588157;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 16px;
+            font-size: 0.85em;
+            margin-bottom: 12px;
+        }
+        .quiz-container {
+            background: #fff8f0;
+            border: 2px solid #c4a77d;
+            border-radius: 12px;
+            padding: 24px;
+            margin: 20px 0;
+        }
+        .question {
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #e0d5c7;
+        }
+        .question:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+        .question-number {
+            display: inline-block;
+            background: #588157;
+            color: white;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 28px;
+            font-weight: bold;
+            margin-right: 8px;
+        }
+        .options {
+            margin-top: 12px;
+            padding-left: 36px;
+        }
+        .option {
+            margin: 8px 0;
+            padding: 8px 12px;
+            background: #fff;
+            border: 1px solid #c4a77d;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .option:hover {
+            background: #f0e6d3;
+        }
+        .answer {
+            display: none;
+            margin-top: 12px;
+            padding: 12px;
+            background: #e9f5db;
+            border-left: 4px solid #588157;
+            border-radius: 8px;
+        }
+        .answer.show {
+            display: block;
+        }
+        .toggle-answers {
+            background: #588157;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 24px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 20px 0;
+        }
+        .toggle-answers:hover {
+            background: #3a5a40;
+        }
+        .score-section {
+            background: #fff8f0;
+            border: 2px solid #588157;
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 24px;
+            text-align: center;
+        }
+        @media (max-width: 768px) {
+            body { padding: 16px; }
+            h1 { font-size: 1.8em; }
+            .lang-toggle { padding: 8px 16px; font-size: 13px; }
+            .options { padding-left: 16px; }
+        }
+    </style>
+</head>
+<body>
+    <button class="lang-toggle" onclick="toggleLang()">한국어</button>
+    
+    <span class="day-badge">Day 36 / Week 8</span>
+    <h1>
+        <span class="en">FIFO Design Part 1 — Quiz</span>
+        <span class="ko" style="display:none;">FIFO 설계 Part 1 — 퀴즈</span>
+    </h1>
+
+    <button class="toggle-answers" onclick="toggleAnswers()">
+        <span class="en">Show/Hide Answers</span>
+        <span class="ko" style="display:none;">정답 보기/숨기기</span>
+    </button>
+
+    <div class="quiz-container">
+        <div class="question">
+            <span class="question-number">1</span>
+            <strong>
+                <span class="en">What does FIFO stand for?</span>
+                <span class="ko" style="display:none;">FIFO는 무엇의 약자인가?</span>
+            </strong>
+            <div class="options">
+                <div class="option">A. Fast Input, Fast Output</div>
+                <div class="option">B. First In, First Out</div>
+                <div class="option">C. First In, Final Out</div>
+                <div class="option">D. Forward Input, Forward Output</div>
+            </div>
+            <div class="answer">
+                <strong>
+                    <span class="en">Answer: B</span>
+                    <span class="ko" style="display:none;">정답: B</span>
+                </strong>
+                <p class="en">FIFO = First In, First Out. The first data written is the first data read.</p>
+                <p class="ko" style="display:none;">FIFO = First In, First Out(선입선출). 처음 쓴 데이터가 처음 읽힙니다.</p>
+            </div>
+        </div>
+
+        <div class="question">
+            <span class="question-number">2</span>
+            <strong>
+                <span class="en">What is the primary purpose of a FIFO in digital design?</span>
+                <span class="ko" style="display:none;">디지털 설계에서 FIFO의 주요 목적은 무엇인가?</span>
+            </strong>
+            <div class="options">
+                <div class="option">A. To sort data in ascending order</div>
+                <div class="option">B. To buffer data between components with different speeds</div>
+                <div class="option">C. To compress data for storage</div>
+                <div class="option">D. To encrypt data for security</div>
+            </div>
+            <div class="answer">
+                <strong>
+                    <span class="en">Answer: B</span>
+                    <span class="ko" style="display:none;">정답: B</span>
+                </strong>
+                <p class="en">FIFOs buffer data between components operating at different rates or in different clock domains.</p>
+                <p class="ko" style="display:none;">FIFO는 서로 다른 속도로 작동하거나 다른 클럭 도메인에 있는 컴포넌트 사이에서 데이터를 버퍼링합니다.</p>
+            </div>
+        </div>
+
+        <div class="question">
+            <span class="question-number">3</span>
+            <strong>
+                <span class="en">What does the write pointer (wr_ptr) point to?</span>
+                <span class="ko" style="display:none;">쓰기 포인터(wr_ptr)는 무엇을 가리키는가?</span>
+            </strong>
+            <div class="options">
+                <div class="option">A. The last location that was written</div>
+                <div class="option">B. The next location where data will be written</div>
+                <div class="option">C. The last location that was read</div>
+                <div class="option">D. The middle of the FIFO</div>
+            </div>
+            <div class="answer">
+                <strong>
+                    <span class="en">Answer: B</span>
+                    <span class="ko" style="display:none;">정답: B</span>
+                </strong>
+                <p class="en">The write pointer points to the next location where data will be written.</p>
+                <p class="ko" style="display:none;">쓰기 포인터는 데이터가 쓰여질 다음 위치를 가리킵니다.</p>
+            </div>
+        </div>
+
+        <div class="question">
+            <span class="question-number">4</span>
+            <strong>
+                <span class="en">In a FIFO with DEPTH=16, what happens when a 4-bit pointer with value 15 is incremented?</span>
+                <span class="ko" style="display:none;">DEPTH=16인 FIFO에서 값이 15인 4비트 포인터가 증가하면 어떻게 되는가?</span>
+            </strong>
+            <div class="options">
+                <div class="option">A. It stays at 15 (saturates)</div>
+                <div class="option">B. It becomes 16</div>
+                <div class="option">C. It wraps to 0</div>
+                <div class="option">D. It causes an overflow error</div>
+            </div>
+            <div class="answer">
+                <strong>
+                    <span class="en">Answer: C</span>
+                    <span class="ko" style="display:none;">정답: C</span>
+                </strong>
+                <p class="en">Due to overflow, 15 + 1 = 0 for a 4-bit value. This gives us automatic wrapping!</p>
+                <p class="ko" style="display:none;">오버플로우로 인해 4비트 값에 대해 15 + 1 = 0이 됩니다. 이것이 자동 래핑입니다!</p>
+            </div>
+        </div>
+
+        <div class="question">
+            <span class="question-number">5</span>
+            <strong>
+                <span class="en">What is the condition for an empty FIFO?</span>
+                <span class="ko" style="display:none;">빈 FIFO의 조건은 무엇인가?</span>
+            </strong>
+            <div class="options">
+                <div class="option">A. wr_ptr > rd_ptr</div>
+                <div class="option">B. wr_ptr < rd_ptr</div>
+                <div class="option">C. wr_ptr == rd_ptr</div>
+                <div class="option">D. wr_ptr == rd_ptr - 1</div>
+            </div>
+            <div class="answer">
+                <strong>
+                    <span class="en">Answer: C</span>
+                    <span class="ko" style="display:none;">정답: C</span>
+                </strong>
+                <p class="en">When wr_ptr equals rd_ptr, the FIFO is empty — everything written has been read.</p>
+                <p class="ko" style="display:none;">wr_ptr가 rd_ptr와 같을 때 FIFO는 비어 있습니다 — 쓴 모든 것이 읽혔습니다.</p>
+            </div>
+        </div>
+
+        <div class="question">
+            <span class="question-number">6</span>
+            <strong>
+                <span class="en">For a FIFO with DEPTH=8 (3-bit pointers), if wr_ptr=5 and rd_ptr=2, how many items are in the FIFO?</span>
+                <span class="ko" style="display:none;">DEPTH=8(3비트 포인터)인 FIFO에서 wr_ptr=5, rd_ptr=2일 때 FIFO에 몇 개의 항목이 있는가?</span>
+            </strong>
+            <div class="options">
+                <div class="option">A. 2</div>
+                <div class="option">B. 3</div>
+                <div class="option">C. 5</div>
+                <div class="option">D. 7</div>
+            </div>
+            <div class="answer">
+                <strong>
+                    <span class="en">Answer: B</span>
+                    <span class="ko" style="display:none;">정답: B</span>
+                </strong>
+                <p class="en">Items in FIFO = wr_ptr - rd_ptr = 5 - 2 = 3 items (at locations 2, 3, and 4).</p>
+                <p class="ko" style="display:none;">FIFO의 항목 = wr_ptr - rd_ptr = 5 - 2 = 3개(위치 2, 3, 4에 있음).</p>
+            </div>
+        </div>
+
+        <div class="question">
+            <span class="question-number">7</span>
+            <strong>
+                <span class="en">Which of these is a valid use case for a FIFO?</span>
+                <span class="ko" style="display:none;">FIFO의 유효한 사용 사례는 무엇인가?</span>
+            </strong>
+            <div class="options">
+                <div class="option">A. Clock domain crossing</div>
+                <div class="option">B. Rate matching between producer and consumer</div>
+                <div class="option">C. Absorbing data bursts</div>
+                <div class="option">D. All of the above</div>
+            </div>
+            <div class="answer">
+                <strong>
+                    <span class="en">Answer: D</span>
+                    <span class="ko" style="display:none;">정답: D</span>
+                </strong>
+                <p class="en">All are valid use cases: CDC, rate matching, and burst handling.</p>
+                <p class="ko" style="display:none;">모두 유효한 사용 사례입니다: CDC, 속도 매칭, 버스트 처리.</p>
+            </div>
+        </div>
+
+        <div class="question">
+            <span class="question-number">8</span>
+            <strong>
+                <span class="en">In the simple FIFO design, why does the full condition waste one location?</span>
+                <span class="ko" style="display:none;">간단한 FIFO 설계에서 full 조건이 왜 하나의 위치를 낭비하는가?</span>
+            </strong>
+            <div class="options">
+                <div class="option">A. To store parity information</div>
+                <div class="option">B. To distinguish full from empty (both can't use wr_ptr == rd_ptr)</div>
+                <div class="option">C. For error correction</div>
+                <div class="option">D. It's a hardware limitation</div>
+            </div>
+            <div class="answer">
+                <strong>
+                    <span class="en">Answer: B</span>
+                    <span class="ko" style="display:none;">정답: B</span>
+                </strong>
+                <p class="en">We need different conditions for full and empty. If both used wr_ptr == rd_ptr, we couldn't tell them apart!</p>
+                <p class="ko" style="display:none;">full과 empty에 대해 다른 조건이 필요합니다. 둘 다 wr_ptr == rd_ptr를 사용하면 구분할 수 없습니다!</p>
+            </div>
+        </div>
+
+        <div class="question">
+            <span class="question-number">9</span>
+            <strong>
+                <span class="en">What type of always block should be used for pointer updates?</span>
+                <span class="ko" style="display:none;">포인터 업데이트에 어떤 유형의 always 블록을 사용해야 하는가?</span>
+            </strong>
+            <div class="options">
+                <div class="option">A. always_comb</div>
+                <div class="option">B. always_latch</div>
+                <div class="option">C. always_ff @(posedge clk)</div>
+                <div class="option">D. always @(*)</div>
+            </div>
+            <div class="answer">
+                <strong>
+                    <span class="en">Answer: C</span>
+                    <span class="ko" style="display:none;">정답: C</span>
+                </strong>
+                <p class="en">Pointers are sequential logic — they need flip-flops, so use always_ff.</p>
+                <p class="ko" style="display:none;">포인터는 순차 논리입니다 — 플립플롭이 필요하므로 always_ff를 사용합니다.</p>
+            </div>
+        </div>
+
+        <div class="question">
+            <span class="question-number">10</span>
+            <strong>
+                <span class="en">If a FIFO has DEPTH=4 and we perform: write(A), write(B), read(), write(C), what is the state?</span>
+                <span class="ko" style="display:none;">FIFO의 DEPTH=4이고 write(A), write(B), read(), write(C)를 수행하면 상태는 어떻게 되는가?</span>
+            </strong>
+            <div class="options">
+                <div class="option">A. wr_ptr=2, rd_ptr=1, contains [B, C]</div>
+                <div class="option">B. wr_ptr=3, rd_ptr=1, contains [B, C]</div>
+                <div class="option">C. wr_ptr=3, rd_ptr=0, contains [A, B, C]</div>
+                <div class="option">D. wr_ptr=2, rd_ptr=0, contains [A, B]</div>
+            </div>
+            <div class="answer">
+                <strong>
+                    <span class="en">Answer: B</span>
+                    <span class="ko" style="display:none;">정답: B</span>
+                </strong>
+                <p class="en">After writes: wr_ptr=2. After read: rd_ptr=1 (A was read). After write C: wr_ptr=3. Contains B at [1] and C at [2].</p>
+                <p class="ko" style="display:none;">쓰기 후: wr_ptr=2. 읽기 후: rd_ptr=1(A가 읽혔음). C 쓴 후: wr_ptr=3. [1]에 B와 [2]에 C가 있음.</p>
+            </div>
+        </div>
+
+        <div class="question">
+            <span class="question-number">11</span>
+            <strong>
+                <span class="en">What happens if you read from an empty FIFO?</span>
+                <span class="ko" style="display:none;">빈 FIFO에서 읽으면 어떻게 되는가?</span>
+            </strong>
+            <div class="options">
+                <div class="option">A. Returns the last valid data</div>
+                <div class="option">B. Returns random data</div>
+                <div class="option">C. Underflow condition — should be prevented by checking empty flag</div>
+                <div class="option">D. The FIFO automatically refills</div>
+            </div>
+            <div class="answer">
+                <strong>
+                    <span class="en">Answer: C</span>
+                    <span class="ko" style="display:none;">정답: C</span>
+                </strong>
+                <p class="en">Reading from empty is an underflow. Good designs check the empty flag before reading.</p>
+                <p class="ko" style="display:none;">비어 있는 곳에서 읽는 것은 언더플로우입니다. 좋은 설계는 읽기 전에 empty 플래그를 확인합니다.</p>
+            </div>
+        </div>
+
+        <div class="question">
+            <span class="question-number">12</span>
+            <strong>
+                <span class="en">For a synchronous FIFO, what clock domain do read and write pointers share?</span>
+                <span class="ko" style="display:none;">동기식 FIFO의 경우 읽기 및 쓰기 포인터가 공유하는 클럭 도메인은 무엇인가?</span>
+            </strong>
+            <div class="options">
+                <div class="option">A. They use different clocks</div>
+                <div class="option">B. They share the same clock</div>
+                <div class="option">C. Read uses clock, write doesn't</div>
+                <div class="option">D. They alternate clocks</div>
+            </div>
+            <div class="answer">
+                <strong>
+                    <span class="en">Answer: B</span>
+                    <span class="ko" style="display:none;">정답: B</span>
+                </strong>
+                <p class="en">Synchronous FIFOs use the same clock for both read and write operations.</p>
+                <p class="ko" style="display:none;">동기식 FIFO는 읽기 및 쓰기 작업 모두에 동일한 클럭을 사용합니다.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="score-section">
+        <h2>
+            <span class="en">Score Yourself</span>
+            <span class="ko" style="display:none;">자가 채점</span>
+        </h2>
+        <p class="en">
+            12/12 = Excellent! 🌟<br>
+            10-11 = Very good<br>
+            8-9 = Good, review weak areas<br>
+            < 8 = Re-read the lesson
+        </p>
+        <p class="ko" style="display:none;">
+            12/12 = 훌륭함! 🌟<br>
+            10-11 = 매우 좋음<br>
+            8-9 = 좋음, 약한 부분 복습<br>
+            < 8 = 레슨 다시 읽기
+        </p>
+    </div>
+
+    <script>
+        let isKorean = false;
+        function toggleLang() {
+            isKorean = !isKorean;
+            document.querySelectorAll('.en').forEach(el => {
+                el.style.setProperty('display', isKorean ? 'none' : 'revert', 'important');
+            });
+            document.querySelectorAll('.ko').forEach(el => {
+                el.style.setProperty('display', isKorean ? 'revert' : 'none', 'important');
+            });
+            document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+        }
+
+        let answersVisible = false;
+        function toggleAnswers() {
+            answersVisible = !answersVisible;
+            document.querySelectorAll('.answer').forEach(el => {
+                el.classList.toggle('show', answersVisible);
+            });
+        }
+    </script>
+</body>
+</html>

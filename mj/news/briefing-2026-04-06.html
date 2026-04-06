@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Tech Briefing - April 6, 2026</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: linear-gradient(135deg, #0d1117 0%, #161b22 100%);
+            color: #e6edf3;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            padding: 30px 0;
+            border-bottom: 1px solid #30363d;
+            margin-bottom: 30px;
+            position: relative;
+        }
+        
+        .lang-toggle {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: #238636;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+        
+        .lang-toggle:hover {
+            background: #2ea043;
+        }
+        
+        h1 {
+            font-size: 28px;
+            margin-bottom: 8px;
+            background: linear-gradient(90deg, #58a6ff, #a371f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .date {
+            color: #8b949e;
+            font-size: 14px;
+        }
+        
+        .section {
+            margin-bottom: 35px;
+            background: rgba(22, 27, 34, 0.6);
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid #30363d;
+        }
+        
+        .section-title {
+            font-size: 20px;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #58a6ff;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .section-icon {
+            font-size: 24px;
+        }
+        
+        .story {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #21262d;
+        }
+        
+        .story:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+        
+        .story-headline {
+            font-size: 17px;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: #e6edf3;
+            line-height: 1.4;
+        }
+        
+        .story-source {
+            font-size: 12px;
+            color: #58a6ff;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 10px;
+        }
+        
+        .story-summary {
+            font-size: 14px;
+            color: #c9d1d9;
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+        
+        .story-link {
+            font-size: 13px;
+            color: #58a6ff;
+            text-decoration: none;
+            word-break: break-all;
+        }
+        
+        .story-link:hover {
+            text-decoration: underline;
+        }
+        
+        /* Korean language styles */
+        .ko {
+            display: none;
+        }
+        
+        .ko.show {
+            display: block !important;
+        }
+        
+        .en.hide {
+            display: none !important;
+        }
+        
+        /* Show Korean inline elements when toggled */
+        span.ko.show {
+            display: inline !important;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #6e7681;
+            font-size: 12px;
+            border-top: 1px solid #30363d;
+            margin-top: 20px;
+        }
+        
+        @media (max-width: 600px) {
+            .container {
+                padding: 15px;
+            }
+            
+            h1 {
+                font-size: 22px;
+            }
+            
+            .section {
+                padding: 15px;
+            }
+            
+            .lang-toggle {
+                position: static;
+                margin-bottom: 15px;
+                display: block;
+                width: 100%;
+            }
+            
+            header {
+                padding-top: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <button class="lang-toggle" onclick="toggleLang()">한국어</button>
+            <h1 class="en">Daily Tech Briefing</h1>
+            <h1 class="ko">데일리 테크 브리핑</h1>
+            <p class="date">April 6, 2026 | Monday</p>
+        </header>
+
+        <!-- AI & Tech Section -->
+        <div class="section">
+            <h2 class="section-title">
+                <span class="section-icon">🤖</span>
+                <span class="en">AI & Tech</span>
+                <span class="ko">AI & 테크</span>
+            </h2>
+            
+            <div class="story">
+                <h3 class="story-headline en">Sam Altman "Unconstrained by Truth" - New Yorker Investigation</h3>
+                <h3 class="story-headline ko">샘 올트먼 "진실에 얽매이지 않는다" - 뉴요커 조사 복도</h3>
+                <p class="story-source">The Verge / The New Yorker</p>
+                <p class="story-summary en">A comprehensive New Yorker investigation reveals Sam Altman's pattern of deceit and will to power, compiled from over 100 interviews. While grimmer rumors were unfounded, the report raises serious questions about OpenAI's leadership as the company controls increasingly powerful AI systems.</p>
+                <p class="story-summary ko">100개 이상의 인터뷰를 바탕으로 한 뉴요커의 종합적인 조사는 샘 올트먼의 기만 패턴과 권력 의지를 드러냈습니다. 더 끔찍한 루머는 사실이 아니었지만, 이 보고서는 OpenAI가 점점 더 강력한 AI 시스템을 통제하면서 회사 리더십에 대한 심각한 의문을 제기합니다.</p>
+                <a class="story-link" href="https://www.theverge.com/ai-artificial-intelligence/907421/sam-altman-is-unconstrained-by-truth" target="_blank">theverge.com/ai-artificial-intelligence/907421/sam-altman-is-unconstrained-by-truth</a>
+            </div>
+            
+            <div class="story">
+                <h3 class="story-headline en">Anthropic Leaked Claude AI Code Sparks Containment Rush</h3>
+                <h3 class="story-headline ko">Anthropic 유출된 Claude AI 코드, 긴급 봉쇄 작전</h3>
+                <p class="story-source">Yahoo Finance</p>
+                <p class="story-summary en">Anthropic accidentally leaked instructions for directing its AI agent Claude and is now racing to contain the code via copyright takedown requests. The leak reveals internal system prompts that could give competitors insight into Claude's operation.</p>
+                <p class="story-summary ko">Anthropic이 AI 에이전트 Claude를 지시하는 방법을 담은 지침을 실수로 유출하여 저작권 삭제 요청을 통해 코드를 봉쇄하기 위해 경쟁하고 있습니다. 이번 유출은 Claude의 작동 방식에 대한 통찰력을 경쟁사에 제공할 수 있는 내부 시스템 프롬프트를 공개했습니다.</p>
+                <a class="story-link" href="https://finance.yahoo.com/video/what-to-know-as-anthropic-tries-to-contain-leaked-claude-ai-code-141759728.html" target="_blank">finance.yahoo.com/video/anthropic-leaked-claude-ai-code</a>
+            </div>
+            
+            <div class="story">
+                <h3 class="story-headline en">OpenAI Valued at $852 Billion in Historic Funding Round</h3>
+                <h3 class="story-headline ko">OpenAI, 역사적인 펀딩 라운드에서 8,520억 달러 가치 평가</h3>
+                <p class="story-source">Yahoo Finance</p>
+                <p class="story-summary en">OpenAI announced a massive $122 billion funding round at a $852 billion valuation, positioning the company for a potential IPO. The raise reflects continued investor confidence in AI despite leadership controversies.</p>
+                <p class="story-summary ko">OpenAI는 잠재적인 IPO를 위해 8,520억 달러의 가치로 1,220억 달러의 대규모 펀딩 라운드를 발표했습니다. 이번 투자 유치는 리더십 논란에도 불구하고 AI에 대한 투자자들의 지속적인 신뢰를 반영합니다.</p>
+                <a class="story-link" href="https://finance.yahoo.com/sectors/technology/article/openai-valued-at-852-billion-in-latest-funding-round-ahead-of-ipo-213943098.html" target="_blank">finance.yahoo.com/openai-valued-at-852-billion</a>
+            </div>
+        </div>
+
+        <!-- Markets Section -->
+        <div class="section">
+            <h2 class="section-title">
+                <span class="section-icon">📈</span>
+                <span class="en">Markets</span>
+                <span class="ko">시장</span>
+            </h2>
+            
+            <div class="story">
+                <h3 class="story-headline en">Markets Open Higher: S&P 500 +0.25%, Nasdaq +0.36%</h3>
+                <h3 class="story-headline ko">시장 상승 출발: S&P 500 +0.25%, 나스닥 +0.36%</h3>
+                <p class="story-source">Yahoo Finance</p>
+                <p class="story-summary en">U.S. markets opened higher Monday with the S&P 500 at 6,599.26 (+16.57), Dow 30 at 46,597.65 (+92.98), and Nasdaq at 21,958.40 (+79.22). Bitcoin surged 3.96% to $69,947, while gold gained 0.28% to $4,692.90.</p>
+                <p class="story-summary ko">미국 시장은 월요일에 상승하여 S&P 500은 6,599.26(+16.57), 다우 30은 46,597.65(+92.98), 나스닥은 21,958.40(+79.22)을 기록했습니다. 비트코인은 3.96% 급등하여 69,947달러에, 금은 0.28% 상승하여 4,692.90달러에 거래되었습니다.</p>
+                <a class="story-link" href="https://finance.yahoo.com" target="_blank">finance.yahoo.com</a>
+            </div>
+            
+            <div class="story">
+                <h3 class="story-headline en">Tesla Q1 Deliveries Expected to Dip on Softening EV Demand</h3>
+                <h3 class="story-headline ko">테슬라 1분기 인도량, EV 수요 둔화로 감소 예상</h3>
+                <p class="story-source">Reuters / Yahoo Finance</p>
+                <p class="story-summary en">Tesla's first-quarter deliveries are expected to be lower than Q4 as the EV maker faces uneven demand and intensifying competition. The stock has been volatile amid concerns about the company's growth trajectory.</p>
+                <p class="story-summary ko">테슬라의 1분기 인도량은 전기차 제조사가 불균형한 수요와 치열해지는 경쟁에 직면하면서 4분기보다 낮을 것으로 예상됩니다. 주식은 회사의 성장 궤적에 대한 우려 속에서 변동성을 보이고 있습니다.</p>
+                <a class="story-link" href="https://finance.yahoo.com/markets/stocks/articles/tesla-q1-deliveries-likely-dip-100411550.html" target="_blank">finance.yahoo.com/tesla-q1-deliveries</a>
+            </div>
+            
+            <div class="story">
+                <h3 class="story-headline en">Meta and Google Lose Major Social Media Addiction Lawsuit</h3>
+                <h3 class="story-headline ko">메타와 구글, 주요 소셜 미디어 중독 소송 패소</h3>
+                <p class="story-source">Yahoo Finance</p>
+                <p class="story-summary en">Meta and Google lost a significant lawsuit over social media addiction, with legal troubles far from over. The case could open floodgates for similar claims and force changes to platform design practices.</p>
+                <p class="story-summary ko">메타와 구글은 소셜 미디어 중독과 관련된 중요한 소송에서 패배했으며 법적 문제는 아직 끝나지 않았습니다. 이 사건은 유사한 주장의 물결을 열 수 있고 플랫폼 설계 관행의 변화를 강요할 수 있습니다.</p>
+                <a class="story-link" href="https://finance.yahoo.com/news/meta-and-google-lost-a-major-social-media-addiction-lawsuit-their-troubles-are-far-from-over-130000496.html" target="_blank">finance.yahoo.com/meta-google-social-media-lawsuit</a>
+            </div>
+        </div>
+
+        <!-- Semiconductors Section -->
+        <div class="section">
+            <h2 class="section-title">
+                <span class="section-icon">💻</span>
+                <span class="en">Semiconductors</span>
+                <span class="ko">반도체</span>
+            </h2>
+            
+            <div class="story">
+                <h3 class="story-headline en">Micron Stock Slides Despite Massive Data Center Demand</h3>
+                <h3 class="story-headline ko">미크론 주가, 대규모 데이터센터 수요에도 불구하고 하락</h3>
+                <p class="story-source">Yahoo Finance</p>
+                <p class="story-summary en">Micron Technology continues to face stock pressure despite booming data center demand for memory chips. The disconnect highlights investor concerns about pricing power and competition in the memory market.</p>
+                <p class="story-summary ko">미크론 테크놀로지는 메모리 칩에 대한 데이터센터 수요가 급증하고 있음에도 불구하고 주식 압력에 계속 직면하고 있습니다. 이러한 괴리는 메모리 시장의 가격 설정력과 경쟁에 대한 투자자들의 우려를 강조합니다.</p>
+                <a class="story-link" href="https://finance.yahoo.com/markets/stocks/article/micron-stock-continues-slide-despite-massive-data-center-demand-134349171.html" target="_blank">finance.yahoo.com/micron-stock-data-center-demand</a>
+            </div>
+            
+            <div class="story">
+                <h3 class="story-headline en">Nvidia Investors Had a Surprising First Quarter</h3>
+                <h3 class="story-headline ko">엔비디아 투자자들, 놀라운 1분기 경험</h3>
+                <p class="story-source">Yahoo Finance</p>
+                <p class="story-summary en">Nvidia's stock performance in Q1 surprised many investors, with the AI chip leader facing valuation questions despite continued dominance in the data center market. The stock currently trades around $177.</p>
+                <p class="story-summary ko">엔비디아의 1분기 주식 성과는 데이터센터 시장에서 지속적인 지배력에도 불구하고 밸류에이션 문제에 직면한 AI 칩 리더로서 많은 투자자들을 놀라게 했습니다. 주식은 현재 약 177달러에 거래되고 있습니다.</p>
+                <a class="story-link" href="https://finance.yahoo.com/news/nvidia-investors-just-had-a-surprising-first-quarter-204546936.html" target="_blank">finance.yahoo.com/nvidia-investors-first-quarter</a>
+            </div>
+            
+            <div class="story">
+                <h3 class="story-headline en">Cisco Partners with Atom Computing on Quantum Networking</h3>
+                <h3 class="story-headline ko">시스코, Atom Computing과 양자 네트워킹 파트너십 체결</h3>
+                <p class="story-source">Simply Wall St / Yahoo Finance</p>
+                <p class="story-summary en">Cisco signed an MOU with Atom Computing to explore linking neutral-atom quantum computers over quantum networks. The collaboration positions Cisco beyond classical networking into the emerging quantum infrastructure market.</p>
+                <p class="story-summary ko">시스코는 양자 네트워크를 통해 중성 원자 양자 컴퓨터를 연결하는 것을 탐구하기 위해 Atom Computing과 양해각서(MOU)에 서명했습니다. 이번 협업은 시스코를 클래식 네트워킹을 넘어 신흥 양자 인프라 시장으로 위치시킵니다.</p>
+                <a class="story-link" href="https://finance.yahoo.com/sectors/technology/articles/cisco-quantum-networking-push-atom-011246994.html" target="_blank">finance.yahoo.com/cisco-quantum-networking</a>
+            </div>
+        </div>
+
+        <!-- Wild Card Section -->
+        <div class="section">
+            <h2 class="section-title">
+                <span class="section-icon">🚀</span>
+                <span class="en">Wild Card</span>
+                <span class="ko">와일드 카드</span>
+            </h2>
+            
+            <div class="story">
+                <h3 class="story-headline en">Artemis II Astronauts Set Distance Record from Earth Today</h3>
+                <h3 class="story-headline ko">아르테미스 II 우주비행사, 오늘 지구로부터 거리 기록 세워</h3>
+                <p class="story-source">The Verge / NASA</p>
+                <p class="story-summary en">The Artemis II crew flew past the Moon's far side today, setting a new distance record from Earth. The mission marks the first time humans have seen the entire Orientale basin. Netflix secured streaming rights after missing the April 1 launch.</p>
+                <p class="story-summary ko">아르테미스 II 승무원은 오늘 달의 뒷면을 지나며 지구로부터 새로운 거리 기록을 세웠습니다. 이 임무는 인간이 전체 오리엔탈 분지를 처음 본 것을 의미합니다. 넷플릭스는 4월 1일 발사를 놓친 후 스트리밍 권리를 확보했습니다.</p>
+                <a class="story-link" href="https://www.theverge.com/science/907364/nasa-artemis-ii-astronauts-moon-orion-distance-record" target="_blank">theverge.com/artemis-ii-astronauts-moon-record</a>
+            </div>
+            
+            <div class="story">
+                <h3 class="story-headline en">Amazon Wins Delta Satellite Internet Deal Over SpaceX</h3>
+                <h3 class="story-headline ko">아마존, 스페이스X 제치고 델타 위성 인터넷 계약 수주</h3>
+                <p class="story-source">Yahoo Finance</p>
+                <p class="story-summary en">Amazon's Project Kuiper secured a major satellite internet deal with Delta Air Lines, beating out Elon Musk's SpaceX Starlink. The partnership represents a significant win for Amazon's delayed satellite constellation.</p>
+                <p class="story-summary ko">아마존의 프로젝트 카이퍼는 일론 머스크의 스페이스X 스타링크를 제치고 델타 항공과의 주요 위성 인터넷 계약을 확보했습니다. 이번 파트너십은 지연된 아마존의 위성 컨스텔레이션에 대한 중요한 승리를 의미합니다.</p>
+                <a class="story-link" href="https://finance.yahoo.com/markets/article/amazon-inks-satellite-internet-deal-with-delta-in-major-win-over-elon-musks-spacex-152246215.html" target="_blank">finance.yahoo.com/amazon-delta-satellite-deal</a>
+            </div>
+            
+            <div class="story">
+                <h3 class="story-headline en">Samsung Messages App Shutting Down July 2026</h3>
+                <h3 class="story-headline ko">삼성 메시지 앱, 2026년 7월 종료</h3>
+                <p class="story-source">The Verge / Samsung</p>
+                <p class="story-summary en">Samsung is officially shutting down its Messages app for devices with Android 12 or newer starting July 2026. The company is pushing users to Google Messages, which became the default on flagship Galaxy devices in 2024.</p>
+                <p class="story-summary ko">삼성은 2026년 7월부터 Android 12 이상이 탑재된 기기에서 메시지 앱을 공식적으로 종료합니다. 회사는 2024년에 기본 앱이 된 Google Messages로 사용자를 유도하고 있습니다.</p>
+                <a class="story-link" href="https://www.theverge.com/tech/907262/samsung-messages-is-shutting-down" target="_blank">theverge.com/samsung-messages-shutting-down</a>
+            </div>
+        </div>
+
+        <footer>
+            <p class="en">Daily Tech Briefing | Generated April 6, 2026</p>
+            <p class="ko">데일리 테크 브리핑 | 2026년 4월 6일 생성</p>
+        </footer>
+    </div>
+
+    <script>
+        let isKorean = false;
+        
+        function toggleLang() {
+            isKorean = !isKorean;
+            
+            // Toggle all English elements
+            document.querySelectorAll('.en').forEach(el => {
+                el.classList.toggle('hide', isKorean);
+            });
+            
+            // Toggle all Korean elements
+            document.querySelectorAll('.ko').forEach(el => {
+                el.classList.toggle('show', isKorean);
+            });
+            
+            // Update button text
+            document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+        }
+    </script>
+</body>
+</html>
