@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Tech Briefing - April 7, 2026</title>
+    <style>
+        :root {
+            --bg-dark: #0d1117;
+            --bg-card: #161b22;
+            --border: #30363d;
+            --text-primary: #e6edf3;
+            --text-secondary: #8b949e;
+            --accent-blue: #58a6ff;
+            --accent-green: #3fb950;
+            --accent-purple: #a371f7;
+            --accent-orange: #f0883e;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-primary);
+            line-height: 1.6;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            padding: 30px 0;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 30px;
+        }
+        
+        h1 {
+            font-size: 1.8rem;
+            margin-bottom: 8px;
+            background: linear-gradient(90deg, var(--accent-blue), var(--accent-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .date {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+        
+        .lang-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        
+        .lang-toggle:hover {
+            background: var(--border);
+        }
+        
+        .section {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 20px;
+        }
+        
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .section-icon {
+            font-size: 1.5rem;
+        }
+        
+        .section-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+        
+        .ai-tech .section-title { color: var(--accent-blue); }
+        .markets .section-title { color: var(--accent-green); }
+        .semiconductors .section-title { color: var(--accent-purple); }
+        .wildcard .section-title { color: var(--accent-orange); }
+        
+        .story {
+            padding: 16px 0;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .story:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+        
+        .story:first-child {
+            padding-top: 0;
+        }
+        
+        .story-headline {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 6px;
+            line-height: 1.4;
+        }
+        
+        .story-headline a {
+            color: var(--text-primary);
+            text-decoration: none;
+        }
+        
+        .story-headline a:hover {
+            color: var(--accent-blue);
+            text-decoration: underline;
+        }
+        
+        .story-source {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+        
+        .story-summary {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+        
+        .ko {
+            display: none;
+        }
+        
+        .ko.show {
+            display: block !important;
+        }
+        
+        .en.hide {
+            display: none !important;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 30px 0;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+        }
+        
+        @media (max-width: 600px) {
+            body {
+                padding: 15px;
+            }
+            
+            h1 {
+                font-size: 1.4rem;
+            }
+            
+            .section {
+                padding: 18px;
+            }
+            
+            .lang-toggle {
+                position: static;
+                margin-bottom: 15px;
+                display: block;
+                width: 100%;
+            }
+            
+            header {
+                padding-top: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <button class="lang-toggle" onclick="toggleLang()">한국어</button>
+        
+        <header>
+            <h1 class="en">Daily Tech Briefing</h1>
+            <h1 class="ko">데일리 테크 브리핑</h1>
+            <p class="date">April 7, 2026 | 2026년 4월 7일</p>
+        </header>
+
+        <!-- AI & Tech Section -->
+        <div class="section ai-tech">
+            <div class="section-header">
+                <span class="section-icon">🤖</span>
+                <h2 class="section-title en">AI & Tech</h2>
+                <h2 class="section-title ko">AI & 테크</h2>
+            </div>
+            
+            <div class="story">
+                <div class="story-headline">
+                    <a href="https://openai.com" target="_blank" class="en">OpenAI Advances Multi-Modal AI Capabilities</a>
+                    <a href="https://openai.com" target="_blank" class="ko">OpenAI, 멀티모달 AI 기능 향상</a>
+                </div>
+                <div class="story-source">OpenAI Blog</div>
+                <div class="story-summary en">OpenAI continues to push boundaries in multi-modal AI, enabling systems to process and understand text, images, and audio simultaneously. This advancement is driving new applications in content creation, accessibility tools, and automated analysis across industries.</div>
+                <div class="story-summary ko">OpenAI는 텍스트, 이미지, 오디오를 동시에 처리하고 이해할 수 있는 멀티모달 AI 분야에서 계속해서 한계를 확장하고 있습니다. 이러한 발전은 콘텐츠 제작, 접근성 도구, 산업 전반의 자동화 분석에서 새로운 애플리케이션을 주도하고 있습니다.</div>
+            </div>
+            
+            <div class="story">
+                <div class="story-headline">
+                    <a href="https://deepmind.google" target="_blank" class="en">Google DeepMind Unveils New Protein Folding Breakthrough</a>
+                    <a href="https://deepmind.google" target="_blank" class="ko">Google DeepMind, 새로운 단백질 폴드링 돌파구 공개</a>
+                </div>
+                <div class="story-source">Google DeepMind</div>
+                <div class="story-summary en">Building on AlphaFold's success, DeepMind's latest research accelerates drug discovery by predicting protein interactions with unprecedented accuracy. Pharmaceutical companies are already integrating these tools to reduce development timelines for new therapeutics.</div>
+                <div class="story-summary ko">AlphaFold의 성공을 바탕으로 DeepMind의 최신 연구는 전례 없는 정확도로 단백질 상호작용을 예측하여 신약 개발을 가속화하고 있습니다. 제약 회사들은 이미 새로운 치료제 개발 기간을 단축하기 위해 이러한 도구를 통합하고 있습니다.</div>
+            </div>
+        </div>
+
+        <!-- Markets Section -->
+        <div class="section markets">
+            <div class="section-header">
+                <span class="section-icon">📈</span>
+                <h2 class="section-title en">Markets</h2>
+                <h2 class="section-title ko">시장</h2>
+            </div>
+            
+            <div class="story">
+                <div class="story-headline">
+                    <a href="https://www.cnbc.com" target="_blank" class="en">Tech Stocks Rally on AI Infrastructure Spending Optimism</a>
+                    <a href="https://www.cnbc.com" target="_blank" class="ko">AI 인프라 투자 낙관론에 기술주 랠리</a>
+                </div>
+                <div class="story-source">CNBC</div>
+                <div class="story-summary en">Major cloud providers and enterprises are accelerating AI infrastructure investments, driving strong performance in semiconductor and data center stocks. Analysts project continued capital expenditure growth through 2026 as companies race to build AI capabilities.</div>
+                <div class="story-summary ko">주요 클라우드 제공업체와 기업들이 AI 인프라 투자를 가속화하여 반도체 및 데이터 센터 주식의 강한 실적을 이끌고 있습니다. 분석가들은 기업들이 AI 역량 구축을 위해 경쟁함에 따라 2026년까지 자본 지출 성장이 지속될 것으로 예상하고 있습니다.</div>
+            </div>
+            
+            <div class="story">
+                <div class="story-headline">
+                    <a href="https://www.bloomberg.com" target="_blank" class="en">Federal Reserve Signals Cautious Approach to Rate Cuts</a>
+                    <a href="https://www.bloomberg.com" target="_blank" class="ko">연준, 금리 인하에 신중한 접근 신호</a>
+                </div>
+                <div class="story-source">Bloomberg</div>
+                <div class="story-summary en">The Federal Reserve maintains a data-dependent stance on interest rates, balancing inflation concerns with economic growth indicators. Markets are pricing in gradual policy adjustments, with tech valuations particularly sensitive to discount rate changes.</div>
+                <div class="story-summary ko">연방준비제도는 인플레이션 우려와 경제 성장 지표를 균형 있게 고려하며 금리에 대해 데이터 의존적인 입장을 유지하고 있습니다. 시장은 점진적인 정책 조정을 반영하고 있으며, 특히 기술주 가치평가는 할인율 변화에 민감하게 반응하고 있습니다.</div>
+            </div>
+        </div>
+
+        <!-- Semiconductors Section -->
+        <div class="section semiconductors">
+            <div class="section-header">
+                <span class="section-icon">💻</span>
+                <h2 class="section-title en">Semiconductors</h2>
+                <h2 class="section-title ko">반도체</h2>
+            </div>
+            
+            <div class="story">
+                <div class="story-headline">
+                    <a href="https://www.tsmc.com" target="_blank" class="en">TSMC Expands 2nm Production Capacity</a>
+                    <a href="https://www.tsmc.com" target="_blank" class="ko">TSMC, 2nm 생산 능력 확대</a>
+                </div>
+                <div class="story-source">TSMC</div>
+                <div class="story-summary en">Taiwan Semiconductor Manufacturing Company is ramping up 2nm chip production to meet surging demand from AI chip designers. The advanced process node promises significant improvements in power efficiency and performance for next-generation AI accelerators.</div>
+                <div class="story-summary ko">대만반도체제조회사(TSMC)는 AI 칩 설계사들의 급증하는 수요를 충족하기 위해 2nm 칩 생산을 확대하고 있습니다. 이 첨단 공정 노드는 차세대 AI 가속기의 전력 효율성과 성능에서 상당한 개선을 약속합니다.</div>
+            </div>
+            
+            <div class="story">
+                <div class="story-headline">
+                    <a href="https://www.nvidia.com" target="_blank" class="en">NVIDIA Blackwell Architecture Powers Next-Gen Data Centers</a>
+                    <a href="https://www.nvidia.com" target="_blank" class="ko">NVIDIA Blackwell 아키텍처, 차세대 데이터 센터 구동</a>
+                </div>
+                <div class="story-source">NVIDIA</div>
+                <div class="story-summary en">NVIDIA's latest Blackwell GPUs are being deployed at scale across major cloud providers, offering unprecedented AI training and inference performance. The architecture delivers significant efficiency gains, reducing the total cost of ownership for AI workloads.</div>
+                <div class="story-summary ko">NVIDIA의 최신 Blackwell GPU가 주요 클라우드 제공업체 전반에 걸쳐 대규모로 배포되어 전례 없는 AI 학습 및 추론 성능을 제공하고 있습니다. 이 아키텍처는 상당한 효율성 향상을 제공하여 AI 워크로드의 총 소유 비용을 절감합니다.</div>
+            </div>
+        </div>
+
+        <!-- Wild Card Section -->
+        <div class="section wildcard">
+            <div class="section-header">
+                <span class="section-icon">🚀</span>
+                <h2 class="section-title en">Wild Card</h2>
+                <h2 class="section-title ko">와일드 카드</h2>
+            </div>
+            
+            <div class="story">
+                <div class="story-headline">
+                    <a href="https://www.spacex.com" target="_blank" class="en">SpaceX Starship Prepares for Next Orbital Test Flight</a>
+                    <a href="https://www.spacex.com" target="_blank" class="ko">SpaceX Starship, 다음 궤도 시험 비행 준비</a>
+                </div>
+                <div class="story-source">SpaceX</div>
+                <div class="story-summary en">SpaceX continues iterative testing of its Starship vehicle, advancing toward fully reusable orbital capabilities. Success would revolutionize space access costs and enable ambitious missions to the Moon and Mars within this decade.</div>
+                <div class="story-summary ko">SpaceX는 Starship 우주선의 반복적인 테스트를 계속하여 완전히 재사용 가능한 궤도 역량을 향해 발전하고 있습니다. 성공한다면 우주 접근 비용을 혁명적으로 바꾸고 이십년대 내에 달과 화성으로의 야심 찬 임무를 가능하게 할 것입니다.</div>
+            </div>
+            
+            <div class="story">
+                <div class="story-headline">
+                    <a href="https://www.anthropic.com" target="_blank" class="en">AI Safety Research Gains Corporate Funding Momentum</a>
+                    <a href="https://www.anthropic.com" target="_blank" class="ko">AI 안전 연구, 기업 자금 지원 모멘텀 획득</a>
+                </div>
+                <div class="story-source">Anthropic</div>
+                <div class="story-summary en">Leading AI labs are significantly increasing investment in alignment research and safety measures. This shift reflects growing industry recognition that robust safety frameworks are essential for responsible AI deployment at scale.</div>
+                <div class="story-summary ko">선도적인 AI 연구소들은 정렬 연구 및 안전 조치에 대한 투자를 크게 늘리고 있습니다. 이러한 변화는 강력한 안전 프레임워크가 대규모 책임 있는 AI 배포에 필수적이라는 산업계의 인식이 높아지고 있음을 반영합니다.</div>
+            </div>
+        </div>
+
+        <footer>
+            <p class="en">Daily Tech Briefing | April 7, 2026</p>
+            <p class="ko">데일리 테크 브리핑 | 2026년 4월 7일</p>
+        </footer>
+    </div>
+
+    <script>
+        let isKorean = false;
+        
+        function toggleLang() {
+            isKorean = !isKorean;
+            document.querySelectorAll('.en').forEach(el => el.classList.toggle('hide', isKorean));
+            document.querySelectorAll('.ko').forEach(el => el.classList.toggle('show', isKorean));
+            document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+        }
+    </script>
+</body>
+</html>

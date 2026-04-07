@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Day 37 Quiz: FIFO Full/Empty Flags | Digital Design Study</title>
+    <style>
+        body {
+            background: linear-gradient(135deg, #fefae0 0%, #faedcd 100%);
+            color: #3d405b;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.8;
+            padding: 24px;
+            max-width: 920px;
+            margin: 0 auto;
+        }
+        h1 { 
+            color: #5d4037;
+            border-bottom: 3px solid #c4a77d;
+            padding-bottom: 12px;
+        }
+        h2 { 
+            color: #588157;
+            border-bottom: 2px solid #a3b18a;
+            margin-top: 32px;
+        }
+        pre {
+            background: #2d3436;
+            padding: 24px;
+            border-radius: 12px;
+            margin: 24px 0;
+            border: 3px solid #a3b18a;
+            overflow-x: auto;
+        }
+        code {
+            background: #e9f5db;
+            color: #3d405b;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+            font-size: 0.9em;
+        }
+        pre code {
+            background: transparent;
+            color: inherit;
+            padding: 0;
+        }
+        .keyword { color: #ff79c6; font-weight: 600; }
+        .type { color: #8be9fd; }
+        .signal { color: #50fa7b; }
+        .number { color: #ffb86c; }
+        .comment { color: #6272a4; font-style: italic; }
+        .question {
+            background: #fff8f0;
+            border: 2px solid #c4a77d;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            color: #3d405b;
+        }
+        .question h3 {
+            color: #5d4037;
+            margin-top: 0;
+            margin-bottom: 12px;
+        }
+        .options {
+            margin: 12px 0;
+        }
+        .option {
+            padding: 8px 12px;
+            margin: 8px 0;
+            background: #fff;
+            border: 1px solid #a3b18a;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        .option:hover {
+            background: #e9f5db;
+        }
+        .answer {
+            display: none;
+            background: #e9f5db;
+            border-left: 4px solid #588157;
+            padding: 16px;
+            margin-top: 16px;
+            border-radius: 0 8px 8px 0;
+        }
+        .answer.revealed {
+            display: block;
+        }
+        .reveal-btn {
+            background: #588157;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-top: 12px;
+        }
+        .reveal-btn:hover {
+            background: #3a5a40;
+        }
+        .score-section {
+            background: #fff8f0;
+            border: 2px solid #588157;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 30px 0;
+            text-align: center;
+        }
+        .lang-toggle {
+            position: fixed;
+            top: 16px;
+            right: 16px;
+            background: #588157;
+            border: none;
+            border-radius: 24px;
+            padding: 10px 20px;
+            cursor: pointer;
+            color: #fff;
+            font-size: 14px;
+            font-weight: 600;
+            z-index: 1000;
+        }
+        .lang-toggle:hover { background: #3a5a40; }
+        .day-badge {
+            background: #588157;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 16px;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+        .quiz-badge {
+            background: #a3b18a;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 16px;
+            font-size: 0.85em;
+            margin-left: 8px;
+        }
+        @media (max-width: 768px) {
+            body { padding: 16px; }
+            h1 { font-size: 1.8em; }
+            pre { font-size: 14px; padding: 16px; }
+            .lang-toggle { padding: 8px 16px; font-size: 13px; }
+        }
+    </style>
+</head>
+<body>
+    <button class="lang-toggle" onclick="toggleLang()">한국어</button>
+    
+    <div style="margin-bottom: 20px;">
+        <span class="day-badge">Day 37</span>
+        <span class="quiz-badge">Quiz</span>
+    </div>
+
+    <h1>
+        <span class="en">FIFO Full/Empty Flags Quiz</span>
+        <span class="ko" style="display:none;">FIFO Full/Empty 플래그 퀴즈</span>
+    </h1>
+
+    <p class="en">Test your understanding of full/empty detection in FIFO design.</p>
+    <p class="ko" style="display:none;">FIFO 설계에서 full/empty 감지에 대한 이해를 테스트하세요.</p>
+
+    <!-- Question 1 -->
+    <div class="question">
+        <h3>
+            <span class="en">Question 1: The MSB Trick</span>
+            <span class="ko" style="display:none;">질문 1: MSB 트릭</span>
+        </h3>
+        <p class="en">For an 8-entry FIFO, how many bits should each pointer have?</p>
+        <p class="ko" style="display:none;">8-entry FIFO의 경우, 각 포인터는 몇 비트를 가져야 하나요?</p>
+        
+        <div class="options">
+            <div class="option">A) 3 bits (to address 8 locations)</div>
+            <div class="option">B) 4 bits (3 for address + 1 for wrap detection)</div>
+            <div class="option">C) 8 bits (one per entry)</div>
+            <div class="option">D) 2 bits (binary encoding)</div>
+        </div>
+        
+        <button class="reveal-btn" onclick="toggleAnswer(1)">
+            <span class="en">Show Answer</span>
+            <span class="ko" style="display:none;">정답 보기</span>
+        </button>
+        
+        <div class="answer" id="answer-1">
+            <strong>
+                <span class="en">Answer: B) 4 bits</span>
+                <span class="ko" style="display:none;">정답: B) 4비트</span>
+            </strong>
+            <p class="en">
+                You need 3 bits to address 8 locations (0-7), plus 1 extra MSB to track wraparound. 
+                The MSB toggles each time the pointer wraps, allowing you to distinguish full from empty.
+            </p>
+            <p class="ko" style="display:none;">
+                8개 위치(0-7)를 주소 지정하려면 3비트가 필요하고, wraparound를 추적하기 위해 1개의 추가 MSB가 필요합니다. 
+                MSB는 포인터가 wrap할 때마다 토글되어 full과 empty를 구분할 수 있게 합니다.
+            </p>
+        </div>
+    </div>
+
+    <!-- Question 2 -->
+    <div class="question">
+        <h3>
+            <span class="en">Question 2: Empty Condition</span>
+            <span class="ko" style="display:none;">질문 2: Empty 조건</span>
+        </h3>
+        <p class="en">When is a FIFO empty?</p>
+        <p class="ko" style="display:none;">FIFO는 언제 empty인가요?</p>
+        
+        <div class="options">
+            <div class="option">A) When write_ptr MSB differs from read_ptr MSB</div>
+            <div class="option">B) When write_ptr == read_ptr (all bits match)</div>
+            <div class="option">C) When write_ptr > read_ptr</div>
+            <div class="option">D) When write_ptr < read_ptr</div>
+        </div>
+        
+        <button class="reveal-btn" onclick="toggleAnswer(2)">
+            <span class="en">Show Answer</span>
+            <span class="ko" style="display:none;">정답 보기</span>
+        </button>
+        
+        <div class="answer" id="answer-2">
+            <strong>
+                <span class="en">Answer: B) When write_ptr == read_ptr</span>
+                <span class="ko" style="display:none;">정답: B) write_ptr == read_ptr일 때</span>
+            </strong>
+            <p class="en">
+                Empty occurs when the write pointer catches up to the read pointer with the same wrap count. 
+                All bits (including MSB) are equal. This is different from full, where only the lower bits match.
+            </p>
+            <p class="ko" style="display:none;">
+                Empty는 write 포인터가 같은 wrap count로 read 포인터를 따라잡을 때 발생합니다. 
+                모든 비트(MSB 포함)가 같습니다. 이는 하위 비트만 일치하는 full과 다릅니다.
+            </p>
+        </div>
+    </div>
+
+    <!-- Question 3 -->
+    <div class="question">
+        <h3>
+            <span class="en">Question 3: Full Condition</span>
+            <span class="ko" style="display:none;">질문 3: Full 조건</span>
+        </h3>
+        <p class="en">For a FIFO with 4-bit pointers (ADDR_WIDTH=3), which condition indicates FULL?</p>
+        <p class="ko" style="display:none;">4비트 포인터(ADDR_WIDTH=3)를 가진 FIFO에서 어떤 조건이 FULL을 나타내나요?</p>
+        
+        <div class="options">
+            <div class="option">A) <code>wr_ptr == rd_ptr</code></div>
+            <div class="option">B) <code>wr_ptr[2:0] == rd_ptr[2:0] && wr_ptr[3] != rd_ptr[3]</code></div>
+            <div class="option">C) <code>wr_ptr > rd_ptr</code></div>
+            <div class="option">D) <code>wr_ptr[3] == rd_ptr[3]</code></div>
+        </div>
+        
+        <button class="reveal-btn" onclick="toggleAnswer(3)">
+            <span class="en">Show Answer</span>
+            <span class="ko" style="display:none;">정답 보기</span>
+        </button>
+        
+        <div class="answer" id="answer-3">
+            <strong>
+                <span class="en">Answer: B) Lower bits match, MSBs differ</span>
+                <span class="ko" style="display:none;">정답: B) 하위 비트는 일치, MSB는 다름</span>
+            </strong>
+            <p class="en">
+                Full occurs when write has wrapped one more time than read. The addresses (lower bits) 
+                align, but the MSBs differ because write has cycled through the FIFO one extra time.
+            </p>
+            <p class="ko" style="display:none;">
+                Full은 write가 read보다 한 번 더 wrap했을 때 발생합니다. 주소(하위 비트)는 
+                일치하지만 MSB는 다릅니다 — write가 FIFO를 한 번 더 순환했기 때문입니다.
+            </p>
+        </div>
+    </div>
+
+    <!-- Question 4 -->
+    <div class="question">
+        <h3>
+            <span class="en">Question 4: Pointer State Analysis</span>
+            <span class="ko" style="display:none;">질문 4: 포인터 상태 분석</span>
+        </h3>
+        <p class="en">Given: wr_ptr = 4'b1010, rd_ptr = 4'b0010. What is the FIFO state?</p>
+        <p class="ko" style="display:none;">주어짐: wr_ptr = 4'b1010, rd_ptr = 4'b0010. FIFO 상태는?</p>
+        
+        <div class="options">
+            <div class="option">A) Empty</div>
+            <div class="option">B) Full</div>
+            <div class="option">C) Partially full (8 entries)</div>
+            <div class="option">D) Cannot determine</div>
+        </div>
+        
+        <button class="reveal-btn" onclick="toggleAnswer(4)">
+            <span class="en">Show Answer</span>
+            <span class="ko" style="display:none;">정답 보기</span>
+        </button>
+        
+        <div class="answer" id="answer-4">
+            <strong>
+                <span class="en">Answer: B) Full</span>
+                <span class="ko" style="display:none;">정답: B) Full</span>
+            </strong>
+            <p class="en">
+                Lower 3 bits match (010 == 010), but MSBs differ (1 != 0). This means write has wrapped 
+                around and caught up to read — the FIFO is full. With 3 address bits, this represents 8 entries.
+            </p>
+            <p class="ko" style="display:none;">
+                하위 3비트가 일치(010 == 010)하지만 MSB는 다릅니다(1 != 0). 이는 write가 
+                wrap around되어 read를 따라잡았음을 의미 — FIFO는 full입니다. 3개 주소 비트로 8개 entry를 나타냅니다.
+            </p>
+        </div>
+    </div>
+
+    <!-- Question 5 -->
+    <div class="question">
+        <h3>
+            <span class="en">Question 5: Write Protection</span>
+            <span class="ko" style="display:none;">질문 5: 쓰기 보호</span>
+        </h3>
+        <p class="en">What happens if you write to a FIFO when it's full?</p>
+        <p class="ko" style="display:none;">FIFO가 full일 때 쓰기를 하면 어떻게 되나요?</p>
+        
+        <div class="options">
+            <div class="option">A) The write is ignored (no data written)</div>
+            <div class="option">B) The oldest data is overwritten</div>
+            <div class="option">C) The FIFO overflows and data is lost</div>
+            <div class="option">D) It depends on the implementation</div>
+        </div>
+        
+        <button class="reveal-btn" onclick="toggleAnswer(5)">
+            <span class="en">Show Answer</span>
+            <span class="ko" style="display:none;">정답 보기</span>
+        </button>
+        
+        <div class="answer" id="answer-5">
+            <strong>
+                <span class="en">Answer: D) It depends on the implementation</span>
+                <span class="ko" style="display:none;">정답: D) 구현에 따라 다름</span>
+            </strong>
+            <p class="en">
+                Well-designed FIFOs guard writes with <code>if (wr_en && !full)</code>, ignoring the write. 
+                However, unprotected writes could overwrite data or corrupt pointers. Always check the full flag!
+            </p>
+            <p class="ko" style="display:none;">
+                잘 설계된 FIFO는 <code>if (wr_en && !full)</code>로 쓰기를 보호하여 쓰기를 무시합니다. 
+                하지만 보호되지 않은 쓰기는 데이터를 덮어쓰거나 포인터를 손상시킬 수 있습니다. 항상 full 플래그를 확인하세요!
+            </p>
+        </div>
+    </div>
+
+    <!-- Question 6 -->
+    <div class="question">
+        <h3>
+            <span class="en">Question 6: Code Bug</span>
+            <span class="ko" style="display:none;">질문 6: 코드 버그</span>
+        </h3>
+        <p class="en">What's wrong with this full detection logic?</p>
+        <p class="ko" style="display:none;">이 full 감지 로직의 문제는 무엇인가요?</p>
+        
+        <pre style="margin: 16px 0;"><code><span class="keyword">assign</span> full = (<span class="signal">wr_ptr</span>[<span class="number">2</span>:<span class="number">0</span>] == <span class="signal">rd_ptr</span>[<span class="number">2</span>:<span class="number">0</span>]);</code></pre>
+        
+        <div class="options">
+            <div class="option">A) Nothing, this is correct</div>
+            <div class="option">B) It can't distinguish full from empty</div>
+            <div class="option">C) The bit range is wrong</div>
+            <div class="option">D) It should use > instead of ==</div>
+        </div>
+        
+        <button class="reveal-btn" onclick="toggleAnswer(6)">
+            <span class="en">Show Answer</span>
+            <span class="ko" style="display:none;">정답 보기</span>
+        </button>
+        
+        <div class="answer" id="answer-6">
+            <strong>
+                <span class="en">Answer: B) It can't distinguish full from empty</span>
+                <span class="ko" style="display:none;">정답: B) full과 empty를 구분할 수 없음</span>
+            </strong>
+            <p class="en">
+                This condition is also true when the FIFO is empty (both pointers point to the same address). 
+                You MUST compare the MSBs to distinguish: full = addresses match AND MSBs differ.
+            </p>
+            <p class="ko" style="display:none;">
+                이 조건은 FIFO가 empty일 때도 참입니다(두 포인터가 같은 주소를 가리킴). 
+                구분하려면 MSB를 비교해야 합니다: full = 주소가 일치 AND MSB가 다름.
+            </p>
+        </div>
+    </div>
+
+    <!-- Question 7 -->
+    <div class="question">
+        <h3>
+            <span class="en">Question 7: FIFO Depth</span>
+            <span class="ko" style="display:none;">질문 7: FIFO 깊이</span>
+        </h3>
+        <p class="en">With the MSB trick, what's the maximum usable depth of a FIFO with 4-bit pointers?</p>
+        <p class="ko" style="display:none;">MSB 트릭을 사용하면 4비트 포인터로 FIFO의 최대 사용 가능 깊이는 얼마인가요?</p>
+        
+        <div class="options">
+            <div class="option">A) 16 entries</div>
+            <div class="option">B) 15 entries</div>
+            <div class="option">C) 8 entries</div>
+            <div class="option">D) 7 entries</div>
+        </div>
+        
+        <button class="reveal-btn" onclick="toggleAnswer(7)">
+            <span class="en">Show Answer</span>
+            <span class="ko" style="display:none;">정답 보기</span>
+        </button>
+        
+        <div class="answer" id="answer-7">
+            <strong>
+                <span class="en">Answer: C) 8 entries</span>
+                <span class="ko" style="display:none;">정답: C) 8개 entry</span>
+            </strong>
+            <p class="en">
+                With 4-bit pointers, 1 bit is used for the wrap flag, leaving 3 bits for addressing. 
+                2³ = 8 addressable locations. The MSB trick "costs" you half the address space.
+            </p>
+            <p class="ko" style="display:none;">
+                4비트 포인터에서 1비트는 wrap 플래그에 사용되고 3비트는 주소 지정에 남습니다. 
+                2³ = 8개의 주소 지정 가능 위치. MSB 트릭은 주소 공간의 절반을 "비용"으로 합니다.
+            </p>
+        </div>
+    </div>
+
+    <!-- Question 8 -->
+    <div class="question">
+        <h3>
+            <span class="en">Question 8: Simultaneous Read/Write</span>
+            <span class="ko" style="display:none;">질문 8: 동시 읽기/쓰기</span>
+        </h3>
+        <p class="en">What happens if both wr_en and rd_en are asserted when the FIFO is full?</p>
+        <p class="ko" style="display:none;">FIFO가 full일 때 wr_en과 rd_en이 모두 assert되면 어떻게 되나요?</p>
+        
+        <div class="options">
+            <div class="option">A) Both operations succeed (write then read)</div>
+            <div class="option">B) Only the read succeeds, write is blocked</div>
+            <div class="option">C) Only the write succeeds, read is blocked</div>
+            <div class="option">D) Both operations are blocked</div>
+        </div>
+        
+        <button class="reveal-btn" onclick="toggleAnswer(8)">
+            <span class="en">Show Answer</span>
+            <span class="ko" style="display:none;">정답 보기</span>
+        </button>
+        
+        <div class="answer" id="answer-8">
+            <strong>
+                <span class="en">Answer: B) Only the read succeeds, write is blocked</span>
+                <span class="ko" style="display:none;">정답: B) 읽기만 성공, 쓰기는 차단됨</span>
+            </strong>
+            <p class="en">
+                At the start of the cycle, full=1 so the write is blocked. The read proceeds (if not empty), 
+                freeing a slot. Some FIFO designs allow both in the same cycle — this depends on your 
+                specification. The safest approach: read first, then write.
+            </p>
+            <p class="ko" style="display:none;">
+                사이클 시작 시 full=1이므로 쓰기가 차단됩니다. 읽기는 진행됩니다(empty가 아니라면), 
+                슬롯을 비웁니다. 일부 FIFO 설계에서는 같은 사이클에 둘 다 허용합니다 — 이는 
+                사양에 따라 다릅니다. 가장 안전한 접근: 먼저 읽기, 그 다음 쓰기.
+            </p>
+        </div>
+    </div>
+
+    <!-- Question 9 -->
+    <div class="question">
+        <h3>
+            <span class="en">Question 9: Reset State</span>
+            <span class="ko" style="display:none;">질문 9: 리셋 상태</span>
+        </h3>
+        <p class="en">After reset, what are the initial values of wr_ptr and rd_ptr?</p>
+        <p class="ko" style="display:none;">리셋 후 wr_ptr과 rd_ptr의 초기값은 무엇인가요?</p>
+        
+        <div class="options">
+            <div class="option">A) Both are X (unknown)</div>
+            <div class="option">B) wr_ptr = 0, rd_ptr = DEPTH-1</div>
+            <div class="option">C) Both are 0</div>
+            <div class="option">D) Both are 1</div>
+        </div>
+        
+        <button class="reveal-btn" onclick="toggleAnswer(9)">
+            <span class="en">Show Answer</span>
+            <span class="ko" style="display:none;">정답 보기</span>
+        </button>
+        
+        <div class="answer" id="answer-9">
+            <strong>
+                <span class="en">Answer: C) Both are 0</span>
+                <span class="ko" style="display:none;">정답: C) 둘 다 0</span>
+            </strong>
+            <p class="en">
+                Both pointers start at 0, making wr_ptr == rd_ptr, which correctly indicates empty. 
+                This is the natural reset state for a FIFO.
+            </p>
+            <p class="ko" style="display:none;">
+                두 포인터 모두 0에서 시작하여 wr_ptr == rd_ptr이 되어, 이는 empty를 올바르게 나타냅니다. 
+                이것이 FIFO의 자연스러운 리셋 상태입니다.
+            </p>
+        </div>
+    </div>
+
+    <!-- Question 10 -->
+    <div class="question">
+        <h3>
+            <span class="en">Question 10: Almost-Full Purpose</span>
+            <span class="ko" style="display:none;">질문 10: Almost-Full 목적</span>
+        </h3>
+        <p class="en">Why would you implement an "almost_full" flag instead of just using "full"?</p>
+        <p class="ko" style="display:none;">왜 "full"만 사용하는 대신 "almost_full" 플래그를 구현하나요?</p>
+        
+        <div class="options">
+            <div class="option">A) To reduce power consumption</div>
+            <div class="option">B) For flow control — to prevent overflow in multi-cycle paths</div>
+            <div class="option">C) Because full detection is unreliable</div>
+            <div class="option">D) To increase FIFO capacity</div>
+        </div>
+        
+        <button class="reveal-btn" onclick="toggleAnswer(10)">
+            <span class="en">Show Answer</span>
+            <span class="ko" style="display:none;">정답 보기</span>
+        </button>
+        
+        <div class="answer" id="answer-10">
+            <strong>
+                <span class="en">Answer: B) For flow control — to prevent overflow in multi-cycle paths</span>
+                <span class="ko" style="display:none;">정답: B) flow control — 멀티사이클 경로에서 오버플로우 방지</span>
+            </strong>
+            <p class="en">
+                Almost-full gives upstream logic early warning to stop sending data before it's too late. 
+                This is crucial when crossing clock domains or when there's latency in the backpressure path.
+            </p>
+            <p class="ko" style="display:none;">
+                Almost-full은 업스트림 로직에 너무 늦기 전에 데이터 전송을 중지하라는 조기 경고를 제공합니다. 
+                이는 clock domain crossing 시나 backpressure 경로에 지연이 있을 때 중요합니다.
+            </p>
+        </div>
+    </div>
+
+    <div class="score-section">
+        <h2>
+            <span class="en">How Did You Do?</span>
+            <span class="ko" style="display:none;">점수는 어떤가요?</span>
+        </h2>
+        <p class="en">
+            Count your correct answers. 8-10 correct = Excellent! 5-7 = Good, review the lesson. 
+            Below 5 = Re-read the lesson and try again.
+        </p>
+        <p class="ko" style="display:none;">
+            맞은 답을 세어보세요. 8-10개 = 훌륭합니다! 5-7개 = 좋습니다, 복습하세요. 
+            5개 미만 = 레슨을 다시 읽고 다시 시도하세요.
+        </p>
+        <p style="margin-top: 16px; font-weight: 600; color: #588157;">
+            <span class="en">Ready for the practice exercises? →</span>
+            <span class="ko" style="display:none;">실습 문제 준비됐나요? →</span>
+        </p>
+    </div>
+
+    <script>
+        let isKorean = false;
+        function toggleLang() {
+            isKorean = !isKorean;
+            document.querySelectorAll('.en').forEach(el => {
+                el.style.setProperty('display', isKorean ? 'none' : 'revert', 'important');
+            });
+            document.querySelectorAll('.ko').forEach(el => {
+                el.style.setProperty('display', isKorean ? 'revert' : 'none', 'important');
+            });
+            document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+        }
+        
+        function toggleAnswer(qNum) {
+            const answer = document.getElementById('answer-' + qNum);
+            answer.classList.toggle('revealed');
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Day 37: FIFO Full/Empty Flags | Digital Design Study</title>
+    <style>
+        body {
+            background: linear-gradient(135deg, #fefae0 0%, #faedcd 100%);
+            color: #3d405b;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.8;
+            padding: 24px;
+            max-width: 920px;
+            margin: 0 auto;
+        }
+        h1 { 
+            color: #5d4037;
+            border-bottom: 3px solid #c4a77d;
+            padding-bottom: 12px;
+        }
+        h2 { 
+            color: #588157;
+            border-bottom: 2px solid #a3b18a;
+            margin-top: 32px;
+        }
+        h3 { 
+            color: #5d4037;
+            margin-top: 24px;
+        }
+        pre {
+            background: #2d3436;
+            padding: 24px;
+            border-radius: 12px;
+            margin: 24px 0;
+            border: 3px solid #a3b18a;
+            overflow-x: auto;
+        }
+        code {
+            background: #e9f5db;
+            color: #3d405b;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+            font-size: 0.9em;
+        }
+        pre code {
+            background: transparent;
+            color: inherit;
+            padding: 0;
+        }
+        .keyword { color: #ff79c6; font-weight: 600; }
+        .type { color: #8be9fd; }
+        .signal { color: #50fa7b; }
+        .number { color: #ffb86c; }
+        .comment { color: #6272a4; font-style: italic; }
+        .string { color: #f1fa8c; }
+        .concept-box {
+            background: #fff8f0;
+            border: 2px solid #c4a77d;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            color: #3d405b;
+        }
+        .concept-box h3 {
+            color: #5d4037;
+            margin-bottom: 12px;
+            margin-top: 0;
+        }
+        .warning-box {
+            background: #fff8f0;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 4px solid #ef4444;
+            color: #3d405b;
+        }
+        .warning-box h3 {
+            color: #c53030;
+            margin-bottom: 12px;
+            margin-top: 0;
+        }
+        .tip-box {
+            background: #fff8f0;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 4px solid #588157;
+            color: #3d405b;
+        }
+        .tip-box h3 {
+            color: #588157;
+            margin-bottom: 12px;
+            margin-top: 0;
+        }
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        .comparison-table th {
+            background: #588157;
+            color: white;
+            padding: 12px;
+            text-align: left;
+        }
+        .comparison-table td {
+            background: #fff;
+            border: 1px solid #c4a77d;
+            padding: 12px;
+            color: #3d405b;
+        }
+        .comparison-table tr:nth-child(even) td {
+            background: #fff8f0;
+        }
+        .lang-toggle {
+            position: fixed;
+            top: 16px;
+            right: 16px;
+            background: #588157;
+            border: none;
+            border-radius: 24px;
+            padding: 10px 20px;
+            cursor: pointer;
+            color: #fff;
+            font-size: 14px;
+            font-weight: 600;
+            z-index: 1000;
+        }
+        .lang-toggle:hover { background: #3a5a40; }
+        .day-badge {
+            background: #588157;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 16px;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+        .week-badge {
+            background: #a3b18a;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 16px;
+            font-size: 0.85em;
+            margin-left: 8px;
+        }
+        @media (max-width: 768px) {
+            body { padding: 16px; }
+            h1 { font-size: 1.8em; }
+            pre { font-size: 14px; padding: 16px; }
+            .lang-toggle { padding: 8px 16px; font-size: 13px; }
+        }
+    </style>
+</head>
+<body>
+    <button class="lang-toggle" onclick="toggleLang()">한국어</button>
+    
+    <div style="margin-bottom: 20px;">
+        <span class="day-badge">Day 37</span>
+        <span class="week-badge">Week 8</span>
+    </div>
+
+    <h1>
+        <span class="en">FIFO Design Part 2: Full & Empty Flags</span>
+        <span class="ko" style="display:none;">FIFO 설계 파트 2: Full & Empty 플래그</span>
+    </h1>
+
+    <p class="en">
+        Yesterday we built the pointer logic for a FIFO. Today we'll tackle the most critical part: 
+        <strong>accurately detecting full and empty conditions</strong> — the heart of FIFO correctness.
+    </p>
+    <p class="ko" style="display:none;">
+        어제 우리는 FIFO의 포인터 로직을 구축했습니다. 오늘은 가장 중요한 부분인 
+        <strong>정확한 full 및 empty 상태 감지</strong>를 다룰 것입니다 — 이는 FIFO 정확성의 핵심입니다.
+    </p>
+
+    <h2>
+        <span class="en">The Challenge: Full vs Empty Detection</span>
+        <span class="ko" style="display:none;">도전: Full vs Empty 감지</span>
+    </h2>
+
+    <p class="en">
+        Here's the problem: when <code>write_ptr == read_ptr</code>, is the FIFO full or empty?
+    </p>
+    <p class="ko" style="display:none;">
+        문제는 다음과 같습니다: <code>write_ptr == read_ptr</code>일 때, FIFO는 full인가요 아니면 empty인가요?
+    </p>
+
+    <div class="concept-box">
+        <h3>
+            <span class="en">The Pointer Collision Problem</span>
+            <span class="ko" style="display:none;">포인터 충돌 문제</span>
+        </h3>
+        <ul>
+            <li class="en"><strong>Empty:</strong> write_ptr catches up to read_ptr (both point to same location, nothing written)</li>
+            <li class="ko" style="display:none;"><strong>Empty:</strong> write_ptr이 read_ptr을 따라잡음 (둘 다 같은 위치를 가리킴, 아무것도 쓰여지지 않음)</li>
+            <li class="en"><strong>Full:</strong> write_ptr wraps around and catches up to read_ptr (all locations written)</li>
+            <li class="ko" style="display:none;"><strong>Full:</strong> write_ptr이 wrap around되어 read_ptr을 따라잡음 (모든 위치에 쓰여짐)</li>
+        </ul>
+        <p class="en">
+            <strong>Solution:</strong> Add an extra bit to each pointer! This "MSB trick" distinguishes full from empty.
+        </p>
+        <p class="ko" style="display:none;">
+            <strong>해결책:</strong> 각 포인터에 추가 비트를 더하세요! 이 "MSB 트릭"이 full과 empty를 구분합니다.
+        </p>
+    </div>
+
+    <h2>
+        <span class="en">The MSB Trick Explained</span>
+        <span class="ko" style="display:none;">MSB 트릭 설명</span>
+    </h2>
+
+    <p class="en">
+        For a FIFO with <code>DEPTH = 8</code> (needs 3 address bits), we use <strong>4-bit pointers</strong>:
+    </p>
+    <p class="ko" style="display:none;">
+        <code>DEPTH = 8</code>(3개의 주소 비트 필요)인 FIFO의 경우, <strong>4비트 포인터</strong>를 사용합니다:
+    </p>
+
+    <pre><code><span class="comment">// 4-bit pointers for 8-entry FIFO</span>
+<span class="comment">// Bits [3] = MSB (wrap flag), Bits [2:0] = actual address</span>
+
+<span class="comment">// Empty condition: all bits match (including MSB)</span>
+<span class="keyword">assign</span> empty = (write_ptr == read_ptr);
+
+<span class="comment">// Full condition: addresses match, but MSBs differ (wrapped)</span>
+<span class="keyword">assign</span> full = (write_ptr[<span class="number">2</span>:<span class="number">0</span>] == read_ptr[<span class="number">2</span>:<span class="number">0</span>]) && 
+              (write_ptr[<span class="number">3</span>] != read_ptr[<span class="number">3</span>]);</code></pre>
+
+    <div class="tip-box">
+        <h3>
+            <span class="en">Why This Works</span>
+            <span class="ko" style="display:none;">왜 이것이 작동하는가</span>
+        </h3>
+        <p class="en">
+            The MSB acts as a "generation counter." Every time a pointer wraps around, its MSB toggles. 
+            Full means write has wrapped one more time than read — the addresses align but the "generations" differ.
+        </p>
+        <p class="ko" style="display:none;">
+            MSB는 "세대 카운터" 역할을 합니다. 포인터가 wrap around할 때마다 MSB가 토글됩니다. 
+            Full은 write가 read보다 한 번 더 wrap around했음을 의미합니다 — 주소는 일치하지만 "세대"는 다릅니다.
+        </p>
+    </div>
+
+    <h2>
+        <span class="en">Complete FIFO with Full/Empty Logic</span>
+        <span class="ko" style="display:none;">Full/Empty 로직이 포함된 완전한 FIFO</span>
+    </h2>
+
+    <pre><code><span class="keyword">module</span> <span class="type">fifo</span> #(
+    <span class="keyword">parameter</span> <span class="type">DATA_WIDTH</span> = <span class="number">32</span>,
+    <span class="keyword">parameter</span> <span class="type">DEPTH</span> = <span class="number">8</span>,
+    <span class="keyword">parameter</span> <span class="type">ADDR_WIDTH</span> = $clog2(DEPTH)  <span class="comment">// 3 for DEPTH=8</span>
+)(
+    <span class="keyword">input</span>  <span class="type">logic</span> <span class="signal">clk</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span> <span class="signal">rst_n</span>,
+    
+    <span class="comment">// Write interface</span>
+    <span class="keyword">input</span>  <span class="type">logic</span> <span class="signal">wr_en</span>,
+    <span class="keyword">input</span>  <span class="type">logic</span> [<span class="type">DATA_WIDTH</span>-<span class="number">1</span>:<span class="number">0</span>] <span class="signal">wr_data</span>,
+    <span class="keyword">output</span> <span class="type">logic</span> <span class="signal">full</span>,
+    
+    <span class="comment">// Read interface</span>
+    <span class="keyword">input</span>  <span class="type">logic</span> <span class="signal">rd_en</span>,
+    <span class="keyword">output</span> <span class="type">logic</span> [<span class="type">DATA_WIDTH</span>-<span class="number">1</span>:<span class="number">0</span>] <span class="signal">rd_data</span>,
+    <span class="keyword">output</span> <span class="type">logic</span> <span class="signal">empty</span>
+);
+
+    <span class="comment">// Memory array</span>
+    <span class="type">logic</span> [<span class="type">DATA_WIDTH</span>-<span class="number">1</span>:<span class="number">0</span>] <span class="signal">mem</span> [<span class="type">DEPTH</span>];
+    
+    <span class="comment">// Pointers with extra bit for full/empty detection</span>
+    <span class="type">logic</span> [<span class="type">ADDR_WIDTH</span>:<span class="number">0</span>] <span class="signal">wr_ptr</span>, <span class="signal">rd_ptr</span>;  <span class="comment">// ADDR_WIDTH+1 bits!</span>
+    
+    <span class="comment">// Status flags</span>
+    <span class="keyword">assign</span> <span class="signal">empty</span> = (<span class="signal">wr_ptr</span> == <span class="signal">rd_ptr</span>);
+    <span class="keyword">assign</span> <span class="signal">full</span>  = (<span class="signal">wr_ptr</span>[<span class="type">ADDR_WIDTH</span>-<span class="number">1</span>:<span class="number">0</span>] == <span class="signal">rd_ptr</span>[<span class="type">ADDR_WIDTH</span>-<span class="number">1</span>:<span class="number">0</span>]) && 
+                   (<span class="signal">wr_ptr</span>[<span class="type">ADDR_WIDTH</span>] != <span class="signal">rd_ptr</span>[<span class="type">ADDR_WIDTH</span>]);
+    
+    <span class="comment">// Write logic</span>
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span> <span class="keyword">or negedge</span> <span class="signal">rst_n</span>) <span class="keyword">begin</span>
+        <span class="keyword">if</span> (!<span class="signal">rst_n</span>) <span class="keyword">begin</span>
+            <span class="signal">wr_ptr</span> <= <span class="number">0</span>;
+        <span class="keyword">end</span> <span class="keyword">else if</span> (<span class="signal">wr_en</span> && !<span class="signal">full</span>) <span class="keyword">begin</span>
+            <span class="signal">mem</span>[<span class="signal">wr_ptr</span>[<span class="type">ADDR_WIDTH</span>-<span class="number">1</span>:<span class="number">0</span>]] <= <span class="signal">wr_data</span>;
+            <span class="signal">wr_ptr</span> <= <span class="signal">wr_ptr</span> + <span class="number">1</span>;
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+    
+    <span class="comment">// Read logic</span>
+    <span class="keyword">always_ff</span> @(<span class="keyword">posedge</span> <span class="signal">clk</span> <span class="keyword">or negedge</span> <span class="signal">rst_n</span>) <span class="keyword">begin</span>
+        <span class="keyword">if</span> (!<span class="signal">rst_n</span>) <span class="keyword">begin</span>
+            <span class="signal">rd_ptr</span> <= <span class="number">0</span>;
+        <span class="keyword">end</span> <span class="keyword">else if</span> (<span class="signal">rd_en</span> && !<span class="signal">empty</span>) <span class="keyword">begin</span>
+            <span class="signal">rd_ptr</span> <= <span class="signal">rd_ptr</span> + <span class="number">1</span>;
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+    
+    <span class="comment">// Output data (registered read)</span>
+    <span class="keyword">assign</span> <span class="signal">rd_data</span> = <span class="signal">mem</span>[<span class="signal">rd_ptr</span>[<span class="type">ADDR_WIDTH</span>-<span class="number">1</span>:<span class="number">0</span>]];
+
+<span class="keyword">endmodule</span></code></pre>
+
+    <h2>
+        <span class="en">Pointer State Visualization</span>
+        <span class="ko" style="display:none;">포인터 상태 시각화</span>
+    </h2>
+
+    <table class="comparison-table">
+        <tr>
+            <th>
+                <span class="en">State</span>
+                <span class="ko" style="display:none;">상태</span>
+            </th>
+            <th>
+                <span class="en">wr_ptr</span>
+                <span class="ko" style="display:none;">wr_ptr</span>
+            </th>
+            <th>
+                <span class="en">rd_ptr</span>
+                <span class="ko" style="display:none;">rd_ptr</span>
+            </th>
+            <th>
+                <span class="en">full</span>
+                <span class="ko" style="display:none;">full</span>
+            </th>
+            <th>
+                <span class="en">empty</span>
+                <span class="ko" style="display:none;">empty</span>
+            </th>
+        </tr>
+        <tr>
+            <td>
+                <span class="en">Reset</span>
+                <span class="ko" style="display:none;">리셋</span>
+            </td>
+            <td>0000</td>
+            <td>0000</td>
+            <td>0</td>
+            <td>1</td>
+        </tr>
+        <tr>
+            <td>
+                <span class="en">3 items</span>
+                <span class="ko" style="display:none;">3개 아이템</span>
+            </td>
+            <td>0011</td>
+            <td>0000</td>
+            <td>0</td>
+            <td>0</td>
+        </tr>
+        <tr>
+            <td>
+                <span class="en">Full (8 items)</span>
+                <span class="ko" style="display:none;">Full (8개 아이템)</span>
+            </td>
+            <td>1000</td>
+            <td>0000</td>
+            <td>1</td>
+            <td>0</td>
+        </tr>
+        <tr>
+            <td>
+                <span class="en">Read 4</span>
+                <span class="ko" style="display:none;">4개 읽기</span>
+            </td>
+            <td>1000</td>
+            <td>0100</td>
+            <td>0</td>
+            <td>0</td>
+        </tr>
+        <tr>
+            <td>
+                <span class="en">Wrap & Write 4</span>
+                <span class="ko" style="display:none;">Wrap & 4개 쓰기</span>
+            </td>
+            <td>1100</td>
+            <td>0100</td>
+            <td>0</td>
+            <td>0</td>
+        </tr>
+        <tr>
+            <td>
+                <span class="en">Empty again</span>
+                <span class="ko" style="display:none;">다시 Empty</span>
+            </td>
+            <td>1100</td>
+            <td>1100</td>
+            <td>0</td>
+            <td>1</td>
+        </tr>
+    </table>
+
+    <div class="warning-box">
+        <h3>
+            <span class="en">Common Mistake: Using Address Bits Only</span>
+            <span class="ko" style="display:none;">흔한 실수: 주소 비트만 사용하기</span>
+        </h3>
+        <pre style="background: #2d3436; padding: 16px; border-radius: 8px;"><code><span class="comment">// WRONG: Can't distinguish full from empty!</span>
+<span class="keyword">assign</span> full = (wr_ptr[<span class="number">2</span>:<span class="number">0</span>] == rd_ptr[<span class="number">2</span>:<span class="number">0</span>]);  <span class="comment">// Same as empty!</span></code></pre>
+        <p class="en">
+            Without the MSB comparison, full and empty have identical conditions. 
+            The extra bit is essential!
+        </p>
+        <p class="ko" style="display:none;">
+            MSB 비교 없이는 full과 empty가 동일한 조건을 가집니다. 
+            추가 비트가 필수적입니다!
+        </p>
+    </div>
+
+    <h2>
+        <span class="en">Almost-Full & Almost-Empty (Optional)</span>
+        <span class="ko" style="display:none;">Almost-Full & Almost-Empty (선택사항)</span>
+    </h2>
+
+    <p class="en">
+        Many designs need "almost" flags for flow control — to prevent overflow/underflow 
+        when crossing clock domains or managing backpressure.
+    </p>
+    <p class="ko" style="display:none;">
+        많은 설계에서 flow control을 위해 "almost" 플래그가 필요합니다 — 
+        clock domain crossing 시 오버플로우/언더플로우를 방지하거나 backpressure를 관리하기 위해 사용됩니다.
+    </p>
+
+    <pre><code><span class="comment">// Almost flags with programmable threshold</span>
+<span class="keyword">parameter</span> <span class="type">ALMOST_FULL_THRESH</span> = <span class="type">DEPTH</span> - <span class="number">2</span>;
+<span class="keyword">parameter</span> <span class="type">ALMOST_EMPTY_THRESH</span> = <span class="number">2</span>;
+
+<span class="type">logic</span> [<span class="type">ADDR_WIDTH</span>:<span class="number">0</span>] <span class="signal">fifo_count</span>;
+
+<span class="comment">// Calculate occupancy (tricky with wraparound!)</span>
+<span class="keyword">always_comb</span> <span class="keyword">begin</span>
+    <span class="keyword">if</span> (<span class="signal">wr_ptr</span>[<span class="type">ADDR_WIDTH</span>] == <span class="signal">rd_ptr</span>[<span class="type">ADDR_WIDTH</span>])
+        <span class="signal">fifo_count</span> = <span class="signal">wr_ptr</span> - <span class="signal">rd_ptr</span>;
+    <span class="keyword">else</span>
+        <span class="signal">fifo_count</span> = (<span class="number">2</span>**<span class="type">ADDR_WIDTH</span> + <span class="signal">wr_ptr</span>) - <span class="signal">rd_ptr</span>;
+<span class="keyword">end</span>
+
+<span class="keyword">assign</span> <span class="signal">almost_full</span>  = (<span class="signal">fifo_count</span> >= <span class="type">ALMOST_FULL_THRESH</span>);
+<span class="keyword">assign</span> <span class="signal">almost_empty</span> = (<span class="signal">fifo_count</span> <= <span class="type">ALMOST_EMPTY_THRESH</span>);</code></pre>
+
+    <h2>
+        <span class="en">Key Takeaways</span>
+        <span class="ko" style="display:none;">핵심 요약</span>
+    </h2>
+
+    <div class="concept-box">
+        <ul>
+            <li class="en">
+                <strong>MSB Trick:</strong> Use N+1 bits for pointers in an N-bit address FIFO to distinguish full from empty
+            </li>
+            <li class="ko" style="display:none;">
+                <strong>MSB 트릭:</strong> N비트 주소 FIFO에서 full과 empty를 구분하기 위해 N+1비트 포인터 사용
+            </li>
+            <li class="en">
+                <strong>Empty:</strong> All pointer bits match (including MSB)
+            </li>
+            <li class="ko" style="display:none;">
+                <strong>Empty:</strong> 모든 포인터 비트가 일치 (MSB 포함)
+            </li>
+            <li class="en">
+                <strong>Full:</strong> Lower bits match, but MSBs differ (wrapped around)
+            </li>
+            <li class="ko" style="display:none;">
+                <strong>Full:</strong> 하위 비트는 일치하지만 MSB는 다름 (wrap around됨)
+            </li>
+            <li class="en">
+                <strong>Guard writes:</strong> Only write when <code>!full</code>
+            </li>
+            <li class="ko" style="display:none;">
+                <strong>쓰기 보호:</strong> <code>!full</code>일 때만 쓰기
+            </li>
+            <li class="en">
+                <strong>Guard reads:</strong> Only read when <code>!empty</code>
+            </li>
+            <li class="ko" style="display:none;">
+                <strong>읽기 보호:</strong> <code>!empty</code>일 때만 읽기
+            </li>
+        </ul>
+    </div>
+
+    <div class="tip-box">
+        <h3>
+            <span class="en">Interview Tip</span>
+            <span class="ko" style="display:none;">면접 팁</span>
+        </h3>
+        <p class="en">
+            When asked "How do you detect full vs empty in a FIFO?" — don't just say "compare pointers." 
+            Explain the MSB trick and why it's needed. This shows deep understanding of the problem.
+        </p>
+        <p class="ko" style="display:none;">
+            "FIFO에서 full과 empty를 어떻게 감지하나요?"라는 질문에 "포인터를 비교한다"고만 하지 마세요. 
+            MSB 트릭과 그것이 필요한 이유를 설명하세요. 이는 문제에 대한 깊은 이해를 보여줍니다.
+        </p>
+    </div>
+
+    <script>
+        let isKorean = false;
+        function toggleLang() {
+            isKorean = !isKorean;
+            document.querySelectorAll('.en').forEach(el => {
+                el.style.setProperty('display', isKorean ? 'none' : 'revert', 'important');
+            });
+            document.querySelectorAll('.ko').forEach(el => {
+                el.style.setProperty('display', isKorean ? 'revert' : 'none', 'important');
+            });
+            document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+        }
+    </script>
+</body>
+</html>
