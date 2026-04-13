@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Daily Tech Briefing — Apr 12, 2026</title>
+<style>
+  :root {
+    --bg: #0d1117; --card: #161b22; --border: #30363d;
+    --text: #c9d1d9; --heading: #f0f6fc; --accent: #58a6ff;
+    --tag-ai: #7ee787; --tag-mkt: #f78166; --tag-semi: #d2a8ff; --tag-wild: #ffa657;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; padding: 16px; max-width: 720px; margin: 0 auto; }
+  header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
+  h1 { font-size: 1.4rem; color: var(--heading); }
+  .date { color: #8b949e; font-size: 0.85rem; margin-top: 4px; }
+  .lang-toggle { background: var(--card); color: var(--accent); border: 1px solid var(--border); padding: 6px 14px; border-radius: 20px; cursor: pointer; font-size: 0.85rem; white-space: nowrap; }
+  .lang-toggle:hover { background: var(--border); }
+  .audio-player { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px; margin-bottom: 24px; }
+  .audio-label { margin-bottom: 10px; font-size: 0.95rem; color: var(--heading); }
+  .section-title { font-size: 1.1rem; color: var(--heading); margin: 24px 0 12px; display: flex; align-items: center; gap: 8px; }
+  .tag { font-size: 0.7rem; padding: 2px 8px; border-radius: 12px; font-weight: 600; text-transform: uppercase; }
+  .tag-ai { background: rgba(126,231,135,0.15); color: var(--tag-ai); }
+  .tag-mkt { background: rgba(247,129,102,0.15); color: var(--tag-mkt); }
+  .tag-semi { background: rgba(210,168,255,0.15); color: var(--tag-semi); }
+  .tag-wild { background: rgba(255,166,87,0.15); color: var(--tag-wild); }
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px; margin-bottom: 12px; }
+  .card h3 { color: var(--heading); font-size: 1rem; margin-bottom: 6px; }
+  .card .source { color: #8b949e; font-size: 0.8rem; margin-bottom: 8px; }
+  .card p { font-size: 0.9rem; }
+  .card a { color: var(--accent); text-decoration: none; font-size: 0.85rem; }
+  .card a:hover { text-decoration: underline; }
+  footer { text-align: center; color: #484f58; font-size: 0.75rem; margin-top: 32px; padding-top: 16px; border-top: 1px solid var(--border); }
+  .ko { display: none; }
+  .ko.show { display: inline !important; }
+  .en.hide { display: none !important; }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>🌳 <span class="en">Daily Tech Briefing</span><span class="ko">오늘의 테크 브리핑</span></h1>
+    <div class="date"><span class="en">Saturday, April 12, 2026</span><span class="ko">2026년 4월 12일 토요일</span></div>
+  </div>
+  <button class="lang-toggle" onclick="toggleLang()">한국어</button>
+</header>
+
+<div class="audio-player">
+  <div class="audio-label">
+    <span class="en">🎙️ Morning Briefing Audio</span>
+    <span class="ko">🎙️ 모닝 브리핑 오디오</span>
+  </div>
+  <audio controls style="width:100%">
+    <source src="briefing-2026-04-12.mp3" type="audio/mpeg">
+  </audio>
+</div>
+
+<!-- AI & TECH -->
+<div class="section-title"><span class="tag tag-ai">AI & Tech</span></div>
+
+<div class="card">
+  <h3><span class="en">Anthropic Launches Claude for Word Beta — AI Sidebar Comes to Microsoft Word</span><span class="ko">앤트로픽, 마이크로소프트 워드용 클로드 베타 출시 — AI 사이드바 도입</span></h3>
+  <div class="source">Anthropic / The Next Web</div>
+  <p><span class="en">Anthropic released Claude for Word in public beta on April 10, a native sidebar add-in for Microsoft Word on Mac and Windows. It can draft, edit, and review documents with tracked changes — with legal contract review as its headline use case. Available for Team and Enterprise plans, it also connects seamlessly with Claude for Excel and PowerPoint.</span><span class="ko">앤트로픽이 4월 10일 마이크로소프트 워드용 클로드를 퍼블릭 베타로 출시했습니다. Mac과 Windows에서 네이티브 사이드바 애드인으로 문서 작성, 편집, 검토가 가능하며 변경 추적을 지원합니다. 법률 계약 검토가 핵심 사용 사례이며, 엑셀·파워포인트용 클로드와도 연동됩니다.</span></p>
+  <a href="https://thenextweb.com/news/dario-amodei-london-united-kingdom" target="_blank"><span class="en">Read more →</span><span class="ko">자세히 보기 →</span></a>
+</div>
+
+<div class="card">
+  <h3><span class="en">Google Releases Gemma 4 — Most Capable Open Models Under Apache 2.0</span><span class="ko">구글 젬마 4 출시 — 아파치 2.0 라이선스 하 최고 성능 오픈 모델</span></h3>
+  <div class="source">Google / Engadget</div>
+  <p><span class="en">Google released Gemma 4, a family of open-weight models from 2B to 31B parameters, built from the same research as Gemini 3. The flagship 31B model handles 256K context windows, native vision and audio, 140+ languages, and built-in function calling. A major shift: it's now under a commercially permissive Apache 2.0 license, with over 400 million downloads to date.</span><span class="ko">구글이 2B~31B 파라미터의 오픈 웨이트 모델군 젬마 4를 출시했습니다. 제미나이 3과 동일한 연구 기반으로 구축된 플래그십 31B 모델은 256K 컨텍스트 윈도우, 네이티브 비전·오디오, 140개 이상 언어를 지원합니다. 상용 허용 아파치 2.0 라이선스로 전환된 것이 큰 변화이며, 누적 다운로드는 4억 회를 넘었습니다.</span></p>
+  <a href="https://blog.google/innovation-and-ai/technology/developers-tools/gemma-4/" target="_blank"><span class="en">Read more →</span><span class="ko">자세히 보기 →</span></a>
+</div>
+
+<div class="card">
+  <h3><span class="en">India's Sarvam AI Closes $350M Round at $1.5B Valuation</span><span class="ko">인도 사르밤 AI, $1.5B 밸류에이션으로 $350M 펀딩 마감</span></h3>
+  <div class="source">Bloomberg / Outlook Business</div>
+  <p><span class="en">Bengaluru-based Sarvam AI is closing a $350 million round at a $1.5 billion valuation, led by Bessemer Venture Partners with Nvidia, Amazon, and Prosperity7 participating. It's the largest AI funding deal in India this year. The startup builds voice-first AI systems supporting 22 Indian languages, aligning with India's national IndiaAI Mission.</span><span class="ko">벵갈루루 소재 사르밤 AI가 베세머 벤처 파트너스 주도, 엔비디아·아마존·프로스퍼리티7 참여로 $1.5B 밸류에이션에 $350M 라운드를 마감 중입니다. 올해 인도 최대 AI 펀딩이며, 22개 인도어를 지원하는 음성 우선 AI 시스템을 구축하고 있습니다.</span></p>
+  <a href="https://www.outlookbusiness.com/corporate/sarvam-ai-350m-funding-round-2026-bessemer-nvidia-amazon" target="_blank"><span class="en">Read more →</span><span class="ko">자세히 보기 →</span></a>
+</div>
+
+<div class="card">
+  <h3><span class="en">Notion Adds Voice Input for AI Agents on Desktop</span><span class="ko">노션, 데스크톱 AI 에이전트 음성 입력 추가</span></h3>
+  <div class="source">Notion</div>
+  <p><span class="en">Notion shipped voice input for its AI agents on desktop, letting users dictate prompts instead of typing. The update also adds AI Meeting Notes from Command Search for quick capture. Custom Agents remain free to try through May 3, 2026, as Notion continues building out its agentic AI stack.</span><span class="ko">노션이 데스크톱 AI 에이전트에 음성 입력을 추가하여 프롬프트를 타이핑 대신 말로 전달할 수 있게 되었습니다. 명령 검색에서 AI 회의록도 생성 가능하며, 커스텀 에이전트는 2026년 5월 3일까지 무료 체험이 가능합니다.</span></p>
+  <a href="https://www.notion.com/releases/2026-04-06" target="_blank"><span class="en">Read more →</span><span class="ko">자세히 보기 →</span></a>
+</div>
+
+<!-- MARKETS -->
+<div class="section-title"><span class="tag tag-mkt"><span class="en">Markets</span><span class="ko">시장</span></span></div>
+
+<div class="card">
+  <h3><span class="en">Oracle Lays Off 30,000 Workers via 6 AM Email — Biggest Cut of 2026</span><span class="ko">오라클, 새벽 6시 이메일로 3만 명 해고 — 2026년 최대 감원</span></h3>
+  <div class="source">CNBC / Yahoo Finance</div>
+  <p><span class="en">Oracle terminated up to 30,000 employees — roughly 18% of its workforce — via email at 6 AM with no prior warning, making it the largest single layoff of 2026. Workers were immediately locked out of company systems. The cuts are funding Oracle's aggressive $50 billion AI infrastructure pivot, expected to free up $8-10 billion in cash flow.</span><span class="ko">오라클이 사전 통보 없이 새벽 6시 이메일로 약 3만 명(전체 인력의 18%)을 해고했으며, 이는 2026년 최대 단일 감원입니다. 직원들은 즉시 사내 시스템 접근이 차단되었습니다. 이 감원은 500억 달러 규모 AI 인프라 전환에 필요한 80~100억 달러 현금 흐름 확보를 위한 것입니다.</span></p>
+  <a href="https://www.cnbc.com/2026/03/31/oracle-layoffs-ai-spending.html" target="_blank"><span class="en">Read more →</span><span class="ko">자세히 보기 →</span></a>
+</div>
+
+<div class="card">
+  <h3><span class="en">Apple Faces $20 Billion Tariff Problem Ahead of Q2 Earnings</span><span class="ko">애플, Q2 실적 앞두고 200억 달러 관세 문제 직면</span></h3>
+  <div class="source">Techi / Motley Fool</div>
+  <p><span class="en">Apple has absorbed $3.3 billion in tariff costs since April 2025, with quarterly expenses accelerating from $800M to $1.4B. The company chose to absorb costs rather than raise prices, protecting demand but squeezing margins. All eyes are on Q2 earnings on April 30 for clarity on whether the $1.4B quarterly rate is the new normal.</span><span class="ko">애플이 2025년 4월 이후 33억 달러의 관세 비용을 흡수했으며, 분기 비용은 8억에서 14억 달러로 증가했습니다. 가격 인상 대신 비용을 흡수하는 전략으로 수요는 보호했지만 마진이 압박받고 있습니다. 4월 30일 Q2 실적 발표에서 14억 달러 분기 비용이 뉴노멀인지 주목됩니다.</span></p>
+  <a href="https://www.techi.com/apple-tariff-problem/" target="_blank"><span class="en">Read more →</span><span class="ko">자세히 보기 →</span></a>
+</div>
+
+<!-- SEMICONDUCTORS -->
+<div class="section-title"><span class="tag tag-semi"><span class="en">Semiconductors</span><span class="ko">반도체</span></span></div>
+
+<div class="card">
+  <h3><span class="en">Nvidia Locks Up TSMC's Advanced Packaging for Years — CoWoS Bottleneck Deepens</span><span class="ko">엔비디아, TSMC 첨단 패키징 수년간 독점 — CoWoS 병목 심화</span></h3>
+  <div class="source">CNBC / DigiTimes</div>
+  <p><span class="en">Nvidia has reserved the majority of TSMC's CoWoS advanced packaging capacity for years ahead, leaving little room for competitors. CoWoS demand is growing at roughly 80% CAGR. TSMC is ramping two new packaging facilities in Taiwan plus two in Arizona, and outsourcing simpler steps to ASE and Amkor to ease the crunch.</span><span class="ko">엔비디아가 TSMC의 CoWoS 첨단 패키징 용량을 수년간 선점하여 경쟁사에 여유가 거의 없습니다. CoWoS 수요는 약 80% CAGR로 성장 중이며, TSMC는 대만에 2개, 애리조나에 2개의 새 패키징 시설을 가동하고 ASE·앰코어에 일부 공정을 위탁하고 있습니다.</span></p>
+  <a href="https://www.cnbc.com/2026/04/08/tsmc-nvidia-advanced-packaging-intel.html" target="_blank"><span class="en">Read more →</span><span class="ko">자세히 보기 →</span></a>
+</div>
+
+<div class="card">
+  <h3><span class="en">Global Chip Revenue to Exceed $1.3 Trillion in 2026, Fastest Growth in Decades</span><span class="ko">2026년 글로벌 반도체 매출 1.3조 달러 돌파 전망 — 수십 년 만에 최고 성장</span></h3>
+  <div class="source">IANS / Semiconductor Industry Association</div>
+  <p><span class="en">Global semiconductor revenue is projected to blow past $1.3 trillion in 2026 — the fastest growth in over two decades. AI chips now account for ~30% of total revenue. Memory prices are surging dramatically, with DRAM up 125% and NAND flash up 234%, driving memory revenue to an estimated $633 billion.</span><span class="ko">2026년 글로벌 반도체 매출이 1.3조 달러를 넘어설 전망이며, 이는 20년 이상 만에 가장 빠른 성장입니다. AI 칩이 전체 매출의 약 30%를 차지하고, DRAM 125%, NAND 플래시 234% 가격 급등으로 메모리 매출이 약 6,330억 달러에 달할 것으로 예상됩니다.</span></p>
+  <a href="https://ianslive.in/ai-demand-to-push-global-chip-industry-revenue-past-13-tn-in-2026--20260408161018" target="_blank"><span class="en">Read more →</span><span class="ko">자세히 보기 →</span></a>
+</div>
+
+<!-- WILD CARD -->
+<div class="section-title"><span class="tag tag-wild"><span class="en">Wild Card</span><span class="ko">와일드 카드</span></span></div>
+
+<div class="card">
+  <h3><span class="en">Overworld Waypoint-1.5 Generates Interactive 3D Worlds on Consumer Hardware</span><span class="ko">오버월드 웨이포인트-1.5, 일반 하드웨어에서 인터랙티브 3D 세계 생성</span></h3>
+  <div class="source">GlobeNewswire / GamesBeat</div>
+  <p><span class="en">Overworld released Waypoint-1.5, an AI system that generates interactive 3D worlds in real-time on consumer Mac and Windows hardware at up to 720p/60fps. Trained on 100x more data than the original release, it delivers dramatically better visual fidelity while being half the model size. Available both as a local download and cloud-streamed experience.</span><span class="ko">오버월드가 일반 Mac·Windows 하드웨어에서 최대 720p/60fps로 인터랙티브 3D 세계를 실시간 생성하는 AI 시스템 웨이포인트-1.5를 출시했습니다. 원래 버전 대비 100배 많은 데이터로 학습하여 시각적 품질이 크게 향상되었으며, 모델 크기는 절반으로 줄었습니다.</span></p>
+  <a href="https://over.world/blog/waypoint-1-5" target="_blank"><span class="en">Read more →</span><span class="ko">자세히 보기 →</span></a>
+</div>
+
+<div class="card">
+  <h3><span class="en">Critical Marimo RCE Exploited Within 10 Hours of Disclosure</span><span class="ko">마리모 치명적 RCE 취약점, 공개 10시간 만에 악용</span></h3>
+  <div class="source">The Hacker News / BleepingComputer</div>
+  <p><span class="en">CVE-2026-39987, a pre-auth remote code execution flaw in the popular Python notebook tool Marimo (CVSS 9.3), was exploited just 10 hours after disclosure. Attackers built a working exploit directly from the advisory, gaining root shell access. Default Docker images run as root, making the impact severe. Users should upgrade to v0.23.0 immediately.</span><span class="ko">인기 파이썬 노트북 도구 마리모의 사전 인증 원격 코드 실행 취약점 CVE-2026-39987(CVSS 9.3)이 공개 10시간 만에 악용되었습니다. 공격자가 권고문만으로 익스플로잇을 제작해 루트 쉘 접근을 획득했으며, 기본 도커 이미지가 루트로 실행되어 피해가 심각합니다. v0.23.0으로 즉시 업그레이드가 필요합니다.</span></p>
+  <a href="https://thehackernews.com/2026/04/marimo-rce-flaw-cve-2026-39987.html" target="_blank"><span class="en">Read more →</span><span class="ko">자세히 보기 →</span></a>
+</div>
+
+<footer>
+  <span class="en">Curated by Totoro 🌳 for Minjun</span><span class="ko">토토로 🌳가 민준을 위해 큐레이션</span>
+</footer>
+
+<script>
+let isKorean = false;
+function toggleLang() {
+  isKorean = !isKorean;
+  document.querySelectorAll('.en').forEach(el => el.classList.toggle('hide', isKorean));
+  document.querySelectorAll('.ko').forEach(el => el.classList.toggle('show', isKorean));
+  document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+}
+</script>
+</body>
+</html>
