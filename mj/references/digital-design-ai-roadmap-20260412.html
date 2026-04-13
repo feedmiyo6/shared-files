@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Digital Design AI Platform — Complete Roadmap</title>
+<style>
+  :root {
+    --bg: #0d1117; --card: #161b22; --border: #30363d;
+    --text: #c9d1d9; --heading: #f0f6fc; --accent: #58a6ff;
+    --green: #7ee787; --orange: #ffa657; --purple: #d2a8ff; --red: #f78166;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.7; padding: 16px; max-width: 780px; margin: 0 auto; }
+  header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 28px; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
+  h1 { font-size: 1.45rem; color: var(--heading); }
+  .subtitle { color: #8b949e; font-size: 0.85rem; margin-top: 4px; }
+  .lang-toggle { background: var(--card); color: var(--accent); border: 1px solid var(--border); padding: 6px 14px; border-radius: 20px; cursor: pointer; font-size: 0.85rem; white-space: nowrap; flex-shrink: 0; margin-left: 12px; }
+  .lang-toggle:hover { background: var(--border); }
+  .toc { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 32px; }
+  .toc-title { color: var(--heading); font-weight: 600; margin-bottom: 12px; font-size: 0.95rem; }
+  .toc ol { padding-left: 20px; }
+  .toc li { margin-bottom: 6px; font-size: 0.88rem; }
+  .toc a { color: var(--accent); text-decoration: none; }
+  .toc a:hover { text-decoration: underline; }
+  h2 { color: var(--heading); font-size: 1.2rem; margin: 36px 0 16px; padding-left: 12px; border-left: 3px solid var(--accent); }
+  h3 { color: var(--heading); font-size: 1rem; margin: 20px 0 10px; }
+  h4 { color: #8b949e; font-size: 0.88rem; margin: 16px 0 8px; text-transform: uppercase; letter-spacing: 0.04em; }
+  p { margin-bottom: 12px; font-size: 0.9rem; }
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  .card h3 { margin-top: 0; }
+  .highlight { background: rgba(88,166,255,0.08); border: 1px solid rgba(88,166,255,0.3); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  .highlight.warn { background: rgba(255,166,87,0.08); border-color: rgba(255,166,87,0.3); }
+  .highlight.green { background: rgba(126,231,135,0.08); border-color: rgba(126,231,135,0.3); }
+  .highlight.red { background: rgba(247,129,102,0.08); border-color: rgba(247,129,102,0.3); }
+  .highlight strong { color: var(--heading); }
+  .phase-box { background: #0d1f0d; border: 1px solid #2ea043; border-radius: 12px; padding: 20px; margin-bottom: 20px; }
+  .phase-title { color: var(--green); font-weight: 700; margin-bottom: 8px; font-size: 1rem; }
+  .phase-meta { color: #8b949e; font-size: 0.82rem; margin-bottom: 10px; }
+  pre { background: #010409; border: 1px solid var(--border); border-radius: 8px; padding: 14px; overflow-x: auto; margin-bottom: 16px; }
+  code { font-family: 'SF Mono', 'Fira Code', Menlo, monospace; font-size: 0.82rem; color: #e6edf3; }
+  p code, li code, td code { background: #1c2128; padding: 2px 6px; border-radius: 4px; font-size: 0.82rem; }
+  .table-wrap { overflow-x: auto; margin-bottom: 16px; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.84rem; }
+  th { background: #1c2128; color: var(--heading); padding: 8px 10px; text-align: left; border: 1px solid var(--border); }
+  td { padding: 8px 10px; border: 1px solid var(--border); }
+  tr:nth-child(even) td { background: #0d1117; }
+  tr:nth-child(odd) td { background: #161b22; }
+  .tag { display: inline-block; font-size: 0.7rem; padding: 2px 8px; border-radius: 12px; font-weight: 600; text-transform: uppercase; margin-right: 4px; }
+  .tag-ai { background: rgba(126,231,135,0.15); color: var(--green); }
+  .tag-warn { background: rgba(255,166,87,0.15); color: var(--orange); }
+  .tag-key { background: rgba(88,166,255,0.15); color: var(--accent); }
+  ul, ol { padding-left: 20px; margin-bottom: 12px; font-size: 0.9rem; }
+  li { margin-bottom: 4px; }
+  footer { text-align: center; color: #484f58; font-size: 0.75rem; margin-top: 40px; padding-top: 16px; border-top: 1px solid var(--border); }
+  .ko { display: none; }
+  .ko.show { display: inline !important; }
+  .en.hide { display: none !important; }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>⚡ <span class="en">Digital Design AI Platform — Complete Roadmap</span><span class="ko">디지털 설계 AI 플랫폼 — 완벽 로드맵</span></h1>
+    <div class="subtitle"><span class="en">From Raw Engineering Data → Fine-Tuned LLM → Internal API → Web Platform</span><span class="ko">원시 엔지니어링 데이터 → 파인튜닝 LLM → 내부 API → 웹 플랫폼</span></div>
+    <div class="subtitle"><span class="en">April 12, 2026 · For Minjun @ Microchip Technology</span><span class="ko">2026년 4월 12일 · 민준 @ Microchip Technology</span></div>
+  </div>
+  <button class="lang-toggle" onclick="toggleLang()">한국어</button>
+</header>
+
+<!-- TOC -->
+<div class="toc">
+  <div class="toc-title">📋 <span class="en">Table of Contents</span><span class="ko">목차</span></div>
+  <ol>
+    <li><a href="#s1"><span class="en">Training Data Formats Explained</span><span class="ko">학습 데이터 형식 설명</span></a></li>
+    <li><a href="#s2"><span class="en">Converting Your Engineering Files</span><span class="ko">엔지니어링 파일 변환하기</span></a></li>
+    <li><a href="#s3"><span class="en">Data Processing Pipeline Architecture</span><span class="ko">데이터 처리 파이프라인 아키텍처</span></a></li>
+    <li><a href="#s4"><span class="en">Server Setup: 32GB VM</span><span class="ko">서버 설정: 32GB VM</span></a></li>
+    <li><a href="#s5"><span class="en">Model Upgrade Strategy</span><span class="ko">모델 업그레이드 전략</span></a></li>
+    <li><a href="#s6"><span class="en">Exposing as an API</span><span class="ko">API로 노출하기</span></a></li>
+    <li><a href="#s7"><span class="en">Web Platform Architecture</span><span class="ko">웹 플랫폼 아키텍처</span></a></li>
+    <li><a href="#s8"><span class="en">Phased Roadmap (12-Week Plan)</span><span class="ko">단계별 로드맵 (12주 계획)</span></a></li>
+    <li><a href="#s9"><span class="en">Feasibility & Risk Assessment</span><span class="ko">실현 가능성 & 리스크 평가</span></a></li>
+  </ol>
+</div>
+
+<!-- ========== SECTION 1 ========== -->
+<div id="s1">
+<h2>1. <span class="en">Training Data Formats Explained</span><span class="ko">학습 데이터 형식 설명</span></h2>
+
+<p><span class="en">LLM fine-tuning requires structured conversation data. Here are the main formats:</span><span class="ko">LLM 파인튜닝에는 구조화된 대화 데이터가 필요합니다. 주요 형식은 다음과 같습니다:</span></p>
+
+<h3><span class="en">Format Comparison</span><span class="ko">형식 비교</span></h3>
+<div class="table-wrap">
+<table>
+<tr><th><span class="en">Format</span><span class="ko">형식</span></th><th><span class="en">Structure</span><span class="ko">구조</span></th><th><span class="en">Best For</span><span class="ko">최적 용도</span></th><th><span class="en">Recommendation</span><span class="ko">추천</span></th></tr>
+<tr><td><strong>ChatML / JSONL</strong></td><td><code>{"messages": [...]}</code></td><td><span class="en">Multi-turn chat, most tools support</span><span class="ko">멀티턴 대화, 대부분의 도구 지원</span></td><td><span class="tag tag-ai">RECOMMENDED</span></td></tr>
+<tr><td><strong>Alpaca</strong></td><td><code>{"instruction", "input", "output"}</code></td><td><span class="en">Simple Q&A tasks</span><span class="ko">단순 Q&A 작업</span></td><td><span class="en">Good for code tasks</span><span class="ko">코드 작업에 적합</span></td></tr>
+<tr><td><strong>ShareGPT</strong></td><td><code>{"conversations": [{"from": "human/gpt", ...}]}</code></td><td><span class="en">Multi-turn, popular in community</span><span class="ko">멀티턴, 커뮤니티에서 인기</span></td><td><span class="en">Easy to convert to ChatML</span><span class="ko">ChatML로 변환 용이</span></td></tr>
+<tr><td><strong>Completion</strong></td><td><code>{"text": "full document"}</code></td><td><span class="en">Continued pre-training (domain knowledge)</span><span class="ko">연속 사전학습 (도메인 지식)</span></td><td><span class="en">For datasheet ingestion</span><span class="ko">데이터시트 학습용</span></td></tr>
+</table>
+</div>
+
+<h3><span class="en">ChatML / JSONL — The Format You Should Use</span><span class="ko">ChatML / JSONL — 사용해야 할 형식</span></h3>
+<p><span class="en">This is the universal standard. One JSON object per line, each with a <code>messages</code> array:</span><span class="ko">이것이 범용 표준입니다. 라인당 하나의 JSON 객체, 각각 <code>messages</code> 배열 포함:</span></p>
+
+<pre><code>{"messages": [
+  {"role": "system", "content": "You are an expert digital design engineer specializing in automotive Ethernet PHY."},
+  {"role": "user", "content": "What is the T1 PHY 100BASE-T1 transmit amplitude specification?"},
+  {"role": "assistant", "content": "Per IEEE 802.3cg, the 100BASE-T1 transmit amplitude is 1.0V peak-to-peak differential (+/- 50mV). The transmitter output droop shall be less than 45% at 500ns. Key parameters:\n- Peak differential voltage: 1.0 Vpp\n- Template mask: per Figure 96-8\n- Rise/fall time: 3ns to 5ns\n- Return loss: > 18dB from 2MHz to 66MHz"}
+]}</code></pre>
+
+<h4><span class="en">Alpaca Format (simpler, good for single-turn)</span><span class="ko">Alpaca 형식 (더 간단, 단일 턴에 적합)</span></h4>
+<pre><code>{"instruction": "Explain the clock domain crossing issue in this Verilog module",
+ "input": "module sync_ff (\n  input clk_a, clk_b, data_in,\n  output reg data_out\n);\n  always @(posedge clk_b)\n    data_out <= data_in;\nendmodule",
+ "output": "This module has a classic CDC violation. data_in is driven by clk_a domain but sampled directly by clk_b with a single flip-flop. This creates metastability risk.\n\nFix: Use a 2-stage synchronizer:\n```verilog\nreg sync_stage1, sync_stage2;\nalways @(posedge clk_b) begin\n  sync_stage1 <= data_in;\n  sync_stage2 <= sync_stage1; // Second stage resolves metastability\nend\nassign data_out = sync_stage2;\n```"
+}</code></pre>
+
+<h4><span class="en">Completion Format (for continued pre-training)</span><span class="ko">Completion 형식 (연속 사전학습용)</span></h4>
+<pre><code>{"text": "## 100BASE-T1 PHY Architecture Overview\n\nThe 100BASE-T1 PHY implements full-duplex communication over a single twisted pair using PAM-3 encoding. The transmit path consists of a PCS (Physical Coding Sublayer), PMA (Physical Medium Attachment), and PMD (Physical Medium Dependent) sublayer.\n\n### Key Specifications\n- Data rate: 100 Mbps\n- Encoding: PAM-3 (3-level pulse amplitude modulation)\n- Cable: single unshielded twisted pair up to 15m\n- Frequency band: DC to 66.6 MHz\n..."}</code></pre>
+
+<h3><span class="en">Dataset Size Guidelines</span><span class="ko">데이터셋 크기 가이드라인</span></h3>
+<div class="highlight green">
+<strong>📊 <span class="en">How much data do you need?</span><span class="ko">얼마나 많은 데이터가 필요한가?</span></strong>
+<div class="table-wrap">
+<table>
+<tr><th><span class="en">Goal</span><span class="ko">목표</span></th><th><span class="en">Examples Needed</span><span class="ko">필요한 예시 수</span></th><th><span class="en">Notes</span><span class="ko">비고</span></th></tr>
+<tr><td><span class="en">Basic domain awareness</span><span class="ko">기본 도메인 인식</span></td><td>200–500</td><td><span class="en">Model starts using your terminology correctly</span><span class="ko">모델이 전문 용어를 올바르게 사용하기 시작</span></td></tr>
+<tr><td><span class="en">Solid domain expertise</span><span class="ko">견실한 도메인 전문성</span></td><td>1,000–5,000</td><td><span class="en">Good answers for common questions</span><span class="ko">일반적인 질문에 좋은 답변</span></td></tr>
+<tr><td><span class="en">Deep specialization</span><span class="ko">깊은 전문화</span></td><td>5,000–20,000</td><td><span class="en">Handles edge cases, nuanced answers</span><span class="ko">엣지 케이스 처리, 미묘한 답변</span></td></tr>
+<tr><td><span class="en">Production-grade</span><span class="ko">프로덕션 수준</span></td><td>20,000+</td><td><span class="en">Comparable to commercial domain models</span><span class="ko">상용 도메인 모델에 필적</span></td></tr>
+</table>
+</div>
+<span class="en"><strong>Quality > Quantity.</strong> 500 high-quality, expert-written examples beat 10,000 auto-generated low-quality ones. Start with 500 hand-curated examples, then expand with AI-assisted generation.</span><span class="ko"><strong>품질 > 수량.</strong> 전문가가 작성한 500개의 고품질 예시가 자동 생성된 10,000개의 저품질 예시보다 낫습니다. 500개의 수작업 큐레이션 예시로 시작하고, AI 지원 생성으로 확장하세요.</span>
+</div>
+</div>
+
+<!-- ========== SECTION 2 ========== -->
+<div id="s2">
+<h2>2. <span class="en">Converting Your Engineering Files</span><span class="ko">엔지니어링 파일 변환하기</span></h2>
+
+<p><span class="en">Here's how to convert each of your data sources into training-ready JSONL format:</span><span class="ko">각 데이터 소스를 학습용 JSONL 형식으로 변환하는 방법입니다:</span></p>
+
+<!-- PDF -->
+<div class="card">
+<h3>📄 <span class="en">PDFs (Datasheets, Specs)</span><span class="ko">PDF (데이터시트, 스펙)</span></h3>
+<p><span class="en"><strong>Strategy:</strong> Extract text → chunk into sections → use AI to generate Q&A pairs from each chunk</span><span class="ko"><strong>전략:</strong> 텍스트 추출 → 섹션별 청킹 → AI를 사용해 각 청크에서 Q&A 쌍 생성</span></p>
+
+<h4><span class="en">Recommended Tools</span><span class="ko">추천 도구</span></h4>
+<div class="table-wrap">
+<table>
+<tr><th><span class="en">Tool</span><span class="ko">도구</span></th><th><span class="en">Strengths</span><span class="ko">강점</span></th><th><span class="en">Install</span><span class="ko">설치</span></th></tr>
+<tr><td><strong>marker-pdf</strong></td><td><span class="en">Best for technical PDFs with tables/figures. Outputs clean Markdown.</span><span class="ko">테이블/그림이 있는 기술 PDF에 최적. 깔끔한 마크다운 출력.</span></td><td><code>pip install marker-pdf</code></td></tr>
+<tr><td><strong>PyMuPDF (fitz)</strong></td><td><span class="en">Fast, reliable text extraction. Good for simple layouts.</span><span class="ko">빠르고 안정적인 텍스트 추출. 간단한 레이아웃에 적합.</span></td><td><code>pip install pymupdf</code></td></tr>
+<tr><td><strong>Docling (IBM)</strong></td><td><span class="en">State-of-art for complex docs. Table/figure-aware.</span><span class="ko">복잡한 문서에 최신 기술. 테이블/그림 인식.</span></td><td><code>pip install docling</code></td></tr>
+</table>
+</div>
+
+<pre><code># PDF extraction with marker-pdf (best for datasheets)
+pip install marker-pdf
+
+# Convert single PDF to markdown
+marker_single /path/to/datasheet.pdf /output/dir/
+
+# Batch convert directory of PDFs
+marker /path/to/pdf_folder/ /output/dir/ --workers 4</code></pre>
+
+<pre><code># Then: generate Q&A pairs from extracted text using AI
+import json, openai
+
+def generate_qa_pairs(chunk: str, context: str = "digital design") -> list:
+    """Use GPT-4.1-mini to generate training Q&A from a text chunk."""
+    response = openai.chat.completions.create(
+        model="gpt-4.1-mini",
+        messages=[{
+            "role": "system",
+            "content": f"Generate 3-5 technical Q&A pairs from this {context} text. "
+                       "Format as JSON array: [{\"q\": \"...\", \"a\": \"...\"}]. "
+                       "Questions should be what an engineer would actually ask. "
+                       "Answers must be detailed, technical, and cite specifics."
+        }, {
+            "role": "user",
+            "content": chunk
+        }],
+        response_format={"type": "json_object"}
+    )
+    return json.loads(response.choices[0].message.content)["pairs"]
+
+# Convert to JSONL
+for pair in qa_pairs:
+    entry = {"messages": [
+        {"role": "system", "content": "You are an expert digital design engineer at Microchip Technology."},
+        {"role": "user", "content": pair["q"]},
+        {"role": "assistant", "content": pair["a"]}
+    ]}
+    with open("training_data.jsonl", "a") as f:
+        f.write(json.dumps(entry) + "\n")</code></pre>
+</div>
+
+<!-- VERILOG -->
+<div class="card">
+<h3>💻 <span class="en">Verilog / SystemVerilog / VHDL Code</span><span class="ko">Verilog / SystemVerilog / VHDL 코드</span></h3>
+<p><span class="en"><strong>Strategy:</strong> Parse modules → create explain/complete/debug/review training pairs</span><span class="ko"><strong>전략:</strong> 모듈 파싱 → 설명/완성/디버그/리뷰 학습 쌍 생성</span></p>
+
+<h4><span class="en">Types of Training Pairs from Code</span><span class="ko">코드에서 생성할 학습 쌍 유형</span></h4>
+<div class="table-wrap">
+<table>
+<tr><th><span class="en">Type</span><span class="ko">유형</span></th><th><span class="en">User Prompt</span><span class="ko">사용자 프롬프트</span></th><th><span class="en">Expected Response</span><span class="ko">기대 응답</span></th></tr>
+<tr><td><span class="en">Explain</span><span class="ko">설명</span></td><td><span class="en">"Explain this RTL module"</span><span class="ko">"이 RTL 모듈을 설명해줘"</span></td><td><span class="en">Architecture, ports, FSM, timing</span><span class="ko">아키텍처, 포트, FSM, 타이밍</span></td></tr>
+<tr><td><span class="en">Complete</span><span class="ko">완성</span></td><td><span class="en">"Complete this module: [partial code]"</span><span class="ko">"이 모듈을 완성해줘: [부분 코드]"</span></td><td><span class="en">Missing logic, remaining states</span><span class="ko">누락된 로직, 나머지 상태</span></td></tr>
+<tr><td><span class="en">Debug</span><span class="ko">디버그</span></td><td><span class="en">"Find the bug: [code with issue]"</span><span class="ko">"버그를 찾아줘: [이슈 있는 코드]"</span></td><td><span class="en">Bug ID, root cause, fix</span><span class="ko">버그 식별, 원인, 수정</span></td></tr>
+<tr><td><span class="en">Review</span><span class="ko">리뷰</span></td><td><span class="en">"Review this RTL for synthesis issues"</span><span class="ko">"합성 이슈에 대해 이 RTL을 리뷰해줘"</span></td><td><span class="en">Linting, CDC, timing concerns</span><span class="ko">린팅, CDC, 타이밍 우려</span></td></tr>
+<tr><td><span class="en">Convert</span><span class="ko">변환</span></td><td><span class="en">"Convert this Verilog to SystemVerilog"</span><span class="ko">"이 Verilog를 SystemVerilog로 변환해줘"</span></td><td><span class="en">Modernized code</span><span class="ko">현대화된 코드</span></td></tr>
+</table>
+</div>
+
+<pre><code>import re, json, pathlib
+
+def extract_verilog_modules(filepath: str) -> list[dict]:
+    """Extract individual modules from a Verilog file."""
+    text = pathlib.Path(filepath).read_text()
+    # Match module ... endmodule blocks
+    pattern = r'(module\s+\w+[\s\S]*?endmodule)'
+    modules = re.findall(pattern, text)
+    results = []
+    for mod in modules:
+        name_match = re.match(r'module\s+(\w+)', mod)
+        results.append({
+            "name": name_match.group(1) if name_match else "unknown",
+            "code": mod,
+            "file": filepath
+        })
+    return results
+
+def create_code_training_pair(module: dict) -> dict:
+    """Create an 'explain' training pair from a Verilog module."""
+    return {"messages": [
+        {"role": "system", "content": "You are an expert RTL design engineer. Explain code clearly with architecture details."},
+        {"role": "user", "content": f"Explain this Verilog module:\n```verilog\n{module['code']}\n```"},
+        {"role": "assistant", "content": f"[AI-generated explanation of {module['name']}]"}
+        # ^ Replace with actual explanation — use GPT-4.1-mini to generate
+    ]}
+
+# Process all .v / .sv files in a directory
+for f in pathlib.Path("/path/to/rtl/").rglob("*.sv"):
+    modules = extract_verilog_modules(str(f))
+    for mod in modules:
+        pair = create_code_training_pair(mod)
+        # Write to training file...</code></pre>
+</div>
+
+<!-- VERIFICATION LOGS -->
+<div class="card">
+<h3>📊 <span class="en">Simulation & Verification Logs</span><span class="ko">시뮬레이션 & 검증 로그</span></h3>
+<p><span class="en"><strong>Strategy:</strong> Parse error/warning patterns → create diagnostic Q&A pairs</span><span class="ko"><strong>전략:</strong> 에러/경고 패턴 파싱 → 진단 Q&A 쌍 생성</span></p>
+
+<pre><code>import re
+
+def parse_sim_log(log_path: str) -> list[dict]:
+    """Extract errors, warnings, and test results from verification logs."""
+    entries = []
+    with open(log_path) as f:
+        for line in f:
+            # UVM errors
+            if re.search(r'UVM_ERROR|UVM_FATAL', line):
+                entries.append({"type": "error", "line": line.strip()})
+            # Assertion failures
+            elif re.search(r'Assertion.*failed|assert.*error', line, re.I):
+                entries.append({"type": "assertion", "line": line.strip()})
+            # Timing violations
+            elif re.search(r'timing violation|setup.*violation|hold.*violation', line, re.I):
+                entries.append({"type": "timing", "line": line.strip()})
+            # Test pass/fail
+            elif re.search(r'TEST (PASSED|FAILED)', line):
+                entries.append({"type": "test_result", "line": line.strip()})
+    return entries
+
+# Create training pairs: "Given this error, what's the likely cause and fix?"
+def error_to_training_pair(error_entry: dict, context: str) -> dict:
+    return {"messages": [
+        {"role": "system", "content": "You are a verification engineer debugging simulation failures."},
+        {"role": "user", "content": f"I got this error in simulation:\n{error_entry['line']}\n\nContext: {context}\nWhat's the likely cause and how to fix it?"},
+        {"role": "assistant", "content": "[AI-generated diagnosis and fix]"}
+    ]}</code></pre>
+</div>
+
+<!-- JIRA/CONFLUENCE -->
+<div class="card">
+<h3>📋 <span class="en">Jira / Confluence Documentation</span><span class="ko">Jira / Confluence 문서</span></h3>
+<p><span class="en"><strong>Strategy:</strong> Extract via REST API → convert tickets/pages to Q&A pairs</span><span class="ko"><strong>전략:</strong> REST API로 추출 → 티켓/페이지를 Q&A 쌍으로 변환</span></p>
+
+<pre><code>import requests, json
+
+# Jira: Export issues with descriptions and comments
+def extract_jira_issues(base_url: str, project: str, token: str) -> list:
+    headers = {"Authorization": f"Bearer {token}"}
+    jql = f"project={project} AND type=Bug ORDER BY updated DESC"
+    resp = requests.get(
+        f"{base_url}/rest/api/2/search",
+        headers=headers,
+        params={"jql": jql, "maxResults": 1000,
+                "fields": "summary,description,comment,resolution,status"}
+    )
+    issues = resp.json()["issues"]
+    pairs = []
+    for issue in issues:
+        if issue["fields"]["resolution"]:
+            pairs.append({"messages": [
+                {"role": "system", "content": "You are a digital design engineer helping debug issues."},
+                {"role": "user", "content": f"Bug: {issue['fields']['summary']}\n\n{issue['fields']['description'] or ''}"},
+                {"role": "assistant", "content": f"Resolution: {issue['fields']['resolution']['name']}\n\n{_get_resolution_comment(issue)}"}
+            ]})
+    return pairs
+
+# Confluence: Extract pages
+def extract_confluence_pages(base_url: str, space: str, token: str) -> list:
+    headers = {"Authorization": f"Bearer {token}"}
+    resp = requests.get(
+        f"{base_url}/rest/api/content",
+        headers=headers,
+        params={"spaceKey": space, "limit": 500, "expand": "body.storage"}
+    )
+    # Process HTML → text → chunk → Q&A pairs
+    # Use BeautifulSoup to strip HTML, then generate pairs via AI</code></pre>
+</div>
+
+<!-- SCRIPTS -->
+<div class="card">
+<h3>🔧 <span class="en">Python / TCL / Perl Scripts</span><span class="ko">Python / TCL / Perl 스크립트</span></h3>
+<p><span class="en"><strong>Strategy:</strong> Same as RTL code — extract functions/procedures, create explain/usage pairs. TCL scripts are especially valuable since many EDA tools use TCL.</span><span class="ko"><strong>전략:</strong> RTL 코드와 동일 — 함수/프로시저 추출, 설명/사용법 쌍 생성. TCL 스크립트는 많은 EDA 도구가 TCL을 사용하므로 특히 가치 있습니다.</span></p>
+
+<pre><code># TCL scripts → training pairs
+# Great training data: "How do I configure [EDA tool] to do X?"
+# → "Here's the TCL command: proc_name arg1 arg2 ..."
+
+# Example training pair from a Synopsys DC script:
+{"messages": [
+  {"role": "system", "content": "You are an expert in EDA tool scripting (Synopsys, Cadence, Mentor)."},
+  {"role": "user", "content": "How do I set timing constraints for a 100MHz clock in Design Compiler?"},
+  {"role": "assistant", "content": "In Design Compiler TCL:\n```tcl\ncreate_clock -name sys_clk -period 10 [get_ports clk]\nset_clock_uncertainty 0.2 [get_clocks sys_clk]\nset_input_delay 2.0 -clock sys_clk [all_inputs]\nset_output_delay 2.0 -clock sys_clk [all_outputs]\n```\nThe period is 10ns (100MHz). Clock uncertainty accounts for jitter + skew."}
+]}</code></pre>
+</div>
+</div>
+
+<!-- ========== SECTION 3 ========== -->
+<div id="s3">
+<h2>3. <span class="en">Data Processing Pipeline Architecture</span><span class="ko">데이터 처리 파이프라인 아키텍처</span></h2>
+
+<div class="highlight">
+<strong>🏗️ <span class="en">Complete Pipeline Overview</span><span class="ko">전체 파이프라인 개요</span></strong><br>
+<code><span class="en">Raw Files → Extract → Clean → Chunk → Generate Q&A → Deduplicate → Quality Filter → JSONL</span><span class="ko">원시 파일 → 추출 → 정제 → 청킹 → Q&A 생성 → 중복 제거 → 품질 필터링 → JSONL</span></code>
+</div>
+
+<h3><span class="en">Pipeline Architecture</span><span class="ko">파이프라인 아키텍처</span></h3>
+<pre><code># Directory structure for your data processing project
+digital-design-ai/
+├── pipeline/
+│   ├── extractors/
+│   │   ├── pdf_extractor.py      # marker-pdf based
+│   │   ├── rtl_extractor.py      # Verilog/SV/VHDL parser
+│   │   ├── log_extractor.py      # Simulation log parser
+│   │   ├── jira_extractor.py     # Jira REST API
+│   │   └── confluence_extractor.py
+│   ├── processors/
+│   │   ├── chunker.py            # Smart text chunking
+│   │   ├── cleaner.py            # Remove noise, normalize
+│   │   └── deduplicator.py       # Fuzzy dedup with MinHash
+│   ├── generators/
+│   │   ├── qa_generator.py       # AI-powered Q&A pair generation
+│   │   └── quality_filter.py     # Score and filter pairs
+│   ├── config.yaml               # Pipeline configuration
+│   └── run_pipeline.py           # Main orchestrator
+├── data/
+│   ├── raw/                      # Input files
+│   ├── extracted/                # Extracted text/markdown
+│   ├── chunks/                   # Chunked segments
+│   └── training/                 # Final JSONL output
+└── eval/
+    └── eval_model.py             # Model evaluation scripts</code></pre>
+
+<h3><span class="en">AI-Powered Q&A Generation (Key Step!)</span><span class="ko">AI 기반 Q&A 생성 (핵심 단계!)</span></h3>
+<p><span class="en">This is the most powerful technique: use a strong model (GPT-4.1-mini or Claude Haiku — cheap and fast) to <strong>automatically generate high-quality Q&A pairs</strong> from your raw text chunks:</span><span class="ko">이것이 가장 강력한 기법입니다: 강력한 모델(GPT-4.1-mini 또는 Claude Haiku — 저렴하고 빠름)을 사용해 원시 텍스트 청크에서 <strong>자동으로 고품질 Q&A 쌍을 생성</strong>합니다:</span></p>
+
+<pre><code>import openai, json
+
+SYSTEM_PROMPT = """You are a training data generator for a digital design AI assistant.
+Given a text chunk from engineering documentation, generate 3-5 high-quality Q&A pairs.
+
+Rules:
+- Questions should be what a real design/verification engineer would ask
+- Answers must be detailed, technical, and accurate to the source
+- Include specific numbers, register values, timing specs when present
+- Vary question types: what/how/why/debug/compare
+- Output format: {"pairs": [{"q": "...", "a": "..."}]}"""
+
+def generate_training_pairs(chunk: str, source_file: str) -> list[dict]:
+    response = openai.chat.completions.create(
+        model="gpt-4.1-mini",  # ~$0.40/M tokens — very cheap for this
+        messages=[
+            {"role": "system", "content": SYSTEM_PROMPT},
+            {"role": "user", "content": f"Source: {source_file}\n\n{chunk}"}
+        ],
+        response_format={"type": "json_object"},
+        temperature=0.7
+    )
+    data = json.loads(response.choices[0].message.content)
+    return data.get("pairs", [])
+
+# Cost estimate: 1000 PDFs × 20 chunks/PDF × ~$0.002/chunk = ~$40 total</code></pre>
+
+<h3><span class="en">Quality Filtering</span><span class="ko">품질 필터링</span></h3>
+<pre><code>def quality_score(pair: dict) -> float:
+    """Score a Q&A pair from 0-1 based on quality heuristics."""
+    score = 0.0
+    q, a = pair["q"], pair["a"]
+
+    # Length checks
+    if len(a) > 100: score += 0.2   # Answers should be substantial
+    if len(a) > 300: score += 0.1   # Bonus for detailed answers
+    if len(q) > 20: score += 0.1    # Questions shouldn't be too short
+
+    # Technical content indicators
+    if any(kw in a.lower() for kw in ['register', 'clock', 'timing', 'voltage',
+        'protocol', 'signal', 'module', 'frequency', 'latency']):
+        score += 0.2
+
+    # Has code or specific values
+    if '```' in a or re.search(r'\d+\s*(MHz|ns|mV|Gbps|dB)', a):
+        score += 0.2
+
+    # Not too repetitive
+    if q.lower() not in a.lower()[:50]:
+        score += 0.1
+
+    # Penalize very short or generic answers
+    if "I don't know" in a or len(a) < 50:
+        score = 0.0
+
+    return min(score, 1.0)
+
+# Filter: keep only pairs scoring > 0.5
+filtered = [p for p in all_pairs if quality_score(p) > 0.5]</code></pre>
+
+<h3><span class="en">Deduplication with MinHash</span><span class="ko">MinHash를 이용한 중복 제거</span></h3>
+<pre><code>pip install datasketch
+
+from datasketch import MinHash, MinHashLSH
+
+def deduplicate_pairs(pairs: list[dict], threshold: float = 0.8) -> list[dict]:
+    """Remove near-duplicate Q&A pairs using MinHash LSH."""
+    lsh = MinHashLSH(threshold=threshold, num_perm=128)
+    unique_pairs = []
+
+    for i, pair in enumerate(pairs):
+        m = MinHash(num_perm=128)
+        for word in pair["q"].lower().split():
+            m.update(word.encode('utf8'))
+
+        key = f"pair_{i}"
+        if not lsh.query(m):  # No similar pair found
+            lsh.insert(key, m)
+            unique_pairs.append(pair)
+
+    print(f"Dedup: {len(pairs)} → {len(unique_pairs)} ({len(pairs)-len(unique_pairs)} removed)")
+    return unique_pairs</code></pre>
+
+<h3><span class="en">Processing Time Estimates</span><span class="ko">처리 시간 예상</span></h3>
+<div class="table-wrap">
+<table>
+<tr><th><span class="en">Data Source</span><span class="ko">데이터 소스</span></th><th><span class="en">Volume</span><span class="ko">분량</span></th><th><span class="en">Est. Time</span><span class="ko">예상 시간</span></th><th><span class="en">Est. API Cost</span><span class="ko">예상 API 비용</span></th></tr>
+<tr><td>1,000 PDFs</td><td>~20K chunks</td><td>2–4 hours</td><td>~$40</td></tr>
+<tr><td>10K code files</td><td>~30K modules</td><td>3–6 hours</td><td>~$60</td></tr>
+<tr><td>Simulation logs</td><td>~5K errors</td><td>1–2 hours</td><td>~$10</td></tr>
+<tr><td>Jira/Confluence</td><td>~2K pages</td><td>1–2 hours</td><td>~$20</td></tr>
+<tr><td colspan="2"><strong>Total</strong></td><td><strong>~8–14 hours</strong></td><td><strong>~$130</strong></td></tr>
+</table>
+</div>
+</div>
+
+<!-- ========== SECTION 4 ========== -->
+<div id="s4">
+<h2>4. <span class="en">Server Setup: 32GB RAM Virtual Server</span><span class="ko">서버 설정: 32GB RAM 가상 서버</span></h2>
+
+<h3><span class="en">Key Question: Does Your VM Have a GPU?</span><span class="ko">핵심 질문: VM에 GPU가 있나요?</span></h3>
+
+<div class="highlight warn">
+<strong>⚠️ <span class="en">This matters A LOT.</span><span class="ko">이것이 매우 중요합니다.</span></strong><br>
+<span class="en">Most company VMs are <strong>CPU-only</strong>. This changes everything about which model to run and how fast it'll be.</span><span class="ko">대부분의 회사 VM은 <strong>CPU 전용</strong>입니다. 이는 실행할 모델과 속도에 대한 모든 것을 바꿉니다.</span>
+</div>
+
+<div class="table-wrap">
+<table>
+<tr><th></th><th><span class="en">CPU-Only 32GB VM</span><span class="ko">CPU 전용 32GB VM</span></th><th><span class="en">GPU VM (if available)</span><span class="ko">GPU VM (가능한 경우)</span></th></tr>
+<tr><td><span class="en">Best Model</span><span class="ko">최적 모델</span></td><td>Gemma 4 E4B (Q4)</td><td>Gemma 4 26B or 31B</td></tr>
+<tr><td><span class="en">RAM Usage</span><span class="ko">RAM 사용량</span></td><td>~10 GB model + 8 GB system</td><td>VRAM-dependent</td></tr>
+<tr><td><span class="en">Speed</span><span class="ko">속도</span></td><td><strong>3–8 tok/s</strong> (slow but usable)</td><td>20–80 tok/s</td></tr>
+<tr><td><span class="en">Concurrent Users</span><span class="ko">동시 사용자</span></td><td>1–2 max</td><td>5–10+</td></tr>
+<tr><td><span class="en">Fine-tuning On Server?</span><span class="ko">서버에서 파인튜닝?</span></td><td>❌ <span class="en">Too slow — fine-tune on Mac mini</span><span class="ko">너무 느림 — Mac mini에서 파인튜닝</span></td><td>✅ <span class="en">Possible</span><span class="ko">가능</span></td></tr>
+</table>
+</div>
+
+<div class="highlight green">
+<strong>✅ <span class="en">Recommended Workflow</span><span class="ko">추천 워크플로</span></strong><br>
+<span class="en"><strong>Fine-tune on Mac mini M4</strong> (fast Apple Silicon) → <strong>Export GGUF</strong> → <strong>Deploy on company server</strong> for inference only. This gives you the best of both worlds.</span><span class="ko"><strong>Mac mini M4에서 파인튜닝</strong> (빠른 Apple Silicon) → <strong>GGUF 내보내기</strong> → <strong>회사 서버에 추론 전용으로 배포</strong>. 이것이 양쪽의 장점을 모두 활용하는 방법입니다.</span>
+</div>
+
+<h3><span class="en">Server Software Stack</span><span class="ko">서버 소프트웨어 스택</span></h3>
+<pre><code># Ubuntu 24.04 LTS Server Setup
+
+# 1. System dependencies
+sudo apt update && sudo apt install -y build-essential python3-pip python3-venv git curl
+
+# 2. Install Ollama (works on Linux CPU-only!)
+curl -fsSL https://ollama.com/install.sh | sh
+
+# 3. Pull your fine-tuned model (after exporting GGUF from Mac mini)
+# Copy the .gguf file to server first, then:
+cat > Modelfile << 'EOF'
+FROM /opt/models/my-digital-design-gemma4.gguf
+PARAMETER temperature 0.3
+PARAMETER num_ctx 16384
+SYSTEM "You are an expert digital design engineer at Microchip Technology specializing in automotive Ethernet PHY and switch design."
+EOF
+
+ollama create design-ai -f Modelfile
+ollama run design-ai "What is the MDI return loss spec for 1000BASE-T1?"
+
+# 4. Ollama serves on port 11434 by default
+# Test the API:
+curl http://localhost:11434/api/generate \
+  -d '{"model": "design-ai", "prompt": "Explain CDC in RTL", "stream": false}'
+
+# 5. Set Ollama to run as a service (auto-start on boot)
+sudo systemctl enable ollama
+sudo systemctl start ollama</code></pre>
+
+<h3><span class="en">Ollama vs vLLM vs llama.cpp</span><span class="ko">Ollama vs vLLM vs llama.cpp 비교</span></h3>
+<div class="table-wrap">
+<table>
+<tr><th><span class="en">Tool</span><span class="ko">도구</span></th><th><span class="en">Best For</span><span class="ko">최적 용도</span></th><th><span class="en">CPU Support</span><span class="ko">CPU 지원</span></th><th><span class="en">API</span></th></tr>
+<tr><td><strong>Ollama</strong></td><td><span class="en">Easiest setup, good for 1-5 users</span><span class="ko">가장 쉬운 설정, 1-5명 사용자에 적합</span></td><td>✅ <span class="en">Good</span><span class="ko">좋음</span></td><td><span class="en">REST + OpenAI-compatible</span></td></tr>
+<tr><td><strong>llama.cpp server</strong></td><td><span class="en">Maximum CPU perf, most control</span><span class="ko">최대 CPU 성능, 가장 많은 제어</span></td><td>✅ <span class="en">Best</span><span class="ko">최고</span></td><td><span class="en">OpenAI-compatible</span></td></tr>
+<tr><td><strong>vLLM</strong></td><td><span class="en">High throughput, GPU-optimized</span><span class="ko">높은 처리량, GPU 최적화</span></td><td>⚠️ <span class="en">Slow, GPU preferred</span><span class="ko">느림, GPU 권장</span></td><td><span class="en">OpenAI-compatible</span></td></tr>
+</table>
+</div>
+<p><span class="en"><strong>Recommendation: Ollama</strong> for your use case. Simplest to manage, good enough performance, and OpenAI-compatible API out of the box.</span><span class="ko"><strong>추천: Ollama.</strong> 관리가 가장 간단하고, 충분한 성능, 바로 사용 가능한 OpenAI 호환 API 제공.</span></p>
+</div>
+
+<!-- ========== SECTION 5 ========== -->
+<div id="s5">
+<h2>5. <span class="en">Model Upgrade Strategy</span><span class="ko">모델 업그레이드 전략</span></h2>
+
+<div class="highlight green">
+<strong>💡 <span class="en">The best news: your training data is model-agnostic!</span><span class="ko">가장 좋은 소식: 학습 데이터는 모델에 독립적입니다!</span></strong><br>
+<span class="en">JSONL training data works with <strong>any model</strong> — Gemma 4 today, Gemma 5 next year, Llama 5, whatever. You're investing in the <strong>dataset</strong>, not the model. The dataset is the real asset.</span><span class="ko">JSONL 학습 데이터는 <strong>어떤 모델</strong>에서든 작동합니다 — 오늘은 Gemma 4, 내년엔 Gemma 5, Llama 5, 무엇이든. <strong>데이터셋</strong>에 투자하는 것이지, 모델이 아닙니다. 데이터셋이 진짜 자산입니다.</span>
+</div>
+
+<h3><span class="en">Upgrade Workflow</span><span class="ko">업그레이드 워크플로</span></h3>
+<pre><code># When Gemma 5 (or a better model) releases:
+
+# 1. Your dataset stays EXACTLY the same
+ls training_data/
+# → digital_design_v3.jsonl (your curated dataset)
+
+# 2. Fine-tune the new base model with same data
+unsloth studio  # Load gemma-5 base, point to same JSONL, train
+
+# 3. Evaluate both models side-by-side
+python eval/compare_models.py \
+  --model-a design-ai-gemma4 \
+  --model-b design-ai-gemma5 \
+  --eval-set eval/test_questions.jsonl
+
+# 4. If new model is better → export GGUF → deploy to server
+# 5. If old model is better → keep it! (sometimes newer ≠ better for your domain)
+
+# Total time to upgrade: ~2 hours (fine-tune) + 30 min (eval + deploy)</code></pre>
+
+<h3><span class="en">Evaluation: How to Know if Your Model is Good</span><span class="ko">평가: 모델이 잘 되었는지 확인하는 방법</span></h3>
+<pre><code># Create a test set: 50-100 questions with known correct answers
+# These should NOT be in your training data!
+
+eval_questions = [
+    {"q": "What is the 100BASE-T1 transmit droop spec?",
+     "expected": "less than 45% at 500ns"},
+    {"q": "How many MDI pairs does 1000BASE-T1 use?",
+     "expected": "1 pair (single twisted pair)"},
+    # ... 50-100 more domain-specific questions
+]
+
+# Score: % of questions where model answer contains key facts
+# Compare: base Gemma 4 (no fine-tune) vs your fine-tuned version
+# You should see 30-60% improvement in domain accuracy</code></pre>
+</div>
+
+<!-- ========== SECTION 6 ========== -->
+<div id="s6">
+<h2>6. <span class="en">Exposing as an API</span><span class="ko">API로 노출하기</span></h2>
+
+<p><span class="en"><strong>Yes, absolutely feasible!</strong> Ollama gives you an OpenAI-compatible REST API out of the box.</span><span class="ko"><strong>네, 완전히 가능합니다!</strong> Ollama는 바로 사용 가능한 OpenAI 호환 REST API를 제공합니다.</span></p>
+
+<h3><span class="en">Option 1: Ollama Native API (Simplest)</span><span class="ko">옵션 1: Ollama 기본 API (가장 간단)</span></h3>
+<pre><code># Ollama already serves OpenAI-compatible API on port 11434
+
+# Chat completion (same format as OpenAI!)
+curl http://your-server:11434/v1/chat/completions \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "design-ai",
+    "messages": [
+      {"role": "user", "content": "Explain the T1 PHY PCS layer architecture"}
+    ]
+  }'
+
+# Your web app can use the OpenAI SDK pointed at your server:
+# const openai = new OpenAI({ baseURL: "http://your-server:11434/v1", apiKey: "unused" })</code></pre>
+
+<h3><span class="en">Option 2: FastAPI Wrapper (Add Auth + Logging)</span><span class="ko">옵션 2: FastAPI 래퍼 (인증 + 로깅 추가)</span></h3>
+<pre><code># api_gateway.py — production wrapper around Ollama
+pip install fastapi uvicorn httpx python-jose
+
+from fastapi import FastAPI, Header, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
+import httpx, time, json
+
+app = FastAPI(title="Digital Design AI API")
+app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"], allow_headers=["*"])
+
+OLLAMA_URL = "http://localhost:11434"
+API_KEYS = {"minjun-key-123", "team-key-456"}  # Simple API key auth
+
+@app.post("/v1/chat/completions")
+async def chat(request: dict, authorization: str = Header(None)):
+    # Auth check
+    token = (authorization or "").replace("Bearer ", "")
+    if token not in API_KEYS:
+        raise HTTPException(401, "Invalid API key")
+
+    # Log the request
+    print(f"[{time.strftime('%H:%M:%S')}] User query: {request['messages'][-1]['content'][:80]}...")
+
+    # Forward to Ollama
+    async with httpx.AsyncClient(timeout=120) as client:
+        resp = await client.post(
+            f"{OLLAMA_URL}/v1/chat/completions",
+            json={**request, "model": "design-ai"}
+        )
+    return resp.json()
+
+# Run: uvicorn api_gateway:app --host 0.0.0.0 --port 8000</code></pre>
+
+<h3><span class="en">Performance on 32GB CPU Server</span><span class="ko">32GB CPU 서버 성능</span></h3>
+<div class="table-wrap">
+<table>
+<tr><th><span class="en">Metric</span><span class="ko">지표</span></th><th><span class="en">Expected (CPU, E4B Q4)</span><span class="ko">예상 (CPU, E4B Q4)</span></th></tr>
+<tr><td><span class="en">Tokens/sec</span><span class="ko">토큰/초</span></td><td>3–8 tok/s</td></tr>
+<tr><td><span class="en">Response time (200 token answer)</span><span class="ko">응답 시간 (200 토큰 답변)</span></td><td>25–60 sec</td></tr>
+<tr><td><span class="en">Concurrent requests</span><span class="ko">동시 요청</span></td><td>1–2</td></tr>
+<tr><td><span class="en">Requests/hour</span><span class="ko">요청/시간</span></td><td>~60–120</td></tr>
+</table>
+</div>
+<p><span class="en"><strong>Honest assessment:</strong> CPU-only is slow but usable for a small team (5-10 people asking occasional questions). For real-time chat, it'll feel sluggish. Consider: if the company can provide a GPU VM, performance jumps 10-20x.</span><span class="ko"><strong>솔직한 평가:</strong> CPU 전용은 느리지만 소규모 팀(5-10명이 가끔 질문)에는 사용 가능합니다. 실시간 채팅에서는 느리게 느껴질 것입니다. 참고: 회사에서 GPU VM을 제공할 수 있다면 성능이 10-20배 향상됩니다.</span></p>
+</div>
+
+<!-- ========== SECTION 7 ========== -->
+<div id="s7">
+<h2>7. <span class="en">Web Platform Architecture</span><span class="ko">웹 플랫폼 아키텍처</span></h2>
+
+<h3><span class="en">Recommended Stack</span><span class="ko">추천 스택</span></h3>
+<div class="table-wrap">
+<table>
+<tr><th><span class="en">Layer</span><span class="ko">계층</span></th><th><span class="en">Technology</span><span class="ko">기술</span></th><th><span class="en">Why</span><span class="ko">이유</span></th></tr>
+<tr><td><span class="en">Frontend</span><span class="ko">프론트엔드</span></td><td>Next.js + TypeScript + Tailwind</td><td><span class="en">Your stack, fast to build</span><span class="ko">당신의 스택, 빠른 개발</span></td></tr>
+<tr><td><span class="en">API Gateway</span><span class="ko">API 게이트웨이</span></td><td>FastAPI (Python)</td><td><span class="en">Auth, logging, rate limiting</span><span class="ko">인증, 로깅, 속도 제한</span></td></tr>
+<tr><td><span class="en">LLM Backend</span><span class="ko">LLM 백엔드</span></td><td>Ollama</td><td><span class="en">OpenAI-compatible, easy deploy</span><span class="ko">OpenAI 호환, 쉬운 배포</span></td></tr>
+<tr><td><span class="en">Vector DB (RAG)</span><span class="ko">벡터 DB (RAG)</span></td><td>Chroma or pgvector</td><td><span class="en">For live document retrieval</span><span class="ko">실시간 문서 검색용</span></td></tr>
+<tr><td><span class="en">Database</span><span class="ko">데이터베이스</span></td><td>PostgreSQL</td><td><span class="en">Users, chat history, analytics</span><span class="ko">사용자, 대화 기록, 분석</span></td></tr>
+</table>
+</div>
+
+<h3><span class="en">Key Features to Build</span><span class="ko">구축할 주요 기능</span></h3>
+<ul>
+<li><span class="en">💬 <strong>Chat Interface</strong> — Ask questions about chip design, get domain-expert answers</span><span class="ko">💬 <strong>채팅 인터페이스</strong> — 칩 설계에 대한 질문, 도메인 전문가 답변 받기</span></li>
+<li><span class="en">📄 <strong>Document Upload + RAG</strong> — Drag-drop a new datasheet, instantly queryable</span><span class="ko">📄 <strong>문서 업로드 + RAG</strong> — 새 데이터시트 드래그앤드롭, 즉시 질의 가능</span></li>
+<li><span class="en">🔍 <strong>Code Review Assistant</strong> — Paste RTL, get linting + CDC + synthesis feedback</span><span class="ko">🔍 <strong>코드 리뷰 어시스턴트</strong> — RTL 붙여넣기, 린팅 + CDC + 합성 피드백 받기</span></li>
+<li><span class="en">📊 <strong>Log Analyzer</strong> — Upload sim logs, get diagnosis of failures</span><span class="ko">📊 <strong>로그 분석기</strong> — 시뮬레이션 로그 업로드, 실패 진단 받기</span></li>
+<li><span class="en">📚 <strong>Knowledge Base</strong> — Searchable index of all ingested docs</span><span class="ko">📚 <strong>지식 베이스</strong> — 수집된 모든 문서의 검색 가능한 인덱스</span></li>
+</ul>
+
+<h3><span class="en">Hybrid Strategy: RAG + Fine-Tuned Model</span><span class="ko">하이브리드 전략: RAG + 파인튜닝 모델</span></h3>
+<div class="highlight">
+<strong>🧠 <span class="en">This is the winning approach:</span><span class="ko">이것이 승리 전략입니다:</span></strong><br>
+<ul>
+<li><span class="en"><strong>Fine-tuned model</strong> = the model "knows" your domain deeply (terminology, concepts, patterns)</span><span class="ko"><strong>파인튜닝 모델</strong> = 모델이 도메인을 깊이 "알고 있음" (전문 용어, 개념, 패턴)</span></li>
+<li><span class="en"><strong>RAG</strong> = gives the model access to specific documents at query time (up-to-date info, exact specs)</span><span class="ko"><strong>RAG</strong> = 쿼리 시 특정 문서에 접근 가능 (최신 정보, 정확한 스펙)</span></li>
+<li><span class="en"><strong>Together</strong> = a domain expert who can also look things up. Best of both worlds!</span><span class="ko"><strong>함께</strong> = 검색도 할 수 있는 도메인 전문가. 양쪽의 장점!</span></li>
+</ul>
+</div>
+
+<pre><code># RAG setup with Chroma (simplest vector DB)
+pip install chromadb sentence-transformers
+
+import chromadb
+
+# Create/load collection
+client = chromadb.PersistentClient(path="/opt/design-ai/vectordb")
+collection = client.get_or_create_collection(
+    name="datasheets",
+    metadata={"hnsw:space": "cosine"}
+)
+
+# Index a document
+collection.add(
+    documents=["The 100BASE-T1 transmit amplitude is 1.0V peak-to-peak..."],
+    metadatas=[{"source": "T1_PHY_datasheet.pdf", "page": 42}],
+    ids=["doc_001"]
+)
+
+# Query at runtime — retrieve relevant chunks, inject into prompt
+results = collection.query(query_texts=["T1 transmit amplitude spec"], n_results=3)
+context = "\n".join(results["documents"][0])
+
+# Send to fine-tuned model with retrieved context
+prompt = f"Based on this documentation:\n{context}\n\nAnswer: What is the T1 transmit amplitude?"
+# → Send to Ollama API</code></pre>
+</div>
+
+<!-- ========== SECTION 8 ========== -->
+<div id="s8">
+<h2>8. <span class="en">Phased Roadmap (12-Week Plan)</span><span class="ko">단계별 로드맵 (12주 계획)</span></h2>
+
+<div class="phase-box">
+<div class="phase-title"><span class="en">Phase 0: Data Audit & Environment Setup</span><span class="ko">0단계: 데이터 감사 & 환경 설정</span></div>
+<div class="phase-meta"><span class="en">⏰ Weeks 1–2 | Effort: ~10 hrs/week</span><span class="ko">⏰ 1-2주차 | 작업량: 주당 ~10시간</span></div>
+<ul>
+<li><span class="en">📋 Inventory all available data sources (PDFs, code repos, logs, Jira spaces)</span><span class="ko">📋 모든 사용 가능한 데이터 소스 목록 작성 (PDF, 코드 저장소, 로그, Jira 스페이스)</span></li>
+<li><span class="en">🔒 Confirm legal/IP approval for using company data in model training</span><span class="ko">🔒 회사 데이터를 모델 학습에 사용하는 것에 대한 법적/IP 승인 확인</span></li>
+<li><span class="en">🛠️ Set up Python env: <code>pip install marker-pdf pymupdf unsloth mlx-lm datasketch chromadb</code></span><span class="ko">🛠️ Python 환경 설정: <code>pip install marker-pdf pymupdf unsloth mlx-lm datasketch chromadb</code></span></li>
+<li><span class="en">📥 Install Ollama on Mac mini, pull base Gemma 4 E4B, test it works</span><span class="ko">📥 Mac mini에 Ollama 설치, 기본 Gemma 4 E4B 다운로드, 작동 테스트</span></li>
+<li><span class="en">📁 Create project structure (pipeline/, data/, eval/ folders)</span><span class="ko">📁 프로젝트 구조 생성 (pipeline/, data/, eval/ 폴더)</span></li>
+</ul>
+<p><strong><span class="en">Deliverables:</span><span class="ko">산출물:</span></strong> <span class="en">Data inventory spreadsheet, working local Ollama, pipeline skeleton</span><span class="ko">데이터 목록 스프레드시트, 작동하는 로컬 Ollama, 파이프라인 골격</span></p>
+</div>
+
+<div class="phase-box">
+<div class="phase-title"><span class="en">Phase 1: Build Data Processing Pipeline</span><span class="ko">1단계: 데이터 처리 파이프라인 구축</span></div>
+<div class="phase-meta"><span class="en">⏰ Weeks 2–4 | Effort: ~15 hrs/week</span><span class="ko">⏰ 2-4주차 | 작업량: 주당 ~15시간</span></div>
+<ul>
+<li><span class="en">🔧 Build extractors for each data type (PDF, Verilog, logs, Jira)</span><span class="ko">🔧 각 데이터 유형별 추출기 구축 (PDF, Verilog, 로그, Jira)</span></li>
+<li><span class="en">🤖 Implement AI-powered Q&A generator using GPT-4.1-mini</span><span class="ko">🤖 GPT-4.1-mini를 사용한 AI 기반 Q&A 생성기 구현</span></li>
+<li><span class="en">🧹 Build quality filter + MinHash deduplication</span><span class="ko">🧹 품질 필터 + MinHash 중복 제거 구축</span></li>
+<li><span class="en">📊 Process initial dataset: aim for 1,000–2,000 high-quality Q&A pairs</span><span class="ko">📊 초기 데이터셋 처리: 1,000-2,000개 고품질 Q&A 쌍 목표</span></li>
+<li><span class="en">✅ Manually review ~100 pairs for quality — fix the generator prompts based on issues</span><span class="ko">✅ ~100개 쌍을 수작업으로 품질 검토 — 이슈에 따라 생성기 프롬프트 수정</span></li>
+</ul>
+<p><strong><span class="en">Deliverables:</span><span class="ko">산출물:</span></strong> <span class="en">Working pipeline, 1,000+ Q&A JSONL file, quality metrics</span><span class="ko">작동하는 파이프라인, 1,000+ Q&A JSONL 파일, 품질 지표</span></p>
+</div>
+
+<div class="phase-box">
+<div class="phase-title"><span class="en">Phase 2: Fine-Tune Model on Mac mini</span><span class="ko">2단계: Mac mini에서 모델 파인튜닝</span></div>
+<div class="phase-meta"><span class="en">⏰ Weeks 4–6 | Effort: ~10 hrs/week</span><span class="ko">⏰ 4-6주차 | 작업량: 주당 ~10시간</span></div>
+<ul>
+<li><span class="en">🧠 Fine-tune Gemma 4 E4B with LoRA using Unsloth on Mac mini</span><span class="ko">🧠 Mac mini에서 Unsloth를 사용해 Gemma 4 E4B LoRA 파인튜닝</span></li>
+<li><span class="en">📈 Create evaluation test set (50-100 held-out questions)</span><span class="ko">📈 평가 테스트셋 생성 (50-100개 별도 질문)</span></li>
+<li><span class="en">⚖️ Compare: base Gemma 4 vs fine-tuned version on your eval set</span><span class="ko">⚖️ 비교: 기본 Gemma 4 vs 파인튜닝 버전의 평가 세트 성능</span></li>
+<li><span class="en">🔄 Iterate: improve dataset based on model weaknesses, retrain</span><span class="ko">🔄 반복: 모델 약점에 따라 데이터셋 개선, 재학습</span></li>
+<li><span class="en">📦 Export best model as GGUF (Q4_K_M quantization)</span><span class="ko">📦 최적 모델을 GGUF로 내보내기 (Q4_K_M 양자화)</span></li>
+</ul>
+<p><strong><span class="en">Deliverables:</span><span class="ko">산출물:</span></strong> <span class="en">Fine-tuned GGUF model file, evaluation report showing improvement</span><span class="ko">파인튜닝된 GGUF 모델 파일, 개선을 보여주는 평가 보고서</span></p>
+</div>
+
+<div class="phase-box">
+<div class="phase-title"><span class="en">Phase 3: Deploy on Company Server + API</span><span class="ko">3단계: 회사 서버에 배포 + API</span></div>
+<div class="phase-meta"><span class="en">⏰ Weeks 6–8 | Effort: ~12 hrs/week</span><span class="ko">⏰ 6-8주차 | 작업량: 주당 ~12시간</span></div>
+<ul>
+<li><span class="en">🖥️ Set up Ubuntu 24.04 on company VM, install Ollama</span><span class="ko">🖥️ 회사 VM에 Ubuntu 24.04 설정, Ollama 설치</span></li>
+<li><span class="en">📤 Transfer GGUF model file to server, create Ollama Modelfile</span><span class="ko">📤 서버에 GGUF 모델 파일 전송, Ollama Modelfile 생성</span></li>
+<li><span class="en">🌐 Build FastAPI wrapper with API key auth + request logging</span><span class="ko">🌐 API 키 인증 + 요청 로깅이 있는 FastAPI 래퍼 구축</span></li>
+<li><span class="en">🔒 Set up nginx reverse proxy + HTTPS for secure internal access</span><span class="ko">🔒 안전한 내부 접근을 위한 nginx 리버스 프록시 + HTTPS 설정</span></li>
+<li><span class="en">🧪 Load test: verify performance under concurrent requests</span><span class="ko">🧪 부하 테스트: 동시 요청에서 성능 확인</span></li>
+</ul>
+<p><strong><span class="en">Deliverables:</span><span class="ko">산출물:</span></strong> <span class="en">Working API endpoint, API docs, performance benchmarks</span><span class="ko">작동하는 API 엔드포인트, API 문서, 성능 벤치마크</span></p>
+</div>
+
+<div class="phase-box">
+<div class="phase-title"><span class="en">Phase 4: Web Platform MVP</span><span class="ko">4단계: 웹 플랫폼 MVP</span></div>
+<div class="phase-meta"><span class="en">⏰ Weeks 8–12 | Effort: ~15 hrs/week</span><span class="ko">⏰ 8-12주차 | 작업량: 주당 ~15시간</span></div>
+<ul>
+<li><span class="en">🎨 Build Next.js frontend: chat interface, streaming responses</span><span class="ko">🎨 Next.js 프론트엔드 구축: 채팅 인터페이스, 스트리밍 응답</span></li>
+<li><span class="en">📄 Document upload feature (drag-drop PDF → parse → RAG index)</span><span class="ko">📄 문서 업로드 기능 (PDF 드래그앤드롭 → 파싱 → RAG 인덱스)</span></li>
+<li><span class="en">💻 Code review panel (paste Verilog → get analysis)</span><span class="ko">💻 코드 리뷰 패널 (Verilog 붙여넣기 → 분석 받기)</span></li>
+<li><span class="en">📊 Admin dashboard (usage stats, popular questions, model performance)</span><span class="ko">📊 관리자 대시보드 (사용 통계, 인기 질문, 모델 성능)</span></li>
+<li><span class="en">👥 User authentication (company SSO/LDAP or simple login)</span><span class="ko">👥 사용자 인증 (회사 SSO/LDAP 또는 간단한 로그인)</span></li>
+</ul>
+<p><strong><span class="en">Deliverables:</span><span class="ko">산출물:</span></strong> <span class="en">Working web app, internal pilot with 5-10 team members</span><span class="ko">작동하는 웹 앱, 5-10명 팀원과 내부 파일럿</span></p>
+</div>
+
+<div class="phase-box">
+<div class="phase-title"><span class="en">Phase 5: RAG + Continuous Improvement Loop</span><span class="ko">5단계: RAG + 지속적 개선 루프</span></div>
+<div class="phase-meta"><span class="en">⏰ Ongoing | Effort: ~5 hrs/week</span><span class="ko">⏰ 지속적 | 작업량: 주당 ~5시간</span></div>
+<ul>
+<li><span class="en">🔍 Full RAG pipeline: Chroma/pgvector for all datasheets + specs</span><span class="ko">🔍 전체 RAG 파이프라인: 모든 데이터시트 + 스펙용 Chroma/pgvector</span></li>
+<li><span class="en">📈 Feedback loop: collect user thumbs-up/down → improve training data</span><span class="ko">📈 피드백 루프: 사용자 좋아요/싫어요 수집 → 학습 데이터 개선</span></li>
+<li><span class="en">🔄 Monthly retraining with expanded dataset</span><span class="ko">🔄 확장된 데이터셋으로 월간 재학습</span></li>
+<li><span class="en">🆕 Evaluate new base models as they release — upgrade when beneficial</span><span class="ko">🆕 새 기본 모델 출시 시 평가 — 유리할 때 업그레이드</span></li>
+<li><span class="en">🏢 Expand to other teams, collect more diverse training data</span><span class="ko">🏢 다른 팀으로 확장, 더 다양한 학습 데이터 수집</span></li>
+</ul>
+</div>
+</div>
+
+<!-- ========== SECTION 9 ========== -->
+<div id="s9">
+<h2>9. <span class="en">Feasibility & Risk Assessment</span><span class="ko">실현 가능성 & 리스크 평가</span></h2>
+
+<h3><span class="en">Honest Assessment: Can One Engineer Do This Part-Time?</span><span class="ko">솔직한 평가: 한 명의 엔지니어가 파트타임으로 가능한가?</span></h3>
+
+<div class="highlight green">
+<strong>✅ <span class="en">YES — with the right approach.</span><span class="ko">예 — 올바른 접근 방식으로.</span></strong><br>
+<span class="en">The tools have matured enormously. What took a team of ML engineers 6 months in 2023 can be done by one motivated engineer in 12 weeks in 2026. The key is using existing tools (Unsloth, Ollama, marker-pdf) instead of building from scratch.</span><span class="ko">도구들이 엄청나게 성숙해졌습니다. 2023년에 ML 엔지니어 팀이 6개월 걸리던 것을 2026년에는 동기부여된 한 명의 엔지니어가 12주 만에 할 수 있습니다. 핵심은 처음부터 만드는 것이 아니라 기존 도구(Unsloth, Ollama, marker-pdf)를 사용하는 것입니다.</span>
+</div>
+
+<h3><span class="en">Biggest Risks</span><span class="ko">최대 리스크</span></h3>
+<div class="table-wrap">
+<table>
+<tr><th><span class="en">Risk</span><span class="ko">리스크</span></th><th><span class="en">Severity</span><span class="ko">심각도</span></th><th><span class="en">Mitigation</span><span class="ko">완화 방안</span></th></tr>
+<tr><td><span class="en"><strong>Legal/IP:</strong> Company may not allow model training on proprietary data</span><span class="ko"><strong>법적/IP:</strong> 회사가 독점 데이터로 모델 학습을 허용하지 않을 수 있음</span></td><td>🔴 <span class="en">High</span><span class="ko">높음</span></td><td><span class="en">Get written approval from management FIRST. The model stays on company servers, never leaves. Frame it as an internal tool.</span><span class="ko">경영진의 서면 승인을 먼저 받으세요. 모델은 회사 서버에 남고 절대 외부로 나가지 않습니다. 내부 도구로 포지셔닝하세요.</span></td></tr>
+<tr><td><span class="en"><strong>Data quality:</strong> Garbage in = garbage out</span><span class="ko"><strong>데이터 품질:</strong> 쓰레기를 넣으면 쓰레기가 나옴</span></td><td>🟡 <span class="en">Medium</span><span class="ko">중간</span></td><td><span class="en">Start with 500 hand-curated examples. Quality filter aggressively. Manual review is worth the time.</span><span class="ko">500개 수작업 큐레이션 예시로 시작. 적극적으로 품질 필터링. 수동 검토는 시간을 들일 가치가 있음.</span></td></tr>
+<tr><td><span class="en"><strong>CPU server speed:</strong> May be too slow for good UX</span><span class="ko"><strong>CPU 서버 속도:</strong> 좋은 UX에 너무 느릴 수 있음</span></td><td>🟡 <span class="en">Medium</span><span class="ko">중간</span></td><td><span class="en">Use E4B (smallest decent model). Request GPU VM if pilot shows value. Streaming helps perceived speed.</span><span class="ko">E4B (가장 작은 적절한 모델) 사용. 파일럿이 가치를 보여주면 GPU VM 요청. 스트리밍이 체감 속도에 도움.</span></td></tr>
+<tr><td><span class="en"><strong>Hallucination:</strong> Model may generate incorrect specs</span><span class="ko"><strong>환각:</strong> 모델이 잘못된 스펙을 생성할 수 있음</span></td><td>🟡 <span class="en">Medium</span><span class="ko">중간</span></td><td><span class="en">RAG with source citations. Always show "Based on: [document]". Engineers verify before using.</span><span class="ko">출처 인용이 있는 RAG. 항상 "출처: [문서]"를 표시. 엔지니어가 사용 전 확인.</span></td></tr>
+</table>
+</div>
+
+<h3><span class="en">Smart Shortcuts</span><span class="ko">스마트 지름길</span></h3>
+<div class="card">
+<h3>💡 <span class="en">Shortcut #1: RAG First, Fine-Tune Later</span><span class="ko">지름길 #1: RAG 먼저, 파인튜닝은 나중에</span></h3>
+<p><span class="en">You can get <strong>80% of the value with just RAG</strong> (no fine-tuning needed). Index your datasheets into Chroma, use base Gemma 4, and inject relevant chunks into every query. This gives you a working prototype in <strong>2 weeks</strong> instead of 6. Fine-tune later to push from 80% → 95%.</span><span class="ko">RAG만으로도 <strong>80%의 가치를 얻을 수 있습니다</strong> (파인튜닝 불필요). 데이터시트를 Chroma에 인덱싱하고, 기본 Gemma 4를 사용하고, 모든 쿼리에 관련 청크를 주입하세요. 6주 대신 <strong>2주</strong> 만에 작동하는 프로토타입을 얻을 수 있습니다. 나중에 파인튜닝으로 80% → 95%로 향상.</span></p>
+</div>
+
+<div class="card">
+<h3>💡 <span class="en">Shortcut #2: Bootstrap with Public Data</span><span class="ko">지름길 #2: 공개 데이터로 부트스트랩</span></h3>
+<p><span class="en">Before your pipeline is ready, fine-tune on public chip design datasets to get a head start:</span><span class="ko">파이프라인이 준비되기 전에, 공개 칩 설계 데이터셋으로 파인튜닝해서 선수를 치세요:</span></p>
+<ul>
+<li><span class="en"><strong>ChipNeMo</strong> (NVIDIA) — domain-adapted LLM training data for chip design</span><span class="ko"><strong>ChipNeMo</strong> (NVIDIA) — 칩 설계용 도메인 적응 LLM 학습 데이터</span></li>
+<li><span class="en"><strong>OpenCores</strong> — open-source RTL designs on GitHub</span><span class="ko"><strong>OpenCores</strong> — GitHub의 오픈소스 RTL 설계</span></li>
+<li><span class="en"><strong>VLSI tutorials</strong> — academic papers and course materials</span><span class="ko"><strong>VLSI 튜토리얼</strong> — 학술 논문 및 교육 자료</span></li>
+<li><span class="en"><strong>IEEE 802.3 specs</strong> — public Ethernet standards</span><span class="ko"><strong>IEEE 802.3 스펙</strong> — 공개 이더넷 표준</span></li>
+</ul>
+</div>
+
+<div class="card">
+<h3>💡 <span class="en">Shortcut #3: FOLIO Integration</span><span class="ko">지름길 #3: FOLIO 통합</span></h3>
+<p><span class="en">You already built FOLIO for Jira ticket management. You know how to work with Jira's API. Reuse that code for extracting training data from tickets — you're already 30% done on the Jira extractor.</span><span class="ko">이미 Jira 티켓 관리용 FOLIO를 만들었습니다. Jira API 작업 방법을 알고 있으니, 티켓에서 학습 데이터를 추출하는 데 그 코드를 재사용하세요 — Jira 추출기는 이미 30% 완료된 셈입니다.</span></p>
+</div>
+
+<h3><span class="en">Key Tools Reference</span><span class="ko">핵심 도구 참조</span></h3>
+<pre><code># Everything you need — one install block
+pip install \
+  marker-pdf pymupdf \       # PDF extraction
+  unsloth \                  # Fine-tuning (Mac/GPU)
+  mlx-lm \                   # Fine-tuning (Apple Silicon native)
+  chromadb \                 # Vector DB for RAG
+  sentence-transformers \    # Embeddings for RAG
+  datasketch \               # MinHash deduplication
+  fastapi uvicorn httpx \    # API server
+  openai \                   # For AI-powered data generation
+  peft trl \                 # Hugging Face fine-tuning libs
+  datasets                   # Dataset loading/processing</code></pre>
+</div>
+
+<footer>
+  <span class="en">Roadmap by Totoro 🌳 for Minjun · April 12, 2026 · Digital Design AI Platform</span><span class="ko">토토로 🌳가 민준을 위해 작성한 로드맵 · 2026년 4월 12일 · 디지털 설계 AI 플랫폼</span>
+</footer>
+
+<script>
+let isKorean = false;
+function toggleLang() {
+  isKorean = !isKorean;
+  document.querySelectorAll('.en').forEach(el => el.classList.toggle('hide', isKorean));
+  document.querySelectorAll('.ko').forEach(el => el.classList.toggle('show', isKorean));
+  document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+}
+</script>
+</body>
+</html>
