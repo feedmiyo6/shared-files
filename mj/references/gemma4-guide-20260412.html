@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gemma 4 — Complete Local AI Guide</title>
+<style>
+  :root {
+    --bg: #0d1117; --card: #161b22; --border: #30363d;
+    --text: #c9d1d9; --heading: #f0f6fc; --accent: #58a6ff;
+    --green: #7ee787; --orange: #ffa657; --purple: #d2a8ff; --red: #f78166;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.7; padding: 16px; max-width: 760px; margin: 0 auto; }
+  header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 28px; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
+  h1 { font-size: 1.5rem; color: var(--heading); }
+  .subtitle { color: #8b949e; font-size: 0.85rem; margin-top: 4px; }
+  .lang-toggle { background: var(--card); color: var(--accent); border: 1px solid var(--border); padding: 6px 14px; border-radius: 20px; cursor: pointer; font-size: 0.85rem; white-space: nowrap; flex-shrink: 0; margin-left: 12px; }
+  .lang-toggle:hover { background: var(--border); }
+
+  /* TOC */
+  .toc { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 32px; }
+  .toc-title { color: var(--heading); font-weight: 600; margin-bottom: 12px; font-size: 0.95rem; }
+  .toc ol { padding-left: 20px; }
+  .toc li { margin-bottom: 6px; font-size: 0.9rem; }
+  .toc a { color: var(--accent); text-decoration: none; }
+  .toc a:hover { text-decoration: underline; }
+
+  /* Sections */
+  .section { margin-bottom: 40px; }
+  h2 { color: var(--heading); font-size: 1.2rem; margin: 32px 0 16px; padding-left: 12px; border-left: 3px solid var(--accent); }
+  h3 { color: var(--heading); font-size: 1rem; margin: 20px 0 10px; }
+  h4 { color: #8b949e; font-size: 0.9rem; margin: 16px 0 8px; text-transform: uppercase; letter-spacing: 0.05em; }
+  p { margin-bottom: 12px; font-size: 0.9rem; }
+
+  /* Cards */
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  .card h3 { margin-top: 0; }
+
+  /* Highlight box */
+  .highlight { background: rgba(88,166,255,0.08); border: 1px solid rgba(88,166,255,0.3); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  .highlight.warning { background: rgba(255,166,87,0.08); border-color: rgba(255,166,87,0.3); }
+  .highlight.green { background: rgba(126,231,135,0.08); border-color: rgba(126,231,135,0.3); }
+  .highlight strong { color: var(--heading); }
+
+  /* Quick ref */
+  .quick-ref { background: #0d1f0d; border: 1px solid #2ea043; border-radius: 12px; padding: 20px; margin-bottom: 16px; }
+  .quick-ref-title { color: var(--green); font-weight: 600; margin-bottom: 12px; font-size: 0.95rem; }
+
+  /* Code */
+  pre { background: #010409; border: 1px solid var(--border); border-radius: 8px; padding: 14px; overflow-x: auto; margin-bottom: 16px; }
+  code { font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', Menlo, monospace; font-size: 0.82rem; color: #e6edf3; }
+  p code, li code { background: #1c2128; padding: 2px 6px; border-radius: 4px; font-size: 0.82rem; color: #e6edf3; }
+
+  /* Tables */
+  .table-wrap { overflow-x: auto; margin-bottom: 16px; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+  th { background: #1c2128; color: var(--heading); padding: 8px 12px; text-align: left; border: 1px solid var(--border); }
+  td { padding: 8px 12px; border: 1px solid var(--border); }
+  tr:nth-child(even) td { background: #0d1117; }
+  tr:nth-child(odd) td { background: #161b22; }
+
+  /* Tags */
+  .tag { display: inline-block; font-size: 0.7rem; padding: 2px 8px; border-radius: 12px; font-weight: 600; text-transform: uppercase; margin-right: 4px; }
+  .tag-new { background: rgba(126,231,135,0.15); color: var(--green); }
+  .tag-warn { background: rgba(255,166,87,0.15); color: var(--orange); }
+  .tag-tip { background: rgba(88,166,255,0.15); color: var(--accent); }
+
+  ul, ol { padding-left: 20px; margin-bottom: 12px; font-size: 0.9rem; }
+  li { margin-bottom: 4px; }
+
+  footer { text-align: center; color: #484f58; font-size: 0.75rem; margin-top: 40px; padding-top: 16px; border-top: 1px solid var(--border); }
+
+  .ko { display: none; }
+  .ko.show { display: inline !important; }
+  .en.hide { display: none !important; }
+  .ko-block { display: none; }
+  .ko-block.show { display: block !important; }
+  .en-block.hide { display: none !important; }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>🌳 <span class="en">Gemma 4 — Complete Local AI Guide</span><span class="ko">Gemma 4 — 로컬 AI 완벽 가이드</span></h1>
+    <div class="subtitle"><span class="en">Research report · April 12, 2026 · For Minjun</span><span class="ko">리서치 리포트 · 2026년 4월 12일 · 민준을 위한</span></div>
+  </div>
+  <button class="lang-toggle" onclick="toggleLang()">한국어</button>
+</header>
+
+<!-- TOC -->
+<div class="toc">
+  <div class="toc-title">📋 <span class="en">Table of Contents</span><span class="ko">목차</span></div>
+  <ol>
+    <li><a href="#s1"><span class="en">What is Gemma 4? Community & Benchmarks</span><span class="ko">Gemma 4란? 커뮤니티 반응 & 벤치마크</span></a></li>
+    <li><a href="#s2"><span class="en">Running Gemma 4 on Mac mini (Setup Guide)</span><span class="ko">Mac mini에서 Gemma 4 실행하기 (설치 가이드)</span></a></li>
+    <li><a href="#s3"><span class="en">Electricity & Cost Analysis</span><span class="ko">전기 요금 & 비용 분석</span></a></li>
+    <li><a href="#s4"><span class="en">Fine-Tuning & Personalization (Hermes + LoRA)</span><span class="ko">파인튜닝 & 개인화 (Hermes + LoRA)</span></a></li>
+    <li><a href="#s5"><span class="en">Model Portability — Moving to Another Machine</span><span class="ko">모델 이식성 — 다른 기기로 옮기기</span></a></li>
+    <li><a href="#s6"><span class="en">Quick Reference Card</span><span class="ko">빠른 참조 카드</span></a></li>
+  </ol>
+</div>
+
+<!-- SECTION 1 -->
+<div id="s1">
+<h2>1. <span class="en">What is Gemma 4? Community & Benchmarks</span><span class="ko">Gemma 4란? 커뮤니티 반응 & 벤치마크</span></h2>
+
+<p><span class="en">Google released <strong>Gemma 4 on April 2, 2026</strong>, built on the same research foundation as Gemini 3 but packaged for open distribution under <strong>Apache 2.0</strong> — meaning you can use it commercially with no restrictions or fees.</span><span class="ko">구글은 <strong>2026년 4월 2일 Gemma 4</strong>를 출시했습니다. Gemini 3와 동일한 연구 기반 위에 구축되었지만, <strong>Apache 2.0</strong> 라이선스 하에 오픈 배포되어 상업적 이용도 제한 없이 무료로 가능합니다.</span></p>
+
+<h3><span class="en">Model Family</span><span class="ko">모델 패밀리</span></h3>
+<div class="table-wrap">
+<table>
+  <tr><th><span class="en">Model</span><span class="ko">모델</span></th><th><span class="en">Params</span><span class="ko">파라미터</span></th><th><span class="en">Architecture</span><span class="ko">아키텍처</span></th><th><span class="en">Context</span><span class="ko">컨텍스트</span></th><th><span class="en">Best For</span><span class="ko">최적 용도</span></th></tr>
+  <tr><td><strong>E2B</strong></td><td>~2B</td><td><span class="en">Dense + PLE</span><span class="ko">Dense + PLE</span></td><td>128K</td><td><span class="en">Phones, edge devices</span><span class="ko">폰, 엣지 기기</span></td></tr>
+  <tr><td><strong>E4B</strong></td><td>~4B</td><td><span class="en">Dense + PLE</span><span class="ko">Dense + PLE</span></td><td>128K</td><td><span class="en">Laptops, daily tasks</span><span class="ko">노트북, 일상 작업</span></td></tr>
+  <tr><td><strong>26B A4B</strong></td><td>26B total, 4B active</td><td>MoE (128 experts)</td><td>256K</td><td><span class="en">16GB Mac sweet spot</span><span class="ko">24GB Mac 최적</span></td></tr>
+  <tr><td><strong>31B</strong></td><td>31B</td><td>Dense</td><td>256K</td><td><span class="en">Server / 32GB+</span><span class="ko">서버 / 32GB+</span></td></tr>
+</table>
+</div>
+
+<div class="highlight green">
+<strong>🔑 <span class="en">Key: The 26B A4B is a Mixture of Experts model.</span><span class="ko">핵심: 26B A4B는 Mixture of Experts 모델입니다.</span></strong><br>
+<span class="en">It has 26B total parameters but only activates 4B per token — so it runs at 4B speed while producing 26B-quality output. Best bang for your buck on 24GB hardware.</span><span class="ko">총 26B 파라미터를 갖고 있지만 토큰당 4B만 활성화됩니다. 즉, 4B 속도로 실행되면서 26B 품질의 출력을 냅니다. 24GB 하드웨어에서 가장 가성비가 뛰어납니다.</span>
+</div>
+
+<h3><span class="en">Benchmark Performance</span><span class="ko">벤치마크 성능</span></h3>
+<div class="table-wrap">
+<table>
+  <tr><th><span class="en">Benchmark</span><span class="ko">벤치마크</span></th><th>Gemma 4 31B</th><th>Llama 4 Scout</th></tr>
+  <tr><td>GPQA Diamond (<span class="en">grad reasoning</span><span class="ko">대학원 추론</span>)</td><td><strong>84.3%</strong></td><td>74.3%</td></tr>
+  <tr><td>AIME 2026 (<span class="en">math</span><span class="ko">수학</span>)</td><td><strong>89.2%</strong></td><td>88.3%</td></tr>
+  <tr><td>LiveCodeBench v6 (<span class="en">coding</span><span class="ko">코딩</span>)</td><td><strong>80.0%</strong></td><td>77.1%</td></tr>
+  <tr><td>MMLU Pro (<span class="en">knowledge</span><span class="ko">지식</span>)</td><td><strong>85.2%</strong></td><td>—</td></tr>
+</table>
+</div>
+<p><span class="en">The 31B model ranks <strong>#3 on the Arena AI leaderboard</strong> among all open models and outcompetes models with 20x more parameters.</span><span class="ko">31B 모델은 오픈 모델 중 <strong>Arena AI 리더보드 3위</strong>를 기록하며, 20배 더 많은 파라미터를 가진 모델들을 능가합니다.</span></p>
+
+<h3><span class="en">What People Are Saying</span><span class="ko">커뮤니티 반응</span></h3>
+<div class="card">
+  <p>💬 <em>"<span class="en">The E4B is really the first time 16GB users get a model that's reliably useful for day-to-day tasks."</span><span class="ko">E4B는 16GB 유저가 일상 작업에 진짜 쓸 만한 모델을 처음으로 갖게 된 것이다.</span>"</em> — <span class="en">r/LocalLLaMA</span><span class="ko">r/LocalLLaMA</span></p>
+</div>
+<div class="card">
+  <p>💬 <em>"<span class="en">Gemma 4's performance is a game-changer for open models. A 31B beating 400B rivals is wild."</span><span class="ko">Gemma 4의 성능은 오픈 모델 판도를 바꾸는 게임 체인저다. 31B가 400B 경쟁 모델을 이기는 건 대단한 일이다.</span>"</em> — <span class="en">Hacker News</span><span class="ko">Hacker News</span></p>
+</div>
+<p><span class="en"><strong>License:</strong> Apache 2.0 — commercial use, fine-tuning, redistribution all allowed. No agreement required with Google.</span><span class="ko"><strong>라이선스:</strong> Apache 2.0 — 상업적 이용, 파인튜닝, 재배포 모두 허용. 구글과의 별도 계약 불필요.</span></p>
+</div>
+
+<!-- SECTION 2 -->
+<div id="s2">
+<h2>2. <span class="en">Running Gemma 4 on Mac mini (Setup Guide)</span><span class="ko">Mac mini에서 Gemma 4 실행하기 (설치 가이드)</span></h2>
+
+<h3><span class="en">Best Tool: Ollama ✅</span><span class="ko">최고의 도구: Ollama ✅</span></h3>
+<p><span class="en">As of Ollama v0.19+, it <strong>automatically uses Apple's MLX framework</strong> on Apple Silicon — no configuration needed. Easiest path by far.</span><span class="ko">Ollama v0.19+부터 Apple Silicon에서 <strong>Apple MLX 프레임워크를 자동으로 사용</strong>합니다. 별도 설정 없이 가장 쉬운 방법입니다.</span></p>
+
+<h3><span class="en">Step-by-Step Setup</span><span class="ko">단계별 설치 가이드</span></h3>
+
+<pre><code># 1. Install Ollama (use official installer, NOT Homebrew)
+curl -fsSL https://ollama.com/install.sh | sh
+# Or download from: https://ollama.com
+
+# 2. Pull your model (pick based on your RAM — see table below)
+ollama pull gemma4           # Default: E4B (~9.6 GB) — best for 16GB Mac mini
+ollama pull gemma4:e2b       # Lightest (~7.2 GB)
+ollama pull gemma4:26b       # MoE sweet spot (~18 GB) — best for 24GB Mac mini
+ollama pull gemma4:31b       # Full power (~20 GB) — needs 32GB+
+
+# 3. Run interactively
+ollama run gemma4
+
+# 4. Pass images (multimodal!)
+ollama run gemma4 "What's in this image?" /path/to/photo.jpg
+
+# 5. API access (OpenAI-compatible)
+curl http://localhost:11434/api/generate \
+  -d '{"model": "gemma4", "prompt": "Hello!"}'</code></pre>
+
+<h4><span class="en">Recommended Environment Variables (add to ~/.zshrc)</span><span class="ko">권장 환경 변수 (~/.zshrc에 추가)</span></h4>
+<pre><code>export OLLAMA_NUM_GPU=99          # Maximize GPU layer offloading
+export OLLAMA_KEEP_ALIVE=0        # Keep model loaded between requests
+export OLLAMA_HOST=0.0.0.0:11434  # Accept connections from network</code></pre>
+
+<h4><span class="en">Increase Context Window (default is too small!)</span><span class="ko">컨텍스트 창 확장 (기본값이 너무 작음!)</span></h4>
+<pre><code># Create a Modelfile
+echo "FROM gemma4
+PARAMETER num_ctx 32768" > Modelfile
+
+ollama create gemma4-32k -f Modelfile
+ollama run gemma4-32k</code></pre>
+
+<h3><span class="en">Which Model for Your Hardware?</span><span class="ko">내 하드웨어에 맞는 모델은?</span></h3>
+<div class="table-wrap">
+<table>
+  <tr><th><span class="en">Mac mini Config</span><span class="ko">Mac mini 사양</span></th><th><span class="en">Recommended</span><span class="ko">추천 모델</span></th><th><span class="en">Download Size</span><span class="ko">다운로드 크기</span></th><th><span class="en">Notes</span><span class="ko">비고</span></th></tr>
+  <tr><td>M4 16GB</td><td><code>gemma4</code> (E4B)</td><td>~9.6 GB</td><td><span class="en">Best option. Max 32K context.</span><span class="ko">최선의 선택. 최대 32K 컨텍스트.</span></td></tr>
+  <tr><td>M4 16GB</td><td><code>gemma4:e2b</code></td><td>~7.2 GB</td><td><span class="en">Fastest, lightest</span><span class="ko">가장 빠르고 가벼움</span></td></tr>
+  <tr><td>M4 24GB</td><td><code>gemma4:26b</code></td><td>~18 GB</td><td><span class="en">🏆 Sweet spot — 26B quality at 4B speed</span><span class="ko">🏆 최적 — 26B 품질, 4B 속도</span></td></tr>
+  <tr><td>M4 32GB+</td><td><code>gemma4:31b</code></td><td>~20 GB</td><td><span class="en">Best quality, needs 32GB</span><span class="ko">최고 품질, 32GB 필요</span></td></tr>
+</table>
+</div>
+
+<h3><span class="en">Expected Speed (tokens/sec)</span><span class="ko">예상 속도 (토큰/초)</span></h3>
+<div class="table-wrap">
+<table>
+  <tr><th><span class="en">Model</span><span class="ko">모델</span></th><th><span class="en">Chip</span><span class="ko">칩</span></th><th><span class="en">Speed</span><span class="ko">속도</span></th><th><span class="en">Feel</span><span class="ko">체감</span></th></tr>
+  <tr><td>E4B</td><td>M4 16GB</td><td><strong>40–80 tok/s</strong></td><td><span class="en">Fluid conversation</span><span class="ko">자연스러운 대화</span></td></tr>
+  <tr><td>26B MoE</td><td>M4 24GB</td><td><strong>15–20 tok/s</strong></td><td><span class="en">Good for most tasks</span><span class="ko">대부분 작업에 충분</span></td></tr>
+  <tr><td>31B</td><td>M4 32GB</td><td><strong>10–15 tok/s</strong></td><td><span class="en">Usable, slightly slow</span><span class="ko">사용 가능, 약간 느림</span></td></tr>
+</table>
+</div>
+<p><span class="en"><strong>Memory bandwidth is the bottleneck</strong> on Apple Silicon — M4 base (120 GB/s) vs M4 Pro (273 GB/s). More bandwidth = faster generation.</span><span class="ko"><strong>메모리 대역폭이 병목</strong>입니다 — M4 기본 (120 GB/s) vs M4 Pro (273 GB/s). 대역폭이 클수록 생성 속도가 빠릅니다.</span></p>
+
+<h3><span class="en">Verify GPU is Active</span><span class="ko">GPU 사용 확인</span></h3>
+<pre><code># Check GPU power usage while Ollama is generating
+sudo powermetrics --samplers gpu_power -i 1000 -n 1
+# If GPU power > 0 watts during generation → Metal is working ✅
+
+# Or: Activity Monitor → GPU tab → look for "ollama" process</code></pre>
+</div>
+
+<!-- SECTION 3 -->
+<div id="s3">
+<h2>3. <span class="en">Electricity & Cost Analysis</span><span class="ko">전기 요금 & 비용 분석</span></h2>
+
+<h3><span class="en">Mac mini M4 Power Draw</span><span class="ko">Mac mini M4 소비 전력</span></h3>
+<div class="table-wrap">
+<table>
+  <tr><th><span class="en">State</span><span class="ko">상태</span></th><th><span class="en">Power</span><span class="ko">전력</span></th></tr>
+  <tr><td><span class="en">Sleep</span><span class="ko">수면</span></td><td>4–6 W</td></tr>
+  <tr><td><span class="en">Idle</span><span class="ko">대기</span></td><td>3–4 W</td></tr>
+  <tr><td><span class="en">AI inference (LLM running)</span><span class="ko">AI 추론 (LLM 실행 중)</span></td><td><strong>30–40 W</strong></td></tr>
+  <tr><td><span class="en">Peak sustained</span><span class="ko">최대 지속</span></td><td>~45 W</td></tr>
+</table>
+</div>
+<p><span class="en">For comparison: an RTX 4090 setup pulls <strong>500+ watts</strong> for the same work. A Mac mini uses 10x less power!</span><span class="ko">비교: RTX 4090 시스템은 같은 작업에 <strong>500W 이상</strong>을 소비합니다. Mac mini는 10배 더 적은 전력을 씁니다!</span></p>
+
+<h3><span class="en">Monthly Cost (at $0.12/kWh)</span><span class="ko">월 요금 ($0.12/kWh 기준)</span></h3>
+<div class="table-wrap">
+<table>
+  <tr><th><span class="en">Usage Pattern</span><span class="ko">사용 패턴</span></th><th><span class="en">Monthly Cost</span><span class="ko">월 비용</span></th></tr>
+  <tr><td><span class="en">Idle 24/7 (model loaded, no queries)</span><span class="ko">24/7 대기 (모델 로드됨, 쿼리 없음)</span></td><td><strong>~$0.43</strong></td></tr>
+  <tr><td><span class="en">AI load 8hrs/day + idle overnight</span><span class="ko">8시간/일 AI 사용 + 야간 대기</span></td><td><strong>~$1.30</strong></td></tr>
+  <tr><td><span class="en">AI load 24/7 continuous</span><span class="ko">24/7 AI 연속 사용</span></td><td><strong>~$3.02</strong></td></tr>
+</table>
+</div>
+
+<div class="highlight green">
+<strong>💡 <span class="en">Bottom line: Running a Mac mini M4 as an always-on AI server costs about $1–4/month in electricity.</span><span class="ko">결론: Mac mini M4를 항상 켜진 AI 서버로 운영하는 전기 요금은 월 약 $1–4입니다.</span></strong>
+</div>
+
+<h3><span class="en">Local vs API Cost (1,000 queries/day)</span><span class="ko">로컬 vs API 비용 (하루 1,000 쿼리 기준)</span></h3>
+<div class="table-wrap">
+<table>
+  <tr><th><span class="en">Method</span><span class="ko">방법</span></th><th><span class="en">Monthly Cost</span><span class="ko">월 비용</span></th><th><span class="en">Break-Even</span><span class="ko">손익분기점</span></th></tr>
+  <tr><td><span class="en">Local Gemma 4 (Mac mini)</span><span class="ko">로컬 Gemma 4 (Mac mini)</span></td><td><strong>~$3</strong> (<span class="en">electricity</span><span class="ko">전기료</span>)</td><td>—</td></tr>
+  <tr><td>Claude Sonnet API</td><td>~$270</td><td><strong>~2.2 <span class="en">months</span><span class="ko">개월</span></strong></td></tr>
+  <tr><td>GPT-4.1 API</td><td>~$150</td><td><strong>~4 <span class="en">months</span><span class="ko">개월</span></strong></td></tr>
+  <tr><td>Claude Haiku API</td><td>~$22</td><td>~31 <span class="en">months</span><span class="ko">개월</span></td></tr>
+  <tr><td>GPT-4o mini API</td><td>~$11</td><td>~75 <span class="en">months</span><span class="ko">개월</span></td></tr>
+</table>
+</div>
+
+<div class="highlight warning">
+<strong>⚠️ <span class="en">Honest take:</span><span class="ko">솔직한 평가:</span></strong><br>
+<span class="en">Local AI makes financial sense if you run <strong>500+ queries/day</strong> against mid-tier APIs, need privacy, or want offline access. For light use (&lt;100 queries/day), cheap API tiers are more cost-effective. Best strategy: run Gemma 4 locally for high-volume routine tasks, use Claude/GPT APIs for complex reasoning.</span><span class="ko">로컬 AI는 중간 수준 API 대비 <strong>하루 500+ 쿼리</strong>를 실행하거나, 프라이버시가 중요하거나, 오프라인 접근이 필요할 때 경제적입니다. 가벼운 사용(&lt;하루 100 쿼리)에는 저렴한 API 요금제가 더 효율적입니다. 최선의 전략: 대량 루틴 작업은 Gemma 4 로컬로, 복잡한 추론은 Claude/GPT API로.</span>
+</div>
+</div>
+
+<!-- SECTION 4 -->
+<div id="s4">
+<h2>4. <span class="en">Fine-Tuning & Personalization (Hermes + LoRA)</span><span class="ko">파인튜닝 & 개인화 (Hermes + LoRA)</span></h2>
+
+<h3><span class="en">What is Hermes?</span><span class="ko">Hermes란?</span></h3>
+<p><span class="en"><strong>NousResearch Hermes</strong> refers to two things: (1) <strong>Hermes Models</strong> — fine-tuned LLMs optimized for function calling, tool use, and agentic behavior; (2) <strong>Hermes Agent</strong> (Feb 2026) — an open-source autonomous AI agent platform with persistent memory, native function calling, and the ability to export conversation trajectories for fine-tuning.</span><span class="ko"><strong>NousResearch Hermes</strong>는 두 가지를 의미합니다: (1) <strong>Hermes 모델</strong> — 함수 호출, 도구 사용, 에이전트 동작에 최적화된 파인튜닝된 LLM; (2) <strong>Hermes Agent</strong> (2026년 2월) — 영구 메모리, 기본 함수 호출, 파인튜닝용 대화 내보내기 기능을 갖춘 오픈소스 자율 AI 에이전트 플랫폼.</span></p>
+
+<!-- IMPORTANT MISCONCEPTION -->
+<div class="highlight warning">
+<strong>🚨 <span class="en">CRITICAL: Using a model ≠ Training a model</span><span class="ko">중요: 모델 사용 ≠ 모델 훈련</span></strong><br><br>
+<span class="en"><strong>Simply chatting with a local model does NOT make it smarter or more personalized over time.</strong> This is the most common misconception about local AI.</span><span class="ko"><strong>로컬 모델과 그냥 대화하는 것만으로는 시간이 지나도 더 똑똑해지거나 개인화되지 않습니다.</strong> 이것이 로컬 AI에 대한 가장 흔한 오해입니다.</span><br><br>
+<div class="table-wrap">
+<table>
+  <tr><th><span class="en">Action</span><span class="ko">행동</span></th><th><span class="en">Does model change?</span><span class="ko">모델이 변하나요?</span></th></tr>
+  <tr><td><strong><span class="en">Inference (chatting)</span><span class="ko">추론 (대화하기)</span></strong></td><td>❌ <span class="en">No. Weights are frozen. Read-only.</span><span class="ko">아니요. 가중치가 고정됩니다. 읽기 전용.</span></td></tr>
+  <tr><td><strong><span class="en">Fine-tuning</span><span class="ko">파인튜닝</span></strong></td><td>✅ <span class="en">Yes. Weights actually update.</span><span class="ko">예. 가중치가 실제로 업데이트됩니다.</span></td></tr>
+  <tr><td><strong>RAG</strong></td><td>❌ <span class="en">No. Just better context injection.</span><span class="ko">아니요. 더 나은 컨텍스트 주입일 뿐.</span></td></tr>
+</table>
+</div>
+<span class="en"><strong>Analogy:</strong> Inference is reading someone a book — they answer from what they already know. Fine-tuning is sending them to school. More chatting ≠ more learning.</span><span class="ko"><strong>비유:</strong> 추론은 책을 읽어주는 것 — 이미 아는 것으로 대답합니다. 파인튜닝은 학교에 보내는 것. 더 많이 채팅한다고 ≠ 더 많이 배우지 않습니다.</span>
+</div>
+
+<h3><span class="en">Fine-Tuning Methods</span><span class="ko">파인튜닝 방법</span></h3>
+<div class="table-wrap">
+<table>
+  <tr><th><span class="en">Method</span><span class="ko">방법</span></th><th><span class="en">What it does</span><span class="ko">역할</span></th><th><span class="en">Output</span><span class="ko">결과물</span></th><th><span class="en">Difficulty</span><span class="ko">난이도</span></th></tr>
+  <tr><td><strong>LoRA</strong></td><td><span class="en">Trains small adapter on top of frozen model</span><span class="ko">고정된 모델 위에 소형 어댑터 훈련</span></td><td>~10–100 MB adapter</td><td><span class="en">Medium</span><span class="ko">중간</span></td></tr>
+  <tr><td><strong>QLoRA</strong></td><td><span class="en">LoRA with 4-bit quantized base model</span><span class="ko">4비트 양자화된 기본 모델로 LoRA</span></td><td>~10–100 MB adapter</td><td><span class="en">Low VRAM</span><span class="ko">낮은 VRAM</span></td></tr>
+  <tr><td><strong>Full fine-tune</strong></td><td><span class="en">Updates ALL weights</span><span class="ko">모든 가중치 업데이트</span></td><td><span class="en">New full model</span><span class="ko">새 전체 모델</span></td><td><span class="en">High (needs lots of VRAM)</span><span class="ko">높음 (많은 VRAM 필요)</span></td></tr>
+</table>
+</div>
+
+<h3><span class="en">Hardware Requirements for Fine-Tuning</span><span class="ko">파인튜닝 하드웨어 요구사항</span></h3>
+<div class="table-wrap">
+<table>
+  <tr><th><span class="en">Model</span><span class="ko">모델</span></th><th><span class="en">Method</span><span class="ko">방법</span></th><th><span class="en">RAM Needed</span><span class="ko">필요 RAM</span></th><th><span class="en">Est. Time (200 iters)</span><span class="ko">예상 시간 (200회)</span></th></tr>
+  <tr><td>E2B</td><td>LoRA</td><td>8–10 GB</td><td>~20–40 min</td></tr>
+  <tr><td>E4B</td><td>QLoRA</td><td>17 GB</td><td>~1–2 hrs</td></tr>
+  <tr><td>31B</td><td>QLoRA</td><td>22 GB</td><td>~4–8 hrs</td></tr>
+</table>
+</div>
+
+<h3><span class="en">Step-by-Step: Fine-Tune with Unsloth (Recommended)</span><span class="ko">단계별 가이드: Unsloth로 파인튜닝 (추천)</span></h3>
+
+<pre><code># 1. Install Unsloth
+curl -fsSL https://unsloth.ai/install.sh | sh
+
+# 2. Launch Unsloth Studio (web UI — easiest method!)
+unsloth studio -H 0.0.0.0 -p 8888
+# Open http://localhost:8888</code></pre>
+
+<h4><span class="en">Or via Python:</span><span class="ko">또는 Python으로:</span></h4>
+<pre><code>from unsloth import FastVisionModel
+
+# Load model with 4-bit quantization (saves memory)
+model, tokenizer = FastVisionModel.from_pretrained(
+    "google/gemma-4-E4B-it",
+    load_in_4bit=True,
+)
+
+# Add LoRA adapter
+model = FastVisionModel.get_peft_model(
+    model,
+    r=8,           # LoRA rank
+    lora_alpha=8,
+    lora_dropout=0,
+    bias="none",
+)
+
+# Train...
+trainer.train()
+
+# Save as GGUF for Ollama
+model.save_pretrained_gguf("./my-gemma4", tokenizer,
+                           quantization_method="q4_k_m")</code></pre>
+
+<h4><span class="en">Training Data Format (JSONL):</span><span class="ko">학습 데이터 형식 (JSONL):</span></h4>
+<pre><code>{"messages": [
+  {"role": "system", "content": "You are a TypeScript expert."},
+  {"role": "user", "content": "How do I create a generic type guard?"},
+  {"role": "assistant", "content": "Here's how..."}
+]}</code></pre>
+
+<h4><span class="en">Alternative: MLX (Apple-native, no install needed)</span><span class="ko">대안: MLX (Apple 네이티브, 별도 설치 불필요)</span></h4>
+<pre><code>pip install mlx-lm
+
+python -m mlx_lm.lora \
+  --model "google/gemma-4-E4B-it" \
+  --train \
+  --iters 200 \
+  --data ./my-training-data \
+  --adapter-path ./checkpoints \
+  --batch-size 1</code></pre>
+</div>
+
+<!-- SECTION 5 -->
+<div id="s5">
+<h2>5. <span class="en">Model Portability — Moving to Another Machine</span><span class="ko">모델 이식성 — 다른 기기로 옮기기</span></h2>
+
+<h3><span class="en">Where Files Are Stored</span><span class="ko">파일 저장 위치</span></h3>
+<div class="table-wrap">
+<table>
+  <tr><th><span class="en">Tool</span><span class="ko">도구</span></th><th><span class="en">Location</span><span class="ko">위치</span></th></tr>
+  <tr><td>Ollama</td><td><code>~/.ollama/models/</code></td></tr>
+  <tr><td>LM Studio</td><td><code>~/.cache/lm-studio/models/</code></td></tr>
+  <tr><td>MLX / HuggingFace</td><td><code>~/.cache/huggingface/hub/</code></td></tr>
+  <tr><td><span class="en">LoRA adapters (after fine-tuning)</span><span class="ko">LoRA 어댑터 (파인튜닝 후)</span></td><td><span class="en">Your output directory</span><span class="ko">지정한 출력 디렉토리</span></td></tr>
+</table>
+</div>
+
+<h3><span class="en">File Formats</span><span class="ko">파일 형식</span></h3>
+<div class="table-wrap">
+<table>
+  <tr><th><span class="en">Format</span><span class="ko">형식</span></th><th><span class="en">Used By</span><span class="ko">사용처</span></th><th><span class="en">Portable?</span><span class="ko">이식 가능?</span></th><th><span class="en">Notes</span><span class="ko">비고</span></th></tr>
+  <tr><td><strong>GGUF</strong></td><td>Ollama, llama.cpp, LM Studio</td><td>✅ <span class="en">Most portable</span><span class="ko">가장 이식성 좋음</span></td><td><span class="en">Single file, includes quantization</span><span class="ko">단일 파일, 양자화 포함</span></td></tr>
+  <tr><td><strong>safetensors</strong></td><td>HuggingFace, MLX</td><td>✅ <span class="en">Yes</span><span class="ko">가능</span></td><td><span class="en">Full precision, larger files</span><span class="ko">전체 정밀도, 큰 파일</span></td></tr>
+  <tr><td><strong>GGML</strong></td><td>Legacy</td><td>⚠️ <span class="en">Deprecated</span><span class="ko">지원 중단</span></td><td><span class="en">Don't use for new work</span><span class="ko">새 작업에 사용하지 말 것</span></td></tr>
+</table>
+</div>
+
+<h3><span class="en">Option A: Move LoRA Adapter Only (Small & Fast)</span><span class="ko">옵션 A: LoRA 어댑터만 이동 (소형 & 빠름)</span></h3>
+<pre><code># After fine-tuning, your adapter folder is ~10–100 MB
+ls ./my-gemma4-adapter/
+# adapter_config.json  adapter_model.safetensors
+
+# Copy to new machine
+scp -r ./my-gemma4-adapter/ user@new-machine:~/adapters/
+
+# ⚠️ The new machine also needs the same base model downloaded!</code></pre>
+
+<h3><span class="en">Option B: Export Merged GGUF (Self-Contained, Recommended)</span><span class="ko">옵션 B: 병합된 GGUF 내보내기 (자급자족, 추천)</span></h3>
+<pre><code># Export merged model as single GGUF (in Python, after training)
+model.save_pretrained_gguf(
+    "./my-gemma4-merged",
+    tokenizer,
+    quantization_method="q4_k_m"
+)
+
+# Copy the .gguf file to new machine
+scp ./my-gemma4-merged/*.gguf user@new-machine:~/models/</code></pre>
+
+<h3><span class="en">Option C: Import into Ollama on New Machine</span><span class="ko">옵션 C: 새 기기의 Ollama에 가져오기</span></h3>
+<pre><code># On the new machine, after copying the .gguf file:
+cat > Modelfile << 'EOF'
+FROM /path/to/my-gemma4-merged.gguf
+PARAMETER temperature 0.7
+PARAMETER num_ctx 32768
+SYSTEM "You are a helpful assistant specialized in TypeScript."
+EOF
+
+ollama create my-custom-gemma -f Modelfile
+ollama run my-custom-gemma</code></pre>
+
+<h3><span class="en">Option D: Upload to Hugging Face (Any Machine Can Pull)</span><span class="ko">옵션 D: Hugging Face에 업로드 (어디서나 당겨올 수 있음)</span></h3>
+<pre><code">pip install huggingface-hub
+huggingface-cli login
+
+# Upload
+huggingface-cli upload your-username/my-gemma4 ./my-gemma4-merged/ --private
+
+# On any new machine
+huggingface-cli download your-username/my-gemma4</code></pre>
+
+<h3><span class="en">Storage Size Reference</span><span class="ko">파일 크기 참조</span></h3>
+<div class="table-wrap">
+<table>
+  <tr><th><span class="en">Format</span><span class="ko">형식</span></th><th>E4B</th><th>26B</th><th>31B</th></tr>
+  <tr><td>safetensors (FP16)</td><td>~8 GB</td><td>~52 GB</td><td>~62 GB</td></tr>
+  <tr><td>GGUF Q8_0</td><td>~4.5 GB</td><td>~27 GB</td><td>~34 GB</td></tr>
+  <tr><td>GGUF Q4_K_M</td><td>~2.5 GB</td><td>~15 GB</td><td>~20 GB</td></tr>
+  <tr><td><span class="en">LoRA adapter only</span><span class="ko">LoRA 어댑터만</span></td><td>~50–100 MB</td><td>~100–200 MB</td><td>~100–300 MB</td></tr>
+</table>
+</div>
+</div>
+
+<!-- SECTION 6: Quick Reference -->
+<div id="s6">
+<h2>6. <span class="en">Quick Reference Card</span><span class="ko">빠른 참조 카드</span></h2>
+<div class="quick-ref">
+<div class="quick-ref-title">⚡ <span class="en">Get up and running in 5 minutes</span><span class="ko">5분 안에 시작하기</span></div>
+<pre><code># === INSTALL & RUN ===
+curl -fsSL https://ollama.com/install.sh | sh
+
+# Pick your model based on your Mac's RAM:
+ollama pull gemma4        # 16GB Mac mini (E4B)
+ollama pull gemma4:26b    # 24GB Mac mini (MoE sweet spot 🏆)
+ollama run gemma4
+
+# === VERIFY GPU ===
+sudo powermetrics --samplers gpu_power -i 1000 -n 1
+# Look for GPU Power > 0W during generation
+
+# === EXPAND CONTEXT ===
+printf "FROM gemma4\nPARAMETER num_ctx 32768" > Modelfile
+ollama create gemma4-32k -f Modelfile && ollama run gemma4-32k
+
+# === FINE-TUNE (Unsloth) ===
+curl -fsSL https://unsloth.ai/install.sh | sh
+unsloth studio -H 0.0.0.0 -p 8888   # Open http://localhost:8888
+
+# === EXPORT TO GGUF (after training) ===
+# model.save_pretrained_gguf("./output", tokenizer, quantization_method="q4_k_m")
+
+# === IMPORT ON NEW MACHINE ===
+printf "FROM ./output/model.gguf" > Modelfile
+ollama create my-gemma -f Modelfile && ollama run my-gemma</code></pre>
+</div>
+</div>
+
+<footer>
+  <span class="en">Research by Totoro 🌳 for Minjun · April 12, 2026</span><span class="ko">토토로 🌳가 민준을 위해 조사 · 2026년 4월 12일</span>
+</footer>
+
+<script>
+let isKorean = false;
+function toggleLang() {
+  isKorean = !isKorean;
+  document.querySelectorAll('.en').forEach(el => el.classList.toggle('hide', isKorean));
+  document.querySelectorAll('.ko').forEach(el => el.classList.toggle('show', isKorean));
+  document.querySelectorAll('.en-block').forEach(el => el.classList.toggle('hide', isKorean));
+  document.querySelectorAll('.ko-block').forEach(el => el.classList.toggle('show', isKorean));
+  document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+}
+</script>
+</body>
+</html>
