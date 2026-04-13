@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Daily Tech Briefing — Apr 13, 2026</title>
+<style>
+  :root {
+    --bg: #0d1117; --card: #161b22; --border: #30363d;
+    --text: #c9d1d9; --heading: #f0f6fc; --accent: #58a6ff;
+    --tag-ai: #7ee787; --tag-mkt: #f78166; --tag-semi: #d2a8ff; --tag-wild: #ffa657;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; padding: 16px; max-width: 720px; margin: 0 auto; }
+  header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
+  h1 { font-size: 1.4rem; color: var(--heading); }
+  .date { color: #8b949e; font-size: 0.85rem; margin-top: 4px; }
+  .lang-toggle { background: var(--card); color: var(--accent); border: 1px solid var(--border); padding: 6px 14px; border-radius: 20px; cursor: pointer; font-size: 0.85rem; white-space: nowrap; }
+  .lang-toggle:hover { background: var(--border); }
+  .section-title { font-size: 1.1rem; color: var(--heading); margin: 24px 0 12px; display: flex; align-items: center; gap: 8px; }
+  .tag { font-size: 0.7rem; padding: 2px 8px; border-radius: 12px; font-weight: 600; text-transform: uppercase; }
+  .tag-ai { background: rgba(126,231,135,0.15); color: var(--tag-ai); }
+  .tag-mkt { background: rgba(247,129,102,0.15); color: var(--tag-mkt); }
+  .tag-semi { background: rgba(210,168,255,0.15); color: var(--tag-semi); }
+  .tag-wild { background: rgba(255,166,87,0.15); color: var(--tag-wild); }
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px; margin-bottom: 12px; }
+  .card h3 { color: var(--heading); font-size: 1rem; margin-bottom: 6px; }
+  .card .source { color: #8b949e; font-size: 0.8rem; margin-bottom: 8px; }
+  .card p { font-size: 0.9rem; }
+  .card a { color: var(--accent); text-decoration: none; font-size: 0.85rem; }
+  .card a:hover { text-decoration: underline; }
+  footer { text-align: center; color: #484f58; font-size: 0.75rem; margin-top: 32px; padding-top: 16px; border-top: 1px solid var(--border); }
+  .ko { display: none; }
+  .ko.show { display: inline !important; }
+  .en.hide { display: none !important; }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>🌳 <span class="en">Daily Tech Briefing</span><span class="ko">오늘의 테크 브리핑</span></h1>
+    <div class="date"><span class="en">Monday, April 13, 2026</span><span class="ko">2026년 4월 13일 월요일</span></div>
+  </div>
+  <button class="lang-toggle" onclick="toggleLang()">한국어</button>
+</header>
+
+<div class="audio-player" style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:24px">
+  <div style="font-size:0.85rem;color:#8b949e;margin-bottom:8px"><span class="en">🎙️ Morning Briefing Audio</span><span class="ko">🎙️ 모닝 브리핑 오디오</span></div>
+  <audio controls style="width:100%"><source src="briefing-2026-04-13.mp3" type="audio/mpeg"></audio>
+</div>
+
+<!-- AI & TECH -->
+<div class="section-title"><span class="tag tag-ai">AI & Tech</span></div>
+
+<div class="card">
+  <h3><span class="en">Meta Launches Muse Spark — Its First Proprietary AI Model</span><span class="ko">메타, 첫 독점 AI 모델 '뮤즈 스파크' 출시</span></h3>
+  <div class="source">VentureBeat / CNBC</div>
+  <p><span class="en">Meta Superintelligence Labs, led by former Scale AI CEO Alexandr Wang, released Muse Spark — Meta's first proprietary model and a dramatic departure from the open-source Llama strategy. The move signals Meta's new approach to competing with OpenAI and Anthropic after Llama 4's mixed reception last year.</span><span class="ko">전 Scale AI CEO 알렉산드르 왕이 이끄는 메타 초지능 연구소가 첫 독점 모델 뮤즈 스파크를 출시했습니다. 지난해 라마 4의 엇갈린 평가 이후 오픈소스 전략에서 벗어나 OpenAI, Anthropic과 정면 경쟁하겠다는 전략 전환입니다.</span></p>
+  <a href="https://venturebeat.com/technology/goodbye-llama-meta-launches-new-proprietary-ai-model-muse-spark-first-since" target="_blank"><span class="en">Read more →</span><span class="ko">자세히 보기 →</span></a>
+</div>
+
+<div class="card">
+  <h3><span class="en">OpenAI, Anthropic & Google Form Alliance Against Model Copying</span><span class="ko">OpenAI·Anthropic·구글, 모델 복제 방지 동맹 결성</span></h3>
+  <div class="source">FutureTech / Hacker News</div>
+  <p><span class="en">The three leading AI labs have established an unprecedented alliance to combat unauthorized copying of large language models and secure AI intellectual property. The coalition aims to protect model weights and defend against competitors who attempt to replicate proprietary architectures without authorization.</span><span class="ko">3대 AI 연구소가 대규모 언어 모델의 무단 복제를 막고 AI 지적재산권을 보호하기 위한 전례 없는 동맹을 결성했습니다. 독점 아키텍처의 무단 복제 시도에 대응하고 모델 가중치를 보호하는 것이 목표입니다.</span></p>
+  <a href="https://blog.tahababa.com/2026/04/april-13-2026-ai-giants-form-alliance.html" target="_blank"><span class="en">Read more →</span><span class="ko">자세히 보기 →</span></a>
+</div>
+
+<div class="card">
+  <h3><span class="en">Anthropic's Project Glasswing Uncovers Thousands of OS Vulnerabilities</span><span class="ko">Anthropic 프로젝트 글래스윙, OS 취약점 수천 개 발견</span></h3>
+  <div class="source">Wall Street Journal / TechStartups</div>
+  <p><span class="en">Anthropic shared a specialized Claude model with major tech companies through Project Glasswing to identify security flaws in operating systems. The AI-assisted analysis has already uncovered thousands of severe vulnerabilities, demonstrating a powerful new use case for frontier models in defensive cybersecurity.</span><span class="ko">Anthropic이 프로젝트 글래스윙을 통해 주요 기술 기업들에 특수 Claude 모델을 공유하여 운영체제의 보안 결함을 식별하고 있습니다. AI 기반 분석으로 이미 수천 개의 심각한 취약점이 발견되어 방어적 사이버보안의 강력한 활용 사례를 보여주고 있습니다.</span></p>
+  <a href="https://techstartups.com/2026/04/10/top-tech-news-today-april-10-2026/" target="_blank"><span class="en">Read more →</span><span class="ko">자세히 보기 →</span></a>
+</div>
+
+<div class="card">
+  <h3><span class="en">PwC: 75% of AI's Economic Gains Captured by Just 20% of Companies</span><span class="ko">PwC: AI 경제적 이익의 75%를 상위 20% 기업이 독식</span></h3>
+  <div class="source">PwC / Reuters</div>
+  <p><span class="en">PwC's 2026 AI Performance Study reveals a widening gap: the top 20% of companies are 2.6x more likely to report that AI reinvents their business model. These leaders focus on growth rather than just productivity, while the majority of companies struggle to move beyond pilot projects.</span><span class="ko">PwC의 2026 AI 성과 보고서에 따르면 상위 20% 기업이 AI로 비즈니스 모델을 혁신할 가능성이 2.6배 높은 것으로 나타났습니다. 선도 기업들은 생산성뿐 아니라 성장에 집중하는 반면, 대다수 기업은 파일럿 단계를 벗어나지 못하고 있습니다.</span></p>
+  <a href="https://www.pwc.com/gx/en/news-room/press-releases/2026/pwc-2026-ai-performance-study.html" target="_blank"><span class="en">Read more →</span><span class="ko">자세히 보기 →</span></a>
+</div>
+
+<!-- MARKETS -->
+<div class="section-title"><span class="tag tag-mkt"><span class="en">Markets</span><span class="ko">시장</span></span></div>
+
+<div class="card">
+  <h3><span class="en">Q1 2026 Venture Funding Shatters Records at $300B — AI Gets 80%</span><span class="ko">2026년 1분기 벤처 투자 3000억 달러 사상 최고 — AI가 80% 차지</span></h3>
+  <div class="source">TechCrunch / Crunchbase</div>
+  <p><span class="en">Global startup funding hit $300 billion in Q1 2026, a 2.5x increase over the previous quarter and an all-time record. AI startups captured $242 billion — 80% of all venture investment. The four largest rounds were OpenAI ($122B), Anthropic ($30B), xAI ($20B), and Waymo ($16B).</span><span class="ko">2026년 1분기 글로벌 스타트업 투자가 전 분기 대비 2.5배 증가한 3000억 달러로 사상 최고를 기록했습니다. AI 스타트업이 2420억 달러(80%)를 차지했으며, 최대 투자는 OpenAI(1220억), Anthropic(300억), xAI(200억), Waymo(160억) 순입니다.</span></p>
+  <a href="https://techcrunch.com/2026/04/01/startup-funding-shatters-all-records-in-q1/" target="_blank"><span class="en">Read more →</span><span class="ko">자세히 보기 →</span></a>
+</div>
+
+<div class="card">
+  <h3><span class="en">Meta & CoreWeave Expand AI Infrastructure Deal to $21 Billion</span><span class="ko">메타·CoreWeave, AI 인프라 계약 210억 달러로 확대</span></h3>
+  <div class="source">Bloomberg / TechStartups</div>
+  <p><span class="en">Meta and CoreWeave extended their computing infrastructure partnership to $21 billion through 2032, incorporating Nvidia's upcoming next-generation systems. The expanded deal underscores the critical role cloud GPU providers play in scaling AI training and inference workloads.</span><span class="ko">메타와 CoreWeave가 2032년까지 컴퓨팅 인프라 파트너십을 210억 달러로 확대하며 엔비디아의 차세대 시스템을 도입합니다. 이번 계약은 AI 학습 및 추론 워크로드 확장에서 클라우드 GPU 제공업체의 핵심 역할을 보여줍니다.</span></p>
+  <a href="https://techstartups.com/2026/04/10/top-tech-news-today-april-10-2026/" target="_blank"><span class="en">Read more →</span><span class="ko">자세히 보기 →</span></a>
+</div>
+
+<!-- SEMICONDUCTORS -->
+<div class="section-title"><span class="tag tag-semi"><span class="en">Semiconductors</span><span class="ko">반도체</span></span></div>
+
+<div class="card">
+  <h3><span class="en">Nvidia Locks Up TSMC's Advanced Packaging — CoWoS Becomes AI Bottleneck</span><span class="ko">엔비디아, TSMC 첨단 패키징 독점 — CoWoS가 AI 병목으로</span></h3>
+  <div class="source">CNBC / Digitimes</div>
+  <p><span class="en">Nvidia has reserved over 50% of TSMC's CoWoS advanced packaging capacity through 2027, leaving little room for competitors. TSMC's CoWoS demand is growing at roughly 80% CAGR, with the chipmaker outsourcing steps to ASE and Amkor to keep up. Advanced packaging is emerging as the next critical bottleneck for AI hardware.</span><span class="ko">엔비디아가 2027년까지 TSMC CoWoS 첨단 패키징 용량의 50% 이상을 확보하여 경쟁사에 여유가 거의 없습니다. TSMC CoWoS 수요는 연 80% 성장률을 보이며, ASE와 Amkor에 일부 공정을 위탁하고 있습니다. 첨단 패키징이 AI 하드웨어의 차세대 핵심 병목으로 부상하고 있습니다.</span></p>
+  <a href="https://www.cnbc.com/2026/04/08/tsmc-nvidia-advanced-packaging-intel.html" target="_blank"><span class="en">Read more →</span><span class="ko">자세히 보기 →</span></a>
+</div>
+
+<div class="card">
+  <h3><span class="en">Intel Terafab Wins SpaceX, Tesla & Amazon Chip Packaging Deals</span><span class="ko">인텔 테라팹, SpaceX·테슬라·아마존 칩 패키징 수주</span></h3>
+  <div class="source">CNBC / Digitimes</div>
+  <p><span class="en">Intel Foundry is positioning its planned Texas Terafab as the U.S. alternative to TSMC's Asia-centric packaging dominance. With "billions" in customer commitments from SpaceX, Tesla, Amazon, and Cisco, Intel's EMIB/Foveros packaging technology is gaining real traction as geopolitical concerns drive demand for domestic chip manufacturing.</span><span class="ko">인텔 파운드리가 텍사스 테라팹을 TSMC의 아시아 중심 패키징 독점에 대한 미국 대안으로 내세우고 있습니다. SpaceX, 테슬라, 아마존, 시스코로부터 수십억 달러 규모의 약정을 확보하며, 지정학적 우려로 국내 칩 제조 수요가 증가하고 있습니다.</span></p>
+  <a href="https://www.cnbc.com/2026/04/08/tsmc-nvidia-advanced-packaging-intel.html" target="_blank"><span class="en">Read more →</span><span class="ko">자세히 보기 →</span></a>
+</div>
+
+<!-- WILD CARD -->
+<div class="section-title"><span class="tag tag-wild"><span class="en">Wild Card</span><span class="ko">와일드 카드</span></span></div>
+
+<div class="card">
+  <h3><span class="en">Marimo Python Notebook Exploited Within 9 Hours of Disclosure</span><span class="ko">Marimo 파이썬 노트북, 공개 9시간 만에 공격 당해</span></h3>
+  <div class="source">SecurityWeek / CVE-2026-39987</div>
+  <p><span class="en">Attackers began exploiting a critical unauthenticated remote code execution vulnerability in the open-source Python notebook tool Marimo just nine hours after the bug was publicly disclosed. The speed of exploitation highlights the shrinking window developers have to patch critical vulnerabilities before they're weaponized.</span><span class="ko">오픈소스 파이썬 노트북 도구 Marimo에서 인증 없는 원격 코드 실행 취약점이 공개된 지 불과 9시간 만에 공격자들이 이를 악용하기 시작했습니다. 개발자들이 치명적 취약점을 패치할 수 있는 시간이 갈수록 줄어들고 있음을 보여줍니다.</span></p>
+  <a href="https://techstartups.com/2026/04/10/top-tech-news-today-april-10-2026/" target="_blank"><span class="en">Read more →</span><span class="ko">자세히 보기 →</span></a>
+</div>
+
+<div class="card">
+  <h3><span class="en">Big Tech Bets Billions on Nuclear Energy for AI Data Centers</span><span class="ko">빅테크, AI 데이터센터용 원자력에 수십억 달러 투자</span></h3>
+  <div class="source">Reuters / TechStartups</div>
+  <p><span class="en">Major technology companies are pouring billions into next-generation nuclear projects to power their increasingly energy-hungry AI data centers. The shift toward nuclear addresses the massive and growing electricity demands of AI training infrastructure, creating significant new commercial opportunities for nuclear startups.</span><span class="ko">주요 기술 기업들이 점점 더 많은 전력을 필요로 하는 AI 데이터센터에 전력을 공급하기 위해 차세대 원자력 프로젝트에 수십억 달러를 투자하고 있습니다. AI 학습 인프라의 막대한 전력 수요를 해결하며 원자력 스타트업에 새로운 기회를 열고 있습니다.</span></p>
+  <a href="https://techstartups.com/2026/04/10/top-tech-news-today-april-10-2026/" target="_blank"><span class="en">Read more →</span><span class="ko">자세히 보기 →</span></a>
+</div>
+
+<footer>
+  <span class="en">Curated by Totoro 🌳 for Minjun</span><span class="ko">토토로 🌳가 민준을 위해 큐레이션</span>
+</footer>
+
+<script>
+let isKorean = false;
+function toggleLang() {
+  isKorean = !isKorean;
+  document.querySelectorAll('.en').forEach(el => el.classList.toggle('hide', isKorean));
+  document.querySelectorAll('.ko').forEach(el => el.classList.toggle('show', isKorean));
+  document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+}
+</script>
+</body>
+</html>
