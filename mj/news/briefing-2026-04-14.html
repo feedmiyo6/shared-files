@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Daily Tech Briefing — Apr 14, 2026</title>
+<style>
+  :root {
+    --bg: #0d1117; --card: #161b22; --border: #30363d;
+    --text: #c9d1d9; --heading: #f0f6fc; --accent: #58a6ff;
+    --tag-ai: #7ee787; --tag-mkt: #f78166; --tag-semi: #d2a8ff; --tag-wild: #ffa657;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; padding: 16px; max-width: 720px; margin: 0 auto; }
+  header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
+  h1 { font-size: 1.4rem; color: var(--heading); }
+  .date { color: #8b949e; font-size: 0.85rem; margin-top: 4px; }
+  .lang-toggle { background: var(--card); color: var(--accent); border: 1px solid var(--border); padding: 6px 14px; border-radius: 20px; cursor: pointer; font-size: 0.85rem; white-space: nowrap; }
+  .lang-toggle:hover { background: var(--border); }
+  .section-title { font-size: 1.1rem; color: var(--heading); margin: 24px 0 12px; display: flex; align-items: center; gap: 8px; }
+  .tag { font-size: 0.7rem; padding: 2px 8px; border-radius: 12px; font-weight: 600; text-transform: uppercase; }
+  .tag-ai { background: rgba(126,231,135,0.15); color: var(--tag-ai); }
+  .tag-mkt { background: rgba(247,129,102,0.15); color: var(--tag-mkt); }
+  .tag-semi { background: rgba(210,168,255,0.15); color: var(--tag-semi); }
+  .tag-wild { background: rgba(255,166,87,0.15); color: var(--tag-wild); }
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px; margin-bottom: 12px; }
+  .card h3 { color: var(--heading); font-size: 1rem; margin-bottom: 6px; }
+  .card .source { color: #8b949e; font-size: 0.8rem; margin-bottom: 8px; }
+  .card p { font-size: 0.9rem; }
+  .card a { color: var(--accent); text-decoration: none; font-size: 0.85rem; }
+  .card a:hover { text-decoration: underline; }
+  footer { text-align: center; color: #484f58; font-size: 0.75rem; margin-top: 32px; padding-top: 16px; border-top: 1px solid var(--border); }
+  .ko { display: none; }
+  .ko.show { display: inline !important; }
+  .en.hide { display: none !important; }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>🌳 <span class="en">Daily Tech Briefing</span><span class="ko">오늘의 테크 브리핑</span></h1>
+    <div class="date"><span class="en">Monday, April 14, 2026</span><span class="ko">2026년 4월 14일 월요일</span></div>
+  </div>
+  <button class="lang-toggle" onclick="toggleLang()">한국어</button>
+</header>
+
+<div class="audio-player" style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:24px">
+  <div style="font-size:0.85rem;color:#8b949e;margin-bottom:8px"><span class="en">🎙️ Morning Briefing Audio</span><span class="ko">🎙️ 모닝 브리핑 오디오</span></div>
+  <audio controls style="width:100%"><source src="briefing-2026-04-14.mp3" type="audio/mpeg"></audio>
+</div>
+
+<!-- AI & TECH -->
+<div class="section-title"><span class="tag tag-ai">AI & Tech</span></div>
+
+<div class="card">
+  <h3><span class="en">Stanford 2026 AI Index: China Closes Gap, Transparency Declines</span><span class="ko">스탠포드 2026 AI 인덱스: 중국 격차 축소, 투명성 하락</span></h3>
+  <div class="source">Stanford HAI / TechCrunch</div>
+  <p><span class="en">Stanford's 2026 AI Index reveals China has nearly eliminated the U.S. lead in AI model quality — the gap narrowed from 9.26% to just 1.70%. Transparency is declining too: the Foundation Model Transparency Index dropped from 58 to 40 points, as leading labs have stopped disclosing dataset sizes and training duration. A growing divide is emerging between AI insiders (56% optimistic) and an increasingly anxious general public.</span><span class="ko">스탠포드 2026 AI 인덱스에 따르면 중국이 미국과의 AI 모델 품질 격차를 거의 해소했습니다 — 격차가 9.26%에서 1.70%로 축소. 투명성도 하락해 주요 연구소들이 데이터셋 규모와 훈련 기간 공개를 중단했으며, AI 업계 내부자(56% 낙관)와 불안감이 커지는 일반 대중 사이의 인식 격차가 벌어지고 있습니다.</span></p>
+  <a href="https://hai.stanford.edu/news/inside-the-ai-index-12-takeaways-from-the-2026-report" target="_blank"><span class="en">Read more →</span><span class="ko">자세히 보기 →</span></a>
+</div>
+
+<div class="card">
+  <h3><span class="en">Anthropic's Claude Mythos Restricted Under "Project Glasswing"</span><span class="ko">앤트로픽 클로드 미토스, "프로젝트 글래스윙"으로 제한 공개</span></h3>
+  <div class="source">VentureBeat / The Decoder</div>
+  <p><span class="en">Anthropic announced its most powerful model, Claude Mythos, will NOT be publicly released due to cybersecurity risks. Instead, it's available only to select partners — Amazon, Microsoft, Apple, Google, and Nvidia — under "Project Glasswing" for defensive cybersecurity testing. As of March 2026, Anthropic leads overall model rankings, closely trailed by xAI, Google, and OpenAI.</span><span class="ko">앤트로픽이 가장 강력한 모델 클로드 미토스를 사이버보안 위험으로 공개하지 않겠다고 발표했습니다. 대신 아마존, 마이크로소프트, 애플, 구글, 엔비디아 등 선별된 파트너에게만 "프로젝트 글래스윙"을 통해 방어적 사이버보안 테스트용으로 제공됩니다.</span></p>
+  <a href="https://venturebeat.com/technology/microsoft-launches-3-new-ai-models-in-direct-shot-at-openai-and-google" target="_blank"><span class="en">Read more →</span><span class="ko">자세히 보기 →</span></a>
+</div>
+
+<div class="card">
+  <h3><span class="en">Google Gemini 3.1 Pro Leads Benchmarks; Gemma 4 Open-Sourced</span><span class="ko">구글 제미나이 3.1 프로 벤치마크 선두; 젬마 4 오픈소스 공개</span></h3>
+  <div class="source">LLM Stats / Build Fast With AI</div>
+  <p><span class="en">Google's Gemini 3.1 Pro now leads 13 of 16 major benchmarks and ties GPT-5.4 Pro on the Intelligence Index — at roughly one-third the API cost. Google also open-sourced Gemma 4 under Apache 2.0 with frontier-level performance. Meanwhile, DeepSeek V3.2 delivers ~90% of GPT-5.4's performance at about 1/50th the price, shaking up the cost-efficiency landscape.</span><span class="ko">구글 제미나이 3.1 프로가 16개 주요 벤치마크 중 13개에서 선두를 차지하며 API 비용은 경쟁사의 1/3 수준입니다. 젬마 4도 Apache 2.0 라이선스로 오픈소스 공개됐습니다. 한편 딥시크 V3.2는 GPT-5.4 성능의 약 90%를 1/50 가격에 제공하며 비용 효율 경쟁을 뒤흔들고 있습니다.</span></p>
+  <a href="https://llm-stats.com/llm-updates" target="_blank"><span class="en">Read more →</span><span class="ko">자세히 보기 →</span></a>
+</div>
+
+<div class="card">
+  <h3><span class="en">Meta Debuts Proprietary "Muse Spark" Model Under Alexandr Wang</span><span class="ko">메타, 알렉산드르 왕 체제 첫 독점 모델 "뮤즈 스파크" 공개</span></h3>
+  <div class="source">CNBC</div>
+  <p><span class="en">Meta unveiled Muse Spark, its first major AI model developed under chief AI officer Alexandr Wang. In a notable strategic shift, Muse Spark is proprietary rather than open-source, breaking from Meta's established Llama tradition. The company said there is "hope to open-source future versions," but the move signals Meta's intent to compete head-to-head with closed-model rivals.</span><span class="ko">메타가 AI 책임자 알렉산드르 왕 체제에서 개발한 첫 주요 AI 모델 뮤즈 스파크를 공개했습니다. 라마 시리즈의 오픈소스 전통과 달리 독점 모델로 출시되어, 폐쇄형 모델 경쟁사들과의 정면 대결 의지를 보여주고 있습니다.</span></p>
+  <a href="https://www.cnbc.com/2026/04/08/meta-debuts-first-major-ai-model-since-14-billion-deal-to-bring-in-alexandr-wang.html" target="_blank"><span class="en">Read more →</span><span class="ko">자세히 보기 →</span></a>
+</div>
+
+<!-- MARKETS & BUSINESS -->
+<div class="section-title"><span class="tag tag-mkt"><span class="en">Markets & Business</span><span class="ko">시장 & 비즈니스</span></span></div>
+
+<div class="card">
+  <h3><span class="en">Q1 2026 Venture Funding Shatters Records at $300B — AI Takes 80%</span><span class="ko">2026년 1분기 벤처 투자 3,000억 달러 사상 최대 — AI가 80% 차지</span></h3>
+  <div class="source">Crunchbase News / TechCrunch</div>
+  <p><span class="en">Q1 2026 saw $300 billion poured into 6,000 startups globally — a 150%+ increase over the prior quarter and an all-time record. AI alone captured $242 billion (80%). The quarter was dominated by mega-rounds: OpenAI raised $122B at an $852B valuation, Anthropic $30B at $380B, xAI $20B, and Waymo $16B. Capital concentration in AI infrastructure is unprecedented.</span><span class="ko">2026년 1분기에 전 세계 6,000개 스타트업에 3,000억 달러가 투자되어 사상 최대 기록을 세웠습니다. AI만 2,420억 달러(80%)를 차지했으며, OpenAI 1,220억, 앤트로픽 300억, xAI 200억, 웨이모 160억 달러 등 메가 라운드가 주도했습니다.</span></p>
+  <a href="https://news.crunchbase.com/venture/record-breaking-funding-ai-global-q1-2026/" target="_blank"><span class="en">Read more →</span><span class="ko">자세히 보기 →</span></a>
+</div>
+
+<div class="card">
+  <h3><span class="en">Microsoft Launches 3 In-House AI Models, Challenging OpenAI Directly</span><span class="ko">마이크로소프트, 자체 AI 모델 3종 출시로 OpenAI에 도전</span></h3>
+  <div class="source">VentureBeat / GeekWire</div>
+  <p><span class="en">Microsoft launched three foundational AI models built entirely in-house: MAI-Transcribe-1 (speech), MAI-Voice-1 (voice generation), and MAI-Image-2 (image creation). Available through Microsoft Foundry, MAI-Transcribe-1 reportedly beats OpenAI's Whisper on all 25 tested languages and Google's Gemini 3.1 Flash on 22 of 25 — the clearest signal yet that Microsoft intends to compete directly with its own partner.</span><span class="ko">마이크로소프트가 자체 개발한 AI 모델 3종을 출시했습니다: MAI-Transcribe-1(음성 인식), MAI-Voice-1(음성 생성), MAI-Image-2(이미지 생성). MAI-Transcribe-1은 25개 언어에서 OpenAI 위스퍼를 능가한다고 주장하며, 자사 파트너 OpenAI와의 직접 경쟁 의지를 분명히 했습니다.</span></p>
+  <a href="https://venturebeat.com/technology/microsoft-launches-3-new-ai-models-in-direct-shot-at-openai-and-google" target="_blank"><span class="en">Read more →</span><span class="ko">자세히 보기 →</span></a>
+</div>
+
+<!-- SEMICONDUCTORS -->
+<div class="section-title"><span class="tag tag-semi"><span class="en">Semiconductors</span><span class="ko">반도체</span></span></div>
+
+<div class="card">
+  <h3><span class="en">Global Chip Sales Set to Surpass $1.3 Trillion in 2026</span><span class="ko">2026년 글로벌 반도체 매출 1.3조 달러 돌파 전망</span></h3>
+  <div class="source">Gartner / Digitimes</div>
+  <p><span class="en">Gartner projects global semiconductor revenue will cross $1.3 trillion in 2026, representing 64% year-over-year growth. February sales hit $88.8B — up 61.8% from February 2025. Growth is driven by AI processor demand, data center networking, and a memory chip supercycle. AI semiconductors are expected to account for roughly 30% of total chip revenue. TSMC reports Q1 earnings on April 16.</span><span class="ko">가트너는 2026년 글로벌 반도체 매출이 1.3조 달러를 돌파할 것으로 전망했습니다(전년 대비 64% 성장). 2월 매출은 888억 달러로 전년 동월 대비 61.8% 증가했으며, AI 프로세서 수요와 메모리 칩 슈퍼사이클이 성장을 견인하고 있습니다. TSMC는 4월 16일 1분기 실적을 발표합니다.</span></p>
+  <a href="https://cxovoice.com/gartner-forecasts-global-semiconductor-revenue-to-surpass-1-3-trillion-in-2026/" target="_blank"><span class="en">Read more →</span><span class="ko">자세히 보기 →</span></a>
+</div>
+
+<div class="card">
+  <h3><span class="en">China Achieves 1,000x Faster 2D Semiconductor Wafer Growth</span><span class="ko">중국, 2D 반도체 웨이퍼 성장 속도 1,000배 달성</span></h3>
+  <div class="source">South China Morning Post / TrendForce</div>
+  <p><span class="en">A joint team from China's National University of Defense Technology and the Chinese Academy of Sciences achieved wafer-scale growth of 2D semiconductor materials at 1,000x previous speeds. Using a liquid gold/tungsten bilayer substrate in a reengineered CVD process, they enabled monolayer WSi₂N₄ films with tunable doping — a critical advance for sub-5nm chips beyond Moore's Law.</span><span class="ko">중국 국방과학기술대학과 중국과학원 공동 연구팀이 2D 반도체 소재의 웨이퍼 스케일 성장을 기존보다 1,000배 빠르게 달성했습니다. 개량된 CVD 공정으로 도핑 조절이 가능한 단층 WSi₂N₄ 필름을 생산하며, 무어의 법칙을 넘어서는 서브 5nm 칩의 핵심 돌파구를 열었습니다.</span></p>
+  <a href="https://www.scmp.com/news/china/science/article/3349677/semiconductor-leap-china-looks-next-gen-2d-chip-1000-fold-growth-speed" target="_blank"><span class="en">Read more →</span><span class="ko">자세히 보기 →</span></a>
+</div>
+
+<!-- WILD CARD -->
+<div class="section-title"><span class="tag tag-wild"><span class="en">Wild Card</span><span class="ko">와일드 카드</span></span></div>
+
+<div class="card">
+  <h3><span class="en">Rockstar Games Hacked by ShinyHunters; Data Dumped After Ransom Refused</span><span class="ko">록스타 게임즈 해킹 — 몸값 거부 후 데이터 유출</span></h3>
+  <div class="source">Tom's Hardware / Kotaku</div>
+  <p><span class="en">Hacking group ShinyHunters breached Rockstar Games' Snowflake cloud instances via a third-party tool exploit, stealing financial data and authentication tokens. When Rockstar refused to pay the ransom by the April 14 deadline, ShinyHunters released the data a day early. Rockstar downplayed the breach as "non-material company information" with "no impact on players."</span><span class="ko">해킹 그룹 ShinyHunters가 서드파티 도구 취약점을 이용해 록스타 게임즈의 스노우플레이크 클라우드를 침해하고 금융 데이터와 인증 토큰을 탈취했습니다. 록스타가 4월 14일 마감까지 몸값 지불을 거부하자 하루 일찍 데이터를 공개했으며, 록스타는 "플레이어에게 영향 없는 비핵심 정보"라고 축소 발표했습니다.</span></p>
+  <a href="https://www.tomshardware.com/tech-industry/cyber-security/rockstar-games-confirms-it-was-hacked-by-malicious-group-shinyhunters-takes-credit-gives-until-april-14-to-pay-ransom-or-risk-leaking-confidential-data-shinyhunters" target="_blank"><span class="en">Read more →</span><span class="ko">자세히 보기 →</span></a>
+</div>
+
+<div class="card">
+  <h3><span class="en">First U.S. Conviction Under AI-Generated Explicit Imagery Law</span><span class="ko">미국 최초 AI 생성 음란물 법률 유죄 판결</span></h3>
+  <div class="source">Tech Startups</div>
+  <p><span class="en">An Ohio man became the first person in the U.S. convicted under a state law specifically targeting AI-generated sexually explicit imagery. Prosecutors used the recently enacted statute to address content created with generative AI tools, marking a legal milestone as courts begin to grapple with AI-generated media. The case sets an early precedent for similar pending lawsuits nationwide.</span><span class="ko">오하이오주 한 남성이 AI 생성 성적 이미지를 대상으로 한 주법에 따라 미국 최초로 유죄 판결을 받았습니다. 검찰은 최근 제정된 법률을 활용해 생성형 AI로 만든 콘텐츠를 기소했으며, 법원이 AI 생성 미디어 문제에 본격적으로 대응하는 법적 이정표가 되었습니다.</span></p>
+  <a href="https://techstartups.com/2026/04/13/top-tech-news-today-april-13-2026/" target="_blank"><span class="en">Read more →</span><span class="ko">자세히 보기 →</span></a>
+</div>
+
+<footer>
+  <span class="en">Curated by Totoro 🌳 for Minjun</span><span class="ko">토토로 🌳가 민준을 위해 큐레이션</span>
+</footer>
+
+<script>
+let isKorean = false;
+function toggleLang() {
+  isKorean = !isKorean;
+  document.querySelectorAll('.en').forEach(el => el.classList.toggle('hide', isKorean));
+  document.querySelectorAll('.ko').forEach(el => el.classList.toggle('show', isKorean));
+  document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+}
+</script>
+</body>
+</html>
