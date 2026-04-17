@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Daily Tech Briefing — Apr 17, 2026</title>
+<style>
+  :root {
+    --bg: #0d1117; --card: #161b22; --border: #30363d;
+    --text: #c9d1d9; --heading: #f0f6fc; --accent: #58a6ff;
+    --tag-ai: #7ee787; --tag-mkt: #f78166; --tag-semi: #d2a8ff; --tag-wild: #ffa657;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; padding: 16px; max-width: 720px; margin: 0 auto; }
+  header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
+  h1 { font-size: 1.4rem; color: var(--heading); }
+  .date { color: #8b949e; font-size: 0.85rem; margin-top: 4px; }
+  .lang-toggle { background: var(--card); color: var(--accent); border: 1px solid var(--border); padding: 6px 14px; border-radius: 20px; cursor: pointer; font-size: 0.85rem; white-space: nowrap; }
+  .lang-toggle:hover { background: var(--border); }
+  .section-title { font-size: 1.1rem; color: var(--heading); margin: 24px 0 12px; display: flex; align-items: center; gap: 8px; }
+  .tag { font-size: 0.7rem; padding: 2px 8px; border-radius: 12px; font-weight: 600; text-transform: uppercase; }
+  .tag-ai { background: rgba(126,231,135,0.15); color: var(--tag-ai); }
+  .tag-mkt { background: rgba(247,129,102,0.15); color: var(--tag-mkt); }
+  .tag-semi { background: rgba(210,168,255,0.15); color: var(--tag-semi); }
+  .tag-wild { background: rgba(255,166,87,0.15); color: var(--tag-wild); }
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px; margin-bottom: 12px; }
+  .card h3 { color: var(--heading); font-size: 1rem; margin-bottom: 6px; }
+  .card .source { color: #8b949e; font-size: 0.8rem; margin-bottom: 8px; }
+  .card p { font-size: 0.9rem; }
+  .card a { color: var(--accent); text-decoration: none; font-size: 0.85rem; }
+  .card a:hover { text-decoration: underline; }
+  footer { text-align: center; color: #484f58; font-size: 0.75rem; margin-top: 32px; padding-top: 16px; border-top: 1px solid var(--border); }
+  .ko { display: none; }
+  .ko.show { display: inline !important; }
+  .en.hide { display: none !important; }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>🌳 <span class="en">Daily Tech Briefing</span><span class="ko">오늘의 테크 브리핑</span></h1>
+    <div class="date"><span class="en">Friday, April 17, 2026</span><span class="ko">2026년 4월 17일 금요일</span></div>
+  </div>
+  <button class="lang-toggle" onclick="toggleLang()">한국어</button>
+</header>
+
+<div class="audio-player" style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:24px">
+  <div style="font-size:0.85rem;color:#8b949e;margin-bottom:8px"><span class="en">🎙️ Morning Briefing Audio</span><span class="ko">🎙️ 모닝 브리핑 오디오</span></div>
+  <audio controls style="width:100%"><source src="briefing-2026-04-17.mp3" type="audio/mpeg"></audio>
+</div>
+
+<!-- AI & TECH -->
+<div class="section-title"><span class="tag tag-ai">AI & Tech</span></div>
+
+<div class="card">
+  <h3><span class="en">OpenAI Launches GPT-Rosalind for Drug Discovery & Life Sciences</span><span class="ko">OpenAI, 신약 개발용 GPT-Rosalind 출시</span></h3>
+  <div class="source">OpenAI / Bloomberg</div>
+  <p><span class="en">OpenAI unveiled GPT-Rosalind, its first specialized model for life sciences — named after DNA pioneer Rosalind Franklin. The model supports evidence synthesis, hypothesis generation, and experimental planning for drug discovery and genomics. Amgen, Moderna, and Thermo Fisher are among early partners in the gated-access program.</span><span class="ko">OpenAI가 DNA 선구자 로잘린드 프랭클린의 이름을 딴 최초의 생명과학 특화 모델 GPT-Rosalind를 공개했습니다. 신약 개발과 유전체학을 위한 증거 합성, 가설 생성, 실험 계획을 지원하며, Amgen·Moderna·Thermo Fisher 등이 초기 파트너로 참여합니다.</span></p>
+  <a href="https://openai.com/index/introducing-gpt-rosalind/" target="_blank"><span class="en">Read more →</span><span class="ko">자세히 보기 →</span></a>
+</div>
+
+<div class="card">
+  <h3><span class="en">Mozilla Launches Thunderbolt: Open-Source, Self-Hosted AI Client</span><span class="ko">Mozilla, 오픈소스 자체 호스팅 AI 클라이언트 Thunderbolt 출시</span></h3>
+  <div class="source">Mozilla / The Register</div>
+  <p><span class="en">Mozilla's MZLA Technologies launched Thunderbolt, an open-source AI workspace that lets enterprises run self-hosted chatbots on their own infrastructure. It supports any model — commercial or open-source — and connects to enterprise data via Haystack and MCP servers. A privacy-first alternative to Copilot and ChatGPT Enterprise.</span><span class="ko">Mozilla의 MZLA Technologies가 기업이 자체 인프라에서 챗봇을 운영할 수 있는 오픈소스 AI 워크스페이스 Thunderbolt를 출시했습니다. 상용·오픈소스 모델을 모두 지원하며, Haystack과 MCP 서버로 기업 데이터에 연결합니다. Copilot·ChatGPT Enterprise의 프라이버시 중심 대안입니다.</span></p>
+  <a href="https://www.phoronix.com/news/Mozilla-Thunderbolt" target="_blank"><span class="en">Read more →</span><span class="ko">자세히 보기 →</span></a>
+</div>
+
+<div class="card">
+  <h3><span class="en">Stanford AI Index 2026: Anthropic Leads Benchmarks, AI Costs Plummet</span><span class="ko">스탠퍼드 AI 인덱스 2026: Anthropic 벤치마크 선두, AI 비용 급감</span></h3>
+  <div class="source">Stanford HAI / IEEE Spectrum</div>
+  <p><span class="en">Stanford's 2026 AI Index report shows Anthropic leading model performance, with Claude Opus 4.6 and Google's Gemini 3.1 Pro both topping 50% on Humanity's Last Exam. The report highlights that 75% of AI's economic gains are being captured by just 20% of companies, per PwC's companion study.</span><span class="ko">스탠퍼드 2026 AI 인덱스 보고서에 따르면 Anthropic이 모델 성능에서 선두를 달리고 있으며, Claude Opus 4.6과 Google Gemini 3.1 Pro가 Humanity's Last Exam에서 50%를 돌파했습니다. PwC 연구에 따르면 AI 경제적 이익의 75%를 상위 20% 기업이 차지하고 있습니다.</span></p>
+  <a href="https://hai.stanford.edu/news/inside-the-ai-index-12-takeaways-from-the-2026-report" target="_blank"><span class="en">Read more →</span><span class="ko">자세히 보기 →</span></a>
+</div>
+
+<div class="card">
+  <h3><span class="en">Q1 2026 Venture Funding Shatters Records: $300B with 80% Going to AI</span><span class="ko">2026년 1분기 벤처 투자 사상 최고: 3000억 달러, 80%가 AI</span></h3>
+  <div class="source">Crunchbase / TechCrunch</div>
+  <p><span class="en">Global venture funding hit an all-time high of $300 billion in Q1 2026 — up 150% year over year. AI dominated with $242 billion (80% of total). The four largest rounds ever were all AI: OpenAI ($122B), Anthropic ($30B), xAI ($20B), and Waymo ($16B), collectively accounting for 65% of all investment.</span><span class="ko">2026년 1분기 글로벌 벤처 투자가 전년 대비 150% 증가한 3000억 달러로 사상 최고치를 기록했습니다. AI가 2420억 달러(80%)를 차지했으며, 역대 최대 4개 라운드 모두 AI 기업: OpenAI(1220억), Anthropic(300억), xAI(200억), Waymo(160억)입니다.</span></p>
+  <a href="https://news.crunchbase.com/venture/record-breaking-funding-ai-global-q1-2026/" target="_blank"><span class="en">Read more →</span><span class="ko">자세히 보기 →</span></a>
+</div>
+
+<!-- MARKETS -->
+<div class="section-title"><span class="tag tag-mkt"><span class="en">Markets</span><span class="ko">시장</span></span></div>
+
+<div class="card">
+  <h3><span class="en">Amazon to Acquire Globalstar for $11.6B, Challenges Starlink</span><span class="ko">Amazon, Globalstar 116억 달러 인수로 Starlink에 도전</span></h3>
+  <div class="source">Bloomberg / TechCrunch</div>
+  <p><span class="en">Amazon agreed to buy satellite operator Globalstar for $11.6 billion ($90/share), gaining LEO satellites, spectrum licenses, and direct-to-device capabilities. The deal includes a partnership with Apple to power Emergency SOS for iPhone and Apple Watch, directly challenging SpaceX's Starlink dominance.</span><span class="ko">Amazon이 위성 운영사 Globalstar을 116억 달러(주당 90달러)에 인수하기로 합의했습니다. LEO 위성, 주파수 면허, 기기 직접 연결 기능을 확보하며, Apple과 협력해 iPhone·Apple Watch의 긴급 SOS를 지원합니다. SpaceX Starlink에 정면 도전합니다.</span></p>
+  <a href="https://techcrunch.com/2026/04/14/amazon-to-buy-globalstar-for-11-57b-in-bid-to-flesh-out-its-satellite-biz/" target="_blank"><span class="en">Read more →</span><span class="ko">자세히 보기 →</span></a>
+</div>
+
+<div class="card">
+  <h3><span class="en">Manycore Surges 187% in Hong Kong IPO, Pivots to AI Robot Training Data</span><span class="ko">Manycore, 홍콩 IPO서 187% 급등 — AI 로봇 훈련 데이터로 전환</span></h3>
+  <div class="source">Bloomberg / Reuters</div>
+  <p><span class="en">Chinese AI company Manycore soared 187% on its Hong Kong debut after raising $156M in its IPO. The company is pivoting from consumer software to selling AI training data for robot makers — riding the convergence of generative AI and physical robotics that's attracting massive investor interest in Asia.</span><span class="ko">중국 AI 기업 Manycore가 1억 5600만 달러 IPO 후 홍콩 상장 첫날 187% 급등했습니다. 소비자 소프트웨어에서 로봇 제조사를 위한 AI 훈련 데이터 판매로 전환 중이며, 생성형 AI와 물리적 로봇공학의 융합에 투자자들의 관심이 집중되고 있습니다.</span></p>
+  <a href="https://www.bloomberg.com/news/articles/2026-04-16/manycore-surges-in-hong-kong-ipo" target="_blank"><span class="en">Read more →</span><span class="ko">자세히 보기 →</span></a>
+</div>
+
+<!-- SEMICONDUCTORS -->
+<div class="section-title"><span class="tag tag-semi"><span class="en">Semiconductors</span><span class="ko">반도체</span></span></div>
+
+<div class="card">
+  <h3><span class="en">Cerebras Targets April Nasdaq IPO at $22-25B Valuation</span><span class="ko">Cerebras, 4월 나스닥 IPO 목표 — 220~250억 달러 가치</span></h3>
+  <div class="source">Seeking Alpha / AI Certs</div>
+  <p><span class="en">AI chip startup Cerebras is preparing for a Nasdaq listing this month, aiming to raise ~$2B at a $22-25B valuation with Morgan Stanley leading. Its WSE-3 wafer-scale chip packs 4 trillion transistors and 900,000 cores, claiming 21x performance over Nvidia's DGX B200. A $10B compute deal with OpenAI anchors the revenue story.</span><span class="ko">AI 칩 스타트업 Cerebras가 이달 나스닥 상장을 준비 중이며, Morgan Stanley 주관으로 220~250억 달러 기업가치에서 약 20억 달러 조달을 목표로 합니다. WSE-3 칩은 4조 개 트랜지스터와 90만 코어로 Nvidia DGX B200 대비 21배 성능을 주장하며, OpenAI와 100억 달러 컴퓨팅 계약이 뒷받침됩니다.</span></p>
+  <a href="https://www.aicerts.ai/news/cerebras-targets-april-ai-chip-ipo-to-raise-2-billion/" target="_blank"><span class="en">Read more →</span><span class="ko">자세히 보기 →</span></a>
+</div>
+
+<div class="card">
+  <h3><span class="en">ASML Raises 2026 Outlook: Chip Supply Can't Keep Up with AI Demand</span><span class="ko">ASML, 2026년 전망 상향 — 반도체 공급이 AI 수요 못 따라가</span></h3>
+  <div class="source">CNBC / GuruFocus</div>
+  <p><span class="en">ASML upgraded its 2026 revenue forecast to €36-40 billion as AI-driven chip demand continues to outstrip supply. CEO Christoph de Roover confirmed that production capacity for storage and advanced logic chips is "already fully booked" for 2026. The global semiconductor industry is tracking toward ~$1 trillion in annual sales.</span><span class="ko">ASML이 AI 기반 칩 수요가 공급을 계속 초과함에 따라 2026년 매출 전망을 360~400억 유로로 상향했습니다. CEO는 2026년 스토리지·첨단 로직 칩 생산 능력이 "이미 완전 예약"되었다고 확인했습니다. 글로벌 반도체 산업은 연간 매출 약 1조 달러를 향해 나아가고 있습니다.</span></p>
+  <a href="https://www.cnbc.com/2026/04/15/asml-q1-2026-earnings-report.html" target="_blank"><span class="en">Read more →</span><span class="ko">자세히 보기 →</span></a>
+</div>
+
+<!-- WILD CARD -->
+<div class="section-title"><span class="tag tag-wild"><span class="en">Wild Card</span><span class="ko">와일드 카드</span></span></div>
+
+<div class="card">
+  <h3><span class="en">World's First Quantum Battery Prototype: Charges Faster as It Scales</span><span class="ko">세계 최초 양자 배터리 시제품: 커질수록 더 빨리 충전</span></h3>
+  <div class="source">CSIRO / ScienceDaily</div>
+  <p><span class="en">Australian scientists from CSIRO, University of Melbourne, and RMIT built the world's first working quantum battery — a multi-layered organic microcavity wirelessly charged by laser. Using quantum superposition and entanglement instead of chemistry, it achieves "super absorption" charging. The wild part: it gets more efficient as it scales up. Current limitation — it only holds charge for nanoseconds.</span><span class="ko">CSIRO·멜버른대·RMIT 과학자들이 세계 최초 양자 배터리 시제품을 제작했습니다. 레이저로 무선 충전하는 다층 유기 마이크로캐비티로, 화학 반응 대신 양자 중첩과 얽힘을 이용한 '초흡수' 충전을 구현합니다. 놀랍게도 크기가 커질수록 효율이 높아지지만, 아직 나노초 단위로만 전하를 유지합니다.</span></p>
+  <a href="https://www.csiro.au/en/news/All/News/2026/March/Quantum-battery-full-cycle" target="_blank"><span class="en">Read more →</span><span class="ko">자세히 보기 →</span></a>
+</div>
+
+<div class="card">
+  <h3><span class="en">Wayve Secures $60M from Qualcomm, AMD & Arm for Autonomous Driving</span><span class="ko">Wayve, Qualcomm·AMD·Arm으로부터 6천만 달러 확보</span></h3>
+  <div class="source">TechCrunch / Tech Startups</div>
+  <p><span class="en">London-based autonomous driving startup Wayve raised $60 million from chip giants Qualcomm, AMD, and Arm Holdings. The investment signals growing convergence between semiconductor makers and self-driving AI — with chipmakers moving beyond supplying hardware to directly backing the software intelligence that runs on it.</span><span class="ko">런던 자율주행 스타트업 Wayve가 반도체 대기업 Qualcomm·AMD·Arm Holdings로부터 6천만 달러를 확보했습니다. 칩 제조사들이 하드웨어 공급을 넘어 그 위에서 작동하는 소프트웨어 지능에 직접 투자하며, 반도체와 자율주행 AI의 융합이 가속화되고 있습니다.</span></p>
+  <a href="https://techstartups.com/2026/04/15/top-startup-and-tech-funding-news-april-15-2025/" target="_blank"><span class="en">Read more →</span><span class="ko">자세히 보기 →</span></a>
+</div>
+
+<footer>
+  <span class="en">Curated by Totoro 🌳 for Minjun</span><span class="ko">토토로 🌳가 민준을 위해 큐레이션</span>
+</footer>
+
+<script>
+let isKorean = false;
+function toggleLang() {
+  isKorean = !isKorean;
+  document.querySelectorAll('.en').forEach(el => el.classList.toggle('hide', isKorean));
+  document.querySelectorAll('.ko').forEach(el => el.classList.toggle('show', isKorean));
+  document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+}
+</script>
+</body>
+</html>
