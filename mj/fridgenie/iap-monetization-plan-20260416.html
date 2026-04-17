@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fridgenie — Apple Subscription Monetization Plan</title>
+<style>
+  :root {
+    --bg: #0d1117; --card: #161b22; --border: #30363d;
+    --text: #c9d1d9; --heading: #f0f6fc; --accent: #58a6ff;
+    --green: #7ee787; --orange: #ffa657; --purple: #d2a8ff; --red: #f78166;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.7; padding: 16px; max-width: 780px; margin: 0 auto; }
+  header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 28px; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
+  h1 { font-size: 1.4rem; color: var(--heading); }
+  .subtitle { color: #8b949e; font-size: 0.85rem; margin-top: 4px; }
+  .lang-toggle { background: var(--card); color: var(--accent); border: 1px solid var(--border); padding: 6px 14px; border-radius: 20px; cursor: pointer; font-size: 0.85rem; white-space: nowrap; flex-shrink: 0; margin-left: 12px; }
+  .toc { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 32px; }
+  .toc-title { color: var(--heading); font-weight: 600; margin-bottom: 12px; }
+  .toc ol { padding-left: 20px; }
+  .toc li { margin-bottom: 6px; font-size: 0.88rem; }
+  .toc a { color: var(--accent); text-decoration: none; }
+  h2 { color: var(--heading); font-size: 1.2rem; margin: 36px 0 16px; padding-left: 12px; border-left: 3px solid var(--accent); }
+  h3 { color: var(--heading); font-size: 1rem; margin: 20px 0 10px; }
+  h4 { color: #8b949e; font-size: 0.85rem; margin: 14px 0 8px; text-transform: uppercase; letter-spacing: 0.04em; }
+  p { margin-bottom: 12px; font-size: 0.9rem; }
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  .highlight { background: rgba(88,166,255,0.08); border: 1px solid rgba(88,166,255,0.3); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  .highlight.green { background: rgba(126,231,135,0.08); border-color: rgba(126,231,135,0.3); }
+  .highlight.warn { background: rgba(255,166,87,0.08); border-color: rgba(255,166,87,0.3); }
+  .highlight.red { background: rgba(247,129,102,0.08); border-color: rgba(247,129,102,0.3); }
+  .highlight strong { color: var(--heading); }
+  .flow-step { display: flex; gap: 12px; margin-bottom: 12px; align-items: flex-start; }
+  .step-num { background: var(--accent); color: #000; border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700; flex-shrink: 0; margin-top: 2px; }
+  .step-content { font-size: 0.9rem; }
+  .step-content strong { color: var(--heading); }
+  .phase-box { background: #0d1f0d; border: 1px solid #2ea043; border-radius: 12px; padding: 20px; margin-bottom: 20px; }
+  .phase-title { color: var(--green); font-weight: 700; margin-bottom: 6px; font-size: 1rem; }
+  .phase-meta { color: #8b949e; font-size: 0.82rem; margin-bottom: 12px; }
+  pre { background: #010409; border: 1px solid var(--border); border-radius: 8px; padding: 14px; overflow-x: auto; margin-bottom: 16px; }
+  code { font-family: 'SF Mono', 'Fira Code', Menlo, monospace; font-size: 0.82rem; color: #e6edf3; }
+  p code, li code, td code { background: #1c2128; padding: 2px 6px; border-radius: 4px; font-size: 0.82rem; }
+  .table-wrap { overflow-x: auto; margin-bottom: 16px; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.84rem; }
+  th { background: #1c2128; color: var(--heading); padding: 8px 10px; text-align: left; border: 1px solid var(--border); }
+  td { padding: 8px 10px; border: 1px solid var(--border); vertical-align: top; }
+  tr:nth-child(even) td { background: #0d1117; }
+  tr:nth-child(odd) td { background: #161b22; }
+  ul, ol { padding-left: 20px; margin-bottom: 12px; font-size: 0.9rem; }
+  li { margin-bottom: 5px; }
+  footer { text-align: center; color: #484f58; font-size: 0.75rem; margin-top: 40px; padding-top: 16px; border-top: 1px solid var(--border); }
+  .ko { display: none; }
+  .ko.show { display: inline !important; }
+  .en.hide { display: none !important; }
+  .badge { display: inline-block; font-size: 0.7rem; padding: 2px 8px; border-radius: 12px; font-weight: 600; margin-left: 6px; }
+  .badge-done { background: rgba(126,231,135,0.15); color: var(--green); }
+  .badge-todo { background: rgba(255,166,87,0.15); color: var(--orange); }
+  .badge-easy { background: rgba(88,166,255,0.15); color: var(--accent); }
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <h1>💳 <span class="en">Fridgenie — Apple Subscription Plan</span><span class="ko">Fridgenie — 애플 구독 플랜</span></h1>
+    <div class="subtitle"><span class="en">Complete monetization roadmap · April 16, 2026</span><span class="ko">완전한 수익화 로드맵 · 2026년 4월 16일</span></div>
+  </div>
+  <button class="lang-toggle" onclick="toggleLang()">한국어</button>
+</header>
+
+<div class="toc">
+  <div class="toc-title">📋 <span class="en">Table of Contents</span><span class="ko">목차</span></div>
+  <ol>
+    <li><a href="#s1"><span class="en">How Apple Subscriptions Work (Behind the Scenes)</span><span class="ko">애플 구독이 작동하는 방식 (내부 구조)</span></a></li>
+    <li><a href="#s2"><span class="en">Flutter Package Choice: RevenueCat vs in_app_purchase</span><span class="ko">Flutter 패키지 선택: RevenueCat vs in_app_purchase</span></a></li>
+    <li><a href="#s3"><span class="en">Promo Codes — Two Systems Explained</span><span class="ko">프로모 코드 — 두 가지 시스템 설명</span></a></li>
+    <li><a href="#s4"><span class="en">Discounts & Special Occasions</span><span class="ko">할인 & 특별 행사</span></a></li>
+    <li><a href="#s5"><span class="en">Implementation Roadmap (5 Phases)</span><span class="ko">구현 로드맵 (5단계)</span></a></li>
+    <li><a href="#s6"><span class="en">What Happens Behind the Scenes — Simple Stories</span><span class="ko">내부에서 무슨 일이? — 쉬운 설명</span></a></li>
+    <li><a href="#s7"><span class="en">Effort Estimate & Recommendation</span><span class="ko">작업량 예상 & 추천</span></a></li>
+  </ol>
+</div>
+
+<!-- SECTION 1 -->
+<div id="s1">
+<h2>1. <span class="en">How Apple Subscriptions Work (Behind the Scenes)</span><span class="ko">애플 구독이 작동하는 방식 (내부 구조)</span></h2>
+
+<div class="highlight">
+<strong>🧠 <span class="en">The big picture:</span><span class="ko">큰 그림:</span></strong><br>
+<span class="en">Apple is the payment processor. You set products in App Store Connect. Your app calls StoreKit to show the payment sheet. Apple charges the user. Apple sends your server a receipt to verify. You update Supabase. User gets Pro.</span><span class="ko">애플이 결제 처리자입니다. App Store Connect에서 상품을 설정하고, 앱에서 StoreKit으로 결제 시트를 표시합니다. 애플이 사용자에게 청구하고, 서버에 영수증을 전송합니다. Supabase를 업데이트하면 사용자가 Pro가 됩니다.</span>
+</div>
+
+<h3><span class="en">Step-by-Step: User Subscribes</span><span class="ko">단계별: 사용자가 구독할 때</span></h3>
+<div class="flow-step"><div class="step-num">1</div><div class="step-content"><strong><span class="en">User taps "Subscribe $4.99/mo"</span><span class="ko">사용자가 "구독 $4.99/월" 탭</span></strong><br><span class="en">Your Flutter app calls StoreKit (Apple's payment API) to present the system payment sheet.</span><span class="ko">Flutter 앱이 StoreKit(애플 결제 API)을 호출해 시스템 결제 시트를 표시합니다.</span></div></div>
+<div class="flow-step"><div class="step-num">2</div><div class="step-content"><strong><span class="en">Apple shows native payment sheet</span><span class="ko">애플이 기본 결제 시트 표시</span></strong><br><span class="en">The familiar Face ID + confirm dialog. You never touch the user's payment info — Apple handles it entirely.</span><span class="ko">익숙한 Face ID + 확인 대화상자. 사용자 결제 정보를 직접 다루지 않습니다 — 애플이 완전히 처리합니다.</span></div></div>
+<div class="flow-step"><div class="step-num">3</div><div class="step-content"><strong><span class="en">Apple charges user → sends transaction to your app</span><span class="ko">애플이 사용자에게 청구 → 앱에 트랜잭션 전송</span></strong><br><span class="en">StoreKit delivers a signed transaction object to your Flutter app. This contains a receipt/token proving the purchase.</span><span class="ko">StoreKit이 서명된 트랜잭션 객체를 Flutter 앱에 전달합니다. 구매를 증명하는 영수증/토큰이 포함됩니다.</span></div></div>
+<div class="flow-step"><div class="step-num">4</div><div class="step-content"><strong><span class="en">Your app sends receipt to your Supabase Edge Function</span><span class="ko">앱이 Supabase Edge Function에 영수증 전송</span></strong><br><span class="en">Never validate receipts client-side — hackers can fake them. Your server calls Apple's API to verify it's real.</span><span class="ko">클라이언트에서 영수증을 검증하지 마세요 — 해커가 위조할 수 있습니다. 서버에서 애플 API를 호출해 진짜인지 확인합니다.</span></div></div>
+<div class="flow-step"><div class="step-num">5</div><div class="step-content"><strong><span class="en">Edge Function verifies with Apple → updates Supabase</span><span class="ko">Edge Function이 애플로 검증 → Supabase 업데이트</span></strong><br><span class="en"><code>UPDATE profiles SET subscription_tier = 'pro' WHERE id = user_id</code>. That's the money shot.</span><span class="ko"><code>UPDATE profiles SET subscription_tier = 'pro' WHERE id = user_id</code>. 핵심 동작입니다.</span></div></div>
+<div class="flow-step"><div class="step-num">6</div><div class="step-content"><strong><span class="en">App invalidates subscriptionTierProvider → user sees Pro UI</span><span class="ko">앱이 subscriptionTierProvider 무효화 → 사용자가 Pro UI 확인</span></strong><br><span class="en">Riverpod re-fetches the tier from Supabase. Gates open. Paywall disappears.</span><span class="ko">Riverpod이 Supabase에서 티어를 다시 가져옵니다. 게이트가 열립니다. 페이월이 사라집니다.</span></div></div>
+
+<h3><span class="en">Auto-Renewal (Monthly)</span><span class="ko">자동 갱신 (월별)</span></h3>
+<p><span class="en">Apple handles renewals automatically every 30 days. You don't write any code for this — Apple charges the user and sends your server a notification. Your server just needs to listen for it. If payment fails, Apple retries for up to 60 days before cancelling.</span><span class="ko">애플이 30일마다 자동으로 갱신을 처리합니다. 코드를 작성할 필요가 없습니다 — 애플이 청구하고 서버에 알림을 보냅니다. 서버는 이를 수신하기만 하면 됩니다. 결제 실패 시 애플이 최대 60일간 재시도한 후 취소합니다.</span></p>
+
+<h3><span class="en">StoreKit 2 vs StoreKit 1 — Which to Use?</span><span class="ko">StoreKit 2 vs StoreKit 1 — 어떤 것을 사용?</span></h3>
+<div class="table-wrap"><table>
+<tr><th></th><th>StoreKit 1</th><th>StoreKit 2 ✅</th></tr>
+<tr><td><span class="en">Introduced</span><span class="ko">도입</span></td><td>iOS 3</td><td>iOS 15+</td></tr>
+<tr><td><span class="en">Receipt format</span><span class="ko">영수증 형식</span></td><td><span class="en">Base64 blob (complex)</span><span class="ko">Base64 블롭 (복잡)</span></td><td>JWS (simple JSON)</td></tr>
+<tr><td><span class="en">Server notifications</span><span class="ko">서버 알림</span></td><td>V1 (limited)</td><td>V2 (rich, reliable)</td></tr>
+<tr><td><span class="en">Minimum iOS</span><span class="ko">최소 iOS</span></td><td>Any</td><td>iOS 15</td></tr>
+<tr><td><span class="en">Recommendation</span><span class="ko">추천</span></td><td></td><td>✅ <span class="en">Use this for new apps</span><span class="ko">새 앱에는 이것 사용</span></td></tr>
+</table></div>
+<p><span class="en">Fridgenie already requires iOS 16+ so StoreKit 2 is fine. Use RevenueCat SDK — it abstracts both versions automatically.</span><span class="ko">Fridgenie는 이미 iOS 16+를 요구하므로 StoreKit 2가 적합합니다. RevenueCat SDK를 사용하면 두 버전을 자동으로 추상화합니다.</span></p>
+</div>
+
+<!-- SECTION 2 -->
+<div id="s2">
+<h2>2. <span class="en">Flutter Package Choice: RevenueCat vs in_app_purchase</span><span class="ko">Flutter 패키지 선택: RevenueCat vs in_app_purchase</span></h2>
+
+<div class="table-wrap"><table>
+<tr><th></th><th>in_app_purchase <span class="en">(official Flutter)</span><span class="ko">(공식 Flutter)</span></th><th>purchases_flutter (RevenueCat) ✅</th></tr>
+<tr><td><span class="en">Maintained by</span><span class="ko">관리자</span></td><td>Flutter team</td><td>RevenueCat (dedicated IAP company)</td></tr>
+<tr><td><span class="en">Code required</span><span class="ko">필요 코드</span></td><td><span class="en">~500 lines</span><span class="ko">~500줄</span></td><td><span class="en">~50 lines</span><span class="ko">~50줄</span></td></tr>
+<tr><td><span class="en">Receipt validation</span><span class="ko">영수증 검증</span></td><td><span class="en">You build it</span><span class="ko">직접 구축</span></td><td><span class="en">Built-in (their servers)</span><span class="ko">내장 (그들의 서버)</span></td></tr>
+<tr><td><span class="en">Server notifications</span><span class="ko">서버 알림</span></td><td><span class="en">You build webhook handler</span><span class="ko">직접 웹훅 핸들러 구축</span></td><td><span class="en">Built-in dashboard</span><span class="ko">내장 대시보드</span></td></tr>
+<tr><td><span class="en">Subscription status tracking</span><span class="ko">구독 상태 추적</span></td><td><span class="en">You query Apple</span><span class="ko">직접 애플에 쿼리</span></td><td><span class="en">SDK handles it</span><span class="ko">SDK가 처리</span></td></tr>
+<tr><td><span class="en">Analytics dashboard</span><span class="ko">분석 대시보드</span></td><td>❌</td><td>✅ <span class="en">MRR, churn, trials</span><span class="ko">MRR, 이탈률, 트라이얼</span></td></tr>
+<tr><td><span class="en">Promo/offer codes</span><span class="ko">프로모/오퍼 코드</span></td><td><span class="en">Manual</span><span class="ko">수동</span></td><td>✅ <span class="en">Built-in</span><span class="ko">내장</span></td></tr>
+<tr><td><span class="en">Free tier</span><span class="ko">무료 티어</span></td><td>Free</td><td><span class="en">Free up to $2.5k MRR</span><span class="ko">MRR $2,500까지 무료</span></td></tr>
+<tr><td><span class="en">After free tier</span><span class="ko">무료 티어 이후</span></td><td>Free</td><td>1% of revenue</td></tr>
+<tr><td><span class="en">Supabase integration</span><span class="ko">Supabase 통합</span></td><td><span class="en">Build yourself</span><span class="ko">직접 구축</span></td><td><span class="en">Webhook → Edge Function</span><span class="ko">웹훅 → Edge Function</span></td></tr>
+</table></div>
+
+<div class="highlight green">
+<strong>✅ <span class="en">Recommendation: RevenueCat</span><span class="ko">추천: RevenueCat</span></strong><br>
+<span class="en">For a first-time monetization with a Supabase backend, RevenueCat saves you 2-3 days of work. It handles receipt validation, renewal tracking, and lapse detection automatically. Free until you hit $2,500/month revenue — which is great for early stage. At that point you're making real money and 1% is a fair price for what it does.</span><span class="ko">Supabase 백엔드를 가진 첫 번째 수익화에 RevenueCat은 2-3일의 작업을 절약해줍니다. 영수증 검증, 갱신 추적, 실패 감지를 자동으로 처리합니다. 월 $2,500 수익까지 무료 — 초기 단계에 매우 좋습니다. 그 시점에 진짜 수익을 내고 있으니 1%는 합리적인 가격입니다.</span>
+</div>
+
+<pre><code># pubspec.yaml addition
+dependencies:
+  purchases_flutter: ^8.0.0  # RevenueCat SDK
+
+# That's it. One line.</code></pre>
+</div>
+
+<!-- SECTION 3 -->
+<div id="s3">
+<h2>3. <span class="en">Promo Codes — Two Completely Different Systems</span><span class="ko">프로모 코드 — 완전히 다른 두 가지 시스템</span></h2>
+
+<p><span class="en">This is where it gets interesting. There are TWO separate promo code systems and they serve different purposes:</span><span class="ko">흥미로운 부분입니다. 두 가지 별개의 프로모 코드 시스템이 있으며 목적이 다릅니다:</span></p>
+
+<h3><span class="en">System A: Apple Offer Codes (App Store Connect)</span><span class="ko">시스템 A: 애플 오퍼 코드 (App Store Connect)</span></h3>
+<div class="card">
+<p><span class="en"><strong>What it is:</strong> Apple-generated alphanumeric codes that give free/discounted access to your subscription. Redeemed directly in the App Store app.</span><span class="ko"><strong>무엇인가:</strong> 구독에 무료/할인 접근을 제공하는 애플 생성 영숫자 코드. App Store 앱에서 직접 사용합니다.</span></p>
+<p><span class="en"><strong>Use when:</strong> Marketing campaigns, influencer codes, App Store feature negotiations, press review access.</span><span class="ko"><strong>사용 시기:</strong> 마케팅 캠페인, 인플루언서 코드, App Store 피처 협상, 언론 리뷰 접근.</span></p>
+<p><span class="en"><strong>How it works:</strong> Generate up to 1,000 codes/quarter in App Store Connect → Share code → User opens App Store app → Taps "Redeem Gift Card or Code" → Gets subscription for free/discount.</span><span class="ko"><strong>작동 방식:</strong> App Store Connect에서 분기당 최대 1,000개 코드 생성 → 코드 공유 → 사용자가 App Store 앱 열기 → "기프트 카드 또는 코드 사용" 탭 → 무료/할인으로 구독 획득.</span></p>
+<p><span class="en"><strong>Limitation:</strong> Codes are single-use and expire after 6 months. Apple manages everything — you just see the subscription activate.</span><span class="ko"><strong>제한:</strong> 코드는 1회용이고 6개월 후 만료됩니다. 애플이 모든 것을 관리 — 구독 활성화만 확인합니다.</span></p>
+</div>
+
+<h3><span class="en">System B: Your Existing Fridgenie Promo Codes (Supabase)</span><span class="ko">시스템 B: 기존 Fridgenie 프로모 코드 (Supabase)</span></h3>
+<div class="card">
+<p><span class="en"><strong>What it is:</strong> Your custom <code>promo_codes</code> table + <code>redeem_promo_code</code> RPC. User enters a code in YOUR app → Supabase validates → sets <code>subscription_tier = 'pro'</code>.</span><span class="ko"><strong>무엇인가:</strong> 커스텀 <code>promo_codes</code> 테이블 + <code>redeem_promo_code</code> RPC. 사용자가 앱에서 코드 입력 → Supabase 검증 → <code>subscription_tier = 'pro'</code> 설정.</span></p>
+<p><span class="en"><strong>Use when:</strong> Beta access, team/friend codes, internal testing, "FRIDGENIE2026" launch code, gifting Pro to early adopters.</span><span class="ko"><strong>사용 시기:</strong> 베타 접근, 팀/친구 코드, 내부 테스트, "FRIDGENIE2026" 론칭 코드, 얼리 어답터에게 Pro 선물.</span></p>
+<p><span class="en"><strong>Important caveat:</strong> This bypasses Apple's payment system. Apple gets no cut. But Apple's rules say: you cannot use your own promo code system to give access to features that normally cost money through IAP, UNLESS it's for press/reviewers or internal testing. In practice, this is fine for beta — just don't actively advertise it as an alternative to paying.</span><span class="ko"><strong>중요 주의사항:</strong> 애플의 결제 시스템을 우회합니다. 애플에 수수료가 없습니다. 하지만 애플 규정상: IAP를 통해 돈을 내야 하는 기능에 자체 프로모 코드 시스템 사용 불가 (언론/리뷰어 또는 내부 테스트 제외). 실제로 베타에서는 괜찮습니다 — 결제 대안으로 적극적으로 홍보만 하지 않으면 됩니다.</span></p>
+</div>
+
+<h3><span class="en">How Both Systems Coexist in Fridgenie</span><span class="ko">Fridgenie에서 두 시스템의 공존</span></h3>
+<div class="table-wrap"><table>
+<tr><th><span class="en">Scenario</span><span class="ko">시나리오</span></th><th><span class="en">Which System</span><span class="ko">어떤 시스템</span></th><th><span class="en">Result in Supabase</span><span class="ko">Supabase 결과</span></th></tr>
+<tr><td><span class="en">User pays monthly</span><span class="ko">사용자가 월별 결제</span></td><td>Apple IAP + RevenueCat</td><td><span class="en">RevenueCat webhook → Edge Function → tier=pro</span><span class="ko">RevenueCat 웹훅 → Edge Function → tier=pro</span></td></tr>
+<tr><td><span class="en">User redeems Apple Offer Code</span><span class="ko">애플 오퍼 코드 사용</span></td><td>Apple IAP + RevenueCat</td><td><span class="en">Same webhook flow as paying</span><span class="ko">결제와 동일한 웹훅 흐름</span></td></tr>
+<tr><td><span class="en">Beta/friend uses FRIDGENIE2026</span><span class="ko">베타/친구가 FRIDGENIE2026 사용</span></td><td>Fridgenie Supabase promo</td><td><span class="en">Direct DB update, no Apple involved</span><span class="ko">직접 DB 업데이트, 애플 미관여</span></td></tr>
+<tr><td><span class="en">Subscription lapses</span><span class="ko">구독 만료</span></td><td>RevenueCat webhook</td><td><span class="en">Edge Function → tier=free</span><span class="ko">Edge Function → tier=free</span></td></tr>
+</table></div>
+</div>
+
+<!-- SECTION 4 -->
+<div id="s4">
+<h2>4. <span class="en">Discounts & Special Occasions</span><span class="ko">할인 & 특별 행사</span></h2>
+
+<p><span class="en">All discounts for paid subscribers go through <strong>Apple Subscription Offers</strong> — set up in App Store Connect, handled by StoreKit. No server code needed. Here are the 4 types:</span><span class="ko">유료 구독자를 위한 모든 할인은 <strong>애플 구독 오퍼</strong>를 통해 처리됩니다 — App Store Connect에서 설정하고 StoreKit이 처리합니다. 서버 코드 불필요. 4가지 유형:</span></p>
+
+<div class="table-wrap"><table>
+<tr><th><span class="en">Offer Type</span><span class="ko">오퍼 유형</span></th><th><span class="en">Who Sees It</span><span class="ko">대상</span></th><th><span class="en">Example for Fridgenie</span><span class="ko">Fridgenie 예시</span></th><th><span class="en">Setup</span><span class="ko">설정</span></th></tr>
+<tr><td><strong><span class="en">Introductory Offer</span><span class="ko">입문 오퍼</span></strong></td><td><span class="en">New subscribers only (never subscribed before)</span><span class="ko">신규 구독자만 (이전에 구독한 적 없음)</span></td><td><span class="en">7-day free trial, then $4.99/mo</span><span class="ko">7일 무료 체험, 이후 월 $4.99</span></td><td>App Store Connect</td></tr>
+<tr><td><strong><span class="en">Promotional Offer</span><span class="ko">프로모션 오퍼</span></strong></td><td><span class="en">Current OR past subscribers</span><span class="ko">현재 또는 과거 구독자</span></td><td><span class="en">Black Friday: 3 months for $1.99/mo</span><span class="ko">블랙 프라이데이: 3개월 월 $1.99</span></td><td>App Store Connect + your server signs the offer</td></tr>
+<tr><td><strong><span class="en">Offer Code</span><span class="ko">오퍼 코드</span></strong></td><td><span class="en">Anyone with the code</span><span class="ko">코드가 있는 누구나</span></td><td><span class="en">Chuseok: "CHUSEOK25" → 1 month free</span><span class="ko">추석: "CHUSEOK25" → 1개월 무료</span></td><td>App Store Connect only</td></tr>
+<tr><td><strong><span class="en">Win-Back Offer</span><span class="ko">재유치 오퍼</span></strong></td><td><span class="en">Lapsed subscribers (cancelled)</span><span class="ko">만료된 구독자 (취소한 사람)</span></td><td><span class="en">Auto: "Come back, 50% off for 2 months"</span><span class="ko">자동: "돌아오세요, 2개월 50% 할인"</span></td><td>App Store Connect (iOS 17.4+)</td></tr>
+</table></div>
+
+<h3><span class="en">Holiday Campaign Workflow (e.g. Chuseok, Black Friday)</span><span class="ko">명절 캠페인 워크플로 (예: 추석, 블랙 프라이데이)</span></h3>
+<div class="card">
+<ol>
+<li><span class="en">Go to App Store Connect → Your subscription → Subscription Prices → Add Promotional Offer</span><span class="ko">App Store Connect → 구독 → 구독 가격 → 프로모션 오퍼 추가</span></li>
+<li><span class="en">Set: "Chuseok Special" → $0.99/mo for 3 months → starts Sep 15, ends Sep 22</span><span class="ko">설정: "추석 특별" → 3개월 월 $0.99 → 9월 15일 시작, 9월 22일 종료</span></li>
+<li><span class="en">Generate Offer Codes (up to 1,000) → share on Reddit/Instagram/Discord</span><span class="ko">오퍼 코드 생성 (최대 1,000개) → Reddit/Instagram/Discord에 공유</span></li>
+<li><span class="en">No new build needed. Apple handles the rest.</span><span class="ko">새 빌드 불필요. 애플이 나머지를 처리합니다.</span></li>
+</ol>
+</div>
+
+<div class="highlight green">
+<strong>💡 <span class="en">The best part:</span><span class="ko">가장 좋은 점:</span></strong><br>
+<span class="en">Once your app is live with RevenueCat, ALL future discount campaigns (Black Friday, Chuseok, New Year, Korean launch special) are handled entirely in App Store Connect + RevenueCat dashboard. <strong>Zero new code or builds needed.</strong></span><span class="ko">앱이 RevenueCat과 함께 출시되면, 이후의 모든 할인 캠페인 (블랙 프라이데이, 추석, 새해, 한국 론칭 특별 이벤트)은 App Store Connect + RevenueCat 대시보드에서 완전히 처리됩니다. <strong>새 코드나 빌드 불필요.</strong></span>
+</div>
+</div>
+
+<!-- SECTION 5 -->
+<div id="s5">
+<h2>5. <span class="en">Implementation Roadmap (5 Phases)</span><span class="ko">구현 로드맵 (5단계)</span></h2>
+
+<div class="phase-box">
+<div class="phase-title">Phase 1: App Store Connect Setup <span class="badge badge-todo">No Code</span></div>
+<div class="phase-meta">⏰ ~2 hours · Do this first, before writing any code</div>
+<ol>
+<li><span class="en">Create Subscription Group named "Fridgenie Pro"</span><span class="ko">"Fridgenie Pro"라는 구독 그룹 생성</span></li>
+<li><span class="en">Add product: <code>com.fridgenie.app.pro.monthly</code> → $4.99/month</span><span class="ko">상품 추가: <code>com.fridgenie.app.pro.monthly</code> → 월 $4.99</span></li>
+<li><span class="en">Add product: <code>com.fridgenie.app.pro.yearly</code> → $39.99/year</span><span class="ko">상품 추가: <code>com.fridgenie.app.pro.yearly</code> → 연 $39.99</span></li>
+<li><span class="en">Add Introductory Offer: 7-day free trial on both products</span><span class="ko">입문 오퍼 추가: 두 상품 모두 7일 무료 체험</span></li>
+<li><span class="en">Create RevenueCat account → connect App Store Connect → get API key</span><span class="ko">RevenueCat 계정 생성 → App Store Connect 연결 → API 키 획득</span></li>
+<li><span class="en">Configure RevenueCat webhook URL → point to Supabase Edge Function</span><span class="ko">RevenueCat 웹훅 URL 설정 → Supabase Edge Function 연결</span></li>
+</ol>
+</div>
+
+<div class="phase-box">
+<div class="phase-title">Phase 2: Flutter Code <span class="badge badge-easy">~4-6 hrs (Claude Code)</span></div>
+<div class="phase-meta">⏰ ~4-6 hours · Claude Code handles this</div>
+<pre><code># pubspec.yaml
+purchases_flutter: ^8.0.0
+
+# Initialize in main.dart
+await Purchases.configure(PurchasesConfiguration('rc_prod_YOUR_KEY'));
+
+# PurchaseService class (what Claude Code will build)
+class PurchaseService {
+  // Get available packages (monthly + yearly)
+  Future&lt;List&lt;Package&gt;&gt; getPackages()
+
+  // Subscribe — shows Apple payment sheet
+  Future&lt;bool&gt; purchase(Package package)
+
+  // Check current subscription status
+  Future&lt;bool&gt; isSubscribed()
+
+  // Restore purchases (Apple requires this button!)
+  Future&lt;bool&gt; restorePurchases()
+}</code></pre>
+<ol>
+<li><span class="en">Add RevenueCat SDK + configure with API key</span><span class="ko">RevenueCat SDK 추가 + API 키로 설정</span></li>
+<li><span class="en">Build PaywallScreen with monthly/yearly toggle + trial callout</span><span class="ko">월별/연별 토글 + 체험 안내가 있는 PaywallScreen 구축</span></li>
+<li><span class="en">Wire purchase result → invalidate subscriptionTierProvider</span><span class="ko">구매 결과 연결 → subscriptionTierProvider 무효화</span></li>
+<li><span class="en">Add "Restore Purchases" button to Profile screen</span><span class="ko">프로필 화면에 "구매 복원" 버튼 추가</span></li>
+<li><span class="en">Identify user in RevenueCat with Supabase user ID</span><span class="ko">Supabase 사용자 ID로 RevenueCat에 사용자 식별</span></li>
+</ol>
+</div>
+
+<div class="phase-box">
+<div class="phase-title">Phase 3: Supabase Edge Function <span class="badge badge-easy">~2-3 hrs (Claude Code)</span></div>
+<div class="phase-meta">⏰ ~2-3 hours · One new Edge Function</div>
+<pre><code>// supabase/functions/revenuecat-webhook/index.ts
+// Receives: { event: "INITIAL_PURCHASE" | "RENEWAL" | "CANCELLATION", 
+//             app_user_id: "supabase-user-id", ... }
+
+Deno.serve(async (req) => {
+  const body = await req.json()
+  const userId = body.event.app_user_id
+  const eventType = body.event.type
+
+  const tier = ['INITIAL_PURCHASE', 'RENEWAL', 'UNCANCELLATION']
+    .includes(eventType) ? 'pro' : 'free'
+
+  await supabase
+    .from('profiles')
+    .update({ subscription_tier: tier })
+    .eq('id', userId)
+
+  return new Response('ok')
+})</code></pre>
+<p><span class="en">This one function handles ALL subscription state changes automatically: new purchase → pro, renewal → stay pro, cancellation → back to free after period ends.</span><span class="ko">이 하나의 함수가 모든 구독 상태 변경을 자동으로 처리합니다: 신규 구매 → pro, 갱신 → pro 유지, 취소 → 기간 종료 후 free로 복귀.</span></p>
+</div>
+
+<div class="phase-box">
+<div class="phase-title">Phase 4: Enable Gating + Migrate Beta Users <span class="badge badge-easy">~30 min</span></div>
+<div class="phase-meta">⏰ ~30 minutes</div>
+<pre><code>// lib/config/app_config.dart
+static const bool enableTierGating = true;  // ← flip this
+
+// Supabase: Give all existing beta users Pro (run once)
+UPDATE profiles 
+SET subscription_tier = 'pro',
+    tier_updated_at = NOW()
+WHERE created_at < '2026-06-01';  // adjust date to your launch date
+-- This keeps all your beta testers happy, they keep Pro access</code></pre>
+</div>
+
+<div class="phase-box">
+<div class="phase-title">Phase 5: Test + Submit <span class="badge badge-todo">~1 day</span></div>
+<div class="phase-meta">⏰ ~1 day</div>
+<ol>
+<li><span class="en">Test full purchase flow using StoreKit Sandbox (no real charges)</span><span class="ko">StoreKit 샌드박스를 사용해 전체 구매 흐름 테스트 (실제 청구 없음)</span></li>
+<li><span class="en">Test restore purchases flow</span><span class="ko">구매 복원 흐름 테스트</span></li>
+<li><span class="en">Test subscription lapse (RevenueCat sandbox accelerated time)</span><span class="ko">구독 만료 테스트 (RevenueCat 샌드박스 가속 시간)</span></li>
+<li><span class="en">Verify Supabase tier updates correctly on all events</span><span class="ko">모든 이벤트에서 Supabase 티어 업데이트 올바른지 확인</span></li>
+<li><span class="en">Submit to App Store — mention IAP in review notes</span><span class="ko">App Store 제출 — 리뷰 노트에 IAP 언급</span></li>
+</ol>
+</div>
+</div>
+
+<!-- SECTION 6 -->
+<div id="s6">
+<h2>6. <span class="en">What Happens Behind the Scenes — Simple Stories</span><span class="ko">내부에서 무슨 일이? — 쉬운 설명</span></h2>
+
+<div class="card">
+<h3>🆕 <span class="en">New User Subscribes (Monthly)</span><span class="ko">신규 사용자 구독 (월별)</span></h3>
+<p><span class="en">Mia opens Fridgenie → tries to tap AI Recipes → sees paywall → taps "Start Free Trial" → Apple Face ID confirmation → Apple charges nothing today (trial) → RevenueCat gets notified → RevenueCat calls your webhook → Edge Function sets <code>tier=pro</code> → Mia's app refreshes → paywall gone → AI Recipes unlocked. In 7 days, Apple auto-charges $4.99. Every 30 days after, same thing. Mia never has to do anything.</span><span class="ko">Mia가 Fridgenie 열기 → AI 레시피 탭 시도 → 페이월 표시 → "무료 체험 시작" 탭 → 애플 Face ID 확인 → 오늘 청구 없음 (체험) → RevenueCat 알림 받음 → RevenueCat이 웹훅 호출 → Edge Function이 <code>tier=pro</code> 설정 → Mia의 앱 새로고침 → 페이월 사라짐 → AI 레시피 잠금 해제. 7일 후 애플이 $4.99 자동 청구. 이후 30일마다 동일. Mia는 아무것도 할 필요 없음.</span></p>
+</div>
+
+<div class="card">
+<h3>💸 <span class="en">Subscription Lapses (Payment Fails)</span><span class="ko">구독 만료 (결제 실패)</span></h3>
+<p><span class="en">Jake's credit card expired. Apple tries to charge → fails → retries over several days → after ~16 days Apple cancels → RevenueCat webhook fires with <code>BILLING_ISSUE</code> → Edge Function sets <code>tier=free</code> → Jake opens app → AI Recipes now shows paywall again. Jake gets an email from Apple (not you) saying his payment failed. He updates his card in iOS Settings → Apple recharges → RevenueCat webhook → <code>tier=pro</code> again. You do nothing.</span><span class="ko">Jake의 신용카드가 만료됨. 애플이 청구 시도 → 실패 → 며칠에 걸쳐 재시도 → 약 16일 후 애플이 취소 → RevenueCat 웹훅이 <code>BILLING_ISSUE</code>로 발동 → Edge Function이 <code>tier=free</code> 설정 → Jake가 앱 열기 → AI 레시피에 다시 페이월 표시. Jake는 애플(당신이 아닌)로부터 결제 실패 이메일 받음. iOS 설정에서 카드 업데이트 → 애플 재청구 → RevenueCat 웹훅 → 다시 <code>tier=pro</code>. 당신은 아무것도 하지 않음.</span></p>
+</div>
+
+<div class="card">
+<h3>🎁 <span class="en">Chuseok Campaign (Offer Code)</span><span class="ko">추석 캠페인 (오퍼 코드)</span></h3>
+<p><span class="en">You go to App Store Connect → generate 500 codes for "1 month free" → post on Instagram: "Happy Chuseok! Free month of Fridgenie Pro: XXXXXXXXXX". Someone redeems it in App Store → they get 1 free month → after that, normal billing starts → RevenueCat tracks it like any other subscription. You spent 20 minutes and got 500 potential new subscribers. No code changes, no new build.</span><span class="ko">App Store Connect로 이동 → "1개월 무료"를 위한 코드 500개 생성 → 인스타그램에 게시: "추석 행복! Fridgenie Pro 1개월 무료: XXXXXXXXXX". 누군가 App Store에서 사용 → 1개월 무료 구독 → 이후 정상 청구 시작 → RevenueCat이 다른 구독처럼 추적. 20분을 사용해 잠재적 신규 구독자 500명 확보. 코드 변경 없음, 새 빌드 없음.</span></p>
+</div>
+
+<div class="card">
+<h3>🔄 <span class="en">User Switches Phones / Reinstalls</span><span class="ko">사용자가 폰 교체 / 재설치</span></h3>
+<p><span class="en">Sara gets a new iPhone. Downloads Fridgenie → signs in with her Apple ID → sees paywall (subscription not yet linked to new device) → taps "Restore Purchases" → RevenueCat checks Apple → finds active subscription → fires webhook → <code>tier=pro</code> in Supabase → paywall gone. The "Restore Purchases" button is why Apple requires it — it's the safety net for this exact scenario.</span><span class="ko">Sara가 새 iPhone 구매. Fridgenie 다운로드 → Apple ID로 로그인 → 페이월 표시 (구독이 아직 새 기기에 연결 안 됨) → "구매 복원" 탭 → RevenueCat이 애플 확인 → 활성 구독 발견 → 웹훅 발동 → Supabase에서 <code>tier=pro</code> → 페이월 사라짐. "구매 복원" 버튼은 이 상황을 위한 안전망이기 때문에 애플이 요구합니다.</span></p>
+</div>
+</div>
+
+<!-- SECTION 7 -->
+<div id="s7">
+<h2>7. <span class="en">Effort Estimate & Recommendation</span><span class="ko">작업량 예상 & 추천</span></h2>
+
+<div class="table-wrap"><table>
+<tr><th><span class="en">Task</span><span class="ko">작업</span></th><th><span class="en">Effort</span><span class="ko">작업량</span></th><th><span class="en">Who Does It</span><span class="ko">담당</span></th></tr>
+<tr><td><span class="en">App Store Connect setup</span><span class="ko">App Store Connect 설정</span></td><td>~2 hrs</td><td><span class="en">You (UI clicks)</span><span class="ko">당신 (UI 클릭)</span></td></tr>
+<tr><td><span class="en">RevenueCat account + config</span><span class="ko">RevenueCat 계정 + 설정</span></td><td>~1 hr</td><td><span class="en">You (UI clicks)</span><span class="ko">당신 (UI 클릭)</span></td></tr>
+<tr><td><span class="en">Flutter: RevenueCat SDK + PurchaseService</span><span class="ko">Flutter: RevenueCat SDK + PurchaseService</span></td><td>~3 hrs</td><td>Claude Code</td></tr>
+<tr><td><span class="en">Flutter: Paywall screen UI</span><span class="ko">Flutter: 페이월 화면 UI</span></td><td>~2 hrs</td><td>Claude Code</td></tr>
+<tr><td><span class="en">Supabase: revenuecat-webhook Edge Function</span><span class="ko">Supabase: revenuecat-webhook Edge Function</span></td><td>~1 hr</td><td>Claude Code</td></tr>
+<tr><td><span class="en">enableTierGating = true + beta migration SQL</span><span class="ko">enableTierGating = true + 베타 마이그레이션 SQL</span></td><td>~30 min</td><td>Totoro + You</td></tr>
+<tr><td><span class="en">Testing (sandbox)</span><span class="ko">테스트 (샌드박스)</span></td><td>~3 hrs</td><td><span class="en">You</span><span class="ko">당신</span></td></tr>
+<tr><td><strong><span class="en">Total</span><span class="ko">합계</span></strong></td><td><strong>~12 hrs</strong></td><td><span class="en">~1-2 focused days</span><span class="ko">~1-2일 집중 작업</span></td></tr>
+</table></div>
+
+<div class="highlight green">
+<strong>✅ <span class="en">My Recommendation: Do It Now (V1)</span><span class="ko">추천: 지금 하세요 (V1)</span></strong><br><br>
+<ul>
+<li><span class="en">Apple may reject apps that show "Pro" badges/paywalls without a real purchase path</span><span class="ko">애플은 실제 구매 경로 없이 "Pro" 배지/페이월을 보여주는 앱을 거절할 수 있음</span></li>
+<li><span class="en">Doing it in V2 means another 3-7 day App Store review at a critical moment</span><span class="ko">V2에서 하면 중요한 시점에 3-7일 App Store 리뷰 추가</span></li>
+<li><span class="en">Your beta users keep Pro (SQL migration) — no disruption, no bad reviews</span><span class="ko">베타 사용자는 Pro 유지 (SQL 마이그레이션) — 중단 없음, 나쁜 리뷰 없음</span></li>
+<li><span class="en">All future campaigns (Chuseok, Black Friday, Korean launch) need zero code after this</span><span class="ko">이후 모든 캠페인 (추석, 블랙 프라이데이, 한국 론칭)은 코드 불필요</span></li>
+<li><span class="en">Start earning day 1 of launch instead of months later</span><span class="ko">몇 달 후가 아닌 론칭 첫날부터 수익 창출 시작</span></li>
+</ul>
+</div>
+
+<div class="highlight warn">
+<strong>⚠️ <span class="en">One Thing to Know About Apple's 30% Cut</span><span class="ko">애플의 30% 수수료에 대해 알아야 할 것</span></strong><br>
+<span class="en">Apple takes <strong>30% of every subscription payment</strong> for the first year, then <strong>15%</strong> after a subscriber has been with you for 12+ months (Small Business Program). So $4.99/mo → you get $3.49 in year 1, $4.24 from year 2. Factor this into your pricing.</span><span class="ko">애플은 첫 해에는 <strong>모든 구독 결제의 30%</strong>를, 구독자가 12개월 이상 유지 후에는 <strong>15%</strong>를 가져갑니다 (소규모 비즈니스 프로그램). $4.99/월 → 첫 해에 $3.49, 2년차부터 $4.24 수령. 가격 책정 시 고려하세요.</span>
+</div>
+
+<p><span class="en"><strong>Ready to build?</strong> Just say the word and I'll have Claude Code wire up the full RevenueCat integration. All you need to do first is set up the products in App Store Connect and create a RevenueCat account — I'll walk you through that too if you want 🌳</span><span class="ko"><strong>빌드 준비되셨나요?</strong> 말씀만 하시면 Claude Code로 전체 RevenueCat 통합을 구축하겠습니다. 먼저 App Store Connect에서 상품을 설정하고 RevenueCat 계정을 만들기만 하면 됩니다 — 원하시면 그것도 안내해 드리겠습니다 🌳</span></p>
+</div>
+
+<footer>
+  <span class="en">Planned by Totoro 🌳 for Minjun · Fridgenie Monetization · April 16, 2026</span>
+  <span class="ko">토토로 🌳가 민준을 위해 계획 · Fridgenie 수익화 · 2026년 4월 16일</span>
+</footer>
+
+<script>
+let isKorean = false;
+function toggleLang() {
+  isKorean = !isKorean;
+  document.querySelectorAll('.en').forEach(el => el.classList.toggle('hide', isKorean));
+  document.querySelectorAll('.ko').forEach(el => el.classList.toggle('show', isKorean));
+  document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+}
+</script>
+</body>
+</html>
