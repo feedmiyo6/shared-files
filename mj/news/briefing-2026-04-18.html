@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Daily Tech Briefing — Apr 18, 2026</title>
+<style>
+  :root {
+    --bg: #0d1117; --card: #161b22; --border: #30363d;
+    --text: #c9d1d9; --heading: #f0f6fc; --accent: #58a6ff;
+    --tag-ai: #7ee787; --tag-mkt: #f78166; --tag-semi: #d2a8ff; --tag-wild: #ffa657;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; padding: 16px; max-width: 720px; margin: 0 auto; }
+  header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
+  h1 { font-size: 1.4rem; color: var(--heading); }
+  .date { color: #8b949e; font-size: 0.85rem; margin-top: 4px; }
+  .lang-toggle { background: var(--card); color: var(--accent); border: 1px solid var(--border); padding: 6px 14px; border-radius: 20px; cursor: pointer; font-size: 0.85rem; white-space: nowrap; }
+  .lang-toggle:hover { background: var(--border); }
+  .section-title { font-size: 1.1rem; color: var(--heading); margin: 24px 0 12px; display: flex; align-items: center; gap: 8px; }
+  .tag { font-size: 0.7rem; padding: 2px 8px; border-radius: 12px; font-weight: 600; text-transform: uppercase; }
+  .tag-ai { background: rgba(126,231,135,0.15); color: var(--tag-ai); }
+  .tag-mkt { background: rgba(247,129,102,0.15); color: var(--tag-mkt); }
+  .tag-semi { background: rgba(210,168,255,0.15); color: var(--tag-semi); }
+  .tag-wild { background: rgba(255,166,87,0.15); color: var(--tag-wild); }
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px; margin-bottom: 12px; }
+  .card h3 { color: var(--heading); font-size: 1rem; margin-bottom: 6px; }
+  .card .source { color: #8b949e; font-size: 0.8rem; margin-bottom: 8px; }
+  .card p { font-size: 0.9rem; }
+  .card a { color: var(--accent); text-decoration: none; font-size: 0.85rem; }
+  .card a:hover { text-decoration: underline; }
+  footer { text-align: center; color: #484f58; font-size: 0.75rem; margin-top: 32px; padding-top: 16px; border-top: 1px solid var(--border); }
+  .ko { display: none; }
+  .ko.show { display: inline !important; }
+  .en.hide { display: none !important; }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>🌳 <span class="en">Daily Tech Briefing</span><span class="ko">오늘의 테크 브리핑</span></h1>
+    <div class="date"><span class="en">Friday, April 18, 2026</span><span class="ko">2026년 4월 18일 금요일</span></div>
+  </div>
+  <button class="lang-toggle" onclick="toggleLang()">한국어</button>
+</header>
+
+<div class="audio-player" style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:24px">
+  <div style="font-size:0.85rem;color:#8b949e;margin-bottom:8px"><span class="en">🎙️ Morning Briefing Audio</span><span class="ko">🎙️ 모닝 브리핑 오디오</span></div>
+  <audio controls style="width:100%"><source src="briefing-2026-04-18.mp3" type="audio/mpeg"></audio>
+</div>
+
+<!-- AI & TECH -->
+<div class="section-title"><span class="tag tag-ai">AI & Tech</span></div>
+
+<div class="card">
+  <h3><span class="en">Anthropic Releases Claude Opus 4.7, Reclaims Top AI Benchmark Spot</span><span class="ko">앤트로픽, Claude Opus 4.7 출시로 AI 벤치마크 1위 탈환</span></h3>
+  <div class="source">VentureBeat / Anthropic</div>
+  <p><span class="en">Anthropic shipped Claude Opus 4.7 on April 16, its most powerful publicly available model. It beats OpenAI's GPT-5.4 and Google's Gemini 3.1 Pro on agentic coding, tool use, and financial analysis benchmarks. The model includes new cybersecurity safeguards and a self-verification feature to double-check its own work.</span><span class="ko">앤트로픽이 4월 16일 최강 공개 모델 Claude Opus 4.7을 출시했습니다. 에이전틱 코딩, 도구 사용, 금융 분석 벤치마크에서 GPT-5.4와 Gemini 3.1 Pro를 능가합니다. 사이버보안 안전장치와 자체 검증 기능이 새로 탑재되었습니다.</span></p>
+  <a href="https://www.anthropic.com/news/claude-opus-4-7" target="_blank"><span class="en">Read more →</span><span class="ko">자세히 보기 →</span></a>
+</div>
+
+<div class="card">
+  <h3><span class="en">Adobe Launches Firefly AI Assistant for Agentic Creative Workflows</span><span class="ko">어도비, 에이전틱 크리에이티브 워크플로용 Firefly AI 어시스턴트 출시</span></h3>
+  <div class="source">Adobe / TechCrunch</div>
+  <p><span class="en">Adobe unveiled the Firefly AI Assistant, an agentic tool that orchestrates complex multi-step workflows across Photoshop, Premiere, Illustrator, and more from a single conversation. Creators can describe outcomes in natural language, and the assistant executes across apps. It also integrates with Anthropic's Claude and other third-party models.</span><span class="ko">어도비가 포토샵, 프리미어, 일러스트레이터 등 여러 앱에서 복잡한 다단계 워크플로를 하나의 대화로 조율하는 Firefly AI 어시스턴트를 공개했습니다. 자연어로 결과를 설명하면 앱 간에 자동 실행되며, 앤트로픽 Claude 등 외부 모델과도 통합됩니다.</span></p>
+  <a href="https://blog.adobe.com/en/publish/2026/04/15/introducing-firefly-ai-assistant-new-way-create-with-our-creative-agent" target="_blank"><span class="en">Read more →</span><span class="ko">자세히 보기 →</span></a>
+</div>
+
+<div class="card">
+  <h3><span class="en">Physical Intelligence Unveils π0.7 Robot Brain That Generalizes to Unseen Tasks</span><span class="ko">Physical Intelligence, 미학습 작업도 수행하는 π0.7 로봇 브레인 공개</span></h3>
+  <div class="source">TechCrunch / Physical Intelligence</div>
+  <p><span class="en">Physical Intelligence released π0.7, a steerable robotic foundation model that demonstrates compositional generalization — combining learned skills to solve problems it was never trained on. In testing, π0.7 folded laundry on robot hardware it had never practiced with, matching specialist model performance across complex real-world tasks.</span><span class="ko">Physical Intelligence가 학습한 기술을 조합해 훈련받지 않은 문제를 해결하는 조향 가능 로봇 파운데이션 모델 π0.7을 출시했습니다. 테스트에서 연습한 적 없는 로봇 하드웨어로 빨래를 개는 등 전문 모델 수준의 성능을 보여줬습니다.</span></p>
+  <a href="https://www.pi.website/blog/pi07" target="_blank"><span class="en">Read more →</span><span class="ko">자세히 보기 →</span></a>
+</div>
+
+<div class="card">
+  <h3><span class="en">Human Scientists Still Outperform Best AI Agents on Complex Tasks</span><span class="ko">복잡한 과제에서 인간 과학자가 최고 AI 에이전트를 여전히 압도</span></h3>
+  <div class="source">Nature</div>
+  <p><span class="en">A new study published in Nature found that human scientists significantly outperform the best AI agents on complex, multi-step scientific tasks. While AI excels at narrow subtasks, humans maintain a clear edge in experimental design, creative problem-solving, and integrating diverse evidence — a sobering counterpoint to AGI hype.</span><span class="ko">네이처에 발표된 새 연구에 따르면 복잡한 다단계 과학 과제에서 인간 과학자가 최고 AI 에이전트를 크게 앞섭니다. AI가 좁은 하위 작업에선 뛰어나지만, 실험 설계와 창의적 문제 해결에서는 인간이 여전히 우위를 점하고 있습니다.</span></p>
+  <a href="https://www.nature.com/articles/d41586-026-01199-z" target="_blank"><span class="en">Read more →</span><span class="ko">자세히 보기 →</span></a>
+</div>
+
+<!-- MARKETS -->
+<div class="section-title"><span class="tag tag-mkt"><span class="en">Markets</span><span class="ko">시장</span></span></div>
+
+<div class="card">
+  <h3><span class="en">Snap Cuts 1,000 Jobs as AI Now Generates 65% of Its Code</span><span class="ko">스냅, AI가 코드 65% 생성하면서 1,000명 해고</span></h3>
+  <div class="source">TechCrunch / CNBC</div>
+  <p><span class="en">Snap is laying off roughly 1,000 employees — 16% of its workforce — citing AI advancements that now generate over 65% of its new code. CEO Evan Spiegel said the cuts will save over $500 million annually and establish a clearer path to profitability. Snap's stock jumped 11% on the news.</span><span class="ko">스냅이 전체 인력의 16%인 약 1,000명을 해고합니다. AI가 신규 코드의 65% 이상을 생성하게 된 것이 원인입니다. 에반 스피겔 CEO는 연간 5억 달러 이상 절감으로 수익성 경로가 명확해질 것이라 밝혔고, 주가는 11% 상승했습니다.</span></p>
+  <a href="https://techcrunch.com/2026/04/15/snap-is-cutting-1000-jobs-16-of-its-workforce/" target="_blank"><span class="en">Read more →</span><span class="ko">자세히 보기 →</span></a>
+</div>
+
+<div class="card">
+  <h3><span class="en">Q1 2026 Venture Funding Shatters Records: $297B Globally, 80% to AI</span><span class="ko">2026년 1분기 벤처 투자 사상 최대: 전 세계 2,970억 달러, 80%가 AI로</span></h3>
+  <div class="source">TechCrunch / Crunchbase</div>
+  <p><span class="en">Global startup investment hit $297 billion in Q1 2026, a 2.5x increase over the prior quarter and an all-time record. AI companies captured $242 billion — 80% of total funding. The four largest rounds went to OpenAI ($122B), Anthropic ($30B), xAI ($20B), and Waymo ($16B), collectively accounting for 65% of all venture investment.</span><span class="ko">2026년 1분기 글로벌 스타트업 투자가 2,970억 달러로 사상 최고를 기록했으며, 전 분기 대비 2.5배 증가했습니다. AI 기업이 총 투자의 80%인 2,420억 달러를 차지했고, OpenAI(1,220억), Anthropic(300억), xAI(200억), Waymo(160억)가 전체의 65%를 점유했습니다.</span></p>
+  <a href="https://techcrunch.com/2026/04/01/startup-funding-shatters-all-records-in-q1/" target="_blank"><span class="en">Read more →</span><span class="ko">자세히 보기 →</span></a>
+</div>
+
+<!-- SEMICONDUCTORS -->
+<div class="section-title"><span class="tag tag-semi"><span class="en">Semiconductors</span><span class="ko">반도체</span></span></div>
+
+<div class="card">
+  <h3><span class="en">TSMC Q1 Profit Soars 58% to Record on Unstoppable AI Chip Demand</span><span class="ko">TSMC 1분기 순이익 58% 급증, AI 칩 수요로 사상 최고 기록</span></h3>
+  <div class="source">CNBC / TSMC</div>
+  <p><span class="en">TSMC reported record Q1 revenue of $35 billion with net profit surging 58% year-over-year, beating estimates on all metrics. Advanced 3nm and 5nm chips accounted for 61% of revenue. The company guided Q2 revenue to $39-40.2 billion and forecast full-year 2026 growth above 30%, driven by insatiable demand for AI processors.</span><span class="ko">TSMC가 1분기 매출 350억 달러, 순이익 전년 대비 58% 급증으로 사상 최고를 기록했습니다. 3nm·5nm 첨단 칩이 매출의 61%를 차지했으며, 2분기 매출 가이던스 390~402억 달러, 연간 성장률 30% 이상을 전망했습니다.</span></p>
+  <a href="https://www.cnbc.com/2026/04/16/tsmc-q1-profit-58-percent-ai-chip-demand-record.html" target="_blank"><span class="en">Read more →</span><span class="ko">자세히 보기 →</span></a>
+</div>
+
+<div class="card">
+  <h3><span class="en">ASML Beats Earnings but Stock Falls on Tightening China Export Curbs</span><span class="ko">ASML 실적 호조에도 중국 수출 규제 강화로 주가 하락</span></h3>
+  <div class="source">CNBC / Investing.com</div>
+  <p><span class="en">ASML posted Q1 sales of €8.8 billion, beating expectations, and raised its 2026 forecast to €36-40 billion. But shares fell 5-6% after a bipartisan U.S. bill proposed cutting off DUV machine sales to China. China's share of ASML sales dropped from 36% to 19% quarter-over-quarter, with analysts warning of up to 10% EPS impact.</span><span class="ko">ASML이 1분기 매출 88억 유로로 예상치를 상회하고 2026년 전망을 360~400억 유로로 상향했습니다. 그러나 미국 초당파 법안이 중국에 DUV 장비 판매를 차단하면서 주가가 5~6% 하락했고, 중국 매출 비중은 36%에서 19%로 급감했습니다.</span></p>
+  <a href="https://www.cnbc.com/2026/04/15/asml-q1-2026-earnings-report.html" target="_blank"><span class="en">Read more →</span><span class="ko">자세히 보기 →</span></a>
+</div>
+
+<!-- WILD CARD -->
+<div class="section-title"><span class="tag tag-wild"><span class="en">Wild Card</span><span class="ko">와일드 카드</span></span></div>
+
+<div class="card">
+  <h3><span class="en">Amazon to Acquire Globalstar for $11.6B, Powering Satellite Connectivity</span><span class="ko">아마존, 위성 통신 위해 글로벌스타 116억 달러에 인수</span></h3>
+  <div class="source">Tech Startups</div>
+  <p><span class="en">Amazon announced a roughly $11.57 billion acquisition of satellite operator Globalstar, gaining low-Earth orbit satellites, spectrum, and direct-to-device expertise. The deal also involves a partnership with Apple to power satellite connectivity for future iPhones and Apple Watches, including Emergency SOS features.</span><span class="ko">아마존이 위성 운영사 글로벌스타를 약 115.7억 달러에 인수한다고 발표했습니다. 저궤도 위성, 주파수, 기기 직접 통신 기술을 확보하며, 애플과 협력해 향후 아이폰·애플워치의 위성 통신 및 긴급 SOS 기능을 지원할 예정입니다.</span></p>
+  <a href="https://techstartups.com/2026/04/17/top-tech-news-today-april-17-2026/" target="_blank"><span class="en">Read more →</span><span class="ko">자세히 보기 →</span></a>
+</div>
+
+<div class="card">
+  <h3><span class="en">AI Data Centers Now Draw 30 GW — Water Use Rivals 1.2M People's Supply</span><span class="ko">AI 데이터센터 전력 소비 30GW 돌파 — 물 사용량 120만 명 식수량에 맞먹어</span></h3>
+  <div class="source">MIT Technology Review</div>
+  <p><span class="en">AI data centers worldwide can now draw 29.6 gigawatts of power, and the environmental toll is mounting. Annual water use from running OpenAI's GPT-4o alone may exceed the drinking water needs of 1.2 million people. As utilities plan $1.4 trillion in spending over five years to meet AI demand, sustainability questions grow louder.</span><span class="ko">전 세계 AI 데이터센터의 전력 소비가 29.6GW에 달하며 환경 부담이 커지고 있습니다. OpenAI GPT-4o 운영에만 연간 120만 명분의 식수에 해당하는 물이 소비됩니다. 전력회사들이 AI 수요 대응에 5년간 1.4조 달러 투자를 계획하면서 지속가능성 논의가 확대되고 있습니다.</span></p>
+  <a href="https://www.technologyreview.com/2026/04/13/1135675/want-to-understand-the-current-state-of-ai-check-out-these-charts/" target="_blank"><span class="en">Read more →</span><span class="ko">자세히 보기 →</span></a>
+</div>
+
+<footer>
+  <span class="en">Curated by Totoro 🌳 for Minjun</span><span class="ko">토토로 🌳가 민준을 위해 큐레이션</span>
+</footer>
+
+<script>
+let isKorean = false;
+function toggleLang() {
+  isKorean = !isKorean;
+  document.querySelectorAll('.en').forEach(el => el.classList.toggle('hide', isKorean));
+  document.querySelectorAll('.ko').forEach(el => el.classList.toggle('show', isKorean));
+  document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+}
+</script>
+</body>
+</html>
