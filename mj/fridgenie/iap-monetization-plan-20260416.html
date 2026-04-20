@@ -63,7 +63,7 @@
 <header>
   <div>
     <h1>💳 <span class="en">Fridgenie — Apple Subscription Plan</span><span class="ko">Fridgenie — 애플 구독 플랜</span></h1>
-    <div class="subtitle"><span class="en">Complete monetization roadmap · April 16, 2026</span><span class="ko">완전한 수익화 로드맵 · 2026년 4월 16일</span></div>
+    <div class="subtitle"><span class="en">Complete monetization roadmap · Updated to reflect current Fridgenie status</span><span class="ko">현재 Fridgenie 상태를 반영한 수익화 로드맵</span></div>
   </div>
   <button class="lang-toggle" onclick="toggleLang()">한국어</button>
 </header>
@@ -88,6 +88,11 @@
 <div class="highlight">
 <strong>🧠 <span class="en">The big picture:</span><span class="ko">큰 그림:</span></strong><br>
 <span class="en">Apple is the payment processor. You set products in App Store Connect. Your app calls StoreKit to show the payment sheet. Apple charges the user. Apple sends your server a receipt to verify. You update Supabase. User gets Pro.</span><span class="ko">애플이 결제 처리자입니다. App Store Connect에서 상품을 설정하고, 앱에서 StoreKit으로 결제 시트를 표시합니다. 애플이 사용자에게 청구하고, 서버에 영수증을 전송합니다. Supabase를 업데이트하면 사용자가 Pro가 됩니다.</span>
+</div>
+
+<div class="highlight warn">
+<strong>📍 <span class="en">Current Fridgenie status (important):</span><span class="ko">현재 Fridgenie 상태 (중요):</span></strong><br>
+<span class="en">Fridgenie already has the <strong>free/pro gating logic and switch behavior built in app code</strong>. In other words, the beta-vs-paid mode concept is already there. What is <strong>NOT</strong> built yet is the actual Apple payment plumbing: <strong>StoreKit / Apple IAP / RevenueCat / receipt validation / restore purchases</strong>.</span><span class="ko">Fridgenie에는 이미 <strong>무료/프로 게이팅 로직과 스위치 동작이 앱 코드에 구현되어 있습니다</strong>. 즉, 베타 모드와 유료 모드 개념은 이미 있습니다. 아직 <strong>구현되지 않은 것</strong>은 실제 애플 결제 연결부입니다: <strong>StoreKit / Apple IAP / RevenueCat / 영수증 검증 / 구매 복원</strong>.</span>
 </div>
 
 <h3><span class="en">Step-by-Step: User Subscribes</span><span class="ko">단계별: 사용자가 구독할 때</span></h3>
@@ -279,17 +284,18 @@ Deno.serve(async (req) => {
 </div>
 
 <div class="phase-box">
-<div class="phase-title">Phase 4: Enable Gating + Migrate Beta Users <span class="badge badge-easy">~30 min</span></div>
-<div class="phase-meta">⏰ ~30 minutes</div>
+<div class="phase-title">Phase 4: Connect Existing Gating System to Real Payments <span class="badge badge-easy">~30-60 min app config + migration</span></div>
+<div class="phase-meta">⏰ ~30-60 minutes after IAP plumbing is built</div>
+<p><span class="en">This phase is lighter than it first appears because <strong>Fridgenie already has the gating/switch logic built</strong>. You're not inventing Pro from scratch here, you're attaching real Apple payments to the Pro system that already exists.</span><span class="ko">이 단계는 처음 보기보다 가볍습니다. <strong>Fridgenie에는 이미 게이팅/스위치 로직이 구현되어 있기 때문</strong>입니다. 여기서는 Pro를 처음부터 만드는 것이 아니라, 이미 존재하는 Pro 시스템에 실제 애플 결제를 연결하는 작업입니다.</span></p>
 <pre><code>// lib/config/app_config.dart
-static const bool enableTierGating = true;  // ← flip this
+static const bool enableTierGating = true;  // ← ship one build with this on
 
 // Supabase: Give all existing beta users Pro (run once)
 UPDATE profiles 
 SET subscription_tier = 'pro',
     tier_updated_at = NOW()
 WHERE created_at < '2026-06-01';  // adjust date to your launch date
--- This keeps all your beta testers happy, they keep Pro access</code></pre>
+-- This keeps all beta users on Pro while new public users can subscribe normally</code></pre>
 </div>
 
 <div class="phase-box">
@@ -350,6 +356,7 @@ WHERE created_at < '2026-06-01';  // adjust date to your launch date
 <strong>✅ <span class="en">My Recommendation: Do It Now (V1)</span><span class="ko">추천: 지금 하세요 (V1)</span></strong><br><br>
 <ul>
 <li><span class="en">Apple may reject apps that show "Pro" badges/paywalls without a real purchase path</span><span class="ko">애플은 실제 구매 경로 없이 "Pro" 배지/페이월을 보여주는 앱을 거절할 수 있음</span></li>
+<li><span class="en">You already did the harder conceptual part: the app's free/pro behavior is mostly built. Now the remaining work is mainly payment plumbing and Apple-compliant purchase handling.</span><span class="ko">더 어려운 개념 설계는 이미 해두었습니다. 앱의 무료/프로 동작은 대부분 구현되어 있고, 이제 남은 일은 결제 연결부와 애플 규정에 맞는 구매 처리입니다.</span></li>
 <li><span class="en">Doing it in V2 means another 3-7 day App Store review at a critical moment</span><span class="ko">V2에서 하면 중요한 시점에 3-7일 App Store 리뷰 추가</span></li>
 <li><span class="en">Your beta users keep Pro (SQL migration) — no disruption, no bad reviews</span><span class="ko">베타 사용자는 Pro 유지 (SQL 마이그레이션) — 중단 없음, 나쁜 리뷰 없음</span></li>
 <li><span class="en">All future campaigns (Chuseok, Black Friday, Korean launch) need zero code after this</span><span class="ko">이후 모든 캠페인 (추석, 블랙 프라이데이, 한국 론칭)은 코드 불필요</span></li>
