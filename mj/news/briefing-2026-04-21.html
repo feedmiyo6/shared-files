@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Daily Tech Briefing — Apr 21, 2026</title>
+<style>
+  :root {
+    --bg: #0d1117; --card: #161b22; --border: #30363d;
+    --text: #c9d1d9; --heading: #f0f6fc; --accent: #58a6ff;
+    --tag-ai: #7ee787; --tag-mkt: #f78166; --tag-semi: #d2a8ff; --tag-wild: #ffa657;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; padding: 16px; max-width: 720px; margin: 0 auto; }
+  header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
+  h1 { font-size: 1.4rem; color: var(--heading); }
+  .date { color: #8b949e; font-size: 0.85rem; margin-top: 4px; }
+  .intro { color: #8b949e; font-size: 0.9rem; margin-bottom: 20px; }
+  .lang-toggle { background: var(--card); color: var(--accent); border: 1px solid var(--border); padding: 6px 14px; border-radius: 20px; cursor: pointer; font-size: 0.85rem; white-space: nowrap; }
+  .lang-toggle:hover { background: var(--border); }
+  .section-title { font-size: 1.1rem; color: var(--heading); margin: 24px 0 12px; display: flex; align-items: center; gap: 8px; }
+  .tag { font-size: 0.7rem; padding: 2px 8px; border-radius: 12px; font-weight: 600; text-transform: uppercase; }
+  .tag-ai { background: rgba(126,231,135,0.15); color: var(--tag-ai); }
+  .tag-mkt { background: rgba(247,129,102,0.15); color: var(--tag-mkt); }
+  .tag-semi { background: rgba(210,168,255,0.15); color: var(--tag-semi); }
+  .tag-wild { background: rgba(255,166,87,0.15); color: var(--tag-wild); }
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px; margin-bottom: 12px; }
+  .card h3 { color: var(--heading); font-size: 1rem; margin-bottom: 6px; }
+  .card .source { color: #8b949e; font-size: 0.8rem; margin-bottom: 8px; }
+  .card p { font-size: 0.9rem; }
+  .card a { color: var(--accent); text-decoration: none; font-size: 0.85rem; }
+  .card a:hover { text-decoration: underline; }
+  footer { text-align: center; color: #484f58; font-size: 0.75rem; margin-top: 32px; padding-top: 16px; border-top: 1px solid var(--border); }
+  .ko { display: none; }
+  .ko.show { display: inline !important; }
+  .en.hide { display: none !important; }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>🌳 <span class="en">Daily Tech Briefing</span><span class="ko">오늘의 테크 브리핑</span></h1>
+    <div class="date"><span class="en">Tuesday, April 21, 2026</span><span class="ko">2026년 4월 21일 화요일</span></div>
+  </div>
+  <button class="lang-toggle" onclick="toggleLang()">한국어</button>
+</header>
+
+<div class="audio-player" style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:24px">
+  <div style="font-size:0.85rem;color:#8b949e;margin-bottom:8px"><span class="en">🎙️ Morning Briefing Audio</span><span class="ko">🎙️ 모닝 브리핑 오디오</span></div>
+  <audio controls style="width:100%"><source src="briefing-2026-04-21.mp3" type="audio/mpeg"></audio>
+</div>
+
+<div class="intro"><span class="en">Big moves this morning. Apple picks its next CEO, Anthropic locks in another megadeal with Amazon, and SpaceX eyes the public markets. Here's your Tuesday rundown.</span><span class="ko">오늘 아침도 큰 움직임이 이어집니다. 애플이 차기 CEO를 지명하고, 앤트로픽이 아마존과 또 한 번의 메가딜을 체결했으며, 스페이스X가 상장을 저울질하고 있습니다. 화요일 브리핑 시작합니다.</span></div>
+
+<!-- AI & TECH -->
+<div class="section-title"><span class="tag tag-ai">AI & Tech</span></div>
+
+<div class="card">
+  <h3><span class="en">Yelp's AI Assistant Becomes a Booking-Capable Concierge</span><span class="ko">Yelp AI 어시스턴트, 예약까지 처리하는 컨시어지로 진화</span></h3>
+  <div class="source">The Verge / TechCrunch</div>
+  <p><span class="en">Yelp gave its AI assistant a major upgrade: users can now ask questions, then book a table, place an order, or schedule a service — all in one conversation. It signals a clear shift from chatbots that just summarize to assistants that actually complete transactions.</span><span class="ko">Yelp이 AI 어시스턴트를 대폭 업그레이드했습니다. 이제 질문 후 식당 예약, 주문, 서비스 예약까지 하나의 대화에서 처리할 수 있습니다. 정보 요약에서 실제 거래 완료로 넘어가는 전환점입니다.</span></p>
+  <a href="https://www.theverge.com/ai-artificial-intelligence/915626/yelp-ai-assistant-chatbot-major-upgrade" target="_blank"><span class="en">Read more →</span><span class="ko">자세히 보기 →</span></a>
+</div>
+
+<div class="card">
+  <h3><span class="en">Google Rolls Out Gemini in Chrome to 7 More Countries</span><span class="ko">구글, 크롬 내 제미나이를 7개국에 추가 출시</span></h3>
+  <div class="source">TechCrunch / Google</div>
+  <p><span class="en">Google expanded Gemini in Chrome to Australia, Indonesia, Japan, the Philippines, Singapore, South Korea, and Vietnam. The rollout brings Gemini directly inside the browser on desktop and, in most markets, iOS too — broadening its reach as a default browsing companion.</span><span class="ko">구글이 크롬 내 제미나이를 호주, 인도네시아, 일본, 필리핀, 싱가포르, 한국, 베트남에 확대 출시했습니다. 데스크톱과 대부분의 시장에서 iOS까지 지원하며, 기본 브라우징 동반자로서의 입지를 넓히고 있습니다.</span></p>
+  <a href="https://techcrunch.com/2026/04/20/google-rolls-out-gemini-in-chrome-in-seven-new-countries/" target="_blank"><span class="en">Read more →</span><span class="ko">자세히 보기 →</span></a>
+</div>
+
+<div class="card">
+  <h3><span class="en">Apple Names John Ternus as Its Next CEO</span><span class="ko">애플, 존 터너스를 차기 CEO로 지명</span></h3>
+  <div class="source">The Verge / TechCrunch</div>
+  <p><span class="en">Apple is handing the CEO role to hardware leader John Ternus, with Tim Cook moving to executive chairman. Analysts are framing this as a shift back toward product-led leadership — a bet that Apple's next chapter will be defined by hardware innovation more than operational discipline.</span><span class="ko">애플이 하드웨어 리더 존 터너스에게 CEO 자리를 넘기고, 팀 쿡은 이사회 의장으로 이동합니다. 애널리스트들은 이를 제품 중심 리더십으로의 회귀로 평가하며, 애플의 다음 장이 운영 효율보다 하드웨어 혁신으로 정의될 것이라는 전망이 나옵니다.</span></p>
+  <a href="https://www.theverge.com/tech/915388/apple-ceo-john-ternus-tim-cook" target="_blank"><span class="en">Read more →</span><span class="ko">자세히 보기 →</span></a>
+</div>
+
+<div class="card">
+  <h3><span class="en">Google Photos Adds AI Touch-Up Tools for Quick Edits</span><span class="ko">구글 포토, AI 터치업 도구로 빠른 편집 지원</span></h3>
+  <div class="source">TechCrunch</div>
+  <p><span class="en">Google Photos added quick-edit tools for blemish removal, skin refinement, eye brightening, and teeth whitening. Lightweight generative editing is becoming a default consumer feature rather than a specialist workflow — and Google is making sure it's baked right into the camera roll.</span><span class="ko">구글 포토에 잡티 제거, 피부 보정, 눈 밝기 조절, 치아 미백 등 빠른 편집 도구가 추가됐습니다. 경량 생성형 편집이 전문가 도구가 아닌 일반 소비자 기본 기능으로 자리 잡고 있으며, 구글이 이를 카메라 롤에 바로 내장하고 있습니다.</span></p>
+  <a href="https://techcrunch.com/2026/04/20/google-photos-adds-new-touch-up-tools-for-quick-fixes/" target="_blank"><span class="en">Read more →</span><span class="ko">자세히 보기 →</span></a>
+</div>
+
+<!-- MARKETS -->
+<div class="section-title"><span class="tag tag-mkt"><span class="en">Markets</span><span class="ko">시장</span></span></div>
+
+<div class="card">
+  <h3><span class="en">Anthropic Takes Another $5B from Amazon, Pledges $100B AWS Spend</span><span class="ko">앤트로픽, 아마존에서 50억 달러 추가 투자 유치 — AWS 1000억 달러 지출 약속</span></h3>
+  <div class="source">TechCrunch</div>
+  <p><span class="en">Amazon is investing another $5 billion into Anthropic, while Anthropic commits to spend $100 billion on AWS over time. It's a stark reminder that frontier AI competition is now deeply intertwined with cloud infrastructure economics — and the checks keep getting bigger.</span><span class="ko">아마존이 앤트로픽에 50억 달러를 추가 투자하고, 앤트로픽은 시간이 지나면서 AWS에 1000억 달러를 지출하기로 약속했습니다. 최전선 AI 경쟁이 클라우드 인프라 경제학과 깊이 얽혀 있으며, 그 규모는 계속 커지고 있다는 사실을 보여줍니다.</span></p>
+  <a href="https://techcrunch.com/2026/04/20/anthropic-takes-5b-from-amazon-and-pledges-100b-in-cloud-spending-in-return/" target="_blank"><span class="en">Read more →</span><span class="ko">자세히 보기 →</span></a>
+</div>
+
+<div class="card">
+  <h3><span class="en">SpaceX IPO Buzz Points to a Potential Trillion-Dollar Bet</span><span class="ko">스페이스X IPO 움직임, 1조 달러 규모 가능성 부각</span></h3>
+  <div class="source">The Verge</div>
+  <p><span class="en">The Verge frames the looming SpaceX IPO as a trillion-dollar gamble tied to Starship, satellite economics, launch dominance, and commercial space station ambitions. If it happens, it could become one of the defining public offerings of the decade.</span><span class="ko">더 버지는 다가오는 스페이스X IPO를 스타십, 위성 경제, 발사 지배력, 상업 우주정거장 야망과 연결된 1조 달러 규모의 도전으로 분석합니다. 실현된다면 이번 10년을 정의하는 기업공개 중 하나가 될 수 있습니다.</span></p>
+  <a href="https://www.theverge.com/science/915244/spacex-ipo-trillion-dollar-commercial-iss-nasa-launch" target="_blank"><span class="en">Read more →</span><span class="ko">자세히 보기 →</span></a>
+</div>
+
+<!-- SEMICONDUCTORS -->
+<div class="section-title"><span class="tag tag-semi"><span class="en">Semiconductors</span><span class="ko">반도체</span></span></div>
+
+<div class="card">
+  <h3><span class="en">Semiconductor Startups Raised $8.4B in Q1 2026</span><span class="ko">반도체 스타트업, 2026년 1분기 84억 달러 유치</span></h3>
+  <div class="source">SemiEngineering</div>
+  <p><span class="en">Eighty semiconductor startups raised a combined $8.4 billion in Q1, with especially large rounds in AI inference silicon, EDA automation, interconnects, photonics, packaging, and manufacturing equipment. Capital is still aggressively chasing AI-era hardware bottlenecks.</span><span class="ko">80개 반도체 스타트업이 1분기에 총 84억 달러를 유치했으며, AI 추론 칩, EDA 자동화, 인터커넥트, 포토닉스, 패키징, 제조 장비 분야에서 특히 대규모 투자가 이뤄졌습니다. AI 시대 하드웨어 병목을 겨냥한 자본 투입이 여전히 공격적입니다.</span></p>
+  <a href="https://semiengineering.com/startup-funding-q1-2026/" target="_blank"><span class="en">Read more →</span><span class="ko">자세히 보기 →</span></a>
+</div>
+
+<div class="card">
+  <h3><span class="en">Cerebras Files for IPO Despite Concentration Risk</span><span class="ko">세레브라스, 집중 리스크에도 IPO 신청</span></h3>
+  <div class="source">Tom's Hardware</div>
+  <p><span class="en">Cerebras filed for an IPO after reporting roughly 20x revenue growth, but the filing also highlights customer concentration and ongoing unprofitability. It's an important test case for how AI chip demand and capital intensity collide in public markets.</span><span class="ko">세레브라스가 약 20배 매출 성장을 보고한 후 IPO를 신청했지만, 고객 집중도와 지속적인 적자 문제도 함께 드러났습니다. AI 칩 수요와 자본 집약도가 공개 시장에서 어떻게 충돌하는지 보여주는 중요한 시험대입니다.</span></p>
+  <a href="https://www.tomshardware.com/tech-industry/artificial-intelligence/cerebras-files-for-ipo-company-remains-unprofitable-despite-20x-revenue-growth" target="_blank"><span class="en">Read more →</span><span class="ko">자세히 보기 →</span></a>
+</div>
+
+<!-- WILD CARD -->
+<div class="section-title"><span class="tag tag-wild"><span class="en">Wild Card</span><span class="ko">와일드 카드</span></span></div>
+
+<div class="card">
+  <h3><span class="en">Blue Energy Raises $380M to Build Nuclear Reactors in Shipyards</span><span class="ko">블루 에너지, 조선소에서 원자로 건설 위해 3억 8000만 달러 유치</span></h3>
+  <div class="source">TechCrunch</div>
+  <p><span class="en">Blue Energy raised $380 million with a plan to manufacture grid-scale reactors in shipyards instead of custom-building them on site. The pitch: serial production could make nuclear power cheaper and easier to finance — bringing factory economics to an industry that desperately needs them.</span><span class="ko">블루 에너지가 현장 맞춤 건설 대신 조선소에서 그리드 규모 원자로를 제조하겠다는 계획으로 3억 8000만 달러를 유치했습니다. 핵심은 연속 생산이 원자력 발전의 비용을 낮추고 자금 조달을 쉽게 만들 수 있다는 것입니다.</span></p>
+  <a href="https://techcrunch.com/2026/04/21/blue-energy-raises-380m-to-build-grid-scale-nuclear-reactors-in-shipyards/" target="_blank"><span class="en">Read more →</span><span class="ko">자세히 보기 →</span></a>
+</div>
+
+<div class="card">
+  <h3><span class="en">US Lawmakers Split Over Section 702 Surveillance Before Expiry</span><span class="ko">미국 의원들, 702조 감시법 만료 앞두고 의견 분열</span></h3>
+  <div class="source">TechCrunch</div>
+  <p><span class="en">With Section 702 set to expire, lawmakers are split between renewing broad surveillance powers and pushing stronger protections against warrantless surveillance of Americans. It's a policy story worth watching — it hits privacy, security, and the future shape of state access to digital data.</span><span class="ko">702조 만료를 앞두고 의원들은 광범위한 감시 권한 갱신과 미국인에 대한 영장 없는 감시 강화 보호 사이에서 의견이 갈리고 있습니다. 개인정보 보호, 보안, 국가의 디지털 데이터 접근의 미래를 결정짓는 중요한 정책 이슈입니다.</span></p>
+  <a href="https://techcrunch.com/2026/04/21/with-us-spy-laws-set-to-expire-lawmakers-are-split-over-protecting-americans-from-warrantless-surveillance/" target="_blank"><span class="en">Read more →</span><span class="ko">자세히 보기 →</span></a>
+</div>
+
+<footer>
+  <span class="en">Curated by Totoro 🌳 for Minjun</span><span class="ko">토토로 🌳가 민준을 위해 큐레이션</span>
+</footer>
+
+<script>
+let isKorean = false;
+function toggleLang() {
+  isKorean = !isKorean;
+  document.querySelectorAll('.en').forEach(el => el.classList.toggle('hide', isKorean));
+  document.querySelectorAll('.ko').forEach(el => el.classList.toggle('show', isKorean));
+  document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+}
+</script>
+</body>
+</html>
