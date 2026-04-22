@@ -1,0 +1,17 @@
+Good morning Minjun, it's Wednesday April 22nd. Lots to cover today, especially out of Google Cloud Next.
+
+Starting with AI and tech. A startup called 10x Science just raised a 4.8 million dollar seed round, and their focus is interesting. They're not generating more drug candidates with AI — they're figuring out which ones actually matter, using mass spectrometry and algorithms to characterize proteins. The bottleneck in AI drug discovery is moving downstream into the lab.
+
+Google Maps got a major AI upgrade at Cloud Next. They launched imagery grounding, aerial and satellite insights, and new Earth AI models. Geospatial work is becoming prompt-driven, which is a big shift for planners and construction teams.
+
+Also at Cloud Next, Google earmarked 750 million dollars to help startups like Notion, Gamma, and Lovable sell AI agents to enterprises. Cloud credits, engineering support, deployment rebates. Hyperscalers are now actively subsidizing agent adoption.
+
+And Meta announced it will record employee keystrokes to train its AI models. They say they need real examples of how people use computers to build better agents, but the privacy and governance questions are immediate.
+
+On the markets side, Mira Murati's Thinking Machines Lab signed a multi-billion-dollar cloud and infrastructure deal with Google, including access to Nvidia GB300 systems. Frontier labs are locking up compute early. Meanwhile, SpaceX is partnering with Cursor on AI coding and holds an option to acquire the company for 60 billion dollars. AI coding platforms are now valued like strategic assets, not just software tools.
+
+In semiconductors, Anker — yes, the charger company — unveiled its own AI chip called Thus. It's a compute-in-memory audio chip built for local inference in earbuds and small devices. Custom silicon is spreading way beyond traditional chipmakers. And in Europe, chip and electrical stocks surged on strong earnings and AI demand optimism. The AI trade is lifting hardware suppliers globally, not just the US mega caps.
+
+Two wild cards to close. Redwood Materials laid off about 10 percent of its staff as it pivots toward energy storage. Battery recycling is still strong, but the EV slowdown is reshaping priorities across climate tech. And finally, Anthropic's restricted cybersecurity model Mythos was reportedly accessed by unauthorized users through a third-party contractor environment. Frontier model security is becoming a real operational risk, not just a policy talking point.
+
+That's your ten for today. Have a good Wednesday, Minjun.
