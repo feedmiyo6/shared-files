@@ -1,0 +1,23 @@
+Good morning Minjun, it's Thursday April 23rd. Big earnings day and some serious geopolitical moves — let's get into it.
+
+Starting with AI and tech. The White House just accused China of running industrial-scale campaigns to steal American AI models. A memo from science and tech policy director Michael Kratsios says tens of thousands of proxy accounts are being used to distill frontier models — basically sending massive volumes of queries to reverse-engineer proprietary capabilities. The administration plans to share intelligence with AI labs and explore countermeasures ahead of a Trump-Xi summit next month.
+
+Meta is cutting 10 percent of its workforce — roughly 8,000 people — effective May 20th, and canceling 6,000 open roles. The reason? To offset what's now a 135 billion dollar AI spending plan for 2026, nearly double last year. Zuckerberg has called this the year AI dramatically changes how we work, but for 8,000 employees, it's changing things a lot faster than expected.
+
+Nvidia is going nuclear — literally. It announced a collaboration with Oklo and Los Alamos National Laboratory to use AI for nuclear fuel validation and to build nuclear-powered AI factories. They're combining Oklo's sodium-fast reactor design with Nvidia's AI infrastructure and LANL's materials science expertise. If you're wondering where all the power for AI data centers comes from, this is one answer.
+
+And from Stanford's 2026 AI Index report — the estimated value of generative AI tools to US consumers has hit 172 billion dollars annually, with the median value per user tripling between 2025 and 2026. AI is becoming embedded infrastructure, not just a novelty.
+
+Moving to markets. Intel absolutely crushed Q1 earnings — adjusted EPS came in at 29 cents versus the 1 cent Wall Street expected, on revenue of 13.6 billion versus 12.4 billion expected. The stock jumped 20 percent after hours. Data center revenue climbed 22 percent, and they've now beaten expectations six quarters in a row. Intel's turnaround under Lip-Bu Tan is looking real.
+
+On the flip side, software stocks got hammered. ServiceNow fell nearly 18 percent and IBM dropped 9 percent despite both beating estimates. The issue is slowing growth and AI disruption anxiety. Salesforce, Adobe, Workday, and others all fell 6 to 9 percent in sympathy. Solid earnings aren't enough anymore — the market wants proof that traditional software can survive the AI wave.
+
+In semiconductors, NEO Semiconductor announced successful proof-of-concept results for its 3D X-DRAM technology — a next-gen high-density memory architecture designed for AI workloads. They also secured a strategic investment led by Stan Shih, the founder of Acer and former TSMC board director. Memory innovation for AI is heating up fast.
+
+And South Korea's economy just posted its fastest growth in five years, driven by a 5.1 percent jump in exports led by semiconductors. The AI chip boom isn't just an American story — it's lifting entire national economies.
+
+Two wild cards to close. Tesla raised its 2026 capex guidance to 25 billion dollars — nearly triple last year — for AI training, Optimus robots, Cybercab production, and a new semiconductor fab in Austin. The company will go free-cash-flow negative for the rest of 2026, but ended Q1 with 44.7 billion in cash. Musk's bet is that capex now means dominance later.
+
+And finally, Jeff Bezos is reportedly closing in on a 10 billion dollar funding round for his AI lab, which is focused on models that understand the physical world. Between Bezos, Murati's Thinking Machines Lab, and the frontier labs, the capital flowing into foundational AI research is reaching levels we've never seen before.
+
+That's your ten for today. Have a good Thursday, Minjun.
