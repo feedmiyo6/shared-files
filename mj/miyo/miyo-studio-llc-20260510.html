@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Miyo Studio LLC — Software for everyday life</title>
+  <meta name="description" content="Miyo Studio LLC builds practical software and mobile apps that help people live better while reducing waste and caring for the earth.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌿</text></svg>">
+  <style>
+    /* ——— Reset & Base ——— */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --stone-50: #fafaf9;
+      --stone-100: #f5f5f4;
+      --stone-200: #e7e5e4;
+      --stone-300: #d6d3d1;
+      --stone-400: #a8a29e;
+      --stone-500: #78716c;
+      --stone-600: #57534e;
+      --stone-700: #44403c;
+      --stone-800: #292524;
+      --stone-900: #1c1917;
+      --sage-50: #f6f7f5;
+      --sage-100: #e8ebe5;
+      --sage-200: #d4dace;
+      --sage-400: #8a9a7c;
+      --sage-500: #6b7d5c;
+      --sage-600: #556a45;
+      --sage-700: #3f5232;
+      --warm-50: #fef9f3;
+      --warm-100: #fceedd;
+      --terracotta: #b8704a;
+      --terracotta-light: #d4956e;
+    }
+
+    html {
+      font-size: 16px;
+      scroll-behavior: smooth;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    body {
+      font-family: 'Iowan Old Style', 'Palatino Linotype', 'Georgia', serif;
+      color: var(--stone-800);
+      background: var(--stone-50);
+      line-height: 1.7;
+    }
+
+    /* ——— Typography ——— */
+    h1, h2, h3, h4, nav, .btn, .footer-nav a {
+      font-family: system-ui, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+    }
+
+    h1 { font-size: clamp(2rem, 4.5vw, 3.25rem); font-weight: 600; line-height: 1.15; letter-spacing: -0.02em; }
+    h2 { font-size: clamp(1.5rem, 3vw, 2.25rem); font-weight: 600; line-height: 1.2; letter-spacing: -0.015em; }
+    h3 { font-size: 1.15rem; font-weight: 600; line-height: 1.3; }
+
+    p { max-width: 38em; }
+
+    a { color: inherit; text-decoration: none; }
+
+    /* ——— Layout ——— */
+    .container {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+
+    section {
+      padding: 5rem 0;
+    }
+
+    /* ——— Header ——— */
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background: rgba(250, 250, 249, 0.92);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--stone-200);
+      transition: box-shadow 0.3s ease;
+    }
+
+    header.scrolled {
+      box-shadow: 0 1px 8px rgba(0,0,0,0.06);
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 3.75rem;
+    }
+
+    .wordmark {
+      font-family: system-ui, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      color: var(--stone-900);
+    }
+
+    .wordmark span {
+      font-weight: 400;
+      color: var(--stone-500);
+      margin-left: 0.15em;
+    }
+
+    nav { display: flex; gap: 2rem; align-items: center; }
+
+    nav a {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--stone-600);
+      transition: color 0.2s;
+      letter-spacing: 0.01em;
+    }
+
+    nav a:hover { color: var(--stone-900); }
+
+    .mobile-toggle {
+      display: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0.5rem;
+      color: var(--stone-700);
+    }
+
+    .mobile-toggle svg { display: block; }
+
+    /* ——— Hero ——— */
+    .hero {
+      padding: 9rem 0 5rem;
+      background: linear-gradient(180deg, var(--warm-50) 0%, var(--stone-50) 100%);
+    }
+
+    .hero-content { max-width: 640px; }
+
+    .hero h1 {
+      color: var(--stone-900);
+      margin-bottom: 1.25rem;
+    }
+
+    .hero p {
+      font-size: 1.15rem;
+      color: var(--stone-600);
+      margin-bottom: 2rem;
+      line-height: 1.75;
+    }
+
+    .hero-cta {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .btn {
+      display: inline-block;
+      font-size: 0.9rem;
+      font-weight: 500;
+      padding: 0.7rem 1.6rem;
+      border-radius: 6px;
+      transition: all 0.2s ease;
+      letter-spacing: 0.01em;
+    }
+
+    .btn-primary {
+      background: var(--stone-800);
+      color: var(--stone-50);
+    }
+
+    .btn-primary:hover {
+      background: var(--stone-900);
+      transform: translateY(-1px);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+    }
+
+    .btn-secondary {
+      color: var(--stone-600);
+      border: 1px solid var(--stone-300);
+      background: white;
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--stone-400);
+      color: var(--stone-800);
+    }
+
+    /* ——— Mission ——— */
+    .mission {
+      border-top: 1px solid var(--stone-200);
+    }
+
+    .mission-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: start;
+    }
+
+    .mission-label {
+      font-family: system-ui, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--sage-500);
+      margin-bottom: 1rem;
+    }
+
+    .mission h2 {
+      margin-bottom: 1.25rem;
+      color: var(--stone-900);
+    }
+
+    .mission p {
+      color: var(--stone-600);
+      font-size: 1.05rem;
+      line-height: 1.8;
+    }
+
+    .mission p + p {
+      margin-top: 1rem;
+    }
+
+    .values-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      margin-top: 0.5rem;
+    }
+
+    .values-list li {
+      padding-left: 1.25rem;
+      border-left: 2px solid var(--sage-200);
+      color: var(--stone-600);
+      font-size: 1rem;
+    }
+
+    .values-list li strong {
+      display: block;
+      font-family: system-ui, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+      color: var(--stone-800);
+      font-size: 0.95rem;
+      margin-bottom: 0.2rem;
+    }
+
+    /* ——— Product (Fridgenie) ——— */
+    .product {
+      background: var(--sage-50);
+      border-top: 1px solid var(--sage-100);
+      border-bottom: 1px solid var(--sage-100);
+    }
+
+    .product-card {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3.5rem;
+      align-items: center;
+      background: white;
+      border: 1px solid var(--stone-200);
+      border-radius: 12px;
+      padding: 3rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    }
+
+    .product-visual {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(145deg, var(--warm-50), var(--sage-50));
+      border-radius: 10px;
+      aspect-ratio: 1;
+      max-height: 380px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .app-mockup {
+      width: 55%;
+      max-width: 180px;
+      background: white;
+      border-radius: 20px;
+      padding: 0.75rem;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.1), 0 1px 4px rgba(0,0,0,0.05);
+    }
+
+    .app-screen {
+      background: var(--stone-50);
+      border-radius: 14px;
+      padding: 1rem;
+      font-family: system-ui, -apple-system, sans-serif;
+    }
+
+    .app-status {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.55rem;
+      color: var(--stone-400);
+      margin-bottom: 0.75rem;
+    }
+
+    .app-title {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--stone-800);
+      margin-bottom: 0.15rem;
+    }
+
+    .app-subtitle {
+      font-size: 0.55rem;
+      color: var(--stone-500);
+      margin-bottom: 0.75rem;
+    }
+
+    .app-ingredient-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.3rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .app-chip {
+      font-size: 0.5rem;
+      padding: 0.2rem 0.45rem;
+      background: var(--sage-100);
+      color: var(--sage-700);
+      border-radius: 4px;
+      font-weight: 500;
+    }
+
+    .app-recipe {
+      background: white;
+      border-radius: 8px;
+      padding: 0.6rem;
+      border: 1px solid var(--stone-200);
+    }
+
+    .app-recipe-title {
+      font-size: 0.6rem;
+      font-weight: 600;
+      color: var(--stone-800);
+    }
+
+    .app-recipe-meta {
+      font-size: 0.45rem;
+      color: var(--sage-500);
+      margin-top: 0.15rem;
+    }
+
+    .product-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-family: system-ui, -apple-system, sans-serif;
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--sage-600);
+      background: var(--sage-100);
+      padding: 0.3rem 0.7rem;
+      border-radius: 100px;
+      margin-bottom: 1rem;
+    }
+
+    .product-badge::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      background: var(--sage-500);
+      border-radius: 50%;
+    }
+
+    .product-info h2 {
+      margin-bottom: 0.75rem;
+      color: var(--stone-900);
+    }
+
+    .product-info p {
+      color: var(--stone-600);
+      font-size: 1.05rem;
+      line-height: 1.8;
+    }
+
+    .product-info p + p { margin-top: 0.75rem; }
+
+    .product-features {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+      margin-top: 1.5rem;
+      list-style: none;
+    }
+
+    .product-features li {
+      font-family: system-ui, -apple-system, sans-serif;
+      font-size: 0.85rem;
+      color: var(--stone-600);
+      padding-left: 1.2rem;
+      position: relative;
+    }
+
+    .product-features li::before {
+      content: '—';
+      position: absolute;
+      left: 0;
+      color: var(--sage-400);
+    }
+
+    /* ——— Focus Areas ——— */
+    .focus {
+      border-top: 1px solid var(--stone-200);
+    }
+
+    .focus-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .focus-header h2 { margin-bottom: 0.75rem; }
+
+    .focus-header p {
+      color: var(--stone-500);
+      font-size: 1.05rem;
+      margin: 0 auto;
+    }
+
+    .focus-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+
+    .focus-card {
+      padding: 2rem 1.75rem;
+      border: 1px solid var(--stone-200);
+      border-radius: 10px;
+      background: white;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .focus-card:hover {
+      border-color: var(--stone-300);
+      box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+    }
+
+    .focus-icon {
+      width: 2.5rem;
+      height: 2.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--sage-50);
+      border-radius: 8px;
+      margin-bottom: 1rem;
+      font-size: 1.15rem;
+    }
+
+    .focus-card h3 {
+      margin-bottom: 0.5rem;
+      color: var(--stone-800);
+    }
+
+    .focus-card p {
+      font-size: 0.95rem;
+      color: var(--stone-500);
+      line-height: 1.65;
+    }
+
+    /* ——— Footer ——— */
+    footer {
+      background: var(--stone-900);
+      color: var(--stone-400);
+      padding: 3.5rem 0 2.5rem;
+    }
+
+    .footer-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: start;
+      margin-bottom: 3rem;
+      gap: 2rem;
+    }
+
+    .footer-brand .wordmark {
+      color: var(--stone-100);
+      margin-bottom: 0.5rem;
+      display: block;
+    }
+
+    .footer-brand .wordmark span {
+      color: var(--stone-500);
+    }
+
+    .footer-tagline {
+      font-size: 0.9rem;
+      color: var(--stone-500);
+      max-width: 280px;
+      line-height: 1.6;
+    }
+
+    .footer-nav {
+      display: flex;
+      gap: 2rem;
+    }
+
+    .footer-nav a {
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--stone-400);
+      transition: color 0.2s;
+    }
+
+    .footer-nav a:hover { color: var(--stone-200); }
+
+    .footer-bottom {
+      border-top: 1px solid var(--stone-700);
+      padding-top: 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .footer-copy {
+      font-family: system-ui, -apple-system, sans-serif;
+      font-size: 0.8rem;
+      color: var(--stone-500);
+    }
+
+    .footer-contact a {
+      font-family: system-ui, -apple-system, sans-serif;
+      font-size: 0.8rem;
+      color: var(--stone-400);
+      transition: color 0.2s;
+    }
+
+    .footer-contact a:hover { color: var(--stone-200); }
+
+    /* ——— Responsive ——— */
+    @media (max-width: 768px) {
+      section { padding: 3.5rem 0; }
+
+      .hero { padding: 7rem 0 3.5rem; }
+
+      nav { display: none; }
+      nav.open {
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: rgba(250, 250, 249, 0.98);
+        backdrop-filter: blur(12px);
+        padding: 1rem 1.5rem 1.5rem;
+        gap: 0.75rem;
+        border-bottom: 1px solid var(--stone-200);
+      }
+
+      .mobile-toggle { display: block; }
+
+      .mission-grid {
+        grid-template-columns: 1fr;
+        gap: 2.5rem;
+      }
+
+      .product-card {
+        grid-template-columns: 1fr;
+        padding: 2rem;
+      }
+
+      .product-visual {
+        max-height: 300px;
+        order: -1;
+      }
+
+      .product-features {
+        grid-template-columns: 1fr;
+      }
+
+      .focus-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .footer-top {
+        flex-direction: column;
+      }
+
+      .footer-bottom {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .hero h1 { font-size: 1.75rem; }
+      .product-card { padding: 1.5rem; }
+      .hero-cta { flex-direction: column; align-items: flex-start; }
+    }
+
+    /* ——— Subtle animations ——— */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .fade-up.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header id="header">
+    <div class="container header-inner">
+      <a href="#" class="wordmark">Miyo Studio <span>LLC</span></a>
+      <nav id="nav">
+        <a href="#mission">About</a>
+        <a href="#product">Products</a>
+        <a href="#focus">What We Build</a>
+        <a href="#contact">Contact</a>
+      </nav>
+      <button class="mobile-toggle" id="menu-btn" aria-label="Toggle navigation">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <line x1="3" y1="6" x2="21" y2="6"/>
+          <line x1="3" y1="12" x2="21" y2="12"/>
+          <line x1="3" y1="18" x2="21" y2="18"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-content fade-up">
+        <h1>Software for the way<br>you actually live</h1>
+        <p>Miyo Studio builds thoughtful mobile apps and software tools. We focus on the small, everyday moments — cooking, planning, making less go to waste — and try to make them a little easier.</p>
+        <div class="hero-cta">
+          <a href="#product" class="btn btn-primary">See our work</a>
+          <a href="#mission" class="btn btn-secondary">Our story</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Mission -->
+  <section class="mission" id="mission">
+    <div class="container">
+      <div class="mission-grid">
+        <div class="fade-up">
+          <div class="mission-label">Our story</div>
+          <h2>We started with a simple question</h2>
+          <p>What if the tools we use every day were designed with a little more care — for us and for the world around us?</p>
+          <p>Miyo Studio is a small software company. We design and build mobile apps and digital tools that solve real, specific problems. Not everything needs to be a platform. Sometimes a well-made app that does one thing well is exactly enough.</p>
+          <p>We care about sustainability — not as a tagline, but as a design constraint. Every product we make considers what it helps people use, reuse, or waste less of.</p>
+        </div>
+        <div class="fade-up">
+          <div class="mission-label">What drives us</div>
+          <ul class="values-list">
+            <li>
+              <strong>Make useful things</strong>
+              Products should solve problems people actually have, not problems we invented to sell a solution.
+            </li>
+            <li>
+              <strong>Respect people's time</strong>
+              No dark patterns, no engagement traps. Open the app, get what you need, close the app.
+            </li>
+            <li>
+              <strong>Waste less, gently</strong>
+              Sustainability works best when it fits into your life without friction. We design for that.
+            </li>
+            <li>
+              <strong>Stay small on purpose</strong>
+              We'd rather make a few great products than chase growth for its own sake.
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Product: Fridgenie -->
+  <section class="product" id="product">
+    <div class="container">
+      <div class="product-card fade-up">
+        <div class="product-visual">
+          <div class="app-mockup">
+            <div class="app-screen">
+              <div class="app-status">
+                <span>9:41</span>
+                <span>●●●</span>
+              </div>
+              <div class="app-title">Fridgenie</div>
+              <div class="app-subtitle">What's in your fridge?</div>
+              <div class="app-ingredient-row">
+                <span class="app-chip">chicken</span>
+                <span class="app-chip">rice</span>
+                <span class="app-chip">broccoli</span>
+                <span class="app-chip">soy sauce</span>
+                <span class="app-chip">garlic</span>
+              </div>
+              <div class="app-recipe">
+                <div class="app-recipe-title">Garlic Chicken Stir Fry</div>
+                <div class="app-recipe-meta">25 min · uses 5 ingredients</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="product-info">
+          <div class="product-badge">Available now</div>
+          <h2>Fridgenie</h2>
+          <p>A recipe app that works backward — starting from what you already have. Tell Fridgenie what's in your fridge, and it generates meal ideas using those ingredients. Leftovers, odds and ends, that half a bag of spinach — it all becomes dinner.</p>
+          <p>Built for people who want to cook more and waste less, without needing a meal plan or a grocery run.</p>
+          <ul class="product-features">
+            <li>Recipe ideas from your ingredients</li>
+            <li>Reduce food waste at home</li>
+            <li>No meal planning required</li>
+            <li>Works with what you have</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Focus Areas -->
+  <section class="focus" id="focus">
+    <div class="container">
+      <div class="focus-header fade-up">
+        <h2>What we're working on</h2>
+        <p>Areas we care about and where we think good software can help.</p>
+      </div>
+      <div class="focus-grid">
+        <div class="focus-card fade-up">
+          <div class="focus-icon">🍽</div>
+          <h3>Food &amp; Home</h3>
+          <p>Helping households cook smarter, store better, and throw away less. Fridgenie is our first step here — there's more to explore.</p>
+        </div>
+        <div class="focus-card fade-up">
+          <div class="focus-icon">♻️</div>
+          <h3>Everyday sustainability</h3>
+          <p>Small tools that make sustainable choices the easy default. We're interested in habits, not lectures — software that fits into routines people already have.</p>
+        </div>
+        <div class="focus-card fade-up">
+          <div class="focus-icon">🧰</div>
+          <h3>Practical utilities</h3>
+          <p>Simple, well-made tools for specific problems. Not every app needs to be a social network. Sometimes you just need something that works.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer / Contact -->
+  <footer id="contact">
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <span class="wordmark">Miyo Studio <span>LLC</span></span>
+          <p class="footer-tagline">Thoughtful software for everyday life. Built with care, designed to last.</p>
+        </div>
+        <div class="footer-nav">
+          <a href="#mission">About</a>
+          <a href="#product">Products</a>
+          <a href="#focus">What We Build</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span class="footer-copy">&copy; 2025 Miyo Studio LLC. All rights reserved.</span>
+        <div class="footer-contact">
+          <a href="mailto:hello@miyostudiollc.com">hello@miyostudiollc.com</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Header scroll effect
+    var header = document.getElementById('header');
+    window.addEventListener('scroll', function () {
+      header.classList.toggle('scrolled', window.scrollY > 10);
+    });
+
+    // Mobile nav toggle
+    var menuBtn = document.getElementById('menu-btn');
+    var nav = document.getElementById('nav');
+    menuBtn.addEventListener('click', function () {
+      nav.classList.toggle('open');
+    });
+
+    // Close mobile nav on link click
+    nav.querySelectorAll('a').forEach(function (link) {
+      link.addEventListener('click', function () {
+        nav.classList.remove('open');
+      });
+    });
+
+    // Scroll-triggered fade-in
+    var faders = document.querySelectorAll('.fade-up');
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15 });
+
+    faders.forEach(function (el) { observer.observe(el); });
+  </script>
+
+</body>
+</html>
