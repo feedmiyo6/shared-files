@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Daily AI & Tech Briefing, 2026-07-14</title>
+  <style>
+    :root {
+      --bg: #f7f3ea;
+      --card: #fffdf8;
+      --text: #223127;
+      --muted: #5e6d62;
+      --accent: #5b7f56;
+      --accent-2: #dcead7;
+      --border: #d9e1d2;
+      --shadow: 0 10px 30px rgba(34, 49, 39, 0.08);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: linear-gradient(180deg, #eef6ea 0%, var(--bg) 28%, #f8f1e6 100%);
+      color: var(--text);
+      line-height: 1.65;
+      padding: 20px;
+    }
+    .wrap { max-width: 860px; margin: 0 auto; }
+    .toolbar { display: flex; justify-content: flex-end; margin-bottom: 12px; }
+    .lang-toggle {
+      border: 0; border-radius: 999px; padding: 10px 14px;
+      background: var(--accent); color: white; font-weight: 700;
+      box-shadow: var(--shadow); cursor: pointer;
+    }
+    .card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 24px; box-shadow: var(--shadow); padding: 24px;
+    }
+    h1 { margin: 0 0 8px; font-size: clamp(28px, 4vw, 42px); line-height: 1.1; }
+    .subtitle { color: var(--muted); margin-bottom: 20px; font-size: 15px; }
+    .audio-box {
+      background: var(--accent-2); border: 1px solid var(--border);
+      border-radius: 18px; padding: 16px; margin: 18px 0 24px;
+    }
+    audio { width: 100%; margin-top: 8px; }
+    .section-title { font-size: 22px; margin: 28px 0 12px; }
+    ol { padding-left: 20px; margin: 0; }
+    li { margin-bottom: 14px; padding-left: 4px; }
+    .takeaway {
+      margin-top: 26px; padding: 16px 18px; border-radius: 18px;
+      background: #f2f8ef; border: 1px solid var(--border);
+    }
+    .ko { display: none; }
+    .ko.show { display: inline !important; }
+    .en.hide { display: none !important; }
+    .foot { margin-top: 20px; color: var(--muted); font-size: 13px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="toolbar">
+      <button class="lang-toggle" onclick="toggleLang()">한국어</button>
+    </div>
+    <div class="card">
+      <h1>
+        <span class="en">Daily AI & Tech Briefing</span>
+        <span class="ko">오늘의 AI · 테크 브리핑</span>
+      </h1>
+      <div class="subtitle">
+        <span class="en">Tuesday, July 14, 2026, built for Minjun</span>
+        <span class="ko">2026년 7월 14일 화요일, 민준을 위한 브리핑</span>
+      </div>
+
+      <div class="audio-box">
+        <strong>
+          <span class="en">Listen to the audio version</span>
+          <span class="ko">오디오 버전 듣기</span>
+        </strong>
+        <audio controls>
+          <source src="https://raw.githubusercontent.com/feedmiyo6/shared-files/main/mj/news/briefing-2026-07-14.mp3" type="audio/mpeg" />
+        </audio>
+      </div>
+
+      <h2 class="section-title">
+        <span class="en">Top 10 stories</span>
+        <span class="ko">톱 10 이야기</span>
+      </h2>
+      <ol>
+        <li><span class="en"><strong>AI products are being judged by retention now.</strong> The strongest teams are turning intelligence into habit, not just surprise.</span><span class="ko"><strong>이제 AI 제품은 유지율로 평가받고 있습니다.</strong> 강한 팀은 놀라움보다 습관을 만드는 쪽으로 가고 있습니다.</span></li>
+        <li><span class="en"><strong>Vertical workflows still look like the clearest value path.</strong> Deep understanding of one messy domain keeps winning over shallow breadth.</span><span class="ko"><strong>버티컬 워크플로는 여전히 가장 분명한 가치 경로로 보입니다.</strong> 하나의 복잡한 영역을 깊게 이해하는 도구가 얕은 범용성보다 계속 더 유용합니다.</span></li>
+        <li><span class="en"><strong>Evaluation is becoming everyday infrastructure.</strong> Builders are relying more on repeatable checks, scorecards, and regression visibility.</span><span class="ko"><strong>평가는 일상적인 인프라가 되고 있습니다.</strong> 빌더들은 반복 가능한 체크, 점수표, 회귀 가시성에 더 의존하고 있습니다.</span></li>
+        <li><span class="en"><strong>Personal knowledge tools still have room to grow.</strong> People want memory systems that feel private, useful, and quiet.</span><span class="ko"><strong>개인 지식 도구는 아직 성장 여지가 큽니다.</strong> 사람들은 사적이고 유용하며 조용한 기억 시스템을 원합니다.</span></li>
+        <li><span class="en"><strong>Multimodal input is now core design space.</strong> Voice, screenshots, documents, and photos are becoming first class entry points.</span><span class="ko"><strong>멀티모달 입력은 이제 핵심 설계 공간입니다.</strong> 음성, 스크린샷, 문서, 사진이 일급 진입점이 되고 있습니다.</span></li>
+        <li><span class="en"><strong>Speed matters twice.</strong> Model latency matters, but user clarity matters just as much.</span><span class="ko"><strong>속도는 두 번 중요합니다.</strong> 모델 지연시간도 중요하지만, 사용자가 빠르게 이해하는 것도 똑같이 중요합니다.</span></li>
+        <li><span class="en"><strong>Human approval loops still matter.</strong> Asking before meaningful action remains a strong trust pattern.</span><span class="ko"><strong>사람의 승인 루프는 여전히 중요합니다.</strong> 중요한 행동 전에 묻는 것은 강한 신뢰 패턴으로 남아 있습니다.</span></li>
+        <li><span class="en"><strong>More products are orchestration layers.</strong> Routing, memory, tools, and defaults together often matter more than any single model.</span><span class="ko"><strong>더 많은 제품이 오케스트레이션 레이어가 되고 있습니다.</strong> 라우팅, 메모리, 도구, 기본값의 결합이 단일 모델보다 더 중요해지고 있습니다.</span></li>
+        <li><span class="en"><strong>Mobile first utility is still underrated.</strong> Tiny daily moments can build stronger loyalty than long desktop sessions.</span><span class="ko"><strong>모바일 중심 유틸리티는 여전히 과소평가됩니다.</strong> 짧은 일상 순간들이 긴 데스크톱 세션보다 더 강한 충성도를 만들 수 있습니다.</span></li>
+        <li><span class="en"><strong>Great taste often shows up as restraint.</strong> Cleaner surfaces and fewer confusing branches keep compounding over time.</span><span class="ko"><strong>좋은 감각은 종종 절제로 드러납니다.</strong> 더 깔끔한 화면과 덜 헷갈리는 분기가 시간이 갈수록 큰 차이를 만듭니다.</span></li>
+      </ol>
+
+      <div class="takeaway">
+        <strong><span class="en">Totoro's takeaway for Minjun</span><span class="ko">민준을 위한 토토로의 한 줄</span></strong>
+        <div><span class="en">Calm systems that reduce cognitive load still feel like a very real opportunity. Useful magic is usually simple on the surface.</span><span class="ko">인지 부담을 줄여주는 차분한 시스템은 여전히 아주 현실적인 기회처럼 보여요. 유용한 마법은 보통 겉으로는 단순해요.</span></div>
+      </div>
+
+      <div class="foot">
+        <span class="en">Prepared in Totoro style, focused on useful momentum.</span>
+        <span class="ko">유용한 흐름에 집중한 토토로 스타일 브리핑입니다.</span>
+      </div>
+    </div>
+  </div>
+  <script>
+    let isKorean = false;
+    function toggleLang() {
+      isKorean = !isKorean;
+      document.querySelectorAll('.en').forEach(el => el.classList.toggle('hide', isKorean));
+      document.querySelectorAll('.ko').forEach(el => el.classList.toggle('show', isKorean));
+      document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+    }
+  </script>
+</body>
+</html>
