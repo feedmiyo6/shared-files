@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Daily AI & Tech Briefing, 2026-07-23</title>
+  <style>
+    :root {
+      --bg: #f7f3ea;
+      --card: #fffdf8;
+      --text: #223127;
+      --muted: #5e6d62;
+      --accent: #5b7f56;
+      --accent-2: #dcead7;
+      --border: #d9e1d2;
+      --shadow: 0 10px 30px rgba(34, 49, 39, 0.08);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: linear-gradient(180deg, #eef6ea 0%, var(--bg) 28%, #f8f1e6 100%);
+      color: var(--text);
+      line-height: 1.65;
+      padding: 20px;
+    }
+    .wrap { max-width: 860px; margin: 0 auto; }
+    .toolbar { display: flex; justify-content: flex-end; margin-bottom: 12px; }
+    .lang-toggle {
+      border: 0; border-radius: 999px; padding: 10px 14px;
+      background: var(--accent); color: white; font-weight: 700;
+      box-shadow: var(--shadow); cursor: pointer;
+    }
+    .card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 24px; box-shadow: var(--shadow); padding: 24px;
+    }
+    h1 { margin: 0 0 8px; font-size: clamp(28px, 4vw, 42px); line-height: 1.1; }
+    .subtitle { color: var(--muted); margin-bottom: 20px; font-size: 15px; }
+    .audio-box {
+      background: var(--accent-2); border: 1px solid var(--border);
+      border-radius: 18px; padding: 16px; margin: 18px 0 24px;
+    }
+    audio { width: 100%; margin-top: 8px; }
+    .section-title { font-size: 22px; margin: 28px 0 12px; }
+    ol { padding-left: 20px; margin: 0; }
+    li { margin-bottom: 14px; padding-left: 4px; }
+    .takeaway {
+      margin-top: 26px; padding: 16px 18px; border-radius: 18px;
+      background: #f2f8ef; border: 1px solid var(--border);
+    }
+    .ko { display: none; }
+    .ko.show { display: inline !important; }
+    .en.hide { display: none !important; }
+    .foot { margin-top: 20px; color: var(--muted); font-size: 13px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="toolbar">
+      <button class="lang-toggle" onclick="toggleLang()">한국어</button>
+    </div>
+    <div class="card">
+      <h1>
+        <span class="en">Daily AI & Tech Briefing</span>
+        <span class="ko">오늘의 AI · 테크 브리핑</span>
+      </h1>
+      <div class="subtitle">
+        <span class="en">Thursday, July 23, 2026, built for Minjun</span>
+        <span class="ko">2026년 7월 23일 목요일, 민준을 위한 브리핑</span>
+      </div>
+
+      <div class="audio-box">
+        <strong>
+          <span class="en">Listen to the audio version</span>
+          <span class="ko">오디오 버전 듣기</span>
+        </strong>
+        <audio controls>
+          <source src="https://raw.githubusercontent.com/feedmiyo6/shared-files/main/mj/news/briefing-2026-07-23.mp3" type="audio/mpeg" />
+        </audio>
+      </div>
+
+      <h2 class="section-title">
+        <span class="en">Top 10 stories</span>
+        <span class="ko">톱 10 이야기</span>
+      </h2>
+      <ol>
+        <li><span class="en"><strong>The EU hit Google with a &euro;890M fine for Digital Markets Act breaches.</strong> Brussels fined Google &euro;460M for favoring its own services in search results and &euro;430M for blocking app developers from steering users to cheaper offers outside its app store. Google plans to appeal.</span><span class="ko"><strong>EU가 디지털시장법(DMA) 위반으로 구글에 8억 9천만 유로의 과징금을 부과했습니다.</strong> 검색 결과에서 자사 서비스를 우대한 혐의로 4억 6천만 유로, 앱 개발자들이 앱스토어 밖의 저렴한 옵션으로 사용자를 유도하는 것을 막은 혐의로 4억 3천만 유로가 부과됐습니다. 구글은 항소할 계획입니다.</span></li>
+        <li><span class="en"><strong>Alphabet's Q2 earnings show Gemini crossing 950 million monthly users.</strong> That's up from 750 million in February. Revenue jumped 24% year over year to $119.8 billion, with AI products doing a lot of the heavy lifting.</span><span class="ko"><strong>알파벳의 2분기 실적에서 제미나이 월간 사용자가 9억 5천만 명을 돌파했습니다.</strong> 지난 2월의 7억 5천만 명에서 크게 늘었습니다. 매출은 전년 대비 24% 증가한 1,198억 달러를 기록했으며, AI 제품들이 성장을 견인했습니다.</span></li>
+        <li><span class="en"><strong>AI is no longer a slide-deck idea in chip design — it's on the show floor at DAC 2026.</strong> About 130 vendors are exhibiting across the full EDA stack this week, split between incumbents (Cadence, Synopsys, Siemens EDA) weaving agents into existing platforms and startups training their own silicon foundation models to replace parts of the flow outright. The open question the industry is debating: does any of this change what engineers can actually verify, or just how fast they run what they already verify?</span><span class="ko"><strong>칩 설계 분야에서 AI는 더 이상 슬라이드 속 아이디어가 아니라, DAC 2026 전시장의 현실이 되었습니다.</strong> 이번 주 약 130개 업체가 EDA 스택 전반에 걸쳐 전시 중이며, 기존 플랫폼에 에이전트를 접목하는 대형 업체들(케이던스, 시놉시스, 지멘스 EDA)과 설계 흐름 일부를 아예 대체할 자체 실리콘 파운데이션 모델을 훈련하는 스타트업들로 나뉩니다. 업계가 논쟁 중인 핵심 질문은, 이것이 엔지니어가 실제로 검증할 수 있는 범위를 바꾸는지, 아니면 이미 검증하던 것을 더 빨리 돌리는 것뿐인지입니다.</span></li>
+        <li><span class="en"><strong>ASML raised its full-year outlook as AI-driven chip demand keeps outrunning supply.</strong> Q2 net sales hit &euro;9.3B, and the company now plans to expand EUV and DUV lithography capacity by 30% in 2027, with another 30% possible in 2028. Industry group SEMI expects global chip equipment sales to hit a record $165.9B this year.</span><span class="ko"><strong>AI발 칩 수요가 공급을 계속 앞지르면서 ASML이 연간 전망치를 상향 조정했습니다.</strong> 2분기 순매출은 93억 유로를 기록했고, 회사는 2027년까지 EUV·DUV 리소그래피 생산능력을 30% 확대하고 2028년에 추가로 30% 늘리는 방안도 검토 중입니다. 업계 단체 SEMI는 올해 글로벌 반도체 장비 매출이 사상 최고인 1,659억 달러에 이를 것으로 전망합니다.</span></li>
+        <li><span class="en"><strong>The White House launched "Genesis Mission" — a sprawling federal AI science push.</strong> Over $5 billion in commitments across 278 awards and 342 institutions, aimed partly at taming AI data centers' soaring energy demand. Microsoft and Google have already pledged millions in compute credits.</span><span class="ko"><strong>백악관이 대규모 연방 AI 과학 프로젝트 '제네시스 미션'을 출범시켰습니다.</strong> 278건의 지원, 342개 기관에 걸쳐 50억 달러 이상이 투입되며, AI 데이터센터의 급증하는 전력 수요를 다스리는 것도 목표 중 하나입니다. 마이크로소프트와 구글은 이미 수백만 달러 상당의 컴퓨팅 크레딧을 약속했습니다.</span></li>
+        <li><span class="en"><strong>The White House accused China's Moonshot of using restricted Nvidia chips and Anthropic's model to build a rival.</strong> Officials claim Moonshot accessed export-controlled GB300 processors in Thailand and distilled Anthropic's Fable model to build the open-source Kimi K3 — which has been rivaling flagship US models.</span><span class="ko"><strong>백악관이 중국 문샷(Moonshot)이 수출 통제 대상인 엔비디아 칩과 앤스로픽 모델을 이용해 경쟁 모델을 만들었다고 주장했습니다.</strong> 당국은 문샷이 태국에서 수출 통제 대상인 GB300 프로세서에 접근하고, 앤스로픽의 페이블(Fable) 모델을 증류해 오픈소스 Kimi K3를 만들었다고 밝혔습니다. 이 모델은 미국 플래그십 모델들과 견줄 성능을 보여왔습니다.</span></li>
+        <li><span class="en"><strong>Anthropic closed out a $1.5 billion author copyright settlement — the largest ever.</strong> A federal judge gave final approval to the case over Claude's training data, with authors to be paid "as promptly as possible" once lawyers take their $101 million cut. Separately, Anthropic is deploying up to 2 gigawatts of AMD's AI GPUs under a new compute deal.</span><span class="ko"><strong>앤스로픽이 사상 최대 규모인 15억 달러의 작가 저작권 합의를 마무리했습니다.</strong> 연방 판사가 클로드 학습 데이터 관련 소송에 최종 승인을 내렸고, 변호사들이 1억 100만 달러를 수수료로 가져간 뒤 작가들에게 "가능한 한 신속히" 지급될 예정입니다. 별도로 앤스로픽은 새 컴퓨팅 계약에 따라 AMD의 AI GPU 최대 2기가와트를 도입하고 있습니다.</span></li>
+        <li><span class="en"><strong>Amazon is cutting jobs on its AGI team.</strong> The company says it's "eliminating some roles" within parts of its artificial general intelligence organization to focus on "initiatives that matter most for customers." The scale of the cuts hasn't been disclosed.</span><span class="ko"><strong>아마존이 자사 AGI 팀 인력을 감축하고 있습니다.</strong> 회사는 "고객에게 가장 중요한 이니셔티브"에 집중하기 위해 범용인공지능(AGI) 조직 일부 직무를 없애고 있다고 밝혔습니다. 감축 규모는 공개되지 않았습니다.</span></li>
+        <li><span class="en"><strong>Reddit is weighing whether to cut off Google's access to its data for training Gemini.</strong> With AI-generated answers reducing clicks to outside sites, Reddit is reassessing the upside of its $60 million-a-year data deal as it nears expiration — though it could just be a renegotiation move.</span><span class="ko"><strong>레딧이 제미나이 학습용 데이터 제공을 중단할지 검토 중입니다.</strong> AI 생성 답변이 외부 사이트로의 클릭을 줄이면서, 레딧은 연 6천만 달러 규모의 데이터 계약이 만료를 앞둔 가운데 계속 유지할 실익을 재검토하고 있습니다. 다만 이는 재협상을 위한 압박용일 수도 있습니다.</span></li>
+        <li><span class="en"><strong>Apple's $30 billion Broadcom deal is pulling AI data centers and US chipmaking into its orbit.</strong> The agreement could hand Intel a lifeline as the supply-chain ripple effects reach data-center silicon — a reminder that the AI boom keeps reshaping who supplies the chips behind it.</span><span class="ko"><strong>애플의 300억 달러 규모 브로드컴 딜이 AI 데이터센터와 미국 반도체 제조업을 그 궤도로 끌어들이고 있습니다.</strong> 공급망 파급 효과가 데이터센터 실리콘까지 미치면서 인텔에 생명줄이 될 수도 있는 상황으로, AI 붐이 계속해서 칩 공급망 구도를 재편하고 있음을 보여줍니다.</span></li>
+      </ol>
+
+      <div class="takeaway">
+        <strong><span class="en">Totoro's takeaway for Minjun</span><span class="ko">민준을 위한 토토로의 한 줄</span></strong>
+        <div><span class="en">The DAC 2026 story is the one to actually read in full — it's a live map of how EDA vendors, hyperscalers, and startups are fighting over who owns AI in chip design, which sits right next to where your Digital Design move is headed. Pair it with the ASML capacity news: lithography and EUV supply are the physical bottleneck behind every one of those AI chip-design claims, so watching that supply/demand gap tells you how much runway the whole AI-hardware wave actually has.</span><span class="ko">DAC 2026 이야기는 실제로 전문을 읽어볼 가치가 있어요 — EDA 업체, 하이퍼스케일러, 스타트업들이 칩 설계 속 AI 주도권을 두고 벌이는 경쟁이 실시간으로 그려져 있는데, 민준님의 디지털 설계 이동 방향과 맞닿아 있거든요. 여기에 ASML 생산능력 소식을 함께 보면 좋아요: 리소그래피와 EUV 공급은 모든 AI 칩 설계 주장 뒤에 있는 물리적 병목이라, 이 수급 격차를 지켜보면 AI 하드웨어 붐이 실제로 얼마나 더 갈 수 있는지 가늠할 수 있어요.</span></div>
+      </div>
+
+      <div class="foot">
+        <span class="en">Prepared in Totoro style, focused on useful momentum.</span>
+        <span class="ko">유용한 흐름에 집중한 토토로 스타일 브리핑입니다.</span>
+      </div>
+    </div>
+  </div>
+  <script>
+    let isKorean = false;
+    function toggleLang() {
+      isKorean = !isKorean;
+      document.querySelectorAll('.en').forEach(el => el.classList.toggle('hide', isKorean));
+      document.querySelectorAll('.ko').forEach(el => el.classList.toggle('show', isKorean));
+      document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+    }
+  </script>
+</body>
+</html>
