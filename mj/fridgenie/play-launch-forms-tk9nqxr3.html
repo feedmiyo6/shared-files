@@ -1,0 +1,334 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jujube — Play Store Launch Forms</title>
+<style>
+  :root {
+    --paper:#F4EFE7; --card:#FAF7F2; --section:#E1D6C8;
+    --ink:#2B1E1B; --ink-med:#5A4742; --ink-light:#8C7B75;
+    --red:#B63F39; --red-light:#F6E2DF;
+    --botanical:#D8DED6; --blush:#F2C9C4;
+    --green:#5f8a54; --amber:#a67c1f; --danger:#9b2f2c;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin:0; padding:0; background:var(--paper); color:var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, sans-serif;
+    line-height:1.55; }
+  .wrap { max-width: 860px; margin: 0 auto; padding: 24px 20px 80px; }
+  header { display:flex; align-items:baseline; justify-content:space-between;
+    padding: 20px 0 8px; border-bottom:1px solid var(--section); margin-bottom:24px; }
+  h1 { font-size: 28px; margin:0; font-family: Georgia, "Times New Roman", serif; font-weight:600; }
+  .sub { font-size:13px; color:var(--ink-light); margin-top:6px; }
+  .lang-toggle { border:1px solid var(--red); background:transparent; color:var(--red);
+    padding:6px 14px; border-radius:20px; font-size:13px; font-weight:600; cursor:pointer; }
+  .lang-toggle:hover { background:var(--red); color:#fff; }
+  section { background:var(--card); border:1px solid var(--section); border-radius:14px;
+    padding: 20px 22px; margin: 16px 0; }
+  h2 { font-family: Georgia, serif; font-size:20px; margin:0 0 6px; color:var(--red); }
+  h3 { font-family: Georgia, serif; font-size:16px; margin:14px 0 6px; color:var(--ink); }
+  h4 { font-size:14px; margin:12px 0 4px; color:var(--ink-med); text-transform:uppercase; letter-spacing:0.5px; }
+  p, li { font-size:14.5px; }
+  .callout { background:var(--red-light); border-left:4px solid var(--red); padding:10px 14px; border-radius:6px; margin:12px 0; font-size:13.5px; }
+  .callout.good { background:#e3ede0; border-color:var(--green); }
+  .callout.warn { background:#f5eede; border-color:var(--amber); }
+  .callout.danger { background:#f5dedd; border-color:var(--danger); }
+  code, .mono { font-family: SFMono-Regular, Menlo, Consolas, monospace; font-size:12.5px;
+    background:#EEE6DA; padding:2px 6px; border-radius:4px; }
+  pre { background:#EEE6DA; padding:12px; border-radius:8px; overflow-x:auto; font-size:12.5px; }
+  .tag { display:inline-block; padding:2px 8px; border-radius:10px; font-size:11px; font-weight:600;
+    vertical-align:middle; margin-left:4px; }
+  .tag.ok  { background:var(--green); color:#fff; }
+  .tag.no  { background:var(--ink-light); color:#fff; }
+  .tag.act { background:var(--red); color:#fff; }
+  table { width:100%; border-collapse:collapse; margin:10px 0; font-size:13.5px; }
+  th, td { text-align:left; padding:6px 8px; border-bottom:1px solid var(--section); vertical-align:top; }
+  th { color:var(--ink-med); font-weight:600; font-size:12px; text-transform:uppercase; letter-spacing:0.4px; }
+  .toc { list-style:none; padding-left:0; }
+  .toc li { padding:4px 0; border-bottom:1px dashed var(--section); }
+  .toc a { color:var(--red); text-decoration:none; }
+  .toc a:hover { text-decoration:underline; }
+  .checklist { list-style:none; padding-left:0; }
+  .checklist li { padding:4px 0 4px 22px; position:relative; }
+  .checklist li::before { content:"☐"; position:absolute; left:0; color:var(--ink-med); font-size:14px; }
+  .ko { display: none; }
+  .ko.show { display: inline !important; }
+  .en.hide { display: none !important; }
+  .field-row { display:flex; gap:14px; padding:8px 0; border-bottom:1px dashed var(--section); }
+  .field-row:last-child { border-bottom:0; }
+  .field-q { flex:0 0 44%; font-weight:600; }
+  .field-a { flex:1; color:var(--ink-med); }
+  .divider { height:1px; background:var(--section); margin:22px 0; }
+  footer { text-align:center; color:var(--ink-light); font-size:12px; margin-top:40px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div>
+    <h1><span class="en">Jujube — Play Store Launch Forms</span><span class="ko">주주브 — 플레이스토어 출시 양식</span></h1>
+    <div class="sub"><span class="en">Copy-paste answers for Google Play Console pre-launch questionnaires · Miyo Studio LLC · com.fridgenie.app</span><span class="ko">Google Play Console 출시 전 설문지 복사-붙여넣기용 답변 · Miyo Studio LLC · com.fridgenie.app</span></div>
+  </div>
+  <button class="lang-toggle" onclick="toggleLang()">한국어</button>
+</header>
+
+<section>
+  <h2><span class="en">How to use this doc</span><span class="ko">이 문서 사용 방법</span></h2>
+  <p><span class="en">Play Console → left sidebar → <b>App content</b>. Each form below matches a card on that page. For every form: open the card in Play Console → follow the "Do this" steps → paste answers verbatim from this doc. Estimated total time: <b>45 minutes</b>.</span><span class="ko">Play Console → 왼쪽 사이드바 → <b>앱 콘텐츠</b>. 아래 각 양식은 그 페이지의 카드와 일치합니다. 각 양식에서 Play Console 카드를 열고 → "이렇게 하세요" 단계를 따라 → 이 문서의 답변을 그대로 붙여넣으세요. 예상 소요 시간: <b>45분</b>.</span></p>
+  <div class="callout warn">
+    <span class="en"><b>Do this in one sitting.</b> Play Console saves each form independently, but you'll want to hit "Publish updates" at the end to lock everything in.</span>
+    <span class="ko"><b>한 번에 끝내세요.</b> Play Console은 각 양식을 독립적으로 저장하지만, 마지막에 "업데이트 게시"를 눌러 모두 확정해야 합니다.</span>
+  </div>
+</section>
+
+<section>
+  <h2><span class="en">Table of Contents</span><span class="ko">목차</span></h2>
+  <ul class="toc">
+    <li><a href="#privacy"><span class="en">1. Privacy Policy</span><span class="ko">1. 개인정보 처리방침</span></a></li>
+    <li><a href="#app-access"><span class="en">2. App Access</span><span class="ko">2. 앱 액세스</span></a></li>
+    <li><a href="#ads"><span class="en">3. Ads</span><span class="ko">3. 광고</span></a></li>
+    <li><a href="#content-rating"><span class="en">4. Content Rating (IARC)</span><span class="ko">4. 콘텐츠 등급 (IARC)</span></a></li>
+    <li><a href="#target-audience"><span class="en">5. Target Audience & Content</span><span class="ko">5. 타겟 사용자 및 콘텐츠</span></a></li>
+    <li><a href="#news"><span class="en">6. News App</span><span class="ko">6. 뉴스 앱</span></a></li>
+    <li><a href="#covid"><span class="en">7. COVID-19 Contact Tracing</span><span class="ko">7. COVID-19 접촉 추적</span></a></li>
+    <li><a href="#government"><span class="en">8. Government App</span><span class="ko">8. 정부 앱</span></a></li>
+    <li><a href="#financial"><span class="en">9. Financial Features</span><span class="ko">9. 금융 기능</span></a></li>
+    <li><a href="#health"><span class="en">10. Health Content</span><span class="ko">10. 건강 콘텐츠</span></a></li>
+    <li><a href="#data-safety"><span class="en">11. Data Safety <span class="tag act">longest</span></span><span class="ko">11. 데이터 안전 섹션 <span class="tag act">가장 김</span></span></a></li>
+    <li><a href="#store-listing"><span class="en">12. Store Listing</span><span class="ko">12. 스토어 등록정보</span></a></li>
+    <li><a href="#final"><span class="en">13. Final Checklist Before Promoting</span><span class="ko">13. 프로덕션 승격 전 최종 체크리스트</span></a></li>
+  </ul>
+</section>
+
+<section id="privacy">
+  <h2><span class="en">1. Privacy Policy</span><span class="ko">1. 개인정보 처리방침</span></h2>
+  <h4><span class="en">Play Console field</span><span class="ko">Play Console 필드</span></h4>
+  <div class="field-row">
+    <div class="field-q"><span class="en">Privacy policy URL</span><span class="ko">개인정보 처리방침 URL</span></div>
+    <div class="field-a"><code>https://myjujube.app/privacy</code></div>
+  </div>
+  <div class="callout good"><span class="en">✓ Already live at that URL — no work needed. Just paste and Save.</span><span class="ko">✓ 해당 URL에 이미 라이브 상태 — 추가 작업 불필요. 붙여넣고 저장만 하면 됩니다.</span></div>
+</section>
+
+<section id="app-access">
+  <h2><span class="en">2. App Access</span><span class="ko">2. 앱 액세스</span></h2>
+  <h4><span class="en">Question</span><span class="ko">질문</span></h4>
+  <p><span class="en">"Is any functionality restricted (login required, geographic restrictions, etc.)?"</span><span class="ko">"기능이 제한되어 있습니까 (로그인 필요, 지역 제한 등)?"</span></p>
+  <h4><span class="en">Answer</span><span class="ko">답변</span></h4>
+  <p><span class="en"><b>"All or some functionality is restricted"</b> → then provide test account credentials.</span><span class="ko"><b>"모든 또는 일부 기능이 제한됨"</b> → 그런 다음 테스트 계정 자격 증명을 제공하세요.</span></p>
+  <h4><span class="en">Test account for reviewers</span><span class="ko">리뷰어용 테스트 계정</span></h4>
+  <div class="callout warn"><span class="en">Create a real test account at <code>myjujube.app</code> before submitting. Suggested: <code>google-review@myjujube.app</code> if you own that alias, else create <code>jujube.reviewer@gmail.com</code>. Password: something strong you can share.</span><span class="ko">제출 전 <code>myjujube.app</code>에서 실제 테스트 계정을 만드세요. 권장: 해당 alias를 소유하고 있다면 <code>google-review@myjujube.app</code>, 아니면 <code>jujube.reviewer@gmail.com</code>을 만드세요. 비밀번호: 공유 가능한 강력한 비밀번호.</span></div>
+  <h4><span class="en">Instructions to reviewer (paste in "Notes" field)</span><span class="ko">리뷰어에게 안내 (참고 필드에 붙여넣기)</span></h4>
+  <pre><span class="en">Jujube requires a free account to use.
+
+Option 1 — Sign up with any email address (no email verification required in the current build).
+
+Option 2 — Use the pre-provisioned reviewer account:
+  Email: [YOUR TEST EMAIL]
+  Password: [YOUR TEST PASSWORD]
+
+After login, tap through the 3-step onboarding (household setup, cuisine preferences,
+dietary restrictions), then you'll land on the home screen with sample pantry data pre-loaded
+for reviewer accounts.
+
+Key features to test:
+- Add a pantry item manually (Pantry tab → + button)
+- Take a photo of any grocery receipt (Camera icon) — AI parses items automatically
+- Voice input: press and hold the mic button, say ingredients in EN/KO/ZH
+- Generate a recipe (Recipes tab) — AI suggests based on inventory
+- Share the household (Profile → Household → Invite)
+
+Contact: hello@myjujube.app</span><span class="ko">Jujube 사용을 위해서는 무료 계정이 필요합니다.
+
+옵션 1 — 아무 이메일 주소로 회원가입 (현재 빌드에서는 이메일 인증 불필요).
+
+옵션 2 — 사전 제공된 리뷰어 계정 사용:
+  이메일: [YOUR TEST EMAIL]
+  비밀번호: [YOUR TEST PASSWORD]
+
+로그인 후, 3단계 온보딩(가정 설정, 요리 취향, 식이 제한)을 완료하면 홈 화면으로 이동합니다.
+리뷰어 계정에는 샘플 팬트리 데이터가 사전 로드되어 있습니다.
+
+주요 테스트 기능:
+- 팬트리 아이템 수동 추가 (Pantry 탭 → + 버튼)
+- 영수증 사진 촬영 (카메라 아이콘) — AI가 자동으로 항목 파싱
+- 음성 입력: 마이크 버튼을 길게 눌러 EN/KO/ZH로 재료 말하기
+- 레시피 생성 (Recipes 탭) — 재고 기반 AI 제안
+- 가정 공유 (Profile → Household → Invite)
+
+문의: hello@myjujube.app</span></pre>
+</section>
+
+<section id="ads">
+  <h2><span class="en">3. Ads</span><span class="ko">3. 광고</span></h2>
+  <div class="field-row">
+    <div class="field-q"><span class="en">Does your app contain ads?</span><span class="ko">앱에 광고가 포함되어 있습니까?</span></div>
+    <div class="field-a"><b>No</b> <span class="tag ok">1 click</span></div>
+  </div>
+</section>
+
+<section id="content-rating">
+  <h2><span class="en">4. Content Rating (IARC Questionnaire)</span><span class="ko">4. 콘텐츠 등급 (IARC 설문지)</span></h2>
+  <h4><span class="en">Step 1 — Contact + Category</span><span class="ko">1단계 — 연락처 + 카테고리</span></h4>
+  <div class="field-row"><div class="field-q"><span class="en">Email</span><span class="ko">이메일</span></div><div class="field-a"><code>hello@myjujube.app</code></div></div>
+  <div class="field-row"><div class="field-q"><span class="en">Category</span><span class="ko">카테고리</span></div><div class="field-a"><span class="en">Utility, Productivity, Communication, or Other <span class="tag ok">→ pick "Utility"</span></span><span class="ko">유틸리티, 생산성, 커뮤니케이션 또는 기타 <span class="tag ok">→ "유틸리티" 선택</span></span></div></div>
+
+  <h4><span class="en">Step 2 — All safety questions</span><span class="ko">2단계 — 모든 안전 관련 질문</span></h4>
+  <div class="callout good"><span class="en"><b>Answer "No" to every single question.</b> Jujube has no violence, no sexual content, no drugs/alcohol/tobacco, no gambling, no user-to-user communication, no personal-info sharing, no location sharing, no in-app purchases (currently), no user-generated content shared publicly. Everyone rating expected.</span><span class="ko"><b>모든 질문에 "아니오"로 답변하세요.</b> Jujube에는 폭력, 성적 콘텐츠, 마약/알코올/담배, 도박, 사용자 간 커뮤니케이션, 개인정보 공유, 위치 공유, 인앱 구매(현재), 공개적으로 공유되는 사용자 생성 콘텐츠가 없습니다. 전체 이용가 등급 예상.</span></div>
+
+  <table>
+    <thead><tr><th><span class="en">Question</span><span class="ko">질문</span></th><th><span class="en">Answer</span><span class="ko">답변</span></th></tr></thead>
+    <tbody>
+      <tr><td><span class="en">Violence (any kind, cartoon or realistic)</span><span class="ko">폭력 (만화 또는 사실적, 모든 종류)</span></td><td><b>No</b></td></tr>
+      <tr><td><span class="en">Sexual content, nudity, suggestive content</span><span class="ko">성적 콘텐츠, 나체, 암시적 콘텐츠</span></td><td><b>No</b></td></tr>
+      <tr><td><span class="en">Profanity, crude humor, references to drugs/alcohol/tobacco</span><span class="ko">욕설, 저속한 유머, 마약/알코올/담배 언급</span></td><td><b>No</b></td></tr>
+      <tr><td><span class="en">Fear, horror, or discomforting content</span><span class="ko">공포, 호러 또는 불편함을 주는 콘텐츠</span></td><td><b>No</b></td></tr>
+      <tr><td><span class="en">Gambling or simulated gambling</span><span class="ko">도박 또는 시뮬레이션 도박</span></td><td><b>No</b></td></tr>
+      <tr><td><span class="en">User-to-user communication (chat, forums, comments)</span><span class="ko">사용자 간 커뮤니케이션 (채팅, 포럼, 댓글)</span></td><td><b>No</b> <span class="tag no">household sharing is via invite code, not chat</span></td></tr>
+      <tr><td><span class="en">Shares user location with other users</span><span class="ko">사용자 위치를 다른 사용자와 공유</span></td><td><b>No</b></td></tr>
+      <tr><td><span class="en">Shares personal info publicly</span><span class="ko">개인정보를 공개적으로 공유</span></td><td><b>No</b></td></tr>
+      <tr><td><span class="en">Digital purchases</span><span class="ko">디지털 구매</span></td><td><b>No</b> <span class="tag no">promo codes only, no IAP</span></td></tr>
+      <tr><td><span class="en">User-generated content posted publicly</span><span class="ko">사용자 생성 콘텐츠 공개 게시</span></td><td><b>No</b></td></tr>
+      <tr><td><span class="en">Anything else concerning</span><span class="ko">기타 우려사항</span></td><td><b>No</b></td></tr>
+    </tbody>
+  </table>
+
+  <h4><span class="en">Expected outcome</span><span class="ko">예상 결과</span></h4>
+  <p><span class="en"><b>Rating: Everyone (across all regions).</b> Submit → certificate issued instantly.</span><span class="ko"><b>등급: 전체 이용가 (모든 지역).</b> 제출 → 인증서 즉시 발급.</span></p>
+</section>
+
+<section id="target-audience">
+  <h2><span class="en">5. Target Audience & Content</span><span class="ko">5. 타겟 사용자 및 콘텐츠</span></h2>
+  <h4><span class="en">Age groups</span><span class="ko">연령 그룹</span></h4>
+  <div class="callout good"><span class="en"><b>Select ONLY: "18 and older"</b> — because account creation with email is required (COPPA compliance is much simpler for adult-only apps). Do NOT select any child age brackets.</span><span class="ko"><b>"만 18세 이상"만 선택</b> — 이메일로 계정 생성이 필요하기 때문 (성인 전용 앱은 COPPA 준수가 훨씬 간단함). 아동 연령대는 선택하지 마세요.</span></div>
+  <h4><span class="en">Store presence for children</span><span class="ko">어린이용 스토어 노출</span></h4>
+  <div class="field-row"><div class="field-q"><span class="en">Do you want the app to appear in "Kids" section?</span><span class="ko">앱이 "어린이" 섹션에 표시되기를 원합니까?</span></div><div class="field-a"><b>No</b></div></div>
+  <h4><span class="en">Does the app appeal unintentionally to children?</span><span class="ko">앱이 의도치 않게 어린이에게 어필합니까?</span></h4>
+  <div class="field-row"><div class="field-q"><span class="en">Answer</span><span class="ko">답변</span></div><div class="field-a"><b>No</b> — <span class="en">warm-paper adult aesthetic (Shippori Mincho serif + tomato red), no cartoon mascot, cooking app for household adults.</span><span class="ko">따뜻한 종이 성인 미학 (Shippori Mincho 세리프 + 토마토 레드), 만화 마스코트 없음, 가정 성인용 요리 앱.</span></div></div>
+</section>
+
+<section id="news">
+  <h2><span class="en">6. News App</span><span class="ko">6. 뉴스 앱</span></h2>
+  <div class="field-row"><div class="field-q"><span class="en">Is your app a news app?</span><span class="ko">앱이 뉴스 앱입니까?</span></div><div class="field-a"><b>No</b> <span class="tag ok">1 click</span></div></div>
+</section>
+
+<section id="covid">
+  <h2><span class="en">7. COVID-19 Contact Tracing</span><span class="ko">7. COVID-19 접촉 추적</span></h2>
+  <div class="field-row"><div class="field-q"><span class="en">Does your app use contact tracing / status apps?</span><span class="ko">앱이 접촉 추적/상태 앱을 사용합니까?</span></div><div class="field-a"><b>No</b></div></div>
+</section>
+
+<section id="government">
+  <h2><span class="en">8. Government App</span><span class="ko">8. 정부 앱</span></h2>
+  <div class="field-row"><div class="field-q"><span class="en">Is this a government app?</span><span class="ko">이것은 정부 앱입니까?</span></div><div class="field-a"><b>No</b></div></div>
+</section>
+
+<section id="financial">
+  <h2><span class="en">9. Financial Features</span><span class="ko">9. 금융 기능</span></h2>
+  <div class="field-row"><div class="field-q"><span class="en">Does your app provide financial features (lending, banking, crypto, insurance, etc.)?</span><span class="ko">앱이 금융 기능을 제공합니까 (대출, 은행, 암호화폐, 보험 등)?</span></div><div class="field-a"><b>No</b></div></div>
+</section>
+
+<section id="health">
+  <h2><span class="en">10. Health Content</span><span class="ko">10. 건강 콘텐츠</span></h2>
+  <div class="field-row"><div class="field-q"><span class="en">Does your app deliver clinical health information or medical advice?</span><span class="ko">앱이 임상 건강 정보 또는 의학적 조언을 제공합니까?</span></div><div class="field-a"><b>No</b> — <span class="en">recipes and dietary restriction handling are lifestyle/preference-driven, not medical advice.</span><span class="ko">레시피와 식이 제한 처리는 라이프스타일/선호도 기반이며 의학적 조언이 아닙니다.</span></div></div>
+</section>
+
+<section id="data-safety">
+  <h2><span class="en">11. Data Safety <span class="tag act">most detailed form — ~15 min</span></span><span class="ko">11. 데이터 안전 <span class="tag act">가장 상세한 양식 — 약 15분</span></span></h2>
+
+  <div class="callout warn"><span class="en">Google's most-audited form. Be truthful and precise. Below are Jujube's exact answers based on what the app actually collects.</span><span class="ko">Google에서 가장 많이 감사하는 양식. 진실되고 정확하게 답변하세요. 아래는 앱이 실제로 수집하는 것에 기반한 Jujube의 정확한 답변입니다.</span></div>
+
+  <h3><span class="en">Overview questions</span><span class="ko">개요 질문</span></h3>
+  <div class="field-row"><div class="field-q"><span class="en">Does your app collect or share any of the required user data types?</span><span class="ko">앱이 필수 사용자 데이터 유형을 수집하거나 공유합니까?</span></div><div class="field-a"><b>Yes</b></div></div>
+  <div class="field-row"><div class="field-q"><span class="en">Is all of the user data collected by your app encrypted in transit?</span><span class="ko">앱에서 수집한 모든 사용자 데이터가 전송 중 암호화됩니까?</span></div><div class="field-a"><b>Yes</b> — <span class="en">HTTPS to Supabase (TLS 1.3), AI providers over HTTPS.</span><span class="ko">Supabase에 HTTPS (TLS 1.3), AI 제공업체에 HTTPS.</span></div></div>
+  <div class="field-row"><div class="field-q"><span class="en">Do you provide a way for users to request that their data is deleted?</span><span class="ko">사용자가 데이터 삭제를 요청할 수 있는 방법을 제공합니까?</span></div><div class="field-a"><b>Yes</b> — <span class="en">In-app "Delete Account" (Profile → Account → Delete Account) removes all user data.</span><span class="ko">앱 내 "계정 삭제" (Profile → Account → Delete Account)로 모든 사용자 데이터 제거.</span></div></div>
+
+  <h3><span class="en">Data types collected</span><span class="ko">수집되는 데이터 유형</span></h3>
+  <p><span class="en">For each data type: mark as <b>Collected</b>, and choose whether it's Optional / Required + purposes. Jujube does NOT sell data or use it for advertising — the two most important "No" boxes.</span><span class="ko">각 데이터 유형에 대해 <b>수집됨</b>으로 표시하고 선택사항/필수 여부와 목적을 선택하세요. Jujube는 데이터를 판매하거나 광고에 사용하지 않습니다 — 두 가지 가장 중요한 "아니오" 박스.</span></p>
+
+  <table>
+    <thead><tr>
+      <th><span class="en">Data type</span><span class="ko">데이터 유형</span></th>
+      <th><span class="en">Collected?</span><span class="ko">수집?</span></th>
+      <th><span class="en">Purpose</span><span class="ko">목적</span></th>
+      <th><span class="en">Optional / Required</span><span class="ko">선택 / 필수</span></th>
+    </tr></thead>
+    <tbody>
+      <tr><td><span class="en"><b>Personal info → Email</b></span><span class="ko"><b>개인정보 → 이메일</b></span></td><td>Yes</td><td><span class="en">App functionality (account); Analytics</span><span class="ko">앱 기능 (계정); 분석</span></td><td>Required</td></tr>
+      <tr><td><span class="en"><b>Personal info → Name</b></span><span class="ko"><b>개인정보 → 이름</b></span></td><td>Yes</td><td><span class="en">App functionality (display name in household)</span><span class="ko">앱 기능 (가정에서 표시 이름)</span></td><td>Optional</td></tr>
+      <tr><td><span class="en"><b>Personal info → User IDs</b></span><span class="ko"><b>개인정보 → 사용자 ID</b></span></td><td>Yes</td><td><span class="en">App functionality (Supabase user UUID)</span><span class="ko">앱 기능 (Supabase 사용자 UUID)</span></td><td>Required</td></tr>
+      <tr><td><span class="en"><b>Photos & Videos → Photos</b></span><span class="ko"><b>사진 및 동영상 → 사진</b></span></td><td>Yes</td><td><span class="en">App functionality (receipt OCR — photos are processed by AI then immediately discarded; not stored)</span><span class="ko">앱 기능 (영수증 OCR — 사진은 AI로 처리된 후 즉시 폐기; 저장되지 않음)</span></td><td>Optional</td></tr>
+      <tr><td><span class="en"><b>Audio → Voice recordings</b></span><span class="ko"><b>오디오 → 음성 녹음</b></span></td><td>Yes</td><td><span class="en">App functionality (voice-to-text ingredient input — audio is transcribed then immediately discarded)</span><span class="ko">앱 기능 (음성-텍스트 재료 입력 — 오디오는 전사 후 즉시 폐기)</span></td><td>Optional</td></tr>
+      <tr><td><span class="en"><b>App activity → App interactions</b></span><span class="ko"><b>앱 활동 → 앱 상호작용</b></span></td><td>Yes</td><td><span class="en">Analytics; App functionality (feature usage, personalization)</span><span class="ko">분석; 앱 기능 (기능 사용, 개인화)</span></td><td>Required</td></tr>
+      <tr><td><span class="en"><b>App activity → In-app search history</b></span><span class="ko"><b>앱 활동 → 앱 내 검색 기록</b></span></td><td>Yes</td><td><span class="en">App functionality (ingredient/recipe search)</span><span class="ko">앱 기능 (재료/레시피 검색)</span></td><td>Required</td></tr>
+      <tr><td><span class="en"><b>App activity → Installed apps</b></span><span class="ko"><b>앱 활동 → 설치된 앱</b></span></td><td>No</td><td>—</td><td>—</td></tr>
+      <tr><td><span class="en"><b>App info & performance → Crash logs</b></span><span class="ko"><b>앱 정보 및 성능 → 충돌 로그</b></span></td><td>Yes</td><td><span class="en">Analytics (Sentry, when enabled)</span><span class="ko">분석 (Sentry, 활성화된 경우)</span></td><td>Required</td></tr>
+      <tr><td><span class="en"><b>App info & performance → Diagnostics</b></span><span class="ko"><b>앱 정보 및 성능 → 진단</b></span></td><td>Yes</td><td><span class="en">Analytics (performance metrics via Sentry/PostHog)</span><span class="ko">분석 (Sentry/PostHog를 통한 성능 지표)</span></td><td>Required</td></tr>
+      <tr><td><span class="en"><b>Device or other IDs</b></span><span class="ko"><b>기기 또는 기타 ID</b></span></td><td>Yes</td><td><span class="en">Analytics (PostHog anonymous ID)</span><span class="ko">분석 (PostHog 익명 ID)</span></td><td>Required</td></tr>
+      <tr><td colspan="4" style="background:#f5eede;font-size:12px;color:var(--amber)"><span class="en">All other data types (location, financial info, health, contacts, calendar, messages, files/docs, web history, race/ethnicity, political/religious/sexual orientation): <b>No / Not collected</b></span><span class="ko">기타 모든 데이터 유형 (위치, 금융 정보, 건강, 연락처, 캘린더, 메시지, 파일/문서, 웹 기록, 인종/민족, 정치/종교/성적 지향): <b>아니오 / 수집 안함</b></span></td></tr>
+    </tbody>
+  </table>
+
+  <h3><span class="en">Data sharing (with third parties)</span><span class="ko">데이터 공유 (제3자와)</span></h3>
+  <div class="callout"><span class="en"><b>Important nuance:</b> Google's "data sharing" doesn't include data sent to processors acting on your behalf (Supabase, OpenAI, Anthropic — all bound by DPAs). Only tick "shared" if data is passed to third parties for their own use. Answer: <b>No data is shared with third parties.</b></span><span class="ko"><b>중요 뉘앙스:</b> Google의 "데이터 공유"에는 사용자를 대신해 처리하는 프로세서(Supabase, OpenAI, Anthropic — 모두 DPA로 구속됨)로 전송된 데이터는 포함되지 않습니다. 제3자가 자체 용도로 사용하기 위해 데이터가 전달되는 경우에만 "공유됨"을 체크하세요. 답변: <b>제3자와 공유되는 데이터 없음.</b></span></div>
+  <div class="field-row"><div class="field-q"><span class="en">Data shared for advertising/marketing?</span><span class="ko">광고/마케팅을 위해 공유되는 데이터?</span></div><div class="field-a"><b>None</b></div></div>
+  <div class="field-row"><div class="field-q"><span class="en">Data sold to third parties?</span><span class="ko">제3자에게 판매되는 데이터?</span></div><div class="field-a"><b>None</b></div></div>
+
+  <h3><span class="en">Security practices</span><span class="ko">보안 관행</span></h3>
+  <div class="field-row"><div class="field-q"><span class="en">Data encrypted in transit?</span><span class="ko">전송 중 데이터 암호화?</span></div><div class="field-a"><b>Yes</b> (HTTPS everywhere)</div></div>
+  <div class="field-row"><div class="field-q"><span class="en">User can request data deletion?</span><span class="ko">사용자가 데이터 삭제를 요청할 수 있음?</span></div><div class="field-a"><b>Yes</b> — <span class="en">in-app account deletion under Profile</span><span class="ko">Profile 아래 앱 내 계정 삭제</span></div></div>
+  <div class="field-row"><div class="field-q"><span class="en">Committed to follow Play Families Policy?</span><span class="ko">Play 가족 정책을 따르기로 약속?</span></div><div class="field-a"><span class="en">N/A — app is 18+</span><span class="ko">해당 없음 — 앱은 18세 이상</span></div></div>
+  <div class="field-row"><div class="field-q"><span class="en">Independent security review?</span><span class="ko">독립적 보안 검토?</span></div><div class="field-a"><b>No</b></div></div>
+</section>
+
+<section id="store-listing">
+  <h2><span class="en">12. Store Listing</span><span class="ko">12. 스토어 등록정보</span></h2>
+  <div class="callout good"><span class="en">✓ Already bootstrapped from Play via the gradle-play-publisher plugin. Text, screenshots, icon, feature graphic are all versioned in <code>~/Projects/fridgenie/android/app/src/main/play/</code> and pushed automatically on every deploy.</span><span class="ko">✓ gradle-play-publisher 플러그인을 통해 Play에서 이미 부트스트랩됨. 텍스트, 스크린샷, 아이콘, 피처 그래픽 모두 <code>~/Projects/fridgenie/android/app/src/main/play/</code>에 버전 관리되며 매번 배포 시 자동으로 푸시됩니다.</span></div>
+  <h4><span class="en">Just verify these fields are set (they should be from bootstrap)</span><span class="ko">이 필드가 설정되어 있는지 확인만 하세요 (부트스트랩으로 설정되어 있어야 함)</span></h4>
+  <ul>
+    <li><span class="en">App name: <b>Jujube</b></span><span class="ko">앱 이름: <b>Jujube</b></span></li>
+    <li><span class="en">Short description (80 chars): <b>AI-powered recipe discovery from what's already in your kitchen</b></span><span class="ko">짧은 설명 (80자): <b>AI-powered recipe discovery from what's already in your kitchen</b></span></li>
+    <li><span class="en">Full description: check current state, may want to punch up with the marketing kit copy from <a href="https://github.com/feedmiyo6/jujube-marketing-kit">feedmiyo6/jujube-marketing-kit</a></span><span class="ko">전체 설명: 현재 상태 확인, <a href="https://github.com/feedmiyo6/jujube-marketing-kit">feedmiyo6/jujube-marketing-kit</a>의 마케팅 키트 문구로 강화 권장</span></li>
+    <li><span class="en">App icon (512×512): current book logo</span><span class="ko">앱 아이콘 (512×512): 현재 책 로고</span></li>
+    <li><span class="en">Feature graphic (1024×500): current</span><span class="ko">피처 그래픽 (1024×500): 현재 것</span></li>
+    <li><span class="en">Screenshots: at least 2, phone (portrait). Ideally 4-8.</span><span class="ko">스크린샷: 최소 2개, 폰 (세로). 이상적으로는 4-8개.</span></li>
+    <li><span class="en">Contact email: <code>hello@myjujube.app</code></span><span class="ko">연락처 이메일: <code>hello@myjujube.app</code></span></li>
+    <li><span class="en">Contact website: <code>https://myjujube.app</code></span><span class="ko">연락처 웹사이트: <code>https://myjujube.app</code></span></li>
+    <li><span class="en">Privacy policy: <code>https://myjujube.app/privacy</code></span><span class="ko">개인정보 처리방침: <code>https://myjujube.app/privacy</code></span></li>
+  </ul>
+</section>
+
+<section id="final">
+  <h2><span class="en">13. Final Checklist Before Promoting to Production</span><span class="ko">13. 프로덕션 승격 전 최종 체크리스트</span></h2>
+  <ul class="checklist">
+    <li><span class="en">All 12 forms above marked "Complete" in Play Console</span><span class="ko">위의 12개 양식이 모두 Play Console에서 "완료"로 표시됨</span></li>
+    <li><span class="en">Latest AAB uploaded to internal testing (verified working on real device)</span><span class="ko">최신 AAB가 내부 테스트에 업로드됨 (실제 기기에서 작동 확인)</span></li>
+    <li><span class="en">Test-account credentials handed to Google reviewers (via App Access form)</span><span class="ko">테스트 계정 자격 증명이 Google 리뷰어에게 제공됨 (App Access 양식을 통해)</span></li>
+    <li><span class="en">Publishing overview shows "No blocking issues"</span><span class="ko">게시 개요에 "차단 문제 없음" 표시됨</span></li>
+    <li><span class="en">Store listing screenshots current and high quality</span><span class="ko">스토어 등록정보 스크린샷이 최신이며 고품질</span></li>
+    <li><span class="en">Full description reads well (consider punching up from marketing kit)</span><span class="ko">전체 설명이 잘 읽힘 (마케팅 키트에서 강화 고려)</span></li>
+    <li><span class="en">Production release created → rollout percentage set (recommend 100% for first launch)</span><span class="ko">프로덕션 릴리스 생성됨 → 롤아웃 백분율 설정 (첫 출시에는 100% 권장)</span></li>
+    <li><span class="en">"Send for review" clicked</span><span class="ko">"검토 요청" 클릭됨</span></li>
+  </ul>
+  <div class="callout good"><span class="en"><b>First-time production review typically takes 1–3 days.</b> Subsequent updates: 3–7 hours (often faster). Miyo Studio LLC's Organization account skips the 14-day-closed-testing requirement — you can promote from internal to production directly.</span><span class="ko"><b>첫 프로덕션 검토는 일반적으로 1-3일 소요.</b> 이후 업데이트: 3-7시간 (종종 더 빠름). Miyo Studio LLC의 조직 계정은 14일 폐쇄 테스트 요구사항을 건너뛸 수 있음 — 내부에서 프로덕션으로 직접 승격 가능.</span></div>
+</section>
+
+<footer>
+  <p>🌳 <span class="en">Totoro — prepared for Minjun, 2026-07-23</span><span class="ko">Totoro — Minjun을 위해 준비, 2026-07-23</span></p>
+  <p><span class="en">Questions? Just ask in chat.</span><span class="ko">질문 있으면 채팅에서 물어보세요.</span></p>
+</footer>
+
+</div>
+
+<script>
+  let isKorean = false;
+  function toggleLang() {
+    isKorean = !isKorean;
+    document.querySelectorAll('.en').forEach(el => el.classList.toggle('hide', isKorean));
+    document.querySelectorAll('.ko').forEach(el => el.classList.toggle('show', isKorean));
+    document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+  }
+</script>
+</body>
+</html>
