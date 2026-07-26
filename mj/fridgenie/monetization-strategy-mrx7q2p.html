@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Jujube Monetization Strategy</title>
+<style>
+  * { box-sizing: border-box; -webkit-text-size-adjust: 100%; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", sans-serif;
+    background: #FBF5EE;
+    color: #2C1810;
+    line-height: 1.55;
+    font-size: 16px;
+    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+  }
+  .wrap { max-width: 720px; margin: 0 auto; padding: 20px 18px 80px; }
+  header {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    gap: 12px; margin-bottom: 24px; padding-top: 12px;
+  }
+  .brand { display: flex; align-items: center; gap: 10px; }
+  .brand-mark {
+    width: 36px; height: 36px; border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, #E85A6B, #8B2E38);
+    box-shadow: 0 2px 6px rgba(139,46,56,0.25);
+  }
+  .brand-name { font-weight: 700; font-size: 18px; color: #8B2E38; letter-spacing: -0.3px; }
+  .lang-toggle {
+    background: #8B2E38; color: #FBF5EE;
+    border: none; padding: 8px 14px; border-radius: 20px;
+    font-size: 13px; font-weight: 600; cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    box-shadow: 0 2px 4px rgba(139,46,56,0.2);
+    min-width: 76px;
+  }
+  .lang-toggle:active { transform: scale(0.97); }
+
+  h1 {
+    font-size: 28px; line-height: 1.2; margin: 0 0 8px;
+    color: #8B2E38; font-weight: 700; letter-spacing: -0.5px;
+  }
+  .subtitle { color: #6B4A44; font-size: 15px; margin-bottom: 28px; }
+  h2 {
+    font-size: 20px; margin: 32px 0 12px; color: #8B2E38;
+    padding-bottom: 6px; border-bottom: 2px solid rgba(139,46,56,0.15);
+    font-weight: 700; letter-spacing: -0.3px;
+  }
+  h3 {
+    font-size: 16px; margin: 20px 0 8px; color: #C13E4D;
+    font-weight: 700;
+  }
+  p { margin: 0 0 12px; }
+  ul, ol { margin: 0 0 12px; padding-left: 22px; }
+  li { margin-bottom: 6px; }
+
+  .callout {
+    background: #FFF; border-left: 4px solid #C13E4D;
+    padding: 14px 16px; border-radius: 8px; margin: 16px 0;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  }
+  .callout.warn { border-left-color: #D68A2E; background: #FFF9F0; }
+  .callout.good { border-left-color: #5B8C4A; background: #F4F9EF; }
+  .callout .label {
+    font-size: 12px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.6px; color: #8B2E38; margin-bottom: 6px;
+  }
+  .callout.warn .label { color: #B36A1F; }
+  .callout.good .label { color: #4A7539; }
+
+  .path-card {
+    background: #FFF; border-radius: 12px;
+    padding: 16px 18px; margin: 14px 0;
+    box-shadow: 0 2px 8px rgba(139,46,56,0.06);
+    border: 1px solid rgba(139,46,56,0.08);
+  }
+  .path-header {
+    display: flex; justify-content: space-between; align-items: baseline;
+    gap: 10px; margin-bottom: 8px; flex-wrap: wrap;
+  }
+  .path-title { font-weight: 700; color: #2C1810; font-size: 17px; }
+  .fit-badge {
+    font-size: 11px; font-weight: 700; padding: 3px 8px;
+    border-radius: 10px; text-transform: uppercase; letter-spacing: 0.5px;
+    white-space: nowrap;
+  }
+  .fit-high { background: #E4F0DC; color: #4A7539; }
+  .fit-med { background: #FFF0D5; color: #B36A1F; }
+  .fit-low { background: #F5D8DC; color: #8B2E38; }
+
+  .kv { display: grid; grid-template-columns: 88px 1fr; gap: 4px 12px; font-size: 14px; margin-top: 8px; }
+  .kv dt { color: #8B4A4A; font-weight: 600; }
+  .kv dd { margin: 0; }
+
+  .year-block {
+    background: #FFF; border-radius: 12px;
+    padding: 16px 18px; margin: 12px 0;
+    border-top: 3px solid #C13E4D;
+  }
+  .year-tag { font-size: 12px; font-weight: 700; letter-spacing: 1px; color: #C13E4D; text-transform: uppercase; }
+  .year-goal { font-size: 17px; font-weight: 700; color: #2C1810; margin: 4px 0 10px; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 14px; margin: 10px 0; }
+  th, td { text-align: left; padding: 8px 6px; border-bottom: 1px solid rgba(139,46,56,0.1); }
+  th { font-size: 12px; text-transform: uppercase; letter-spacing: 0.4px; color: #8B4A4A; }
+  td.num { font-variant-numeric: tabular-nums; color: #2C1810; font-weight: 600; }
+
+  .footer {
+    margin-top: 40px; padding-top: 20px;
+    border-top: 1px solid rgba(139,46,56,0.15);
+    color: #8B4A4A; font-size: 13px; text-align: center;
+  }
+  .footer .heart { color: #C13E4D; }
+
+  body.lang-en .lang-ko { display: none !important; }
+  body.lang-ko .lang-en { display: none !important; }
+</style>
+</head>
+<body class="lang-en">
+<div class="wrap">
+  <header>
+    <div class="brand">
+      <div class="brand-mark" aria-hidden="true"></div>
+      <div class="brand-name">Jujube 🍒</div>
+    </div>
+    <button class="lang-toggle" onclick="toggleLang()" aria-label="Toggle language">한국어</button>
+  </header>
+
+  <h1>
+    <span class="lang-en">Monetization Strategy</span>
+    <span class="lang-ko">수익화 전략</span>
+  </h1>
+  <p class="subtitle">
+    <span class="lang-en">Realistic paths to make money from Jujube over the next 2–3 years</span>
+    <span class="lang-ko">앞으로 2~3년 동안 Jujube로 실제 수익을 낼 수 있는 현실적인 경로</span>
+  </p>
+
+  <!-- SECTION 1: RESET -->
+  <div class="callout warn">
+    <div class="label">
+      <span class="lang-en">Honest Reset</span>
+      <span class="lang-ko">솔직한 재점검</span>
+    </div>
+    <p>
+      <span class="lang-en">My earlier suggestion to run ads was too fast and too generic. On a food app for immigrant families, banner ads cheapen the brand and probably suppress Pro conversion more than they add in revenue. This report replaces that with sharper thinking about how a niche, culturally-rooted app actually makes money.</span>
+      <span class="lang-ko">이전에 광고를 제안한 것은 너무 성급하고 일반적인 조언이었어요. 이민 가정을 위한 음식 앱에서 배너 광고는 브랜드를 값싸게 보이게 하고, 오히려 Pro 전환율을 떨어뜨려서 광고 수익보다 손해가 더 클 가능성이 높습니다. 이 리포트는 그 조언을 대체해서, 틈새 시장에 뿌리내린 앱이 실제로 어떻게 돈을 버는지를 더 날카롭게 정리했어요.</span>
+    </p>
+  </div>
+
+  <h2>
+    <span class="lang-en">The Reality You're Playing With</span>
+    <span class="lang-ko">우리가 놓인 현실</span>
+  </h2>
+  <p>
+    <span class="lang-en">Realistic Year 1 shape: 4,000–12,000 organic downloads over 6 months, ~1,800 MAU, 2% Pro conversion. That's roughly $150/mo Pro revenue at month 6 — breakeven, not profit. This isn't failure. Most solo consumer apps die before month 6. But it means:</span>
+    <span class="lang-ko">현실적인 1년 차 모습: 6개월간 자연 다운로드 4,000~12,000회, MAU 약 1,800명, Pro 전환율 2%. 6개월 시점 Pro 수익은 월 $150 수준 — 이익이 아니라 손익분기점입니다. 이건 실패가 아니에요. 대부분의 1인 개발 소비자 앱은 6개월도 못 버팁니다. 다만 이 숫자가 의미하는 건:</span>
+  </p>
+  <ul>
+    <li>
+      <span class="lang-en"><strong>Subscription alone won't get you to "quit-your-job" numbers</strong> in Year 1 or even Year 2.</span>
+      <span class="lang-ko"><strong>구독만으로는 1~2년 차에 "직장을 그만둘 수준"의 수익</strong>에 도달하지 못합니다.</span>
+    </li>
+    <li>
+      <span class="lang-en"><strong>You need to stack 2–3 revenue streams</strong> that fit the brand, not fight it.</span>
+      <span class="lang-ko"><strong>브랜드와 어울리는 2~3개의 수익원을 겹쳐 쌓아야</strong> 합니다. 브랜드와 싸우는 방식이 아니라.</span>
+    </li>
+    <li>
+      <span class="lang-en"><strong>The "immigrant family" wedge is your moat.</strong> Generic recipe apps can't touch H-Mart pantry management, bilingual cooking, or multi-generational households.</span>
+      <span class="lang-ko"><strong>"이민 가정" 틈새 시장이 우리의 해자입니다.</strong> 일반 레시피 앱은 H-Mart 식재료 관리, 이중언어 요리, 다세대 가정 니즈를 건드릴 수 없어요.</span>
+    </li>
+  </ul>
+
+  <!-- SECTION 2: FIVE PATHS -->
+  <h2>
+    <span class="lang-en">Five Monetization Paths (Ranked by Brand Fit)</span>
+    <span class="lang-ko">5가지 수익화 경로 (브랜드 적합도 순)</span>
+  </h2>
+
+  <div class="path-card">
+    <div class="path-header">
+      <div class="path-title">
+        <span class="lang-en">1. Grocery Affiliate Commerce</span>
+        <span class="lang-ko">1. 식료품 제휴 커머스</span>
+      </div>
+      <span class="fit-badge fit-high">
+        <span class="lang-en">High fit</span>
+        <span class="lang-ko">높은 적합도</span>
+      </span>
+    </div>
+    <p>
+      <span class="lang-en">Partner with Weee!, Umamicart, Sayweee, HMart Online. When Jujube shows a recipe missing 3 ingredients, "Add to Weee! cart" earns 4–8% commission. Feels like a real feature, not an ad. Under-served for Asian grocery.</span>
+      <span class="lang-ko">Weee!, Umamicart, Sayweee, HMart Online 같은 아시아 식료품 배송 서비스와 제휴하세요. 레시피에 재료 3개가 부족할 때 "Weee! 장바구니에 담기" 버튼으로 4~8% 커미션을 벌 수 있습니다. 광고가 아니라 실제 기능처럼 느껴지고, 아시아 식료품 시장에서 아직 아무도 제대로 안 하고 있어요.</span>
+    </p>
+    <dl class="kv">
+      <dt><span class="lang-en">Revenue</span><span class="lang-ko">수익</span></dt>
+      <dd><span class="lang-en">$0.80–$2.50 per active user/month at scale</span><span class="lang-ko">규모화 시 활성 사용자당 월 $0.80~$2.50</span></dd>
+      <dt><span class="lang-en">Timing</span><span class="lang-ko">시점</span></dt>
+      <dd><span class="lang-en">Year 2 — needs 3k+ MAU before partners take you seriously</span><span class="lang-ko">2년 차 — 파트너들이 진지하게 받아들이려면 MAU 3,000명 이상 필요</span></dd>
+      <dt><span class="lang-en">Effort</span><span class="lang-ko">노력</span></dt>
+      <dd><span class="lang-en">Medium — deep link integration, cart matching</span><span class="lang-ko">중간 — 딥링크 통합, 장바구니 매칭</span></dd>
+    </dl>
+  </div>
+
+  <div class="path-card">
+    <div class="path-header">
+      <div class="path-title">
+        <span class="lang-en">2. Freemium Pro + Family Plan</span>
+        <span class="lang-ko">2. 프리미엄 Pro + 가족 요금제</span>
+      </div>
+      <span class="fit-badge fit-high">
+        <span class="lang-en">High fit</span>
+        <span class="lang-ko">높은 적합도</span>
+      </span>
+    </div>
+    <p>
+      <span class="lang-en">Individual Pro at $4.99/mo. Family plan at $9.99/mo for up to 6 members — this is the smart move. Korean/Chinese immigrant households are multi-generational and cook together. The family plan is literally built for the target demo. Higher LTV, lower churn (nobody wants to be the one who cancels the family's app).</span>
+      <span class="lang-ko">개인 Pro는 월 $4.99. 가족 요금제는 최대 6명까지 월 $9.99 — 이게 핵심 카드예요. 한국/중국계 이민 가정은 다세대이고 함께 요리합니다. 가족 요금제는 말 그대로 이 타깃을 위해 설계된 상품이에요. LTV가 높고 이탈률은 낮습니다 (아무도 가족이 쓰는 앱을 자기가 해지하고 싶어하지 않아요).</span>
+    </p>
+    <dl class="kv">
+      <dt><span class="lang-en">Revenue</span><span class="lang-ko">수익</span></dt>
+      <dd><span class="lang-en">2–3% conversion Yr 1 → 3–5% Yr 2 with polish</span><span class="lang-ko">1년 차 전환율 2~3% → 완성도가 올라가면 2년 차 3~5%</span></dd>
+      <dt><span class="lang-en">Timing</span><span class="lang-ko">시점</span></dt>
+      <dd><span class="lang-en">Year 1 (individual) → Year 2 (family)</span><span class="lang-ko">1년 차 (개인) → 2년 차 (가족)</span></dd>
+      <dt><span class="lang-en">Effort</span><span class="lang-ko">노력</span></dt>
+      <dd><span class="lang-en">Low — StoreKit / Google Play Billing already in place</span><span class="lang-ko">낮음 — StoreKit / Google Play Billing 이미 준비됨</span></dd>
+    </dl>
+  </div>
+
+  <div class="path-card">
+    <div class="path-header">
+      <div class="path-title">
+        <span class="lang-en">3. Sponsored Recipe Cards (Curated)</span>
+        <span class="lang-ko">3. 스폰서 레시피 카드 (엄선)</span>
+      </div>
+      <span class="fit-badge fit-med">
+        <span class="lang-en">Medium fit</span>
+        <span class="lang-ko">중간 적합도</span>
+      </span>
+    </div>
+    <p>
+      <span class="lang-en">Native sponsored recipes from CJ Foods, Nongshim, Ottogi, Lee Kum Kee, Kikkoman. These brands actively pay to reach diaspora consumers, and a real recipe using their product is honest marketing. Disclosed clearly ("Sponsored by CJ") to keep trust. Not banner ads. Way more per-impression than ads and doesn't cheapen the app.</span>
+      <span class="lang-ko">CJ, 농심, 오뚜기, 이금기, 기꼬만 같은 브랜드의 네이티브 스폰서 레시피. 이 브랜드들은 디아스포라 소비자에게 도달하려고 실제로 돈을 씁니다. 그들의 제품을 쓴 실제 레시피는 정직한 마케팅이에요. "CJ 협찬" 이라고 명확히 표시해서 신뢰를 지키는 방식. 배너 광고가 아닙니다. 노출당 단가가 훨씬 높고 앱을 값싸게 만들지 않아요.</span>
+    </p>
+    <dl class="kv">
+      <dt><span class="lang-en">Revenue</span><span class="lang-ko">수익</span></dt>
+      <dd><span class="lang-en">$500–3,000 per sponsored recipe campaign</span><span class="lang-ko">스폰서 레시피 캠페인당 $500~$3,000</span></dd>
+      <dt><span class="lang-en">Timing</span><span class="lang-ko">시점</span></dt>
+      <dd><span class="lang-en">Year 2 (need 5k+ MAU and press for outreach)</span><span class="lang-ko">2년 차 (제안을 위해 MAU 5,000명 이상과 언론 노출 필요)</span></dd>
+      <dt><span class="lang-en">Effort</span><span class="lang-ko">노력</span></dt>
+      <dd><span class="lang-en">High — sales, contracts, editorial curation</span><span class="lang-ko">높음 — 영업, 계약, 편집 큐레이션 필요</span></dd>
+    </dl>
+  </div>
+
+  <div class="path-card">
+    <div class="path-header">
+      <div class="path-title">
+        <span class="lang-en">4. Recipe Pack IAPs</span>
+        <span class="lang-ko">4. 레시피 팩 개별 구매</span>
+      </div>
+      <span class="fit-badge fit-med">
+        <span class="lang-en">Medium fit</span>
+        <span class="lang-ko">중간 적합도</span>
+      </span>
+    </div>
+    <p>
+      <span class="lang-en">One-time IAP for themed packs: "Korean Holidays" ($2.99, 100 recipes), "Weeknight Chinese" ($4.99), "Kids Love It" ($3.99). Captures users who won't subscribe but will pay once for something specific. Also nice gift-able content.</span>
+      <span class="lang-ko">테마 팩 일회성 구매: "한국 명절" ($2.99, 100개 레시피), "평일 중국요리" ($4.99), "아이들이 좋아하는 요리" ($3.99). 구독은 안 하지만 특정한 것에 한 번 돈은 낼 사람들을 잡을 수 있어요. 선물하기 좋은 콘텐츠이기도 하고요.</span>
+    </p>
+    <dl class="kv">
+      <dt><span class="lang-en">Revenue</span><span class="lang-ko">수익</span></dt>
+      <dd><span class="lang-en">~15% of non-Pro users buy 1 pack/year on average</span><span class="lang-ko">Pro 아닌 사용자 중 평균 약 15%가 연 1팩 구매</span></dd>
+      <dt><span class="lang-en">Timing</span><span class="lang-ko">시점</span></dt>
+      <dd><span class="lang-en">Year 2 — once you have content depth to support it</span><span class="lang-ko">2년 차 — 콘텐츠 깊이가 충분해진 뒤</span></dd>
+      <dt><span class="lang-en">Effort</span><span class="lang-ko">노력</span></dt>
+      <dd><span class="lang-en">Medium — content curation, IAP setup</span><span class="lang-ko">중간 — 콘텐츠 큐레이션, IAP 설정</span></dd>
+    </dl>
+  </div>
+
+  <div class="path-card">
+    <div class="path-header">
+      <div class="path-title">
+        <span class="lang-en">5. Content Media Play (YouTube/TikTok/Instagram)</span>
+        <span class="lang-ko">5. 콘텐츠 미디어 (유튜브/틱톡/인스타그램)</span>
+      </div>
+      <span class="fit-badge fit-high">
+        <span class="lang-en">High fit</span>
+        <span class="lang-ko">높은 적합도</span>
+      </span>
+    </div>
+    <p>
+      <span class="lang-en">This is how a lot of niche apps actually work. "Jujube Kitchen" channel makes short recipe videos in EN + KO. The videos earn creator revenue AND funnel viewers into the app. This turns your growth cost into a profit center. High effort but compounds — every video is a permanent lead magnet.</span>
+      <span class="lang-ko">사실 많은 틈새 앱이 실제로 이렇게 돌아갑니다. "Jujube Kitchen" 채널에서 EN + KO 짧은 레시피 영상을 만듭니다. 영상 자체가 크리에이터 수익을 벌면서 시청자를 앱으로 유입시켜요. 성장 비용을 수익원으로 바꾸는 방식입니다. 노력은 많이 들지만 복리로 쌓입니다 — 영상 하나하나가 영구적인 리드 자석이 되니까요.</span>
+    </p>
+    <dl class="kv">
+      <dt><span class="lang-en">Revenue</span><span class="lang-ko">수익</span></dt>
+      <dd><span class="lang-en">$500–5,000/mo at 20k+ subs, plus app funnel value</span><span class="lang-ko">구독자 2만 명 이상 시 월 $500~$5,000, 추가로 앱 유입 가치</span></dd>
+      <dt><span class="lang-en">Timing</span><span class="lang-ko">시점</span></dt>
+      <dd><span class="lang-en">Start now, monetize Year 2+</span><span class="lang-ko">지금 시작, 수익화는 2년 차부터</span></dd>
+      <dt><span class="lang-en">Effort</span><span class="lang-ko">노력</span></dt>
+      <dd><span class="lang-en">Very high — 2 videos/week minimum for a year</span><span class="lang-ko">매우 높음 — 1년간 주 2편 이상 꾸준히</span></dd>
+    </dl>
+  </div>
+
+  <!-- SECTION 3: BRAND ANGLES -->
+  <h2>
+    <span class="lang-en">Branding Angles That Make Monetization Easier</span>
+    <span class="lang-ko">수익화를 쉽게 만드는 브랜딩 방향</span>
+  </h2>
+  <p>
+    <span class="lang-en">The current pitch — "AI recipes from your fridge" — puts you in a crowded graveyard. These sharper angles make people <em>choose</em> Jujube and make partners <em>want</em> to work with you:</span>
+    <span class="lang-ko">현재 피치인 "냉장고 재료로 AI 레시피"는 이미 죽은 사람이 즐비한 시장에 우리를 세워둡니다. 이 더 날카로운 방향들은 사람들이 Jujube를 <em>선택하게</em> 만들고, 파트너들이 우리와 <em>일하고 싶게</em> 만듭니다:</span>
+  </p>
+
+  <h3>
+    <span class="lang-en">A. "The Bilingual Family Kitchen"</span>
+    <span class="lang-ko">A. "이중언어 가족의 부엌"</span>
+  </h3>
+  <p>
+    <span class="lang-en">Position around cross-generational cooking. Grandma reads recipes in Korean, kid reads in English, both cook the same dish. Nobody else owns this space. Enables sponsored content from cultural food brands.</span>
+    <span class="lang-ko">세대를 넘나드는 요리를 중심에 두는 포지셔닝. 할머니는 한국어로 레시피를 읽고, 손자는 영어로 읽지만 같은 요리를 함께 만듭니다. 아무도 이 자리를 차지하고 있지 않아요. 문화 음식 브랜드의 스폰서 콘텐츠를 유치하기 좋은 각도입니다.</span>
+  </p>
+
+  <h3>
+    <span class="lang-en">B. "Never Waste Immigrant Groceries"</span>
+    <span class="lang-ko">B. "이민자의 식재료를 낭비하지 않기"</span>
+  </h3>
+  <p>
+    <span class="lang-en">Korean/Chinese groceries are expensive and hard to find. A specialty pantry-management angle. This positions the receipt-scanning OCR as the hero feature and directly justifies affiliate integrations with Asian grocery services.</span>
+    <span class="lang-ko">한국/중국 식재료는 비싸고 구하기 어렵습니다. 특화된 팬트리 관리 각도. 영수증 스캔 OCR을 주인공 기능으로 자리잡게 하고, 아시아 식료품 서비스와의 제휴를 직접적으로 정당화합니다.</span>
+  </p>
+
+  <h3>
+    <span class="lang-en">C. "Weeknight Asian Home Cooking, Stupid Simple"</span>
+    <span class="lang-ko">C. "평일에 아시아 가정식을 아주 간단하게"</span>
+  </h3>
+  <p>
+    <span class="lang-en">Anti-influencer, anti-fancy positioning. Not restaurant food. Not aesthetic. Just what mom makes on a Tuesday. This is what most target users actually want and nobody targets it explicitly.</span>
+    <span class="lang-ko">인플루언서 반대, 화려함 반대의 포지셔닝. 레스토랑 음식 아님. 미학적 아님. 그냥 화요일 저녁에 엄마가 만드는 것. 대부분의 타깃 사용자들이 실제로 원하는 게 이것인데 아무도 명시적으로 겨냥하지 않아요.</span>
+  </p>
+
+  <!-- SECTION 4: ROADMAP -->
+  <h2>
+    <span class="lang-en">Recommended 2–3 Year Roadmap</span>
+    <span class="lang-ko">권장 2~3년 로드맵</span>
+  </h2>
+
+  <div class="year-block">
+    <div class="year-tag">
+      <span class="lang-en">Year 1 · Now → Month 12</span>
+      <span class="lang-ko">1년 차 · 지금 → 12개월</span>
+    </div>
+    <div class="year-goal">
+      <span class="lang-en">Goal: Reach breakeven, prove retention</span>
+      <span class="lang-ko">목표: 손익분기점 도달, 리텐션 증명</span>
+    </div>
+    <ul>
+      <li><span class="lang-en">Individual Pro subscription only ($4.99/mo, $39.99/yr).</span><span class="lang-ko">개인 Pro 구독만 (월 $4.99, 연 $39.99).</span></li>
+      <li><span class="lang-en"><strong>No ads.</strong> Preserve brand quality.</span><span class="lang-ko"><strong>광고 없음.</strong> 브랜드 품질 보존.</span></li>
+      <li><span class="lang-en">Focus market: Korean immigrant families in US.</span><span class="lang-ko">집중 시장: 미국 내 한인 이민 가정.</span></li>
+      <li><span class="lang-en">Growth: TikTok/Instagram organic + Reddit /r/AsianParentStories, /r/koreanfood, /r/EatCheapAndHealthy.</span><span class="lang-ko">성장: TikTok/Instagram 자연 유입 + Reddit /r/AsianParentStories, /r/koreanfood, /r/EatCheapAndHealthy.</span></li>
+      <li><span class="lang-en">Ship YouTube Shorts / TikTok channel from month 3 — 2 videos/week minimum.</span><span class="lang-ko">3개월 차부터 YouTube Shorts / TikTok 채널 시작 — 최소 주 2편.</span></li>
+      <li><span class="lang-en"><strong>Instrument everything:</strong> cache hit rate, per-MAU AI cost, D1/D7/D30 retention, free→Pro conversion funnel.</span><span class="lang-ko"><strong>모든 것을 계측:</strong> 캐시 히트율, MAU당 AI 비용, D1/D7/D30 리텐션, 무료→Pro 전환 퍼널.</span></li>
+    </ul>
+    <p style="margin-top:10px;">
+      <span class="lang-en"><strong>Target end-of-Year-1:</strong> $300–800/mo net revenue, 3,000–5,000 MAU.</span>
+      <span class="lang-ko"><strong>1년 차 말 목표:</strong> 월 순수익 $300~$800, MAU 3,000~5,000명.</span>
+    </p>
+  </div>
+
+  <div class="year-block">
+    <div class="year-tag">
+      <span class="lang-en">Year 2 · Month 12 → 24</span>
+      <span class="lang-ko">2년 차 · 12~24개월</span>
+    </div>
+    <div class="year-goal">
+      <span class="lang-en">Goal: Stack revenue streams, expand market</span>
+      <span class="lang-ko">목표: 수익원 겹쳐 쌓기, 시장 확장</span>
+    </div>
+    <ul>
+      <li><span class="lang-en"><strong>Launch Family Plan</strong> ($9.99/mo, 6 members). Aggressive Korean market messaging.</span><span class="lang-ko"><strong>가족 요금제 출시</strong> (월 $9.99, 6명). 한국 시장 대상 강력한 메시징.</span></li>
+      <li><span class="lang-en"><strong>Affiliate integration:</strong> pitch Weee!, Umamicart, Sayweee. Even one deal at 4% commission on $10 average cart = real money at scale.</span><span class="lang-ko"><strong>제휴 통합:</strong> Weee!, Umamicart, Sayweee 제안. 평균 $10 장바구니에 4% 커미션 딜 하나만 성사돼도 규모화되면 실제 수익.</span></li>
+      <li><span class="lang-en"><strong>Chinese-language market expansion.</strong> Full Simplified + Traditional Chinese localization. Overseas Chinese community in US is 5.4M and has near-zero good pantry apps.</span><span class="lang-ko"><strong>중국어 시장 확장.</strong> 간체 + 번체 완전 현지화. 미국 내 화교 커뮤니티는 540만 명이고 제대로 된 팬트리 앱이 거의 없습니다.</span></li>
+      <li><span class="lang-en">Launch first Recipe Pack IAPs — start with "Korean Holidays" for Chuseok / Lunar New Year seasons.</span><span class="lang-ko">첫 레시피 팩 IAP 출시 — 추석 / 설날 시즌에 맞춰 "한국 명절" 팩부터.</span></li>
+      <li><span class="lang-en">YouTube/TikTok channel monetization kicks in around 20k subs.</span><span class="lang-ko">YouTube/TikTok 채널이 구독자 2만 명 근처에서 수익화 시작.</span></li>
+    </ul>
+    <p style="margin-top:10px;">
+      <span class="lang-en"><strong>Target end-of-Year-2:</strong> $2,000–4,000/mo net, 10,000–20,000 MAU.</span>
+      <span class="lang-ko"><strong>2년 차 말 목표:</strong> 월 순수익 $2,000~$4,000, MAU 10,000~20,000명.</span>
+    </p>
+  </div>
+
+  <div class="year-block">
+    <div class="year-tag">
+      <span class="lang-en">Year 3 · Month 24 → 36</span>
+      <span class="lang-ko">3년 차 · 24~36개월</span>
+    </div>
+    <div class="year-goal">
+      <span class="lang-en">Goal: Cross into meaningful side income</span>
+      <span class="lang-ko">목표: 의미 있는 부수입 단계로 진입</span>
+    </div>
+    <ul>
+      <li><span class="lang-en"><strong>Sponsored recipe deals</strong> with CJ, Nongshim, Ottogi, Lee Kum Kee. 1–2 campaigns/quarter at $1–3k each.</span><span class="lang-ko"><strong>스폰서 레시피 딜</strong> CJ, 농심, 오뚜기, 이금기와. 분기당 1~2개 캠페인, 건당 $1~3k.</span></li>
+      <li><span class="lang-en">Recipe Pack library expands to 6–10 themed packs.</span><span class="lang-ko">레시피 팩 라이브러리를 6~10개 테마로 확장.</span></li>
+      <li><span class="lang-en">Explore <strong>white-label / B2B pilot</strong> with a regional Asian grocer (H-Mart, 99 Ranch) — long shot but high ceiling.</span><span class="lang-ko">지역 아시아 식료품점 (H-Mart, 99 Ranch)과 <strong>화이트라벨 / B2B 파일럿</strong> 탐색 — 확률은 낮지만 상한선이 높음.</span></li>
+      <li><span class="lang-en">Content channel becomes a real growth engine — reduces reliance on paid acquisition.</span><span class="lang-ko">콘텐츠 채널이 진짜 성장 엔진으로 자리잡음 — 유료 유입 의존도 감소.</span></li>
+    </ul>
+    <p style="margin-top:10px;">
+      <span class="lang-en"><strong>Target end-of-Year-3:</strong> $5,000–12,000/mo net = a real $60–140k/year business.</span>
+      <span class="lang-ko"><strong>3년 차 말 목표:</strong> 월 순수익 $5,000~$12,000 = 실제로 연 $60~140k 규모 사업.</span>
+    </p>
+  </div>
+
+  <!-- SECTION 5: THE INSTRUMENT TABLE -->
+  <h2>
+    <span class="lang-en">What to Instrument This Month</span>
+    <span class="lang-ko">이번 달에 계측해야 할 것들</span>
+  </h2>
+  <p>
+    <span class="lang-en">All forecasts above are guesses until these numbers are real. Priority order:</span>
+    <span class="lang-ko">위 예측들은 이 숫자들이 실제로 잡히기 전까지는 전부 추측입니다. 우선순위:</span>
+  </p>
+  <table>
+    <thead>
+      <tr>
+        <th><span class="lang-en">Metric</span><span class="lang-ko">지표</span></th>
+        <th><span class="lang-en">Why</span><span class="lang-ko">이유</span></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="lang-en">Recipe cache hit rate</span><span class="lang-ko">레시피 캐시 히트율</span></td>
+        <td><span class="lang-en">Single biggest margin lever. 40% → 70% doubles net.</span><span class="lang-ko">가장 큰 마진 레버. 40%→70%로 가면 순이익 2배.</span></td>
+      </tr>
+      <tr>
+        <td><span class="lang-en">Per-MAU AI cost</span><span class="lang-ko">MAU당 AI 비용</span></td>
+        <td><span class="lang-en">Tells you when a user is profitable.</span><span class="lang-ko">사용자가 언제부터 흑자인지 알려줌.</span></td>
+      </tr>
+      <tr>
+        <td><span class="lang-en">D1 / D7 / D30 retention</span><span class="lang-ko">D1 / D7 / D30 리텐션</span></td>
+        <td><span class="lang-en">If D30 &lt; 10%, no monetization strategy works.</span><span class="lang-ko">D30 &lt; 10%면 어떤 수익화 전략도 안 됨.</span></td>
+      </tr>
+      <tr>
+        <td><span class="lang-en">Free → Pro funnel</span><span class="lang-ko">무료 → Pro 퍼널</span></td>
+        <td><span class="lang-en">Where users drop. That's where to redesign.</span><span class="lang-ko">사용자가 이탈하는 지점. 거기가 리디자인 대상.</span></td>
+      </tr>
+      <tr>
+        <td><span class="lang-en">Recipe generation cost distribution</span><span class="lang-ko">레시피 생성 비용 분포</span></td>
+        <td><span class="lang-en">Long tail of expensive users can eat your budget.</span><span class="lang-ko">비싸게 쓰는 소수 사용자가 예산을 갉아먹을 수 있음.</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- BOTTOM LINE -->
+  <h2>
+    <span class="lang-en">Bottom Line</span>
+    <span class="lang-ko">결론</span>
+  </h2>
+  <div class="callout good">
+    <div class="label">
+      <span class="lang-en">The play</span>
+      <span class="lang-ko">플레이</span>
+    </div>
+    <p>
+      <span class="lang-en"><strong>Subscription + affiliate + content</strong> is the honest triple for a niche food app. Skip ads. Own the "bilingual immigrant family kitchen" positioning nobody else touches. Ship, instrument, learn, then layer revenue streams year by year. This is a real $60–140k/year business by Year 3 — not "quit your day job at Microchip Year 1," but a legitimate second income and possibly a bridge to Digital Design freedom later.</span>
+      <span class="lang-ko"><strong>구독 + 제휴 + 콘텐츠</strong>가 틈새 음식 앱을 위한 정직한 3종 세트입니다. 광고는 스킵. 아무도 건드리지 않는 "이중언어 이민 가족의 부엌" 포지셔닝을 선점하세요. 출시 → 계측 → 학습 → 연차별로 수익원을 겹쳐 쌓기. 이건 3년 차에 실제로 연 $60~140k 규모의 사업입니다 — "1년 차에 Microchip 그만두기"는 아니지만, 정당한 부수입이자 나중에 Digital Design 이직/자유로 가는 다리가 될 수 있어요.</span>
+    </p>
+  </div>
+
+  <div class="callout">
+    <div class="label">
+      <span class="lang-en">Next Decisions I Need From You</span>
+      <span class="lang-ko">Minjun의 결정이 필요한 다음 사항</span>
+    </div>
+    <ol>
+      <li><span class="lang-en">Confirm no ads in Year 1?</span><span class="lang-ko">1년 차 광고 없음 확정?</span></li>
+      <li><span class="lang-en">Which brand angle resonates most — A, B, or C?</span><span class="lang-ko">A, B, C 중 어느 브랜드 각도가 가장 와닿나요?</span></li>
+      <li><span class="lang-en">Willing to commit to 2 short videos/week for the content play?</span><span class="lang-ko">콘텐츠 전략을 위해 주 2편 짧은 영상 제작 커밋 가능?</span></li>
+      <li><span class="lang-en">Priority for next dev sprint: family plan wiring or instrumentation dashboard?</span><span class="lang-ko">다음 개발 스프린트 우선순위: 가족 요금제 구현 vs 계측 대시보드?</span></li>
+    </ol>
+  </div>
+
+  <div class="footer">
+    <span class="lang-en">Made for Minjun with <span class="heart">♥</span> by Totoro 🌳 · Jujube 🍒 · 2026-07-25</span>
+    <span class="lang-ko">Totoro가 Minjun을 위해 <span class="heart">♥</span> 담아 만듦 🌳 · Jujube 🍒 · 2026-07-25</span>
+  </div>
+</div>
+
+<script>
+  function toggleLang() {
+    var body = document.body;
+    var btn = document.querySelector('.lang-toggle');
+    if (body.classList.contains('lang-ko')) {
+      body.classList.remove('lang-ko');
+      body.classList.add('lang-en');
+      btn.textContent = '한국어';
+    } else {
+      body.classList.remove('lang-en');
+      body.classList.add('lang-ko');
+      btn.textContent = 'English';
+    }
+  }
+</script>
+</body>
+</html>
