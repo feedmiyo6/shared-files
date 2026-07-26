@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Jujube — Smart Pantry Retention System</title>
+<style>
+  :root {
+    --jujube-deep: #8B2E38;
+    --jujube: #C13E4D;
+    --cream: #FBF5EE;
+    --ink: #2C1810;
+    --ink-soft: #6b5750;
+    --card: #FFFFFF;
+    --line: #EDE0D3;
+    --green-ok: #4C7A5E;
+  }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body { margin: 0; padding: 0; background: var(--cream); color: var(--ink); }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+    line-height: 1.55;
+  }
+  .wrap { max-width: 720px; margin: 0 auto; padding: 0 18px 80px; }
+  header.top {
+    position: sticky; top: 0; z-index: 50;
+    background: linear-gradient(180deg, var(--jujube-deep), var(--jujube));
+    color: #fff;
+    padding: calc(env(safe-area-inset-top) + 14px) 18px 16px;
+    display: flex; align-items: center; justify-content: space-between;
+    box-shadow: 0 2px 10px rgba(139,46,56,0.25);
+  }
+  header.top .title { font-size: 15px; font-weight: 700; letter-spacing: 0.02em; }
+  header.top .sub { font-size: 11px; opacity: 0.85; margin-top: 2px; }
+  .lang-toggle {
+    background: rgba(255,255,255,0.18);
+    border: 1px solid rgba(255,255,255,0.4);
+    color: #fff;
+    padding: 8px 14px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+    min-height: 36px;
+  }
+  .hero { padding: 22px 0 8px; }
+  h1 { font-size: 24px; margin: 0 0 6px; color: var(--jujube-deep); line-height: 1.25; }
+  h2 {
+    font-size: 18px; margin: 34px 0 10px; color: var(--jujube-deep);
+    border-bottom: 2px solid var(--line); padding-bottom: 8px;
+  }
+  h3 { font-size: 15px; margin: 20px 0 8px; color: var(--ink); }
+  p { margin: 8px 0; font-size: 14.5px; color: var(--ink); }
+  .lede { font-size: 15px; color: var(--ink-soft); }
+  .pill-row { display: flex; gap: 8px; flex-wrap: wrap; margin: 10px 0; }
+  .pill {
+    background: #F4E4E1; color: var(--jujube-deep);
+    font-size: 11.5px; font-weight: 700; padding: 5px 11px; border-radius: 999px;
+  }
+  .card {
+    background: var(--card); border: 1px solid var(--line); border-radius: 16px;
+    padding: 16px; margin: 12px 0; box-shadow: 0 1px 3px rgba(44,24,16,0.05);
+  }
+  .callout {
+    border-left: 4px solid var(--jujube); background: #FBF0EC;
+    border-radius: 10px; padding: 12px 14px; margin: 14px 0; font-size: 13.5px;
+  }
+  .callout.rec { border-left-color: var(--green-ok); background: #F0F5F1; }
+  .callout .label { font-weight: 800; font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--jujube-deep); display:block; margin-bottom: 4px;}
+  .callout.rec .label { color: var(--green-ok); }
+  table { width: 100%; border-collapse: collapse; font-size: 12.5px; margin: 10px 0; }
+  th, td { text-align: left; padding: 8px 6px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { color: var(--jujube-deep); font-size: 11px; text-transform: uppercase; letter-spacing: 0.04em; }
+  .tbl-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; margin: 10px -2px; }
+  ul, ol { margin: 8px 0; padding-left: 20px; font-size: 14px; }
+  li { margin: 5px 0; }
+  .sprint {
+    display: flex; gap: 12px; align-items: flex-start;
+    border: 1px solid var(--line); border-radius: 14px; padding: 14px; margin: 10px 0; background: var(--card);
+  }
+  .sprint .num {
+    flex: 0 0 auto; width: 34px; height: 34px; border-radius: 50%;
+    background: var(--jujube-deep); color: #fff; display: flex; align-items: center; justify-content: center;
+    font-weight: 800; font-size: 14px;
+  }
+  .sprint .effort {
+    display: inline-block; font-size: 10.5px; font-weight: 800; padding: 2px 8px; border-radius: 6px;
+    background: #F4E4E1; color: var(--jujube-deep); margin-left: 6px; vertical-align: middle;
+  }
+  .mock {
+    background: #1F1310; border-radius: 26px; padding: 10px; margin: 14px 0;
+    box-shadow: 0 10px 30px rgba(31,19,16,0.35);
+  }
+  .mock-screen {
+    background: var(--cream); border-radius: 18px; padding: 14px; font-size: 12px;
+    font-family: -apple-system, sans-serif;
+  }
+  .mock-status { display:flex; justify-content: space-between; font-size: 10px; color: var(--ink-soft); margin-bottom:8px;}
+  .mock-h { font-size: 15px; font-weight: 800; color: var(--jujube-deep); margin-bottom: 2px; }
+  .mock-sub { font-size: 11px; color: var(--ink-soft); margin-bottom: 12px; }
+  .mock-card {
+    background: #fff; border: 1px solid var(--line); border-radius: 14px; padding: 10px 12px;
+    display: flex; align-items: center; gap: 10px; margin-bottom: 8px;
+  }
+  .mock-emoji { font-size: 22px; }
+  .mock-txt { flex: 1; }
+  .mock-name { font-weight: 700; font-size: 12.5px; }
+  .mock-meta { font-size: 10.5px; color: var(--ink-soft); }
+  .mock-btns { display: flex; gap: 6px; }
+  .mock-btn { font-size: 10px; font-weight: 700; border-radius: 8px; padding: 6px 8px; text-align:center; }
+  .btn-gone { background: #F4E4E1; color: var(--jujube-deep); }
+  .btn-keep { background: #EFEAE3; color: var(--ink-soft); }
+  .story-mock {
+    aspect-ratio: 9/16; max-width: 280px; margin: 14px auto;
+    background: linear-gradient(160deg, var(--jujube-deep), var(--jujube) 55%, #E8746F);
+    border-radius: 22px; padding: 20px 16px; display: flex; flex-direction: column;
+    justify-content: space-between; color: #fff; box-shadow: 0 12px 30px rgba(139,46,56,0.4);
+    position: relative; overflow: hidden;
+  }
+  .story-mock::after {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(circle at 80% 0%, rgba(255,255,255,0.18), transparent 55%);
+  }
+  .story-top { font-size: 11px; font-weight: 700; opacity: 0.85; letter-spacing: 0.04em; z-index:1; }
+  .story-big { font-size: 15px; font-weight: 800; margin-top: 10px; z-index:1; }
+  .story-stat { font-size: 38px; font-weight: 900; margin: 4px 0; z-index:1; }
+  .story-stat-label { font-size: 11px; opacity: 0.9; z-index:1; }
+  .story-mid { margin-top: auto; margin-bottom: 14px; z-index:1; }
+  .story-bars { display: flex; gap: 4px; align-items: flex-end; height: 40px; margin: 10px 0; z-index:1; }
+  .story-bars div { flex:1; background: rgba(255,255,255,0.85); border-radius: 3px; }
+  .story-foot { font-size: 10px; opacity: 0.8; z-index:1; }
+  .story-badge { display:inline-block; background: rgba(255,255,255,0.2); border-radius: 999px; padding: 3px 10px; font-size: 10px; font-weight:700; z-index:1; width:fit-content; }
+  footer { text-align: center; font-size: 11px; color: var(--ink-soft); padding: 30px 0 10px; }
+  code { background: #F4E4E1; padding: 1px 5px; border-radius: 4px; font-size: 12px; }
+
+  body.lang-en .lang-ko { display: none !important; }
+  body.lang-ko .lang-en { display: none !important; }
+</style>
+</head>
+<body class="lang-en">
+
+<header class="top">
+  <div>
+    <div class="title">
+      <span class="lang-en">Jujube Product Plan</span>
+      <span class="lang-ko">Jujube 제품 기획서</span>
+    </div>
+    <div class="sub">
+      <span class="lang-en">Smart Pantry Retention System</span>
+      <span class="lang-ko">스마트 팬트리 리텐션 시스템</span>
+    </div>
+  </div>
+  <button class="lang-toggle" onclick="toggleLang()">한국어</button>
+</header>
+
+<div class="wrap">
+
+  <div class="hero">
+    <h1>
+      <span class="lang-en">Fix removal first. Then let people brag about it.</span>
+      <span class="lang-ko">먼저 &ldquo;삭제&rdquo;를 고친다. 그다음 자랑하게 만든다.</span>
+    </h1>
+    <p class="lede">
+      <span class="lang-en">Adding items to Jujube is easy. Removing them is not — and that asymmetry is quietly breaking every downstream feature: stale pantry data means bad recipe suggestions, bad waste estimates, and a voice concierge nobody trusts. This doc lays out a friction-minimized removal pipeline, then a shareable weekly report built on top of it, sequenced into sprints you can ship solo on weekends.</span>
+      <span class="lang-ko">Jujube에 재료를 추가하는 건 쉽습니다. 삭제하는 건 아닙니다 — 그리고 이 비대칭이 조용히 하위 기능들을 다 망가뜨리고 있어요. 팬트리 데이터가 오래되면 레시피 추천도, 음식물 쓰레기 추정치도, 아직 아무도 안 믿는 보이스 컨시어지도 다 나빠집니다. 이 문서는 마찰을 최소화한 삭제 파이프라인을 먼저 설계하고, 그 위에 공유하고 싶어지는 주간 리포트를 얹은 다음, 주말/저녁에 혼자 개발 가능한 스프린트로 순서를 정합니다.</span>
+    </p>
+    <div class="pill-row">
+      <span class="pill"><span class="lang-en">Pantry sync accuracy</span><span class="lang-ko">팬트리 동기화 정확도</span></span>
+      <span class="pill"><span class="lang-en">Retention loop</span><span class="lang-ko">리텐션 루프</span></span>
+      <span class="pill"><span class="lang-en">SNS shareability</span><span class="lang-ko">SNS 공유성</span></span>
+    </div>
+    <div class="callout rec">
+      <span class="label"><span class="lang-en">Bottom line</span><span class="lang-ko">결론부터</span></span>
+      <span class="lang-en">Ship the Pantry Catch-Up screen + inference engine before touching the weekly report. The report's core metric (waste avoided) is a lie without accurate removal data. Voice-removal discoverability is a fast follow, not a blocker.</span>
+      <span class="lang-ko">주간 리포트를 건드리기 전에 Pantry Catch-Up 화면과 추론 엔진부터 출시하세요. 삭제 데이터가 정확하지 않으면 리포트의 핵심 지표(절약한 음식물 쓰레기)는 거짓말이 됩니다. 음성 삭제 발견성 개선은 빠르게 따라가면 되는 것이지, 막는 요소는 아닙니다.</span>
+    </div>
+  </div>
+
+  <h2><span class="lang-en">Part 1 — Smart Pantry Removal Pipeline</span><span class="lang-ko">파트 1 — 스마트 팬트리 삭제 파이프라인</span></h2>
+
+  <p>
+    <span class="lang-en">Current state (confirmed in code): pantry list already supports swipe-to-delete (<code>Dismissible</code>) and long-press single-item delete in <code>pantry_screen.dart</code>, plus a bulk <code>deleteItems()</code> path used by a "Remove items" sheet. Voice removal exists but is buried in <code>VerticalDragFab</code> — a long-press-and-drag-up gesture on the add FAB that most users will never discover. There is also an <code>expiry_defaults</code> table and per-item <code>expiryDate</code>/<code>addedDate</code> fields already in the schema — the hard infrastructure for inference already exists, it's just unused for proactive removal.</span>
+    <span class="lang-ko">현재 상태(코드로 확인함): 팬트리 리스트는 이미 스와이프 삭제(<code>Dismissible</code>)와 <code>pantry_screen.dart</code>의 롱프레스 단일 삭제, 그리고 &ldquo;Remove items&rdquo; 시트가 쓰는 일괄 <code>deleteItems()</code> 경로를 갖고 있습니다. 음성 삭제 기능도 있지만 <code>VerticalDragFab</code> 안에 묻혀 있어요 — 추가 FAB을 길게 눌러 위로 드래그하는 제스처인데, 대부분의 유저는 절대 발견 못 할 겁니다. 스키마에는 이미 <code>expiry_defaults</code> 테이블과 아이템별 <code>expiryDate</code>/<code>addedDate</code> 필드도 있어요 — 추론에 필요한 하드 인프라는 이미 존재하고, 능동적 삭제에 아직 안 쓰이고 있을 뿐입니다.</span>
+  </p>
+
+  <h3><span class="lang-en">1.1 Passive inference model</span><span class="lang-ko">1.1 수동적 추론 모델</span></h3>
+  <p>
+    <span class="lang-en">Extend <code>expiry_defaults</code> into a confidence-scored "likely gone" signal per item, evaluated nightly (cheap cron / edge function), not client-side.</span>
+    <span class="lang-ko"><code>expiry_defaults</code>를 아이템별 &ldquo;아마 다 썼을 것&rdquo; 신뢰도 점수 신호로 확장하고, 클라이언트가 아니라 매일 밤 (저비용 cron / edge function)으로 평가합니다.</span>
+  </p>
+  <div class="tbl-scroll">
+  <table>
+    <tr><th><span class="lang-en">Category</span><span class="lang-ko">카테고리</span></th><th><span class="lang-en">Typical shelf life</span><span class="lang-ko">평균 유통기한</span></th><th><span class="lang-en">Flag as "probably gone" at</span><span class="lang-ko">&ldquo;아마 없음&rdquo; 표시 시점</span></th></tr>
+    <tr><td><span class="lang-en">Fresh veg / leafy greens</span><span class="lang-ko">신선 채소 / 잎채소</span></td><td>5–7d</td><td><span class="lang-en">+2 days past typical</span><span class="lang-ko">평균 이후 +2일</span></td></tr>
+    <tr><td><span class="lang-en">Fresh fruit</span><span class="lang-ko">신선 과일</span></td><td>5–10d</td><td><span class="lang-en">+2 days past typical</span><span class="lang-ko">평균 이후 +2일</span></td></tr>
+    <tr><td><span class="lang-en">Dairy (milk, yogurt)</span><span class="lang-ko">유제품 (우유, 요거트)</span></td><td>10–14d</td><td><span class="lang-en">+3 days past typical</span><span class="lang-ko">평균 이후 +3일</span></td></tr>
+    <tr><td><span class="lang-en">Meat / seafood (fridge)</span><span class="lang-ko">육류 / 해산물 (냉장)</span></td><td>2–4d</td><td><span class="lang-en">on typical day</span><span class="lang-ko">평균 당일</span></td></tr>
+    <tr><td><span class="lang-en">Frozen items</span><span class="lang-ko">냉동 식품</span></td><td>60–180d</td><td><span class="lang-en">+14 days past typical</span><span class="lang-ko">평균 이후 +14일</span></td></tr>
+    <tr><td><span class="lang-en">Opened sauces/condiments</span><span class="lang-ko">개봉한 소스/양념</span></td><td>~90d</td><td><span class="lang-en">+10 days past typical</span><span class="lang-ko">평균 이후 +10일</span></td></tr>
+    <tr><td><span class="lang-en">Dry goods (rice, pasta)</span><span class="lang-ko">건식 재료 (쌀, 파스타)</span></td><td>180d+</td><td><span class="lang-en">rarely auto-flagged</span><span class="lang-ko">거의 자동 표시 안 함</span></td></tr>
+  </table>
+  </div>
+  <p>
+    <span class="lang-en">Signals to combine (weighted, not binary): (1) days past <code>expiryDate</code> or category default from <code>addedDate</code>, (2) whether item was used as an ingredient in any cooked/completed recipe since being added, (3) whether user has opened the app / touched this item at all recently. Low confidence → surface as gentle suggestion in Catch-Up, never auto-delete. Never silently remove anything — Jujube's trust hinges on the user always being the final "yes."</span>
+    <span class="lang-ko">가중치를 둔 신호 조합(이분법 아님): (1) <code>expiryDate</code> 경과일 또는 <code>addedDate</code> 기준 카테고리 평균 초과일, (2) 추가된 이후 조리 완료된 레시피에 재료로 쓰였는지, (3) 최근에 유저가 이 아이템을 앱에서 건드린 적이 있는지. 신뢰도가 낮으면 Catch-Up에서 부드러운 제안으로만 보여주고, 자동 삭제는 절대 하지 않습니다. 아무것도 조용히 삭제하지 않는 것 — 유저가 항상 최종 &ldquo;예&rdquo;를 결정한다는 것이 Jujube 신뢰의 핵심입니다.</span>
+  </p>
+
+  <h3><span class="lang-en">1.2 Pantry Catch-Up screen</span><span class="lang-ko">1.2 Pantry Catch-Up 화면</span></h3>
+  <p>
+    <span class="lang-en">A dedicated surface, reached from a home-screen banner or notification tap — not buried in settings. Card stack, one item per card, three actions: <b>Gone</b> (swipe left / tap), <b>Still have it</b> (swipe right / tap — resets the inference clock), <b>Used in a recipe</b> (deep-links to log it against a cooked dish, feeds the waste-avoided metric). Batch mode: "Confirm all gone" button up top for when the whole list is stale after a trip.</span>
+    <span class="lang-ko">홈 화면 배너나 알림 탭에서 진입하는 전용 화면 — 설정 안에 숨기지 않습니다. 카드 스택, 카드당 아이템 하나, 세 가지 액션: <b>없음</b> (왼쪽 스와이프 / 탭), <b>아직 있음</b> (오른쪽 스와이프 / 탭 — 추론 타이머 리셋), <b>레시피에 사용함</b> (조리한 요리에 기록하는 화면으로 딥링크, 절약한 낭비 지표에 반영). 일괄 모드: 여행 다녀와서 리스트 전체가 오래됐을 때를 위한 상단 &ldquo;모두 없음으로 확인&rdquo; 버튼.</span>
+  </p>
+
+  <div class="mock">
+    <div class="mock-screen">
+      <div class="mock-status"><span>9:41</span><span>●●●</span></div>
+      <div class="mock-h">
+        <span class="lang-en">Pantry Catch-Up</span><span class="lang-ko">팬트리 캐치업</span>
+      </div>
+      <div class="mock-sub">
+        <span class="lang-en">7 items probably gone — quick confirm?</span>
+        <span class="lang-ko">7개 항목이 아마 없어요 — 빠르게 확인할까요?</span>
+      </div>
+      <div class="mock-card">
+        <div class="mock-emoji">🥬</div>
+        <div class="mock-txt">
+          <div class="mock-name"><span class="lang-en">Napa cabbage</span><span class="lang-ko">배추</span></div>
+          <div class="mock-meta"><span class="lang-en">Added 9 days ago · past typical</span><span class="lang-ko">9일 전 추가 · 평균 초과</span></div>
+        </div>
+        <div class="mock-btns">
+          <div class="mock-btn btn-gone"><span class="lang-en">Gone</span><span class="lang-ko">없음</span></div>
+          <div class="mock-btn btn-keep"><span class="lang-en">Keep</span><span class="lang-ko">있음</span></div>
+        </div>
+      </div>
+      <div class="mock-card">
+        <div class="mock-emoji">🥛</div>
+        <div class="mock-txt">
+          <div class="mock-name"><span class="lang-en">Milk</span><span class="lang-ko">우유</span></div>
+          <div class="mock-meta"><span class="lang-en">Added 13 days ago · past typical</span><span class="lang-ko">13일 전 추가 · 평균 초과</span></div>
+        </div>
+        <div class="mock-btns">
+          <div class="mock-btn btn-gone"><span class="lang-en">Gone</span><span class="lang-ko">없음</span></div>
+          <div class="mock-btn btn-keep"><span class="lang-en">Keep</span><span class="lang-ko">있음</span></div>
+        </div>
+      </div>
+      <div class="mock-card" style="opacity:0.5">
+        <div class="mock-emoji">🧄</div>
+        <div class="mock-txt">
+          <div class="mock-name"><span class="lang-en">Garlic</span><span class="lang-ko">마늘</span></div>
+          <div class="mock-meta"><span class="lang-en">Added 20 days ago</span><span class="lang-ko">20일 전 추가</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout">
+    <span class="label"><span class="lang-en">Trigger points</span><span class="lang-ko">진입 트리거</span></span>
+    <span class="lang-en">(1) Weekly push notification (see 1.3), (2) a persistent but small badge on the Pantry tab icon when 3+ items are flagged, (3) auto-surfaced as a dismissible banner at the top of the Pantry screen itself — zero extra taps for someone already there.</span>
+    <span class="lang-ko">(1) 주간 푸시 알림 (1.3 참조), (2) 3개 이상 항목이 표시되면 Pantry 탭 아이콘에 작지만 계속 보이는 뱃지, (3) Pantry 화면 상단에 닫을 수 있는 배너로 자동 노출 — 이미 화면에 있는 유저는 추가 탭 없이 바로 보임.</span>
+  </div>
+
+  <h3><span class="lang-en">1.3 Notification strategy</span><span class="lang-ko">1.3 알림 전략</span></h3>
+  <ul>
+    <li><span class="lang-en"><b>Cadence:</b> 1 pantry-catch-up push per week max, e.g. Sunday 10am local time (grocery-restock day for most households) — configurable but opinionated default.</span><span class="lang-ko"><b>주기:</b> Pantry Catch-Up 푸시는 주 최대 1회, 예: 현지시간 일요일 오전 10시 (대부분 가정의 장보기 요일) — 조정 가능하지만 강한 기본값.</span></li>
+    <li><span class="lang-en"><b>Trigger override:</b> only send if 3+ items are flagged; otherwise skip that week silently — never nag with an empty list.</span><span class="lang-ko"><b>발동 조건:</b> 3개 이상 표시된 경우에만 발송. 아니면 그 주는 조용히 건너뜀 — 빈 목록으로 귀찮게 하지 않음.</span></li>
+    <li><span class="lang-en"><b>iOS:</b> request notification permission contextually — right after the user completes their first successful Catch-Up confirmation manually, not at first launch (higher opt-in rate). <b>Android 13+:</b> same contextual ask, required runtime permission (<code>POST_NOTIFICATIONS</code>).</span><span class="lang-ko"><b>iOS:</b> 첫 실행 시가 아니라, 유저가 처음으로 Catch-Up을 수동으로 완료한 직후에 맥락적으로 알림 권한을 요청 (동의율이 더 높음). <b>Android 13+:</b> 동일하게 맥락적으로 요청, 런타임 권한 필수 (<code>POST_NOTIFICATIONS</code>).</span></li>
+    <li><span class="lang-en">Copy should be specific, not generic: "3 items in your fridge are probably gone — 10 sec to confirm" beats "Check your pantry."</span><span class="lang-ko">문구는 뭉뚱그리지 말고 구체적으로: &ldquo;냉장고에서 3개 항목이 아마 다 썼을 거예요 — 10초면 확인 끝&rdquo;이 &ldquo;팬트리를 확인하세요&rdquo;보다 낫습니다.</span></li>
+  </ul>
+
+  <h3><span class="lang-en">1.4 Contextual removal after cooking</span><span class="lang-ko">1.4 요리 후 맥락적 삭제</span></h3>
+  <p>
+    <span class="lang-en">When a user marks a recipe "cooked" (this flow needs to exist if it doesn't already), show a single lightweight confirm sheet listing the recipe's ingredients pre-checked against current pantry stock: "Used these?" with all boxes pre-ticked, one tap to confirm, individual uncheck for substitutions. This is the single highest-signal, lowest-friction removal moment in the whole app — cooking is already an admission the ingredients existed and are now gone.</span>
+    <span class="lang-ko">유저가 레시피를 &ldquo;조리 완료&rdquo;로 표시하면(이 플로우가 아직 없다면 만들어야 함), 현재 팬트리 재고와 대조해 미리 체크된 재료 목록을 보여주는 가벼운 확인 시트 하나만: &ldquo;이거 다 쓰셨나요?&rdquo; 모든 체크박스가 기본 체크, 탭 한 번으로 확인, 대체 재료는 개별 체크 해제. 앱 전체에서 신호는 가장 강하고 마찰은 가장 낮은 삭제 순간입니다 — 조리했다는 것 자체가 이미 재료가 존재했고 이제 없어졌다는 자백이니까요.</span>
+  </p>
+
+  <h3><span class="lang-en">1.5 Voice removal discoverability</span><span class="lang-ko">1.5 음성 삭제 발견성</span></h3>
+  <p>
+    <span class="lang-en">The long-press-and-drag FAB gesture is clever but undiscoverable — Minjun's own instinct ("I don't know if people would use this") is correct. Recommend replacing/supplementing it with:</span>
+    <span class="lang-ko">롱프레스+드래그 FAB 제스처는 영리하지만 발견하기 어렵습니다 — Minjun의 직감(&ldquo;사람들이 이걸 쓸지 모르겠다&rdquo;)이 맞습니다. 다음으로 교체/보완할 것을 권장:</span>
+  </p>
+  <ol>
+    <li><span class="lang-en"><b>Mic icon in the Pantry list header</b> (recommended) — always visible next to search/filter, one tap opens voice input pre-scoped to "remove mode." No gesture to learn, no menu to discover.</span><span class="lang-ko"><b>Pantry 리스트 헤더의 마이크 아이콘</b> (권장) — 검색/필터 옆에 항상 보이며, 탭 한 번으로 &ldquo;삭제 모드&rdquo;로 미리 스코프된 음성 입력이 열림. 배울 제스처도, 찾아야 할 메뉴도 없음.</span></li>
+    <li><span class="lang-en"><b>Mic button directly on each item's swipe-action row</b> — supplements the existing Dismissible swipe, for "remove several by voice while scanning the fridge" moments.</span><span class="lang-ko"><b>각 아이템의 스와이프 액션에 마이크 버튼</b> — 기존 Dismissible 스와이프를 보완, &ldquo;냉장고 보면서 음성으로 여러 개 삭제&rdquo; 상황에 적합.</span></li>
+    <li><span class="lang-en"><b>Keep the FAB gesture as a power-user shortcut</b> but stop relying on it as the only path — it graduates from primary to secondary discovery.</span><span class="lang-ko"><b>FAB 제스처는 파워유저 단축키로 남겨두되</b> 유일한 경로로 의존하지 않기 — 주요 발견 경로에서 보조 경로로 격하.</span></li>
+  </ol>
+  <div class="callout rec">
+    <span class="label"><span class="lang-en">Recommendation</span><span class="lang-ko">권장안</span></span>
+    <span class="lang-en">Ship #1 alone first — it's an S-effort change with outsized discoverability payoff. Measure voice-removal usage before investing further.</span>
+    <span class="lang-ko">먼저 1번만 출시하세요 — 개발 규모는 작지만(S) 발견성 개선 효과는 큽니다. 더 투자하기 전에 음성 삭제 사용률부터 측정하세요.</span>
+  </div>
+
+  <h3><span class="lang-en">1.6 Manual delete UX (already partly shipped)</span><span class="lang-ko">1.6 수동 삭제 UX (이미 일부 구현됨)</span></h3>
+  <p>
+    <span class="lang-en">Confirmed in code: swipe-to-delete via <code>Dismissible</code> and long-press single delete already exist in <code>pantry_screen.dart</code>, plus a bulk <code>deleteItems()</code> path. Gaps to close: (1) add an <b>undo toast</b> after every delete (single or bulk) — 5 second window, this is a cheap trust-builder and currently likely missing; (2) add a <b>multi-select mode</b> entry point (long-press → "Select" → checkboxes → batch delete bar) for clearing many stale items at once without one-by-one swiping.</span>
+    <span class="lang-ko">코드로 확인됨: <code>pantry_screen.dart</code>에 <code>Dismissible</code> 스와이프 삭제와 롱프레스 단일 삭제가 이미 있고, 일괄 <code>deleteItems()</code> 경로도 있습니다. 메꿔야 할 부분: (1) 모든 삭제(단일/일괄) 후 <b>실행취소 토스트</b> 추가 — 5초 창, 저비용으로 신뢰를 쌓을 수 있는데 현재 없을 가능성이 높음; (2) 오래된 항목을 한 번에 정리할 <b>다중 선택 모드</b> 진입점(롱프레스 → &ldquo;선택&rdquo; → 체크박스 → 일괄 삭제 바) 추가, 하나씩 스와이프하지 않도록.</span>
+  </p>
+
+  <h2><span class="lang-en">Part 2 — Weekly Report + SNS Shareable Card</span><span class="lang-ko">파트 2 — 주간 리포트 + SNS 공유 카드</span></h2>
+
+  <p>
+    <span class="lang-en">This only works once Part 1 makes removal data trustworthy. Model it after Spotify Wrapped / Duolingo streaks: earned, personal, a little smug. Not a dashboard — a brag.</span>
+    <span class="lang-ko">이건 파트 1이 삭제 데이터를 신뢰할 수 있게 만든 다음에야 작동합니다. Spotify Wrapped나 Duolingo 스트릭처럼 만드세요: 노력해서 얻은, 개인적인, 살짝 으쓱한 느낌. 대시보드가 아니라 자랑거리로.</span>
+  </p>
+
+  <h3><span class="lang-en">2.1 Metrics that matter</span><span class="lang-ko">2.1 중요한 지표</span></h3>
+  <div class="tbl-scroll">
+  <table>
+    <tr><th><span class="lang-en">Metric</span><span class="lang-ko">지표</span></th><th><span class="lang-en">Source</span><span class="lang-ko">출처</span></th><th><span class="lang-en">Ship in</span><span class="lang-ko">출시 시점</span></th></tr>
+    <tr><td><span class="lang-en">Waste avoided (kg + $)</span><span class="lang-ko">절약한 낭비 (kg + $)</span></td><td><span class="lang-en">"Used in recipe" confirmations vs. USDA baseline</span><span class="lang-ko">&ldquo;레시피에 사용함&rdquo; 확인 대 USDA 기준치</span></td><td>v1</td></tr>
+    <tr><td><span class="lang-en">Recipes cooked</span><span class="lang-ko">조리한 레시피 수</span></td><td><span class="lang-en">"Mark as cooked" events</span><span class="lang-ko">&ldquo;조리 완료&rdquo; 이벤트</span></td><td>v1</td></tr>
+    <tr><td><span class="lang-en">Ingredient diversity</span><span class="lang-ko">재료 다양성</span></td><td><span class="lang-en">distinct ingredients used this week</span><span class="lang-ko">이번 주 사용된 고유 재료 수</span></td><td>v1</td></tr>
+    <tr><td><span class="lang-en">Weekly streak</span><span class="lang-ko">주간 스트릭</span></td><td><span class="lang-en">consecutive weeks with ≥1 confirmed cooked recipe</span><span class="lang-ko">확인된 조리 레시피가 ≥1개인 연속 주</span></td><td>v1</td></tr>
+    <tr><td><span class="lang-en">Cultural mix</span><span class="lang-ko">문화적 비율</span></td><td><span class="lang-en">recipe cuisine tags this week</span><span class="lang-ko">이번 주 레시피 요리 태그</span></td><td>v1.1</td></tr>
+    <tr><td><span class="lang-en">Money saved</span><span class="lang-ko">절약한 금액</span></td><td><span class="lang-en">receipt OCR price data × waste-avoided weight</span><span class="lang-ko">영수증 OCR 가격 데이터 × 절약한 낭비 무게</span></td><td>v1.1 (needs receipt price capture)</td></tr>
+  </table>
+  </div>
+  <div class="callout">
+    <span class="label"><span class="lang-en">Note</span><span class="lang-ko">참고</span></span>
+    <span class="lang-en">"Money saved" needs per-item price data from receipt OCR to be accurate — check whether <code>receipt_ocr_service.dart</code> currently captures line-item prices or just item names. If not, that's a small scope add before v1.1, not a blocker for v1.</span>
+    <span class="lang-ko">&ldquo;절약한 금액&rdquo;이 정확하려면 영수증 OCR의 아이템별 가격 데이터가 필요합니다 — <code>receipt_ocr_service.dart</code>가 현재 라인아이템 가격까지 캡처하는지, 아니면 아이템 이름만 캡처하는지 확인하세요. 안 된다면 v1.1 전에 작은 범위로 추가하면 되고, v1을 막는 요소는 아닙니다.</span>
+  </div>
+
+  <h3><span class="lang-en">2.2 Calculating waste avoided honestly</span><span class="lang-ko">2.2 절약한 낭비를 정직하게 계산하기</span></h3>
+  <p>
+    <span class="lang-en">Baseline: USDA estimates US households waste ~30–40% of groceries by value. Formula: for every item marked "Used in a recipe" (not just deleted/gone), credit it as waste-avoided at its category's typical unit value. Items marked "Gone" without a recipe link do NOT count as saved — they're neutral (unknown fate), which keeps the number honest. Always show the estimation disclaimer inline: "Estimated from your logged items and typical US household waste rates (USDA)." This protects trust and avoids the report feeling gamed.</span>
+    <span class="lang-ko">기준치: USDA는 미국 가정이 식료품 가치의 약 30–40%를 낭비한다고 추정합니다. 계산식: &ldquo;레시피에 사용함&rdquo;으로 표시된 항목마다(단순 삭제/없음이 아니라) 해당 카테고리의 평균 단가로 낭비 절약분을 인정합니다. 레시피 연결 없이 &ldquo;없음&rdquo;으로만 표시된 항목은 절약으로 카운트하지 않습니다 — 중립(용도 불명)으로 처리해서 숫자를 정직하게 유지합니다. 항상 인라인으로 추정 문구를 표시하세요: &ldquo;기록하신 항목과 미국 가정 평균 낭비율(USDA)을 기반으로 추정.&rdquo; 이렇게 하면 신뢰를 지키고 리포트가 조작된 느낌을 주지 않습니다.</span>
+  </p>
+
+  <h3><span class="lang-en">2.3 Shareable card design</span><span class="lang-ko">2.3 공유 카드 디자인</span></h3>
+  <p>
+    <span class="lang-en">9:16 story format, one-tap native share sheet. Jujube-branded gradient background (deep jujube red → jujube), big single hero number (waste avoided or $ saved — pick the one that's higher/more impressive per user, auto-selected), supporting stats below, ingredient-diversity mini bar chart, streak badge, small "myjujube.app" wordmark bottom corner. No dense data — one hero stat people can read in half a second while scrolling a story.</span>
+    <span class="lang-ko">9:16 스토리 포맷, 원탭 네이티브 공유 시트. Jujube 브랜드 그라데이션 배경(딥 주주브 레드 → 주주브), 큼직한 히어로 숫자 하나(절약한 낭비 또는 절약 금액 — 유저마다 더 크고 인상적인 쪽을 자동 선택), 아래에 보조 통계, 재료 다양성 미니 막대 그래프, 스트릭 뱃지, 하단 구석에 작은 &ldquo;myjujube.app&rdquo; 워드마크. 데이터 빽빽하게 넣지 않기 — 스토리 스크롤하다 0.5초 만에 읽을 수 있는 히어로 스탯 하나.</span>
+  </p>
+
+  <div class="story-mock">
+    <div class="story-top">JUJUBE · <span class="lang-en">WEEK 12</span><span class="lang-ko">12주차</span></div>
+    <div class="story-badge">🔥 <span class="lang-en">6-week streak</span><span class="lang-ko">6주 연속</span></div>
+    <div class="story-big"><span class="lang-en">You saved</span><span class="lang-ko">이번 주 절약</span></div>
+    <div class="story-stat">$31</div>
+    <div class="story-stat-label"><span class="lang-en">of food from going to waste this week</span><span class="lang-ko">음식물 쓰레기 방지</span></div>
+    <div class="story-mid">
+      <div class="story-bars">
+        <div style="height:35%"></div><div style="height:60%"></div><div style="height:45%"></div>
+        <div style="height:90%"></div><div style="height:70%"></div><div style="height:50%"></div><div style="height:80%"></div>
+      </div>
+      <div class="story-foot">
+        <span class="lang-en">Cooked with 27 ingredients · 5 recipes · Korean 55% · American 30% · Chinese 15%</span>
+        <span class="lang-ko">재료 27종 · 레시피 5개 · 한식 55% · 미국식 30% · 중식 15%</span>
+      </div>
+    </div>
+  </div>
+
+  <h3><span class="lang-en">2.4 Where it lives + cadence</span><span class="lang-ko">2.4 노출 위치 + 주기</span></h3>
+  <ul>
+    <li><span class="lang-en"><b>Weekly</b> push notification (Monday morning — "Your week in review is ready") deep-linking to a full-screen report; the shareable card is one tap from there, not the primary surface.</span><span class="lang-ko"><b>주간</b> 푸시 알림(월요일 아침 — &ldquo;이번 주 리포트가 준비됐어요&rdquo;)이 전체화면 리포트로 딥링크; 공유 카드는 거기서 한 탭 거리, 메인 화면은 아님.</span></li>
+    <li><span class="lang-en"><b>Monthly</b> roll-up as a bigger-moment variant (more stats, better for occasional users who mute weekly pushes) — v2, not v1.</span><span class="lang-ko"><b>월간</b> 롤업은 더 큰 모먼트 버전(통계 더 풍부, 주간 알림을 끈 유저에게 적합) — v2, v1 아님.</span></li>
+    <li><span class="lang-en">Also accessible anytime from a small icon on the Home tab — don't force people to wait for the notification.</span><span class="lang-ko">Home 탭의 작은 아이콘으로도 언제든 접근 가능 — 알림 올 때까지 기다리게 하지 않기.</span></li>
+    <li><span class="lang-en">Skip a home-screen widget for v1 — nice-to-have, real effort (WidgetKit + Glance are separate codebases), doesn't move retention as directly as the push+in-app loop.</span><span class="lang-ko">v1에서는 홈스크린 위젯 스킵 — 있으면 좋지만 개발 부담이 크고(WidgetKit과 Glance는 별도 코드베이스), 푸시+인앱 루프만큼 리텐션에 직접적이지 않음.</span></li>
+  </ul>
+
+  <h2><span class="lang-en">Part 3 — Sprint Roadmap</span><span class="lang-ko">파트 3 — 스프린트 로드맵</span></h2>
+  <p class="lede">
+    <span class="lang-en">Sequenced by dependency, sized for solo weekend/evening pace.</span>
+    <span class="lang-ko">의존성 순서, 혼자 주말/저녁 개발 페이스에 맞춘 규모.</span>
+  </p>
+
+  <div class="sprint">
+    <div class="num">1</div>
+    <div>
+      <h3 style="margin-top:0"><span class="lang-en">Removal UX polish</span><span class="lang-ko">삭제 UX 다듬기</span><span class="effort">S</span></h3>
+      <p><span class="lang-en">Undo toast on delete, multi-select batch delete, mic icon in Pantry header. No backend changes. Unlocks: immediate friction relief, sets baseline before inference work.</span><span class="lang-ko">삭제 시 실행취소 토스트, 다중 선택 일괄 삭제, Pantry 헤더 마이크 아이콘. 백엔드 변경 없음. 잠금 해제: 즉각적인 마찰 완화, 추론 작업 전 기준선 마련.</span></p>
+    </div>
+  </div>
+
+  <div class="sprint">
+    <div class="num">2</div>
+    <div>
+      <h3 style="margin-top:0"><span class="lang-en">Inference engine + Pantry Catch-Up screen</span><span class="lang-ko">추론 엔진 + Pantry Catch-Up 화면</span><span class="effort">L</span></h3>
+      <p><span class="lang-en">Nightly job scoring "probably gone" per category/subcategory using <code>expiry_defaults</code> + <code>addedDate</code>/<code>expiryDate</code>. New Catch-Up screen (card stack UI). Home banner + tab badge triggers. Unlocks: accurate pantry state, which every later feature depends on.</span><span class="lang-ko">카테고리/서브카테고리별로 <code>expiry_defaults</code> + <code>addedDate</code>/<code>expiryDate</code>를 이용해 &ldquo;아마 없음&rdquo; 점수를 매기는 야간 작업. 새 Catch-Up 화면(카드 스택 UI). 홈 배너 + 탭 뱃지 트리거. 잠금 해제: 정확한 팬트리 상태, 이후 모든 기능이 여기 의존함.</span></p>
+    </div>
+  </div>
+
+  <div class="sprint">
+    <div class="num">3</div>
+    <div>
+      <h3 style="margin-top:0"><span class="lang-en">Notifications + cook-to-decrement flow</span><span class="lang-ko">알림 + 조리-후-차감 플로우</span><span class="effort">M</span></h3>
+      <p><span class="lang-en">flutter_local_notifications / FCM+APNs setup, weekly cadence logic, contextual permission prompt. "Mark as cooked" confirm sheet with pre-checked ingredients. Unlocks: passive engagement loop + highest-signal removal data source.</span><span class="lang-ko">flutter_local_notifications / FCM+APNs 설정, 주간 주기 로직, 맥락적 권한 요청. 미리 체크된 재료가 있는 &ldquo;조리 완료&rdquo; 확인 시트. 잠금 해제: 수동적 참여 루프 + 가장 신호가 강한 삭제 데이터 소스.</span></p>
+    </div>
+  </div>
+
+  <div class="sprint">
+    <div class="num">4</div>
+    <div>
+      <h3 style="margin-top:0"><span class="lang-en">Weekly report + shareable card (v1)</span><span class="lang-ko">주간 리포트 + 공유 카드 (v1)</span><span class="effort">M</span></h3>
+      <p><span class="lang-en">Waste-avoided calc off "Used in recipe" data, report screen, story-card renderer (native share sheet), Monday push. Metrics: waste avoided, recipes cooked, ingredient diversity, streak. Unlocks: retention loop + organic SNS acquisition channel.</span><span class="lang-ko">&ldquo;레시피에 사용함&rdquo; 데이터 기반 낭비-절약 계산, 리포트 화면, 스토리 카드 렌더러(네이티브 공유 시트), 월요일 푸시. 지표: 절약한 낭비, 조리한 레시피, 재료 다양성, 스트릭. 잠금 해제: 리텐션 루프 + 오가닉 SNS 획득 채널.</span></p>
+    </div>
+  </div>
+
+  <div class="sprint">
+    <div class="num">5</div>
+    <div>
+      <h3 style="margin-top:0"><span class="lang-en">Money saved + cultural mix (v1.1)</span><span class="lang-ko">절약 금액 + 문화적 비율 (v1.1)</span><span class="effort">S–M</span></h3>
+      <p><span class="lang-en">Requires receipt OCR to capture per-item price (verify current coverage first). Cuisine-tag aggregation off existing recipe cuisine metadata. Unlocks: the two most brag-worthy stats — do these last since they compound on a proven report.</span><span class="lang-ko">영수증 OCR이 아이템별 가격을 캡처해야 함(현재 커버리지 먼저 확인). 기존 레시피 요리 메타데이터 기반 문화 태그 집계. 잠금 해제: 가장 자랑하고 싶어지는 두 지표 — 이미 검증된 리포트 위에 쌓이는 것이므로 마지막에 진행.</span></p>
+    </div>
+  </div>
+
+  <h2><span class="lang-en">Part 4 — Metrics to prove it worked</span><span class="lang-ko">파트 4 — 효과를 증명할 지표</span></h2>
+  <ul>
+    <li><span class="lang-en"><b>Pantry sync accuracy</b> — % of Catch-Up suggestions confirmed "Gone" vs. "Keep" (target: &gt;60% agreement means inference is trustworthy, not noisy).</span><span class="lang-ko"><b>팬트리 동기화 정확도</b> — Catch-Up 제안 중 &ldquo;없음&rdquo; 대 &ldquo;있음&rdquo; 확인 비율 (목표: &gt;60% 일치율이면 추론이 노이즈가 아니라 신뢰할 만함).</span></li>
+    <li><span class="lang-en"><b>Catch-Up completion rate</b> — % of users who open the screen and act on ≥1 card within the session.</span><span class="lang-ko"><b>Catch-Up 완료율</b> — 화면을 열고 세션 내에 카드 1개 이상 처리한 유저 비율.</span></li>
+    <li><span class="lang-en"><b>Weekly report open rate</b> — % of push recipients who open within 24h.</span><span class="lang-ko"><b>주간 리포트 오픈율</b> — 푸시 수신자 중 24시간 내 오픈 비율.</span></li>
+    <li><span class="lang-en"><b>Share rate</b> — % of report opens that result in a tap on native share sheet (the real SNS growth signal).</span><span class="lang-ko"><b>공유율</b> — 리포트 오픈 중 네이티브 공유 시트 탭으로 이어진 비율 (진짜 SNS 성장 신호).</span></li>
+    <li><span class="lang-en"><b>D7 / D30 retention</b> — cohort comparison pre/post this system's rollout.</span><span class="lang-ko"><b>D7 / D30 리텐션</b> — 이 시스템 출시 전후 코호트 비교.</span></li>
+    <li><span class="lang-en"><b>Voice-removal usage rate</b> — did the mic-in-header placement actually get used vs. the old FAB gesture (validates 1.5's recommendation).</span><span class="lang-ko"><b>음성 삭제 사용률</b> — 헤더 마이크 배치가 기존 FAB 제스처 대비 실제로 쓰였는지 (1.5 권장안 검증).</span></li>
+    <li><span class="lang-en">All of the above are instrumentable via the existing PostHog wiring (<code>analytics_service.dart</code>) — no new observability stack needed.</span><span class="lang-ko">위 모든 것은 기존 PostHog 연동(<code>analytics_service.dart</code>)으로 측정 가능 — 새 옵저버빌리티 스택 불필요.</span></li>
+  </ul>
+
+  <h2><span class="lang-en">Part 5 — Cross-platform notes</span><span class="lang-ko">파트 5 — 크로스플랫폼 참고사항</span></h2>
+  <div class="tbl-scroll">
+  <table>
+    <tr><th>iOS</th><th>Android</th></tr>
+    <tr>
+      <td><span class="lang-en">APNs push via existing cert setup; permission prompt is a single system dialog, ask contextually per CLAUDE.md guidance.</span><span class="lang-ko">기존 인증서 설정으로 APNs 푸시; 권한 요청은 단일 시스템 다이얼로그, CLAUDE.md 가이드대로 맥락적으로 요청.</span></td>
+      <td><span class="lang-en">FCM push; Android 13+ requires explicit runtime <code>POST_NOTIFICATIONS</code> permission request — must be a separate code path, older Android versions don't need it.</span><span class="lang-ko">FCM 푸시; Android 13+는 명시적 런타임 <code>POST_NOTIFICATIONS</code> 권한 요청 필요 — 별도 코드 경로여야 하며, 구버전 Android는 필요 없음.</span></td>
+    </tr>
+    <tr>
+      <td><span class="lang-en">Native share sheet via <code>share_plus</code> — story-card image share works identically, test Instagram/TikTok share-to-story deep targets specifically (iOS has richer story-sheet integration).</span><span class="lang-ko"><code>share_plus</code>로 네이티브 공유 시트 — 스토리 카드 이미지 공유는 동일하게 작동, Instagram/TikTok 스토리 공유 타겟을 특별히 테스트할 것(iOS가 스토리 시트 연동이 더 풍부함).</span></td>
+      <td><span class="lang-en">Same <code>share_plus</code> API, but Android's share sheet is the OS chooser (more apps listed, less curated) — verify the target apps installed on test devices actually appear.</span><span class="lang-ko">동일한 <code>share_plus</code> API지만 Android 공유 시트는 OS 선택창(더 많은 앱이 나열되고 덜 정제됨) — 테스트 기기에 설치된 타겟 앱이 실제로 나타나는지 확인.</span></td>
+    </tr>
+    <tr>
+      <td><span class="lang-en">No widget in v1 (see 2.4); if added later, WidgetKit is a separate Swift target.</span><span class="lang-ko">v1에서는 위젯 없음(2.4 참조); 나중에 추가한다면 WidgetKit은 별도 Swift 타겟.</span></td>
+      <td><span class="lang-en">No widget in v1; if added later, Glance/AppWidget is a separate Kotlin surface — do not assume iOS widget code ports over.</span><span class="lang-ko">v1에서는 위젯 없음; 나중에 추가한다면 Glance/AppWidget은 별도 Kotlin 서피스 — iOS 위젯 코드가 그대로 이식된다고 가정하지 말 것.</span></td>
+    </tr>
+    <tr>
+      <td><span class="lang-en">Nightly inference job should run server-side (Supabase Edge Function / cron), not on-device — avoids iOS background-execution limits entirely.</span><span class="lang-ko">야간 추론 작업은 온디바이스가 아니라 서버 사이드(Supabase Edge Function / cron)에서 실행 — iOS 백그라운드 실행 제한을 아예 피함.</span></td>
+      <td><span class="lang-en">Same server-side approach sidesteps Android's Doze/App Standby battery restrictions too — one implementation, zero platform divergence risk.</span><span class="lang-ko">동일한 서버 사이드 방식이 Android의 Doze/앱 대기 배터리 제한도 피함 — 구현 하나로 플랫폼 분기 리스크 제로.</span></td>
+    </tr>
+  </table>
+  </div>
+  <p>
+    <span class="lang-en">Every commit in this workstream should follow the CLAUDE.md commit-prefix rule (<code>[both]</code>, <code>[ios]</code>, <code>[android]</code>, <code>[server]</code>) and get built + installed on both a physical iPhone and Android device before merge, per the existing Cross-Platform Discipline section.</span>
+    <span class="lang-ko">이 작업 흐름의 모든 커밋은 CLAUDE.md 커밋 프리픽스 규칙(<code>[both]</code>, <code>[ios]</code>, <code>[android]</code>, <code>[server]</code>)을 따르고, 기존 Cross-Platform Discipline 섹션대로 머지 전에 실제 아이폰과 안드로이드 기기에 빌드+설치해서 테스트해야 합니다.</span>
+  </p>
+
+  <footer>
+    <span class="lang-en">Jujube internal planning doc · generated for Minjun</span>
+    <span class="lang-ko">Jujube 내부 기획 문서 · Minjun을 위해 생성됨</span>
+  </footer>
+
+</div>
+
+<script>
+function toggleLang() {
+  var body = document.body;
+  var btn = document.querySelector('.lang-toggle');
+  if (body.classList.contains('lang-ko')) {
+    body.classList.remove('lang-ko'); body.classList.add('lang-en');
+    btn.textContent = '한국어';
+  } else {
+    body.classList.remove('lang-en'); body.classList.add('lang-ko');
+    btn.textContent = 'English';
+  }
+}
+</script>
+
+</body>
+</html>
