@@ -1,0 +1,263 @@
+generated /tmp/model_comparison.html (24353 chars)
+t="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jujube — Haiku 4.5 vs Sonnet 5 Recipe Benchmark</title>
+<style>
+* { box-sizing:border-box; margin:0; padding:0 }
+body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+       background: #faf8f4; color: #2d2a26; line-height: 1.55; padding: 16px 12px 80px; max-width: 900px; margin: 0 auto; }
+h1 { font-size: 22px; color: #2d5a3a; margin: 12px 0 4px }
+h2 { font-size: 18px; color: #2d5a3a; margin: 24px 0 8px; border-bottom: 2px solid #c8dfc0; padding-bottom: 4px }
+h3 { font-size: 16px; margin: 16px 0 6px }
+h4 { font-size: 15px; margin: 6px 0 4px; color: #1a4a2a }
+h5 { font-size: 14px; margin: 12px 0 4px; color: #4a4a4a; text-transform: uppercase; letter-spacing: 0.5px }
+p { margin: 6px 0 }
+.lang-toggle { position: fixed; top: 12px; right: 12px; z-index: 100; background: #2d5a3a; color: white; border: none; padding: 6px 14px; border-radius: 20px; font-weight: 600; font-size: 13px; cursor: pointer; box-shadow: 0 2px 6px rgba(0,0,0,.15) }
+.ko { display: none }
+.ko.show { display: inline !important }
+.en.hide { display: none !important }
+.subtitle { color: #6a6660; font-size: 13px; margin-bottom: 12px }
+.card { background: white; border: 1px solid #e6dfcf; border-radius: 10px; padding: 12px 14px; margin: 10px 0 }
+.rec-cost { background: #eaf5e6; border-left: 4px solid #4a7c59; padding: 10px 12px; border-radius: 4px; margin: 12px 0; font-size: 14px }
+table { width: 100%; border-collapse: collapse; font-size: 13px; margin: 8px 0 }
+th, td { text-align: left; padding: 6px 8px; border-bottom: 1px solid #eee }
+th { background: #f3ede0; font-weight: 700 }
+td:first-child { font-weight: 600; color: #4a4a4a }
+td.sonnet { color: #1a4a2a }
+td.haiku { color: #5a4a1a }
+.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 10px 0 }
+@media (max-width: 640px) { .grid { grid-template-columns: 1fr } }
+.grid > div { background: white; border: 1px solid #e6dfcf; border-radius: 8px; padding: 10px }
+.grid h3 { margin-top: 0 }
+.grid.sonnet-col h3 { color: #1a4a2a }
+.grid.haiku-col h3 { color: #5a4a1a }
+.win { background: #e0f0d8; color: #1a4a2a; font-weight: 700; padding: 1px 6px; border-radius: 4px; font-size: 11px }
+.loss { background: #f5e0d8; color: #7a3a1a; padding: 1px 6px; border-radius: 4px; font-size: 11px }
+.tie { background: #eeece5; color: #4a4a4a; padding: 1px 6px; border-radius: 4px; font-size: 11px }
+ul.ings { padding-left: 18px; font-size: 13px }
+ul.ings li { margin: 2px 0 }
+.ko-name { color: #6a6660; font-size: 12px }
+ol.steps { padding-left: 18px; font-size: 13px }
+ol.steps li { margin: 8px 0 }
+.tip { background: #f9f4e8; padding: 6px 10px; border-radius: 4px; margin: 4px 0; font-size: 12px; border-left: 3px solid #d4a373 }
+.meta { font-size: 12px; color: #6a6660; margin: 2px 0 }
+.ko-line { margin: 2px 0 8px 0; font-size: 14px; color: #1a4a2a }
+.verdict { background: linear-gradient(135deg, #2d5a3a 0%, #4a7c59 100%); color: white; padding: 14px; border-radius: 10px; margin: 16px 0; font-size: 14px }
+.verdict h2 { color: white; border-color: rgba(255,255,255,.3) }
+.verdict b { color: #f9e4a8 }
+kbd { background: #f3ede0; padding: 1px 5px; border-radius: 3px; font-family: monospace; font-size: 12px }
+.ko-only { color: #1a4a2a }
+</style>
+</head>
+<body>
+<button class="lang-toggle" onclick="toggleLang()">한국어</button>
+
+<h1><span class="en">Jujube · Haiku 4.5 vs Sonnet 5 Recipe Benchmark</span><span class="ko">Jujube · 하이쿠 4.5 대 소넷 5 레시피 벤치마크</span></h1>
+<div class="subtitle"><span class="en">Same production prompt, same input, same day. 2026-07-26.</span><span class="ko">동일 프로덕션 프롬프트, 동일 입력, 같은 날. 2026-07-26.</span></div>
+
+<div class="card">
+<h3><span class="en">Test Setup</span><span class="ko">테스트 설정</span></h3>
+<p class="en"><b>Dish:</b> Kimchi Jjigae (Korean cuisine) &middot; <b>Language:</b> ko (English base + Korean translation) &middot; <b>Prompt:</b> exact production RECIPE_SYSTEM_PROMPT from <kbd>generate-recipe/index.ts</kbd> (unchanged).</p>
+<p class="ko"><b>요리:</b> 김치찌개 (한식) &middot; <b>언어:</b> ko (영어 기본 + 한국어 번역) &middot; <b>프롬프트:</b> <kbd>generate-recipe/index.ts</kbd>의 실제 프로덕션 RECIPE_SYSTEM_PROMPT (변경 없음).</p>
+</div>
+
+<h2>💰 <span class="en">Cost — real measured numbers</span><span class="ko">비용 — 실측 데이터</span></h2>
+<table>
+<tr><th></th><th>Sonnet 5</th><th>Haiku 4.5</th></tr>
+<tr><td>Input tokens (regular)</td><td class="sonnet">103</td><td class="haiku">1554</td></tr>
+<tr><td>Cache-create tokens</td><td class="sonnet">2051</td><td class="haiku">0</td></tr>
+<tr><td>Output tokens</td><td class="sonnet">4764</td><td class="haiku">5794</td></tr>
+<tr><td>Latency (this call)</td><td class="sonnet">41.8s</td><td class="haiku">34.2s <span class="win">-18%</span></td></tr>
+<tr><td><b>Cost per call (cache miss)</b></td><td class="sonnet"><b>$0.0795</b></td><td class="haiku"><b>$0.0244</b></td></tr>
+<tr><td><b>Cost per call (typical, cached)</b></td><td class="sonnet"><b>$0.0724</b></td><td class="haiku"><b>$0.0244</b> <span class="win">-66%</span></td></tr>
+</table>
+
+<div class="rec-cost">
+<span class="en"><b>Projected scale @ 100 DAU × 3 recipes/week (~1,300/mo):</b><br>
+Sonnet 5: ~<b>$94/mo</b> &nbsp;·&nbsp; Haiku 4.5: ~<b>$32/mo</b> &nbsp;·&nbsp; <b>Savings: $62/mo</b><br><br>
+<b>Projected scale @ 1,000 DAU × 3 recipes/week (~13,000/mo):</b><br>
+Sonnet 5: ~<b>$941/mo</b> &nbsp;·&nbsp; Haiku 4.5: ~<b>$317/mo</b> &nbsp;·&nbsp; <b>Savings: $624/mo</b>
+</span>
+<span class="ko"><b>확장 예측 100 DAU × 3레시피/주 (~1,300/월):</b><br>
+Sonnet 5: 약 <b>$94/월</b> &nbsp;·&nbsp; Haiku 4.5: 약 <b>$32/월</b> &nbsp;·&nbsp; <b>절감: $62/월</b><br><br>
+<b>확장 예측 1,000 DAU × 3레시피/주 (~13,000/월):</b><br>
+Sonnet 5: 약 <b>$941/월</b> &nbsp;·&nbsp; Haiku 4.5: 약 <b>$317/월</b> &nbsp;·&nbsp; <b>절감: $624/월</b>
+</span>
+</div>
+
+<h2>📊 <span class="en">Structural comparison</span><span class="ko">구조 비교</span></h2>
+<table>
+<tr><th></th><th>Sonnet 5</th><th>Haiku 4.5</th><th></th></tr>
+<tr><td>Ingredients count</td><td>14</td><td>14</td><td class="tie">tie</td></tr>
+<tr><td>Instructions count</td><td>8 (denser)</td><td>10 (more atomic)</td><td class="tie">stylistic</td></tr>
+<tr><td>Avg step text length</td><td>149 chars</td><td>199 chars</td><td class="tie">Haiku wordier</td></tr>
+<tr><td>Cook time estimate</td><td>30 min ✓</td><td>20 min</td><td><span class="win">Sonnet more accurate</span></td></tr>
+<tr><td>Calorie estimate</td><td>380 cal</td><td>285 cal</td><td class="tie">both plausible</td></tr>
+<tr><td>Description length (EN)</td><td>264 chars</td><td>241 chars</td><td class="tie">similar</td></tr>
+<tr><td>Description length (KO)</td><td>86 chars</td><td>111 chars</td><td class="tie">similar</td></tr>
+<tr><td>Tips count</td><td>4</td><td>4</td><td class="tie">tie</td></tr>
+<tr><td>Allergens detected</td><td>soy</td><td>soy, sesame</td><td class="tie">both defensible</td></tr>
+</table>
+
+<h2>🇰🇷 <span class="en">Korean translation quality — the real test</span><span class="ko">한국어 번역 품질 — 진짜 테스트</span></h2>
+<p class="en">This is where the gap opens. For a Korean/Chinese-immigrant-family-first product like Jujube, native-sounding translations matter.</p>
+<p class="ko">여기서 격차가 벌어집니다. 한국계/중국계 이민 가정을 타겟팅한 Jujube 같은 제품에서 자연스러운 번역이 결정적입니다.</p>
+
+<div class="grid">
+<div class="sonnet-col">
+<h3>Sonnet 5 <span class="win">wins</span></h3>
+<p><b>Description (KO):</b><br>
+<i>"김장독 속 김치가 새콤하게 익었을 때 집집마다 끓이는 바로 그 찌개예요…"</i></p>
+<p class="en">Reads like a Korean home cook wrote it. Uses "김장독" (traditional kimchi jar), "새콤하게 익었을 때" (when properly ripened/sour) — culturally specific and warm. Ends in casual "-예요" register.</p>
+<p class="ko">한국 가정에서 직접 쓴 것처럼 읽힙니다. "김장독", "새콤하게 익었을 때" 같은 표현이 문화적으로 정확하고 따뜻해요. "-예요"의 친근한 어투.</p>
+
+<p><b>Ingredient names:</b><br>
+<kbd>돼지고기 삼겹살</kbd>, <kbd>잘 익은 배추김치</kbd>, <kbd>김치 국물</kbd>, <kbd>대파</kbd></p>
+<p class="en">Uses the actual cut name (삼겹살), quality-descriptor for the kimchi (잘 익은 = well-ripened), and 대파 not "green onion" transliterated. Feels native.</p>
+<p class="ko">삼겹살, "잘 익은 배추김치", 대파 등 실제 요리에서 쓰는 이름 사용. 자연스럽습니다.</p>
+</div>
+
+<div class="haiku-col">
+<h3>Haiku 4.5 <span class="loss">weaker</span></h3>
+<p><b>Description (KO):</b><br>
+<i>"매운 발효 김치, 부드러운 돼지고기, 그리고 부드러운 두부가 풍부한 육수에 함께 끓여진 한국의 사랑받는 찌개입니다…"</i></p>
+<p class="en">Reads like a translated English cookbook. Passive construction "끓여진", literal "발효 김치" (fermented kimchi as a compound noun in KO doesn't sound native), formal "-입니다" register (fine, just less warm). Missing cultural anchor.</p>
+<p class="ko">번역투. "끓여진" 수동태, "발효 김치" 같은 영어 직역 표현. "-입니다"체 (문법상 맞지만 다소 딱딱함). 문화적 정서 부족.</p>
+
+<p><b>Ingredient names:</b><br>
+<kbd>배추김치</kbd>, <kbd>돼지고기</kbd> (just "pork"), <kbd>두부</kbd>, <kbd>고추가루</kbd></p>
+<p class="en">Generic. Says "돼지고기" (pork) instead of the actual cut used. "고추가루" is missing a syllable — should be "고춧가루". Missing the ㅅ.</p>
+<p class="ko">두루뭉술. 삼겹살 대신 그냥 "돼지고기". "고추가루"는 오타 (정확히는 "고춧가루", ㅅ 빠짐).</p>
+</div>
+</div>
+
+<h2>🍳 <span class="en">Full recipes side-by-side</span><span class="ko">전체 레시피 비교</span></h2>
+
+<div class="grid">
+<div class="sonnet-col">
+<h3>Sonnet 5</h3>
+<h4 class="en">EN Title: Kimchi Jjigae (Korean Kimchi Stew)</h4>
+<h4 class="ko">EN Title: Kimchi Jjigae (Korean Kimchi Stew)</h4>
+<div class="ko-line"><b>KO Title:</b> 김치찌개</div>
+<p class="en"><b>Description:</b> This is the stew every Korean household makes when the kimchi jar gets good and sour — bubbling, spicy, deeply savory, and ready in under an hour. Pork belly and well-fermented kimchi simmer together into a broth so good you&#x27;ll want to spoon it straight over rice.</p>
+<p class="ko"><b>설명:</b> 김장독 속 김치가 새콤하게 익었을 때 집집마다 끓이는 바로 그 찌개예요. 보글보글 끓는 얼큰하고 깊은 맛이 일품이라, 밥에 국물만 부어 먹어도 맛있답니다.</p>
+<p><b class="en">Description (Korean):</b><b class="ko">Description (영어):</b> <span class="en">김장독 속 김치가 새콤하게 익었을 때 집집마다 끓이는 바로 그 찌개예요. 보글보글 끓는 얼큰하고 깊은 맛이 일품이라, 밥에 국물만 부어 먹어도 맛있답니다.</span><span class="ko">This is the stew every Korean household makes when the kimchi jar gets good and sour — bubbling, spicy, deeply savory, and ready in under an hour. Pork belly and well-fermented kimchi simmer together into a broth so good you&#x27;ll want to spoon it straight over rice.</span></p>
+<div class="meta"><b>Servings:</b> 4 &middot; <b>Prep:</b> 15m &middot; <b>Cook:</b> 30m &middot; <b>Difficulty:</b> Easy</div>
+<div class="meta"><b>Tags:</b> stew, spicy, comfort food, gluten-free option, one-pot, simmered</div>
+<div class="meta"><b>Allergens:</b> soy</div>
+<div class="meta"><b>Nutrition:</b> 380cal / 22g protein / 12g carbs / 26g fat</div>
+<h5>Ingredients</h5><ul class="ings">
+<li>200 g <b>pork belly</b> <span class="ko-name">(돼지고기 삼겹살)</span></li>
+<li>2 cups (about 400g) <b>well-fermented kimchi</b> <span class="ko-name">(잘 익은 배추김치)</span></li>
+<li>3 tbsp <b>kimchi juice</b> <span class="ko-name">(김치 국물)</span></li>
+<li>1/2 medium, sliced <b>onion</b> <span class="ko-name">(양파)</span></li>
+<li>2 stalks, sliced <b>green onion</b> <span class="ko-name">(대파)</span></li>
+<li>200 g, sliced <b>firm tofu</b> <span class="ko-name">(두부)</span></li>
+<li>1 tbsp, minced <b>garlic</b> <span class="ko-name">(마늘)</span></li>
+<li>1 tbsp <b>gochugaru (Korean chili flakes)</b> <span class="ko-name">(고춧가루)</span></li>
+<li>1 tbsp <b>gochujang (Korean chili paste)</b> <span class="ko-name">(고추장)</span></li>
+<li>1 tbsp <b>soy sauce</b> <span class="ko-name">(간장)</span></li>
+<li>1 tsp <b>sugar</b> <span class="ko-name">(설탕)</span></li>
+<li>3 cups <b>water or anchovy stock</b> <span class="ko-name">(물 또는 멸치육수)</span></li>
+<li>1 tsp <b>sesame oil</b> <span class="ko-name">(참기름)</span></li>
+<li>1 tbsp <b>cooking oil</b> <span class="ko-name">(식용유)</span></li>
+</ul>
+<h5>Instructions</h5><ol class="steps">
+<li><b>Prep pork and kimchi</b><br><span class="en">Cut the pork belly into bite-sized pieces and pat dry with paper towels. Slice the kimchi into bite-sized strips if it isn&#x27;t already cut.</span><span class="ko">삼겹살을 한입 크기로 썰고 키친타월로 물기를 제거하세요. 김치가 통째로 있다면 먹기 좋은 크기로 썰어주세요.</span>
+<div class="tip"><b>💡</b> <span class="en">Patting the pork dry helps it sear rather than steam, giving the stew a deeper, richer base flavor.</span><span class="ko">고기의 물기를 제거하면 찜 대신 겉이 노릇하게 구워져 찌개 베이스 맛이 훨씬 깊어져요.</span></div>
+</li>
+<li><b>Sear the pork</b><br><span class="en">Heat the cooking oil in a heavy-bottomed pot over medium heat. Add the pork belly and cook, stirring occasionally, until the edges turn golden and the fat has rendered a bit.</span><span class="ko">두꺼운 냄비에 식용유를 두르고 중불에서 달군 후 삼겹살을 넣고 가장자리가 노릇해지고 기름이 살짝 배어 나올 때까지 저어가며 볶아주세요.</span>
+</li>
+<li><b>Stir-fry with kimchi</b><br><span class="en">Add the kimchi to the pot and stir-fry together with the pork for 3-4 minutes, until the kimchi softens and turns a shade darker and everything smells irresistibly savory.</span><span class="ko">냄비에 김치를 넣고 돼지고기와 함께 3~4분간 볶아주세요. 김치가 부드러워지고 색이 살짝 짙어지며 고소한 냄새가 올라올 때까지요.</span>
+<div class="tip"><b>💡</b> <span class="en">This stir-frying step is the secret to a rich jjigae — it caramelizes the kimchi slightly and deepens the whole pot&#x27;s flavor before the liquid goes in.</span><span class="ko">이 볶는 과정이 진한 찌개 맛의 비결이에요. 김치가 살짝 캐러멜라이즈되면서 국물을 넣기 전에 전체적인 맛이 깊어져요.</span></div>
+</li>
+<li><b>Build the broth</b><br><span class="en">Pour in the water or anchovy stock along with the kimchi juice. Stir in the seasoning ingredients below to build the broth&#x27;s flavor.</span><span class="ko">물 또는 멸치육수와 김치 국물을 부어주세요. 아래 양념 재료들을 넣어 국물 맛을 잡아주세요.</span>
+</li>
+<li><b>Simmer the stew</b><br><span class="en">Bring the stew to a boil, then reduce the heat to medium-low and simmer uncovered, letting it bubble gently until the pork is tender and the broth turns a deep, rusty red.</span><span class="ko">찌개를 한소끔 끓인 후 불을 중약불로 줄이고 뚜껑을 연 채로 은근히 끓여주세요. 고기가 부드러워지고 국물이 짙은 붉은빛을 띨 때까지 끓입니다.</span>
+<div class="tip"><b>💡</b> <span class="en">Don&#x27;t rush this simmer — the longer the kimchi cooks down, the mellower and more complex the sourness becomes.</span><span class="ko">이 끓이는 과정을 서두르지 마세요. 김치가 오래 끓을수록 신맛이 부드럽고 깊어져요.</span></div>
+</li>
+<li><b>Add onion</b><br><span class="en">Add the sliced onion and simmer for another 5 minutes until it turns translucent and slightly sweet.</span><span class="ko">썰어둔 양파를 넣고 양파가 투명해지고 살짝 단맛이 날 때까지 5분 정도 더 끓여주세요.</span>
+</li>
+<li><b>Add tofu and scallion</b><br><span class="en">Gently nestle the tofu slices into the stew along with the green onion. Simmer for a final 3-5 minutes so the tofu warms through without falling apart.</span><span class="ko">두부를 국물 속에 조심스럽게 넣고 대파도 넣어주세요. 두부가 부서지지 않게 3~5분간 마지막으로 끓여주세요.</span>
+<div class="tip"><b>💡</b> <span class="en">Stir gently once the tofu goes in — vigorous stirring will break it into crumbles instead of clean slices.</span><span class="ko">두부를 넣은 후에는 살살 저어주세요. 세게 저으면 두부가 으스러져요.</span></div>
+</li>
+<li><b>Finish and serve</b><br><span class="en">Turn off the heat and drizzle the sesame oil over the top for a final touch of aroma. Ladle into bowls and serve bubbling hot with a bowl of steamed rice.</span><span class="ko">불을 끄고 마지막으로 참기름을 뿌려 향을 더해주세요. 뜨겁게 끓는 상태로 그릇에 담아 갓 지은 밥과 함께 내어주세요.</span>
+</li>
+</ol>
+</div>
+<div class="haiku-col">
+<h3>Haiku 4.5</h3>
+<h4 class="en">EN Title: Kimchi Jjigae</h4>
+<h4 class="ko">EN Title: Kimchi Jjigae</h4>
+<div class="ko-line"><b>KO Title:</b> 김치찌개</div>
+<p class="en"><b>Description:</b> This beloved Korean stew is a comforting blend of spicy fermented kimchi, tender pork, and silky tofu simmered in a rich, umami-packed broth. Perfect for a cozy meal, it&#x27;s warming, satisfying, and captures the essence of Korean home cooking.</p>
+<p class="ko"><b>설명:</b> 매운 발효 김치, 부드러운 돼지고기, 그리고 부드러운 두부가 풍부한 육수에 함께 끓여진 한국의 사랑받는 찌개입니다. 아늑한 식사에 완벽하며, 따뜻하고 만족스러우며 한국 가정식의 본질을 담고 있습니다.</p>
+<p><b class="en">Description (Korean):</b><b class="ko">Description (영어):</b> <span class="en">매운 발효 김치, 부드러운 돼지고기, 그리고 부드러운 두부가 풍부한 육수에 함께 끓여진 한국의 사랑받는 찌개입니다. 아늑한 식사에 완벽하며, 따뜻하고 만족스러우며 한국 가정식의 본질을 담고 있습니다.</span><span class="ko">This beloved Korean stew is a comforting blend of spicy fermented kimchi, tender pork, and silky tofu simmered in a rich, umami-packed broth. Perfect for a cozy meal, it&#x27;s warming, satisfying, and captures the essence of Korean home cooking.</span></p>
+<div class="meta"><b>Servings:</b> 4 &middot; <b>Prep:</b> 15m &middot; <b>Cook:</b> 20m &middot; <b>Difficulty:</b> Easy</div>
+<div class="meta"><b>Tags:</b> Korean stew, comfort food, spicy, one-pot meal, fermented, weeknight dinner, naturally vegan-adaptable</div>
+<div class="meta"><b>Allergens:</b> soy, sesame</div>
+<div class="meta"><b>Nutrition:</b> 285cal / 22g protein / 12g carbs / 16g fat</div>
+<h5>Ingredients</h5><ul class="ings">
+<li>2 cups <b>Napa cabbage kimchi</b> <span class="ko-name">(배추김치)</span></li>
+<li>300 g <b>Pork belly or shoulder, thinly sliced</b> <span class="ko-name">(돼지고기)</span></li>
+<li>1 block <b>Firm tofu</b> <span class="ko-name">(두부)</span></li>
+<li>4 cups <b>Anchovy stock</b> <span class="ko-name">(멸치육수)</span></li>
+<li>0.5 cup <b>Kimchi juice (from the jar)</b> <span class="ko-name">(김치 국물)</span></li>
+<li>2 tbsp <b>Gochugaru (Korean red chili flakes)</b> <span class="ko-name">(고추가루)</span></li>
+<li>1 tbsp <b>Gochujang (Korean red chili paste)</b> <span class="ko-name">(고추장)</span></li>
+<li>1 tbsp <b>Soy sauce</b> <span class="ko-name">(간장)</span></li>
+<li>1 tbsp <b>Sesame oil</b> <span class="ko-name">(참기름)</span></li>
+<li>3 cloves <b>Garlic cloves, minced</b> <span class="ko-name">(마늘)</span></li>
+<li>1 medium <b>Onion, sliced</b> <span class="ko-name">(양파)</span></li>
+<li>2 stalks <b>Green onion, cut into 2-inch pieces</b> <span class="ko-name">(대파)</span></li>
+<li>to taste  <b>Salt, to taste</b> <span class="ko-name">(소금)</span></li>
+<li>to taste  <b>Black pepper, to taste</b> <span class="ko-name">(검은 후춧가루)</span></li>
+</ul>
+<h5>Instructions</h5><ol class="steps">
+<li><b>Prepare kimchi</b><br><span class="en">Chop the kimchi into bite-sized pieces if they are too large. Reserve the kimchi juice separately — this adds authentic depth to the broth.</span><span class="ko">김치를 먹기 좋은 크기로 자릅니다. 김치 국물은 따로 덜어두세요 — 이것이 국물의 진정한 깊이를 더합니다.</span>
+<div class="tip"><b>💡</b> <span class="en">Fresh, well-fermented kimchi works best; the tanginess is essential to the stew&#x27;s flavor profile.</span><span class="ko">신선하고 잘 발효된 김치가 최고입니다; 신맛이 찌개의 풍미에 필수적입니다.</span></div>
+</li>
+<li><b>Prep protein and tofu</b><br><span class="en">Cut the tofu block into ½-inch cubes and set aside. Pat the pork slices dry with paper towels — this helps them brown better and develop a richer flavor when the stew begins.</span><span class="ko">두부를 1cm 크기의 정육면체로 자르고 따로 놓아둡니다. 돼지고기를 종이타올로 톡톡 두드려 물기를 제거합니다 — 이렇게 하면 찌개가 시작될 때 더 잘 갈색이 되고 더 풍부한 맛이 납니다.</span>
+<div class="tip"><b>💡</b> <span class="en">Gently handling tofu prevents it from crumbling; it will soften further as it simmers, so avoid overcooking.</span><span class="ko">두부를 조심스럽게 다루면 부서지지 않습니다; 끓이면서 더 부드러워지므로 과익히지 않도록 하세요.</span></div>
+</li>
+<li><b>Prep aromatics</b><br><span class="en">Slice the onion into thin half-moons and mince the garlic. Have these aromatics ready — they&#x27;ll be added early to build a fragrant base.</span><span class="ko">양파를 얇은 반달 모양으로 자르고 마늘을 다집니다. 이 향신료들을 준비해두세요 — 향긋한 베이스를 만들기 위해 처음에 넣습니다.</span>
+</li>
+<li><b>Cook pork</b><br><span class="en">Heat a large heavy-bottomed pot or Korean stew pot (ttukbaegi) over medium-high heat. Add the pork slices and cook for 2–3 minutes, stirring occasionally, until they begin to lose their pink color and are no longer raw. You&#x27;re not looking for a full sear here — just enough to begin cooking the meat through.</span><span class="ko">큰 무거운 냄비나 한국식 찌개냄비(뚝배기)를 중불에서 중강불로 가열합니다. 돼지고기를 넣고 2-3분간 가끔 저으며 요리하여 분홍색을 잃고 더 이상 날것이 아닐 때까지 요리합니다. 여기서는 완전한 갈색을 원하지 않습니다 — 고기를 익히기에 충분한 정도만으로 충분합니다.</span>
+</li>
+<li><b>Bloom aromatics</b><br><span class="en">Add the aromatics below and stir constantly for about 1 minute until fragrant. You should smell the garlic and onion beginning to soften and release their flavors.</span><span class="ko">아래의 향신료를 넣고 약 1분간 계속 저으면서 향기가 날 때까지 요리합니다. 마늘과 양파가 부드러워지고 풍미를 내기 시작하는 냄새를 맡아야 합니다.</span>
+</li>
+<li><b>Add paste</b><br><span class="en">Stir in the sauce ingredients below until the paste is fully incorporated and coats the meat and onions. You&#x27;ll see the mixture deepen in color and become glossy. Toast for about 1 minute to activate the flavors.</span><span class="ko">아래의 소스 재료를 섞어 페이스트가 완전히 섞이고 고기와 양파를 코팅할 때까지 저습니다. 혼합물의 색이 진해지고 윤기가 나는 것을 볼 것입니다. 풍미를 활성화하기 위해 약 1분간 볶습니다.</span>
+<div class="tip"><b>💡</b> <span class="en">Cooking the paste briefly intensifies the chili and soy flavors, creating a more authentic, rounded taste.</span><span class="ko">페이스트를 짧게 요리하면 고추와 간장의 맛이 강해져서 더 진정한, 균형잡힌 맛을 만듭니다.</span></div>
+</li>
+<li><b>Build broth</b><br><span class="en">Pour in the stock and add the chopped kimchi and its reserved juice. Stir well to combine. Bring the mixture to a boil over medium-high heat — you&#x27;ll see vigorous bubbles breaking the surface — then reduce the heat to medium and maintain a gentle, steady simmer.</span><span class="ko">육수를 붓고 다진 김치와 예약된 국물을 넣습니다. 잘 섞이도록 저습니다. 중불에서 중강불로 혼합물을 끓입니다 — 표면을 부수는 활발한 거품이 보일 것입니다 — 그런 다음 열을 줄여서 중불로 부드럽고 꾸준한 끓임을 유지합니다.</span>
+</li>
+<li><b>Simmer tofu</b><br><span class="en">Once the broth is at a gentle simmer, carefully add the tofu cubes. Simmer for 8–10 minutes without stirring too vigorously — let the tofu warm through gently. The cubes should remain intact and absorb the spiced broth.</span><span class="ko">육수가 부드러운 끓임에 이르면 조심스럽게 두부 정육면체를 넣습니다. 8-10분간 너무 세게 저으지 말고 끓입니다 — 두부가 천천히 따뜻해지도록 합니다. 정육면체는 완전한 상태로 남아 있어야 하고 매운 육수를 흡수해야 합니다.</span>
+</li>
+<li><b>Season to taste</b><br><span class="en">Taste the broth and adjust the seasoning with salt and pepper as needed. The stew should be savory, spicy, and balanced — not overly salty or one-dimensional.</span><span class="ko">육수를 맛보고 필요에 따라 소금과 후추로 양념을 조절합니다. 찌개는 풍미있고, 매운맛이 있고, 균형이 잡혀야 합니다 — 지나치게 짜거나 단순하지 않아야 합니다.</span>
+</li>
+<li><b>Finish and serve</b><br><span class="en">Scatter the green onion pieces over the top of the stew just before serving. Transfer to a heated serving bowl or keep in the pot for a more traditional presentation. Serve immediately while the broth is piping hot.</span><span class="ko">서빙 직전에 대파 조각을 찌개 위에 뿌립니다. 데워진 서빙 그릇에 담거나 더 전통적인 표현을 위해 냄비에 그대로 두십시오. 육수가 매우 뜨거울 때 즉시 서빙합니다.</span>
+<div class="tip"><b>💡</b> <span class="en">The green onion adds a fresh, bright note that cuts through the richness and spice — add it just before serving so it stays crisp and aromatic.</span><span class="ko">대파는 신선하고 밝은 향을 더해 풍부함과 매운맛을 자르는 역할을 합니다 — 신선하고 향기로운 상태를 유지하도록 서빙 직전에 추가하세요.</span></div>
+</li>
+</ol>
+</div>
+</div>
+
+<div class="verdict">
+<h2>🎯 <span class="en">Recommendation</span><span class="ko">추천 사항</span></h2>
+<p class="en"><b>Hybrid approach.</b> Use <b>Sonnet 5</b> for the ~700-recipe pool backfill and any recipes marked as "shared" or "featured" (where quality is user-visible and defines the brand). Use <b>Haiku 4.5</b> for on-demand user recipe generation (unlimited scale, cost-critical).</p>
+<p class="en">Full switch to Haiku is technically possible and saves <b>~66%</b> — but the Korean-native voice gap is real. Given Jujube's positioning as a Korean/Chinese-immigrant-family-first product, keeping Sonnet for pool + shared recipes protects the brand experience where it matters most. At current scale (single-digit DAU), the pure-Sonnet cost is trivial. The Haiku switch matters at 500+ DAU.</p>
+
+<p class="ko"><b>하이브리드 접근.</b> Sonnet 5를 ~700개 풀 백필과 "공유"/"추천" 레시피에 사용 (품질이 사용자에게 노출되고 브랜드를 정의하는 부분). Haiku 4.5를 온디맨드 사용자 레시피 생성에 사용 (무제한 확장, 비용 중요).</p>
+<p class="ko">Haiku로 완전 전환은 기술적으로 가능하고 약 <b>66%</b> 절감됩니다 — 그러나 한국어 자연스러움 격차가 실재합니다. 한국계/중국계 이민가정을 우선 타겟팅하는 Jujube 포지셔닝을 고려하면, 풀 + 공유 레시피에는 Sonnet 유지가 가장 중요한 브랜드 경험을 지킵니다. 현재 규모(수 명 DAU)에서는 순수 Sonnet 비용도 미미합니다. Haiku 전환은 500+ DAU 시점에 중요해집니다.</p>
+</div>
+
+<script>
+let isKorean = false;
+function toggleLang() {
+  isKorean = !isKorean;
+  document.querySelectorAll('.en').forEach(el => el.classList.toggle('hide', isKorean));
+  document.querySelectorAll('.ko').forEach(el => el.classList.toggle('show', isKorean));
+  document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+}
+</script>
+</body></html>
