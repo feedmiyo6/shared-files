@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Daily AI & Tech Briefing, 2026-07-27</title>
+  <style>
+    :root {
+      --bg: #f7f3ea;
+      --card: #fffdf8;
+      --text: #223127;
+      --muted: #5e6d62;
+      --accent: #5b7f56;
+      --accent-2: #dcead7;
+      --border: #d9e1d2;
+      --shadow: 0 10px 30px rgba(34, 49, 39, 0.08);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: linear-gradient(180deg, #eef6ea 0%, var(--bg) 28%, #f8f1e6 100%);
+      color: var(--text);
+      line-height: 1.65;
+      padding: 20px;
+    }
+    .wrap { max-width: 860px; margin: 0 auto; }
+    .toolbar { display: flex; justify-content: flex-end; margin-bottom: 12px; }
+    .lang-toggle {
+      border: 0; border-radius: 999px; padding: 10px 14px;
+      background: var(--accent); color: white; font-weight: 700;
+      box-shadow: var(--shadow); cursor: pointer;
+    }
+    .card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 24px; box-shadow: var(--shadow); padding: 24px;
+    }
+    h1 { margin: 0 0 8px; font-size: clamp(28px, 4vw, 42px); line-height: 1.1; }
+    .subtitle { color: var(--muted); margin-bottom: 20px; font-size: 15px; }
+    .audio-box {
+      background: var(--accent-2); border: 1px solid var(--border);
+      border-radius: 18px; padding: 16px; margin: 18px 0 24px;
+    }
+    audio { width: 100%; margin-top: 8px; }
+    .section-title { font-size: 22px; margin: 28px 0 12px; }
+    ol { padding-left: 20px; margin: 0; }
+    li { margin-bottom: 14px; padding-left: 4px; }
+    .takeaway {
+      margin-top: 26px; padding: 16px 18px; border-radius: 18px;
+      background: #f2f8ef; border: 1px solid var(--border);
+    }
+    .ko { display: none; }
+    .ko.show { display: inline !important; }
+    .en.hide { display: none !important; }
+    .foot { margin-top: 20px; color: var(--muted); font-size: 13px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="toolbar">
+      <button class="lang-toggle" onclick="toggleLang()">한국어</button>
+    </div>
+    <div class="card">
+      <h1>
+        <span class="en">Daily AI & Tech Briefing</span>
+        <span class="ko">오늘의 AI · 테크 브리핑</span>
+      </h1>
+      <div class="subtitle">
+        <span class="en">Monday, July 27, 2026, built for Minjun</span>
+        <span class="ko">2026년 7월 27일 월요일, 민준을 위한 브리핑</span>
+      </div>
+
+      <div class="audio-box">
+        <strong>
+          <span class="en">Listen to the audio version</span>
+          <span class="ko">오디오 버전 듣기</span>
+        </strong>
+        <audio controls>
+          <source src="https://raw.githubusercontent.com/feedmiyo6/shared-files/main/mj/news/briefing-2026-07-27.mp3" type="audio/mpeg" />
+        </audio>
+      </div>
+
+      <h2 class="section-title">
+        <span class="en">Top 10 stories</span>
+        <span class="ko">톱 10 이야기</span>
+      </h2>
+      <ol>
+        <li><span class="en"><strong>Anthropic quietly revealed it pays SpaceXAI $1.25 billion per month for compute access through May 2029.</strong> The figure surfaced in SpaceX's S-1 filing and is one of the largest disclosed AI infrastructure commitments to date &mdash; showing how deep the compute arms race has gotten even for a lab that also designs its own chips.</span><span class="ko"><strong>앤트로픽이 스페이스X의 S-1 상장 서류를 통해 2029년 5월까지 매달 12억 5천만 달러를 스페이스XAI에 컴퓨팅 비용으로 지불한다는 사실이 드러났습니다.</strong> 지금까지 공개된 AI 인프라 계약 중 최대 규모 중 하나로, 자체 칩까지 설계하는 연구소조차 컴퓨팅 확보 경쟁이 얼마나 치열한지 보여줍니다.</span></li>
+        <li><span class="en"><strong>SpaceXAI (xAI) open-sourced Grok Build, the coding agent harness behind Grok, under an Apache 2.0 license.</strong> Musk's own agentic coding tooling is now in developers' hands the same week Anthropic and OpenAI are racing to make their agents more autonomous.</span><span class="ko"><strong>스페이스XAI(xAI)가 그록의 코딩 에이전트 하네스인 '그록 빌드'를 아파치 2.0 라이선스로 오픈소스화했습니다.</strong> 앤트로픽과 오픈AI가 자사 에이전트를 더 자율적으로 만들려 경쟁하는 바로 이 시점에, 머스크의 에이전틱 코딩 도구가 개발자들 손에 들어간 것입니다.</span></li>
+        <li><span class="en"><strong>Anthropic upgraded Claude's Voice Mode to run on Opus, Sonnet, or Haiku, with connector access to Gmail, Slack, and Canva across 11 languages.</strong> Voice assistants are quickly evolving from dictation tools into full agentic interfaces.</span><span class="ko"><strong>앤트로픽이 클로드 음성 모드를 업그레이드해 오퍼스·소네트·하이쿠 중 원하는 모델로 실행하고, 지메일·슬랙·캔바 커넥터에 접근하며, 11개 언어를 지원하게 됐습니다.</strong> 음성 비서가 받아쓰기 도구에서 완전한 에이전틱 인터페이스로 빠르게 진화하고 있습니다.</span></li>
+        <li><span class="en"><strong>AI chip stocks added a combined $2 trillion in market value this July alone, with the Philadelphia Semiconductor Index up more than 47% year-to-date.</strong> It's one of the sector's strongest rallies in decades.</span><span class="ko"><strong>AI 반도체 주식이 7월 한 달에만 시가총액 2조 달러를 더했고, 필라델피아 반도체 지수는 연초 대비 47% 넘게 상승했습니다.</strong> 수십 년 만에 손꼽히는 강한 랠리입니다.</span></li>
+        <li><span class="en"><strong>Intel became the first chipmaker to ship high-volume logic chips using ASML's High-NA EUV scanners, with its 18A node now ramping.</strong> New customers reportedly include Microsoft, Qualcomm, and Elon Musk's Terafab project.</span><span class="ko"><strong>인텔이 ASML의 하이-NA EUV 스캐너로 대량 생산 로직 칩을 출하한 최초의 기업이 됐습니다.</strong> 18A 공정이 본격 양산에 들어갔고, 마이크로소프트·퀄컴, 그리고 일론 머스크의 테라팹 프로젝트를 새 고객사로 확보한 것으로 알려졌습니다.</span></li>
+        <li><span class="en"><strong>Nvidia holds an estimated 70&ndash;80% share of the AI GPU market and projects roughly $1 trillion in confirmed demand through 2027.</strong> That's based on hyperscaler purchase orders, even as rivals close in on manufacturing capacity.</span><span class="ko"><strong>엔비디아는 AI GPU 시장에서 약 70~80%의 점유율을 유지하고 있으며, 하이퍼스케일러들의 구매 주문을 근거로 2027년까지 확정된 수요가 약 1조 달러에 달한다고 전망했습니다.</strong> 경쟁사들이 생산 능력을 따라잡고 있는 와중에도 그렇습니다.</span></li>
+        <li><span class="en"><strong>Microchip Technology launched its next-gen LAN878x and LAN888x Single Pair Ethernet PHY families &mdash; 100/1000BASE-T1 transceivers with hardware MACsec security, Time-Sensitive Networking, and ISO 26262 ASIL-B functional safety.</strong> They're built for the software-defined vehicle architectures automakers are racing to ship.</span><span class="ko"><strong>마이크로칩 테크놀로지가 차세대 LAN878x·LAN888x 싱글 페어 이더넷 PHY 제품군을 출시했습니다 &mdash; 하드웨어 MACsec 보안, 시간 민감형 네트워킹(TSN), ISO 26262 ASIL-B 기능 안전을 갖춘 100/1000BASE-T1 트랜시버입니다.</strong> 완성차 업체들이 서둘러 도입 중인 소프트웨어 정의 차량(SDV) 아키텍처를 겨냥합니다.</span></li>
+        <li><span class="en"><strong>Meta's smart glasses have become a moderation headache for the company.</strong> Public backlash over privacy erosion and surveillance concerns is growing as the devices spread.</span><span class="ko"><strong>메타의 스마트 글래스가 회사에 콘텐츠 관리 골칫거리가 되고 있습니다.</strong> 기기가 확산되면서 사생활 침해와 감시 우려에 대한 대중의 반발이 커지고 있습니다.</span></li>
+        <li><span class="en"><strong>Data center developer Switch is reportedly in talks to raise billions at a valuation above $50 billion, backing a planned 382-acre AI campus near Pittsburgh.</strong> Another sign the infrastructure buildout shows no signs of slowing.</span><span class="ko"><strong>데이터센터 개발사 스위치가 피츠버그 인근 382에이커 규모의 AI 캠퍼스를 뒷받침하기 위해 500억 달러 이상의 기업가치로 수십억 달러 투자 유치를 논의 중인 것으로 알려졌습니다.</strong> 인프라 확장 열기가 식을 기미가 없다는 또 하나의 신호입니다.</span></li>
+        <li><span class="en"><strong>Global semiconductor sales are on pace for a record $975 billion in 2026, with generative AI chips alone expected to generate roughly $500 billion of that.</strong> AI is now the single biggest growth engine for the entire chip industry.</span><span class="ko"><strong>글로벌 반도체 매출이 2026년 사상 최고인 9,750억 달러 페이스로 가고 있으며, 그중 생성형 AI 칩만 약 5,000억 달러를 차지할 것으로 예상됩니다.</strong> AI가 이제 반도체 업계 전체를 이끄는 최대 성장 동력입니다.</span></li>
+      </ol>
+
+      <div class="takeaway">
+        <strong><span class="en">Totoro's takeaway for Minjun</span><span class="ko">민준을 위한 토토로의 한 줄</span></strong>
+        <div><span class="en">Story 7 is the one to actually know cold &mdash; that's your own company's new LAN878x/LAN888x line, and it hits every note of where the industry is headed: MACsec security, TSN, and ASIL-B safety on 100/1000BASE-T1, aimed squarely at the zonal software-defined vehicle architectures automakers are racing toward. If Digital Design conversations touch automotive networking, this launch is very likely to come up &mdash; worth skimming the press release so you can speak to it fluently.</span><span class="ko">7번 이야기는 확실히 알아둘 가치가 있어요 &mdash; 바로 민준님 회사의 새 LAN878x/LAN888x 라인이고, 업계가 향하는 방향의 핵심 요소(MACsec 보안, TSN, ASIL-B 안전, 100/1000BASE-T1)를 그대로 담고 있거든요. 완성차 업체들이 서두르는 존 기반 소프트웨어 정의 차량 아키텍처를 정조준한 제품이에요. 디지털 설계 관련 대화에서 자동차 네트워킹 얘기가 나오면 이 신제품 얘기가 나올 가능성이 높으니, 보도자료를 한번 훑어보고 유창하게 설명할 수 있으면 좋겠어요.</span></div>
+      </div>
+
+      <div class="foot">
+        <span class="en">Prepared in Totoro style, focused on useful momentum.</span>
+        <span class="ko">유용한 흐름에 집중한 토토로 스타일 브리핑입니다.</span>
+      </div>
+    </div>
+  </div>
+  <script>
+    let isKorean = false;
+    function toggleLang() {
+      isKorean = !isKorean;
+      document.querySelectorAll('.en').forEach(el => el.classList.toggle('hide', isKorean));
+      document.querySelectorAll('.ko').forEach(el => el.classList.toggle('show', isKorean));
+      document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+    }
+  </script>
+</body>
+</html>
