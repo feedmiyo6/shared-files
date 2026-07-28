@@ -1,0 +1,19 @@
+Good morning — it's Tuesday, July 28th, 2026. Here's your daily tech briefing.
+
+Top story: Nvidia is reportedly in talks to guarantee around two hundred fifty billion dollars in financing so OpenAI can lease SoftBank's ten-gigawatt data center campus in Ohio. A separate three hundred fifty billion dollar package is also being discussed just to fund the chips for that site, on top of a new Nvidia investment in Ilya Sutskever's Safe Superintelligence. Nothing is finalized, but the numbers keep resetting what "AI infrastructure spending" even means.
+
+In chips. A Chinese memory maker called CXMT surged four hundred sixty six percent on its Shanghai debut, becoming China's most valuable listed company after an eight point six billion dollar IPO — the largest semiconductor listing in mainland Chinese history. It's still the world's fourth largest DRAM producer behind Samsung, SK Hynix, and Micron, but Apple is reportedly already testing its memory chips.
+
+On the earnings side, it got ugly. Alphabet shares dropped more than seven percent — its worst day in over a year — after raising its 2026 spending forecast to as much as two hundred five billion dollars and posting negative free cash flow for the first time since its 2004 IPO. Combined AI spending across Amazon, Google, Meta, and Microsoft is now near seven hundred twenty five billion dollars for the year, up seventy seven percent. Microsoft and Meta report tomorrow, Amazon and Apple on Thursday, and Wall Street wants proof this is turning into revenue.
+
+In AI models. China's Moonshot AI released Kimi K3, the largest open-weight AI model ever built — two point eight trillion parameters, with native text, image, and video support. Moonshot says it holds up competitively against the top US models. And Anthropic rolled out Claude Opus 5 across all platforms, delivering near-flagship performance at half the price, with a new dial that lets you trade cost for capability.
+
+Apple pushed its first smart glasses reveal back to WWDC 2027 while it works through privacy concerns about always-on cameras, after Meta's Ray-Ban glasses drew backlash over covert filming.
+
+And UCLA teamed up with Applied Materials, GlobalFoundries, Meta, Synopsys, and Broadcom on a hundred twenty five million dollar semiconductor hub with a mandatory year-long industry internship — a direct answer to the talent shortage the chip industry keeps warning about.
+
+Now, two for your world specifically. Microchip Technology — your own company — just announced new LAN878x and LAN888x single-pair Ethernet PHY families covering 100BASE-T1, 1000BASE-T1, and dual-speed, built for software-defined vehicles as well as industrial and avionics use. And the Ethernet Alliance's 2026 roadmap names automotive connectivity and AI data centers as its two fastest-growing frontiers, with BASE-T1 PHYs called out by name.
+
+That's not background reading today — that's your own company shipping new silicon in exactly the growth lane the whole industry is pointing at. Good sign for where you're headed.
+
+That's your Tuesday briefing. Have a great day.
