@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jujube — Warm Glass Design System v2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;600;700&family=Noto+Serif+KR:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    /* ---- Warm Glass light tokens (docs/DESIGN_SYSTEM_V2.md) ---- */
+    --paper-base:#F4EFE7;
+    --paper-soft:#EEE6DA;
+    --paper-card:#FAF7F2;
+    --paper-section:#E1D6C8;
+    --ink-strong:#2B1E1B;
+    --ink-medium:#5A4742;
+    --ink-light:#8C7B75;
+    --red-600:#B63F39;
+    --red-500:#C94B44;
+    --red-300:#E7A19B;
+    --red-100:#F6E2DF;
+    --green-700:#2D4A3A;
+    --green-500:#4C6E58;
+    --green-200:#C7D6C9;
+    --blush:#F2C9C4;
+
+    --glass-tint01: rgba(250,247,242,0.55);
+    --glass-tint02: rgba(250,247,242,0.68);
+    --glass-tint03: rgba(250,247,242,0.78);
+    --glass-tint-red: rgba(182,63,57,0.08);
+    --glass-tint-green: rgba(45,74,58,0.08);
+    --glass-border: rgba(43,30,27,0.08);
+    --glass-border-strong: rgba(43,30,27,0.16);
+
+    /* ---- dark tokens ---- */
+    --paper-base-dark:#1E1815;
+    --paper-soft-dark:#241D19;
+    --paper-card-dark:#2B211D;
+    --ink-strong-dark:#F4EFE7;
+    --ink-medium-dark:#C9BBB2;
+    --ink-light-dark:#8F7E76;
+    --red-dark:#D9645C;
+    --green-dark:#5E8870;
+    --glass-tint02-dark: rgba(43,33,29,0.68);
+    --glass-tint03-dark: rgba(43,33,29,0.80);
+    --glass-border-dark: rgba(244,239,231,0.10);
+    --glass-border-strong-dark: rgba(244,239,231,0.16);
+
+    --font-serif: 'Shippori Mincho', serif;
+    --font-serif-kr: 'Noto Serif KR', serif;
+    --font-sans: 'Inter', sans-serif;
+  }
+
+  *{ box-sizing:border-box; }
+
+  html,body{
+    margin:0; padding:0;
+    background: var(--paper-base);
+    color: var(--ink-strong);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ============ EN/KO caption toggle — class-toggle pattern only ============ */
+  .ko{ display:none; }
+  .ko.show{ display:inline !important; }
+  .en.hide{ display:none !important; }
+  .ko-block{ display:none; }
+  .ko-block.show{ display:block !important; }
+  .en-block.hide{ display:none !important; }
+
+  /* ============ page chrome ============ */
+  .topbar{
+    position: sticky; top:0; z-index: 50;
+    display:flex; align-items:center; justify-content:space-between;
+    padding: 18px 28px;
+    background: rgba(244,239,231,0.86);
+    backdrop-filter: blur(16px) saturate(140%);
+    -webkit-backdrop-filter: blur(16px) saturate(140%);
+    border-bottom: 1px solid var(--glass-border);
+  }
+  .topbar .brand{
+    font-family: var(--font-serif);
+    font-size: 20px;
+    letter-spacing: -0.4px;
+    color: var(--ink-strong);
+  }
+  .topbar .brand small{
+    display:block;
+    font-family: var(--font-sans);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    color: var(--ink-medium);
+    margin-top: 2px;
+  }
+  .lang-toggle{
+    font-family: var(--font-sans);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    background: var(--paper-card);
+    border: 1px solid var(--glass-border-strong);
+    color: var(--ink-strong);
+    padding: 9px 16px;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: background 160ms ease, transform 120ms ease;
+  }
+  .lang-toggle:hover{ background: var(--red-100); }
+  .lang-toggle:active{ transform: scale(0.96); }
+
+  .intro{
+    max-width: 900px;
+    margin: 36px auto 8px;
+    padding: 0 28px;
+  }
+  .intro h1{
+    font-family: var(--font-serif);
+    font-weight: 600;
+    font-size: 32px;
+    letter-spacing: -0.6px;
+    margin: 0 0 10px;
+  }
+  .intro p{
+    font-size: 14px;
+    line-height: 22px;
+    color: var(--ink-medium);
+    max-width: 640px;
+    margin: 0 0 4px;
+  }
+  .intro .tag-row{ margin-top:16px; display:flex; gap:8px; flex-wrap:wrap; }
+  .tag{
+    font-size: 11px; font-weight: 600; letter-spacing: -0.01em;
+    padding: 6px 12px; border-radius: 999px;
+    background: var(--paper-card); border: 1px solid var(--glass-border);
+    color: var(--ink-medium);
+  }
+  .tag.red{ background: var(--red-100); color: var(--red-600); border-color: rgba(182,63,57,0.18); }
+  .tag.green{ background: var(--green-200); color: var(--green-700); border-color: rgba(45,74,58,0.18); }
+
+  /* ============ mockup stage — busy warm backdrop so glass has something to blur ============ */
+  .stage{
+    position: relative;
+    padding: 40px 28px 70px;
+    overflow: hidden;
+  }
+  .stage::before, .stage::after{
+    content:"";
+    position:absolute;
+    border-radius:50%;
+    filter: blur(70px);
+    opacity:0.55;
+    z-index:0;
+  }
+  .stage::before{
+    width:520px; height:520px; left:-160px; top:60px;
+    background: radial-gradient(circle, var(--green-200), transparent 70%);
+  }
+  .stage::after{
+    width:480px; height:480px; right:-140px; top:420px;
+    background: radial-gradient(circle, var(--red-300), transparent 70%);
+  }
+
+  .phones-row{
+    position:relative; z-index:1;
+    display:flex;
+    gap: 44px;
+    flex-wrap: wrap;
+    align-items:flex-start;
+    justify-content:center;
+  }
+  .phone-col{
+    display:flex; flex-direction:column; align-items:center;
+    width: 300px;
+  }
+  .phone-col .col-title{
+    font-family: var(--font-serif);
+    font-size: 17px;
+    font-weight: 600;
+    letter-spacing:-0.3px;
+    margin: 0 0 4px;
+    text-align:center;
+  }
+  .phone-col .col-sub{
+    font-size: 11.5px;
+    color: var(--ink-medium);
+    text-align:center;
+    margin: 0 0 18px;
+    line-height:16px;
+    max-width: 260px;
+  }
+
+  /* ============ phone frame ============ */
+  .phone{
+    width: 300px;
+    height: 620px;
+    border-radius: 44px;
+    background: #14100e;
+    padding: 12px;
+    box-shadow: 0 30px 60px rgba(43,30,27,0.28), 0 4px 14px rgba(43,30,27,0.16);
+    position: relative;
+  }
+  .phone .notch{
+    position:absolute; top:12px; left:50%; transform:translateX(-50%);
+    width:120px; height:26px; background:#14100e; border-radius:0 0 18px 18px; z-index:5;
+  }
+  .screen{
+    position:relative;
+    width:100%; height:100%;
+    border-radius: 34px;
+    overflow:hidden;
+    background: linear-gradient(180deg, var(--paper-base), var(--paper-soft) 70%);
+  }
+  .screen .statusbar{
+    display:flex; justify-content:space-between; align-items:center;
+    padding: 16px 22px 4px;
+    font-size: 12px; font-weight:600; color: var(--ink-strong);
+    position:relative; z-index:3;
+  }
+
+  /* backdrop color blobs living *inside* the screen so cards have something to blur */
+  .screen .blob{
+    position:absolute; border-radius:50%; filter: blur(50px); z-index:0;
+  }
+  .screen .blob.g{ width:220px; height:220px; background: var(--green-200); opacity:0.9; top:120px; left:-70px; }
+  .screen .blob.r{ width:200px; height:200px; background: var(--red-300); opacity:0.8; top:360px; right:-80px; }
+  .screen .blob.r2{ width:180px; height:180px; background: var(--blush); opacity:0.7; top:40px; right:-60px; }
+
+  .screen-content{
+    position:relative; z-index:2;
+    height: calc(100% - 40px);
+    overflow:hidden;
+    padding: 6px 18px 0;
+  }
+
+  /* ============ glass primitives (FgGlassSurface elevations) ============ */
+  .glass{
+    position:relative;
+    border: 1px solid var(--glass-border);
+    -webkit-backdrop-filter: blur(20px) saturate(160%);
+    backdrop-filter: blur(20px) saturate(160%);
+  }
+  .glass-1{ background: var(--glass-tint01); -webkit-backdrop-filter: blur(20px) saturate(160%); backdrop-filter: blur(20px) saturate(160%); }
+  .glass-2{ background: var(--glass-tint02); -webkit-backdrop-filter: blur(30px) saturate(160%); backdrop-filter: blur(30px) saturate(160%); box-shadow: 0 2px 12px rgba(43,30,27,0.06); }
+  .glass-3{ background: var(--glass-tint03); -webkit-backdrop-filter: blur(40px) saturate(160%); backdrop-filter: blur(40px) saturate(160%); border-color: var(--glass-border-strong); box-shadow: 0 8px 24px rgba(43,30,27,0.10); }
+  .glass-tint-red{ background: linear-gradient(var(--glass-tint-red), var(--glass-tint-red)), var(--glass-tint02); }
+  .glass-tint-green{ background: linear-gradient(var(--glass-tint-green), var(--glass-tint-green)), var(--glass-tint02); }
+
+  .radius-sm{ border-radius:8px; }
+  .radius-md{ border-radius:14px; }
+  .radius-lg{ border-radius:20px; }
+  .radius-xl{ border-radius:28px; }
+  .radius-full{ border-radius:999px; }
+
+  /* ============ type scale utility classes ============ */
+  .t-display{ font-family: var(--font-serif); font-weight:600; font-size:34px; line-height:40px; letter-spacing:-0.6px; }
+  .t-h1{ font-family: var(--font-serif); font-weight:600; font-size:28px; line-height:34px; letter-spacing:-0.56px; }
+  .t-h2{ font-family: var(--font-serif); font-weight:500; font-size:21px; line-height:28px; letter-spacing:-0.42px; }
+  .t-h3-serif{ font-family: var(--font-serif); font-weight:600; font-size:16px; line-height:22px; letter-spacing:-0.32px; }
+  .t-h3-sans{ font-family: var(--font-sans); font-weight:600; font-size:16px; line-height:22px; letter-spacing:-0.32px; }
+  .t-body-em{ font-family: var(--font-sans); font-weight:500; font-size:14px; line-height:20px; letter-spacing:0.28px; }
+  .t-body{ font-family: var(--font-sans); font-weight:400; font-size:14px; line-height:20px; letter-spacing:0.28px; }
+  .t-ui-label{ font-family: var(--font-sans); font-weight:500; font-size:11px; line-height:16px; letter-spacing:-0.22px; }
+  .t-ui-micro{ font-family: var(--font-sans); font-weight:400; font-size:10px; line-height:14px; letter-spacing:-0.20px; color: var(--ink-light); }
+
+  .ink-strong{ color: var(--ink-strong); }
+  .ink-medium{ color: var(--ink-medium); }
+  .ink-light{ color: var(--ink-light); }
+
+  /* ============ HOME DASHBOARD MOCKUP ============ */
+  .home-greeting{ padding: 6px 0 14px; }
+  .home-greeting .t-ui-label{ color: var(--ink-medium); margin-bottom:2px; }
+
+  .hero-card{
+    padding: 16px 18px;
+    margin-bottom: 14px;
+  }
+  .hero-card .pill{
+    display:inline-block;
+    font-size:9.5px; font-weight:700; letter-spacing:0.02em; text-transform:uppercase;
+    color: var(--red-600); background: var(--red-100);
+    padding: 4px 9px; border-radius: 999px; margin-bottom: 8px;
+  }
+  .hero-card .cta{
+    margin-top:10px; display:inline-flex; align-items:center; gap:6px;
+    font-size:11px; font-weight:600; color: var(--red-600);
+  }
+
+  .stat-row{ display:flex; gap:8px; margin-bottom:16px; }
+  .stat-tile{ flex:1; padding:12px 10px; text-align:center; }
+  .stat-tile .num{ font-family: var(--font-serif); font-size:20px; font-weight:600; letter-spacing:-0.3px; }
+  .stat-tile .lbl{ font-size:9.5px; color: var(--ink-medium); margin-top:2px; }
+
+  .section-title{ display:flex; align-items:baseline; justify-content:space-between; margin: 4px 0 10px; }
+  .section-title .see-all{ font-size:10.5px; color: var(--red-600); font-weight:600; }
+
+  .recipe-strip{ display:flex; gap:10px; overflow:hidden; padding-bottom: 4px; }
+  .mini-recipe{
+    width:150px; flex-shrink:0; padding:10px; padding-top:0;
+    overflow:hidden;
+  }
+  .mini-recipe .thumb{
+    height:82px; border-radius:14px; margin-bottom:8px;
+    background: linear-gradient(135deg, var(--green-500), var(--green-700));
+    position:relative;
+  }
+  .mini-recipe .thumb.alt{ background: linear-gradient(135deg, var(--red-500), var(--red-600)); }
+  .mini-recipe .match{
+    position:absolute; top:6px; right:6px;
+    font-size:9px; font-weight:700; color:#fff;
+    background: rgba(30,24,21,0.35);
+    padding:2px 6px; border-radius:999px;
+    -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
+  }
+  .mini-recipe .name{ font-size:12.5px; font-weight:600; letter-spacing:-0.1px; }
+  .mini-recipe .tags{ font-size:9.5px; color: var(--ink-light); margin-top:2px; }
+
+  .navbar{
+    position:absolute; left:14px; right:14px; bottom:14px; z-index:4;
+    display:flex; justify-content:space-around; align-items:center;
+    padding: 12px 6px;
+  }
+  .navbar .nav-item{ display:flex; flex-direction:column; align-items:center; gap:4px; }
+  .navbar .dot{ width:18px; height:18px; border-radius:6px; background: var(--ink-light); opacity:0.5; }
+  .navbar .nav-item.active .dot{ background: var(--green-700); opacity:1; }
+  .navbar .nav-item .lbl{ font-size:8.5px; color: var(--ink-light); font-weight:500; }
+  .navbar .nav-item.active .lbl{ color: var(--green-700); font-weight:700; }
+
+  /* ============ RECIPE DETAIL MOCKUP ============ */
+  .recipe-detail-frame .screen-content{ padding:0; height:100%; }
+  .rd-hero{
+    position:relative; height:260px;
+    background:
+      radial-gradient(circle at 30% 20%, rgba(255,255,255,0.15), transparent 50%),
+      linear-gradient(160deg, var(--green-500), var(--green-700) 65%);
+    display:flex; align-items:flex-end;
+  }
+  .rd-hero-glass{
+    width:100%;
+    padding: 18px 20px 20px;
+    border-top-left-radius:28px; border-top-right-radius:28px;
+  }
+  .rd-hero-glass .match-pill{
+    display:inline-flex; align-items:center; gap:5px;
+    font-size:11px; font-weight:700; color: var(--green-700);
+    background: var(--green-200);
+    padding:4px 10px; border-radius:999px; margin-bottom:8px;
+  }
+  .rd-hero-glass .rd-title{ color: var(--ink-strong); margin-bottom:4px; }
+  .rd-hero-glass .rd-sub{ color: var(--ink-medium); }
+
+  .rd-body{ padding: 16px 20px 0; }
+  .ing-row{
+    display:flex; align-items:center; gap:10px;
+    padding: 10px 4px; border-bottom: 1px solid var(--paper-section);
+  }
+  .ing-row:last-child{ border-bottom:none; }
+  .ing-dot{ width:18px; height:18px; border-radius:50%; flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:11px; }
+  .ing-dot.have{ background: var(--green-200); color: var(--green-700); }
+  .ing-dot.missing{ background: transparent; border:1.5px solid var(--red-300); color: var(--red-500); }
+  .ing-name{ flex:1; }
+  .ing-qty{ color: var(--ink-light); }
+
+  .rd-cta-bar{
+    position:absolute; left:16px; right:16px; bottom:16px; z-index:4;
+    padding: 14px 18px;
+    display:flex; align-items:center; justify-content:space-between;
+  }
+  .rd-cta-bar .save{ color: var(--ink-medium); font-size:11px; font-weight:600; }
+  .rd-cta-bar .start{
+    background: var(--red-600); color:#fff;
+    padding: 11px 22px; border-radius:999px;
+    font-size:12.5px; font-weight:700;
+    box-shadow: 0 3px 10px rgba(182,63,57,0.30);
+  }
+
+  /* ============ CARD CLOSE-UP MOCKUP ============ */
+  .closeup-wrap{ position:relative; width:300px; margin: 0 auto; }
+  .closeup-card{
+    padding: 18px;
+  }
+  .closeup-card .thumb{
+    height:150px; border-radius:16px; margin-bottom:14px;
+    background: linear-gradient(150deg, var(--red-500), var(--red-600) 60%, #8a2f2b);
+    position:relative; overflow:hidden;
+  }
+  .closeup-card .thumb .match-badge{
+    position:absolute; top:10px; right:10px;
+    font-size:11px; font-weight:700; color:#fff;
+    background: rgba(30,24,21,0.35);
+    padding:4px 10px; border-radius:999px;
+    -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+  }
+  .closeup-card .title-row{ display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:6px; }
+  .closeup-card .desc{ color: var(--ink-medium); margin-bottom:12px; }
+  .closeup-ing-dots{ display:flex; gap:6px; margin-bottom: 4px; }
+  .closeup-ing-dots .d{ width:8px; height:8px; border-radius:50%; }
+  .closeup-ing-dots .d.have{ background: var(--green-700); }
+  .closeup-ing-dots .d.missing{ background: var(--red-300); }
+
+  /* annotation badges */
+  .annot{
+    position:absolute;
+    width:22px; height:22px; border-radius:50%;
+    background: var(--ink-strong); color:#fff;
+    font-size:11px; font-weight:700;
+    display:flex; align-items:center; justify-content:center;
+    box-shadow: 0 3px 8px rgba(43,30,27,0.35);
+    z-index:10;
+    cursor:default;
+  }
+  .a1{ top:-10px; right:20px; }
+  .a2{ top:36px; left:-10px; }
+  .a3{ bottom:60px; right:-10px; }
+  .a4{ top:120px; left:-10px; }
+  .a5{ bottom:-10px; left:40%; }
+
+  .legend{
+    max-width: 300px;
+    margin: 22px auto 0;
+  }
+  .legend-item{ display:flex; gap:10px; margin-bottom:10px; align-items:flex-start; }
+  .legend-item .num{
+    flex-shrink:0; width:20px; height:20px; border-radius:50%;
+    background: var(--ink-strong); color:#fff; font-size:10.5px; font-weight:700;
+    display:flex; align-items:center; justify-content:center; margin-top:1px;
+  }
+  .legend-item .txt{ font-size:12px; line-height:17px; color: var(--ink-medium); }
+  .legend-item .txt b{ color: var(--ink-strong); font-weight:600; }
+
+  /* ============ dark mode teaser ============ */
+  .dark-section{
+    background: linear-gradient(180deg, var(--paper-base-dark), var(--paper-soft-dark));
+    padding: 50px 28px 60px;
+    color: var(--ink-strong-dark);
+    position: relative;
+    overflow:hidden;
+  }
+  .dark-section::before{
+    content:""; position:absolute; width:400px; height:400px; border-radius:50%;
+    background: radial-gradient(circle, var(--green-dark), transparent 70%);
+    opacity:0.25; filter: blur(80px); top:-100px; left:10%;
+  }
+  .dark-section .dk-head{ max-width:640px; margin:0 auto 28px; position:relative; z-index:1; }
+  .dark-section .dk-head h2{
+    font-family: var(--font-serif); font-weight:600; font-size:22px; letter-spacing:-0.4px;
+    margin:0 0 8px;
+  }
+  .dark-section .dk-head p{ font-size:13px; line-height:20px; color: var(--ink-medium-dark); margin:0; }
+
+  .dark-cards{
+    position:relative; z-index:1;
+    max-width: 640px; margin:0 auto;
+    display:flex; gap:16px; flex-wrap:wrap; justify-content:center;
+  }
+  .dk-card{
+    width: 220px;
+    padding: 16px;
+    border-radius: 20px;
+    background: var(--glass-tint02-dark);
+    border: 1px solid var(--glass-border-dark);
+    -webkit-backdrop-filter: blur(24px);
+    backdrop-filter: blur(24px);
+  }
+  .dk-card .thumb{
+    height:80px; border-radius:12px; margin-bottom:10px;
+    background: linear-gradient(135deg, var(--green-dark), #22352a);
+  }
+  .dk-card .title{ font-family: var(--font-serif); font-size:15px; font-weight:600; color: var(--ink-strong-dark); margin-bottom:4px; }
+  .dk-card .meta{ font-size:11px; color: var(--ink-medium-dark); }
+  .dk-card .badge{
+    display:inline-block; margin-top:8px;
+    font-size:10px; font-weight:700; color: var(--green-dark);
+    background: rgba(94,136,112,0.15);
+    padding:3px 9px; border-radius:999px;
+  }
+
+  footer{
+    text-align:center; padding: 30px 20px 50px;
+    font-size:11px; color: var(--ink-light);
+  }
+
+  @media (max-width: 720px){
+    .phones-row{ gap:56px; }
+    .topbar{ padding:14px 18px; }
+    .intro{ padding: 0 18px; }
+    .stage{ padding: 30px 12px 60px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="brand">
+    Jujube <span style="color:var(--ink-light); font-weight:400;">/ Warm Glass</span>
+    <small><span class="en">Design System v2 — visual preview</span><span class="ko">디자인 시스템 v2 — 비주얼 프리뷰</span></small>
+  </div>
+  <button class="lang-toggle" onclick="toggleLang()">한국어</button>
+</div>
+
+<div class="intro">
+  <h1><span class="en">Warm light, not dark crystal.</span><span class="ko">따뜻한 빛, 차가운 유리가 아닌.</span></h1>
+  <p>
+    <span class="en">Frosted glass surfaces tinted with Jujube's existing warm-neutral palette — deep green and jujube red stay the only saturated accents. Hairline borders, serif headlines directly on the glass, restraint over decoration.</span>
+    <span class="ko">지주브의 따뜻한 뉴트럴 팔레트로 틴팅된 프로스트 글래스 표면 — 딥 그린과 지주브 레드만 채도 있는 액센트로 남습니다. 헤어라인 보더, 유리 위에 직접 놓인 세리프 헤드라인, 장식보다 절제.</span>
+  </p>
+  <div class="tag-row">
+    <span class="tag">Light mode primary</span>
+    <span class="tag green">Deep green accent</span>
+    <span class="tag red">Jujube red accent</span>
+    <span class="tag">EN / KO / ZH</span>
+  </div>
+</div>
+
+<div class="stage">
+  <div class="phones-row">
+
+    <!-- ============ SCREEN 1: HOME DASHBOARD ============ -->
+    <div class="phone-col">
+      <div class="col-title"><span class="en">Home dashboard</span><span class="ko">홈 대시보드</span></div>
+      <div class="col-sub"><span class="en">Floating glass nav, hero freshness card, recipe strip</span><span class="ko">플로팅 글래스 내비게이션, 히어로 신선도 카드, 레시피 스트립</span></div>
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="screen">
+          <div class="blob g"></div>
+          <div class="blob r2"></div>
+          <div class="statusbar">
+            <span>9:41</span>
+            <span>●●●  📶  🔋</span>
+          </div>
+          <div class="screen-content">
+            <div class="home-greeting">
+              <div class="t-ui-label"><span class="en">GOOD EVENING</span><span class="ko">좋은 저녁이에요</span></div>
+              <div class="t-h1"><span class="en">Minjun</span><span class="ko">민준님</span></div>
+            </div>
+
+            <div class="hero-card glass glass-2 glass-tint-red radius-lg">
+              <div class="pill"><span class="en">FRESH CHECK</span><span class="ko">신선도 체크</span></div>
+              <div class="t-body-em"><span class="en">3 items expiring in 2 days</span><span class="ko">2일 내 소비기한 임박 3개</span></div>
+              <div class="t-ui-micro"><span class="en">Napa cabbage, tofu, scallion</span><span class="ko">배추, 두부, 대파</span></div>
+              <div class="cta">
+                <span class="en">Review now →</span><span class="ko">지금 확인하기 →</span>
+              </div>
+            </div>
+
+            <div class="stat-row">
+              <div class="stat-tile glass glass-2 radius-md">
+                <div class="num">24</div>
+                <div class="lbl t-ui-micro"><span class="en">ITEMS</span><span class="ko">품목</span></div>
+              </div>
+              <div class="stat-tile glass glass-2 radius-md">
+                <div class="num" style="color:var(--red-600);">3</div>
+                <div class="lbl t-ui-micro"><span class="en">EXPIRING</span><span class="ko">임박</span></div>
+              </div>
+              <div class="stat-tile glass glass-2 radius-md">
+                <div class="num" style="color:var(--green-700);">68%</div>
+                <div class="lbl t-ui-micro"><span class="en">AVG MATCH</span><span class="ko">평균 매칭</span></div>
+              </div>
+            </div>
+
+            <div class="section-title">
+              <div class="t-h3-serif"><span class="en">Tonight's recipes</span><span class="ko">오늘 저녁 추천</span></div>
+              <div class="see-all"><span class="en">See all</span><span class="ko">전체보기</span></div>
+            </div>
+            <div class="recipe-strip">
+              <div class="mini-recipe glass glass-2 radius-lg">
+                <div class="thumb"><span class="match">92%</span></div>
+                <div class="name"><span class="en">Doenjang Jjigae</span><span class="ko">된장찌개</span></div>
+                <div class="tags"><span class="en">Stew · 30 min</span><span class="ko">찌개 · 30분</span></div>
+              </div>
+              <div class="mini-recipe glass glass-2 radius-lg">
+                <div class="thumb alt"><span class="match">78%</span></div>
+                <div class="name"><span class="en">Kimchi Fried Rice</span><span class="ko">김치볶음밥</span></div>
+                <div class="tags"><span class="en">Rice · 15 min</span><span class="ko">밥 · 15분</span></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="navbar glass glass-3 radius-xl">
+            <div class="nav-item active">
+              <div class="dot" style="border-radius:50%;"></div>
+              <div class="lbl"><span class="en">Home</span><span class="ko">홈</span></div>
+            </div>
+            <div class="nav-item">
+              <div class="dot"></div>
+              <div class="lbl"><span class="en">Pantry</span><span class="ko">팬트리</span></div>
+            </div>
+            <div class="nav-item">
+              <div class="dot"></div>
+              <div class="lbl"><span class="en">Recipes</span><span class="ko">레시피</span></div>
+            </div>
+            <div class="nav-item">
+              <div class="dot"></div>
+              <div class="lbl"><span class="en">Shop</span><span class="ko">쇼핑</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ SCREEN 2: RECIPE DETAIL ============ -->
+    <div class="phone-col">
+      <div class="col-title"><span class="en">Recipe detail</span><span class="ko">레시피 상세</span></div>
+      <div class="col-sub"><span class="en">Glass hero — the recipe-reveal signature moment lands here</span><span class="ko">글래스 히어로 — 레시피 리빌 시그니처 모먼트가 여기서 일어남</span></div>
+      <div class="phone recipe-detail-frame">
+        <div class="notch"></div>
+        <div class="screen">
+          <div class="screen-content">
+            <div class="rd-hero">
+              <div class="rd-hero-glass glass glass-3">
+                <div class="match-pill">✓ <span class="en">92% match</span><span class="ko">92% 매칭</span></div>
+                <div class="t-display rd-title"><span class="en">Doenjang</span><span class="ko">된장찌개</span></div>
+                <div class="t-body rd-sub"><span class="en">Korean soybean paste stew · 30 min</span><span class="ko">한국식 된장 찌개 · 30분</span></div>
+              </div>
+            </div>
+            <div class="rd-body">
+              <div class="t-ui-label ink-medium" style="margin-bottom:6px;"><span class="en">INGREDIENTS</span><span class="ko">재료</span></div>
+              <div class="ing-row">
+                <div class="ing-dot have">✓</div>
+                <div class="t-body ing-name"><span class="en">Tofu</span><span class="ko">두부</span></div>
+                <div class="t-ui-micro ing-qty"><span class="en">1 block</span><span class="ko">1모</span></div>
+              </div>
+              <div class="ing-row">
+                <div class="ing-dot have">✓</div>
+                <div class="t-body ing-name"><span class="en">Doenjang paste</span><span class="ko">된장</span></div>
+                <div class="t-ui-micro ing-qty"><span class="en">2 tbsp</span><span class="ko">2큰술</span></div>
+              </div>
+              <div class="ing-row">
+                <div class="ing-dot have">✓</div>
+                <div class="t-body ing-name"><span class="en">Zucchini</span><span class="ko">애호박</span></div>
+                <div class="t-ui-micro ing-qty"><span class="en">1/2</span><span class="ko">1/2개</span></div>
+              </div>
+              <div class="ing-row">
+                <div class="ing-dot missing">!</div>
+                <div class="t-body ing-name" style="color:var(--red-500);"><span class="en">Napa cabbage</span><span class="ko">배추</span></div>
+                <div class="t-ui-micro ing-qty"><span class="en">missing</span><span class="ko">없음</span></div>
+              </div>
+            </div>
+          </div>
+          <div class="rd-cta-bar glass glass-3 radius-xl">
+            <div class="save">♡ <span class="en">Save</span><span class="ko">저장</span></div>
+            <div class="start"><span class="en">Start cooking</span><span class="ko">요리 시작</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ SCREEN 3: CARD CLOSE-UP ============ -->
+    <div class="phone-col" style="width:320px;">
+      <div class="col-title"><span class="en">Recipe card — anatomy</span><span class="ko">레시피 카드 — 구조</span></div>
+      <div class="col-sub"><span class="en">Component close-up with material decisions annotated</span><span class="ko">머티리얼 디자인 결정을 주석 처리한 컴포넌트 클로즈업</span></div>
+      <div class="closeup-wrap">
+        <div class="annot a1">1</div>
+        <div class="annot a2">2</div>
+        <div class="annot a3">3</div>
+        <div class="annot a4">4</div>
+        <div class="closeup-card glass glass-2 radius-lg">
+          <div class="thumb">
+            <span class="match-badge">92%</span>
+          </div>
+          <div class="title-row">
+            <div class="t-h3-serif"><span class="en">Doenjang Jjigae</span><span class="ko">된장찌개</span></div>
+          </div>
+          <div class="t-ui-micro desc"><span class="en">Stew · 30 min · Serves 2</span><span class="ko">찌개 · 30분 · 2인분</span></div>
+          <div class="closeup-ing-dots">
+            <div class="d have"></div><div class="d have"></div><div class="d have"></div><div class="d missing"></div>
+          </div>
+          <div class="t-ui-micro"><span class="en">3 of 4 ingredients on hand</span><span class="ko">4개 중 3개 보유</span></div>
+        </div>
+      </div>
+
+      <div class="legend">
+        <div class="legend-item">
+          <div class="num">1</div>
+          <div class="txt"><b><span class="en">Radius 20 (lg)</span><span class="ko">라운드 20 (lg)</span></b> — <span class="en">standalone-card default; sharp corners on translucent glass read as a bug.</span><span class="ko">독립 카드 기본값 — 반투명 글래스에 직각 모서리는 오류처럼 보임.</span></div>
+        </div>
+        <div class="legend-item">
+          <div class="num">2</div>
+          <div class="txt"><b><span class="en">Elevation 2 glass</span><span class="ko">엘리베이션 2 글래스</span></b> — <span class="en">blur 30pt, tint 68%, hairline border — the standalone-card recipe.</span><span class="ko">블러 30pt, 틴트 68%, 헤어라인 보더 — 독립 카드 레시피.</span></div>
+        </div>
+        <div class="legend-item">
+          <div class="num">3</div>
+          <div class="txt"><b><span class="en">Match % badge</span><span class="ko">매칭 % 배지</span></b> — <span class="en">on-image glass chip, not a flat overlay — stays legible over any photo.</span><span class="ko">이미지 위 글래스 칩 — 어떤 사진 위에서도 가독성 유지.</span></div>
+        </div>
+        <div class="legend-item">
+          <div class="num">4</div>
+          <div class="txt"><b><span class="en">Status dots, one signal system</span><span class="ko">상태 점, 단일 시그널 시스템</span></b> — <span class="en">color carries meaning here; a card doesn't also stack icon badges for the same info.</span><span class="ko">여기서는 색상이 의미를 전달 — 같은 정보에 아이콘 배지를 중복하지 않음.</span></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ============ DARK MODE TEASER ============ -->
+<div class="dark-section">
+  <div class="dk-head">
+    <h2><span class="en">Dark mode — token preview</span><span class="ko">다크 모드 — 토큰 프리뷰</span></h2>
+    <p>
+      <span class="en">Warm dusk, not black crystal — tokens are specified in the spec (§1.4) but no screen rebuild is scheduled in this migration; shown here as a preview of intent only.</span>
+      <span class="ko">차가운 블랙 크리스탈이 아닌 따뜻한 황혼 — 토큰은 스펙(§1.4)에 정의되어 있으나 이번 마이그레이션에는 화면 리빌드가 예정되어 있지 않음. 의도 미리보기로만 표시.</span>
+    </p>
+  </div>
+  <div class="dark-cards">
+    <div class="dk-card">
+      <div class="thumb"></div>
+      <div class="title"><span class="en">Doenjang Jjigae</span><span class="ko">된장찌개</span></div>
+      <div class="meta"><span class="en">Stew · 30 min</span><span class="ko">찌개 · 30분</span></div>
+      <div class="badge"><span class="en">92% match</span><span class="ko">92% 매칭</span></div>
+    </div>
+    <div class="dk-card">
+      <div class="title" style="margin-bottom:10px;"><span class="en">Fresh Check</span><span class="ko">신선도 체크</span></div>
+      <div class="meta"><span class="en">3 items expiring in 2 days</span><span class="ko">2일 내 소비기한 임박 3개</span></div>
+      <div class="badge" style="color:var(--red-dark); background:rgba(217,100,92,0.15);"><span class="en">Review →</span><span class="ko">확인하기 →</span></div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <span class="en">Jujube · Warm Glass Design System v2 · 2026-08-01 · Visual preview only, no app code changed</span>
+  <span class="ko">지주브 · 웜 글래스 디자인 시스템 v2 · 2026-08-01 · 비주얼 프리뷰 전용, 앱 코드 변경 없음</span>
+</footer>
+
+<script>
+  let isKorean = false;
+  function toggleLang() {
+    isKorean = !isKorean;
+    document.querySelectorAll('.en').forEach(el => el.classList.toggle('hide', isKorean));
+    document.querySelectorAll('.ko').forEach(el => el.classList.toggle('show', isKorean));
+    document.querySelectorAll('.en-block').forEach(el => el.classList.toggle('hide', isKorean));
+    document.querySelectorAll('.ko-block').forEach(el => el.classList.toggle('show', isKorean));
+    document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+  }
+</script>
+
+</body>
+</html>
