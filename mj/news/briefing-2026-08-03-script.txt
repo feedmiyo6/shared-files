@@ -1,0 +1,21 @@
+Good morning — it's Monday, August 3rd, 2026. Here's your daily tech briefing.
+
+First, a regulatory milestone: Europe's AI Act transparency rules went into force this weekend. Any chatbot, AI voice assistant, or AI agent operating in the EU now has to tell you you're talking to an AI right at the start of the conversation — not buried in the terms and conditions — and deepfakes need clear labeling too. Penalties run up to fifteen million euros or three percent of global revenue.
+
+Meanwhile, the chip sector just had its roughest month since the 2008 financial crisis. The Philadelphia Semiconductor Index fell twenty one percent in July alone, more than twenty two percent off its June peak, as investors got nervous about whether all that hyperscaler AI spending will actually pay off.
+
+But the spending hasn't slowed down one bit. Second quarter earnings confirmed that Amazon, Alphabet, Meta, Microsoft, and Oracle have collectively committed over eight hundred thirty billion dollars to AI infrastructure over the next three years — capex keeps climbing even as the stocks built on it get punished.
+
+On the IPO front, Anthropic and OpenAI are now on very different timelines. Anthropic is targeting an October Nasdaq listing that could make it the first company ever to debut at a one trillion dollar valuation. OpenAI, despite filing its own confidential paperwork back in June, is reportedly leaning toward pushing its listing into 2027, given market volatility and Sam Altman's hard floor of a trillion-dollar price tag.
+
+Anthropic's footprint keeps growing regardless — over three hundred thousand companies now use Claude tools, Claude Code alone is closing in on a billion dollars in annualized revenue, and the company just shipped Claude Haiku 4.5, a cheaper model aimed at cost-conscious users that matches mid-tier Sonnet 4 performance at a third of the price and more than twice the speed.
+
+Government oversight is tightening too. OpenAI and Anthropic are now co-designing the federal threshold that decides which frontier models need government review before release — this after both companies had models sidelined this summer. Anthropic's Claude Fable 5 and Mythos 5 were suspended globally for about three weeks under export control authority, and OpenAI's GPT-5.6 was restricted to government-vetted partners for twelve days.
+
+And on enterprise adoption: Gartner now expects forty percent of enterprise applications to ship with task-specific AI agents built in by the end of this year, up from under five percent just twelve months ago.
+
+Now, one for your world specifically. Microchip Technology — your own company — reports fiscal first-quarter twenty twenty-seven earnings tomorrow, Monday, August 4th, after the market closes. Analysts expect earnings per share of fifty nine cents, up two hundred forty seven percent from seventeen cents a year ago, on revenue near one point four six billion dollars, with the automotive and industrial Ethernet business — anchored by that Hyundai Motor Group ten-base-T1S collaboration — still doing the heavy lifting.
+
+Here's the thing worth sitting with today: last Friday's briefing flagged Microchip's next earnings report as the real test of whether automotive and industrial Ethernet demand is actually insulated from the AI-memory whiplash — and that test lands tomorrow. The chip index just had its worst month since the financial crisis, down twenty one percent in July, while Big Tech keeps promising hundreds of billions more in AI capex. If Microchip prints anywhere close to that two hundred forty seven percent EPS growth estimate tomorrow evening, that's strong evidence your corner of the industry runs on a genuinely different cycle than the GPU and memory names making headlines. Worth watching the after-hours reaction tomorrow.
+
+That's your Monday briefing. Have a great day.
