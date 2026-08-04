@@ -1,0 +1,23 @@
+Good morning, Minjun. Here's your briefing for Tuesday, August 4th.
+
+Story one. Microchip Technology — your own company — reports fiscal Q1 2027 earnings today after market close. Analysts expect earnings per share of fifty-nine cents, up two hundred forty-seven percent from seventeen cents a year ago, on revenue near one point four six billion dollars. This is the print that will show whether automotive and industrial Ethernet demand is holding up while the rest of the chip sector wobbles.
+
+Story two. Chip stocks are still whipsawing. Bloomberg reports Wall Street's favorite bet is coming undone, as the Philadelphia Semiconductor Index's twenty-one percent July slide — its worst month since October 2008 — keeps rattling investors. The fear is that hyperscaler AI spending can't keep paying for itself forever.
+
+Story three. But the underlying demand data tells a different story. Global semiconductor sales hit a record one hundred twenty point six billion dollars in May, up one hundred four percent year over year for a fifteenth straight month of growth. And TSMC just raised its 2026 capital spending guidance by eight billion dollars, to sixty-two billion total. The volatility is in the stocks, not yet in the actual chip orders.
+
+Story four. Networking chipmakers are riding a parallel Ethernet upgrade cycle worth watching. AI clusters are migrating from 400 gig to 800 gig Ethernet right now, with the industry already prepping 1.6 terabit networking for 2027. Broadcom guided AI semiconductor revenue to grow over two hundred percent year over year, to sixteen billion dollars this quarter, on the back of it.
+
+Story five. Anthropic extended its temporary fifty percent weekly usage boost for Claude Code subscribers through August 19th. Worth using the extra headroom while it lasts.
+
+Story six. Claude Sonnet 5's promotional API pricing ends August 31st. Standard pricing kicks in September 1st, so anything built on Sonnet 5 API calls gets moderately more expensive next month.
+
+Story seven. xAI launched Grok Voice Think Fast 2.0, its most capable speech-to-speech voice model, scoring ahead of both GPT-Realtime 2.1 and Gemini 3.1 Flash on independent quality benchmarks. Voice-agent quality keeps climbing across every major lab.
+
+Story eight. OpenAI is launching ChatGPT for Academic Researchers, giving one hundred thousand scientists, mathematicians, and engineers free access to frontier models, starting with ten thousand researchers this summer.
+
+Story nine. Google's Gemini free video-generation trial closes tonight at eleven fifty-nine p-m Pacific time. Last call if it's worth trying before it's gated behind a paid plan.
+
+And now, Totoro's takeaway for Minjun. Today's the day — Microchip reports after the close tonight, right in the middle of two very different chip-sector storylines. On one side, the SOX just had its worst month since 2008 on fear that AI spending is overextended. On the other, the actual demand data — record May sales, TSMC raising capex, Broadcom's AI revenue guide — says the underlying business is fine. And separately, the AI datacenter world is mid-upgrade from 800 gig toward 1.6 terabit Ethernet, a reminder that Ethernet standards work — your world — is the plumbing under both the automotive and industrial side, and the AI datacenter side, of this boom, even though they run on different cycles. If Microchip prints anywhere near that two hundred forty-seven percent earnings growth estimate tonight, that's a clean signal your corner of the industry is riding the real-demand story, not the speculative-AI-spending story that's spooking the SOX. Worth checking the after-hours reaction before bed.
+
+That's your briefing. Have a great day.
