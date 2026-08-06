@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jujube Monetization — Post-Launch, Post-Gating Model</title>
+<style>
+  :root{
+    --paper:#faf5ec;
+    --paper-2:#f2e9d8;
+    --ink:#2b2119;
+    --ink-soft:#5c4f42;
+    --red:#b23a2e;
+    --red-dark:#8c2c22;
+    --red-soft:#f4dcd8;
+    --green:#3f7a52;
+    --green-soft:#dcefe0;
+    --amber:#b6791f;
+    --amber-soft:#f6e8cf;
+    --line:#e2d3ba;
+    --card:#fffdf8;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    background:var(--paper);
+    color:var(--ink);
+    line-height:1.55;
+    padding-bottom:60px;
+  }
+  .en{display:inline;}
+  .ko{display:none;}
+  .ko.show{display:inline !important;}
+  .en.hide{display:none !important;}
+  .en-block{display:block;}
+  .ko-block{display:none;}
+  .ko-block.show{display:block !important;}
+  .en-block.hide{display:none !important;}
+
+  header{
+    position:sticky; top:0; z-index:50;
+    background:linear-gradient(180deg,var(--paper) 85%, transparent);
+    backdrop-filter:blur(6px);
+    padding:14px 16px 8px;
+    border-bottom:1px solid var(--line);
+  }
+  .header-row{display:flex; justify-content:space-between; align-items:flex-start; gap:12px; max-width:920px; margin:0 auto;}
+  .brand{font-size:13px; letter-spacing:.14em; text-transform:uppercase; color:var(--red-dark); font-weight:700;}
+  .lang-toggle{
+    background:var(--red); color:#fff; border:none; border-radius:20px;
+    padding:8px 16px; font-size:13px; font-weight:600; cursor:pointer;
+    box-shadow:0 2px 6px rgba(140,44,34,.25);
+    white-space:nowrap;
+    flex-shrink:0;
+  }
+  .lang-toggle:active{transform:translateY(1px);}
+
+  main{max-width:920px; margin:0 auto; padding:0 16px;}
+
+  .title-block{padding:22px 0 6px;}
+  h1{font-size:25px; margin:4px 0 6px; color:var(--red-dark); line-height:1.25;}
+  .subtitle{color:var(--ink-soft); font-size:14px; margin-bottom:2px;}
+  .meta{color:var(--ink-soft); font-size:12.5px;}
+
+  .tldr{
+    background:var(--card); border:1px solid var(--line); border-left:5px solid var(--red);
+    border-radius:10px; padding:16px 18px; margin:18px 0 22px; font-size:15px;
+  }
+
+  .stat-grid{
+    display:grid; grid-template-columns:repeat(2,1fr); gap:10px; margin:16px 0 24px;
+  }
+  @media(min-width:640px){ .stat-grid{grid-template-columns:repeat(4,1fr);} }
+  .stat-card{
+    background:var(--card); border:1px solid var(--line); border-radius:10px;
+    padding:14px 12px; text-align:center;
+  }
+  .stat-card .num{font-size:17px; font-weight:800; color:var(--red-dark); display:block; margin-bottom:2px;}
+  .stat-card .lbl{font-size:11.5px; color:var(--ink-soft); line-height:1.3;}
+
+  section{margin:34px 0;}
+  h2{
+    font-size:19px; color:var(--red-dark); border-bottom:2px solid var(--red-soft);
+    padding-bottom:8px; margin-bottom:14px; display:flex; align-items:center; gap:8px;
+  }
+  h2 .num-badge{
+    background:var(--red); color:#fff; font-size:12px; width:24px; height:24px; border-radius:50%;
+    display:inline-flex; align-items:center; justify-content:center; flex-shrink:0;
+  }
+  h3{font-size:15.5px; color:var(--ink); margin:20px 0 8px;}
+  p{margin:8px 0;}
+  .note{font-size:12.5px; color:var(--ink-soft); font-style:italic;}
+
+  .card{
+    background:var(--card); border:1px solid var(--line); border-radius:10px; padding:14px 16px; margin:12px 0;
+  }
+
+  .badge{
+    display:inline-block; font-size:10.5px; font-weight:700; letter-spacing:.03em;
+    padding:3px 9px; border-radius:12px; margin-right:6px; text-transform:uppercase;
+  }
+  .badge-risk{background:var(--red-soft); color:var(--red-dark);}
+  .badge-live{background:var(--green-soft); color:var(--green);}
+  .badge-soon{background:var(--amber-soft); color:var(--amber);}
+
+  .risk-box{
+    background:var(--red-soft); border:1px solid #e0b3ac; border-radius:10px; padding:16px; margin:16px 0;
+  }
+  .risk-box h4{margin:0 0 6px; color:var(--red-dark); font-size:15px;}
+
+  .key-box{
+    background:var(--green-soft); border:1px solid #bcdcc3; border-radius:10px; padding:16px; margin:16px 0;
+  }
+  .key-box h4{margin:0 0 6px; color:var(--green); font-size:15px;}
+
+  table{width:100%; border-collapse:collapse; font-size:12px; margin:10px 0 6px;}
+  th,td{padding:7px 6px; text-align:right; border-bottom:1px solid var(--line); white-space:nowrap;}
+  th:first-child,td:first-child{text-align:left;}
+  th{background:var(--paper-2); font-weight:700; color:var(--ink); font-size:11px;}
+  tr:last-child td{border-bottom:none;}
+  tr.net-row td{font-weight:800; color:var(--red-dark); background:#fdf6ef;}
+  td.pos{color:var(--green); font-weight:700;}
+  td.neg{color:var(--red-dark);}
+  .table-scroll{overflow-x:auto; -webkit-overflow-scrolling:touch; border:1px solid var(--line); border-radius:10px;}
+  .table-scroll table{margin:0;}
+  .table-scroll th,.table-scroll td{border-bottom:1px solid var(--line);}
+
+  .scenario-head{
+    display:flex; align-items:center; gap:8px; margin:26px 0 6px;
+  }
+  .scenario-tag{
+    font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:.05em;
+    padding:4px 10px; border-radius:6px;
+  }
+  .tag-cons{background:#e4e9ea; color:#3c5a5f;}
+  .tag-base{background:var(--amber-soft); color:var(--amber);}
+  .tag-viral{background:var(--green-soft); color:var(--green);}
+  .scenario-desc{font-size:12.5px; color:var(--ink-soft); margin:2px 0 8px;}
+
+  .verdict-tier{
+    background:var(--card); border:1px solid var(--line); border-left:5px solid var(--amber);
+    border-radius:8px; padding:12px 14px; margin:10px 0;
+  }
+  .verdict-tier.cons{border-left-color:#9aa5a8;}
+  .verdict-tier.base{border-left-color:var(--amber);}
+  .verdict-tier.viral{border-left-color:var(--green);}
+  .verdict-tier .vt-head{font-weight:800; font-size:13.5px; margin-bottom:4px;}
+
+  footer{
+    max-width:920px; margin:30px auto 0; padding:16px; text-align:center;
+    color:var(--ink-soft); font-size:11.5px; border-top:1px solid var(--line);
+  }
+
+  /* PIN gate */
+  #pinGate{position:fixed; inset:0; background:var(--paper); z-index:999; display:flex; align-items:center; justify-content:center; padding:20px;}
+  #pinGate .box{background:var(--card); border:1px solid var(--line); border-radius:14px; padding:28px 24px; max-width:320px; width:100%; text-align:center; box-shadow:0 8px 30px rgba(43,33,25,.12);}
+  #pinGate h3{margin-top:0;}
+  #pinGate input{width:100%; font-size:22px; letter-spacing:.4em; text-align:center; padding:10px; border:1px solid var(--line); border-radius:8px; margin:14px 0; background:#fff; color:var(--ink);}
+  #pinGate button{background:var(--red); color:#fff; border:none; border-radius:20px; padding:10px 22px; font-size:14px; font-weight:700; cursor:pointer;}
+  #pinGate .err{color:var(--red-dark); font-size:12.5px; height:16px; margin-top:6px;}
+  body.locked main, body.locked footer{display:none;}
+</style>
+</head>
+<body class="locked">
+
+<div id="pinGate">
+  <div class="box">
+    <h3><span class="en">Enter PIN</span><span class="ko">PIN 입력</span></h3>
+    <input id="pinInput" inputmode="numeric" maxlength="4" autocomplete="off" />
+    <div><button onclick="checkPin()"><span class="en">Unlock</span><span class="ko">잠금 해제</span></button></div>
+    <div class="err" id="pinErr"></div>
+  </div>
+</div>
+
+<header>
+  <div class="header-row">
+    <div class="brand">
+      <span class="en">Jujube · Monetization Report</span>
+      <span class="ko">쥬쥬브 · 수익화 보고서</span>
+    </div>
+    <button class="lang-toggle" onclick="toggleLang()">한국어</button>
+  </div>
+</header>
+
+<main>
+
+  <div class="title-block">
+    <h1>
+      <span class="en">Monetization Model — Post-Launch, Post-Gating</span>
+      <span class="ko">수익화 모델 — 출시 후, 게이팅 적용 후</span>
+    </h1>
+    <div class="subtitle">
+      <span class="en">Prepared 2026-08-06 · Live on iOS today · $7.99/mo · $49.99/yr Pro pricing locked</span>
+      <span class="ko">작성일 2026-08-06 · 오늘 iOS 출시 · Pro 가격 월 $7.99 · 연 $49.99로 확정</span>
+    </div>
+    <div class="meta">
+      <span class="en">Rebuilt from real DB data (ai_feature_limits, ai_usage_events) and the marketing playbook you generated — not the pre-launch guesses from Aug 5.</span>
+      <span class="ko">실제 DB 데이터(ai_feature_limits, ai_usage_events)와 직접 생성한 마케팅 플레이북을 기반으로 다시 만든 모델입니다 — 8월 5일의 출시 전 추정치가 아닙니다.</span>
+    </div>
+  </div>
+
+  <div class="tldr">
+    <span class="en"><b>Short answer:</b> the free tier's AI cost, spread across a mostly-non-paying user base, structurally cancels out subscriber profit until conversion clears roughly <b>3.6%</b> — below that line, more downloads make the loss bigger, not smaller. Base case doesn't clear it until Year 4. This isn't a "beer money → life-changing" story. It's a story about one number: <b>free-to-paid conversion is the entire game, not growth.</b> Below are three honest scenarios, built from your real usage data and real gate limits, plus the one sensitivity table that actually matters.</span>
+    <span class="ko"><b>짧은 답:</b> 대부분 결제하지 않는 사용자 기반에 퍼져 있는 무료 등급의 AI 비용은, 전환율이 약 <b>3.6%</b>를 넘기 전까지는 구독자 이익을 구조적으로 상쇄시킵니다 — 그 선 아래에서는 다운로드가 늘어날수록 손실이 줄어드는 게 아니라 커집니다. 기본 시나리오는 4년차가 되어야 그 선을 넘습니다. 이건 "용돈 수준 → 인생이 바뀌는 수준"의 이야기가 아닙니다. 숫자 하나에 관한 이야기입니다: <b>무료→유료 전환율이 성장보다 훨씬 중요한 전부입니다.</b> 아래는 실제 사용 데이터와 실제 게이트 제한을 바탕으로 만든 세 가지 현실적인 시나리오와, 진짜 중요한 민감도 분석 하나입니다.</span>
+  </div>
+
+  <div class="stat-grid">
+    <div class="stat-card">
+      <span class="num">$0.08 / $0.60</span>
+      <span class="lbl"><span class="en">Validated AI COGS: free MAU / mo — Pro sub / mo</span><span class="ko">검증된 AI 원가: 무료 MAU/월 — Pro 구독자/월</span></span>
+    </div>
+    <div class="stat-card">
+      <span class="num">~3.6%</span>
+      <span class="lbl"><span class="en">Conversion rate where Base case Y3 breaks even</span><span class="ko">기본 시나리오 3년차 손익분기 전환율</span></span>
+    </div>
+    <div class="stat-card">
+      <span class="num">$74/mo</span>
+      <span class="lbl"><span class="en">Base case, Year 5 monthly net</span><span class="ko">기본 시나리오, 5년차 월 순이익</span></span>
+    </div>
+    <div class="stat-card">
+      <span class="num">$395/mo</span>
+      <span class="lbl"><span class="en">Viral case, Year 5 monthly net</span><span class="ko">바이럴 시나리오, 5년차 월 순이익</span></span>
+    </div>
+  </div>
+
+  <!-- SECTION 0: WHERE JUJUBE STANDS TODAY -->
+  <section>
+    <h2><span class="num-badge">1</span><span class="en">Where Jujube Stands, Right Now</span><span class="ko">현재 쥬쥬브의 상태</span></h2>
+
+    <div class="card">
+      <p><span class="badge badge-live"><span class="en">Live</span><span class="ko">출시됨</span></span><span class="en">iOS — launched today, 2026-08-06.</span><span class="ko">iOS — 오늘(2026-08-06) 출시.</span></p>
+      <p><span class="badge badge-soon"><span class="en">Pending</span><span class="ko">대기 중</span></span><span class="en">Android — in Google Play production review.</span><span class="ko">Android — Google Play 정식 심사 중.</span></p>
+      <p><span class="en"><b>Zero App Store reviews yet.</b> 25 total signups, <b>11 active users in the last 30 days</b> (mostly you, Miyoii, 민준, and a handful of friends/family testers — not yet a real external cohort). Every number below starts from that real baseline, not zero.</span>
+      <span class="ko"><b>아직 App Store 리뷰 없음.</b> 총 가입자 25명, <b>최근 30일 활성 사용자 11명</b>(대부분 본인, Miyoii, 민준, 그리고 소수의 지인/가족 테스터 — 아직 실질적인 외부 사용자 그룹은 아님). 아래 모든 수치는 0이 아니라 이 실제 기준선에서 시작합니다.</span></p>
+    </div>
+
+    <h3><span class="en">Free-tier gates, as of 2026-08-05 (live in <code>ai_feature_limits</code>)</span><span class="ko">무료 등급 제한, 2026-08-05 기준 (<code>ai_feature_limits</code>에 적용됨)</span></h3>
+    <div class="table-scroll">
+    <table>
+      <tr><th><span class="en">Feature</span><span class="ko">기능</span></th><th><span class="en">Free / day</span><span class="ko">무료 / 일</span></th><th><span class="en">Pro / day</span><span class="ko">Pro / 일</span></th></tr>
+      <tr><td>recipe-suggest</td><td>2</td><td>20</td></tr>
+      <tr><td>generate-recipe</td><td>3</td><td>30</td></tr>
+      <tr><td>receipt-ocr</td><td>5</td><td>20</td></tr>
+      <tr><td>voice-transcribe</td><td>10</td><td>40</td></tr>
+      <tr><td>dish-photo</td><td>1</td><td>15</td></tr>
+      <tr><td><span class="en">Pantry / shopping / household</span><span class="ko">팬트리 / 장보기 / 가구 공유</span></td><td colspan="2" style="text-align:center;"><span class="en">Unlimited, both tiers</span><span class="ko">두 등급 모두 무제한</span></td></tr>
+    </table>
+    </div>
+    <p class="note"><span class="en">This is the fix the Aug 5 report flagged as the #1 economic risk — it's already shipped. Pro pricing is now decided: <b>$7.99/month</b> or <b>$49.99/year</b> (7-day free trial), both modeled below.</span>
+    <span class="ko">8월 5일 보고서에서 경제적 리스크 1순위로 지적했던 수정 사항이 이미 배포되었습니다. Pro 가격도 확정되었습니다: <b>월 $7.99</b> 또는 <b>연 $49.99</b>(7일 무료 체험), 아래 모델에 모두 반영했습니다.</span></p>
+  </section>
+
+  <!-- SECTION 1: UNIT ECONOMICS -->
+  <section>
+    <h2><span class="num-badge">2</span><span class="en">Unit Economics, Validated Against Real Usage</span><span class="ko">실제 사용량으로 검증한 단위 경제성</span></h2>
+
+    <p><span class="en">The working assumption going in was ~$0.30/active user/month in AI cost. Here's what the real numbers say. Last 30 days: 2,507 AI calls, 11 active users, ~8.08M tokens — but that's founder/team testing hammering every feature repeatedly, not real end-user behavior against the caps above. So instead of using that raw blended rate, this model prices each feature at its real per-request cost (from <code>ai_usage_events</code>' actual model mix — Claude Sonnet 5, Haiku 4.5, GPT-4o-mini, GPT-5.4, GPT-4o) and then applies <b>realistic usage against the new caps</b>, not maxed-out usage.</span>
+    <span class="ko">시작 가정은 활성 사용자당 월 AI 비용 약 $0.30였습니다. 실제 수치는 다음과 같습니다. 최근 30일: AI 호출 2,507건, 활성 사용자 11명, 약 808만 토큰 — 하지만 이는 위 제한을 실제로 겪는 일반 사용자 행동이 아니라 창업자·팀이 모든 기능을 반복적으로 테스트한 결과입니다. 그래서 이 원시 혼합 비율 대신, <code>ai_usage_events</code>의 실제 모델 구성(Claude Sonnet 5, Haiku 4.5, GPT-4o-mini, GPT-5.4, GPT-4o)을 기준으로 기능별 실제 요청당 비용을 계산한 뒤, 한도를 최대치로 소진하는 것이 아니라 <b>새 제한 아래에서의 현실적인 사용량</b>을 적용했습니다.</span></p>
+
+    <div class="table-scroll">
+    <table>
+      <tr><th><span class="en">Feature</span><span class="ko">기능</span></th><th><span class="en">Real $/request</span><span class="ko">실제 요청당 $</span></th><th><span class="en">Dominant model</span><span class="ko">주력 모델</span></th></tr>
+      <tr><td>recipe-suggest</td><td>$0.0112</td><td>Sonnet 5 / GPT-4o-mini</td></tr>
+      <tr><td>generate-recipe</td><td>$0.0599</td><td>Sonnet 5 / GPT-5.4</td></tr>
+      <tr><td>receipt-ocr</td><td>$0.0153</td><td>GPT-4o</td></tr>
+      <tr><td>voice-transcribe</td><td>$0.0032</td><td>Whisper / GPT-4o-mini</td></tr>
+      <tr><td>generate-dish-photo</td><td>~$0.07</td><td>GPT Image</td></tr>
+    </table>
+    </div>
+
+    <div class="key-box">
+      <h4><span class="en">Validated blended AI cost</span><span class="ko">검증된 혼합 AI 비용</span></h4>
+      <p><span class="en"><b>Free MAU: ~$0.08/month blended</b> (most free monthly-actives only touch the unlimited pantry/shopping features and never call a gated AI endpoint that month; the minority who do use AI lightly, well under the caps). <b>Pro subscriber: ~$0.60/month blended</b> (higher usage since it's the reason they're paying, still nowhere near maxing daily caps). Both numbers are used everywhere below.</span>
+      <span class="ko"><b>무료 MAU: 월 약 $0.08 (혼합)</b> (대부분의 무료 월간 활성 사용자는 무제한 팬트리/장보기 기능만 사용하고 그 달에 게이팅된 AI 엔드포인트를 전혀 호출하지 않음; AI를 사용하는 소수도 한도보다 훨씬 가볍게 사용). <b>Pro 구독자: 월 약 $0.60 (혼합)</b> (결제한 이유이니만큼 사용량이 더 많지만, 그래도 일일 한도를 거의 소진하지 않음). 아래 모든 계산에 이 두 수치를 사용했습니다.</span></p>
+    </div>
+
+    <div class="risk-box">
+      <h4><span class="badge badge-risk"><span class="en">Worth watching</span><span class="ko">주의할 점</span></span></h4>
+      <p><span class="en">If a Pro subscriber actually maxed every daily cap every day of the month, real AI cost would run <b>~$105/month</b> — well above the $7.99 subscription. That's a tail case (nobody uses every feature to its limit daily), but it's why the caps exist at all, and why they should stay server-tunable rather than get loosened casually as Pro grows.</span>
+      <span class="ko">Pro 구독자가 실제로 매일 모든 일일 한도를 최대치로 사용한다면, 실제 AI 비용은 <b>월 약 $105</b>까지 올라갑니다 — $7.99 구독료를 크게 웃도는 수준입니다. 이는 극단적인 경우이지만(매일 모든 기능을 한도까지 쓰는 사용자는 없음), 애초에 한도가 존재하는 이유이자, Pro 사용자가 늘어나도 한도를 가볍게 풀어서는 안 되는 이유입니다.</span></p>
+    </div>
+  </section>
+
+  <!-- SECTION 2: SCENARIOS -->
+  <section>
+    <h2><span class="num-badge">3</span><span class="en">Year 1 / 2 / 3 / 5 — Three Scenarios</span><span class="ko">1/2/3/5년차 — 세 가지 시나리오</span></h2>
+
+    <p><span class="en">All three assume <b>you handle marketing yourself, full-time alongside dev work</b>, using the playbook's own 4-tier spend structure (Tier 0 $0–40/mo → Tier 3 $5k+/mo). Marketing spend below is <b>self-funded</b> — capped so it never outruns what the app's own revenue can sustain that year, per the playbook's own warning against skipping to a bigger tier before you've earned it.</span>
+    <span class="ko">세 시나리오 모두 <b>본인이 개발과 병행해 마케팅을 전담</b>한다고 가정하며, 플레이북의 4단계 예산 구조(Tier 0 $0–40/월 → Tier 3 $5천+/월)를 사용합니다. 아래 마케팅 지출은 <b>자체 자금 조달</b>입니다 — 그 해 앱 자체 매출이 감당할 수 있는 수준을 넘지 않도록 제한했으며, 이는 벌지도 않은 상위 단계로 건너뛰지 말라는 플레이북 자체의 경고를 반영한 것입니다.</span></p>
+
+    <div class="table-scroll">
+    <table>
+      <tr><th><span class="en">Assumption</span><span class="ko">가정</span></th><th><span class="en">Conservative</span><span class="ko">보수적</span></th><th><span class="en">Base</span><span class="ko">기본</span></th><th><span class="en">Viral</span><span class="ko">바이럴</span></th></tr>
+      <tr><td><span class="en">Playbook execution</span><span class="ko">플레이북 실행 수준</span></td><td><span class="en">ASO + word-of-mouth only</span><span class="ko">ASO + 입소문만</span></td><td><span class="en">Steady content + smart ASO</span><span class="ko">꾸준한 콘텐츠 + 스마트 ASO</span></td><td><span class="en">Full playbook + viral moment</span><span class="ko">전체 플레이북 + 바이럴 모먼트</span></td></tr>
+      <tr><td><span class="en">New downloads, Y1 → Y5</span><span class="ko">신규 다운로드, 1→5년차</span></td><td>2,000 → 6,000</td><td>4,000 → 19,000</td><td>6,000 → 40,000</td></tr>
+      <tr><td><span class="en">Free → paid conversion, Y1 → Y5</span><span class="ko">무료→유료 전환율, 1→5년차</span></td><td>2.0% → 3.0%</td><td>2.5% → 4.5%</td><td>3.0% → 6.0%</td></tr>
+      <tr><td><span class="en">Annual-plan mix, Y1 → Y5</span><span class="ko">연간 플랜 비중, 1→5년차</span></td><td>20% → 35%</td><td>25% → 45%</td><td>30% → 55%</td></tr>
+      <tr><td><span class="en">Marketing spend/mo, Y1 → Y5</span><span class="ko">월 마케팅 지출, 1→5년차</span></td><td>$20 → $40</td><td>$150 → $747</td><td>$350 → $2,127</td></tr>
+    </table>
+    </div>
+    <p class="note"><span class="en">MAU is modeled with cohort decay (35% of a year's downloads stay monthly-active through their first year, 55% further attrition each year after) — not flat retention on all-time installs, which would overcount users who quietly left years ago. Store fee 30% throughout (see Assumptions). Fixed costs ~$150–600/yr (Apple/Google dev fees, Supabase, RevenueCat once MRR &gt; $2.5k).</span>
+    <span class="ko">MAU는 코호트 감쇠 모델을 사용합니다 (해당 연도 다운로드의 35%가 첫 해 동안 월간 활성 상태 유지, 이후 매년 55%씩 추가 이탈) — 전체 누적 설치에 고정 유지율을 적용하지 않았는데, 그럴 경우 몇 년 전 조용히 떠난 사용자까지 과대 집계되기 때문입니다. 스토어 수수료는 전 기간 30% (가정 참고). 고정비는 연 약 $150–600 (Apple/Google 개발자 비용, Supabase, MRR $2.5k 초과 시 RevenueCat).</span></p>
+
+    <!-- Conservative -->
+    <div class="scenario-head"><span class="scenario-tag tag-cons"><span class="en">Conservative</span><span class="ko">보수적</span></span></div>
+    <p class="scenario-desc"><span class="en">Mostly ASO + word-of-mouth, minimal content grind.</span><span class="ko">주로 ASO + 입소문, 콘텐츠 제작은 최소한으로.</span></p>
+    <div class="table-scroll">
+    <table>
+      <tr><th><span class="en">Year</span><span class="ko">연도</span></th><th><span class="en">Installs/mo (EOY)</span><span class="ko">월 설치 (연말)</span></th><th>MAU</th><th><span class="en">Conv %</span><span class="ko">전환율</span></th><th><span class="en">Paid Subs</span><span class="ko">유료 구독자</span></th><th>MRR</th><th>ARR</th><th><span class="en">Monthly Net</span><span class="ko">월 순이익</span></th><th><span class="en">Annual Net</span><span class="ko">연 순이익</span></th></tr>
+      <tr><td>Y1</td><td>167</td><td>700</td><td>2.0%</td><td>14</td><td>$101</td><td>$1,214</td><td class="neg">–$24</td><td class="neg">–$294</td></tr>
+      <tr><td>Y2</td><td>219</td><td>1,236</td><td>2.25%</td><td>28</td><td>$197</td><td>$2,364</td><td class="neg">–$35</td><td class="neg">–$426</td></tr>
+      <tr><td>Y3</td><td>289</td><td>1,769</td><td>2.5%</td><td>44</td><td>$307</td><td>$3,682</td><td class="neg">–$24</td><td class="neg">–$291</td></tr>
+      <tr class="net-row"><td>Y5</td><td>500</td><td>3,176</td><td>3.0%</td><td>95</td><td>$634</td><td>$7,606</td><td class="pos">+$50</td><td class="pos">+$600</td></tr>
+    </table>
+    </div>
+
+    <!-- Base -->
+    <div class="scenario-head"><span class="scenario-tag tag-base"><span class="en">Base</span><span class="ko">기본</span></span></div>
+    <p class="scenario-desc"><span class="en">Steady content (3–5x/week) + smart ASO, no viral spike.</span><span class="ko">꾸준한 콘텐츠(주 3–5회) + 스마트 ASO, 바이럴 스파이크 없음.</span></p>
+    <div class="table-scroll">
+    <table>
+      <tr><th><span class="en">Year</span><span class="ko">연도</span></th><th><span class="en">Installs/mo (EOY)</span><span class="ko">월 설치 (연말)</span></th><th>MAU</th><th><span class="en">Conv %</span><span class="ko">전환율</span></th><th><span class="en">Paid Subs</span><span class="ko">유료 구독자</span></th><th>MRR</th><th>ARR</th><th><span class="en">Monthly Net</span><span class="ko">월 순이익</span></th><th><span class="en">Annual Net</span><span class="ko">연 순이익</span></th></tr>
+      <tr><td>Y1</td><td>333</td><td>1,400</td><td>2.5%</td><td>35</td><td>$246</td><td>$2,954</td><td class="neg">–$120</td><td class="neg">–$1,438</td></tr>
+      <tr><td>Y2</td><td>492</td><td>2,697</td><td>3.0%</td><td>81</td><td>$554</td><td>$6,643</td><td class="neg">–$60</td><td class="neg">–$723</td></tr>
+      <tr><td>Y3</td><td>726</td><td>4,265</td><td>3.5%</td><td>149</td><td>$993</td><td>$11,914</td><td class="neg">–$18</td><td class="neg">–$215</td></tr>
+      <tr class="net-row"><td>Y5</td><td>1,583</td><td>9,541</td><td>4.5%</td><td>429</td><td>$2,692</td><td>$32,298</td><td class="pos">+$74</td><td class="pos">+$884</td></tr>
+    </table>
+    </div>
+
+    <!-- Viral -->
+    <div class="scenario-head"><span class="scenario-tag tag-viral"><span class="en">Viral</span><span class="ko">바이럴</span></span></div>
+    <p class="scenario-desc"><span class="en">Full playbook: content 3–5x/week, UGC creators, KO/ZH ASO, at least one real viral moment.</span><span class="ko">플레이북 전체 실행: 주 3–5회 콘텐츠, UGC 크리에이터, 한/중 ASO, 실제 바이럴 모먼트 최소 1회.</span></p>
+    <div class="table-scroll">
+    <table>
+      <tr><th><span class="en">Year</span><span class="ko">연도</span></th><th><span class="en">Installs/mo (EOY)</span><span class="ko">월 설치 (연말)</span></th><th>MAU</th><th><span class="en">Conv %</span><span class="ko">전환율</span></th><th><span class="en">Paid Subs</span><span class="ko">유료 구독자</span></th><th>MRR</th><th>ARR</th><th><span class="en">Monthly Net</span><span class="ko">월 순이익</span></th><th><span class="en">Annual Net</span><span class="ko">연 순이익</span></th></tr>
+      <tr><td>Y1</td><td>500</td><td>2,100</td><td>3.0%</td><td>63</td><td>$431</td><td>$5,173</td><td class="neg">–$261</td><td class="neg">–$3,132</td></tr>
+      <tr><td>Y2</td><td>803</td><td>4,319</td><td>3.75%</td><td>162</td><td>$1,070</td><td>$12,836</td><td class="neg">–$71</td><td class="neg">–$852</td></tr>
+      <tr><td>Y3</td><td>1,291</td><td>7,366</td><td>4.5%</td><td>331</td><td>$2,110</td><td>$25,316</td><td class="pos">+$82</td><td class="pos">+$982</td></tr>
+      <tr class="net-row"><td>Y5</td><td>3,333</td><td>19,412</td><td>6.0%</td><td>1,165</td><td>$6,856</td><td>$82,278</td><td class="pos">+$395</td><td class="pos">+$4,739</td></tr>
+    </table>
+    </div>
+    <p class="note"><span class="en">"Monthly Net" = MRR minus store fee, AI COGS (free MAU + paid subs, blended rates above), self-funded marketing spend, and fixed costs. It is pre-tax and does not value your time.</span>
+    <span class="ko">"월 순이익" = MRR에서 스토어 수수료, AI 원가(위 무료 MAU + 유료 구독자 혼합 비율), 자체 조달 마케팅 지출, 고정비를 뺀 값입니다. 세전이며 본인의 시간 가치는 반영하지 않았습니다.</span></p>
+  </section>
+
+  <!-- SECTION 3: SENSITIVITY -->
+  <section>
+    <h2><span class="num-badge">4</span><span class="en">The One Knob That Matters</span><span class="ko">진짜 중요한 조절 손잡이 하나</span></h2>
+    <p><span class="en">Holding everything else in the Base case Year 3 fixed — same MAU (4,265), same ARPU ($6.65), same marketing spend ($249/mo), same fixed costs — here's what happens if only the conversion rate changes:</span>
+    <span class="ko">기본 시나리오 3년차의 다른 모든 조건은 고정한 채 — 동일한 MAU(4,265), 동일한 ARPU($6.65), 동일한 마케팅 지출(월 $249), 동일한 고정비 — 전환율만 바뀌면 어떻게 되는지 보여줍니다:</span></p>
+    <div class="table-scroll">
+    <table>
+      <tr><th><span class="en">Conversion</span><span class="ko">전환율</span></th><th><span class="en">Paid Subs</span><span class="ko">유료 구독자</span></th><th>MRR</th><th><span class="en">Monthly Net</span><span class="ko">월 순이익</span></th></tr>
+      <tr><td>2.0%</td><td>85</td><td>$567</td><td class="neg">–$283</td></tr>
+      <tr><td>3.5% <span class="note">(Base Y3)</span></td><td>149</td><td>$993</td><td class="neg">–$18</td></tr>
+      <tr><td>5.0%</td><td>213</td><td>$1,418</td><td class="pos">+$247</td></tr>
+      <tr><td>7.0%</td><td>299</td><td>$1,985</td><td class="pos">+$599</td></tr>
+    </table>
+    </div>
+    <p class="note"><span class="en">Doubling downloads roughly doubles both revenue and free-tier AI cost — it barely moves the profit line. Doubling conversion moves straight to the bottom line with almost no added cost. Every paywall, onboarding, and retention decision from here should be judged against "does this move conversion," not "does this move installs."</span>
+    <span class="ko">다운로드를 두 배로 늘리면 매출과 무료 등급 AI 비용도 거의 두 배로 늘어나 — 순이익 선은 거의 움직이지 않습니다. 전환율을 두 배로 늘리면 추가 비용 거의 없이 곧바로 순이익으로 이어집니다. 앞으로의 모든 페이월, 온보딩, 리텐션 관련 결정은 "설치 수를 늘리는가"가 아니라 "전환율을 움직이는가"를 기준으로 판단해야 합니다.</span></p>
+  </section>
+
+  <!-- SECTION 4: ASSUMPTIONS -->
+  <section>
+    <h2><span class="num-badge">5</span><span class="en">Assumptions, Stated Plainly</span><span class="ko">명시적으로 밝힌 가정</span></h2>
+    <ul>
+      <li><span class="en">Store fee: <b>30%</b> throughout, per your instruction. Apple's Small Business Program and Google's &lt;$1M tier both drop this to <b>15%</b> once enrolled — worth confirming enrollment, since it roughly doubles net margin at every scale in this model. Not applied here to stay conservative.</span>
+      <span class="ko">스토어 수수료: 요청하신 대로 전 기간 <b>30%</b> 적용. Apple 소규모 비즈니스 프로그램과 Google $1M 미만 등급은 가입 시 <b>15%</b>로 낮아집니다 — 이 모델의 모든 규모에서 순마진이 거의 두 배가 되므로 가입 여부를 확인할 가치가 있습니다. 보수적으로 반영하기 위해 여기서는 적용하지 않았습니다.</span></li>
+      <li><span class="en">AI COGS: $0.08/mo per free MAU, $0.60/mo per Pro subscriber — derived from real per-request costs above, applied at realistic (not cap-maxed) usage. See Section 2.</span>
+      <span class="ko">AI 원가: 무료 MAU당 월 $0.08, Pro 구독자당 월 $0.60 — 위의 실제 요청당 비용을 기반으로, 한도를 최대 소진하지 않는 현실적인 사용량에 적용. 2절 참고.</span></li>
+      <li><span class="en">Marketing spend: self-funded per the playbook's 4-tier structure, capped so it never exceeds what that year's revenue can sustain.</span>
+      <span class="ko">마케팅 지출: 플레이북의 4단계 구조에 따라 자체 조달, 해당 연도 매출이 감당할 수 있는 수준을 넘지 않도록 제한.</span></li>
+      <li><span class="en">Conversion starts near 2–3% in Year 1 (gate-driven — this is the first version of the app with any paywall at all) and climbs toward 3–6% by Year 5 as onboarding, the paywall itself, and retention loops (receipt→expiry→"cook tonight" push) mature.</span>
+      <span class="ko">전환율은 1년차에 2–3% 수준에서 시작하며(게이팅 기반 — 페이월이 있는 첫 번째 버전), 온보딩·페이월 자체·리텐션 루프(영수증→유통기한→"오늘 저녁 뭐먹지" 푸시)가 성숙하면서 5년차에는 3–6%까지 상승.</span></li>
+      <li><span class="en">MAU: cohort-decay model, not flat retention on all-time cumulative installs (see Section 3 note) — this alone is the biggest structural difference from the Aug 5 report, and the main reason these numbers are more conservative.</span>
+      <span class="ko">MAU: 전체 누적 설치에 고정 유지율을 적용하지 않고 코호트 감쇠 모델 사용 (3절 참고) — 8월 5일 보고서와의 가장 큰 구조적 차이이며, 이번 수치가 더 보수적인 주된 이유입니다.</span></li>
+    </ul>
+  </section>
+
+  <!-- SECTION 5: VERDICT -->
+  <section>
+    <h2><span class="num-badge">6</span><span class="en">The Honest Verdict</span><span class="ko">솔직한 결론</span></h2>
+
+    <div class="verdict-tier cons">
+      <div class="vt-head"><span class="en">Conservative: flat for five years, and that's fine</span><span class="ko">보수적: 5년 내내 제자리, 그리고 그건 괜찮습니다</span></div>
+      <p><span class="en">ASO and word-of-mouth alone keep this roughly break-even the whole way — Y1 nets –$294, Y5 nets +$600. It never becomes a business, but it also never costs you real money. This is what "do the free stuff and let it run" actually buys you: proof the product doesn't lose money, nothing more.</span>
+      <span class="ko">ASO와 입소문만으로는 5년 내내 대략 손익분기 수준에 머뭅니다 — 1년차 –$294, 5년차 +$600. 사업이 되지는 않지만, 실제로 돈이 나가지도 않습니다. "무료로 할 수 있는 걸 하고 그냥 놔둔다"가 실제로 사주는 것은 딱 이것입니다: 제품이 손해를 보지 않는다는 증거, 그 이상은 아닙니다.</span></p>
+    </div>
+    <div class="verdict-tier base">
+      <div class="vt-head"><span class="en">Base: crosses into real profit around Year 4</span><span class="ko">기본: 4년차 무렵부터 실질적인 흑자로 전환</span></div>
+      <p><span class="en">Steady content plus smart ASO stays net-negative through Year 3 (–$18/mo at Y3, essentially break-even) and turns modestly positive by Y4 (+$20/mo) and Y5 (+$74/mo, $884/yr). That's real, sustainable, and small — not enough to matter financially, but the trajectory is the right shape: losses shrinking every year, not growing.</span>
+      <span class="ko">꾸준한 콘텐츠와 스마트 ASO는 3년차까지 순손실을 유지하다가(3년차 월 –$18, 사실상 손익분기) 4년차(월 +$20)와 5년차(월 +$74, 연 $884)에 완만하게 흑자로 전환합니다. 실질적이고 지속 가능하지만 규모는 작습니다 — 재정적으로 의미 있는 수준은 아니지만, 궤적의 방향은 맞습니다: 손실이 매년 커지는 게 아니라 줄어듭니다.</span></p>
+    </div>
+    <div class="verdict-tier viral">
+      <div class="vt-head"><span class="en">Viral: the only scenario worth the extra effort — and even here, modest</span><span class="ko">바이럴: 추가 노력을 들일 가치가 있는 유일한 시나리오 — 여기서도 규모는 크지 않습니다</span></div>
+      <p><span class="en">Full playbook execution — UGC creators, KO/ZH ASO, a real viral moment — turns profitable earliest (Y3: +$82/mo) and reaches +$395/mo ($4,739/yr) by Y5. That's the first scenario where the number is worth noticing, but it still requires genuinely showing up: 3–5 posts a week for years, sourcing and directing UGC creators, and one thing you can't fully plan for — an actual viral moment. Without that last piece, Viral quietly degrades toward Base.</span>
+      <span class="ko">플레이북 전체 실행 — UGC 크리에이터, 한/중 ASO, 실제 바이럴 모먼트 — 은 가장 빨리 흑자로 전환되고(3년차: 월 +$82) 5년차에는 월 +$395(연 $4,739)에 도달합니다. 눈여겨볼 만한 숫자가 나오는 첫 시나리오지만, 여전히 진짜로 실행해야 합니다: 몇 년간 주 3–5회 포스팅, UGC 크리에이터 소싱과 디렉팅, 그리고 완전히 계획할 수 없는 한 가지 — 실제 바이럴 모먼트. 이 마지막 요소가 없으면 바이럴 시나리오는 조용히 기본 시나리오 수준으로 수렴합니다.</span></p>
+    </div>
+
+    <div class="card">
+      <p><b><span class="en">Bottom line:</span><span class="ko">결론:</span></b> <span class="en">this is a structurally thin business until conversion clears ~3.6%, because the free tier's AI cost is spread across a MAU base that's 95%+ non-paying no matter how big it gets. That means the highest-leverage work isn't chasing downloads — it's everything that raises conversion and reduces churn: paywall design, the receipt→expiry→"cook tonight" retention loop, and pushing the annual-plan mix up. Marketing (Section 3 of the companion report) matters, but only after that foundation is in place — spend ahead of it and you're just buying bigger losses at the same conversion rate.</span>
+      <span class="ko">이 사업은 전환율이 약 3.6%를 넘기 전까지는 구조적으로 얇은 사업입니다. 규모가 아무리 커져도 무료 등급의 AI 비용이 95% 이상이 결제하지 않는 MAU 기반에 퍼져 있기 때문입니다. 즉, 가장 레버리지가 큰 작업은 다운로드를 쫓는 것이 아니라 전환율을 높이고 이탈을 줄이는 모든 것입니다: 페이월 설계, 영수증→유통기한→"오늘 저녁 뭐먹지" 리텐션 루프, 그리고 연간 플랜 비중 확대. 마케팅(동반 보고서 3절)도 중요하지만, 이 기반이 마련된 이후에나 의미가 있습니다 — 그전에 지출하면 같은 전환율에서 손실만 더 커질 뿐입니다.</span></p>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <span class="en">Model built from live DB data (ai_feature_limits, ai_usage_events — 2026-08-06) and your marketing playbook. All future-year figures are estimates with stated assumptions, not projections of certainty.</span>
+  <span class="ko">실제 DB 데이터(ai_feature_limits, ai_usage_events — 2026-08-06 기준)와 본인의 마케팅 플레이북으로 만든 모델입니다. 향후 연도 수치는 명시된 가정에 기반한 추정치이며, 확정된 예측이 아닙니다.</span>
+</footer>
+
+<script>
+  let isKorean = false;
+  function toggleLang(){
+    isKorean = !isKorean;
+    document.querySelectorAll('.en').forEach(el => el.classList.toggle('hide', isKorean));
+    document.querySelectorAll('.ko').forEach(el => el.classList.toggle('show', isKorean));
+    document.querySelectorAll('.en-block').forEach(el => el.classList.toggle('hide', isKorean));
+    document.querySelectorAll('.ko-block').forEach(el => el.classList.toggle('show', isKorean));
+    document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+    document.documentElement.lang = isKorean ? 'ko' : 'en';
+  }
+
+  const CORRECT_PIN = "0411";
+  function checkPin(){
+    const val = document.getElementById('pinInput').value.trim();
+    if(val === CORRECT_PIN){
+      document.body.classList.remove('locked');
+      document.getElementById('pinGate').style.display = 'none';
+      try{ sessionStorage.setItem('jjb_unlocked_mon', '1'); }catch(e){}
+    } else {
+      document.getElementById('pinErr').textContent = isKorean ? '잘못된 PIN입니다' : 'Incorrect PIN';
+    }
+  }
+  document.getElementById('pinInput').addEventListener('keydown', function(e){
+    if(e.key === 'Enter') checkPin();
+  });
+  try{
+    if(sessionStorage.getItem('jjb_unlocked_mon') === '1'){
+      document.body.classList.remove('locked');
+      document.getElementById('pinGate').style.display = 'none';
+    }
+  }catch(e){}
+</script>
+
+</body>
+</html>

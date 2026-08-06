@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jujube 90-Day Marketing Roadmap</title>
+<style>
+  :root{
+    --paper:#faf5ec;
+    --paper-2:#f2e9d8;
+    --ink:#2b2119;
+    --ink-soft:#5c4f42;
+    --red:#b23a2e;
+    --red-dark:#8c2c22;
+    --red-soft:#f4dcd8;
+    --green:#3f7a52;
+    --green-soft:#dcefe0;
+    --amber:#b6791f;
+    --amber-soft:#f6e8cf;
+    --line:#e2d3ba;
+    --card:#fffdf8;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    background:var(--paper);
+    color:var(--ink);
+    line-height:1.55;
+    padding-bottom:60px;
+  }
+  .en{display:inline;}
+  .ko{display:none;}
+  .ko.show{display:inline !important;}
+  .en.hide{display:none !important;}
+  .en-block{display:block;}
+  .ko-block{display:none;}
+  .ko-block.show{display:block !important;}
+  .en-block.hide{display:none !important;}
+
+  header{
+    position:sticky; top:0; z-index:50;
+    background:linear-gradient(180deg,var(--paper) 85%, transparent);
+    backdrop-filter:blur(6px);
+    padding:14px 16px 8px;
+    border-bottom:1px solid var(--line);
+  }
+  .header-row{display:flex; justify-content:space-between; align-items:flex-start; gap:12px; max-width:920px; margin:0 auto;}
+  .brand{font-size:13px; letter-spacing:.14em; text-transform:uppercase; color:var(--red-dark); font-weight:700;}
+  .lang-toggle{
+    background:var(--red); color:#fff; border:none; border-radius:20px;
+    padding:8px 16px; font-size:13px; font-weight:600; cursor:pointer;
+    box-shadow:0 2px 6px rgba(140,44,34,.25);
+    white-space:nowrap;
+    flex-shrink:0;
+  }
+  .lang-toggle:active{transform:translateY(1px);}
+
+  main{max-width:920px; margin:0 auto; padding:0 16px;}
+
+  .title-block{padding:22px 0 6px;}
+  h1{font-size:25px; margin:4px 0 6px; color:var(--red-dark); line-height:1.25;}
+  .subtitle{color:var(--ink-soft); font-size:14px; margin-bottom:2px;}
+  .meta{color:var(--ink-soft); font-size:12.5px;}
+
+  .tldr{
+    background:var(--card); border:1px solid var(--line); border-left:5px solid var(--red);
+    border-radius:10px; padding:16px 18px; margin:18px 0 22px; font-size:15px;
+  }
+
+  .stat-grid{
+    display:grid; grid-template-columns:repeat(2,1fr); gap:10px; margin:16px 0 24px;
+  }
+  @media(min-width:640px){ .stat-grid{grid-template-columns:repeat(4,1fr);} }
+  .stat-card{
+    background:var(--card); border:1px solid var(--line); border-radius:10px;
+    padding:14px 12px; text-align:center;
+  }
+  .stat-card .num{font-size:17px; font-weight:800; color:var(--red-dark); display:block; margin-bottom:2px;}
+  .stat-card .lbl{font-size:11.5px; color:var(--ink-soft); line-height:1.3;}
+
+  section{margin:34px 0;}
+  h2{
+    font-size:19px; color:var(--red-dark); border-bottom:2px solid var(--red-soft);
+    padding-bottom:8px; margin-bottom:14px; display:flex; align-items:center; gap:8px;
+  }
+  h2 .num-badge{
+    background:var(--red); color:#fff; font-size:12px; width:24px; height:24px; border-radius:50%;
+    display:inline-flex; align-items:center; justify-content:center; flex-shrink:0;
+  }
+  h3{font-size:15.5px; color:var(--ink); margin:20px 0 8px;}
+  p{margin:8px 0;}
+  .note{font-size:12.5px; color:var(--ink-soft); font-style:italic;}
+
+  .card{
+    background:var(--card); border:1px solid var(--line); border-radius:10px; padding:14px 16px; margin:12px 0;
+  }
+
+  .badge{
+    display:inline-block; font-size:10.5px; font-weight:700; letter-spacing:.03em;
+    padding:3px 9px; border-radius:12px; margin-right:6px; text-transform:uppercase;
+  }
+  .badge-cost{background:var(--amber-soft); color:var(--amber);}
+  .badge-hrs{background:#e4e9ea; color:#3c5a5f;}
+  .badge-out{background:var(--green-soft); color:var(--green);}
+  .badge-wedge{background:var(--red-soft); color:var(--red-dark);}
+
+  table{width:100%; border-collapse:collapse; font-size:12px; margin:10px 0 6px;}
+  th,td{padding:7px 6px; text-align:right; border-bottom:1px solid var(--line); white-space:nowrap;}
+  th:first-child,td:first-child{text-align:left; white-space:normal;}
+  td:first-child{white-space:normal;}
+  th{background:var(--paper-2); font-weight:700; color:var(--ink); font-size:11px;}
+  tr:last-child td{border-bottom:none;}
+  .table-scroll{overflow-x:auto; -webkit-overflow-scrolling:touch; border:1px solid var(--line); border-radius:10px;}
+  .table-scroll table{margin:0;}
+  .table-scroll th,.table-scroll td{border-bottom:1px solid var(--line);}
+
+  .week-block{
+    background:var(--card); border:1px solid var(--line); border-radius:10px; padding:14px 16px; margin:12px 0;
+  }
+  .week-head{display:flex; align-items:center; gap:8px; margin-bottom:8px; flex-wrap:wrap;}
+  .week-num{
+    background:var(--red-dark); color:#fff; font-size:12px; font-weight:800; padding:3px 12px; border-radius:12px;
+  }
+  .week-dates{font-size:12px; color:var(--ink-soft);}
+  .action-item{border-top:1px dashed var(--line); padding:9px 0;}
+  .action-item:first-of-type{border-top:none; padding-top:2px;}
+  .action-title{font-weight:700; font-size:13.5px; margin-bottom:3px;}
+  .action-meta{display:flex; gap:6px; flex-wrap:wrap; margin-bottom:4px;}
+  .action-out{font-size:12.5px; color:var(--ink-soft);}
+
+  .phase-head{
+    display:flex; align-items:center; gap:10px; margin:30px 0 8px;
+  }
+  .phase-tag{
+    font-size:12px; font-weight:800; text-transform:uppercase; letter-spacing:.05em;
+    padding:5px 12px; border-radius:6px; background:var(--red); color:#fff;
+  }
+  .phase-desc{font-size:13px; color:var(--ink-soft);}
+
+  .checklist{list-style:none; padding:0; margin:10px 0;}
+  .checklist li{
+    background:var(--card); border:1px solid var(--line); border-radius:8px;
+    padding:10px 14px; margin-bottom:8px; display:flex; gap:10px; align-items:flex-start;
+  }
+  .checklist .cb{
+    width:18px; height:18px; border:2px solid var(--red); border-radius:4px; flex-shrink:0; margin-top:1px;
+  }
+  .checklist .day-tag{font-weight:800; color:var(--red-dark); font-size:12px; margin-right:6px;}
+
+  .wedge-box{
+    background:var(--red-soft); border:1px solid #e0b3ac; border-radius:10px; padding:16px; margin:16px 0;
+  }
+  .wedge-box h4{margin:0 0 6px; color:var(--red-dark); font-size:15px;}
+
+  footer{
+    max-width:920px; margin:30px auto 0; padding:16px; text-align:center;
+    color:var(--ink-soft); font-size:11.5px; border-top:1px solid var(--line);
+  }
+
+  #pinGate{position:fixed; inset:0; background:var(--paper); z-index:999; display:flex; align-items:center; justify-content:center; padding:20px;}
+  #pinGate .box{background:var(--card); border:1px solid var(--line); border-radius:14px; padding:28px 24px; max-width:320px; width:100%; text-align:center; box-shadow:0 8px 30px rgba(43,33,25,.12);}
+  #pinGate h3{margin-top:0;}
+  #pinGate input{width:100%; font-size:22px; letter-spacing:.4em; text-align:center; padding:10px; border:1px solid var(--line); border-radius:8px; margin:14px 0; background:#fff; color:var(--ink);}
+  #pinGate button{background:var(--red); color:#fff; border:none; border-radius:20px; padding:10px 22px; font-size:14px; font-weight:700; cursor:pointer;}
+  #pinGate .err{color:var(--red-dark); font-size:12.5px; height:16px; margin-top:6px;}
+  body.locked main, body.locked footer{display:none;}
+
+  @media print {
+    header, .lang-toggle, .tldr, .stat-grid { display:none !important; }
+    section:not(#printChecklist){ display:none !important; }
+    #printChecklist { display:block !important; }
+  }
+</style>
+</head>
+<body class="locked">
+
+<div id="pinGate">
+  <div class="box">
+    <h3><span class="en">Enter PIN</span><span class="ko">PIN 입력</span></h3>
+    <input id="pinInput" inputmode="numeric" maxlength="4" autocomplete="off" />
+    <div><button onclick="checkPin()"><span class="en">Unlock</span><span class="ko">잠금 해제</span></button></div>
+    <div class="err" id="pinErr"></div>
+  </div>
+</div>
+
+<header>
+  <div class="header-row">
+    <div class="brand">
+      <span class="en">Jujube · Marketing Roadmap</span>
+      <span class="ko">쥬쥬브 · 마케팅 로드맵</span>
+    </div>
+    <button class="lang-toggle" onclick="toggleLang()">한국어</button>
+  </div>
+</header>
+
+<main>
+
+  <div class="title-block">
+    <h1>
+      <span class="en">90-Day Marketing Roadmap</span>
+      <span class="ko">90일 마케팅 로드맵</span>
+    </h1>
+    <div class="subtitle">
+      <span class="en">Distilled from your playbook · Days 1–90 from launch, 2026-08-06 → 2026-11-04</span>
+      <span class="ko">본인이 만든 플레이북을 압축 · 출시 1–90일차, 2026-08-06 → 2026-11-04</span>
+    </div>
+    <div class="meta">
+      <span class="en">Action-oriented, specific to Jujube today: live on iOS, zero reviews, no paywall yet, solo founder, KO/ZH native.</span>
+      <span class="ko">오늘 쥬쥬브 상황에 맞춘 실행 중심 로드맵: iOS 출시, 리뷰 0개, 페이월 아직 없음, 1인 창업, 한/중 네이티브 지원.</span>
+    </div>
+  </div>
+
+  <div class="tldr">
+    <span class="en"><b>Where you actually stand today:</b> launched on iOS this morning, Android in Play review, zero reviews, no live paywall. Your playbook is excellent but generic-sequenced — this roadmap re-sequences it around the three things that are true about Jujube specifically: nobody's reviewed it yet, you can't monetize a leaky funnel you haven't proven yet, and you speak two languages almost no competitor speaks at all. Everything below is dated, costed, and time-boxed.</span>
+    <span class="ko"><b>오늘 실제 위치:</b> 오늘 아침 iOS 출시, Android는 Play 심사 중, 리뷰 0개, 페이월 아직 없음. 플레이북 자체는 훌륭하지만 순서가 일반적입니다 — 이 로드맵은 쥬쥬브에 특히 해당하는 세 가지 사실을 중심으로 순서를 다시 짰습니다: 아직 아무도 리뷰를 남기지 않았고, 검증되지 않은 새는 퍼널로는 수익화할 수 없으며, 경쟁사 대부분이 전혀 구사하지 못하는 두 언어를 구사합니다. 아래 모든 항목에는 날짜, 비용, 소요 시간이 명시되어 있습니다.</span>
+  </div>
+
+  <div class="stat-grid">
+    <div class="stat-card">
+      <span class="num">$0–40</span>
+      <span class="lbl"><span class="en">Total spend, Week 1–4 (Tier 0 bootstrap)</span><span class="ko">1–4주차 총 지출 (Tier 0 부트스트랩)</span></span>
+    </div>
+    <div class="stat-card">
+      <span class="num">~12–15 hrs/wk</span>
+      <span class="lbl"><span class="en">Time cost, Weeks 1–4</span><span class="ko">1–4주차 시간 투입</span></span>
+    </div>
+    <div class="stat-card">
+      <span class="num">EN + KO + ZH</span>
+      <span class="lbl"><span class="en">Native from day one — your real unfair advantage</span><span class="ko">첫날부터 네이티브 — 진짜 불공정한 우위</span></span>
+    </div>
+    <div class="stat-card">
+      <span class="num">$225–450</span>
+      <span class="lbl"><span class="en">First UGC batch, Week 2 (2–3 beginner creators)</span><span class="ko">2주차 첫 UGC 배치 (초급 크리에이터 2–3명)</span></span>
+    </div>
+  </div>
+
+  <!-- KO/ZH WEDGE -->
+  <section>
+    <h2><span class="num-badge">1</span><span class="en">The KO/ZH Unfair Advantage — Press It First</span><span class="ko">한/중 불공정 우위 — 가장 먼저 활용할 것</span></h2>
+    <div class="wedge-box">
+      <h4><span class="badge badge-wedge"><span class="en">Highest ROI wedge</span><span class="ko">최고 ROI 지점</span></span></h4>
+      <p><span class="en">Jujube is fully native in English, Korean, and Mandarin — not translated after the fact. Almost no pantry or recipe app on either store is built this way. That means real, physical, walkable, and searchable audiences that most competitors structurally cannot reach. Every dollar and hour spent here has close to zero direct competition.</span>
+      <span class="ko">쥬쥬브는 영어, 한국어, 중국어(만다린)를 완전히 네이티브로 지원합니다 — 나중에 번역한 것이 아닙니다. 두 스토어 어디에도 이런 방식으로 만들어진 팬트리·레시피 앱은 거의 없습니다. 즉, 대부분의 경쟁사가 구조적으로 도달할 수 없는 실질적이고 물리적이며 검색 가능한 사용자층이 존재한다는 뜻입니다. 여기에 쓰는 시간과 비용은 직접적인 경쟁이 거의 없습니다.</span></p>
+    </div>
+
+    <h3><span class="en">Four ways to press it</span><span class="ko">활용하는 네 가지 방법</span></h3>
+    <div class="table-scroll">
+    <table>
+      <tr><th><span class="en">Wedge</span><span class="ko">지점</span></th><th><span class="en">What to do</span><span class="ko">할 일</span></th><th><span class="en">Cost</span><span class="ko">비용</span></th></tr>
+      <tr><td><span class="en">ASO metadata</span><span class="ko">ASO 메타데이터</span></td><td><span class="en">Localize title, subtitle, keyword field, screenshots to KO/ZH — your listing is still EN-only today</span><span class="ko">제목, 부제, 키워드 필드, 스크린샷을 한/중으로 현지화 — 현재 리스팅은 영어만 있음</span></td><td>$0–40</td></tr>
+      <tr><td><span class="en">Local corridor</span><span class="ko">지역 상권</span></td><td><span class="en">Dobson Rd, Mesa: Mekong Plaza, H Mart, Asiana Market, Super L Ranch — recipe-card flyers, in person</span><span class="ko">메사 Dobson Rd: Mekong Plaza, H Mart, Asiana Market, Super L Ranch — 레시피 카드 플라이어, 직접 방문</span></td><td>$50–150</td></tr>
+      <tr><td><span class="en">Bilingual creators</span><span class="ko">이중언어 크리에이터</span></td><td><span class="en">Korean-American / Chinese-American home-cooking creators via JoinBrands/TikTok — "my mom's recipes vs. the app" format essentially doesn't exist for competitors</span><span class="ko">JoinBrands/TikTok을 통한 한인·중국계 가정식 크리에이터 — "엄마 레시피 vs 앱 추천" 포맷은 경쟁사에는 사실상 존재하지 않음</span></td><td>$150–400/video</td></tr>
+      <tr><td><span class="en">Community</span><span class="ko">커뮤니티</span></td><td><span class="en">r/KoreanFood, r/Chinesefood, r/AsianParentStories, church groups, parent KakaoTalk/WeChat/Facebook groups, ASU international student associations</span><span class="ko">r/KoreanFood, r/Chinesefood, r/AsianParentStories, 교회 커뮤니티, 학부모 카카오톡/위챗/페이스북 그룹, ASU 국제학생 협회</span></td><td>$0</td></tr>
+    </table>
+    </div>
+    <p class="note"><span class="en">Frame content around immigrant-family cooking, not generic "pantry app" copy: "my mom's recipes vs. what the AI suggested," multicultural cooking angle, budget/food-waste angle. This is the wedge every other section below routes back to.</span>
+    <span class="ko">"팬트리 앱" 같은 일반적인 문구가 아니라 이민 가정 요리를 중심으로 콘텐츠를 구성하세요: "엄마 레시피 vs AI 추천 레시피", 다문화 요리 앵글, 예산·음식물 낭비 앵글. 아래 모든 섹션이 결국 이 지점으로 돌아옵니다.</span></p>
+  </section>
+
+  <!-- 90 DAY ROADMAP -->
+  <section>
+    <h2><span class="num-badge">2</span><span class="en">The 90-Day Roadmap</span><span class="ko">90일 로드맵</span></h2>
+    <p class="note"><span class="en">Don't run everything at once. Each week builds the proof the next week needs.</span><span class="ko">모든 것을 한 번에 진행하지 마세요. 매주의 결과가 다음 주에 필요한 근거가 됩니다.</span></p>
+
+    <!-- PHASE 1 -->
+    <div class="phase-head"><span class="phase-tag"><span class="en">Weeks 1–4</span><span class="ko">1–4주차</span></span><span class="phase-desc"><span class="en">Foundation — Tier 0, $0–40/mo, ~12–15 hrs/wk</span><span class="ko">기반 다지기 — Tier 0, 월 $0–40, 주 12–15시간</span></span></div>
+
+    <div class="week-block">
+      <div class="week-head"><span class="week-num">Week 1</span><span class="week-dates">Aug 6–12</span></div>
+      <div class="action-item">
+        <div class="action-title"><span class="en">Localize App Store keywords + screenshots to KO/ZH</span><span class="ko">App Store 키워드 + 스크린샷 한/중 현지화</span></div>
+        <div class="action-meta"><span class="badge badge-cost">$0–40</span><span class="badge badge-hrs"><span class="en">4–6 hrs</span><span class="ko">4–6시간</span></span></div>
+        <div class="action-out"><span class="en">Outcome: appears in Korean/Mandarin search with close to zero competition — the cheapest real win available.</span><span class="ko">결과: 한국어·중국어 검색에 거의 경쟁 없이 노출 — 가장 저렴하고 확실한 승부처.</span></div>
+      </div>
+      <div class="action-item">
+        <div class="action-title"><span class="en">Set up OneSignal (free tier), ship expiring-item push</span><span class="ko">OneSignal(무료 등급) 설정, 유통기한 임박 푸시 배포</span></div>
+        <div class="action-meta"><span class="badge badge-cost">$0</span><span class="badge badge-hrs"><span class="en">3–4 hrs</span><span class="ko">3–4시간</span></span></div>
+        <div class="action-out"><span class="en">Outcome: retention infrastructure live before you need it.</span><span class="ko">결과: 필요해지기 전에 리텐션 인프라 구축 완료.</span></div>
+      </div>
+      <div class="action-item">
+        <div class="action-title"><span class="en">Post first organic content, 3x this week (screen recordings)</span><span class="ko">첫 오가닉 콘텐츠 이번 주 3회 게시(화면 녹화)</span></div>
+        <div class="action-meta"><span class="badge badge-cost">$0</span><span class="badge badge-hrs"><span class="en">4–5 hrs</span><span class="ko">4–5시간</span></span></div>
+        <div class="action-out"><span class="en">Outcome: content library starts building, algorithm gets first signal.</span><span class="ko">결과: 콘텐츠 라이브러리 구축 시작, 알고리즘에 첫 신호 전달.</span></div>
+      </div>
+    </div>
+
+    <div class="week-block">
+      <div class="week-head"><span class="week-num">Week 2</span><span class="week-dates">Aug 13–19</span></div>
+      <div class="action-item">
+        <div class="action-title"><span class="en">Continue content cadence, 3–5x/week</span><span class="ko">콘텐츠 게시 지속, 주 3–5회</span></div>
+        <div class="action-meta"><span class="badge badge-cost">$0</span><span class="badge badge-hrs"><span class="en">~6 hrs</span><span class="ko">약 6시간</span></span></div>
+        <div class="action-out"><span class="en">Outcome: track saves/shares/profile visits, not views.</span><span class="ko">결과: 조회수가 아니라 저장·공유·프로필 방문 추적.</span></div>
+      </div>
+      <div class="action-item">
+        <div class="action-title"><span class="en">Commission 2–3 UGC videos (beginner tier), prioritize KR/CN home-cooking creators</span><span class="ko">UGC 영상 2–3개 발주(초급 등급), 한인·중국계 가정식 크리에이터 우선</span></div>
+        <div class="action-meta"><span class="badge badge-cost">$225–450</span><span class="badge badge-hrs"><span class="en">2–3 hrs</span><span class="ko">2–3시간</span></span></div>
+        <div class="action-out"><span class="en">Outcome: outside-voice content that solves your no-face constraint, reusable as organic + ad creative later.</span><span class="ko">결과: 얼굴 노출 없이 진행 가능한 외부 목소리 콘텐츠, 이후 오가닉+광고 소재로 재사용 가능.</span></div>
+      </div>
+      <div class="action-item">
+        <div class="action-title"><span class="en">Print + place recipe-card flyers at Dobson Rd corridor stores</span><span class="ko">Dobson Rd 상권 매장에 레시피 카드 플라이어 배치</span></div>
+        <div class="action-meta"><span class="badge badge-cost">$50–150</span><span class="badge badge-hrs"><span class="en">4–5 hrs</span><span class="ko">4–5시간</span></span></div>
+        <div class="action-out"><span class="en">Outcome: physical presence in front of your exact target audience, near-zero competitor reach here.</span><span class="ko">결과: 정확한 타겟 고객층 앞에 물리적으로 노출, 경쟁사 도달률은 거의 0.</span></div>
+      </div>
+    </div>
+
+    <div class="week-block">
+      <div class="week-head"><span class="week-num">Week 3</span><span class="week-dates">Aug 20–26</span></div>
+      <div class="action-item">
+        <div class="action-title"><span class="en">Build DIY referral link on top of household sharing</span><span class="ko">가구 공유 기능 위에 자체 추천 링크 구축</span></div>
+        <div class="action-meta"><span class="badge badge-cost">$0</span><span class="badge badge-hrs"><span class="en">4–6 hrs</span><span class="ko">4–6시간</span></span></div>
+        <div class="action-out"><span class="en">Outcome: referral loop ready to activate the moment premium is live — reward on first-recipe-completed, never on install alone.</span><span class="ko">결과: 프리미엄 출시 즉시 활성화할 수 있는 추천 루프 준비 — 설치만으로가 아니라 첫 레시피 완료 시 보상.</span></div>
+      </div>
+      <div class="action-item">
+        <div class="action-title"><span class="en">Set up review-responder automation (Make.com free tier)</span><span class="ko">리뷰 응답 자동화 설정(Make.com 무료 등급)</span></div>
+        <div class="action-meta"><span class="badge badge-cost">$0</span><span class="badge badge-hrs"><span class="en">2–3 hrs</span><span class="ko">2–3시간</span></span></div>
+        <div class="action-out"><span class="en">Outcome: ready for when reviews start coming in — AI drafts, you approve before posting, always.</span><span class="ko">결과: 리뷰가 들어오기 시작할 때를 대비 — AI가 초안을 작성하고, 게시 전 항상 본인이 승인.</span></div>
+      </div>
+      <div class="action-item">
+        <div class="action-title"><span class="en">Start 6-week Product Hunt maker-profile prep</span><span class="ko">6주짜리 Product Hunt 메이커 프로필 준비 시작</span></div>
+        <div class="action-meta"><span class="badge badge-cost">$0</span><span class="badge badge-hrs"><span class="en">1 hr/wk</span><span class="ko">주 1시간</span></span></div>
+        <div class="action-out"><span class="en">Outcome: aged, credible profile in time for a Week 5 launch — soft mentions on X, not a single ask.</span><span class="ko">결과: 5주차 런칭에 맞춰 신뢰도 있는 프로필 준비 — X에서 자연스럽게 언급, 한 번의 요청이 아니라.</span></div>
+      </div>
+    </div>
+
+    <div class="week-block">
+      <div class="week-head"><span class="week-num">Week 4</span><span class="week-dates">Aug 27–Sep 2</span></div>
+      <div class="action-item">
+        <div class="action-title"><span class="en">Review Week 1–3 content performance, double down on best pillar</span><span class="ko">1–3주차 콘텐츠 성과 검토, 최고 성과 주제에 집중</span></div>
+        <div class="action-meta"><span class="badge badge-cost">$0</span><span class="badge badge-hrs"><span class="en">2 hrs</span><span class="ko">2시간</span></span></div>
+        <div class="action-out"><span class="en">Outcome: data-driven pillar choice instead of guessing — whatever earned saves/shares becomes your paid-ad creative later.</span><span class="ko">결과: 추측이 아닌 데이터 기반 주제 선정 — 저장·공유가 많았던 콘텐츠가 이후 유료 광고 소재가 됨.</span></div>
+      </div>
+      <div class="action-item">
+        <div class="action-title"><span class="en">First UGC videos land — post organic, archive raw footage</span><span class="ko">첫 UGC 영상 도착 — 오가닉 게시, 원본 소스 보관</span></div>
+        <div class="action-meta"><span class="badge badge-cost">$0</span><span class="badge badge-hrs"><span class="en">2 hrs</span><span class="ko">2시간</span></span></div>
+        <div class="action-out"><span class="en">Outcome: three-purpose asset — organic post, App Store preview candidate, future paid-ad creative.</span><span class="ko">결과: 세 가지 용도의 자산 — 오가닉 게시물, App Store 미리보기 후보, 향후 유료 광고 소재.</span></div>
+      </div>
+      <div class="action-item">
+        <div class="action-title"><span class="en">Get the Pro paywall live, start tracking trial→paid</span><span class="ko">Pro 페이월 출시, 체험→결제 전환 추적 시작</span></div>
+        <div class="action-meta"><span class="badge badge-cost">—</span><span class="badge badge-hrs"><span class="en">Blocker — eng-owned</span><span class="ko">차단 요소 — 엔지니어링 담당</span></span></div>
+        <div class="action-out"><span class="en">Outcome: nothing in Weeks 5–12's paid spend makes sense until this ships. See the companion monetization report — this is the single highest-leverage task on the whole roadmap.</span><span class="ko">결과: 이것이 배포되기 전까지 5–12주차의 유료 지출은 의미가 없습니다. 동반 수익화 보고서 참고 — 전체 로드맵에서 가장 레버리지가 큰 단일 작업입니다.</span></div>
+      </div>
+    </div>
+
+    <!-- PHASE 2 -->
+    <div class="phase-head"><span class="phase-tag"><span class="en">Weeks 5–8</span><span class="ko">5–8주차</span></span><span class="phase-desc"><span class="en">Validate — Tier 1, ~$400–650/mo</span><span class="ko">검증 — Tier 1, 월 약 $400–650</span></span></div>
+
+    <div class="week-block">
+      <div class="week-head"><span class="week-num">Week 5</span><span class="week-dates">Sep 3–9</span></div>
+      <div class="action-item">
+        <div class="action-title"><span class="en">Launch on Product Hunt (consider a Smol Launch warm-up first)</span><span class="ko">Product Hunt 런칭(먼저 Smol Launch로 예열 고려)</span></div>
+        <div class="action-meta"><span class="badge badge-cost">$0</span><span class="badge badge-hrs"><span class="en">~8 hrs launch day</span><span class="ko">런칭일 약 8시간</span></span></div>
+        <div class="action-out"><span class="en">Outcome: credibility, backlinks, screenshot-able social proof, and a short organic-ranking bump on both stores.</span><span class="ko">결과: 신뢰도, 백링크, 캡처 가능한 소셜 프루프, 양쪽 스토어의 단기 오가닉 순위 상승.</span></div>
+      </div>
+    </div>
+
+    <div class="week-block">
+      <div class="week-head"><span class="week-num">Week 6</span><span class="week-dates">Sep 10–16</span></div>
+      <div class="action-item">
+        <div class="action-title"><span class="en">Start Apple Search Ads Basic, $150–250/mo</span><span class="ko">Apple Search Ads Basic 시작, 월 $150–250</span></div>
+        <div class="action-meta"><span class="badge badge-cost">$150–250/mo</span><span class="badge badge-hrs"><span class="en">2 hrs</span><span class="ko">2시간</span></span></div>
+        <div class="action-out"><span class="en">Outcome: real CPI signal (Food & Drink est. $1–4). New accounts get a $100 credit — don't judge it before Week 9–10.</span><span class="ko">결과: 실제 CPI 신호 확보(식품·음료 카테고리 추정 $1–4). 신규 계정에 $100 크레딧 제공 — 9–10주차 전까지 판단하지 말 것.</span></div>
+      </div>
+    </div>
+
+    <div class="week-block">
+      <div class="week-head"><span class="week-num">Week 7</span><span class="week-dates">Sep 17–23</span></div>
+      <div class="action-item">
+        <div class="action-title"><span class="en">Add automations: content repurposing + lifecycle messaging</span><span class="ko">자동화 추가: 콘텐츠 재활용 + 라이프사이클 메시징</span></div>
+        <div class="action-meta"><span class="badge badge-cost">$12–38/mo</span><span class="badge badge-hrs"><span class="en">4–5 hrs setup</span><span class="ko">설정 4–5시간</span></span></div>
+        <div class="action-out"><span class="en">Outcome: one long video auto-clips into 3–4 shorts; trial-ending pushes/emails fire without you.</span><span class="ko">결과: 긴 영상 하나가 자동으로 3–4개 숏폼으로 재가공; 체험 종료 알림이 자동 발송.</span></div>
+      </div>
+    </div>
+
+    <div class="week-block">
+      <div class="week-head"><span class="week-num">Week 8</span><span class="week-dates">Sep 24–30</span></div>
+      <div class="action-item">
+        <div class="action-title"><span class="en">Ask every user who completes 3+ recipes for a review, in-app</span><span class="ko">앱 내에서 레시피 3개 이상 완료한 모든 사용자에게 리뷰 요청</span></div>
+        <div class="action-meta"><span class="badge badge-cost">$0</span><span class="badge badge-hrs"><span class="en">2–3 hrs</span><span class="ko">2–3시간</span></span></div>
+        <div class="action-out"><span class="en">Outcome: directly closes the zero-reviews gap, timed to a genuine good moment rather than a system prompt.</span><span class="ko">결과: 리뷰 0개 문제를 직접 해결, 시스템 팝업이 아니라 진짜 만족스러운 순간에 맞춰 요청.</span></div>
+      </div>
+    </div>
+
+    <!-- PHASE 3 -->
+    <div class="phase-head"><span class="phase-tag"><span class="en">Weeks 9–12</span><span class="ko">9–12주차</span></span><span class="phase-desc"><span class="en">Scale what works — Tier 1→2</span><span class="ko">검증된 것 확장 — Tier 1→2</span></span></div>
+
+    <div class="week-block">
+      <div class="week-head"><span class="week-num">Week 9</span><span class="week-dates">Oct 1–7</span></div>
+      <div class="action-item">
+        <div class="action-title"><span class="en">Pull the numbers: lowest cost-per-activated-user wins the next dollar</span><span class="ko">데이터 확인: 활성 사용자당 비용이 가장 낮은 채널에 다음 예산 집중</span></div>
+        <div class="action-meta"><span class="badge badge-cost">$0</span><span class="badge badge-hrs"><span class="en">3–4 hrs</span><span class="ko">3–4시간</span></span></div>
+        <div class="action-out"><span class="en">Outcome: reallocate budget to what's proven, not spread evenly across everything.</span><span class="ko">결과: 균등 분산이 아니라 검증된 곳에 예산 재배분.</span></div>
+      </div>
+    </div>
+
+    <div class="week-block">
+      <div class="week-head"><span class="week-num">Week 10</span><span class="week-dates">Oct 8–14</span></div>
+      <div class="action-item">
+        <div class="action-title"><span class="en">If ASA CAC is comfortably under subscriber LTV, move toward Tier 2</span><span class="ko">ASA CAC이 구독자 LTV보다 충분히 낮다면 Tier 2로 이동</span></div>
+        <div class="action-meta"><span class="badge badge-cost">$1,500–2,500/mo</span><span class="badge badge-hrs"><span class="en">2 hrs/wk</span><span class="ko">주 2시간</span></span></div>
+        <div class="action-out"><span class="en">Outcome: scale the specific channel that's already working, not a guess.</span><span class="ko">결과: 이미 검증된 특정 채널을 확장, 추측이 아님.</span></div>
+      </div>
+    </div>
+
+    <div class="week-block">
+      <div class="week-head"><span class="week-num">Week 11</span><span class="week-dates">Oct 15–21</span></div>
+      <div class="action-item">
+        <div class="action-title"><span class="en">Layer in 1–2 nano/micro-influencer posts, bilingual KR/CN food creators first</span><span class="ko">나노·마이크로 인플루언서 게시물 1–2건 추가, 이중언어 한/중 푸드 크리에이터 우선</span></div>
+        <div class="action-meta"><span class="badge badge-cost">$200–800</span><span class="badge badge-hrs"><span class="en">3–4 hrs</span><span class="ko">3–4시간</span></span></div>
+        <div class="action-out"><span class="en">Outcome: trusted-voice reach into exactly the underserved audience from Section 1.</span><span class="ko">결과: 1절의 소외된 타겟 고객층에 신뢰받는 목소리로 도달.</span></div>
+      </div>
+    </div>
+
+    <div class="week-block">
+      <div class="week-head"><span class="week-num">Week 12</span><span class="week-dates">Oct 22–28</span></div>
+      <div class="action-item">
+        <div class="action-title"><span class="en">Build remaining automations; 90-day retrospective, decide Tier 2/3</span><span class="ko">남은 자동화 구축; 90일 회고, Tier 2/3 여부 결정</span></div>
+        <div class="action-meta"><span class="badge badge-cost">$20–38/mo</span><span class="badge badge-hrs"><span class="en">6–8 hrs</span><span class="ko">6–8시간</span></span></div>
+        <div class="action-out"><span class="en">Outcome: social listening, UGC pipeline tracker, weekly ASO digest all running with less daily attention from you — and a real, numbers-backed answer to "which 2–3 channels actually work."</span><span class="ko">결과: 소셜 리스닝, UGC 파이프라인 추적, 주간 ASO 다이제스트가 매일 신경 쓰지 않아도 돌아감 — 그리고 "실제로 효과 있는 채널 2–3개"에 대한 데이터 기반 답 확보.</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CREATOR SOURCING -->
+  <section>
+    <h2><span class="num-badge">3</span><span class="en">UGC Creator Sourcing</span><span class="ko">UGC 크리에이터 소싱</span></h2>
+    <div class="table-scroll">
+    <table>
+      <tr><th><span class="en">Platform</span><span class="ko">플랫폼</span></th><th><span class="en">Model</span><span class="ko">방식</span></th><th><span class="en">Good for</span><span class="ko">적합한 경우</span></th></tr>
+      <tr><td>Billo</td><td><span class="en">Flat $99/video</span><span class="ko">건당 정액 $99</span></td><td><span class="en">Fastest, cheapest first testimonial videos</span><span class="ko">가장 빠르고 저렴한 첫 후기 영상</span></td></tr>
+      <tr><td>JoinBrands</td><td><span class="en">Per-brief, low hundreds</span><span class="ko">브리프당, 수백 달러대</span></td><td><span class="en">250K+ creator pool — best for bilingual/niche</span><span class="ko">25만+ 크리에이터 풀 — 이중언어·니치에 최적</span></td></tr>
+      <tr><td>Collabstr</td><td><span class="en">Direct marketplace, negotiated</span><span class="ko">직접 협상 마켓플레이스</span></td><td><span class="en">More control, more of your time</span><span class="ko">통제력 높음, 시간 소요 큼</span></td></tr>
+      <tr><td>Trend</td><td><span class="en">Credit-based</span><span class="ko">크레딧 기반</span></td><td><span class="en">TikTok/Gen-Z, lifestyle food content</span><span class="ko">TikTok·Z세대, 라이프스타일 푸드 콘텐츠</span></td></tr>
+      <tr><td>Fiverr</td><td><span class="en">Per-gig, budget</span><span class="ko">건당, 저예산</span></td><td><span class="en">Cheapest entry — vet portfolios carefully</span><span class="ko">가장 저렴한 진입점 — 포트폴리오 꼼꼼히 확인</span></td></tr>
+    </table>
+    </div>
+
+    <h3><span class="en">UGC pricing by tier (2026)</span><span class="ko">UGC 등급별 가격 (2026)</span></h3>
+    <div class="table-scroll">
+    <table>
+      <tr><th><span class="en">Tier</span><span class="ko">등급</span></th><th><span class="en">Per video</span><span class="ko">건당</span></th><th><span class="en">What you get</span><span class="ko">받는 것</span></th></tr>
+      <tr><td><span class="en">Beginner</span><span class="ko">초급</span></td><td>$75–150</td><td><span class="en">Fast turnaround, one edit round</span><span class="ko">빠른 작업, 수정 1회</span></td></tr>
+      <tr><td><span class="en">Established (market median)</span><span class="ko">중급 (시장 중간값)</span></td><td>$150–400</td><td><span class="en">Proven track record, stronger hooks</span><span class="ko">검증된 실적, 강한 훅</span></td></tr>
+      <tr><td><span class="en">Top-tier / specialist</span><span class="ko">상급 / 전문</span></td><td>$400–1,000+</td><td><span class="en">Ad-conversion history</span><span class="ko">광고 전환 실적 보유</span></td></tr>
+    </table>
+    </div>
+    <p class="note"><span class="en">+30–50% for 90-day paid-ad usage rights, +50–150% for perpetual. 5+ video packages run 15–25% cheaper per video than one-offs. Start with 2–3 beginner-tier videos (~$225–450) testing different hooks before committing more.</span>
+    <span class="ko">90일 유료 광고 사용권은 +30–50%, 영구 사용권은 +50–150% 추가. 5개 이상 패키지는 건당 15–25% 저렴. 더 큰 예산을 쓰기 전에 먼저 초급 등급 2–3개(약 $225–450)로 여러 훅을 테스트할 것.</span></p>
+
+    <h3><span class="en">Influencer tiers, by follower count (2026)</span><span class="ko">팔로워 규모별 인플루언서 등급 (2026)</span></h3>
+    <div class="table-scroll">
+    <table>
+      <tr><th><span class="en">Tier</span><span class="ko">등급</span></th><th><span class="en">Followers</span><span class="ko">팔로워</span></th><th>Instagram</th><th>TikTok</th></tr>
+      <tr><td>Nano</td><td>1K–10K</td><td>$25–150</td><td>$50–300</td></tr>
+      <tr><td>Micro</td><td>10K–50K</td><td>$150–750</td><td>$200–1,500</td></tr>
+      <tr><td>Upper-micro</td><td>50K–100K</td><td>$500–2,000</td><td>$800–2,500</td></tr>
+    </table>
+    </div>
+    <p class="note"><span class="en">Engagement rate matters more than follower count — a highly engaged 12K nano account can outperform a sleepy 60K one. Treat these as negotiating anchors, not ceilings.</span>
+    <span class="ko">팔로워 수보다 참여율이 더 중요합니다 — 참여율 높은 1.2만 나노 계정이 활동 저조한 6만 계정보다 더 좋은 성과를 낼 수 있습니다. 이 표는 협상 기준선이지 상한선이 아닙니다.</span></p>
+
+    <h3><span class="en">Content formats, cheapest first</span><span class="ko">콘텐츠 포맷, 저비용순</span></h3>
+    <div class="table-scroll">
+    <table>
+      <tr><th><span class="en">Format</span><span class="ko">포맷</span></th><th><span class="en">Cost</span><span class="ko">비용</span></th><th><span class="en">Why it works for you</span><span class="ko">본인에게 맞는 이유</span></th></tr>
+      <tr><td><span class="en">Screen recording + text overlay + trending audio</span><span class="ko">화면 녹화 + 텍스트 오버레이 + 트렌드 음악</span></td><td>$0</td><td><span class="en">Native TikTok/Reels language, no face needed</span><span class="ko">TikTok/Reels 네이티브 문법, 얼굴 노출 불필요</span></td></tr>
+      <tr><td><span class="en">TikTok photo slideshow</span><span class="ko">TikTok 포토 슬라이드쇼</span></td><td>$0</td><td><span class="en">Lowest-effort format, no video/face required at all</span><span class="ko">가장 손쉬운 포맷, 영상·얼굴 전혀 불필요</span></td></tr>
+      <tr><td><span class="en">AI voiceover over footage (ElevenLabs)</span><span class="ko">AI 보이스오버(ElevenLabs)</span></td><td>$5–22/mo</td><td><span class="en">Same script generates natively in Korean or Mandarin</span><span class="ko">동일 스크립트를 한국어·중국어로 네이티브 생성</span></td></tr>
+      <tr><td><span class="en">AI avatar host (HeyGen / Argil)</span><span class="ko">AI 아바타 호스트(HeyGen / Argil)</span></td><td>$24–39/mo</td><td><span class="en">Consistent explainer presenter that isn't you</span><span class="ko">본인이 아닌 일관된 설명자 캐릭터</span></td></tr>
+    </table>
+    </div>
+  </section>
+
+  <!-- 7 DAY CHECKLIST -->
+  <section id="printChecklist">
+    <h2><span class="num-badge">4</span><span class="en">First 7 Days — Print This</span><span class="ko">첫 7일 — 인쇄해서 사용</span></h2>
+    <p class="note"><span class="en">One page. Do these in order. Everything after Day 7 builds on this.</span><span class="ko">한 페이지 분량. 순서대로 진행하세요. 8일차 이후 모든 것이 이 위에 쌓입니다.</span></p>
+    <ul class="checklist">
+      <li><span class="cb"></span><div><span class="day-tag">Day 1</span><span class="en">Screenshot today's baseline (installs, reviews = 0) · post first organic content: scan → suggestion → cooked dish</span><span class="ko">오늘의 기준선 스크린샷(설치 수, 리뷰=0) · 첫 오가닉 콘텐츠 게시: 스캔→추천→완성 요리</span></div></li>
+      <li><span class="cb"></span><div><span class="day-tag">Day 2</span><span class="en">Draft KO/ZH App Store keyword list (problem-first, feature-first, cuisine-first) · join r/EatCheapAndHealthy + r/KoreanFood, lurk only</span><span class="ko">한/중 App Store 키워드 목록 초안(문제 중심, 기능 중심, 요리 중심) · r/EatCheapAndHealthy + r/KoreanFood 가입, 아직 게시는 안 함</span></div></li>
+      <li><span class="cb"></span><div><span class="day-tag">Day 3</span><span class="en">Set up OneSignal free tier, ship the expiring-item push · post 2nd organic content (photo slideshow)</span><span class="ko">OneSignal 무료 등급 설정, 유통기한 임박 푸시 배포 · 두 번째 오가닉 콘텐츠 게시(포토 슬라이드쇼)</span></div></li>
+      <li><span class="cb"></span><div><span class="day-tag">Day 4</span><span class="en">Shortlist 3–5 Korean/Chinese-American UGC creators on JoinBrands/TikTok · write the creator brief</span><span class="ko">JoinBrands/TikTok에서 한인·중국계 UGC 크리에이터 3–5명 후보 선정 · 크리에이터 브리프 작성</span></div></li>
+      <li><span class="cb"></span><div><span class="day-tag">Day 5</span><span class="en">Design + order first recipe-card flyer batch (Korean recipe for H Mart, Chinese recipe for Super L Ranch) · post 3rd organic content</span><span class="ko">첫 레시피 카드 플라이어 배치 디자인·주문(H Mart용 한식 레시피, Super L Ranch용 중식 레시피) · 세 번째 오가닉 콘텐츠 게시</span></div></li>
+      <li><span class="cb"></span><div><span class="day-tag">Day 6</span><span class="en">Visit Mekong Plaza / H Mart on Dobson Rd, ask 2–3 stores about leaving flyers · commission first UGC video via Billo/Fiverr</span><span class="ko">Dobson Rd의 Mekong Plaza / H Mart 방문, 매장 2–3곳에 플라이어 배치 문의 · Billo/Fiverr로 첫 UGC 영상 발주</span></div></li>
+      <li><span class="cb"></span><div><span class="day-tag">Day 7</span><span class="en">Review Week 1 metrics (saves/shares, App Store Connect impressions) · start soft-mentioning the build on X for Product Hunt prep</span><span class="ko">1주차 지표 검토(저장·공유, App Store Connect 노출수) · Product Hunt 준비를 위해 X에서 자연스럽게 언급 시작</span></div></li>
+    </ul>
+  </section>
+
+</main>
+
+<footer>
+  <span class="en">Distilled from your own marketing playbook (2026 pricing) and current DB/App Store state (2026-08-06). Ad platform costs and creator rates shift with the market — confirm current numbers before locking in a large commitment.</span>
+  <span class="ko">본인이 만든 마케팅 플레이북(2026년 가격 기준)과 현재 DB/App Store 상태(2026-08-06 기준)를 압축했습니다. 광고 플랫폼 비용과 크리에이터 단가는 시장에 따라 변동되므로, 큰 금액을 확정하기 전에 최신 수치를 확인하세요.</span>
+</footer>
+
+<script>
+  let isKorean = false;
+  function toggleLang(){
+    isKorean = !isKorean;
+    document.querySelectorAll('.en').forEach(el => el.classList.toggle('hide', isKorean));
+    document.querySelectorAll('.ko').forEach(el => el.classList.toggle('show', isKorean));
+    document.querySelectorAll('.en-block').forEach(el => el.classList.toggle('hide', isKorean));
+    document.querySelectorAll('.ko-block').forEach(el => el.classList.toggle('show', isKorean));
+    document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+    document.documentElement.lang = isKorean ? 'ko' : 'en';
+  }
+
+  const CORRECT_PIN = "0411";
+  function checkPin(){
+    const val = document.getElementById('pinInput').value.trim();
+    if(val === CORRECT_PIN){
+      document.body.classList.remove('locked');
+      document.getElementById('pinGate').style.display = 'none';
+      try{ sessionStorage.setItem('jjb_unlocked_mkt', '1'); }catch(e){}
+    } else {
+      document.getElementById('pinErr').textContent = isKorean ? '잘못된 PIN입니다' : 'Incorrect PIN';
+    }
+  }
+  document.getElementById('pinInput').addEventListener('keydown', function(e){
+    if(e.key === 'Enter') checkPin();
+  });
+  try{
+    if(sessionStorage.getItem('jjb_unlocked_mkt') === '1'){
+      document.body.classList.remove('locked');
+      document.getElementById('pinGate').style.display = 'none';
+    }
+  }catch(e){}
+</script>
+
+</body>
+</html>
