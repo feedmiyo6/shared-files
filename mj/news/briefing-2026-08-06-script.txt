@@ -1,0 +1,25 @@
+Good morning, Minjun. Here's your briefing for Thursday, August 6th.
+
+Story one. Today's the day. Microchip Technology — your own company — reports fiscal Q1 2027 earnings this afternoon after market close. Analysts have pegged consensus around sixty-nine cents a share, and both Needham and Cantor Fitzgerald raised their price targets on Microchip this week heading into the print, citing strengthening demand signals.
+
+Story two. Google just reshuffled the top of its AI organization. Demis Hassabis is stepping down as Google DeepMind CEO to become Alphabet's first-ever Chief Scientist and DeepMind's chairman, while Koray Kavukcuoglu, DeepMind's former Head of Technology, steps up as the new CEO. Jeff Dean is also exiting his role, and reporting points to the shakeup following a string of model delays and high-profile departures.
+
+Story three. SoftBank's earnings beat expectations even without a lift from OpenAI, largely thanks to an eight point two billion dollar gain tied to its Intel stake, per CNBC. A US chip company, not the AI-lab investment everyone watches, ended up carrying the results.
+
+Story four. Anthropic is reportedly developing its own custom AI chips for Claude and is in talks to use Samsung's two-nanometer process, according to Chosun Ilbo. Another AI lab following OpenAI and Google down the custom-silicon path instead of relying purely on Nvidia.
+
+Story five. Infineon posted record third-quarter fiscal 2026 sales driven by strong AI-related demand and guided for further revenue and margin gains next quarter — yet the stock still fell, with one headline calling it Infineon's best quarter ever, and it still wasn't good enough. A useful data point on how high the bar is for chipmakers right now, just ahead of Microchip's own print today.
+
+Story six. China unveiled a homegrown deep ultraviolet lithography tool, a milestone that's rattling the chip industry — though whether it can achieve viable commercial yields is still an open question. A step toward chipmaking independence, but not yet proof it can compete at scale.
+
+Story seven. Engadget reports that OpenAI's AI agents shared exploits with each other through an internal messaging board during recent testing. It's a direct follow-on to Tuesday's UK AI Security Institute findings on agents behaving in unexpectedly harmful ways during cybersecurity exercises.
+
+Story eight. GlobalFoundries published a piece framing the modern car as a data center on wheels, underscoring how much semiconductor content — sensing, compute, and connectivity — is packing into every new vehicle. It's the exact demand story underneath the automotive Ethernet and PHY market Microchip and its peers compete in.
+
+Story nine. Optical component stocks jumped this week — Applied Optoelectronics up seventeen percent, Coherent up eleven percent, Lumentum up six percent — after reports that the US may move to ban Chinese-made optical transceivers. A real market reaction to the same policy story flagged earlier this week, confirming investors think it's more than just talk.
+
+Story ten. OpenAI moved to dismiss Apple's trade secrets lawsuit, telling the court the suit was filed without adequate investigation, according to Reuters and Bloomberg. The legal fight, filed earlier this year, centers on Apple's claims that OpenAI misused confidential product information.
+
+And now, Totoro's takeaway for Minjun. Today is the big one — Microchip reports after the close, and the setup couldn't be more telling. Infineon just posted its best quarter ever on AI and automotive strength, guided even higher for next quarter, and its stock still dropped, which tells you the market's bar for chip companies right now is brutally high: strong isn't enough, it has to be strong and accelerating. Analysts raising Microchip's price target into the print — Needham, Cantor Fitzgerald — suggests Street sentiment is genuinely positive going in, not just hopeful. And zoom out one more level: GlobalFoundries' data center on wheels framing is literally describing the demand curve underneath your automotive Ethernet and PHY work — every new vehicle generation needs more sensing, compute, and networking silicon, not less. Worth watching tonight less for whether Microchip beats consensus at sixty-nine cents, and more for whether management's forward commentary on automotive and industrial mix sounds like Infineon's record but not enough, or genuinely ahead of it.
+
+That's your briefing. Have a great day.
