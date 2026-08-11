@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Recipe Quality: Sonnet 5 vs Haiku 4.5</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Apple SD Gothic Neo", sans-serif; background:#faf6f1; color:#2d2420; line-height:1.6; padding:16px; }
+  .wrap { max-width:900px; margin:0 auto; }
+  .topbar { display:flex; justify-content:space-between; align-items:center; margin-bottom:18px; }
+  h1 { font-size:1.35rem; color:#a03e2d; }
+  .lang-toggle { background:#a03e2d; color:#fff; border:none; border-radius:20px; padding:8px 16px; font-size:0.9rem; cursor:pointer; }
+  .ko { display:none; }
+  .ko.show { display:inline !important; }
+  .en.hide { display:none !important; }
+  div.ko.show, section.ko.show, p.ko.show { display:block !important; }
+  .meta { font-size:0.85rem; color:#8a7a70; margin-bottom:20px; }
+  .verdict { background:#fff; border:2px solid #a03e2d; border-radius:14px; padding:16px; margin-bottom:22px; }
+  .verdict h2 { font-size:1.05rem; color:#a03e2d; margin-bottom:8px; }
+  .verdict ul { padding-left:20px; }
+  .verdict li { margin-bottom:6px; font-size:0.92rem; }
+  .cols { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  @media (max-width:700px){ .cols { grid-template-columns:1fr; } }
+  .card { background:#fff; border-radius:14px; padding:16px; border:1px solid #e8ddd4; }
+  .card.premium { border:2px solid #a03e2d; }
+  .badge { display:inline-block; font-size:0.75rem; font-weight:700; padding:3px 10px; border-radius:12px; margin-bottom:10px; }
+  .badge.p { background:#a03e2d; color:#fff; }
+  .badge.f { background:#e8ddd4; color:#6a5a50; }
+  .card h3 { font-size:1rem; margin-bottom:4px; }
+  .card .sub { font-size:0.8rem; color:#8a7a70; margin-bottom:12px; }
+  .recipe { font-size:0.85rem; white-space:pre-wrap; color:#3d332c; }
+  .recipe b { color:#a03e2d; }
+  .hl { background:#fdeee9; border-left:3px solid #a03e2d; padding:2px 6px; display:inline; }
+  .note { font-size:0.8rem; color:#8a7a70; margin-top:18px; text-align:center; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <h1><span class="en">Recipe Quality: Sonnet 5 vs Haiku 4.5</span><span class="ko">레시피 품질 비교: Sonnet 5 vs Haiku 4.5</span></h1>
+    <button class="lang-toggle" onclick="toggleLang()">한국어</button>
+  </div>
+  <p class="meta"><span class="en">Same prompt, same dish (Kimchi Jjigae, 2 servings), same ingredient list — generated 2026-08-10 with the app's actual system prompt style. Premium = Sonnet 5 (current model for everyone), Free candidate = Haiku 4.5.</span><span class="ko">동일한 프롬프트, 동일한 요리(김치찌개 2인분), 동일한 재료 — 2026-08-10 앱의 실제 시스템 프롬프트 스타일로 생성. Premium = Sonnet 5 (현재 전체 사용자 모델), Free 후보 = Haiku 4.5.</span></p>
+
+  <div class="verdict">
+    <h2><span class="en">Verdict: real gap, but subtle — a Korean home cook will notice</span><span class="ko">결론: 차이는 확실히 있지만 미묘함 — 한국 가정식 요리 경험자는 알아챔</span></h2>
+    <ul>
+      <li><span class="en"><b>Haiku skipped sautéing the kimchi</b> — it dumps kimchi in with the liquid. Sautéing kimchi in pork fat first is THE defining step of kimchi jjigae. This is the kind of mistake that makes a dish read "AI-generated" to someone who actually cooks Korean food.</span><span class="ko"><b>Haiku는 김치 볶는 단계를 생략</b> — 김치를 국물과 함께 바로 넣습니다. 돼지기름에 김치를 먼저 볶는 것이 김치찌개의 핵심인데, 이걸 빼먹으면 한식 하는 사람에겐 바로 "AI 티"가 납니다.</span></li>
+      <li><span class="en"><b>Haiku adds the onion at the end</b> (5 min before serving) — undercooked onion in a jjigae. Sonnet adds it early with the kimchi, correctly.</span><span class="ko"><b>Haiku는 양파를 마지막에</b> (서빙 5분 전) 넣음 — 찌개에 설익은 양파가 됩니다. Sonnet은 김치와 함께 초반에 제대로 넣습니다.</span></li>
+      <li><span class="en"><b>Sonnet uses kimchi brine as seasoning, separates scallion whites/greens, mentions ttukbaegi, spoons broth over tofu</b> — small authentic touches that add up to "this was written by someone who cooks."</span><span class="ko"><b>Sonnet은 김치국물을 양념으로 활용, 파 흰/파란 부분 분리, 뚝배기 언급, 두부 위로 국물 끼얹기</b> — 실제 요리하는 사람이 쓴 느낌을 주는 디테일들.</span></li>
+      <li><span class="en"><b>Haiku's seasoning amounts are off</b> — ½ tsp gochugaru and ½ tsp soy sauce for a 2-serving jjigae is timid; Sonnet's 1 tbsp each is realistic.</span><span class="ko"><b>Haiku는 양념 양이 어긋남</b> — 2인분 찌개에 고춧가루 ½작은술, 간장 ½작은술은 너무 소심한 양. Sonnet의 각 1큰술이 현실적.</span></li>
+      <li><span class="en">To be fair: Haiku's output is well-formatted, coherent, and totally usable. The gap is authenticity + culinary judgment, not grammar. For casual users it's fine — which is exactly what a free tier should be.</span><span class="ko">공정하게 말하면 Haiku 결과물도 포맷 좋고 일관성 있고 충분히 쓸 만합니다. 차이는 문법이 아니라 정통성 + 요리 센스입니다. 캐주얼 사용자에겐 충분 — 무료 티어로는 딱 적당한 수준.</span></li>
+    </ul>
+  </div>
+
+  <div class="cols">
+    <div class="card premium">
+      <span class="badge p">PREMIUM · Sonnet 5</span>
+      <h3>Kimchi Jjigae (김치찌개)</h3>
+      <div class="sub">45 min · 2 servings</div>
+      <div class="recipe"><b>Ingredients:</b> 150g pork belly · 1½ cups aged kimchi <span class="hl">+ 3 tbsp kimchi brine</span> · 200g firm tofu · ½ onion · 3 garlic · 2 scallions <span class="hl">(whites and greens separated)</span> · 1 tbsp gochugaru · 1 tbsp gochujang · 1 tbsp soy sauce · 1 tbsp sesame oil · 2 cups water/stock
+
+<b>1.</b> Heat sesame oil in a heavy pot <span class="hl">(ttukbaegi if you have one)</span>. Render pork belly 3–4 min until golden. "Rendering the pork properly is what gives the broth its body — jjigae made with unrendered pork tastes thin no matter how much seasoning you add."
+
+<b>2.</b> <span class="hl">Add kimchi, onion, garlic — sauté in the rendered pork fat</span> 3–4 min, letting the kimchi caramelize at the edges. "This blooms the fermented flavors and mellows raw sourness into something deeper."
+
+<b>3.</b> Push mixture aside, <span class="hl">toast gochugaru directly in the fat 15 sec</span>, stir in gochujang + soy sauce, coat everything.
+
+<b>4.</b> Pour 2 cups water <span class="hl">+ the 3 tbsp reserved kimchi brine ("liquid seasoning in its own right")</span>. Boil, then simmer uncovered 15 min so the fat, gochujang and kimchi "fully marry into the broth."
+
+<b>5.</b> Taste and adjust — more gochugaru/brine if the kimchi was young; leave it if tangy.
+
+<b>6.</b> Nestle tofu + scallion whites, simmer 5–6 min, <span class="hl">spooning broth over the tofu instead of stirring so the slabs stay intact</span>.
+
+<b>7.</b> Scallion greens on top, one final minute, serve bubbling with rice.
+
+<i>"Best made with kimchi at least 3–4 weeks fermented — young kimchi lacks the sourness this stew is built around."</i></div>
+    </div>
+
+    <div class="card">
+      <span class="badge f">FREE candidate · Haiku 4.5</span>
+      <h3>Kimchi Jjigae (Korean Kimchi Stew)</h3>
+      <div class="sub">30 min · 2 servings</div>
+      <div class="recipe"><b>Ingredients:</b> 6 oz pork belly · 2 cups aged kimchi (with juice) · 7 oz firm tofu · ½ onion · 3 garlic · 2 scallions · <span class="hl">½ tsp gochugaru</span> · 1½ tbsp gochujang · <span class="hl">½ tsp soy sauce</span> · ½ tsp sesame oil
+
+<b>1.</b> Render pork belly cubes in a dry pot 3–4 min until browned. Good tip about not adding oil early.
+
+<b>2.</b> Bloom garlic 30 sec, toast gochugaru 15–20 sec in the fat.
+
+<b>3.</b> <span class="hl">Stir in kimchi + gochujang and immediately pour 2¼ cups water</span> — kimchi never gets sautéed/caramelized (the defining kimchi-jjigae step is missing).
+
+<b>4.</b> Simmer uncovered 8 min. Reasonable tip about evaporation concentrating the broth.
+
+<b>5.</b> <span class="hl">Fold in tofu AND onion now</span> — onion this late stays half-raw in a jjigae. Add soy sauce.
+
+<b>6.</b> Simmer 5 min; final 30-sec "vigorous boil for an emulsified sheen" (sounds confident, dubious technique).
+
+<b>7.</b> Sesame oil + scallions off heat, serve with rice.
+
+<i>Coherent, well-formatted, usable — but the kimchi-sauté omission, late onion, and timid seasoning read "written by someone who studied recipes, not someone who cooks them."</i></div>
+    </div>
+  </div>
+
+  <p class="note"><span class="en">Generated via Claude subscription (no API cost) · Jujube internal comparison · 2026-08-10</span><span class="ko">Claude 구독으로 생성 (API 비용 없음) · Jujube 내부 비교 자료 · 2026-08-10</span></p>
+</div>
+<script>
+  let isKorean = false;
+  function toggleLang() {
+    isKorean = !isKorean;
+    document.querySelectorAll('.en').forEach(el => el.classList.toggle('hide', isKorean));
+    document.querySelectorAll('.ko').forEach(el => el.classList.toggle('show', isKorean));
+    document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+  }
+</script>
+</body>
+</html>
