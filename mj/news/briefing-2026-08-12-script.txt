@@ -1,0 +1,25 @@
+Good morning, Minjun. Here's your briefing for Wednesday, August 12th.
+
+Story one. Google's Made by Google event kicks off today in New York at six PM Eastern, headlined by the Pixel eleven family — Pixel eleven, Pixel eleven Pro, Pixel eleven Pro X-L, and Pixel eleven Pro Fold — alongside the Pixel Watch five and a rumored tracking accessory called Pixel Tag. Trevor Noah is hosting, with appearances from Alex Cooper, Stephen Curry, Shubman Gill, and Ayami Nakajo, and pre-orders open the same day.
+
+Story two. OpenAI unveiled Astra, an internal AI system that solved ten previously open problems in mathematics and theoretical computer science — including the first-ever explicit construction of a non-sofic group, a question that had stood unresolved for twenty-seven years since the concept was introduced. The full two-hundred-forty-nine-page proof collection came with machine-checkable certificates for every result, at a total compute cost of roughly two thousand dollars, and OpenAI is naming its next major model family after it.
+
+Story three. Microchip announced its next-generation LAN eight-seven-eight-x and LAN eight-eight-eight-x Single Pair Ethernet PHY families, covering one-hundred BASE-T1, one-thousand BASE-T1, and dual-speed variants, with integrated MACsec security, Time Sensitive Networking, and functional safety engineered for ISO twenty-six-two-six-two ASIL-B systems. They're aimed squarely at software-defined vehicles, avionics, robotics, and industrial systems, and are now in limited sampling.
+
+Story four. The European Union's AI Act moved its high-risk provisions into force on August second, requiring chatbots to identify themselves as AI and realistic synthetic media to carry labels and watermarks. Non-compliance can trigger fines up to fifteen million euros or three percent of a company's global annual revenue, whichever is higher.
+
+Story five. Google is rolling out agentic shopping features across the U.S. that let its AI call stores on your behalf to check inventory, confirm pricing, and even complete purchases automatically when a price-tracked item hits your target — built on a new Universal Commerce Protocol that lets Google build the cart and hand it off to participating retailers.
+
+Story six. The Commerce Department announced over eight hundred seventy-four million dollars in CHIPS Act funding for seven semiconductor R&D companies, in exchange for minority equity stakes in each — GlobalFoundries up to three hundred million, Kepler up to two hundred forty-five million for AI memory and logic, and Multibeam up to one hundred forty million for semiconductor equipment, with the rest going to smaller equipment and materials makers.
+
+Story seven. U.S. officials are reviewing how Chinese AI firms are gaining offshore access to Nvidia chips by renting computing power located in other countries, after a string of Chinese AI breakthroughs demonstrated capability despite export restrictions. It's a sign that direct export controls alone aren't closing the gap the way Washington intended.
+
+Story eight. Anthropic expanded Claude Cowork to mobile and web, letting sessions and files follow you across devices with background work, scheduled tasks, shared projects, and mobile approvals — part of a broader push toward agentic, enterprise-trusted AI, alongside a new Claude for Government beta and richer admin analytics for spend and usage.
+
+Story nine. Cloudflare kicked off its second Agents Week, a five-day rollout covering execution and storage primitives for AI agents, the development lifecycle, secure access controls, and what an emerging agentic web actually looks like — another sign that the infrastructure layer for autonomous agents is becoming as contested as the models themselves.
+
+Story ten. NVIDIA scheduled its second-quarter fiscal twenty twenty-seven earnings call for August twenty-sixth, while Arm reported record first-quarter fiscal twenty twenty-seven revenue — two more data points the market will be watching closely for signs of whether AI infrastructure spending is holding up or starting to cool.
+
+And now, Totoro's takeaway for Minjun. Story three is the one to sit with — the LAN878x and LAN888x launch bakes MACsec, TSN, and ASIL-B functional safety directly into the SPE PHY silicon, which means the validation surface for next-gen T1 parts just got a lot more complex: security handshakes, deterministic timing, and safety diagnostics all have to be proven together, not as separate test passes. That's exactly the kind of cross-domain validation work that bridges into Digital Design, so it's worth tracking closely as you make that transfer. And story two — Astra shipping machine-checkable certificates alongside every proof — is a preview of where formal verification tooling is headed; the same instinct, don't just trust the output, generate a certificate you can independently check, maps directly onto hardware validation, and it's worth watching whether that mindset shows up in EDA and verification tooling next.
+
+That's your briefing. Have a great day.
