@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jujube 2.5.1 — Product Plan</title>
+<style>
+  :root{
+    --cream:#F3EDE6;
+    --card:#FFFCF8;
+    --card-alt:#FBF3EA;
+    --red:#B53C38;
+    --red-dark:#8F2E2B;
+    --ink:#2B2320;
+    --muted:#6B5F56;
+    --line:#E6DACB;
+    --gold:#C79A4B;
+    --green:#5F7A5A;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--cream);
+    color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Apple SD Gothic Neo","Malgun Gothic","Helvetica Neue",Arial,sans-serif;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:var(--red);}
+  .en-block{display:block;}
+  .ko-block{display:none;}
+  .ko-block.show{display:block !important;}
+  .en-block.hide{display:none !important;}
+  .en{display:inline;}
+  .ko{display:none;}
+  .ko.show{display:inline !important;}
+  .en.hide{display:none !important;}
+
+  /* ===== Header ===== */
+  header{
+    position:sticky; top:0; z-index:50;
+    background:rgba(243,237,230,0.92);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);
+    padding:12px 20px;
+  }
+  .header-row{
+    max-width:1080px; margin:0 auto;
+    display:flex; align-items:center; justify-content:space-between; gap:12px;
+  }
+  .brand{display:flex; align-items:center; gap:10px;}
+  .brand .mark{
+    width:34px;height:34px;border-radius:10px;
+    background:linear-gradient(135deg,var(--red),var(--red-dark));
+    display:flex;align-items:center;justify-content:center;
+    color:#fff;font-weight:700;font-size:16px;flex-shrink:0;
+  }
+  .brand-text{display:flex;flex-direction:column;line-height:1.25;}
+  .brand-text b{font-size:15px;}
+  .brand-text span{font-size:11px;color:var(--muted);}
+  #langToggle{
+    background:var(--ink); color:#fff; border:none;
+    padding:8px 16px; border-radius:999px; font-size:13px; font-weight:600;
+    cursor:pointer; flex-shrink:0;
+  }
+  #langToggle:hover{background:var(--red);}
+
+  nav.subnav{
+    max-width:1080px; margin:10px auto 0; padding-bottom:2px;
+    display:flex; gap:6px; overflow-x:auto; scrollbar-width:none;
+  }
+  nav.subnav::-webkit-scrollbar{display:none;}
+  nav.subnav a{
+    white-space:nowrap; text-decoration:none; color:var(--muted);
+    font-size:12.5px; font-weight:600; padding:6px 12px; border-radius:999px;
+    border:1px solid var(--line); background:var(--card);
+  }
+  nav.subnav a:hover{color:var(--red); border-color:var(--red);}
+
+  /* ===== Layout ===== */
+  main{max-width:880px; margin:0 auto; padding:28px 20px 80px;}
+  section{margin-bottom:52px; scroll-margin-top:120px;}
+  .hero{padding:20px 0 8px;}
+  .hero h1{font-size:32px; margin:0 0 6px; letter-spacing:-0.02em;}
+  .hero .sub{color:var(--muted); font-size:15.5px; margin:0 0 14px;}
+  .meta-row{display:flex; flex-wrap:wrap; gap:8px;}
+  .pill{
+    font-size:11.5px; font-weight:700; color:var(--red-dark);
+    background:#F6E4DE; border:1px solid #EAC3B9;
+    padding:4px 10px; border-radius:999px;
+  }
+  .pill.alt{color:var(--green); background:#EAF0E7; border-color:#CFDFC9;}
+
+  h2.section-title{
+    font-size:22px; margin:0 0 6px;
+    display:flex; align-items:baseline; gap:10px;
+  }
+  h2.section-title .num{
+    color:var(--red); font-size:14px; font-weight:800; letter-spacing:0.04em;
+  }
+  .section-intro{color:var(--muted); font-size:14.5px; margin:0 0 20px; max-width:640px;}
+
+  .card{
+    background:var(--card); border:1px solid var(--line); border-radius:16px;
+    padding:22px 22px; margin-bottom:16px;
+    box-shadow:0 1px 2px rgba(43,35,32,0.04);
+  }
+  .card h3{margin:0 0 8px; font-size:17px;}
+  .card p{margin:0 0 10px; font-size:14.5px;}
+  .card p:last-child{margin-bottom:0;}
+
+  /* ===== Pillars grid ===== */
+  .pillar-grid{display:grid; grid-template-columns:1fr 1fr; gap:16px;}
+  @media (max-width:680px){.pillar-grid{grid-template-columns:1fr;}}
+  .pillar-card{
+    background:var(--card); border:1px solid var(--line); border-radius:16px;
+    padding:20px; display:flex; flex-direction:column; gap:10px;
+  }
+  .pillar-num{
+    width:30px;height:30px;border-radius:9px;
+    background:var(--red); color:#fff; font-weight:800; font-size:14px;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .pillar-card h3{margin:0; font-size:17px;}
+  .pillar-card .label{
+    font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:0.06em;
+    color:var(--gold); margin-top:6px;
+  }
+  .pillar-card p{margin:2px 0 0; font-size:13.8px; color:var(--ink);}
+  .scope-tag{
+    align-self:flex-start; margin-top:6px; font-size:11.5px; font-weight:700;
+    padding:3px 10px; border-radius:999px; background:var(--card-alt); border:1px solid var(--line); color:var(--muted);
+  }
+
+  /* ===== Callouts ===== */
+  .callout{
+    border-radius:14px; padding:16px 18px; margin:14px 0; font-size:14px;
+    border:1px solid var(--line); background:var(--card-alt);
+  }
+  .callout.warn{background:#FBEDE6; border-color:#EFC9AE;}
+  .callout.risk{background:#F6E4DE; border-color:#EAC3B9;}
+  .callout.legal{background:#EFEAE0; border-color:var(--line);}
+  .callout b{color:var(--red-dark);}
+
+  /* ===== Sub-cards inside creator deep-dive ===== */
+  .subcard{
+    border-left:3px solid var(--red);
+    background:var(--card); border-radius:0 12px 12px 0;
+    padding:14px 18px; margin-bottom:14px;
+  }
+  .subcard h4{margin:0 0 6px; font-size:15px;}
+  .subcard p{margin:0; font-size:14px;}
+  .two-col{display:grid; grid-template-columns:1fr 1fr; gap:14px;}
+  @media (max-width:680px){.two-col{grid-template-columns:1fr;}}
+  .pop-card{
+    background:var(--card); border:1px solid var(--line); border-radius:12px; padding:14px 16px;
+  }
+  .pop-card .tag{font-size:11px;font-weight:800;color:#fff;background:var(--green);padding:2px 8px;border-radius:6px;display:inline-block;margin-bottom:6px;}
+  .pop-card .tag.no{background:var(--red);}
+
+  .checklist{list-style:none; margin:0; padding:0;}
+  .checklist li{
+    display:flex; gap:10px; padding:9px 0; border-bottom:1px dashed var(--line); font-size:14px;
+  }
+  .checklist li:last-child{border-bottom:none;}
+  .checklist li .chk{
+    flex-shrink:0; width:18px;height:18px;border-radius:5px;
+    background:var(--red); color:#fff; font-size:11px; font-weight:800;
+    display:flex;align-items:center;justify-content:center; margin-top:1px;
+  }
+
+  /* ===== Timeline ===== */
+  .timeline{position:relative; margin-left:10px; padding-left:24px; border-left:2px solid var(--line);}
+  .tl-item{position:relative; margin-bottom:22px;}
+  .tl-item::before{
+    content:""; position:absolute; left:-31px; top:2px;
+    width:14px;height:14px;border-radius:50%;
+    background:var(--red); border:3px solid var(--cream);
+  }
+  .tl-item .tl-when{font-size:12px; font-weight:800; color:var(--red-dark); text-transform:uppercase; letter-spacing:0.04em;}
+  .tl-item h4{margin:4px 0 6px; font-size:15.5px;}
+  .tl-item p{margin:0; font-size:14px; color:var(--ink);}
+  .tl-total{
+    margin-top:6px; font-size:13px; color:var(--muted); font-style:italic;
+  }
+
+  /* ===== Email template ===== */
+  .email-card{
+    background:#FBF6EF; border:1px solid var(--gold); border-radius:14px;
+    padding:18px 20px; font-size:13.8px;
+  }
+  .email-card .em-subject{font-weight:800; margin-bottom:10px; padding-bottom:10px; border-bottom:1px dashed var(--line);}
+  .email-card .em-body{white-space:pre-wrap; font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-size:13px; line-height:1.7;}
+
+  .stat-row{display:flex; gap:12px; flex-wrap:wrap; margin-top:14px;}
+  .stat{
+    flex:1; min-width:130px; background:var(--card); border:1px solid var(--line); border-radius:12px;
+    padding:12px 14px; text-align:center;
+  }
+  .stat .n{font-size:20px; font-weight:800; color:var(--red);}
+  .stat .l{font-size:11.5px; color:var(--muted); margin-top:2px;}
+
+  table.tracksheet{width:100%; border-collapse:collapse; margin-top:10px; font-size:13px;}
+  table.tracksheet th, table.tracksheet td{
+    border:1px solid var(--line); padding:7px 9px; text-align:left;
+  }
+  table.tracksheet th{background:var(--card-alt); font-weight:700;}
+
+  /* ===== Sequencing ===== */
+  .seq-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:12px;}
+  @media (max-width:820px){.seq-grid{grid-template-columns:1fr 1fr;}}
+  @media (max-width:480px){.seq-grid{grid-template-columns:1fr;}}
+  .seq-card{
+    background:var(--card); border:1px solid var(--line); border-radius:14px; padding:16px;
+  }
+  .seq-card .seq-tag{font-size:11px;font-weight:800; color:#fff; background:var(--ink); padding:3px 9px; border-radius:999px; display:inline-block; margin-bottom:8px;}
+  .seq-card.a .seq-tag{background:var(--red);}
+  .seq-card.b .seq-tag{background:var(--gold); color:#3a2b0d;}
+  .seq-card.c .seq-tag{background:var(--green);}
+  .seq-card ul{margin:0; padding-left:16px; font-size:13px;}
+  .seq-card li{margin-bottom:4px;}
+
+  /* ===== Decisions ===== */
+  .decision{
+    display:flex; gap:12px; align-items:flex-start; padding:12px 0; border-bottom:1px solid var(--line);
+  }
+  .decision:last-child{border-bottom:none;}
+  .decision .dnum{
+    flex-shrink:0; width:26px;height:26px;border-radius:50%;
+    background:var(--card-alt); border:1px solid var(--line); color:var(--red-dark);
+    font-weight:800; font-size:12.5px; display:flex;align-items:center;justify-content:center;
+  }
+  .decision p{margin:0; font-size:14.5px;}
+
+  /* ===== Verdict ===== */
+  .verdict{
+    background:linear-gradient(135deg,#FBF0EC,#F6E4DE);
+    border:2px solid var(--red); border-radius:18px; padding:22px 24px;
+  }
+  .verdict .vlabel{
+    font-size:12px; font-weight:800; text-transform:uppercase; letter-spacing:0.06em;
+    color:var(--red-dark); margin-bottom:8px; display:flex; align-items:center; gap:6px;
+  }
+  .verdict p{margin:0 0 10px; font-size:14.5px;}
+  .verdict p:last-child{margin-bottom:0;}
+
+  footer{
+    max-width:880px; margin:0 auto; padding:20px; text-align:center;
+    color:var(--muted); font-size:12px; border-top:1px solid var(--line);
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-row">
+    <div class="brand">
+      <div class="mark">J</div>
+      <div class="brand-text">
+        <b><span class="en">Jujube 2.5.1</span><span class="ko">쥬주브 2.5.1</span></b>
+        <span><span class="en">Product Plan · draft</span><span class="ko">제품 기획서 · 초안</span></span>
+      </div>
+    </div>
+    <button id="langToggle" onclick="toggleLang()">한국어</button>
+  </div>
+  <nav class="subnav">
+    <a href="#exec"><span class="en">Summary</span><span class="ko">요약</span></a>
+    <a href="#pillars"><span class="en">4 Pillars</span><span class="ko">4대 축</span></a>
+    <a href="#creator"><span class="en">Creator Program</span><span class="ko">크리에이터 프로그램</span></a>
+    <a href="#roadmap"><span class="en">Roadmap</span><span class="ko">로드맵</span></a>
+    <a href="#outreach"><span class="en">Outreach</span><span class="ko">아웃리치</span></a>
+    <a href="#pitfalls"><span class="en">Pitfalls</span><span class="ko">주의사항</span></a>
+    <a href="#legal"><span class="en">Legal</span><span class="ko">법적 입장</span></a>
+    <a href="#sequencing"><span class="en">Sequencing</span><span class="ko">시퀀싱</span></a>
+    <a href="#decisions"><span class="en">Decisions</span><span class="ko">결정 필요</span></a>
+    <a href="#verdict"><span class="en">Verdict</span><span class="ko">총평</span></a>
+  </nav>
+</header>
+
+<main>
+
+  <div class="hero">
+    <h1><span class="en">Jujube 2.5.1</span><span class="ko">쥬주브 2.5.1</span></h1>
+    <p class="sub">
+      <span class="en">The next release after 2.5.0(12), submitted to App Store review on Aug 13, 2026. Four pillars: Running Low, Fresh Check as a retention engine, a Creator Attribution Program, and ASO built around that story.</span>
+      <span class="ko">2026년 8월 13일 App Store 심사에 제출된 2.5.0(12)의 다음 릴리스입니다. 4대 축: Running Low(재고 부족 상태), 리텐션 엔진으로서의 Fresh Check, 크리에이터 귀속(Attribution) 프로그램, 그리고 이 스토리를 중심으로 한 ASO(앱스토어 최적화)입니다.</span>
+    </p>
+    <div class="meta-row">
+      <span class="pill"><span class="en">Drafted 2026-08-13</span><span class="ko">작성일 2026-08-13</span></span>
+      <span class="pill alt"><span class="en">Founder: Minjun</span><span class="ko">창업자: Minjun</span></span>
+      <span class="pill"><span class="en">Status: planning</span><span class="ko">상태: 기획 중</span></span>
+    </div>
+  </div>
+
+  <!-- ===== Executive Summary ===== -->
+  <section id="exec">
+    <h2 class="section-title"><span class="num">01</span><span class="en">Executive Summary</span><span class="ko">개요</span></h2>
+    <div class="card">
+      <p class="en">Jujube 2.5.1 is organized around four pillars: a 3-state <b>Running Low</b> ingredient status, a <b>Fresh Check</b> retention engine anchored by daily local notifications, a <b>Creator Attribution Program</b> that credits and links the recipe bloggers behind Jujube's AI-generated suggestions, and an <b>ASO refresh</b> built around that ethical-AI story.</p>
+      <p class="en">Critically, most of the underlying infrastructure already exists. Fresh Check's expiry engine is already server-computed. Source discovery already runs on real Brave Search results, stored link-only with no recipe text or photos, feeding AI-original recipe generation. 2.5.1 mostly <b>formalizes and surfaces</b> what's already ~80% built rather than inventing new systems — which is why it's a contained release, not a pivot.</p>
+      <p class="en">The single biggest gap is that notification preferences exist in the UI but nothing actually fires — no local notifications are wired up yet. That's the retention linchpin this release closes.</p>
+      <p class="ko">쥬주브 2.5.1은 네 가지 축을 중심으로 구성됩니다: 3단계 <b>Running Low</b>(재고 부족) 상태, 매일 로컬 알림을 중심축으로 하는 <b>Fresh Check</b> 리텐션 엔진, 쥬주브의 AI 생성 레시피 뒤에 있는 레시피 블로거들에게 공을 돌리고 링크를 연결하는 <b>크리에이터 귀속 프로그램</b>, 그리고 이 윤리적 AI 스토리를 중심으로 한 <b>ASO 개편</b>입니다.</p>
+      <p class="ko">중요한 점은, 이를 위한 기반 인프라의 대부분이 이미 존재한다는 것입니다. Fresh Check의 유통기한 엔진은 이미 서버에서 계산되고 있습니다. 소스 검색은 이미 실제 Brave Search 결과를 사용하며, 레시피 본문이나 사진 없이 링크만 저장하는 방식으로 AI-오리지널 레시피 생성에 활용되고 있습니다. 2.5.1은 새로운 시스템을 발명한다기보다, 이미 80% 정도 구축된 것을 <b>공식화하고 드러내는</b> 작업에 가깝습니다 — 그래서 이번 릴리스는 피벗이 아니라 범위가 제한된(contained) 릴리스입니다.</p>
+      <p class="ko">가장 큰 공백은 알림 설정 UI는 존재하지만 실제로 아무것도 발송되지 않는다는 점입니다 — 로컬 알림이 아직 연결되어 있지 않습니다. 이번 릴리스가 메워야 할 리텐션의 핵심 고리입니다.</p>
+    </div>
+  </section>
+
+  <!-- ===== 4 Pillars ===== -->
+  <section id="pillars">
+    <h2 class="section-title"><span class="num">02</span><span class="en">The 4 Pillars</span><span class="ko">4대 축</span></h2>
+    <p class="section-intro">
+      <span class="en">Each pillar below includes the reframe/why, proposed UX, technical approach, and a rough scope estimate.</span>
+      <span class="ko">아래 각 축에는 재정의/이유, 제안된 UX, 기술적 접근 방식, 대략적인 범위 추정치가 포함되어 있습니다.</span>
+    </p>
+
+    <div class="pillar-grid">
+      <div class="pillar-card">
+        <div class="pillar-num">1</div>
+        <h3><span class="en">Running Low</span><span class="ko">Running Low (재고 부족)</span></h3>
+        <div class="label"><span class="en">Why</span><span class="ko">왜</span></div>
+        <p><span class="en">ItemStatus is currently binary (in-stock / out). A LOW status existed historically and the DB still tolerates 'LOW' rows — re-enabling a 3rd state is low-risk and adds a meaningful mid-state that feeds the shopping list and recipe nudges.</span><span class="ko">ItemStatus는 현재 이진값(재고 있음/없음)입니다. LOW 상태는 과거에 존재했고 DB는 여전히 'LOW' 행을 허용합니다 — 세 번째 상태를 다시 활성화하는 것은 리스크가 낮으면서도 쇼핑 리스트와 레시피 넛지에 반영될 의미 있는 중간 상태를 추가합니다.</span></p>
+        <div class="label"><span class="en">UX / Design</span><span class="ko">UX / 디자인</span></div>
+        <p><span class="en">Tap an in-stock item → Running Low (yellow). Long-press → remove. A second tap clears low back to normal. First-use hint on introduction. Low items feed the shopping list and "you're low on X" recipe nudges.</span><span class="ko">재고 있음 항목을 탭하면 → Running Low(노란색)로 변경. 길게 누르면 → 제거. 다시 한 번 탭하면 정상 상태로 돌아옴. 처음 사용 시 안내 힌트 제공. 부족한 항목은 쇼핑 리스트와 "X가 부족합니다" 레시피 넛지에 반영됩니다.</span></p>
+        <div class="label"><span class="en">Technical Approach</span><span class="ko">기술적 접근</span></div>
+        <p><span class="en">Migration/model enum change to reintroduce LOW; UI treatment for the yellow state; shopping-list hook to surface low items; recipe-nudge integration.</span><span class="ko">LOW 상태를 재도입하는 마이그레이션/모델 열거형 변경; 노란색 상태에 대한 UI 처리; 부족한 항목을 노출하는 쇼핑 리스트 훅; 레시피 넛지 연동.</span></p>
+        <span class="scope-tag"><span class="en">Scope: small</span><span class="ko">범위: 소규모</span></span>
+      </div>
+
+      <div class="pillar-card">
+        <div class="pillar-num">2</div>
+        <h3><span class="en">Fresh Check retention engine</span><span class="ko">Fresh Check 리텐션 엔진</span></h3>
+        <div class="label"><span class="en">Why</span><span class="ko">왜</span></div>
+        <p><span class="en">Retention is Minjun's #1 worry. Fresh Check ("digest" internally) already has a server-computed expiry engine — but notification prefs exist in the UI with nothing actually wired to fire. That gap is the retention linchpin.</span><span class="ko">리텐션은 Minjun의 가장 큰 고민입니다. Fresh Check(내부명 "digest")는 이미 서버에서 계산되는 유통기한 엔진을 갖고 있지만 — 알림 설정 UI는 있는데 실제로 발송되도록 연결된 것이 없습니다. 이 공백이 리텐션의 핵심 고리입니다.</span></p>
+        <div class="label"><span class="en">UX / Design</span><span class="ko">UX / 디자인</span></div>
+        <p><span class="en">Daily local notification ("🍒 Fresh Check — N items need attention"); streak counter; weekly shareable "Rescued/$" card; dedicated Fresh Check destination page; a re-runnable creator demo pantry for content filming.</span><span class="ko">매일 로컬 알림("🍒 Fresh Check — N개 항목이 확인이 필요합니다"); 연속 사용 스트릭 카운터; 주간 공유 가능한 "구조한 항목/$" 카드; 전용 Fresh Check 목적지 페이지; 콘텐츠 촬영용으로 반복 실행 가능한 크리에이터 데모 팬트리.</span></p>
+        <div class="label"><span class="en">Technical Approach</span><span class="ko">기술적 접근</span></div>
+        <p><span class="en">Wire flutter_local_notifications (no Firebase) to existing timing prefs + iOS/Android permission requests; streak logic; track swipe outcomes (used/rescued vs tossed) for the $ estimate; dedicated page + branding; demo-pantry seeding gated to promo/creator accounts.</span><span class="ko">기존 알림 시간 설정에 flutter_local_notifications 연동(Firebase 불필요) + iOS/Android 권한 요청; 스트릭 로직; $ 추정을 위한 스와이프 결과(사용/구조 vs 폐기) 추적; 전용 페이지 + 브랜딩; 프로모/크리에이터 계정으로 제한된 데모 팬트리 시딩.</span></p>
+        <span class="scope-tag"><span class="en">Scope: medium–large (primary net-new build)</span><span class="ko">범위: 중–대규모 (주요 신규 구축)</span></span>
+      </div>
+
+      <div class="pillar-card">
+        <div class="pillar-num">3</div>
+        <h3><span class="en">Creator Attribution Program</span><span class="ko">크리에이터 귀속 프로그램</span></h3>
+        <div class="label"><span class="en">Why</span><span class="ko">왜</span></div>
+        <p><span class="en">The biggest strategic bet. "The AI app that credits + links humans instead of scraping them" is a press story, a distribution channel, and a moat — and Jujube is already ~80% architected for it.</span><span class="ko">가장 큰 전략적 베팅입니다. "인간을 스크래핑하는 대신 공을 돌리고 링크를 연결하는 AI 앱"은 언론 스토리이자 유통 채널이며 모트(moat)입니다 — 그리고 쥬주브는 이미 80% 정도 이를 위한 아키텍처를 갖추고 있습니다.</span></p>
+        <div class="label"><span class="en">UX / Design &amp; Technical Approach</span><span class="ko">UX / 디자인 및 기술적 접근</span></div>
+        <p><span class="en">See the dedicated deep-dive section below — two-population strategy, automated ingestion, manual relationships, in-app infra.</span><span class="ko">아래 별도의 심층 섹션 참조 — 두 개 그룹 전략, 자동 수집, 수동 관계 구축, 인앱 인프라.</span></p>
+        <span class="scope-tag"><span class="en">Scope: large (in-app infra is real eng scope; outreach is founder time)</span><span class="ko">범위: 대규모 (인앱 인프라는 실제 엔지니어링 범위; 아웃리치는 창업자 시간)</span></span>
+      </div>
+
+      <div class="pillar-card">
+        <div class="pillar-num">4</div>
+        <h3><span class="en">ASO / source-attribution marketing</span><span class="ko">ASO / 출처 귀속 마케팅</span></h3>
+        <div class="label"><span class="en">Why</span><span class="ko">왜</span></div>
+        <p><span class="en">The ethical-AI-that-credits-sources story is Jujube's most distinctive marketing angle — it needs to show up in the store listing and in-app, not just in internal architecture.</span><span class="ko">출처를 존중하는 윤리적 AI라는 스토리는 쥬주브가 가진 가장 차별화된 마케팅 앵글입니다 — 이는 내부 아키텍처뿐 아니라 스토어 리스팅과 앱 내에서도 드러나야 합니다.</span></p>
+        <div class="label"><span class="en">UX / Design</span><span class="ko">UX / 디자인</span></div>
+        <p><span class="en">Attribution made prominent in-app via Pillar 3's "Generated for you" vs "From creators you can visit" split.</span><span class="ko">Pillar 3의 "당신을 위해 생성됨" vs "방문 가능한 크리에이터로부터" 구분을 통해 앱 내에서 귀속을 눈에 띄게 표시.</span></p>
+        <div class="label"><span class="en">Technical Approach</span><span class="ko">기술적 접근</span></div>
+        <p><span class="en">Rewrite App Store subtitle/keywords/description and Play Store listing copy around ethical-AI + food-waste + receipt-scan positioning; optional landing-page manifesto; blogger-ally PR pitch to food media.</span><span class="ko">윤리적 AI + 음식물 쓰레기 절감 + 영수증 스캔 포지셔닝을 중심으로 App Store 부제/키워드/설명 및 Play Store 리스팅 문구 재작성; 선택적 랜딩 페이지 매니페스토; 푸드 미디어 대상 블로거-우호적 PR 피치.</span></p>
+        <span class="scope-tag"><span class="en">Scope: small (copy-only), but time-sensitive</span><span class="ko">범위: 소규모(문구 작업 위주), 다만 시급성 있음</span></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Creator Attribution Program deep dive ===== -->
+  <section id="creator">
+    <h2 class="section-title"><span class="num">03</span><span class="en">Creator Attribution Program — In Depth</span><span class="ko">크리에이터 귀속 프로그램 — 심층 분석</span></h2>
+    <p class="section-intro">
+      <span class="en">This is the biggest strategic bet in 2.5.1. It splits into two creator populations, an automated ingestion pipeline, a small manual relationship track, and new in-app infrastructure.</span>
+      <span class="ko">이것은 2.5.1에서 가장 큰 전략적 베팅입니다. 두 개의 크리에이터 그룹, 자동 수집 파이프라인, 소규모 수동 관계 트랙, 그리고 새로운 인앱 인프라로 구성됩니다.</span>
+    </p>
+
+    <div class="subcard">
+      <h4><span class="en">Two populations</span><span class="ko">두 개의 그룹</span></h4>
+      <div class="two-col" style="margin-top:10px;">
+        <div class="pop-card">
+          <span class="tag">A</span>
+          <p><span class="en"><b>Recipe bloggers with websites</b> (Maangchi, My Korean Kitchen, Woks of Life, Omnivore's Cookbook). Citable SOURCES via JSON-LD Recipe schema, indexed via Brave Search.</span><span class="ko"><b>웹사이트를 운영하는 레시피 블로거</b> (Maangchi, My Korean Kitchen, Woks of Life, Omnivore's Cookbook 등). JSON-LD Recipe 스키마를 통해 인용 가능한 출처(SOURCE)이며, Brave Search로 색인됩니다.</span></p>
+        </div>
+        <div class="pop-card">
+          <span class="tag no">B</span>
+          <p><span class="en"><b>Instagram / TikTok creators</b> — marketing partners for a later UGC phase, NOT citable sources. Don't scrape (ToS-fragile, unstructured).</span><span class="ko"><b>인스타그램 / 틱톡 크리에이터</b> — 이후 UGC 단계를 위한 마케팅 파트너이며, 인용 가능한 출처는 아닙니다. 스크래핑하지 않음 (ToS 취약, 비정형 데이터).</span></p>
+        </div>
+      </div>
+      <p style="margin-top:10px;"><span class="en">Overlap case (bloggers with a large IG following) gets extra outreach attention since they bridge both populations.</span><span class="ko">두 그룹에 걸쳐 있는 경우(대형 IG 팔로워를 가진 블로거)는 두 그룹을 모두 아우르므로 추가적인 아웃리치 관심이 필요합니다.</span></p>
+    </div>
+
+    <div class="subcard">
+      <h4><span class="en">Automated ~95% ingestion</span><span class="ko">자동화된 ~95% 수집</span></h4>
+      <p><span class="en">Brave Search → fetch page → parse JSON-LD Recipe schema → store <b>title / URL / ingredients / author / image ONLY</b> — never method text or photos beyond what JSON-LD provides. Respect robots.txt, rate-limit, and cache. Extends the existing fetch-sources function with JSON-LD parsing + author capture. Seed 100–200 Korean/Chinese food blogs initially, scaling to 500+.</span><span class="ko">Brave Search → 페이지 fetch → JSON-LD Recipe 스키마 파싱 → <b>제목 / URL / 재료 / 작성자 / 이미지만</b> 저장 — JSON-LD가 제공하는 것 이상의 조리법 본문이나 사진은 절대 저장하지 않음. robots.txt 준수, 요청 속도 제한, 캐싱 적용. 기존 fetch-sources 함수를 JSON-LD 파싱 + 작성자 캡처로 확장. 초기에는 한국/중국 요리 블로그 100~200개로 시작해 500개 이상으로 확장.</span></p>
+    </div>
+
+    <div class="subcard">
+      <h4><span class="en">Manual top 30–50</span><span class="ko">수동 관리 상위 30~50개</span></h4>
+      <p><span class="en">Personal outreach emails — not for indexing (already handled by the automated pipeline) but for building real relationships with the highest-value creators. ~15 hours of founder effort spread over 5 months, entirely Minjun's track, not engineering.</span><span class="ko">개인화된 아웃리치 이메일 — 색인을 위한 것이 아니라(자동 파이프라인이 이미 처리함) 가장 가치가 높은 크리에이터들과 실제 관계를 구축하기 위함입니다. 5개월에 걸쳐 약 15시간의 창업자 노력이 필요하며, 전적으로 엔지니어링이 아닌 Minjun의 트랙입니다.</span></p>
+    </div>
+
+    <div class="subcard">
+      <h4><span class="en">Reactive opt-out-first form</span><span class="ko">반응형 옵트아웃 우선 폼</span></h4>
+      <p><span class="en">Public opt-out form, honored within 24 hours, permanent. An <code>active</code> flag on the creator record instantly removes them from results server-side — no app update required. <b>This ships FIRST, before any outreach begins.</b></span><span class="ko">공개 옵트아웃 폼, 24시간 이내 반영, 영구 적용. 크리에이터 레코드의 <code>active</code> 플래그를 통해 서버 단에서 즉시 결과에서 제외 — 앱 업데이트 불필요. <b>이는 어떤 아웃리치보다 먼저 출시되어야 합니다.</b></span></p>
+    </div>
+
+    <div class="subcard">
+      <h4><span class="en">In-app infra (targeted for 2.5.1)</span><span class="ko">인앱 인프라 (2.5.1 목표)</span></h4>
+      <ul class="checklist">
+        <li><span class="chk">✓</span><p><span class="en">Normalize recipe_sources into a proper <code>creators</code> table (name, site, author, profile, active flag, contact)</span><span class="ko">recipe_sources를 정식 <code>creators</code> 테이블로 정규화 (이름, 사이트, 작성자, 프로필, 활성 플래그, 연락처)</span></p></li>
+        <li><span class="chk">✓</span><p><span class="en">Per-creator click tracking (<code>creator_clicks</code> table, logged on every "View Original" tap)</span><span class="ko">크리에이터별 클릭 추적 (<code>creator_clicks</code> 테이블, "원본 보기" 탭마다 기록)</span></p></li>
+        <li><span class="chk">✓</span><p><span class="en">Creator profile page</span><span class="ko">크리에이터 프로필 페이지</span></p></li>
+        <li><span class="chk">✓</span><p><span class="en">Visible UI separation — "Generated for you" vs "From creators you can visit" — a generated recipe must NEVER appear creator-authored</span><span class="ko">눈에 띄는 UI 구분 — "당신을 위해 생성됨" vs "방문 가능한 크리에이터로부터" — 생성된 레시피는 절대 크리에이터가 작성한 것처럼 보여서는 안 됨</span></p></li>
+        <li><span class="chk">✓</span><p><span class="en">Admin "Creators" panel (add/remove/view stats)</span><span class="ko">관리자용 "크리에이터" 패널 (추가/제거/통계 확인)</span></p></li>
+      </ul>
+    </div>
+
+    <div class="subcard" style="border-left-color:var(--gold);">
+      <h4><span class="en">Later phase (2.5.2+, out of 2.5.1 scope)</span><span class="ko">이후 단계 (2.5.2+, 2.5.1 범위 밖)</span></h4>
+      <ul class="checklist">
+        <li><span class="chk" style="background:var(--gold);">→</span><p><span class="en">Monthly automated click-report email to top-tier creators ("we sent you 340 clicks in July") — turns a "yes" into an advocate + gives a case study for further outreach</span><span class="ko">최상위 크리에이터에게 월간 자동 클릭 리포트 이메일 발송("7월에 340건의 클릭을 보내드렸습니다") — "예"를 옹호자로 전환하고 향후 아웃리치를 위한 사례 연구 제공</span></p></li>
+        <li><span class="chk" style="background:var(--gold);">→</span><p><span class="en">Revenue share: 20–30% of first-year subscription revenue attributed to a creator's referrals, paid quarterly via App Store offer codes</span><span class="ko">수익 공유: 크리에이터 추천으로 발생한 첫 해 구독 매출의 20~30%, App Store 오퍼 코드를 통해 분기별 지급</span></p></li>
+        <li><span class="chk" style="background:var(--gold);">→</span><p><span class="en">Creator dashboard extending past the initial ~30 relationships</span><span class="ko">초기 약 30개 관계를 넘어서 확장되는 크리에이터 대시보드</span></p></li>
+        <li><span class="chk" style="background:var(--gold);">→</span><p><span class="en">Expansion to South Asian food blogs</span><span class="ko">남아시아 요리 블로그로 확장</span></p></li>
+      </ul>
+    </div>
+
+    <div class="callout risk">
+      <b><span class="en">#1 RISK — relevance matching.</span><span class="ko">1순위 리스크 — 관련성 매칭.</span></b>
+      <span class="en"> If the cited source doesn't obviously match the generated dish, the program is worthless AND damaging — crediting the wrong person is the accusation that sinks it. Audit hard, add a relevance gate, and verify current Brave-match quality before shipping.</span>
+      <span class="ko"> 인용된 출처가 생성된 요리와 명백히 일치하지 않으면 이 프로그램은 무가치할 뿐 아니라 오히려 해가 됩니다 — 잘못된 사람에게 공을 돌리는 것은 프로그램 전체를 침몰시킬 수 있는 비난입니다. 출시 전에 철저히 감사하고, 관련성 게이트를 추가하고, 현재 Brave 매칭 품질을 검증해야 합니다.</span>
+    </div>
+  </section>
+
+  <!-- ===== Scaling Roadmap ===== -->
+  <section id="roadmap">
+    <h2 class="section-title"><span class="num">04</span><span class="en">Scaling Roadmap</span><span class="ko">스케일링 로드맵</span></h2>
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-when"><span class="en">Months 1–2</span><span class="ko">1~2개월차</span></div>
+        <h4><span class="en">Build ingestion + seed + opt-out first</span><span class="ko">수집 구축 + 시딩 + 옵트아웃 우선</span></h4>
+        <p><span class="en">Build the ingestion pipeline (JSON-LD parsing + author capture). Seed 100–200 Korean/Chinese food blogs. Ship the opt-out form <b>FIRST</b>, before any outreach begins. Audit relevance matching <b>HARD</b> — this is the #1 risk.</span><span class="ko">수집 파이프라인 구축(JSON-LD 파싱 + 작성자 캡처). 한국/중국 요리 블로그 100~200개 시딩. 아웃리치 전에 옵트아웃 폼을 <b>먼저</b> 출시. 관련성 매칭을 <b>철저히</b> 감사 — 1순위 리스크입니다.</span></p>
+      </div>
+      <div class="tl-item">
+        <div class="tl-when"><span class="en">Month 2</span><span class="ko">2개월차</span></div>
+        <h4><span class="en">Personal outreach begins</span><span class="ko">개인화된 아웃리치 시작</span></h4>
+        <p><span class="en">Minjun personally emails the top 20 creators.</span><span class="ko">Minjun이 상위 20개 크리에이터에게 직접 이메일을 보냅니다.</span></p>
+      </div>
+      <div class="tl-item">
+        <div class="tl-when"><span class="en">Months 3–5</span><span class="ko">3~5개월차</span></div>
+        <h4><span class="en">Expand + creator profiles + reports</span><span class="ko">확장 + 크리에이터 프로필 + 리포트</span></h4>
+        <p><span class="en">Expand ingestion to 500+ blogs. Build creator profile pages. Start monthly click-report emails.</span><span class="ko">수집 대상을 500개 이상 블로그로 확장. 크리에이터 프로필 페이지 구축. 월간 클릭 리포트 이메일 시작.</span></p>
+      </div>
+      <div class="tl-item">
+        <div class="tl-when"><span class="en">Month 6+</span><span class="ko">6개월차 이후</span></div>
+        <h4><span class="en">Revenue share + South Asian expansion</span><span class="ko">수익 공유 + 남아시아 확장</span></h4>
+        <p><span class="en">Roll out revenue share to top 20–30 creators. Expand ingestion to South Asian food blogs.</span><span class="ko">상위 20~30개 크리에이터에게 수익 공유 적용. 남아시아 요리 블로그로 수집 확장.</span></p>
+        <p class="tl-total"><span class="en">Total founder effort: ~15 hours across the 5 months.</span><span class="ko">총 창업자 소요 시간: 5개월간 약 15시간.</span></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Outreach Pitch ===== -->
+  <section id="outreach">
+    <h2 class="section-title"><span class="num">05</span><span class="en">The Outreach Pitch</span><span class="ko">아웃리치 피치</span></h2>
+
+    <div class="email-card">
+      <div class="em-subject"><span class="en">Subject: "We link back — pantry app crediting Korean recipe creators"</span><span class="ko">제목: "저희는 링크로 연결해드립니다 — 한식 레시피 크리에이터에게 공을 돌리는 팬트리 앱"</span></div>
+      <div class="em-body">
+<span class="en-block">Hi [name] — I built a pantry app that suggests recipes based on what people actually have in their fridge. Most AI recipe tools swallow blogger content and spit it out uncredited. I built the opposite: when we surface your recipe, we show your name and link to your site. We don't reproduce your text or photos. I found you through [specific recipe]. I'd like to include your recipes as linked results — you'd get a creator profile in the app, attribution, and a monthly report of the traffic we sent you. One email removes you at any time, no questions. Interested in a 10-minute call?</span><span class="ko-block">안녕하세요 [이름]님 — 저는 사람들이 냉장고에 실제로 가진 재료를 기반으로 레시피를 추천해주는 팬트리 앱을 만들었습니다. 대부분의 AI 레시피 도구는 블로거의 콘텐츠를 그대로 흡수해 출처 없이 내놓습니다. 저는 그 반대로 만들었습니다: 저희가 당신의 레시피를 보여줄 때, 이름을 표시하고 사이트로 링크를 연결합니다. 저희는 텍스트나 사진을 그대로 복제하지 않습니다. [특정 레시피]를 통해 당신을 알게 되었습니다. 당신의 레시피를 링크된 결과로 포함시키고 싶습니다 — 앱 내 크리에이터 프로필, 귀속 표시, 그리고 저희가 보내드린 트래픽에 대한 월간 리포트를 받으실 수 있습니다. 이메일 한 통이면 언제든 제외해드리며, 별다른 질문도 하지 않습니다. 10분 통화 가능하실까요?</span>
+      </div>
+    </div>
+
+    <div class="stat-row">
+      <div class="stat"><div class="n">10</div><div class="l"><span class="en">personalized emails / week</span><span class="ko">주당 개인화된 이메일 수</span></div></div>
+      <div class="stat"><div class="n">5k–30k</div><div class="l"><span class="en">start with smaller creators first</span><span class="ko">소규모 크리에이터부터 먼저 시작</span></div></div>
+      <div class="stat"><div class="n">20–30%</div><div class="l"><span class="en">expected reply rate</span><span class="ko">예상 응답률</span></div></div>
+      <div class="stat"><div class="n">10–15%</div><div class="l"><span class="en">expected conversion rate</span><span class="ko">예상 전환율</span></div></div>
+    </div>
+
+    <div class="card" style="margin-top:16px;">
+      <h3><span class="en">Tracking sheet spec</span><span class="ko">추적 시트 스펙</span></h3>
+      <table class="tracksheet">
+        <tr>
+          <th><span class="en">Field</span><span class="ko">항목</span></th>
+          <th><span class="en">Purpose</span><span class="ko">용도</span></th>
+        </tr>
+        <tr><td><span class="en">Name</span><span class="ko">이름</span></td><td><span class="en">Creator identity</span><span class="ko">크리에이터 식별</span></td></tr>
+        <tr><td><span class="en">Site</span><span class="ko">사이트</span></td><td><span class="en">Blog URL</span><span class="ko">블로그 URL</span></td></tr>
+        <tr><td><span class="en">Monthly traffic estimate</span><span class="ko">월간 트래픽 추정치</span></td><td><span class="en">Prioritization</span><span class="ko">우선순위 결정</span></td></tr>
+        <tr><td><span class="en">Has recipe schema (Y/N)</span><span class="ko">레시피 스키마 보유 여부 (Y/N)</span></td><td><span class="en">Automated-ingestion eligibility</span><span class="ko">자동 수집 가능 여부</span></td></tr>
+        <tr><td><span class="en">Contact method</span><span class="ko">연락 방법</span></td><td><span class="en">Email / DM / contact form</span><span class="ko">이메일 / DM / 문의 폼</span></td></tr>
+        <tr><td><span class="en">Personal detail</span><span class="ko">개인화 정보</span></td><td><span class="en">Personalization hook for outreach</span><span class="ko">아웃리치용 개인화 포인트</span></td></tr>
+        <tr><td><span class="en">Status</span><span class="ko">상태</span></td><td><span class="en">Contacted / replied / opted-in / opted-out</span><span class="ko">연락함 / 응답함 / 옵트인 / 옵트아웃</span></td></tr>
+      </table>
+    </div>
+  </section>
+
+  <!-- ===== Pitfalls ===== -->
+  <section id="pitfalls">
+    <h2 class="section-title"><span class="num">06</span><span class="en">Pitfalls</span><span class="ko">주의해야 할 함정</span></h2>
+    <div class="callout warn"><span class="en">Only ever surface creators with a <b>working link</b> — add a link-rot checker. Links are real at ingestion time via Brave, but the web rots over time.</span><span class="ko"><b>작동하는 링크</b>가 있는 크리에이터만 노출 — 링크 유효성 검사기(link-rot checker)를 추가할 것. 수집 시점에는 Brave를 통해 실제 링크지만, 시간이 지나면 웹은 부패합니다.</span></div>
+    <div class="callout warn"><span class="en">Never let a generated recipe read as <b>creator-authored</b>. The UI separation between "Generated for you" and "From creators you can visit" must be unambiguous.</span><span class="ko">생성된 레시피가 <b>크리에이터가 작성한 것처럼</b> 읽혀서는 절대 안 됩니다. "당신을 위해 생성됨"과 "방문 가능한 크리에이터로부터"의 UI 구분은 명확해야 합니다.</span></div>
+    <div class="callout warn"><span class="en">Honor removal requests <b>gracefully and fast</b> (&lt;24h) — no friction, no follow-up questions.</span><span class="ko">삭제 요청은 <b>정중하고 신속하게</b> 처리 (24시간 이내) — 마찰 없이, 추가 질문 없이.</span></div>
+    <div class="callout warn"><span class="en">Pay revenue share <b>on time</b> — one late payment poisons the next 20 creator relationships.</span><span class="ko">수익 공유는 <b>제때</b> 지급 — 한 번의 지연 지급이 다음 20개 크리에이터 관계를 망칠 수 있습니다.</span></div>
+  </section>
+
+  <!-- ===== Legal Posture ===== -->
+  <section id="legal">
+    <h2 class="section-title"><span class="num">07</span><span class="en">Legal Posture</span><span class="ko">법적 입장</span></h2>
+    <div class="callout legal">
+      <p><span class="en">Link-only storage + no caching of recipe text/photos + AI-original recipe generation is a defensible posture.</span><span class="ko">링크만 저장 + 레시피 텍스트/사진 캐싱 없음 + AI-오리지널 레시피 생성이라는 조합은 방어 가능한 입장입니다.</span></p>
+      <p><span class="en">Still get a lawyer's hour of review before revenue share or meaningful scaling.</span><span class="ko">그럼에도 수익 공유나 본격적인 확장 이전에는 변호사의 1시간짜리 검토를 받을 것.</span></p>
+      <p><b><span class="en">This is not legal advice.</span><span class="ko">이는 법률 자문이 아닙니다.</span></b></p>
+    </div>
+  </section>
+
+  <!-- ===== Sequencing ===== -->
+  <section id="sequencing">
+    <h2 class="section-title"><span class="num">08</span><span class="en">Sequencing</span><span class="ko">시퀀싱</span></h2>
+    <div class="seq-grid">
+      <div class="seq-card a">
+        <span class="seq-tag">2.5.1-A</span>
+        <p style="font-size:12.5px;color:var(--muted);margin:0 0 8px;"><span class="en">Fastest retention win</span><span class="ko">가장 빠른 리텐션 개선</span></p>
+        <ul>
+          <li><span class="en">Daily local notification</span><span class="ko">매일 로컬 알림</span></li>
+          <li><span class="en">Streak</span><span class="ko">스트릭</span></li>
+          <li><span class="en">Running Low</span><span class="ko">Running Low</span></li>
+        </ul>
+      </div>
+      <div class="seq-card b">
+        <span class="seq-tag">2.5.1-B</span>
+        <p style="font-size:12.5px;color:var(--muted);margin:0 0 8px;"><span class="en">Marketing engine</span><span class="ko">마케팅 엔진</span></p>
+        <ul>
+          <li><span class="en">Rescued/$ share card</span><span class="ko">구조/$ 공유 카드</span></li>
+          <li><span class="en">Fresh Check page</span><span class="ko">Fresh Check 페이지</span></li>
+          <li><span class="en">Creator demo package</span><span class="ko">크리에이터 데모 패키지</span></li>
+          <li><span class="en">Creator-program in-app infra</span><span class="ko">크리에이터 프로그램 인앱 인프라</span></li>
+        </ul>
+      </div>
+      <div class="seq-card c">
+        <span class="seq-tag">2.5.1-C</span>
+        <p style="font-size:12.5px;color:var(--muted);margin:0 0 8px;"><span class="en">No build — founder track</span><span class="ko">빌드 불필요 — 창업자 트랙</span></p>
+        <ul>
+          <li><span class="en">ASO copy</span><span class="ko">ASO 문구</span></li>
+          <li><span class="en">Blogger outreach sheet/emails</span><span class="ko">블로거 아웃리치 시트/이메일</span></li>
+          <li><span class="en">Starts now</span><span class="ko">지금 시작</span></li>
+        </ul>
+      </div>
+      <div class="seq-card">
+        <span class="seq-tag">2.5.2+</span>
+        <p style="font-size:12.5px;color:var(--muted);margin:0 0 8px;"><span class="en">Future</span><span class="ko">향후</span></p>
+        <ul>
+          <li><span class="en">Monthly report automation</span><span class="ko">월간 리포트 자동화</span></li>
+          <li><span class="en">Rev-share / offer codes</span><span class="ko">수익 공유 / 오퍼 코드</span></li>
+          <li><span class="en">Creator dashboard</span><span class="ko">크리에이터 대시보드</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Open Decisions ===== -->
+  <section id="decisions">
+    <h2 class="section-title"><span class="num">09</span><span class="en">Open Decisions</span><span class="ko">결정이 필요한 사항</span></h2>
+    <div class="card">
+      <div class="decision">
+        <div class="dnum">1</div>
+        <p><span class="en">Running Low UX confirm (tap = low / long-press = remove / 2nd tap clears).</span><span class="ko">Running Low UX 확정 (탭 = 부족 / 길게 누르기 = 제거 / 두 번째 탭 = 초기화).</span></p>
+      </div>
+      <div class="decision">
+        <div class="dnum">2</div>
+        <p><span class="en">$ estimate method: category averages vs. receipt-derived.</span><span class="ko">$ 추정 방식: 카테고리 평균 vs. 영수증 기반 산출.</span></p>
+      </div>
+      <div class="decision">
+        <div class="dnum">3</div>
+        <p><span class="en">Notification default time + copy + opt-in-on-first-run.</span><span class="ko">알림 기본 시간 + 문구 + 최초 실행 시 옵트인 여부.</span></p>
+      </div>
+      <div class="decision">
+        <div class="dnum">4</div>
+        <p><span class="en">Creator demo package: gating + item count.</span><span class="ko">크리에이터 데모 패키지: 접근 제한 방식 + 항목 수.</span></p>
+      </div>
+      <div class="decision">
+        <div class="dnum">5</div>
+        <p><span class="en">One big 2.5.1 release vs. phased A/B/C.</span><span class="ko">2.5.1을 하나의 큰 릴리스로 할지 vs. A/B/C 단계별로 나눌지.</span></p>
+      </div>
+      <div class="decision">
+        <div class="dnum">6</div>
+        <p><span class="en">Creator program: start automated ingestion in 2.5.1, or push to 2.5.2?</span><span class="ko">크리에이터 프로그램: 자동 수집을 2.5.1에서 시작할지, 2.5.2로 미룰지?</span></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Verdict ===== -->
+  <section id="verdict">
+    <h2 class="section-title"><span class="num">10</span><span class="en">Assistant's Verdict</span><span class="ko">어시스턴트의 총평</span></h2>
+    <div class="verdict">
+      <div class="vlabel">🍒 <span class="en">Totoro's take</span><span class="ko">토토로의 의견</span></div>
+      <p><span class="en"><b>Strongly worth it.</b> Not a pivot — it formalizes what's already built. Not a massive patch: it's contained and reuses fetch-sources / analytics / recipe_sources. Opt-out / opt-in is a trivial server-side flag. The real cost is Minjun's outreach time, not engineering time.</span><span class="ko"><b>강력히 추진할 가치가 있습니다.</b> 피벗이 아닙니다 — 이미 구축된 것을 공식화하는 작업입니다. 대규모 패치도 아닙니다: 범위가 제한적이며 fetch-sources / analytics / recipe_sources를 재사용합니다. 옵트아웃/옵트인은 단순한 서버 측 플래그입니다. 실제 비용은 엔지니어링 시간이 아니라 Minjun의 아웃리치 시간입니다.</span></p>
+      <p><span class="en"><b>Refinements added beyond the source reports:</b> (1) relevance-match quality is the linchpin — audit hard before shipping; (2) add a link-rot checker; (3) keep robots.txt/ToS/rate-limit discipline + opt-out-first + a legal review pass before any money changes hands.</span><span class="ko"><b>원본 보고서를 넘어 추가된 보완점:</b> (1) 관련성 매칭 품질이 핵심 고리입니다 — 출시 전 철저히 감사할 것; (2) 링크 유효성 검사기 추가; (3) robots.txt/ToS/요청 속도 제한 규율 + 옵트아웃 우선 + 금전이 오가기 전 법률 검토 유지.</span></p>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <span class="en">Jujube 2.5.1 Product Plan — internal reference doc. Drafted 2026-08-13.</span>
+  <span class="ko">쥬주브 2.5.1 제품 기획서 — 내부 참고 문서. 2026년 8월 13일 작성.</span>
+</footer>
+
+<script>
+  let isKorean = false;
+  function toggleLang() {
+    isKorean = !isKorean;
+    document.querySelectorAll('.en, .en-block').forEach(el => el.classList.toggle('hide', isKorean));
+    document.querySelectorAll('.ko, .ko-block').forEach(el => el.classList.toggle('show', isKorean));
+    document.getElementById('langToggle').textContent = isKorean ? 'English' : '한국어';
+    document.documentElement.lang = isKorean ? 'ko' : 'en';
+  }
+</script>
+
+</body>
+</html>
