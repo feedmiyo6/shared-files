@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jujube — Your AI Kitchen Companion</title>
+<meta name="description" content="AI-powered pantry tracking, smart recipes, voice input, and receipt scanning. Cook from what you already have — waste less with Jujube.">
+<meta property="og:title" content="Jujube — Your AI Kitchen Companion">
+<meta property="og:description" content="Smart pantry tracking, AI-powered recipes, voice input, receipt scanning. Free on the App Store.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://myjujube.app">
+<link rel="icon" href="assets/favicon.png" type="image/png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Shippori+Mincho:wght@500;600;800&family=Shippori+Antique+B1&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --red:#b63f39;
+  --red-accent:#c94b44;
+  --red-light:#e7a19b;
+  --bg:#faf7f2;
+  --cream:#f4efe7;
+  --text:#2b1e1b;
+  --text-mid:#5a4742;
+  --text-light:#8c7b75;
+  --border:#8c7b75;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+img{display:block;max-width:100%}
+.wrap{max-width:980px;margin:0 auto;padding:0 32px;position:relative}
+
+/* ── Navbar ── */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(250,247,242,.92);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
+nav .wrap{display:flex;align-items:center;justify-content:space-between;height:56px}
+.nav-wordmark{font-family:'Shippori Mincho',serif;font-weight:600;font-size:1.2rem;letter-spacing:.1em;text-transform:uppercase;color:var(--text)}
+.nav-links{display:flex;align-items:center;gap:26px}
+.nav-links a.nav-link{font-size:.82rem;color:var(--text-mid);font-weight:500;letter-spacing:-.01em;transition:color .2s}
+.nav-links a.nav-link:hover{color:var(--red)}
+.btn-get-beta{display:inline-flex;align-items:center;justify-content:center;background:var(--red);color:var(--cream);font-size:.78rem;font-weight:500;padding:10px 24px;border-radius:100px;transition:opacity .2s;letter-spacing:-.02em}
+.btn-get-beta:hover{opacity:.85}
+
+/* ── Hero ── */
+.hero{padding:112px 0 0;position:relative}
+.hero-grid{display:grid;grid-template-columns:1fr 0.82fr;gap:40px;align-items:center}
+.hero-copy h1{font-family:'Shippori Antique B1',serif;font-weight:400;font-size:clamp(2.1rem,5.4vw,3.2rem);color:var(--text);margin-bottom:22px;letter-spacing:-.04em;line-height:1.03}
+.hero-body{font-family:'Shippori Antique B1',serif;font-weight:400;font-size:clamp(.92rem,2.4vw,1.12rem);color:var(--text-mid);max-width:460px;margin:0 0 32px;line-height:1.62;letter-spacing:-.03em}
+.hero-cta-wrap{display:flex;flex-direction:column;align-items:flex-start;gap:12px}
+.hero-cta{display:inline-flex;align-items:center;justify-content:center;background:var(--red);color:var(--cream);font-size:.9rem;font-weight:500;padding:16px 44px;border-radius:100px;transition:opacity .2s;letter-spacing:-.02em}
+.hero-cta:hover{opacity:.85}
+.hero-note{font-size:.82rem;color:var(--text-light);letter-spacing:-.02em}
+.hero-phone{justify-self:center;width:280px;border-radius:40px;overflow:hidden;background:#000;box-shadow:0 18px 60px rgba(122,50,45,.22);transform:rotate(2deg)}
+.hero-phone img{display:block;width:100%;height:auto;border-radius:40px;padding:7px}
+
+/* ── Decorative elements ── */
+.leaf-hero{position:absolute;right:-6px;top:78px;width:96px;height:auto;opacity:1;pointer-events:none;transform:rotate(6deg);z-index:-1}
+.leaf-pantry{position:absolute;left:0;top:50%;width:80px;height:auto;pointer-events:none;transform:rotate(15deg);z-index:0}
+
+/* ── Section headings ── */
+.section{padding:86px 0 0;position:relative;overflow:visible}
+.eyebrow{font-size:.72rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--red);margin-bottom:12px}
+.feat-head{margin-bottom:34px}
+.feat-head h2{font-family:'Shippori Mincho',serif;font-weight:600;font-size:clamp(1.6rem,4.5vw,2.15rem);color:var(--text);margin-bottom:10px;letter-spacing:-.04em;line-height:1.2}
+.feat-head p{font-size:.9rem;color:var(--text-mid);line-height:1.55;letter-spacing:-.03em;max-width:520px}
+
+/* ── Phone Mockups ── */
+.phone-mockup{position:relative;flex-shrink:0;border-radius:36px;overflow:hidden;background:#000;box-shadow:0 8px 40px rgba(0,0,0,.16)}
+.phone-mockup .phone-screenshot{display:block;width:100%;height:auto;border-radius:36px;padding:8px}
+.phones-pantry{display:flex;gap:24px;justify-content:center;align-items:flex-start;margin-top:8px}
+.phones-pantry .phone-mockup:first-child{width:270px;z-index:2}
+.phones-pantry .phone-mockup:last-child{width:270px;z-index:1;margin-top:24px}
+
+/* Voice & Receipt flow (tidied — no messy overlap) */
+.flow-steps{display:flex;justify-content:center;align-items:center;gap:18px;margin:6px 0 30px;flex-wrap:wrap}
+.flow-step{text-align:center;min-width:88px}
+.flow-step-badge{width:46px;height:46px;border-radius:50%;background:var(--cream);border:2px solid var(--red-light);color:var(--red);font-weight:700;display:flex;align-items:center;justify-content:center;margin:0 auto 10px;font-size:1rem}
+.flow-step-label{font-family:'Shippori Antique B1',serif;font-size:.8rem;color:var(--text-mid);line-height:1.35;letter-spacing:-.03em}
+.flow-arrow{color:var(--red);font-size:1.5rem;flex-shrink:0;font-weight:700;line-height:1}
+.phones-receipt{display:flex;gap:20px;justify-content:center;align-items:flex-start;margin-top:8px}
+.phones-receipt .phone-mockup{width:260px}
+.phones-receipt .phone-mockup:last-child{margin-top:24px}
+
+/* Recipe phones */
+.phones-recipe{display:flex;gap:24px;justify-content:center;align-items:flex-start;margin-top:8px}
+.phones-recipe .phone-mockup:first-child{width:264px;margin-top:24px}
+.phones-recipe .phone-mockup:last-child{width:264px}
+
+/* ── Pricing ── */
+.pricing-head{text-align:center;margin-bottom:40px}
+.pricing-head h2{font-family:'Shippori Mincho',serif;font-weight:600;font-size:clamp(1.7rem,4.6vw,2.25rem);color:var(--text);letter-spacing:-.04em;margin-bottom:10px}
+.pricing-head p{font-size:.9rem;color:var(--text-mid);letter-spacing:-.03em}
+.price-note{display:inline-block;margin-top:10px;font-size:.72rem;color:var(--red);background:#f7e7e3;border-radius:100px;padding:5px 14px}
+.price-grid{display:grid;grid-template-columns:1fr 1fr;gap:22px;align-items:stretch}
+.price-card{background:#fff;border:1px solid #eaded2;border-radius:26px;padding:34px 30px;display:flex;flex-direction:column}
+.price-card.featured{border:2px solid var(--red);box-shadow:0 12px 40px rgba(182,63,57,.14);position:relative}
+.price-badge{position:absolute;top:-13px;left:50%;transform:translateX(-50%);background:var(--red);color:var(--cream);font-size:.66rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:6px 16px;border-radius:100px}
+.price-name{font-family:'Shippori Mincho',serif;font-weight:600;font-size:1.25rem;color:var(--text);margin-bottom:6px}
+.price-tag{font-family:'Shippori Antique B1',serif;font-size:2.1rem;color:var(--text);letter-spacing:-.03em;line-height:1.1;margin:8px 0 2px}
+.price-tag small{font-size:.86rem;color:var(--text-light);font-family:'Inter',sans-serif}
+.price-sub{font-size:.8rem;color:var(--text-light);margin-bottom:20px;min-height:1.2em}
+.price-list{list-style:none;margin:0 0 26px;padding:0;flex:1}
+.price-list li{font-size:.86rem;color:var(--text-mid);padding:7px 0 7px 26px;position:relative;letter-spacing:-.02em}
+.price-list li::before{content:"✓";position:absolute;left:0;color:var(--red);font-weight:700}
+.price-tiers{display:flex;flex-direction:column;gap:8px;margin-bottom:24px}
+.tier-row{display:flex;justify-content:space-between;align-items:baseline;font-size:.86rem;color:var(--text-mid);padding:9px 14px;background:var(--bg);border-radius:12px}
+.tier-row .tier-name{font-weight:600;color:var(--text)}
+.tier-row .tier-best{font-size:.64rem;color:var(--red);font-weight:600;text-transform:uppercase;letter-spacing:.06em;margin-left:6px}
+.tier-row .tier-price{font-variant-numeric:tabular-nums}
+.price-cta{display:inline-flex;align-items:center;justify-content:center;font-size:.86rem;font-weight:500;padding:14px 0;border-radius:100px;transition:opacity .2s;letter-spacing:-.02em}
+.price-cta.primary{background:var(--red);color:var(--cream)}
+.price-cta.ghost{background:transparent;color:var(--red);border:1px solid var(--red-light)}
+.price-cta:hover{opacity:.85}
+
+/* ── FAQ ── */
+.faq-head{text-align:center;margin-bottom:34px}
+.faq-head h2{font-family:'Shippori Mincho',serif;font-weight:600;font-size:clamp(1.7rem,4.6vw,2.25rem);color:var(--text);letter-spacing:-.04em}
+.faq-list{max-width:680px;margin:0 auto}
+.faq-item{border-bottom:1px solid #e6dccf}
+.faq-q{width:100%;text-align:left;background:none;border:none;cursor:pointer;font-family:inherit;font-size:1rem;font-weight:600;color:var(--text);padding:22px 40px 22px 0;position:relative;letter-spacing:-.02em}
+.faq-q::after{content:"+";position:absolute;right:6px;top:50%;transform:translateY(-50%);font-size:1.4rem;color:var(--red);font-weight:400;transition:transform .2s}
+.faq-item.open .faq-q::after{content:"–"}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .28s ease;font-size:.9rem;color:var(--text-mid);line-height:1.6;letter-spacing:-.02em}
+.faq-item.open .faq-a{max-height:260px}
+.faq-a p{padding:0 0 22px}
+
+/* ── Mid CTA Card ── */
+.mid-cta{margin-top:86px;padding:56px 36px;text-align:center;background:var(--cream);border-radius:40px;position:relative;overflow:hidden;border:4px solid var(--red-light);box-shadow:0 4px 24px rgba(0,0,0,.1)}
+.mid-cta h2{font-family:'Shippori Antique B1',serif;font-weight:400;font-size:clamp(1.6rem,5vw,2.4rem);color:var(--text-mid);letter-spacing:-.04em;line-height:1.15;margin-bottom:16px}
+.mid-cta h2 strong{font-family:'Shippori Mincho',serif;font-weight:800}
+.mid-cta p{font-size:.9rem;color:var(--text-mid);max-width:420px;margin:0 auto 26px;line-height:1.55;letter-spacing:-.04em}
+.mid-cta .hero-cta{color:var(--cream)}
+
+/* ── Download Section ── */
+.download-section{padding:86px 0 0;text-align:center}
+.download-title{font-family:'Shippori Antique B1',serif;font-weight:400;font-size:clamp(2rem,6vw,2.6rem);color:var(--text);letter-spacing:-.04em;line-height:1.02}
+.download-wordmark{font-family:'Shippori Mincho',serif;font-weight:800;font-size:clamp(1.8rem,5vw,2.4rem);color:var(--text);letter-spacing:.1em;text-transform:uppercase;margin:12px 0}
+.appstore-badge{display:inline-block;margin-top:10px;transition:opacity .2s}
+.appstore-badge:hover{opacity:.85}
+.appstore-badge img{height:52px;width:auto}
+
+/* ── Footer ── */
+footer{padding:64px 0 24px;background:var(--bg);margin-top:20px}
+.footer-divider{height:1px;background:var(--border);opacity:.4;margin-bottom:40px}
+.footer-wordmark{font-family:'Shippori Mincho',serif;font-weight:600;font-size:1.2rem;letter-spacing:.1em;text-transform:uppercase;color:var(--text);display:block;margin-bottom:10px}
+.footer-tagline{font-size:.72rem;color:var(--text-light);line-height:1.55;max-width:360px;margin-bottom:32px;letter-spacing:-.04em}
+.footer-cols{display:grid;grid-template-columns:1fr 1fr 1fr;gap:28px;margin-bottom:32px}
+.footer-col h4{font-size:.6rem;font-weight:600;letter-spacing:-.04em;text-transform:uppercase;color:var(--text-light);margin-bottom:10px}
+.footer-col a{display:block;font-size:.72rem;color:var(--text-light);margin-bottom:8px;transition:color .2s;letter-spacing:-.04em}
+.footer-col a:hover{color:var(--red)}
+.footer-copy{font-size:.65rem;color:var(--text-light);padding-top:18px;border-top:1px solid rgba(140,123,117,.4);text-align:center;letter-spacing:-.04em}
+
+/* ── Animations ── */
+.reveal{opacity:0;transform:translateY(16px);transition:opacity .5s ease,transform .5s ease}
+.reveal.visible{opacity:1;transform:translateY(0)}
+
+/* ── Responsive ── */
+@media(max-width:820px){
+  .hero{padding:96px 0 0}
+  .hero-grid{grid-template-columns:1fr;gap:8px;text-align:center;justify-items:center}
+  .hero-body{margin-left:auto;margin-right:auto}
+  .hero-cta-wrap{align-items:center}
+  .hero-phone{width:250px;margin-top:20px;transform:rotate(0)}
+  .nav-links a.nav-link{display:none}
+  .section{padding:64px 0 0}
+  .price-grid{grid-template-columns:1fr}
+  .footer-cols{grid-template-columns:1fr}
+  .leaf-hero{width:70px;top:64px}
+}
+@media(max-width:480px){
+  .wrap{padding:0 20px}
+  .phones-pantry,.phones-receipt,.phones-recipe{flex-direction:column;align-items:center;gap:16px}
+  .phones-pantry .phone-mockup,.phones-receipt .phone-mockup,.phones-recipe .phone-mockup{width:250px!important;margin-top:0!important}
+  .flow-steps{gap:10px}
+  .leaf-hero{display:none}
+  .mid-cta{padding:40px 24px}
+}
+
+/* ── Auth error overlay (unchanged behavior) ── */
+body.auth-error-active{overflow:hidden}
+.auth-error-overlay{position:fixed;inset:0;z-index:1000;background:var(--bg);display:flex;align-items:center;justify-content:center;padding:24px}
+.auth-error-card{max-width:420px;width:100%;background:var(--cream);border-radius:32px;border:4px solid var(--red-light);box-shadow:0 4px 24px rgba(0,0,0,.1);padding:48px 32px;text-align:center}
+.auth-error-card .icon{font-size:52px;margin-bottom:20px;line-height:1}
+.auth-error-card h2{font-family:'Shippori Mincho',serif;font-weight:600;font-size:1.6rem;color:var(--text);margin-bottom:14px;letter-spacing:-.02em}
+.auth-error-card p{font-family:'Shippori Antique B1',serif;font-size:.95rem;color:var(--text-mid);letter-spacing:-.02em;line-height:1.6}
+.auth-error-card .open-btn{display:inline-flex;align-items:center;justify-content:center;background:var(--red);color:var(--cream);font-size:.95rem;font-weight:500;padding:16px 40px;border-radius:100px;margin:28px 0 16px;transition:opacity .2s;letter-spacing:-.02em;border:none;cursor:pointer;font-family:inherit}
+.auth-error-card .open-btn:hover{opacity:.85}
+.auth-error-card .fallback{font-size:.8rem;color:var(--text-light);line-height:1.55}
+.auth-error-card .fallback a{color:var(--red);text-decoration:underline}
+</style>
+</head>
+<body>
+
+<!-- Auth error overlay (shown only on Supabase #error redirects) -->
+<div class="auth-error-overlay" id="auth-error-overlay" style="display:none">
+  <div class="auth-error-card">
+    <div class="icon">⏳</div>
+    <h2>Link expired</h2>
+    <p>This confirmation link has expired or was already used. Please open Jujube and request a new one.</p>
+    <button class="open-btn" id="auth-error-open-app">Open Jujube</button>
+    <p class="fallback">Still having trouble? <a href="mailto:hello@myjujube.app">Contact support</a>.</p>
+  </div>
+</div>
+
+<!-- Navbar -->
+<nav>
+  <div class="wrap">
+    <a href="/" class="nav-wordmark">Jujube</a>
+    <div class="nav-links">
+      <a href="#features" class="nav-link">Features</a>
+      <a href="#pricing" class="nav-link">Pricing</a>
+      <a href="#faq" class="nav-link">FAQ</a>
+      <a href="https://apps.apple.com/app/jujube-pantry/id6760092997" class="btn-get-beta" target="_blank">Get the App</a>
+    </div>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="wrap">
+    <img class="leaf-hero" src="assets/leaf-hero.svg" alt="">
+    <div class="hero-grid">
+      <div class="hero-copy reveal">
+        <h1>Cook from what<br>you already have.</h1>
+        <p class="hero-body">Jujube is a smart pantry app with an AI kitchen companion. Track your fridge and pantry, scan grocery receipts, and get recipes from real ingredients — so nothing goes to waste.</p>
+        <div class="hero-cta-wrap">
+          <a href="https://apps.apple.com/app/jujube-pantry/id6760092997" class="hero-cta" target="_blank">Download on the App Store</a>
+          <span class="hero-note">Free on the App Store</span>
+        </div>
+      </div>
+      <div class="hero-phone reveal">
+        <img src="assets/home-lucy.png" alt="Jujube home screen">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Smart Pantry -->
+<section class="section" id="features">
+  <div class="wrap">
+    <img class="leaf-pantry" src="assets/leaf-pantry.svg" alt="">
+    <div class="feat-head reveal">
+      <div class="eyebrow">Smart Pantry</div>
+      <h2>Your kitchen, always up to date</h2>
+      <p>Add items with a tap. Track quantities and categories across fridge, freezer, and pantry — organized automatically so you always know what's on hand.</p>
+    </div>
+    <div class="phones-pantry reveal">
+      <div class="phone-mockup"><img class="phone-screenshot" src="assets/home-lucy.png" alt="Home screen"></div>
+      <div class="phone-mockup"><img class="phone-screenshot" src="assets/pantry-screen-2.png" alt="Pantry detail screen"></div>
+    </div>
+  </div>
+</section>
+
+<!-- Voice & Receipt Input -->
+<section class="section">
+  <div class="wrap">
+    <div class="feat-head reveal">
+      <div class="eyebrow">Voice &amp; Receipt Input</div>
+      <h2>Add groceries in seconds</h2>
+      <p>Say what you brought home or snap a receipt photo. Jujube parses everything and adds it to your pantry instantly — no manual entry.</p>
+    </div>
+    <div class="flow-steps reveal">
+      <div class="flow-step">
+        <div class="flow-step-badge">1</div>
+        <div class="flow-step-label">Scan your<br>receipt</div>
+      </div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-step">
+        <div class="flow-step-badge">2</div>
+        <div class="flow-step-label">AI reads<br>every item</div>
+      </div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-step">
+        <div class="flow-step-badge">3</div>
+        <div class="flow-step-label">Added to<br>your pantry</div>
+      </div>
+    </div>
+    <div class="phones-receipt reveal">
+      <div class="phone-mockup"><img class="phone-screenshot" src="assets/ai-scanning.png" alt="AI scanning receipt"></div>
+      <div class="phone-mockup"><img class="phone-screenshot" src="assets/receipt-scan.png" alt="Receipt scan results"></div>
+    </div>
+  </div>
+</section>
+
+<!-- AI Recipe Discovery -->
+<section class="section">
+  <div class="wrap">
+    <div class="feat-head reveal">
+      <div class="eyebrow">AI Recipe Discovery</div>
+      <h2>Dinner, figured out</h2>
+      <p>Tell Jujube what you're in the mood for. It searches your pantry and suggests recipes you can actually make right now — with what you already have.</p>
+    </div>
+    <div class="phones-recipe reveal">
+      <div class="phone-mockup"><img class="phone-screenshot" src="assets/recipes-1.png" alt="Recipe suggestions"></div>
+      <div class="phone-mockup"><img class="phone-screenshot" src="assets/recipes-2.png" alt="Recipe detail"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================================================================
+     PRICING  ⚠️ PLACEHOLDER PRICES — replace the $X.XX values below with
+     the real App Store / RevenueCat prices. Search "PRICE:" to find them.
+     =================================================================== -->
+<section class="section" id="pricing">
+  <div class="wrap">
+    <div class="pricing-head reveal">
+      <div class="eyebrow" style="text-align:center">Pricing</div>
+      <h2>Start free. Upgrade when you're ready.</h2>
+      <p>Everything you need to cook smarter — with an optional Premium for power users.</p>
+      <div class="price-note">Prices below are placeholders — final numbers TBD</div>
+    </div>
+    <div class="price-grid reveal">
+      <div class="price-card">
+        <div class="price-name">Free</div>
+        <div class="price-tag">$0</div>
+        <div class="price-sub">No card required</div>
+        <ul class="price-list">
+          <li>Pantry, fridge &amp; freezer tracking</li>
+          <li>Receipt &amp; voice input</li>
+          <li>AI recipe suggestions (limited)</li>
+          <li>Shopping list</li>
+        </ul>
+        <a href="https://apps.apple.com/app/jujube-pantry/id6760092997" target="_blank" class="price-cta ghost">Download free</a>
+      </div>
+      <div class="price-card featured">
+        <div class="price-badge">Most popular</div>
+        <div class="price-name">Premium</div>
+        <div class="price-tag">$X.XX<small>/mo</small></div>
+        <div class="price-sub">Unlimited AI, cancel anytime</div>
+        <ul class="price-list">
+          <li>Everything in Free</li>
+          <li>Unlimited AI recipe discovery</li>
+          <li>Household sharing</li>
+          <li>Priority support</li>
+        </ul>
+        <div class="price-tiers">
+          <div class="tier-row"><span class="tier-name">Monthly</span><span class="tier-price"><!-- PRICE:monthly -->$X.XX/mo</span></div>
+          <div class="tier-row"><span class="tier-name">Annual<span class="tier-best">Best value</span></span><span class="tier-price"><!-- PRICE:annual -->$XX.XX/yr</span></div>
+          <div class="tier-row"><span class="tier-name">Lifetime</span><span class="tier-price"><!-- PRICE:lifetime -->$XX.XX once</span></div>
+        </div>
+        <a href="https://apps.apple.com/app/jujube-pantry/id6760092997" target="_blank" class="price-cta primary">Get Premium</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="section" id="faq">
+  <div class="wrap">
+    <div class="faq-head reveal">
+      <h2>Frequently asked</h2>
+    </div>
+    <div class="faq-list reveal">
+      <div class="faq-item">
+        <button class="faq-q">Is Jujube free?</button>
+        <div class="faq-a"><p>Yes — Jujube is free to download and use, including pantry tracking, receipt and voice input, and recipe suggestions. Premium unlocks unlimited AI recipe discovery, household sharing, and more.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">How does receipt scanning work?</button>
+        <div class="faq-a"><p>Snap a photo of your grocery receipt and Jujube's AI reads each line item, then adds everything to your pantry automatically — no typing required.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">Is my data private?</button>
+        <div class="faq-a"><p>Your kitchen data is yours. We don't sell your information, and everything is protected behind your own account. See our <a href="/privacy" style="color:var(--red)">Privacy Policy</a> for details.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">What languages does Jujube support?</button>
+        <div class="faq-a"><p>Jujube is fully localized in English, 한국어 (Korean), and 中文 (Chinese) — including recipes and the AI companion.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">How do I add items to my pantry?</button>
+        <div class="faq-a"><p>Three ways, whichever is fastest: tap to add manually, speak your groceries with voice input, or scan a receipt and let AI do it for you.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Mid CTA -->
+<section class="section">
+  <div class="wrap">
+    <div class="mid-cta reveal">
+      <h2>Your <strong>Fridge</strong> Knows<br>Dinner Tonight</h2>
+      <p>Download Jujube free and let AI handle the mental load of cooking.</p>
+      <a href="https://apps.apple.com/app/jujube-pantry/id6760092997" target="_blank" class="hero-cta">Download on the App Store</a>
+    </div>
+  </div>
+</section>
+
+<!-- Download -->
+<section class="download-section">
+  <div class="wrap">
+    <div class="reveal">
+      <div class="download-title">Download</div>
+      <div class="download-wordmark">Jujube</div>
+      <div class="download-title">Today</div>
+      <a href="https://apps.apple.com/app/jujube-pantry/id6760092997" target="_blank" class="appstore-badge">
+        <img src="assets/appstore-badge.png" alt="Download on the App Store">
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <div class="wrap">
+    <div class="footer-divider"></div>
+    <span class="footer-wordmark">Jujube</span>
+    <p class="footer-tagline">AI-powered pantry tracking and recipe discovery.<br>Cook smarter, waste less.</p>
+    <div class="footer-cols">
+      <div class="footer-col">
+        <h4>Product</h4>
+        <a href="#features">Features</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#faq">FAQ</a>
+      </div>
+      <div class="footer-col">
+        <h4>Legal</h4>
+        <a href="/privacy">Privacy</a>
+        <a href="/terms">Terms</a>
+      </div>
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <a href="mailto:hello@myjujube.app">hello@myjujube.app</a>
+      </div>
+    </div>
+    <div class="footer-copy">© 2026 Jujube. All rights reserved.</div>
+  </div>
+</footer>
+
+<script>
+const obs=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target)}})},{threshold:.12});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+
+// FAQ accordion
+document.querySelectorAll('.faq-q').forEach(q=>{
+  q.addEventListener('click',()=>{q.parentElement.classList.toggle('open')});
+});
+
+// Auth error hash handling (unchanged)
+(function () {
+  var hashParams = {};
+  window.location.hash.replace(/^#/, '').split('&').forEach(function (pair) {
+    if (!pair) return;
+    var idx = pair.indexOf('=');
+    var key = decodeURIComponent(idx === -1 ? pair : pair.slice(0, idx));
+    hashParams[key] = true;
+  });
+  if (hashParams.error || hashParams.error_code) {
+    document.body.classList.add('auth-error-active');
+    document.getElementById('auth-error-overlay').style.display = '';
+    document.getElementById('auth-error-open-app').addEventListener('click', function () {
+      window.location.href = 'com.fridgenie.app://callback';
+    });
+  }
+})();
+</script>
+</body>
+</html>
