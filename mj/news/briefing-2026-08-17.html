@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Daily AI & Tech Briefing, 2026-08-17</title>
+  <style>
+    :root {
+      --bg: #f7f3ea;
+      --card: #fffdf8;
+      --text: #223127;
+      --muted: #5e6d62;
+      --accent: #5b7f56;
+      --accent-2: #dcead7;
+      --border: #d9e1d2;
+      --shadow: 0 10px 30px rgba(34, 49, 39, 0.08);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: linear-gradient(180deg, #eef6ea 0%, var(--bg) 28%, #f8f1e6 100%);
+      color: var(--text);
+      line-height: 1.65;
+      padding: 20px;
+    }
+    .wrap { max-width: 860px; margin: 0 auto; }
+    .toolbar { display: flex; justify-content: flex-end; margin-bottom: 12px; }
+    .lang-toggle {
+      border: 0; border-radius: 999px; padding: 10px 14px;
+      background: var(--accent); color: white; font-weight: 700;
+      box-shadow: var(--shadow); cursor: pointer;
+    }
+    .card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 24px; box-shadow: var(--shadow); padding: 24px;
+    }
+    h1 { margin: 0 0 8px; font-size: clamp(28px, 4vw, 42px); line-height: 1.1; }
+    .subtitle { color: var(--muted); margin-bottom: 20px; font-size: 15px; }
+    .audio-box {
+      background: var(--accent-2); border: 1px solid var(--border);
+      border-radius: 18px; padding: 16px; margin: 18px 0 24px;
+    }
+    audio { width: 100%; margin-top: 8px; }
+    .section-title { font-size: 22px; margin: 28px 0 12px; }
+    ol { padding-left: 20px; margin: 0; }
+    li { margin-bottom: 14px; padding-left: 4px; }
+    .takeaway {
+      margin-top: 26px; padding: 16px 18px; border-radius: 18px;
+      background: #f2f8ef; border: 1px solid var(--border);
+    }
+    .ko { display: none; }
+    .ko.show { display: inline !important; }
+    .en.hide { display: none !important; }
+    .foot { margin-top: 20px; color: var(--muted); font-size: 13px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="toolbar">
+      <button class="lang-toggle" onclick="toggleLang()">한국어</button>
+    </div>
+    <div class="card">
+      <h1>
+        <span class="en">Daily AI & Tech Briefing</span>
+        <span class="ko">오늘의 AI · 테크 브리핑</span>
+      </h1>
+      <div class="subtitle">
+        <span class="en">Monday, August 17, 2026, built for Minjun</span>
+        <span class="ko">2026년 8월 17일 월요일, 민준을 위한 브리핑</span>
+      </div>
+
+      <div class="audio-box">
+        <strong>
+          <span class="en">Listen to the audio version</span>
+          <span class="ko">오디오 버전 듣기</span>
+        </strong>
+        <audio controls>
+          <source src="https://raw.githubusercontent.com/feedmiyo6/shared-files/main/mj/news/briefing-2026-08-17.mp3" type="audio/mpeg" />
+        </audio>
+      </div>
+
+      <h2 class="section-title">
+        <span class="en">Top stories</span>
+        <span class="ko">오늘의 주요 이야기</span>
+      </h2>
+      <ol>
+        <li><span class="en"><strong>OpenAI has reportedly disbanded its Preparedness safety team as part of a company-wide streamlining process, just as it heads toward an expected IPO.</strong> It's the second shakeup of OpenAI's safety organization reported this year, landing right as the company shifts hard into public-company mode.</span><span class="ko"><strong>오픈AI가 기업공개(IPO)를 앞두고 전사적 조직 개편의 일환으로 안전 담당 조직인 &ldquo;프리페어드니스(Preparedness)&rdquo; 팀을 해체했다고 보도되었습니다.</strong> 올해 들어 오픈AI 안전 조직에서 보고된 두 번째 개편으로, 회사가 상장 준비 체제로 강하게 전환하는 시점과 맞물려 있습니다.</span></li>
+        <li><span class="en"><strong>Nvidia CEO Jensen Huang has reportedly doubled the company's own sales guidance, now pointing toward roughly $1 trillion in cumulative revenue through 2027.</strong> It's a striking jump in how much compute demand Nvidia itself expects to serve over the next two years.</span><span class="ko"><strong>엔비디아 CEO 젠슨 황이 자사의 매출 전망치를 두 배로 상향 조정해, 2027년까지 누적 매출 약 1조 달러를 예상한다고 보도되었습니다.</strong> 향후 2년간 엔비디아가 자체적으로 예상하는 컴퓨팅 수요 규모가 얼마나 커졌는지를 보여주는 놀라운 수치입니다.</span></li>
+        <li><span class="en"><strong>OpenAI's enterprise revenue has now overtaken its consumer revenue.</strong> Citing an unnamed source, CNBC reported that CFO Sarah Friar told investors the company &ldquo;entered the year at 60-40, but enterprise has accelerated much faster than expected and those lines have now crossed&rdquo; &mdash; the majority of OpenAI's revenue is now enterprise.</span><span class="ko"><strong>오픈AI의 기업(엔터프라이즈) 매출이 소비자 매출을 넘어섰습니다.</strong> CNBC는 익명의 소식통을 인용해, 최고재무책임자(CFO) 사라 프라이어가 투자자들에게 &ldquo;연초에는 소비자 대 기업 비중이 60대 40이었지만, 기업 부문이 예상보다 훨씬 빠르게 성장해 이제 역전됐다&rdquo;고 밝혔다고 보도했습니다. 오픈AI 매출의 절반 이상이 이제 기업 부문에서 나옵니다.</span></li>
+        <li><span class="en"><strong>Cursor is officially part of SpaceX.</strong> Elon Musk's SpaceX completed its $60 billion acquisition of the AI coding tool on Friday, and Cursor says it will now work on the company's Grok chatbot, which also shipped a new AI agent feature this week.</span><span class="ko"><strong>AI 코딩 도구 커서(Cursor)가 공식적으로 스페이스X 소속이 되었습니다.</strong> 일론 머스크의 스페이스X가 금요일 커서에 대한 600억 달러 규모의 인수를 마무리했으며, 커서 측은 이제 이번 주 새로운 AI 에이전트 기능을 출시한 그록(Grok) 챗봇 작업에 합류한다고 밝혔습니다.</span></li>
+        <li><span class="en"><strong>Meta released Glimmer, an open-weight AI model anyone can download and run on their own hardware, alongside a letter from Mark Zuckerberg arguing AI should be &ldquo;for everyone&rdquo; rather than controlled by a handful of labs.</strong> The release stands in contrast to Muse Spark, Meta's more powerful model, which stays locked behind its own APIs.</span><span class="ko"><strong>메타가 누구나 내려받아 자신의 하드웨어에서 실행할 수 있는 오픈 웨이트 AI 모델 &ldquo;글리머(Glimmer)&rdquo;를 공개했습니다. 마크 저커버그는 함께 발표한 서한에서 AI가 소수의 연구소가 아닌 &ldquo;모두를 위한&rdquo; 것이어야 한다고 주장했습니다.</strong> 이는 API 뒤에 잠긴 채로 남아있는 메타의 더 강력한 모델 &ldquo;뮤즈 스파크(Muse Spark)&rdquo;와 대조를 이룹니다.</span></li>
+        <li><span class="en"><strong>Google's new Gemini 3.7 Flash model is now rolling out inside AI Mode for Search.</strong> Search VP of product Robby Stein says the updated model is better at following instructions and understanding user intent, delivering more helpful responses.</span><span class="ko"><strong>구글의 새로운 제미나이 3.7 플래시 모델이 검색의 AI 모드에 적용되기 시작했습니다.</strong> 검색 제품 담당 부사장 로비 스타인은 업데이트된 모델이 지시를 더 잘 따르고 사용자 의도를 더 잘 이해해 더 유용한 답변을 제공한다고 설명했습니다.</span></li>
+        <li><span class="en"><strong>Google Meet now offers AI notetaking for in-person meetings, not just virtual ones, for paid Workspace accounts.</strong> A new take-notes button records audio from your microphone so Gemini can generate a transcript and action items, saved straight to Google Drive.</span><span class="ko"><strong>구글 미트(Meet)가 유료 워크스페이스 계정을 대상으로 화상 회의뿐 아니라 대면 회의에서도 AI 회의록 기능을 제공합니다.</strong> 새로운 &ldquo;노트 작성&rdquo; 버튼을 누르면 마이크 음성을 녹음해 제미나이가 회의록과 실행 항목을 생성하고, 구글 드라이브에 바로 저장합니다.</span></li>
+        <li><span class="en"><strong>Twitch confirmed it has started training Amazon's generative AI models on streamers' content by default.</strong> Streamers can opt out, but Twitch's chief product officer Mike Minton gave a blunt explanation for the default setting: &ldquo;if it was opt-in, nobody would opt in.&rdquo;</span><span class="ko"><strong>트위치가 스트리머들의 콘텐츠를 아마존의 생성형 AI 모델 학습에 기본값으로 사용하기 시작했다고 확인했습니다.</strong> 스트리머는 이를 거부(옵트아웃)할 수 있지만, 트위치의 최고제품책임자 마이크 민튼은 이런 기본 설정에 대해 &ldquo;만약 옵트인 방식이었다면 아무도 동의하지 않았을 것&rdquo;이라며 솔직한 이유를 밝혔습니다.</span></li>
+        <li><span class="en"><strong>YouTube's &ldquo;Ask YouTube&rdquo; conversational search feature, which had been testing since April, is now rolling out to mobile.</strong></span><span class="ko"><strong>지난 4월부터 테스트해온 유튜브의 대화형 검색 기능 &ldquo;Ask YouTube&rdquo;가 모바일로 확대 출시됩니다.</strong></span></li>
+        <li><span class="en"><strong>Reporting this weekend suggests concerns about AI systems slipping outside human control &mdash; long dismissed by many researchers as speculative &mdash; are being taken more seriously inside the field, as capability keeps outrunning the tooling built to constrain it.</strong></span><span class="ko"><strong>이번 주말 보도에 따르면, 오랫동안 &ldquo;공상과학적 우려&rdquo;로 치부되던 AI 시스템의 인간 통제 이탈 가능성에 대한 우려를 업계가 점점 더 진지하게 받아들이고 있습니다. AI의 능력이 이를 통제하기 위한 도구 개발 속도를 계속 앞지르고 있기 때문입니다.</strong></span></li>
+      </ol>
+
+      <div class="takeaway">
+        <strong><span class="en">Totoro's takeaway for Minjun</span><span class="ko">민준을 위한 토토로의 한 줄</span></strong>
+        <div><span class="en">Story two is the one worth sitting with today. Jensen Huang doubling Nvidia's own revenue guidance to roughly a trillion dollars through 2027 isn't just a stock story &mdash; it's a signal that the industry still expects AI compute demand to compound for years, and that pull doesn't stop at GPUs. It cascades down into every layer of supporting silicon: power delivery, high-speed interconnect, and precision timing, which is exactly the lane Microchip has been building out with its recent space-grade atomic clocks and PolarFire Ethernet sensor bridges. As data centers and, increasingly, zonal vehicle architectures push more AI-inference traffic over single-pair Ethernet links, the timing and synchronization work you already do on T1 PHY and switch validation sits closer to the center of the story, not the edge of it. Worth remembering as you move into Digital Design &mdash; the compute boom everyone's watching in the headlines is quietly a demand curve for the timing-precision problems you already know how to solve.</span><span class="ko">오늘은 두 번째 소식을 눈여겨보실 만합니다. 젠슨 황이 엔비디아의 자체 매출 전망을 2027년까지 약 1조 달러로 두 배 상향한 것은 단순한 주가 이야기가 아닙니다 &mdash; 업계가 앞으로도 수년간 AI 컴퓨팅 수요가 계속 누적될 것으로 본다는 신호이며, 그 수요는 GPU에서 끝나지 않습니다. 전력 공급, 고속 인터커넥트, 정밀 타이밍 등 이를 뒷받침하는 모든 반도체 계층으로 이어지는데, 이는 마이크로칩이 최근 우주급 원자시계와 폴라파이어 이더넷 센서 브리지로 구축해온 바로 그 영역입니다. 데이터센터, 그리고 점점 더 많은 존형 차량 아키텍처가 AI 추론 트래픽을 단일 페어 이더넷 링크로 밀어넣을수록, 지금 하고 계신 T1 PHY 및 스위치 타이밍·동기화 검증 업무는 이야기의 변두리가 아니라 중심에 더 가까워집니다. 디지털 설계로 전환하시면서 기억해둘 만한 점입니다 &mdash; 헤드라인을 장식하는 컴퓨팅 붐은, 조용히 보면 민준님이 이미 잘 아시는 타이밍 정밀도 문제에 대한 수요 곡선이기도 합니다.</span></div>
+      </div>
+
+      <div class="foot">
+        <span class="en">Prepared in Totoro style, focused on useful momentum.</span>
+        <span class="ko">유용한 흐름에 집중한 토토로 스타일 브리핑입니다.</span>
+      </div>
+    </div>
+  </div>
+  <script>
+    let isKorean = false;
+    function toggleLang() {
+      isKorean = !isKorean;
+      document.querySelectorAll('.en').forEach(el => el.classList.toggle('hide', isKorean));
+      document.querySelectorAll('.ko').forEach(el => el.classList.toggle('show', isKorean));
+      document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+    }
+  </script>
+</body>
+</html>

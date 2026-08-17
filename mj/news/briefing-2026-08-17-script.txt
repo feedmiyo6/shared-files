@@ -1,0 +1,25 @@
+Good morning, Minjun. Here's your briefing for Monday, August 17th.
+
+Story one. OpenAI has reportedly disbanded its Preparedness safety team as part of a company-wide streamlining process, just as it heads toward an expected IPO. It's the second shakeup of OpenAI's safety organization reported this year, and it lands right as the company is shifting hard into public-company mode.
+
+Story two. Nvidia CEO Jensen Huang has reportedly doubled the company's own sales guidance, now pointing toward roughly one trillion dollars in cumulative revenue through 2027. That's a striking jump in how much compute demand Nvidia itself expects to serve over the next two years.
+
+Story three. OpenAI's enterprise revenue has now overtaken its consumer revenue. Citing an unnamed source, CNBC reported that CFO Sarah Friar told investors the company, quote, entered the year at 60-40, but enterprise has accelerated much faster than expected and those lines have now crossed, unquote — the majority of OpenAI's revenue is now enterprise.
+
+Story four. Cursor is officially part of SpaceX. Elon Musk's SpaceX completed its sixty billion dollar acquisition of the AI coding tool on Friday, and Cursor says it will now work on the company's Grok chatbot, which also shipped a new AI agent feature this week.
+
+Story five. Meta released Glimmer, an open-weight AI model anyone can download and run on their own hardware, alongside a letter from Mark Zuckerberg arguing AI should be, quote, for everyone, unquote, rather than controlled by a handful of labs. The release stands in contrast to Muse Spark, Meta's more powerful model, which stays locked behind its own APIs.
+
+Story six. Google's new Gemini 3.7 Flash model is now rolling out inside AI Mode for Search. Search VP of product Robby Stein says the updated model is better at following instructions and understanding user intent, delivering more helpful responses.
+
+Story seven. Google Meet now offers AI notetaking for in-person meetings, not just virtual ones, for paid Workspace accounts. A new take-notes button records audio from your microphone so Gemini can generate a transcript and action items, saved straight to Google Drive.
+
+Story eight. Twitch confirmed it has started training Amazon's generative AI models on streamers' content by default. Streamers can opt out, but Twitch's chief product officer Mike Minton gave a blunt explanation for the default setting: quote, if it was opt-in, nobody would opt in, unquote.
+
+Story nine. YouTube's Ask YouTube conversational search feature, which had been testing since April, is now rolling out to mobile.
+
+Story ten. Reporting this weekend suggests concerns about AI systems slipping outside human control — long dismissed by many researchers as speculative — are being taken more seriously inside the field, as capability keeps outrunning the tooling built to constrain it.
+
+And now, Totoro's takeaway for Minjun. Story two is the one worth sitting with today. Jensen Huang doubling Nvidia's own revenue guidance to roughly a trillion dollars through 2027 isn't just a stock story — it's a signal that the industry still expects AI compute demand to compound for years, and that pull doesn't stop at GPUs. It cascades down into every layer of supporting silicon: power delivery, high-speed interconnect, and precision timing, which is exactly the lane Microchip has been building out with its recent space-grade atomic clocks and PolarFire Ethernet sensor bridges. As data centers and, increasingly, zonal vehicle architectures push more AI-inference traffic over single-pair Ethernet links, the timing and synchronization work you already do on T1 PHY and switch validation sits closer to the center of the story, not the edge of it. Worth remembering as you move into Digital Design — the compute boom everyone's watching in the headlines is quietly a demand curve for the timing-precision problems you already know how to solve.
+
+That's your briefing. Have a great day.
