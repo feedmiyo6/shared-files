@@ -1,0 +1,25 @@
+Good morning, Minjun. Here's your briefing for Tuesday, August 18th.
+
+Story one. Nvidia has committed up to one hundred five billion dollars in guarantees to back a massive new OpenAI data center in Ohio, according to a securities filing. The deal lets OpenAI lease eight gigawatts of capacity from SB Energy, a SoftBank subsidiary, with the first eight hundred megawatts due online in 2028. Nvidia is also investing one point five billion dollars directly in SB Energy.
+
+Story two. CNBC reports Nvidia's competitive moat is shifting from chips to capital. As deals like the OpenAI guarantee suggest, Nvidia isn't just selling GPUs anymore — it's underwriting the data centers that will buy them, tying its own balance sheet directly to the AI buildout.
+
+Story three. Anthropic told investors its annualized revenue run rate climbed to roughly sixty five billion dollars in July, according to multiple reports, as the company heads toward an expected IPO.
+
+Story four. Bloomberg reports the Justice Department has been investigating venture firm Andreessen Horowitz for nearly a year over concerns that its partners may be improperly serving on the boards of competing AI companies at the same time.
+
+Story five. The Wall Street Journal reports a twenty one billion dollar AI chip startup, nicknamed "Kids in Chips," is aggressively hiring talent away from Nvidia — a sign of how tight competition for chip-design engineers has become.
+
+Story six. Microchip Technology's stock dropped six point five percent even after the company raised its guidance, following an earnings report where it also unveiled new AI data-center chips — a reminder that even a legacy analog and automotive chipmaker is now being read primarily through an AI lens.
+
+Story seven. Anthropic's Claude is set to begin watermarking AI-generated content, a provenance and safety move that has drawn some backlash from subscribers worried about how it will affect their workflows.
+
+Story eight. South Korea announced a three point five billion dollar national fund to accelerate development of domestic semiconductor hubs, the latest move in a widening global race to localize chip production.
+
+Story nine. New tracking data from Similarweb finds that roughly twenty six percent of ChatGPT responses, and nearly thirty percent of ad-eligible Google AI Mode queries, now include a sponsored ad — an early look at how conversational AI is being monetized.
+
+Story ten. Duke University is partnering with Anthropic to offer students pay-as-you-go access to Claude, one more sign of AI subscriptions becoming standard campus infrastructure.
+
+And now, Totoro's takeaway for Minjun. Story six is the one worth sitting with today. Microchip dropping on an earnings beat, purely because the market wanted to see AI data-center exposure, is the clearest signal yet that "AI company" and "analog and automotive chipmaker" are no longer separate categories investors evaluate. Pair that with story one — Nvidia guaranteeing a hundred five billion dollars just to secure eight gigawatts of OpenAI capacity — and the throughline is that compute demand keeps cascading downward into every layer of supporting silicon: power delivery, precision timing, and high-speed interconnect. That's exactly the lane Microchip is now leaning into publicly, stacking data-center silicon on top of its automotive and industrial base. Worth watching for you specifically — sitting inside T1 PHY and switch validation while the company doubles down on data-center chips means the timing and synchronization expertise you're building on single-pair Ethernet doesn't stay siloed in automotive. It's increasingly the kind of skill set that travels across both worlds as Microchip leans harder into AI infrastructure.
+
+That's your briefing. Have a great day.
