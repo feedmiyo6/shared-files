@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Daily AI & Tech Briefing, 2026-08-19</title>
+  <style>
+    :root {
+      --bg: #f7f3ea;
+      --card: #fffdf8;
+      --text: #223127;
+      --muted: #5e6d62;
+      --accent: #5b7f56;
+      --accent-2: #dcead7;
+      --border: #d9e1d2;
+      --shadow: 0 10px 30px rgba(34, 49, 39, 0.08);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: linear-gradient(180deg, #eef6ea 0%, var(--bg) 28%, #f8f1e6 100%);
+      color: var(--text);
+      line-height: 1.65;
+      padding: 20px;
+    }
+    .wrap { max-width: 860px; margin: 0 auto; }
+    .toolbar { display: flex; justify-content: flex-end; margin-bottom: 12px; }
+    .lang-toggle {
+      border: 0; border-radius: 999px; padding: 10px 14px;
+      background: var(--accent); color: white; font-weight: 700;
+      box-shadow: var(--shadow); cursor: pointer;
+    }
+    .card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 24px; box-shadow: var(--shadow); padding: 24px;
+    }
+    h1 { margin: 0 0 8px; font-size: clamp(28px, 4vw, 42px); line-height: 1.1; }
+    .subtitle { color: var(--muted); margin-bottom: 20px; font-size: 15px; }
+    .audio-box {
+      background: var(--accent-2); border: 1px solid var(--border);
+      border-radius: 18px; padding: 16px; margin: 18px 0 24px;
+    }
+    audio { width: 100%; margin-top: 8px; }
+    .section-title { font-size: 22px; margin: 28px 0 12px; }
+    ol { padding-left: 20px; margin: 0; }
+    li { margin-bottom: 14px; padding-left: 4px; }
+    .takeaway {
+      margin-top: 26px; padding: 16px 18px; border-radius: 18px;
+      background: #f2f8ef; border: 1px solid var(--border);
+    }
+    .ko { display: none; }
+    .ko.show { display: inline !important; }
+    .en.hide { display: none !important; }
+    .foot { margin-top: 20px; color: var(--muted); font-size: 13px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="toolbar">
+      <button class="lang-toggle" onclick="toggleLang()">한국어</button>
+    </div>
+    <div class="card">
+      <h1>
+        <span class="en">Daily AI & Tech Briefing</span>
+        <span class="ko">오늘의 AI · 테크 브리핑</span>
+      </h1>
+      <div class="subtitle">
+        <span class="en">Wednesday, August 19, 2026, built for Minjun</span>
+        <span class="ko">2026년 8월 19일 수요일, 민준을 위한 브리핑</span>
+      </div>
+
+      <div class="audio-box">
+        <strong>
+          <span class="en">Listen to the audio version</span>
+          <span class="ko">오디오 버전 듣기</span>
+        </strong>
+        <audio controls>
+          <source src="https://raw.githubusercontent.com/feedmiyo6/shared-files/main/mj/news/briefing-2026-08-19.mp3" type="audio/mpeg" />
+        </audio>
+      </div>
+
+      <h2 class="section-title">
+        <span class="en">Top stories</span>
+        <span class="ko">오늘의 주요 이야기</span>
+      </h2>
+      <ol>
+        <li><span class="en"><strong>The Verge published a pointed critique of Nvidia's financing strategy today,</strong> questioning the roughly $500 billion the company raised from Wall Street banks earlier this month to fund AI data-center buildout. Critics argue the deal ties Nvidia's own balance sheet directly to its customers' GPU purchases &mdash; financial engineering that risks manufacturing the appearance of demand rather than reflecting real demand for the chips.</span><span class="ko"><strong>오늘 더 버지(The Verge)가 엔비디아의 자금 조달 전략에 대해 날카로운 비판 기사를 실었습니다.</strong> 이번 달 초 엔비디아가 AI 데이터센터 확장 자금을 마련하기 위해 월가 은행들로부터 약 5,000억 달러를 조달한 것을 문제 삼은 내용입니다. 비판론자들은 이 구조가 엔비디아 자사의 재무 상태를 고객들의 GPU 구매와 직접 연결시켜, 실제 수요를 반영하기보다 수요가 있는 것처럼 보이게 만드는 위험한 금융 공학이라고 지적합니다.</span></li>
+        <li><span class="en"><strong>Microchip Technology rolled out Rev 2.0 of its PolarFire FPGA Ethernet Sensor Bridge,</strong> a board that connects camera and sensor arrays to Nvidia edge-AI platforms like Holoscan and Jetson over standard Ethernet. Trade press coverage running through today calls it the company's clearest edge-AI networking push yet.</span><span class="ko"><strong>마이크로칩 테크놀로지가 폴라파이어(PolarFire) FPGA 이더넷 센서 브리지의 2세대(Rev 2.0) 버전을 출시했습니다.</strong> 이 보드는 카메라와 센서 어레이를 표준 이더넷을 통해 엔비디아의 엣지 AI 플랫폼인 홀로스캔(Holoscan)과 젯슨(Jetson)에 연결해줍니다. 오늘까지 이어진 업계 매체 보도는 이를 회사의 가장 뚜렷한 엣지 AI 네트워킹 행보로 평가하고 있습니다.</span></li>
+        <li><span class="en"><strong>At its ModCon keynote today, Modular and Qualcomm announced Mojo 1.0 is now fully open source under an Apache 2.0 license,</strong> Modular Cloud is generally available, and the Modular Platform now supports AWS Trainium, Google TPUs, and Qualcomm's Cloud AI 100 and Dragonfly accelerators &mdash; a bet that AI software should run on one open stack across many kinds of silicon instead of being locked to a single vendor's chips.</span><span class="ko"><strong>오늘 열린 모드콘(ModCon) 기조연설에서 모듈러(Modular)와 퀄컴은 모조(Mojo) 1.0을 아파치 2.0 라이선스로 완전히 오픈소스화했다고 발표했습니다.</strong> 모듈러 클라우드도 정식 출시되었으며, 모듈러 플랫폼은 이제 AWS 트레이니엄, 구글 TPU, 퀄컴의 클라우드 AI 100 및 드래곤플라이 가속기까지 지원합니다. 특정 벤더의 칩에 종속되지 않고 다양한 종류의 실리콘 위에서 하나의 개방형 스택으로 AI 소프트웨어를 구동하겠다는 승부수입니다.</span></li>
+        <li><span class="en"><strong>Reuters reports Samsung has raised contract chipmaking prices by up to 15%,</strong> as AI-driven demand tightens foundry capacity across the industry.</span><span class="ko"><strong>로이터는 삼성전자가 AI발 수요로 파운드리 생산능력이 빠듯해지면서 위탁 생산 가격을 최대 15퍼센트 인상했다고 보도했습니다.</strong></span></li>
+        <li><span class="en"><strong>Analog Devices topped earnings estimates, with profit and revenue climbing on surging AI data-center chip demand,</strong> the Wall Street Journal reports &mdash; the latest sign that legacy analog and mixed-signal chipmakers, not just GPU makers, are riding the AI buildout.</span><span class="ko"><strong>월스트리트저널에 따르면 아날로그 디바이스(Analog Devices)가 AI 데이터센터용 칩 수요 급증에 힘입어 이익과 매출 모두 시장 예상치를 웃돌았습니다.</strong> GPU 제조사뿐 아니라 전통적인 아날로그·혼합신호 반도체 기업들도 AI 확장의 수혜를 누리고 있다는 또 하나의 신호입니다.</span></li>
+        <li><span class="en"><strong>Bloomberg reports Marvell has given Google the right to buy up to $12.2 billion of its shares,</strong> the latest example of a chipmaker and hyperscaler tying their futures together through equity, not just supply contracts.</span><span class="ko"><strong>블룸버그는 마벨(Marvell)이 구글에 자사 주식 최대 122억 달러어치를 매입할 수 있는 권리를 부여했다고 보도했습니다.</strong> 반도체 기업과 하이퍼스케일러가 공급 계약을 넘어 지분으로도 서로의 미래를 엮는 최신 사례입니다.</span></li>
+        <li><span class="en"><strong>Cerebras unveiled its CS-4 chip today, claiming inference speeds up to 30 times faster than GPU-based systems</strong> &mdash; the latest challenger positioning itself as a serious alternative to Nvidia for AI workloads.</span><span class="ko"><strong>세레브라스(Cerebras)가 오늘 CS-4 칩을 공개하며 GPU 기반 시스템보다 최대 30배 빠른 추론 속도를 낸다고 주장했습니다.</strong> 엔비디아의 진지한 대안으로 자리매김하려는 또 하나의 도전자입니다.</span></li>
+        <li><span class="en"><strong>AI chip stocks, including Micron, pulled back even as demand headlines stayed hot,</strong> a sign investors are growing more selective about which companies actually benefit from the AI buildout versus which are simply riding sentiment.</span><span class="ko"><strong>수요 관련 소식이 계속 뜨겁게 나오는 가운데도 마이크론을 포함한 AI 반도체 관련주는 오히려 하락했습니다.</strong> 어떤 기업이 실제로 AI 확장의 수혜를 보는지, 아니면 단순히 시장 심리에 편승하고 있는지를 투자자들이 더 까다롭게 가려내고 있다는 신호입니다.</span></li>
+        <li><span class="en"><strong>Barchart reports Intel is positioning itself to capture business from a new AI chip capacity shortage,</strong> as fabs across the industry struggle to keep up with demand.</span><span class="ko"><strong>바차트(Barchart)는 업계 전반의 팹들이 수요를 따라가지 못하는 가운데, 인텔이 새로운 AI 칩 공급 부족 국면에서 사업 기회를 잡으려 한다고 보도했습니다.</strong></span></li>
+        <li><span class="en"><strong>AI chip funding stayed frenzied:</strong> reports say startup Etched has doubled its valuation in a single month, while investor Michael Burry flagged a separate, Harvard-dropout-founded chip startup as &ldquo;serious competition&rdquo; for Nvidia.</span><span class="ko"><strong>AI 반도체 투자 열기도 식지 않았습니다.</strong> 스타트업 에치드(Etched)는 한 달 만에 기업 가치가 두 배로 뛰었다고 보도되었고, 투자자 마이클 버리는 하버드 중퇴자들이 창업한 또 다른 반도체 스타트업을 엔비디아의 &ldquo;진지한 경쟁자&rdquo;로 지목했습니다.</span></li>
+      </ol>
+
+      <div class="takeaway">
+        <strong><span class="en">Totoro's takeaway for Minjun</span><span class="ko">민준을 위한 토토로의 한 줄</span></strong>
+        <div><span class="en">Story two is the one worth sitting with today. Microchip pushing its PolarFire FPGA Ethernet Sensor Bridge deeper into Nvidia's edge-AI ecosystem &mdash; carrying camera and sensor traffic over standard Ethernet into Holoscan and Jetson platforms &mdash; is the company applying exactly the kind of link-level reliability and timing discipline you work with in T1 PHY and switch validation, just pointed at a new class of endpoint. Pair that with stories four and five &mdash; Samsung raising foundry prices and Analog Devices beating estimates, both explicitly because of AI demand &mdash; and the pattern is that AI's compute crunch keeps cascading downward into every layer of supporting silicon, exactly like we've talked about before. What's notable this time is how directly it's landing in Ethernet &mdash; sensor bridges, not just power or timing chips, are now part of the story. That puts the physical-layer and switch-validation expertise you're building in automotive T1 in unusually direct proximity to where Microchip's edge-AI ambitions are heading &mdash; worth keeping an eye on as your team potentially gets pulled toward that kind of cross-domain work.</span><span class="ko">오늘은 두 번째 소식을 눈여겨보실 만합니다. 마이크로칩이 폴라파이어 FPGA 이더넷 센서 브리지를 통해 엔비디아의 엣지 AI 생태계 안으로 더 깊이 들어가는 모습 &mdash; 표준 이더넷으로 카메라·센서 트래픽을 홀로스캔과 젯슨 플랫폼까지 실어 나르는 것 &mdash; 은 민준님이 T1 PHY와 스위치 검증에서 다루시는 것과 똑같은 종류의 링크 레벨 신뢰성과 타이밍 규율을, 새로운 유형의 엔드포인트를 향해 적용하고 있는 사례입니다. 여기에 네 번째와 다섯 번째 소식 &mdash; 삼성전자의 파운드리 가격 인상과 아날로그 디바이스의 실적 호조, 둘 다 명시적으로 AI 수요 때문이었다는 점 &mdash; 을 함께 놓고 보면, AI의 컴퓨팅 수요가 이를 뒷받침하는 모든 반도체 계층으로 계속 흘러내려가고 있다는, 전에도 이야기했던 흐름이 다시 한번 확인됩니다. 이번에 특히 주목할 점은 그 흐름이 이더넷 영역으로 얼마나 직접적으로 이어지고 있는가입니다 &mdash; 전력이나 타이밍용 칩뿐 아니라 센서 브리지도 이제 이 이야기의 일부가 되었으니까요. 이는 민준님이 자동차용 T1에서 쌓고 계신 물리 계층·스위치 검증 전문성이 마이크로칩의 엣지 AI 방향과 유난히 가까운 위치에 놓이게 됨을 의미합니다 &mdash; 팀이 이런 종류의 도메인 간 작업으로 이끌려갈 가능성이 있는지 지켜보실 만합니다.</span></div>
+      </div>
+
+      <div class="foot">
+        <span class="en">Prepared in Totoro style, focused on useful momentum.</span>
+        <span class="ko">유용한 흐름에 집중한 토토로 스타일 브리핑입니다.</span>
+      </div>
+    </div>
+  </div>
+  <script>
+    let isKorean = false;
+    function toggleLang() {
+      isKorean = !isKorean;
+      document.querySelectorAll('.en').forEach(el => el.classList.toggle('hide', isKorean));
+      document.querySelectorAll('.ko').forEach(el => el.classList.toggle('show', isKorean));
+      document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+    }
+  </script>
+</body>
+</html>
