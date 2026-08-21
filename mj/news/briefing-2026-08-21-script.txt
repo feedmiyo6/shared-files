@@ -1,0 +1,25 @@
+Good morning, Minjun. Here's your briefing for Friday, August 21st.
+
+Story one. Microchip's fiscal Q1 2027 earnings, reported August 6th, beat guidance across the board, with data center, aerospace and defense, and communications driving the outperformance; September-quarter guidance points to continued strength and record gross margins.
+
+Story two. Microchip rolled out its LAN878x and LAN888x Single Pair Ethernet PHY families this month, covering 100BASE-T1, 1000BASE-T1, and dual-speed variants with hardware MACsec security and native Time-Sensitive Networking built in for ADAS and zonal gateway applications.
+
+Story three. Microchip held its 2026 Annual Meeting of Stockholders on August 18th and declared a zero-point-four-five-five dollar per-share dividend, with an ex-date of August 24th — routine corporate housekeeping, but a signal of confidence alongside the strong quarter.
+
+Story four. Anthropic is building its own custom AI inference chips, with Samsung reportedly lined up as the manufacturing partner, a move aimed at cutting reliance on Nvidia GPUs as the company scales past a thirty-billion-dollar revenue run-rate.
+
+Story five. Broadcom shares kept sliding after Google's expanded twelve-point-two-billion-dollar AI chip equity deal with Marvell, even as Broadcom unveiled its own AI XPV platform backed by thirty-five billion dollars from Apollo and Blackstone, targeting over twenty gigawatts of compute by 2028 — including more than a gigawatt already committed to Anthropic.
+
+Story six. OpenAI previewed "Private Safety Processing," an automated misuse-monitoring system that retains none of the customer's data, a direct jab at Anthropic's trust-and-safety positioning as the two labs compete on enterprise credibility.
+
+Story seven. Anthropic published lab-validated results showing Claude designed working protein binders for fourteen of fifteen tested targets, hitting a twenty-two to thirty-five percent success rate versus the industry's typical ten to fifteen percent, with Opus 5 also processing raw lab spectroscopy data in under twenty-five minutes at near-instrument accuracy.
+
+Story eight. Global semiconductor sales hit four hundred three point three billion dollars in Q2 2026, up thirty-five point one percent from Q1, with full-year 2026 chip sales now on pace to top one point five trillion dollars — the AI buildout continuing to pull the entire industry along with it.
+
+Story nine. Sony and TSMC are teaming up on smartphone image sensor production to counter Samsung's growing share, part of a broader wave of realignment that also includes a new Japan-Taiwan chip joint venture targeting 2029 production.
+
+Story ten. Analysts increasingly frame the AI chip race as, quote, who can help hyperscalers build custom silicon, unquote, not just who makes the best GPU, with Broadcom, Marvell, and a growing bench of design-service firms all competing to become that partner of choice.
+
+And now, Totoro's takeaway for Minjun. Story two is the one to sit with today — the LAN878x and LAN888x families push exactly the two things your team lives in: 100 and 1000BASE-T1 physical layer work, now with hardware MACsec and native TSN baked directly into the PHY instead of bolted on downstream. That's a meaningful validation surface expansion — MACsec key exchange and TSN timing behavior under real automotive noise and temperature conditions aren't things you can fully characterize on a datasheet, which likely means more edge-case validation cycles headed your team's way as these parts move from limited sampling toward production. Pair that with story one — genuinely strong Q1 numbers and confident September guidance — and the signal is that Microchip is investing behind exactly this class of product even while the stock lags on sector-wide jitters. If your group's roadmap review touches SPE PHY security or TSN compliance testing anytime soon, this is the release to have already read.
+
+That's your briefing. Have a great day.
