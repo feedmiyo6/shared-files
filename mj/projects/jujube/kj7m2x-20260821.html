@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jujube — Unit Economics &amp; 3-Year Model</title>
+<style>
+  :root{--crimson:#B63F39;--ink:#2B1E1B;--mid:#5A4742;--muted:#8C7B75;--cream:#FAF7F2;--sand:#EEE6DA;--line:#E1D6C8;--good:#3F7D58;--warn:#C4761B;--bad:#B23A3A}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--sand);color:var(--ink);font:16px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+  .wrap{max-width:900px;margin:0 auto;padding:24px 16px 64px}
+  header{background:var(--cream);border:1px solid var(--line);border-radius:16px;padding:28px 24px;margin-bottom:20px;position:relative}
+  h1{margin:0 0 6px;padding-right:104px;font-size:26px;letter-spacing:-.02em;color:var(--crimson)}
+  .sub{color:var(--muted);font-size:14px;margin:0}
+  .lang-toggle{position:absolute;top:16px;right:16px;background:var(--crimson);color:#fff;border:0;border-radius:20px;padding:7px 14px;font-size:13px;font-weight:600;cursor:pointer}
+  section{background:var(--cream);border:1px solid var(--line);border-radius:16px;padding:22px 24px;margin-bottom:16px}
+  h2{font-size:19px;margin:0 0 14px;color:var(--crimson);letter-spacing:-.01em}
+  h3{font-size:15px;margin:20px 0 8px;color:var(--ink)}
+  p{margin:0 0 12px;color:var(--mid)}
+  table{width:100%;border-collapse:collapse;margin:12px 0;font-size:14px;display:block;overflow-x:auto;white-space:nowrap}
+  th,td{padding:9px 10px;text-align:right;border-bottom:1px solid var(--line)}
+  th:first-child,td:first-child{text-align:left;white-space:normal;min-width:150px}
+  th{background:var(--sand);font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);font-weight:600}
+  tr:last-child td{border-bottom:0}
+  .tot td{font-weight:700;background:#F4EDE3}
+  .good{color:var(--good);font-weight:600}.warn{color:var(--warn);font-weight:600}.bad{color:var(--bad);font-weight:600}
+  .callout{border-left:3px solid var(--crimson);background:#F6EFE7;padding:12px 16px;border-radius:0 10px 10px 0;margin:14px 0}
+  .callout p{margin:0;color:var(--ink)}
+  ul{margin:0 0 12px;padding-left:20px;color:var(--mid)}li{margin-bottom:7px}
+  .meta{font-size:12px;color:var(--muted);text-align:center;margin-top:24px}
+  code{background:#F1E9DE;padding:1px 5px;border-radius:4px;font-size:13px}
+  .ko{display:none}
+  .ko.show{display:inline !important}
+  .en.hide{display:none !important}
+  blockquote.ko.show,div.ko.show,li.ko.show,p.ko.show{display:block !important}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <button class="lang-toggle" onclick="toggleLang()">한국어</button>
+  <h1><span class="en">Jujube — Unit Economics &amp; 3-Year Model</span><span class="ko">Jujube — 단위 경제성 및 3년 모델</span></h1>
+  <p class="sub"><span class="en">Built from live telemetry, 21 Aug 2026 · all figures USD</span><span class="ko">실측 데이터 기반, 2026년 8월 21일 · 모든 금액 USD</span></p>
+</header>
+
+<section>
+<h2><span class="en">The short answer</span><span class="ko">요약</span></h2>
+<ul>
+<li><span class="en"><strong>AI cost is not your problem.</strong> A typical 2-person household costs about <strong>$5.70/year</strong> in AI against <strong>$50.99</strong> net revenue — an 89% gross margin. Even a heavy household lands at 65%.</span><span class="ko"><strong>AI 비용은 문제가 아닙니다.</strong> 2인 가구 기준 연간 약 <strong>$5.70</strong>의 AI 비용에 순수익은 <strong>$50.99</strong> — 매출총이익률 89%입니다. 헤비 유저 가구도 65%를 유지합니다.</span></li>
+<li><span class="en"><strong>Customer acquisition cost is your problem.</strong> At realistic Apple Search Ads rates, a paid subscriber costs <strong>$38–$114</strong> to acquire against a 2-year LTV of <strong>$74</strong>. Most of that range loses money.</span><span class="ko"><strong>진짜 문제는 고객 획득 비용입니다.</strong> 현실적인 Apple Search Ads 단가 기준, 유료 구독자 1명 확보에 <strong>$38–$114</strong>가 드는데 2년 LTV는 <strong>$74</strong>입니다. 대부분 구간에서 손실입니다.</span></li>
+<li><span class="en"><strong>Don't switch to Kimi.</strong> But do downgrade one function — translation is 51% of your AI bill and is the least model-sensitive thing you do.</span><span class="ko"><strong>Kimi로 바꿀 필요는 없습니다.</strong> 다만 한 가지 기능은 낮춰야 합니다 — 번역이 AI 비용의 51%를 차지하는데, 모델 성능에 가장 둔감한 작업입니다.</span></li>
+</ul>
+</section>
+
+<section>
+<h2><span class="en">1 · What each action actually costs</span><span class="ko">1 · 동작별 실제 비용</span></h2>
+<p><span class="en">Measured from <code>ai_usage_events</code> joined to <code>ai_model_pricing</code>, 60-day window. The "effective" column applies your real cache hit rates, which is what actually hits the bill.</span><span class="ko"><code>ai_usage_events</code>와 <code>ai_model_pricing</code> 조인, 60일 기준 실측치입니다. "실효 비용"은 실제 캐시 적중률을 반영한, 진짜 청구되는 금액입니다.</span></p>
+<table>
+<tr><th><span class="en">Action</span><span class="ko">동작</span></th><th><span class="en">Model</span><span class="ko">모델</span></th><th><span class="en">Raw / call</span><span class="ko">원가</span></th><th><span class="en">Cache hit</span><span class="ko">캐시 적중</span></th><th><span class="en">Effective</span><span class="ko">실효 비용</span></th></tr>
+<tr><td><span class="en">Open a recipe</span><span class="ko">레시피 열기</span></td><td>Sonnet 5</td><td>$0.0726</td><td class="good">86.7%</td><td><strong>$0.0097</strong></td></tr>
+<tr><td><span class="en">"What can I make?"</span><span class="ko">"뭐 만들지?"</span></td><td>Sonnet 5</td><td>$0.0209</td><td class="warn">50.1%</td><td><strong>$0.0104</strong></td></tr>
+<tr><td><span class="en">Translate recipe body</span><span class="ko">레시피 본문 번역</span></td><td>Sonnet 5</td><td>$0.0508</td><td class="good">86.7%</td><td><strong>$0.0068</strong></td></tr>
+<tr><td><span class="en">Scan a receipt</span><span class="ko">영수증 스캔</span></td><td>GPT-4o</td><td>$0.0226</td><td>—</td><td><strong>$0.0226</strong></td></tr>
+<tr><td><span class="en">Voice add</span><span class="ko">음성 추가</span></td><td>Whisper+mini</td><td>$0.0022</td><td>—</td><td><strong>$0.0022</strong></td></tr>
+<tr><td><span class="en">Estimate expiry</span><span class="ko">유통기한 추정</span></td><td>Haiku 4.5</td><td>$0.0006</td><td>—</td><td><strong>$0.0006</strong></td></tr>
+</table>
+<div class="callout"><p><span class="en"><strong>Your cache is doing the heavy lifting.</strong> 86.7% of recipe opens (351 of 405 in 30 days) never touch a model. That single number turns a 7.3¢ action into a 1¢ action. The dish-suggestion cache is only at 50.1% — that's your best remaining cost lever, worth roughly half a cent per session.</span><span class="ko"><strong>캐시가 대부분을 해결하고 있습니다.</strong> 레시피 열기의 86.7%(30일간 405건 중 351건)가 모델을 거치지 않습니다. 이 수치 하나가 7.3센트 동작을 1센트로 만듭니다. 반면 요리 추천 캐시는 50.1%에 머물러 있어, 남은 비용 절감 여지가 가장 큰 지점입니다.</span></p></div>
+</section>
+
+<section>
+<h2><span class="en">2 · Cost per household per year</span><span class="ko">2 · 가구당 연간 비용</span></h2>
+<p><span class="en">Two actively-using members per household, as you specified. Revenue is $59.99 less Apple's 15% Small Business commission.</span><span class="ko">말씀하신 대로 가구당 실사용자 2명 기준입니다. 매출은 $59.99에서 Apple 소규모 사업자 수수료 15%를 뺀 금액입니다.</span></p>
+<table>
+<tr><th><span class="en">Per household / year</span><span class="ko">가구당 연간</span></th><th><span class="en">Light</span><span class="ko">라이트</span></th><th><span class="en">Typical</span><span class="ko">일반</span></th><th><span class="en">Heavy</span><span class="ko">헤비</span></th></tr>
+<tr><td><span class="en">Recipe opens / mo</span><span class="ko">레시피 열기 / 월</span></td><td>6</td><td>24</td><td>80</td></tr>
+<tr><td><span class="en">Suggestion runs / mo</span><span class="ko">추천 실행 / 월</span></td><td>4</td><td>12</td><td>40</td></tr>
+<tr><td><span class="en">Receipts + voice / mo</span><span class="ko">영수증 + 음성 / 월</span></td><td>1 + 3</td><td>4 + 12</td><td>10 + 40</td></tr>
+<tr><td><span class="en">AI cost</span><span class="ko">AI 비용</span></td><td>$1.55</td><td>$5.68</td><td>$18.05</td></tr>
+<tr><td><span class="en">+ KO/ZH translation</span><span class="ko">+ 한/중 번역</span></td><td>$0.49</td><td>$1.95</td><td>$6.49</td></tr>
+<tr><td><span class="en">Infra share (at 5k households)</span><span class="ko">인프라 분담 (5천 가구 기준)</span></td><td>$0.30</td><td>$0.30</td><td>$0.30</td></tr>
+<tr class="tot"><td><span class="en">Total cost</span><span class="ko">총 비용</span></td><td>$2.34</td><td>$7.93</td><td>$24.84</td></tr>
+<tr class="tot"><td><span class="en">Net revenue</span><span class="ko">순매출</span></td><td>$50.99</td><td>$50.99</td><td>$50.99</td></tr>
+<tr class="tot"><td><span class="en">Gross margin</span><span class="ko">매출총이익률</span></td><td class="good">95%</td><td class="good">84%</td><td class="good">51%</td></tr>
+</table>
+<div class="callout"><p><span class="en"><strong>Free household members are safe.</strong> A second member roughly doubles usage, and even the heavy column keeps you at 51% margin. Household sharing costs you ~$8/year in the worst realistic case and buys you retention and word-of-mouth. Keep it free.</span><span class="ko"><strong>가구원 무료 정책은 안전합니다.</strong> 두 번째 구성원이 사용량을 약 2배로 늘리지만, 헤비 구간에서도 51% 마진이 남습니다. 최악의 경우에도 연 $8 수준이며, 그 대가로 리텐션과 입소문을 얻습니다. 무료 유지하세요.</span></p></div>
+</section>
+
+<section>
+<h2><span class="en">3 · Three-year revenue scenarios</span><span class="ko">3 · 3년 매출 시나리오</span></h2>
+<p><span class="en">Assumes install→trial 12%, trial→paid 40% (so 4.8% of installs become subscribers), and 45% annual renewal. These are consumer-utility benchmarks, not measured — you have 22 users, so there is no retention data yet. Treat this as a shape, not a forecast.</span><span class="ko">설치→체험 12%, 체험→결제 40%(설치의 4.8%가 구독 전환), 연간 갱신율 45%를 가정했습니다. 이는 소비자 유틸리티 앱 벤치마크이며 실측치가 아닙니다 — 현재 사용자 22명으로 리텐션 데이터가 없습니다. 예측이 아니라 형태로 봐주세요.</span></p>
+<table>
+<tr><th><span class="en">Scenario</span><span class="ko">시나리오</span></th><th><span class="en">Y1 installs</span><span class="ko">1년차 설치</span></th><th><span class="en">Y3 installs</span><span class="ko">3년차 설치</span></th><th><span class="en">Y3 subs</span><span class="ko">3년차 구독</span></th><th><span class="en">Y3 net rev</span><span class="ko">3년차 순매출</span></th><th><span class="en">3-yr total</span><span class="ko">3년 누적</span></th></tr>
+<tr><td><span class="en">Conservative</span><span class="ko">보수적</span></td><td>25k</td><td>120k</td><td>7,300</td><td>$372k</td><td><strong>$608k</strong></td></tr>
+<tr><td><span class="en">Base</span><span class="ko">기본</span></td><td>60k</td><td>450k</td><td>26,500</td><td>$1.35M</td><td><strong>$2.05M</strong></td></tr>
+<tr><td><span class="en">Optimistic</span><span class="ko">낙관적</span></td><td>150k</td><td>1.2M</td><td>69,900</td><td>$3.56M</td><td><strong>$5.32M</strong></td></tr>
+</table>
+<h3><span class="en">Cost side at those volumes</span><span class="ko">해당 규모에서의 비용</span></h3>
+<table>
+<tr><th><span class="en">Y3</span><span class="ko">3년차</span></th><th><span class="en">AI</span><span class="ko">AI</span></th><th><span class="en">Infra</span><span class="ko">인프라</span></th><th><span class="en">% of revenue</span><span class="ko">매출 대비</span></th></tr>
+<tr><td><span class="en">Conservative</span><span class="ko">보수적</span></td><td>$58k</td><td>$6k</td><td class="good">17%</td></tr>
+<tr><td><span class="en">Base</span><span class="ko">기본</span></td><td>$210k</td><td>$22k</td><td class="good">17%</td></tr>
+<tr><td><span class="en">Optimistic</span><span class="ko">낙관적</span></td><td>$554k</td><td>$60k</td><td class="good">17%</td></tr>
+</table>
+<div class="callout"><p><span class="en"><strong>Watch the $1M line.</strong> Apple's Small Business Program is 15% only while you're under $1M/year. Base-case Y3 crosses it, and the year after you cross, commission jumps to 30% — that is roughly $200k off Y3 base revenue. Plan for it; don't be surprised by it.</span><span class="ko"><strong>$1M 기준선을 주의하세요.</strong> Apple 소규모 사업자 프로그램의 15% 수수료는 연 $1M 미만일 때만 적용됩니다. 기본 시나리오 3년차에 이 선을 넘고, 넘은 다음 해부터 수수료가 30%로 올라갑니다 — 기본 시나리오 3년차 기준 약 $200k 감소입니다. 미리 대비하세요.</span></p></div>
+</section>
+
+<section>
+<h2><span class="en">4 · The real constraint: acquisition cost</span><span class="ko">4 · 진짜 제약: 획득 비용</span></h2>
+<p><span class="en">This is where the model breaks, and it has nothing to do with AI.</span><span class="ko">모델이 무너지는 지점이며, AI와는 무관합니다.</span></p>
+<table>
+<tr><th><span class="en">Metric</span><span class="ko">지표</span></th><th><span class="en">Low</span><span class="ko">낙관</span></th><th><span class="en">High</span><span class="ko">비관</span></th></tr>
+<tr><td><span class="en">ASA cost per tap</span><span class="ko">ASA 탭당 비용</span></td><td>$1.00</td><td>$3.00</td></tr>
+<tr><td><span class="en">Cost per install (55% tap→install)</span><span class="ko">설치당 비용 (탭→설치 55%)</span></td><td>$1.82</td><td>$5.45</td></tr>
+<tr><td><span class="en">Cost per subscriber (4.8%)</span><span class="ko">구독자당 비용 (4.8%)</span></td><td class="warn">$37.90</td><td class="bad">$113.60</td></tr>
+<tr class="tot"><td><span class="en">2-year LTV</span><span class="ko">2년 LTV</span></td><td>$73.94</td><td>$73.94</td></tr>
+<tr class="tot"><td><span class="en">LTV / CAC</span><span class="ko">LTV / CAC</span></td><td class="warn">1.95×</td><td class="bad">0.65×</td></tr>
+</table>
+<p><span class="en">A healthy subscription business wants 3× or better. You reach 1.95× only at the optimistic end, and you lose money outright at the pessimistic end. Three ways out, in order of leverage:</span><span class="ko">건강한 구독 사업은 3배 이상을 원합니다. 낙관 구간에서도 1.95배에 그치고, 비관 구간에서는 순손실입니다. 레버리지 순으로 세 가지 해법이 있습니다:</span></p>
+<ul>
+<li><span class="en"><strong>UGC and organic carry the growth, not ads.</strong> Your Creator Attribution Program is the highest-leverage thing on the roadmap — creator content has effectively zero marginal CAC. Ads should be a supplement, capped, and measured against a $30 target CAC.</span><span class="ko"><strong>광고가 아니라 UGC와 오가닉이 성장을 이끌어야 합니다.</strong> 크리에이터 어트리뷰션 프로그램이 로드맵에서 가장 레버리지가 큰 항목입니다 — 크리에이터 콘텐츠는 한계 CAC가 사실상 0입니다. 광고는 보조 수단으로, 목표 CAC $30 기준으로 상한을 두고 집행하세요.</span></li>
+<li><span class="en"><strong>Run ASA on Korean long-tail, not US broad.</strong> Your KO keyword set (냉파, 파먹기, 유통기한, 밀프렙) is exactly the kind of low-competition term where cost per tap runs well under a dollar. US broad terms like "recipe" and "meal plan" are where the $3 taps live, and you will not outbid the incumbents there.</span><span class="ko"><strong>미국 광범위 키워드가 아닌 한국어 롱테일에 ASA를 집행하세요.</strong> 보유한 한국어 키워드(냉파, 파먹기, 유통기한, 밀프렙)는 탭당 비용이 $1 이하인 저경쟁 키워드입니다. "recipe", "meal plan" 같은 미국 광범위 키워드가 $3 구간이며, 그곳에서 기존 강자들을 이길 수 없습니다.</span></li>
+<li><span class="en"><strong>Raise conversion, not spend.</strong> Every point you add to install→paid divides CAC directly. Going from 4.8% to 7% drops your worst-case CAC from $114 to $78 without spending a dollar more. The hard paywall you just shipped is the right instrument for this — instrument it and iterate.</span><span class="ko"><strong>지출이 아니라 전환율을 올리세요.</strong> 설치→결제 전환율 1%p가 CAC를 그대로 나눕니다. 4.8%에서 7%로 올리면 최악의 CAC가 $114에서 $78로 떨어지며, 추가 지출은 0입니다. 방금 출시한 하드 페이월이 바로 그 도구입니다 — 계측하고 반복 개선하세요.</span></li>
+</ul>
+</section>
+
+<section>
+<h2><span class="en">5 · Should you switch models?</span><span class="ko">5 · 모델을 바꿔야 할까요?</span></h2>
+<p><span class="en">Short answer: not the way you're thinking. Here's your actual 30-day AI bill of <strong>$384</strong>:</span><span class="ko">짧게 답하면, 생각하시는 방식으로는 아닙니다. 실제 30일 AI 비용 <strong>$384</strong>의 내역입니다:</span></p>
+<table>
+<tr><th><span class="en">Function</span><span class="ko">기능</span></th><th><span class="en">30-day cost</span><span class="ko">30일 비용</span></th><th><span class="en">Share</span><span class="ko">비중</span></th><th><span class="en">User-facing?</span><span class="ko">사용자 대면?</span></th></tr>
+<tr><td>localize-recipe-body</td><td>$197.35</td><td class="bad">51%</td><td><span class="en">No — catalog</span><span class="ko">아니오 — 카탈로그</span></td></tr>
+<tr><td>generate-recipe</td><td>$161.51</td><td>42%</td><td><span class="en">Yes</span><span class="ko">예</span></td></tr>
+<tr><td>recipe-suggest</td><td>$19.76</td><td>5%</td><td><span class="en">Yes</span><span class="ko">예</span></td></tr>
+<tr><td><span class="en">everything else</span><span class="ko">기타 전부</span></td><td>$5.43</td><td>2%</td><td>—</td></tr>
+</table>
+<div class="callout"><p><span class="en"><strong>The cheapest win is not a cheaper model everywhere — it's a cheaper model on translation.</strong> <code>localize-recipe-body</code> is over half your bill and it is <em>translation</em>, the most model-tolerant task in the whole system. You already have the evidence in your own data: the same function ran on GPT-4o-mini at <strong>$0.00138</strong> per call versus Sonnet 5 at <strong>$0.0508</strong> — <strong>37× cheaper</strong>. Moving translation alone to a small model takes ~$190/month off the top with zero impact on the recipes themselves.</span><span class="ko"><strong>가장 값싼 승리는 전방위 모델 교체가 아니라 번역 모델 교체입니다.</strong> <code>localize-recipe-body</code>가 비용의 절반 이상이고, 이는 <em>번역</em> — 시스템 전체에서 모델 성능에 가장 둔감한 작업입니다. 근거는 이미 자체 데이터에 있습니다: 같은 기능을 GPT-4o-mini로 돌렸을 때 호출당 <strong>$0.00138</strong>, Sonnet 5는 <strong>$0.0508</strong> — <strong>37배 차이</strong>입니다. 번역만 소형 모델로 옮겨도 레시피 품질에 아무 영향 없이 월 약 $190이 절감됩니다.</span></p></div>
+<h3><span class="en">On Kimi specifically</span><span class="ko">Kimi에 대해</span></h3>
+<ul>
+<li><span class="en">It would save maybe 5–6× on generation cost. But generation is 42% of a bill that is already only 17% of revenue — halving it buys you ~3.5 points of margin. That is not what decides whether this business works.</span><span class="ko">생성 비용을 5~6배 절감할 수 있습니다. 하지만 생성은 이미 매출의 17%에 불과한 비용의 42%입니다 — 절반으로 줄여도 마진 3.5%p 확보에 그칩니다. 사업의 성패를 가르는 요소가 아닙니다.</span></li>
+<li><span class="en">Your differentiator is Korean and Chinese recipe quality for immigrant families. That is precisely where a model swap is riskiest, and you already learned this once — you regenerated 387 Haiku recipes onto Sonnet because the quality wasn't there. Don't relitigate that to save 3 points.</span><span class="ko">차별점은 이민자 가정을 위한 한국어·중국어 레시피 품질입니다. 모델 교체 리스크가 가장 큰 지점이며, 이미 한 번 겪으셨습니다 — 품질 문제로 Haiku 레시피 387건을 Sonnet으로 재생성했습니다. 3%p 아끼려고 되풀이할 일이 아닙니다.</span></li>
+<li><span class="en"><strong>Revisit at ~50k subscribers.</strong> At that scale AI is a $400k/year line and a 5× cut is real money worth engineering for. Below that, your time is worth more spent on conversion.</span><span class="ko"><strong>구독자 5만 명 시점에 재검토하세요.</strong> 그 규모에서 AI는 연 $40만 항목이 되고, 5배 절감은 엔지니어링할 가치가 있는 금액입니다. 그 아래에서는 전환율 개선에 시간을 쓰는 편이 낫습니다.</span></li>
+</ul>
+</section>
+
+<section>
+<h2><span class="en">6 · What I'd actually do</span><span class="ko">6 · 제안하는 실행 순서</span></h2>
+<ul>
+<li><span class="en"><strong>Now:</strong> move <code>localize-recipe-body</code> to a small model. Biggest single line, lowest risk, ~$190/month.</span><span class="ko"><strong>지금:</strong> <code>localize-recipe-body</code>를 소형 모델로 이전. 최대 항목, 최저 리스크, 월 약 $190.</span></li>
+<li><span class="en"><strong>Now:</strong> instrument install→trial→paid. You cannot manage CAC without it, and every other decision here depends on that one number.</span><span class="ko"><strong>지금:</strong> 설치→체험→결제 퍼널 계측. 이 수치 없이는 CAC를 관리할 수 없고, 나머지 모든 판단이 여기에 달려 있습니다.</span></li>
+<li><span class="en"><strong>Next:</strong> push the dish-suggestion cache from 50% toward 80%. It is the only user-facing cost lever left with real room in it.</span><span class="ko"><strong>다음:</strong> 요리 추천 캐시를 50%에서 80%로 개선. 사용자 대면 비용에서 유일하게 여유가 남은 레버입니다.</span></li>
+<li><span class="en"><strong>Next:</strong> ASA capped at $30 CAC, Korean long-tail only, US broad terms off.</span><span class="ko"><strong>다음:</strong> ASA는 CAC $30 상한, 한국어 롱테일 전용, 미국 광범위 키워드 제외.</span></li>
+<li><span class="en"><strong>Watch:</strong> first renewal cohort. Every number on this page bends on the 45% renewal assumption, and you'll have the first real reading roughly a year after your first paid cohort.</span><span class="ko"><strong>관찰:</strong> 첫 갱신 코호트. 이 문서의 모든 수치가 갱신율 45% 가정에 달려 있으며, 첫 유료 코호트로부터 약 1년 뒤 실제 값을 처음 확인하게 됩니다.</span></li>
+</ul>
+</section>
+
+<p class="meta"><span class="en">Unit costs and cache rates measured from production. Growth, conversion and renewal figures are benchmark assumptions — you have 22 users and no retention history yet.</span><span class="ko">단위 비용과 캐시 적중률은 프로덕션 실측치입니다. 성장·전환·갱신 수치는 벤치마크 가정이며, 현재 사용자 22명으로 리텐션 이력이 없습니다.</span></p>
+</div>
+<script>
+var isKorean=false;
+function toggleLang(){
+  isKorean=!isKorean;
+  document.querySelectorAll('.en').forEach(function(el){el.classList.toggle('hide',isKorean);});
+  document.querySelectorAll('.ko').forEach(function(el){el.classList.toggle('show',isKorean);});
+  document.querySelector('.lang-toggle').textContent=isKorean?'English':'한국어';
+  document.documentElement.lang=isKorean?'ko':'en';
+}
+</script>
+</body>
+</html>
