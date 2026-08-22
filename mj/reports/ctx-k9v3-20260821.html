@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Memory Compaction Report</title>
+<style>
+  :root{
+    --ink:#1A0A0E; --paper:#FBF7F4; --card:#FFFFFF; --crimson:#D81E4A;
+    --muted:#6B5C60; --line:#E8DDD9; --good:#1E7A4A; --warn:#B4690E;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; padding:0; background:var(--paper); color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",sans-serif;
+    line-height:1.65; -webkit-text-size-adjust:100%;
+  }
+  .wrap{max-width:760px; margin:0 auto; padding:28px 20px 64px;}
+  header{position:relative; padding-bottom:20px; border-bottom:2px solid var(--ink); margin-bottom:28px;}
+  .eyebrow{font-size:12px; letter-spacing:.14em; text-transform:uppercase; color:var(--crimson); font-weight:700; margin:0 0 6px;}
+  h1{font-size:27px; line-height:1.25; margin:0 0 8px; font-weight:700; letter-spacing:-.02em;}
+  .sub{color:var(--muted); font-size:14px; margin:0;}
+  .lang-toggle{
+    position:absolute; top:0; right:0; background:var(--ink); color:#fff; border:none;
+    padding:7px 14px; border-radius:999px; font-size:12.5px; font-weight:600; cursor:pointer;
+    font-family:inherit;
+  }
+  .lang-toggle:active{transform:scale(.96);}
+  .ko{display:none;}
+  .ko.show{display:inline !important;}
+  .en.hide{display:none !important;}
+  h2{font-size:19px; margin:38px 0 12px; letter-spacing:-.01em; display:flex; align-items:center; gap:9px;}
+  h2::before{content:""; width:4px; height:19px; background:var(--crimson); border-radius:2px; flex:none;}
+  p{margin:0 0 13px;}
+  .card{background:var(--card); border:1px solid var(--line); border-radius:13px; padding:17px 19px; margin:0 0 15px;}
+  table{width:100%; border-collapse:collapse; margin:6px 0 4px; font-size:14.5px;}
+  th,td{text-align:left; padding:10px 8px; border-bottom:1px solid var(--line);}
+  th{font-size:11.5px; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); font-weight:700;}
+  td.num{font-variant-numeric:tabular-nums; white-space:nowrap;}
+  .drop{color:var(--good); font-weight:700;}
+  .total-row td{border-bottom:none; border-top:2px solid var(--ink); font-weight:700;}
+  ul{margin:0 0 13px; padding-left:20px;}
+  li{margin-bottom:9px;}
+  code{background:#F2ECE9; padding:1.5px 5px; border-radius:4px; font-size:13px;
+       font-family:ui-monospace,SFMono-Regular,Menlo,monospace; word-break:break-word;}
+  .flag{border-left:3px solid var(--warn); background:#FFF9F0; padding:13px 16px; border-radius:0 10px 10px 0; margin:0 0 14px;}
+  .flag.ask{border-left-color:var(--crimson); background:#FFF3F5;}
+  .flag-title{font-weight:700; font-size:14px; margin:0 0 5px; color:var(--warn);}
+  .flag.ask .flag-title{color:var(--crimson);}
+  .bar{height:9px; background:#EDE4E0; border-radius:5px; overflow:hidden; margin-top:7px;}
+  .bar span{display:block; height:100%; background:var(--crimson); border-radius:5px;}
+  .barlabel{font-size:12px; color:var(--muted); margin-top:5px;}
+  footer{margin-top:44px; padding-top:18px; border-top:1px solid var(--line); font-size:12.5px; color:var(--muted);}
+  @media (max-width:520px){
+    h1{font-size:22px; padding-right:88px;} .wrap{padding:22px 15px 52px;}
+    th,td{padding:9px 5px; font-size:13.5px;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <button class="lang-toggle" onclick="toggleLang()">한국어</button>
+  <p class="eyebrow"><span class="en">Workspace Report</span><span class="ko">워크스페이스 리포트</span></p>
+  <h1>
+    <span class="en">Memory Compaction</span>
+    <span class="ko">메모리 압축 정리</span>
+  </h1>
+  <p class="sub">
+    <span class="en">2026-08-21 &middot; MEMORY.md + HEARTBEAT.md were silently truncating</span>
+    <span class="ko">2026-08-21 &middot; MEMORY.md와 HEARTBEAT.md가 조용히 잘려나가고 있었음</span>
+  </p>
+</header>
+
+<h2><span class="en">The problem</span><span class="ko">문제</span></h2>
+<p>
+  <span class="en">Every session loads a set of workspace files into my context. There is a hard limit of <strong>20,000 characters per file</strong>, and when a file goes over, it is <strong>cut without warning</strong> — no error, nothing in the logs.</span>
+  <span class="ko">매 세션마다 워크스페이스 파일들이 제 컨텍스트로 로드됩니다. <strong>파일당 20,000자</strong>라는 고정 한도가 있는데, 이를 넘으면 <strong>경고 없이 잘립니다</strong> — 에러도, 로그도 없습니다.</span>
+</p>
+<div class="card">
+  <p style="margin:0 0 4px;"><strong>MEMORY.md — 33,723</strong> <span class="en">chars against a 20,000 limit</span><span class="ko">자 (한도 20,000자)</span></p>
+  <div class="bar"><span style="width:100%"></span></div>
+  <p class="barlabel">
+    <span class="en">Only ~60% ever reached me. The entire Jujube 2.5.1 section sat at the bottom — it had not been loaded in weeks.</span>
+    <span class="ko">약 60%만 실제로 로드되었습니다. Jujube 2.5.1 섹션 전체가 맨 아래에 있어서 몇 주째 로드되지 않았습니다.</span>
+  </p>
+</div>
+<p>
+  <span class="en">HEARTBEAT.md turned out to have the same problem — <strong>20,241 characters</strong>, just over the line, so its Standing Checks and Quick Checks were being dropped too.</span>
+  <span class="ko">HEARTBEAT.md도 같은 문제였습니다 — <strong>20,241자</strong>로 한도를 막 넘어서, Standing Checks와 Quick Checks가 잘려나가고 있었습니다.</span>
+</p>
+
+<h2><span class="en">Result</span><span class="ko">결과</span></h2>
+<table>
+  <tr><th><span class="en">File</span><span class="ko">파일</span></th><th class="num"><span class="en">Before</span><span class="ko">이전</span></th><th class="num"><span class="en">After</span><span class="ko">이후</span></th><th class="num"><span class="en">Cut</span><span class="ko">감소</span></th></tr>
+  <tr><td>MEMORY.md</td><td class="num">33,723</td><td class="num">9,980</td><td class="num drop">&minus;70%</td></tr>
+  <tr><td>HEARTBEAT.md</td><td class="num">20,241</td><td class="num">5,499</td><td class="num drop">&minus;73%</td></tr>
+  <tr class="total-row"><td><span class="en">All injected files</span><span class="ko">전체 주입 파일</span></td><td class="num">49,181</td><td class="num">35,036</td><td class="num drop">&minus;29%</td></tr>
+</table>
+<p>
+  <span class="en">Every file is now comfortably under the limit. <strong>Nothing is truncated anymore.</strong></span>
+  <span class="ko">이제 모든 파일이 한도 아래로 여유 있게 들어왔습니다. <strong>더 이상 아무것도 잘리지 않습니다.</strong></span>
+</p>
+
+<h2><span class="en">What I actually changed</span><span class="ko">실제로 바꾼 것</span></h2>
+<ul>
+  <li>
+    <span class="en"><strong>MEMORY.md is now an index.</strong> The bulk moved into eight topic files under <code>memory/</code> — brand &amp; naming, monetization, backend ops, store deploy &amp; signing, agent orchestration, ship traps, the daily briefing, and the Sonnet 5 gotcha. They load only when relevant.</span>
+    <span class="ko"><strong>MEMORY.md는 이제 인덱스입니다.</strong> 대부분의 내용을 <code>memory/</code> 아래 8개 주제 파일로 옮겼습니다 — 브랜드/네이밍, 수익화, 백엔드 운영, 스토어 배포/서명, 에이전트 오케스트레이션, 배포 함정, 데일리 브리핑, Sonnet 5 이슈. 필요할 때만 로드됩니다.</span>
+  </li>
+  <li>
+    <span class="en"><strong>HEARTBEAT.md is rolling state only.</strong> This was the root cause of the regrowth: every shipped feature had been leaving a permanent paragraph behind in a file meant to hold <em>current</em> state. Durable lessons now go to <code>memory/jujube-ship-traps.md</code> instead, and that rule is written into the file's header so it does not creep back.</span>
+    <span class="ko"><strong>HEARTBEAT.md는 현재 상태만 담습니다.</strong> 이것이 파일이 계속 커진 근본 원인이었습니다 — 배포할 때마다 <em>현재</em> 상태를 담아야 할 파일에 영구적인 문단이 쌓였습니다. 이제 지속적인 교훈은 <code>memory/jujube-ship-traps.md</code>로 갑니다. 다시 반복되지 않도록 이 규칙을 파일 헤더에 명시했습니다.</span>
+  </li>
+  <li>
+    <span class="en"><strong>Nothing was lost.</strong> Full copies are archived, and I verified 36 load-bearing facts (signing fingerprints, project refs, OAuth client IDs, Lucy's number and birthday) plus every internal link still resolves.</span>
+    <span class="ko"><strong>손실된 내용은 없습니다.</strong> 전체 사본을 아카이브했고, 36개의 핵심 정보(서명 지문, 프로젝트 ref, OAuth 클라이언트 ID, Lucy 연락처와 생일)와 모든 내부 링크가 정상인지 확인했습니다.</span>
+  </li>
+</ul>
+
+<h2><span class="en">Stale facts I corrected</span><span class="ko">수정한 오래된 정보</span></h2>
+<p>
+  <span class="en">Rather than copying old notes forward, I checked them against live source. Three were wrong:</span>
+  <span class="ko">오래된 메모를 그대로 옮기지 않고 실제 소스와 대조했습니다. 세 가지가 틀렸습니다:</span>
+</p>
+<div class="flag">
+  <p class="flag-title"><span class="en">Pricing was wrong in memory</span><span class="ko">메모리의 가격 정보가 틀림</span></p>
+  <p style="margin:0;">
+    <span class="en">Memory said <strong>$7.99/mo + $49.99/yr "Early Bird," raise to $59.99 on Nov 1</strong>. Source says <strong>$14.99 + $59.99</strong>, which you have since confirmed is correct and intended. Now marked as ratified so it will not be re-litigated.</span>
+    <span class="ko">메모리에는 <strong>$7.99/월 + $49.99/년 "얼리버드", 11월 1일에 $59.99로 인상</strong>이라고 되어 있었습니다. 실제 소스는 <strong>$14.99 + $59.99</strong>이고, 이것이 맞다고 확인해 주셨습니다. 확정된 것으로 표시해서 다시 논쟁하지 않도록 했습니다.</span>
+  </p>
+</div>
+<div class="flag">
+  <p class="flag-title"><span class="en">Two doc drifts</span><span class="ko">문서 불일치 두 가지</span></p>
+  <p style="margin:0;">
+    <span class="en">Android <code>versionCode</code> offset is <strong>+159</strong>, not the +110 memory claimed. And the iOS deployment target is <strong>16.0</strong> — builds 9 and 10 shipped "What to Test" copy telling testers 15.0.</span>
+    <span class="ko">Android <code>versionCode</code> 오프셋은 메모리에 적힌 +110이 아니라 <strong>+159</strong>입니다. 그리고 iOS 배포 타겟은 <strong>16.0</strong>인데, 빌드 9와 10의 "What to Test" 문구는 테스터에게 15.0이라고 잘못 안내했습니다.</span>
+  </p>
+</div>
+
+<h2><span class="en">Open — your call</span><span class="ko">미결 — 결정이 필요한 것</span></h2>
+<div class="flag ask">
+  <p class="flag-title"><span class="en">1. Store prices may not match what you agreed</span><span class="ko">1. 스토어 가격이 합의된 금액과 다를 수 있음</span></p>
+  <p style="margin:0;">
+    <span class="en">There is a live <code>TODO(revenuecat)</code> saying the real product configs were never updated. The paywall prefers RevenueCat's live price and only falls back to the code constants — so a mismatch would <strong>show one price and charge another</strong>. Worth confirming <code>pro_monthly</code> and <code>pro_annual</code> in App Store Connect, Play Console, and the RevenueCat offering before launch.</span>
+    <span class="ko">실제 상품 설정이 업데이트되지 않았다는 <code>TODO(revenuecat)</code>가 코드에 남아 있습니다. 페이월은 RevenueCat의 실시간 가격을 우선 사용하고 코드 상수는 폴백일 뿐이라, 불일치하면 <strong>표시 가격과 실제 청구 금액이 다를 수</strong> 있습니다. 출시 전에 App Store Connect, Play Console, RevenueCat offering에서 <code>pro_monthly</code>와 <code>pro_annual</code>을 확인하는 것이 좋겠습니다.</span>
+  </p>
+</div>
+<div class="flag ask">
+  <p class="flag-title"><span class="en">2. The early-bird countdown promises nothing</span><span class="ko">2. 얼리버드 카운트다운이 실제로는 무의미함</span></p>
+  <p style="margin:0;">
+    <span class="en"><code>earlyBirdEndDate</code> (2026-10-31) still counts down to a price change, but founding and regular annual are <em>both</em> $59.99 — nothing happens when it expires. Either drop the countdown framing, or set a genuinely higher regular price. I left the code untouched.</span>
+    <span class="ko"><code>earlyBirdEndDate</code>(2026-10-31)가 가격 인상까지 카운트다운하고 있지만, 파운딩 연간과 일반 연간이 <em>둘 다</em> $59.99라 만료되어도 아무 일도 일어나지 않습니다. 카운트다운 문구를 없애거나, 실제로 더 높은 일반 가격을 설정하는 것 중 선택이 필요합니다. 코드는 건드리지 않았습니다.</span>
+  </p>
+</div>
+<div class="flag ask">
+  <p class="flag-title"><span class="en">3. Possible App Store 5.1.1(v) gap</span><span class="ko">3. App Store 5.1.1(v) 위반 가능성</span></p>
+  <p style="margin:0;">
+    <span class="en"><code>/household-setup</code> has sign-out but <strong>no delete-account</strong>. It has been carried as "offered, not yet fixed" for a while. Say the word and I will take it on.</span>
+    <span class="ko"><code>/household-setup</code>에 로그아웃은 있지만 <strong>계정 삭제가 없습니다</strong>. 한동안 "제안했으나 미수정" 상태로 남아 있었습니다. 말씀만 주시면 처리하겠습니다.</span>
+  </p>
+</div>
+
+<footer>
+  <span class="en">Generated by Totoro &middot; 2026-08-21 &middot; Backups: <code>archive/MEMORY-pre-compaction-20260821.md</code>, <code>archive/HEARTBEAT-pre-compaction-20260821.md</code></span>
+  <span class="ko">Totoro 작성 &middot; 2026-08-21 &middot; 백업: <code>archive/MEMORY-pre-compaction-20260821.md</code>, <code>archive/HEARTBEAT-pre-compaction-20260821.md</code></span>
+</footer>
+
+</div>
+<script>
+var isKorean = false;
+function toggleLang(){
+  isKorean = !isKorean;
+  document.querySelectorAll('.en').forEach(function(el){ el.classList.toggle('hide', isKorean); });
+  document.querySelectorAll('.ko').forEach(function(el){ el.classList.toggle('show', isKorean); });
+  document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+  document.documentElement.lang = isKorean ? 'ko' : 'en';
+}
+</script>
+</body>
+</html>
