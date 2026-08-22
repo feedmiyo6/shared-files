@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jujube — UGC or ASA First?</title>
+<style>
+  :root{--crimson:#B63F39;--ink:#2B1E1B;--mid:#5A4742;--muted:#8C7B75;--cream:#FAF7F2;--sand:#EEE6DA;--line:#E1D6C8;--good:#3F7D58;--warn:#C4761B;--bad:#B23A3A}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--sand);color:var(--ink);font:16px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+  .wrap{max-width:900px;margin:0 auto;padding:24px 16px 64px}
+  header{background:var(--cream);border:1px solid var(--line);border-radius:16px;padding:28px 24px;margin-bottom:20px;position:relative}
+  h1{margin:0 0 6px;padding-right:104px;font-size:26px;letter-spacing:-.02em;color:var(--crimson)}
+  .sub{color:var(--muted);font-size:14px;margin:0}
+  .lang-toggle{position:absolute;top:16px;right:16px;background:var(--crimson);color:#fff;border:0;border-radius:20px;padding:7px 14px;font-size:13px;font-weight:600;cursor:pointer}
+  section{background:var(--cream);border:1px solid var(--line);border-radius:16px;padding:22px 24px;margin-bottom:16px}
+  h2{font-size:19px;margin:0 0 14px;color:var(--crimson);letter-spacing:-.01em}
+  h3{font-size:15px;margin:20px 0 8px;color:var(--ink)}
+  p{margin:0 0 12px;color:var(--mid)}
+  table{width:100%;border-collapse:collapse;margin:12px 0;font-size:14px;display:block;overflow-x:auto;white-space:nowrap}
+  th,td{padding:9px 10px;text-align:right;border-bottom:1px solid var(--line)}
+  th:first-child,td:first-child{text-align:left;white-space:normal;min-width:150px}
+  th{background:var(--sand);font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);font-weight:600}
+  tr:last-child td{border-bottom:0}
+  .tot td{font-weight:700;background:#F4EDE3}
+  .good{color:var(--good);font-weight:600}.warn{color:var(--warn);font-weight:600}.bad{color:var(--bad);font-weight:600}
+  .callout{border-left:3px solid var(--crimson);background:#F6EFE7;padding:12px 16px;border-radius:0 10px 10px 0;margin:14px 0}
+  .callout p{margin:0;color:var(--ink)}
+  .verdict{background:#F6EFE7;border:1px solid var(--crimson);border-radius:12px;padding:18px 20px;margin:0 0 14px}
+  .verdict p{margin:0;color:var(--ink);font-size:17px;font-weight:600}
+  ul{margin:0 0 12px;padding-left:20px;color:var(--mid)}li{margin-bottom:7px}
+  ol{margin:0 0 12px;padding-left:20px;color:var(--mid)}
+  .meta{font-size:12px;color:var(--muted);text-align:center;margin-top:24px}
+  code{background:#F1E9DE;padding:1px 5px;border-radius:4px;font-size:13px}
+  .step{color:var(--muted);font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+  .ko{display:none}
+  .ko.show{display:inline !important}
+  .en.hide{display:none !important}
+  blockquote.ko.show,div.ko.show,li.ko.show,p.ko.show{display:block !important}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <button class="lang-toggle" onclick="toggleLang()">한국어</button>
+  <h1><span class="en">Jujube — UGC or ASA First?</span><span class="ko">Jujube — UGC 먼저? ASA 먼저?</span></h1>
+  <p class="sub"><span class="en">Go-to-market sequencing · 21 Aug 2026 · funnel data pulled live</span><span class="ko">시장 진입 순서 · 2026년 8월 21일 · 퍼널 데이터 실시간 조회</span></p>
+</header>
+
+<div class="verdict">
+<p><span class="en">Your instinct is right: ASA for keywords first, creator sourcing in parallel, UGC campaign last.</span><span class="ko">방향은 맞습니다. 키워드 확보용 ASA를 먼저, 크리에이터 발굴은 병행, UGC 캠페인은 마지막입니다.</span></p>
+</div>
+
+<section>
+<h2><span class="en">Why this isn't really a revenue-projection question</span><span class="ko">이것이 매출 예측의 문제가 아닌 이유</span></h2>
+<p><span class="en">The 3-year model says the business works at scale. It cannot tell you what to do this month, because every growth, conversion and renewal number in it is a benchmark assumption, not a measurement. What should drive this decision is what production actually shows.</span><span class="ko">3년 모델은 규모가 커졌을 때 사업이 성립한다는 것을 보여줍니다. 하지만 이번 달에 무엇을 할지는 알려주지 못합니다. 그 안의 성장·전환·갱신 수치가 전부 실측이 아닌 벤치마크 가정이기 때문입니다. 이번 결정을 좌우해야 하는 것은 실제 프로덕션 데이터입니다.</span></p>
+<table>
+<tr><th><span class="en">Onboarding step</span><span class="ko">온보딩 단계</span></th><th><span class="en">Events</span><span class="ko">이벤트</span></th><th><span class="en">Unique</span><span class="ko">고유 사용자</span></th></tr>
+<tr><td><span class="en">Reached the intro video</span><span class="ko">인트로 영상 도달</span></td><td>20</td><td>8</td></tr>
+<tr><td><span class="en">Reached the invite fork</span><span class="ko">초대 코드 분기 도달</span></td><td>17</td><td>8</td></tr>
+<tr><td><span class="en">Reached the paywall</span><span class="ko">페이월 도달</span></td><td>12</td><td>6</td></tr>
+<tr><td><span class="en">Signed up</span><span class="ko">가입 완료</span></td><td>9</td><td>6</td></tr>
+<tr><td><span class="en">Reached the payment step</span><span class="ko">결제 단계 도달</span></td><td>7</td><td>5</td></tr>
+<tr><td><span class="en">Selected a plan</span><span class="ko">플랜 선택</span></td><td>7</td><td>3</td></tr>
+<tr><td><span class="en">Started a purchase</span><span class="ko">결제 시작</span></td><td>3</td><td>3</td></tr>
+<tr class="tot"><td><span class="en">Completed a purchase</span><span class="ko">결제 완료</span></td><td class="bad">1</td><td class="bad">1</td></tr>
+</table>
+<div class="callout">
+<p><span class="en"><strong>One real purchase, ever — <code>pro_annual</code>, dated 22 Aug 2026.</strong> Of 22 profiles, 20 read as "pro", but that is promo codes and TestFlight grants, not revenue. Two more came in as <code>promo_redeem_succeeded</code>. Five signups in the last week. This is a product with essentially no market validation yet, and that single fact decides the sequencing.</span><span class="ko"><strong>실제 결제는 지금까지 단 1건 — <code>pro_annual</code>, 2026년 8월 22일.</strong> 프로필 22개 중 20개가 "pro"로 표시되지만, 이는 프로모 코드와 TestFlight 부여분이지 매출이 아닙니다. 여기에 <code>promo_redeem_succeeded</code> 2건이 더 있습니다. 지난주 가입은 5명. 아직 시장 검증이 사실상 없는 제품이며, 이 사실 하나가 순서를 결정합니다.</span></p>
+</div>
+</section>
+
+<section>
+<h2><span class="en">Why not UGC right away</span><span class="ko">UGC를 지금 시작하면 안 되는 이유</span></h2>
+<h3><span class="en">1. You're in a ~4-week upload freeze</span><span class="ko">1. 약 4주간 업로드 동결 상태입니다</span></h3>
+<p><span class="en">This is the strongest argument, and it is about timing rather than economics. If UGC drives a spike that exposes an onboarding or paywall problem, you cannot ship a fix. Pointing your best traffic at a product you can't patch is the one genuinely irreversible mistake available here.</span><span class="ko">이것이 가장 강력한 근거이며, 경제성보다 타이밍의 문제입니다. UGC로 유입이 몰렸을 때 온보딩이나 페이월 문제가 드러나면, 지금은 수정본을 올릴 수 없습니다. 고칠 수 없는 제품에 가장 좋은 트래픽을 보내는 것이야말로 이 선택지들 중 유일하게 되돌릴 수 없는 실수입니다.</span></p>
+<h3><span class="en">2. Creator content is one-shot and perishable. Keywords are durable.</span><span class="ko">2. 크리에이터 콘텐츠는 일회성으로 소모되지만, 키워드는 남습니다</span></h3>
+<p><span class="en">You cannot re-run the same video to the same followers after fixing your funnel. The model calls Creator Attribution the highest-leverage item on your roadmap — which is exactly why you don't spend it to discover that trial-to-paid is 2% instead of 4.8%. ASA's output goes into your title, subtitle and keyword field and keeps working for free indefinitely.</span><span class="ko">퍼널을 고친 뒤에 같은 영상을 같은 팔로워에게 다시 노출할 수는 없습니다. 모델에서 크리에이터 어트리뷰션을 로드맵 최고 레버리지 항목으로 꼽았는데, 바로 그렇기 때문에 "체험→유료 전환이 4.8%가 아니라 2%였다"는 사실을 확인하는 데 그것을 써버리면 안 됩니다. 반면 ASA의 결과물은 앱 이름·부제·키워드 필드에 들어가 무기한 무료로 계속 작동합니다.</span></p>
+<h3><span class="en">3. The CAC math doesn't support paid growth yet</span><span class="ko">3. 아직 유료 성장을 뒷받침할 CAC가 아닙니다</span></h3>
+<p><span class="en">LTV/CAC lands between 0.65x and 1.95x against a healthy target of 3x. That is an argument against treating <em>either</em> channel as a growth engine right now — not an argument for picking the cheaper one.</span><span class="ko">LTV/CAC는 0.65배~1.95배로, 건전한 기준인 3배에 못 미칩니다. 이는 지금 <em>어느 쪽도</em> 성장 엔진으로 취급하면 안 된다는 뜻이지, 더 싼 쪽을 고르라는 뜻이 아닙니다.</span></p>
+</section>
+
+<section>
+<h2><span class="en">Why ASA-for-keywords is the right first move</span><span class="ko">키워드 확보용 ASA가 첫 수순인 이유</span></h2>
+<p><span class="en">Your reasoning here is sound, and it's worth being precise about <em>why</em>. Third-party ASO tools estimate search volume. Apple Search Ads is the only instrument that shows you real App Store search terms with real volume and real conversion, from your own listing. That is a research purchase, not a growth purchase — bounded, stoppable, and with a durable output.</span><span class="ko">이 판단은 타당하며, <em>왜</em> 그런지 정확히 짚을 필요가 있습니다. 서드파티 ASO 툴은 검색량을 추정할 뿐입니다. Apple Search Ads는 본인 앱 페이지 기준으로 실제 App Store 검색어의 실제 검색량과 실제 전환을 보여주는 유일한 수단입니다. 이것은 성장을 사는 것이 아니라 데이터를 사는 것입니다. 예산이 한정되고, 언제든 멈출 수 있고, 결과물이 오래 남습니다.</span></p>
+<div class="callout">
+<p><span class="en"><strong>The underrated benefit: ASA manufactures the cohort both channels need.</strong> With a 7-day trial you cannot read trial-to-paid until at least a week after real traffic arrives. ASA is the cheapest way to buy that first honest number — and UGC planning depends on it just as much as ads do.</span><span class="ko"><strong>과소평가된 이점: ASA가 두 채널 모두에 필요한 코호트를 만들어 줍니다.</strong> 7일 체험 구조에서는 실제 트래픽이 들어온 뒤 최소 일주일이 지나야 체험→유료 전환을 읽을 수 있습니다. ASA는 그 첫 번째 정직한 숫자를 가장 싸게 확보하는 방법이며, UGC 기획도 광고 못지않게 그 숫자에 의존합니다.</span></p>
+</div>
+</section>
+
+<section>
+<h2><span class="en">What I'd actually do</span><span class="ko">실제 실행 순서</span></h2>
+<h3><span class="en">Before spending anything</span><span class="ko">지출 전에</span></h3>
+<ul>
+<li><span class="en">Confirm the introductory offer on <code>pro_monthly</code> in App Store Connect. The paywall advertises a 7-day trial on <strong>both</strong> plans; the config notes describe it as annual-only. If monthly has no intro offer, subscribers get charged on day one, your first conversion cohort is polluted, and you risk refunds.</span><span class="ko">App Store Connect에서 <code>pro_monthly</code>의 소개 혜택(무료 체험) 설정을 확인하세요. 페이월은 <strong>두 플랜 모두</strong> 7일 무료 체험을 안내하지만, 설정 주석에는 연간 전용으로 되어 있습니다. 월간에 소개 혜택이 없다면 가입 첫날 바로 청구되고, 첫 전환 코호트 데이터가 오염되며, 환불 리스크가 생깁니다.</span></li>
+<li><span class="en">Fire one end-to-end PostHog event yourself and confirm it lands. Sentry and PostHog are installed, but installed is not the same as wired.</span><span class="ko">PostHog 이벤트를 직접 한 번 끝까지 발생시켜 정상 수집되는지 확인하세요. Sentry와 PostHog가 설치되어 있지만, 설치와 연결은 다른 문제입니다.</span></li>
+</ul>
+<h3><span class="en">Weeks 1–3 · ASA discovery, Korea first</span><span class="ko">1~3주차 · ASA 탐색, 한국 우선</span></h3>
+<p><span class="en">Search Match plus broad match on your Korean seeds (냉파, 파먹기, 유통기한, 밀프렙), an exact-match campaign for brand terms, US broad terms off. Success is a ranked keyword list and a first real install-to-paid reading — <strong>not</strong> installs. Rough sizing: a useful keyword read needs roughly 300–1,000 taps, which at Korean long-tail rates is a few hundred dollars. That is an estimate from the model's tap-cost range, not a measured figure.</span><span class="ko">한국어 시드 키워드(냉파, 파먹기, 유통기한, 밀프렙)에 Search Match와 광범위 매치를 걸고, 브랜드 키워드는 완전 일치 캠페인으로, 미국 광범위 키워드는 제외합니다. 성공 기준은 설치 수가 <strong>아니라</strong> 우선순위가 매겨진 키워드 목록과 첫 실제 설치→유료 전환율입니다. 대략적 규모: 의미 있는 키워드 판독에는 약 300~1,000회 탭이 필요하며, 한국어 롱테일 단가 기준 수백 달러 수준입니다. 이는 모델의 탭 단가 범위에서 추정한 값이지 실측치가 아닙니다.</span></p>
+<h3><span class="en">From day 1, in parallel · creator sourcing only</span><span class="ko">첫날부터 병행 · 크리에이터 발굴만</span></h3>
+<p><span class="en">Finding, DMing, negotiating and briefing takes weeks and costs nothing. Build the pipeline now; ship no content. This is the part of your plan I'd keep exactly as you proposed it.</span><span class="ko">크리에이터를 찾고, DM을 보내고, 조건을 협의하고, 브리핑하는 데는 몇 주가 걸리지만 비용은 들지 않습니다. 지금 파이프라인을 만들되 콘텐츠는 아직 내보내지 마세요. 이 부분은 제안하신 그대로 유지하는 것이 좋습니다.</span></p>
+<h3><span class="en">Week 4+ · fold in and test</span><span class="ko">4주차 이후 · 반영 후 테스트</span></h3>
+<p><span class="en">Put the ASA keywords into your ASO metadata, then run 2–3 creators as a test measured against the CAC baseline ASA gave you.</span><span class="ko">ASA에서 확보한 키워드를 ASO 메타데이터에 반영한 뒤, 크리에이터 2~3명으로 테스트를 돌리고 ASA가 제공한 CAC 기준선과 비교해 측정하세요.</span></p>
+</section>
+
+<section>
+<h2><span class="en">The honest counter-argument</span><span class="ko">반대 논거도 짚자면</span></h2>
+<p><span class="en">UGC-first isn't crazy. Zero marginal CAC, and Korean immigrant-family food content is unusually well-suited to organic reach — it may well validate demand faster and cheaper than ads ever will. If cash is tight, ASA is pure burn while a micro-creator might post for a free subscription.</span><span class="ko">UGC 우선도 무리한 선택은 아닙니다. 한계 CAC가 0이고, 한국 이민 가정 대상 음식 콘텐츠는 오가닉 확산에 유난히 잘 맞습니다. 광고보다 더 빠르고 싸게 수요를 검증할 가능성도 충분합니다. 자금이 빠듯하다면 ASA는 순수 지출인 반면, 마이크로 크리에이터는 무료 구독만으로 게시해 줄 수도 있습니다.</span></p>
+<div class="callout">
+<p><span class="en"><strong>The way to have both: tier your creators.</strong> Seed micro-creators now in exchange for free subscriptions — cheap enough that the one-shot risk doesn't matter, and you learn which hooks land. Hold the creators with real audiences until the funnel has converted a real cohort. That buys you UGC learning immediately without spending your best assets on an unvalidated product.</span><span class="ko"><strong>둘 다 취하는 방법: 크리에이터를 등급으로 나누세요.</strong> 지금은 마이크로 크리에이터에게 무료 구독을 주고 시드를 뿌립니다. 소모되더라도 손실이 작고, 어떤 훅이 먹히는지 배울 수 있습니다. 실제 팬덤이 있는 크리에이터는 퍼널이 실제 코호트를 전환시킨 뒤로 아껴 두세요. 이렇게 하면 검증되지 않은 제품에 최고의 자산을 쓰지 않으면서도 UGC 학습을 즉시 시작할 수 있습니다.</span></p>
+</div>
+</section>
+
+<p class="meta"><span class="en">Funnel counts queried live from <code>onboarding_events</code> and <code>profiles</code> on 21 Aug 2026. Tap costs, LTV and CAC ranges carry over from the unit-economics model, where they are benchmark assumptions rather than measurements.</span><span class="ko">퍼널 수치는 2026년 8월 21일 <code>onboarding_events</code> 및 <code>profiles</code>에서 실시간 조회했습니다. 탭 단가, LTV, CAC 범위는 단위 경제성 모델에서 가져온 값으로, 실측이 아닌 벤치마크 가정입니다.</span></p>
+</div>
+<script>
+var isKorean=false;
+function toggleLang(){
+  isKorean=!isKorean;
+  document.querySelectorAll('.en').forEach(function(el){el.classList.toggle('hide',isKorean);});
+  document.querySelectorAll('.ko').forEach(function(el){el.classList.toggle('show',isKorean);});
+  document.querySelector('.lang-toggle').textContent=isKorean?'English':'한국어';
+  document.documentElement.lang=isKorean?'ko':'en';
+}
+</script>
+</body>
+</html>
