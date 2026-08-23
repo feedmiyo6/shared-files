@@ -45,6 +45,17 @@ table.rc th,table.rc td{padding:9px 11px;text-align:right;border-bottom:1px soli
 table.rc th:first-child,table.rc td:first-child{text-align:left;white-space:normal;min-width:158px}
 table.rc th{background:#f7ece8;font-size:11.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);font-weight:800}
 table.rc tr:last-child td{border-bottom:0}
+table.rc.wr td,table.rc.wr th{white-space:normal;text-align:left}
+.fmt{margin:14px 0}
+.fmt .card{padding:14px 16px}
+.fmtT{font-size:15.5px;font-weight:800;margin:0 0 2px}
+.fmtS{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;font-weight:800;margin:0 0 10px}
+.fmtR{display:flex;gap:10px;margin:7px 0;font-size:14.5px;line-height:1.55}
+.fmtK{flex:none;width:104px;font-size:11.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;font-weight:800;padding-top:3px}
+@media(max-width:430px){.fmtR{flex-direction:column;gap:1px}.fmtK{width:auto;padding-top:0}}
+table.rc.wr td{min-width:96px;vertical-align:top}
+table.rc.wr td:first-child{min-width:118px}
+@media(max-width:560px){table.rc.wr{font-size:13px}table.rc.wr td,table.rc.wr th{padding:8px 7px}}
 .hi{color:var(--good);font-weight:700}.lo{color:var(--cherry);font-weight:700}.mid{color:var(--clay);font-weight:700}
 .chart{margin:16px 0 4px}
 .clg{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:13px}
@@ -87,12 +98,12 @@ table.rc tr:last-child td{border-bottom:0}
 <header>
 <button class="lang-toggle" onclick="toggleLang()">한국어</button>
 <h1><span class="en">Jujube — Creator Recruiting Kit</span><span class="ko">Jujube — 크리에이터 모집 키트</span></h1>
-<p class="sub"><span class="en">Copy-paste outreach, rate card, contract, and answers to your 8 questions. Built from your own playbook. <strong>Pricing, caps and negotiation added 23 Aug 2026 (§8).</strong></span><span class="ko">복사해서 바로 쓰는 아웃리치 · 단가표 · 계약서 · 8가지 질문 답변. 당신의 플레이북 기반. <strong>단가·캡·협상 2026년 8월 23일 추가 (§8).</strong></span></p>
+<p class="sub"><span class="en">Copy-paste outreach, rate card, contract, and answers to your 8 questions. Built from your own playbook. <strong>Pricing and caps §8 · no-founder-content format lab §9 — both added 23 Aug 2026.</strong></span><span class="ko">복사해서 바로 쓰는 아웃리치 · 단가표 · 계약서 · 8가지 질문 답변. 당신의 플레이북 기반. <strong>단가·캡 §8 · 창업자 콘텐츠 없이 포맷 찾기 §9 — 2026년 8월 23일 추가.</strong></span></p>
 </header>
 
 <div class="warn">
-<span class="en"><strong>Read this first.</strong> Your playbook's own rule is <em>founder content before creators</em> — hire only once you have a format that works. You don't have one yet, and that's fine: at $15–25/video these creators are cheap lottery tickets, not your R&D department. But do <strong>not</strong> sign a 60-video retainer with anyone yet, and keep posting your own videos in parallel. Every case study in your playbook has the founder grinding first.</span>
-<span class="ko"><strong>먼저 읽어주세요.</strong> 플레이북의 원칙은 <em>창업자 콘텐츠가 크리에이터보다 먼저</em>입니다 — 검증된 포맷이 생긴 뒤에 고용하세요. 아직 없으시죠. 괜찮습니다: 영상당 $15–25면 크리에이터는 저렴한 복권이지 R&D 부서가 아닙니다. 다만 지금은 <strong>누구와도 60개 영상 리테이너를 맺지 마세요.</strong> 그리고 본인 영상도 병행해서 올리세요.</span>
+<span class="en"><strong>Read this first — updated 23 Aug 2026.</strong> The original version of this kit repeated your playbook's rule, <em>founder content before creators</em>. <strong>You have decided not to make the content yourself, so that rule is retired</strong> and these first creators <em>are</em> your R&amp;D department — they are being hired to find the format, not just to distribute one. That changes what you buy, how many you hire at once, and what you measure. <strong>Read §9 before the first DM goes out.</strong> Still true regardless: do <strong>not</strong> sign a 60-video retainer with anyone yet.</span>
+<span class="ko"><strong>먼저 읽어주세요 — 2026년 8월 23일 갱신.</strong> 이 키트의 원본은 플레이북의 원칙인 <em>창업자 콘텐츠 먼저</em>를 그대로 적었습니다. <strong>직접 콘텐츠를 만들지 않기로 결정하셨으므로 그 원칙은 폐기합니다.</strong> 이제 초반 크리에이터가 곧 R&amp;D 부서입니다 — 유통이 아니라 <em>포맷을 찾기 위해</em> 고용하는 겁니다. 무엇을 사느냐, 한 번에 몇 명을 쓰느냐, 무엇을 측정하느냐가 모두 바뀝니다. <strong>첫 DM 전에 §9를 읽으세요.</strong> 그와 무관하게 유효한 원칙: <strong>아직 누구와도 60개 영상 리테이너를 맺지 마세요.</strong></span>
 </div>
 
 <div class="note">
@@ -133,7 +144,7 @@ table.rc tr:last-child td{border-bottom:0}
 
 <p class="q"><span class="en">1. Their account, or the Jujube account?</span><span class="ko">1. 크리에이터 계정인가, Jujube 계정인가?</span></p>
 <p><span class="en"><strong>Their own account.</strong> Warmed accounts with a real audience convert far better, and a brand account cold-starts terribly — brand accounts read as ads and the algorithm treats them accordingly. The tradeoff is you don't own the post, so <strong>get a Spark Ads authorization code for every video</strong> (see §5) — that gives you the ability to run their post as an ad from their handle later.</span><span class="ko"><strong>크리에이터 본인 계정.</strong> 실제 오디언스가 있는 워밍된 계정이 훨씬 잘 전환되고, 브랜드 계정은 콜드 스타트가 최악입니다 — 광고처럼 읽히고 알고리즘도 그렇게 취급합니다. 대신 게시물 소유권이 없으니 <strong>영상마다 Spark Ads 인증 코드를 꼭 받으세요</strong> (§5 참고).</span></p>
-<p><span class="en">Separately, run a <em>founder-personal</em> account yourself and post to it daily. Not a brand account — you, cooking, using your own app.</span><span class="ko">별도로 <em>창업자 개인</em> 계정을 직접 운영하며 매일 올리세요. 브랜드 계정이 아니라, 본인이 요리하며 앱을 쓰는 모습으로.</span></p>
+<p><span class="en">The original kit said to run a <em>founder-personal</em> account alongside this and post to it daily. <strong>That is retired — you are not making the content.</strong> You still need a Jujube account to exist, because people tap the handle after a creator video and a dead account reads as a dead app. It gets filled with <em>licensed creator footage</em> instead, which is exactly why the reposting right has to be bought in the first deal rather than added later — see <strong>§9</strong>.</span><span class="ko">원본 키트는 <em>창업자 개인</em> 계정을 병행 운영하며 매일 올리라고 했습니다. <strong>이제 해당 없음 — 직접 콘텐츠를 만들지 않습니다.</strong> 다만 Jujube 계정 자체는 있어야 합니다. 크리에이터 영상을 본 사람은 계정을 눌러보고, 죽은 계정은 죽은 앱처럼 읽힙니다. 대신 <em>라이선스를 구매한 크리에이터 영상</em>으로 채웁니다. 그래서 재게시 권리를 나중에 추가하지 말고 첫 계약에 포함시켜야 합니다 — <strong>§9</strong> 참고.</span></p>
 
 <p class="q"><span class="en">2. Can you reject videos you don't like?</span><span class="ko">2. 마음에 안 드는 영상을 거절할 수 있나?</span></p>
 <p><span class="en">Yes — but only on <strong>objective brief compliance</strong>, never on taste or performance. Structure it like this and put it in the agreement:</span><span class="ko">가능합니다 — 단 <strong>객관적인 브리프 준수</strong> 기준으로만, 취향이나 성과로는 안 됩니다. 계약서에 이렇게 명시하세요:</span></p>
@@ -243,6 +254,9 @@ NICE TO HAVE
 - Green screen with your face in front of the app — works really well for this
 - Your actual kitchen, your actual groceries. Messy is good. Over-polished converts worse.
 
+YOUR ANGLE FOR THIS ONE
+[ANGLE]. I'm assigning a different angle to each creator in this batch so I can actually tell the formats apart afterwards. The angle is the only thing I'm picking — how you execute it is entirely yours.
+
 WHAT I'M NOT GOING TO DO
 Give you a script and make you read it. I don't have a proven format yet — I'm trying to find one, and that's exactly why I want creators instead of a template. Make the video you'd make if nobody was paying you.
 
@@ -251,6 +265,9 @@ THE DEAL
 - Plus $1 per 1,000 views, counted at day 14 (100K views = $100 extra, capped at $300/video)
 - Free lifetime Pro account
 - Paid within 7 days of the video going live, bonus at day 14
+- Rights, included in this rate: I can (a) run the video as an ad from your handle for 12 months, and (b) repost it on Jujube's own account with credit. If either is a problem, tell me and we'll price it separately rather than skip it.
+- Please send me the raw unedited clips too. I'm not going to re-cut your video — I need them to understand what worked.
+- Analytics screenshot at day 14 (views, saves, shares, profile taps). This is how your bonus gets calculated, so it's in your interest.
 - If it goes well: $15/video for 16-20 videos a month, and the rate climbs to $50-100/video once you're regularly clearing 10K views
 
 Questions? Just ask. First time I'm doing this so I'd rather over-explain than have you guessing.</div>
@@ -349,8 +366,8 @@ Creator: _______________________  Date: __________</div>
 <li><span class="en">Add "Where did you hear about us?" to onboarding. Without it you will genuinely not know if this worked.</span><span class="ko">온보딩에 "저희를 어떻게 알게 되셨나요?" 추가. 없으면 효과를 알 수 없습니다.</span></li>
 <li><span class="en">Generate 10 App Store Connect promo codes for free Pro. They cost nothing.</span><span class="ko">Pro 무료용 App Store Connect 프로모 코드 10개 생성. 무료입니다.</span></li>
 <li><span class="en">Build a list of 30 creators: 1K–20K followers, recent videos outperforming their follower count, FoodTok + Korean/Asian grocery tags.</span><span class="ko">크리에이터 30명 리스트 작성: 팔로워 1K–20K, 최근 영상이 팔로워 수를 상회, FoodTok + 한식/아시안 식료품 태그.</span></li>
-<li><span class="en">DM 10/day using template A. Aim for 2–3 signed at Tier 1.</span><span class="ko">템플릿 A로 하루 10개 DM. 1단계 2–3명 계약 목표.</span></li>
-<li><span class="en">Start your own founder account and post daily. This is the part that actually finds the format.</span><span class="ko">본인 창업자 계정을 시작하고 매일 올리세요. 실제로 포맷을 찾는 건 이 부분입니다.</span></li>
+<li><span class="en">DM 10/day using template A. Aim for <strong>4 signed</strong> at Tier 1, not 2–3 — four is the minimum that lets you compare formats instead of guessing (§9).</span><span class="ko">템플릿 A로 하루 10개 DM. 2–3명이 아니라 1단계 <strong>4명 계약</strong>을 목표로. 4명이어야 추측이 아니라 포맷 비교가 가능합니다 (§9).</span></li>
+<li><span class="en">Assign one of the four wave-1 formats to each creator you sign — A, B, C, D, no duplicates (<strong>§9</strong>). Since you are not making the content, this is now the part that actually finds the format.</span><span class="ko">계약하는 크리에이터마다 1차 포맷 A·B·C·D 중 하나를 중복 없이 배정하세요 (<strong>§9</strong>). 직접 콘텐츠를 만들지 않기로 한 이상, 이제 포맷을 찾는 건 바로 이 부분입니다.</span></li>
 </ol>
 
 <h2><span class="en">8 · Negotiating up — ceilings, CPM and caps</span><span class="ko">8 · 협상 상한 — 천장·CPM·캡</span></h2>
@@ -465,6 +482,7 @@ Creator: _______________________  Date: __________</div>
 <tr><td><span class="en">Hit the deadline</span><span class="ko">마감 준수</span></td><td class="hi"><span class="en">On time or early</span><span class="ko">기한 내 또는 조기</span></td><td class="lo"><span class="en">Late without warning</span><span class="ko">사전 통보 없이 지연</span></td><td><span class="en">Hygiene</span><span class="ko">기본 요건</span></td></tr>
 </tbody></table>
 <div class="note"><span class="en"><strong>The one that actually decides it:</strong> can you re-run their footage as a paid ad and have it beat your own creative? A creator whose video also works as an ASA Custom Product Page or a Meta ad is worth <em>several times</em> their fee, because the asset keeps earning long after the post stops. That, not follower count, is what makes someone worth a Tier 2 retainer.</span><span class="ko"><strong>결국 결정하는 항목 하나:</strong> 그 영상을 유료 광고로 재집행했을 때 자체 제작 소재보다 성과가 좋은가? ASA 커스텀 제품 페이지나 Meta 광고로도 통하는 영상을 만드는 크리에이터는 단가의 <em>몇 배</em> 가치가 있습니다. 게시물 수명이 끝난 뒤에도 자산이 계속 수익을 내기 때문입니다. 팔로워 수가 아니라 이것이 2단계 리테이너 자격을 가릅니다.</span></div>
+<div class="note"><span class="en"><strong>Score the format separately from the person.</strong> This table judges a <em>creator</em>. Now that creators are also your format R&amp;D, a weak creator can still surface a winning format and a strong one can waste a bad hypothesis — so run both verdicts side by side. The 2×2 for that is in <strong>§9</strong>.</span><span class="ko"><strong>포맷과 사람을 따로 채점하세요.</strong> 이 표는 <em>크리에이터</em>를 평가합니다. 이제 크리에이터가 포맷 R&amp;D까지 겸하므로, 약한 크리에이터가 좋은 포맷을 찾아낼 수도, 좋은 크리에이터가 나쁜 가설에 낭비될 수도 있습니다. 두 판정을 나란히 놓고 보세요. 2×2 표는 <strong>§9</strong>에 있습니다.</span></div>
 <div class="warn"><span class="en"><strong>Red flags — walk away:</strong> won't share an analytics screenshot · wants 100% up front · refuses all usage rights and Spark Ads codes · big follower count with small views · no invoice, no W-9 · pushes payment off-platform · renegotiates after a price was agreed.</span><span class="ko"><strong>경고 신호 — 진행하지 마세요:</strong> 인사이트 스크린샷 공유 거부 · 100% 선지급 요구 · 사용권·Spark Ads 코드 일체 거부 · 팔로워는 많은데 조회수는 적음 · 인보이스·W-9 없음 · 플랫폼 외부 결제 유도 · 가격 합의 후 재협상 요구.</span></div>
 
 <h3><span class="en">TikTok or Instagram? Both — and the same deal covers both</span><span class="ko">TikTok이냐 Instagram이냐? 둘 다 — 한 거래로 커버</span></h3>
@@ -479,6 +497,116 @@ Creator: _______________________  Date: __________</div>
 <tr><td><span class="en">Ad reuse</span><span class="ko">광고 재사용</span></td><td><span class="en">Spark Ads (§5)</span><span class="ko">Spark Ads (§5)</span></td><td class="hi"><span class="en">Also feeds ASA product pages</span><span class="ko">ASA 제품 페이지에도 활용</span></td></tr>
 </tbody></table>
 <p><span class="en">Neither is optional. TikTok is where a stranger discovers Jujube; Reels is where the Korean-American cooking audience saves it and forwards it to the family group chat — which is exactly the household-sharing behaviour the product is built around.</span><span class="ko">둘 다 필요합니다. TikTok은 낯선 사람이 Jujube를 처음 발견하는 곳이고, 릴스는 한인 요리 커뮤니티가 저장해서 가족 단톡방에 공유하는 곳입니다. 바로 그 가족 공유 행동이 이 제품이 설계된 지점입니다.</span></p>
+
+<h2><span class="en">9 · No founder content — making the first creators your format lab</span><span class="ko">9 · 창업자 콘텐츠 없이 — 초반 크리에이터를 포맷 실험실로</span></h2>
+
+<div class="warn">
+<span class="en"><strong>Decision, 23 Aug 2026: you are not making the videos.</strong> That is a legitimate call and this whole section assumes it. But be clear-eyed about the trade — founder content was the <em>free, same-day, unlimited-retry</em> way to find a format. Without it you are <strong>buying</strong> format discovery instead of making it, at roughly <span class="money">$75</span> and two weeks per experiment. Three things that were optional in §1–§8 are now mandatory.</span>
+<span class="ko"><strong>2026년 8월 23일 결정: 영상을 직접 만들지 않습니다.</strong> 정당한 선택이고 이 섹션 전체가 그 전제로 쓰였습니다. 다만 맞바꾸는 것은 분명히 알아야 합니다 — 창업자 콘텐츠는 <em>공짜로, 당일에, 무제한 재시도</em>가 가능한 포맷 탐색 수단이었습니다. 그것 없이는 포맷 탐색을 만드는 게 아니라 <strong>구매</strong>하게 되고, 실험 1회당 대략 <span class="money">$75</span>와 2주가 듭니다. §1~§8에서 선택이었던 세 가지가 이제 필수입니다.</span>
+</div>
+
+<h3><span class="en">What becomes mandatory</span><span class="ko">이제 필수가 되는 것</span></h3>
+<ol class="ladder">
+<li><span class="en"><strong>Buy the footage, not just the post.</strong> If a creator finds your format and you hold no rights, you have paid to learn something you cannot use. From wave 1, every deal includes: paid-ad usage from their handle for 12 months (Spark Ads / Partnership Ads code), the right to repost on Jujube's own account with credit, and <strong>the raw unedited clips</strong>. §8 prices usage rights at +50% as an <em>upsell</em>; in wave 1 it goes into the opening offer instead. Buying it later is a second negotiation with someone who now knows they have leverage.</span><span class="ko"><strong>게시물이 아니라 영상 자체를 사세요.</strong> 크리에이터가 포맷을 찾아냈는데 권리가 없으면, 쓸 수 없는 지식에 돈을 낸 겁니다. 1차부터 모든 계약에 포함: 12개월간 해당 계정 명의 광고 집행권(Spark Ads / 파트너십 광고 코드), 크레딧 표기 후 Jujube 계정 재게시권, 그리고 <strong>편집 전 원본 클립</strong>. §8은 사용권을 +50% <em>추가 옵션</em>으로 잡았지만, 1차에서는 처음 제안에 넣으세요. 나중에 사는 건 협상력이 생긴 상대와의 두 번째 협상입니다.</span></li>
+<li><span class="en"><strong>Run a wave, not a trickle.</strong> One video is an anecdote and two is a coin flip. Wave 1 is <strong>four creators, four deliberately different formats, all posting inside a 10-day window</strong>. Sequential hiring feels safer and teaches you almost nothing, because a video posted five weeks later is a different app, a different algorithm and a different you.</span><span class="ko"><strong>한 명씩이 아니라 한 웨이브로.</strong> 영상 1편은 일화이고 2편은 동전 던지기입니다. 1차는 <strong>크리에이터 4명, 의도적으로 다른 포맷 4개, 10일 안에 모두 게시</strong>입니다. 순차 고용이 안전해 보이지만 배우는 게 거의 없습니다. 5주 뒤에 올라간 영상은 앱도, 알고리즘도, 당신도 다른 상태니까요.</span></li>
+<li><span class="en"><strong>Log the variables, not just the results.</strong> "It got 40K views" is worthless if you cannot say what "it" was. Every video gets coded on the same axes <em>before</em> you look at the numbers.</span><span class="ko"><strong>결과가 아니라 변수를 기록하세요.</strong> "4만 조회 나왔다"는 그 "그것"이 무엇이었는지 말할 수 없으면 무의미합니다. 숫자를 보기 <em>전에</em> 모든 영상을 같은 축으로 코딩하세요.</span></li>
+</ol>
+
+<h3><span class="en">Wave 1 — four formats, one per creator, no duplicates</span><span class="ko">1차 — 포맷 4개, 크리에이터당 1개, 중복 금지</span></h3>
+<p><span class="en">These are four different <em>hypotheses about why anyone would download Jujube</em>, not four different edits. Assign one per creator in the brief (template C now has an <code>ANGLE</code> slot). Two creators filming the same format in wave 1 is buying the same lottery ticket twice.</span><span class="ko">이 네 가지는 편집 스타일 4종이 아니라 <em>사람들이 Jujube를 왜 받는가에 대한 가설</em> 4종입니다. 브리프에서 크리에이터당 하나씩 배정하세요(템플릿 C에 <code>ANGLE</code> 칸을 추가했습니다). 1차에서 두 명이 같은 포맷을 찍는 건 같은 복권을 두 장 사는 겁니다.</span></p>
+
+<div class="fmt">
+<div class="card">
+<p class="fmtT"><span class="en">A · Receipt → dinner</span><span class="ko">A · 영수증 → 저녁</span></p>
+<p class="fmtS"><span class="en">The mechanic</span><span class="ko">기능 그 자체</span></p>
+<div class="fmtR"><span class="fmtK"><span class="en">First 3 sec</span><span class="ko">첫 3초</span></span><span><span class="en">Hands, phone, receipt. No face.</span><span class="ko">손·폰·영수증. 얼굴 없음.</span></span></div>
+<div class="fmtR"><span class="fmtK"><span class="en">Tests</span><span class="ko">검증 대상</span></span><span><span class="en">Whether the <em>product moment</em> is the hook</span><span class="ko"><em>제품의 순간</em>이 훅인가</span></span></div>
+<div class="fmtR"><span class="fmtK"><span class="en">If it wins</span><span class="ko">이기면</span></span><span class="hi"><span class="en">Cheapest to scale — faceless creators, and it re-cuts into an ASA Custom Product Page almost unedited</span><span class="ko">확장 비용 최저 — 얼굴 없는 크리에이터로 가능하고, 거의 그대로 ASA 커스텀 제품 페이지로 재편집됨</span></span></div>
+</div>
+<div class="card">
+<p class="fmtT"><span class="en">B · 6pm blank stare</span><span class="ko">B · 저녁 6시의 멍한 눈</span></p>
+<p class="fmtS"><span class="en">The problem</span><span class="ko">문제 상황</span></p>
+<div class="fmtR"><span class="fmtK"><span class="en">First 3 sec</span><span class="ko">첫 3초</span></span><span><span class="en">Face, open fridge, POV or skit</span><span class="ko">얼굴, 열린 냉장고, POV 또는 스킷</span></span></div>
+<div class="fmtR"><span class="fmtK"><span class="en">Tests</span><span class="ko">검증 대상</span></span><span><span class="en">Whether the <em>pain</em> is the hook and personality carries it</span><span class="ko"><em>고통</em>이 훅이고 개성이 끌고 가는가</span></span></div>
+<div class="fmtR"><span class="fmtK"><span class="en">If it wins</span><span class="ko">이기면</span></span><span class="mid"><span class="en">You are buying personalities — rates rise, and it scales worst of the four</span><span class="ko">개성을 사는 것 — 단가가 오르고, 넷 중 확장성이 가장 낮음</span></span></div>
+</div>
+<div class="card">
+<p class="fmtT"><span class="en">C · Asian pantry fluency</span><span class="ko">C · 아시아 식재료 이해도</span></p>
+<p class="fmtS"><span class="en">The wedge</span><span class="ko">쐐기 시장</span></p>
+<div class="fmtR"><span class="fmtK"><span class="en">First 3 sec</span><span class="ko">첫 3초</span></span><span><span class="en">The jar — gochujang, doenjang — then the app naming it correctly</span><span class="ko">고추장·된장 병 → 앱이 정확히 알아보는 장면</span></span></div>
+<div class="fmtR"><span class="fmtK"><span class="en">Tests</span><span class="ko">검증 대상</span></span><span><span class="en">Whether the wedge audience really is the wedge</span><span class="ko">쐐기 오디언스가 실제로 쐐기인가</span></span></div>
+<div class="fmtR"><span class="fmtK"><span class="en">If it wins</span><span class="ko">이기면</span></span><span class="hi"><span class="en">Targeting narrows and gets cheaper; Reels-first; feeds the family-group-chat forward the product is built on</span><span class="ko">타깃이 좁아지고 저렴해짐. 릴스 우선. 제품이 겨냥한 가족 단톡방 공유로 이어짐</span></span></div>
+</div>
+<div class="card">
+<p class="fmtT"><span class="en">D · Waste and money</span><span class="ko">D · 낭비와 돈</span></p>
+<p class="fmtS"><span class="en">The guilt</span><span class="ko">죄책감</span></p>
+<div class="fmtR"><span class="fmtK"><span class="en">First 3 sec</span><span class="ko">첫 3초</span></span><span><span class="en">A number on screen — &ldquo;$80 in the trash last month&rdquo;</span><span class="ko">화면의 숫자 — "지난달 $80을 버렸다"</span></span></div>
+<div class="fmtR"><span class="fmtK"><span class="en">Tests</span><span class="ko">검증 대상</span></span><span><span class="en">Whether economics beats convenience</span><span class="ko">경제성이 편리함을 이기는가</span></span></div>
+<div class="fmtR"><span class="fmtK"><span class="en">If it wins</span><span class="ko">이기면</span></span><span class="mid"><span class="en">Your App Store subtitle, ASA keywords and landing copy should all shift to save/waste language</span><span class="ko">앱스토어 부제·ASA 키워드·랜딩 카피를 절약/낭비 언어로 전환해야 함</span></span></div>
+</div>
+</div>
+
+<div class="note"><span class="en">A and D need no face on camera. C and B do. Weight your outreach accordingly — the faceless two are easier to cast, cheaper, and more reusable as ad creative, so if you can only sign three, drop B.</span><span class="ko">A와 D는 얼굴이 필요 없고, B와 C는 필요합니다. 아웃리치 비중을 여기에 맞추세요 — 얼굴 없는 두 포맷이 캐스팅이 쉽고, 저렴하고, 광고 소재로 재활용하기 좋습니다. 3명밖에 못 구하면 B를 빼세요.</span></div>
+
+<h3><span class="en">The format log — fill this in before you look at the numbers</span><span class="ko">포맷 로그 — 숫자를 보기 전에 채우세요</span></h3>
+<table class="rc wr">
+<thead><tr>
+<th><span class="en">Field</span><span class="ko">항목</span></th>
+<th><span class="en">Record</span><span class="ko">기록 내용</span></th>
+<th><span class="en">Why it earns a column</span><span class="ko">기록하는 이유</span></th>
+</tr></thead>
+<tbody>
+<tr><td><span class="en">Format code</span><span class="ko">포맷 코드</span></td><td>A / B / C / D</td><td><span class="en">The whole point of the wave</span><span class="ko">웨이브의 존재 이유</span></td></tr>
+<tr><td><span class="en">First 3 seconds</span><span class="ko">첫 3초</span></td><td><span class="en">face / hands / text card / app screen</span><span class="ko">얼굴 / 손 / 텍스트 카드 / 앱 화면</span></td><td><span class="en">Single biggest driver of watch-through</span><span class="ko">시청 완료율의 최대 변수</span></td></tr>
+<tr><td><span class="en">Seconds until the app appears</span><span class="ko">앱 등장까지 초</span></td><td><span class="en">e.g. 4s</span><span class="ko">예: 4초</span></td><td><span class="en">Early product = fewer views, better installs. You need to know which you bought.</span><span class="ko">제품이 일찍 나오면 조회는 줄고 설치는 늘어남. 무엇을 산 건지 알아야 함</span></td></tr>
+<tr><td><span class="en">Length · voice-over vs text-only</span><span class="ko">길이 · 보이스오버 vs 텍스트만</span></td><td><span class="en">e.g. 22s, VO</span><span class="ko">예: 22초, VO</span></td><td><span class="en">Text-only re-cuts into ads in any language; VO does not</span><span class="ko">텍스트만이면 어떤 언어로도 광고 재편집 가능, VO는 불가</span></td></tr>
+<tr><td><span class="en">Cooking actually shown</span><span class="ko">실제 조리 장면 유무</span></td><td><span class="en">yes / no</span><span class="ko">있음 / 없음</span></td><td><span class="en">Separates "food video" reach from "app video" intent</span><span class="ko">"음식 영상"의 도달과 "앱 영상"의 의도를 구분</span></td></tr>
+<tr><td><span class="en">Language</span><span class="ko">언어</span></td><td><span class="en">EN / KO / mixed</span><span class="ko">영어 / 한국어 / 혼용</span></td><td><span class="en">Decides whether the wedge is a market or a niche</span><span class="ko">쐐기 시장이 시장인지 틈새인지 판별</span></td></tr>
+<tr><td><span class="en">CTA</span><span class="ko">CTA</span></td><td><span class="en">spoken / caption / bio only</span><span class="ko">말로 / 캡션 / 바이오만</span></td><td><span class="en">Explains install gaps between two videos with identical views</span><span class="ko">조회수가 같은데 설치가 다른 이유를 설명</span></td></tr>
+<tr><td><span class="en">Views at 24h / d7 / d14</span><span class="ko">24시간 / 7일 / 14일 조회수</span></td><td><span class="en">from their screenshot</span><span class="ko">인사이트 스크린샷 기준</span></td><td><span class="en">d14 &gt; 3× d7 means the algorithm kept serving it — that is the format winning, not the creator</span><span class="ko">14일이 7일의 3배 초과면 알고리즘이 계속 노출한 것 — 크리에이터가 아니라 포맷의 승리</span></td></tr>
+<tr><td><span class="en">Saves + shares</span><span class="ko">저장 + 공유</span></td><td><span class="en">absolute, and vs likes</span><span class="ko">절대값 및 좋아요 대비</span></td><td><span class="en">The forward-to-family-chat behaviour is the product thesis</span><span class="ko">가족 단톡방 공유 행동이 제품 가설의 핵심</span></td></tr>
+<tr><td><span class="en">Promo codes redeemed + survey installs</span><span class="ko">프로모 코드 사용 + 설문 설치</span></td><td><span class="en">count</span><span class="ko">건수</span></td><td><span class="en">Your only attribution. No survey answer = no verdict.</span><span class="ko">유일한 어트리뷰션. 설문 응답이 없으면 판정 불가</span></td></tr>
+<tr><td><span class="en"><strong>Cost per attributed install</strong></span><span class="ko"><strong>귀속 설치당 비용</strong></span></td><td><span class="en">all-in fee ÷ installs</span><span class="ko">총 지급액 ÷ 설치 수</span></td><td class="hi"><span class="en">The number the gate below turns on — compare to your ASA CPI</span><span class="ko">아래 판정 기준이 되는 숫자 — ASA CPI와 비교</span></td></tr>
+</tbody></table>
+
+<div class="warn"><span class="en"><strong>How to read four data points honestly.</strong> Four videos is not statistics. Look for a <strong>3–5× gap</strong> between formats, not a 20% edge — anything smaller is noise from posting time, audience size and luck. If two formats land within 2× of each other, that is a <em>tie</em>: re-run both in wave 2 rather than declaring a winner and building a quarter on it.</span><span class="ko"><strong>데이터 4개를 정직하게 읽는 법.</strong> 영상 4편은 통계가 아닙니다. 포맷 간 <strong>3~5배 격차</strong>를 찾으세요. 20% 차이가 아닙니다 — 그보다 작으면 게시 시각·오디언스 규모·운에서 오는 노이즈입니다. 두 포맷이 2배 이내로 붙으면 <em>무승부</em>입니다. 승자를 선언하고 한 분기를 걸지 말고, 2차에서 둘 다 다시 돌리세요.</span></div>
+
+<h3><span class="en">The gate — two verdicts, not one</span><span class="ko">판정 — 하나가 아니라 두 개</span></h3>
+<p><span class="en">§8's scorecard judges the <em>creator</em>. Now you also need a verdict on the <em>format</em>, and they come apart constantly: a mediocre creator can surface a great format, and a great creator can be wasted on a dead hypothesis. Run both, then read the box you landed in.</span><span class="ko">§8의 채점표는 <em>크리에이터</em>를 평가합니다. 이제 <em>포맷</em>에 대한 판정도 필요하고, 이 둘은 자주 어긋납니다. 평범한 크리에이터가 훌륭한 포맷을 찾아낼 수도, 훌륭한 크리에이터가 죽은 가설에 낭비될 수도 있습니다. 둘 다 매기고 해당 칸을 읽으세요.</span></p>
+<table class="rc wr">
+<thead><tr>
+<th><span class="en">Format</span><span class="ko">포맷</span></th>
+<th><span class="en">Creator</span><span class="ko">크리에이터</span></th>
+<th><span class="en">What you do next</span><span class="ko">다음 행동</span></th>
+</tr></thead>
+<tbody>
+<tr><td class="hi"><span class="en">Won</span><span class="ko">성공</span></td><td class="hi"><span class="en">Clean scorecard</span><span class="ko">채점표 양호</span></td><td><span class="en">Re-book them on the <em>same</em> format for wave 2 and raise their pay through the <strong>view bonus first</strong> (§8 ladder), not the base. Run the footage as an ASA Custom Product Page the same week.</span><span class="ko">2차에서 <em>같은</em> 포맷으로 재계약하고, 기본급이 아니라 <strong>조회 보너스부터</strong> 올리세요(§8 사다리). 같은 주에 그 영상을 ASA 커스텀 제품 페이지로 집행하세요.</span></td></tr>
+<tr><td class="hi"><span class="en">Won</span><span class="ko">성공</span></td><td class="lo"><span class="en">Two or more reds</span><span class="ko">빨간불 2개 이상</span></td><td><span class="en"><strong>Keep the format, recast the person.</strong> The format is the asset you were buying. Do not re-book them out of gratitude — brief two new creators on that exact format.</span><span class="ko"><strong>포맷은 유지, 사람은 교체.</strong> 당신이 산 자산은 포맷입니다. 고마움으로 재계약하지 마세요. 그 포맷으로 새 크리에이터 2명에게 브리프하세요.</span></td></tr>
+<tr><td class="lo"><span class="en">Flat</span><span class="ko">부진</span></td><td class="hi"><span class="en">Clean scorecard</span><span class="ko">채점표 양호</span></td><td><span class="en">Re-book them on a <em>different</em> format. You found a reliable operator, which is rarer than a good video — hand them the next hypothesis.</span><span class="ko"><em>다른</em> 포맷으로 재계약하세요. 좋은 영상보다 드문 게 믿을 만한 파트너입니다. 다음 가설을 맡기세요.</span></td></tr>
+<tr><td class="lo"><span class="en">Flat</span><span class="ko">부진</span></td><td class="lo"><span class="en">Two or more reds</span><span class="ko">빨간불 2개 이상</span></td><td><span class="en">Kill the format and the relationship. But do <strong>not</strong> conclude "creators don't work" until all four formats have run — that is the mistake this section exists to prevent.</span><span class="ko">포맷과 관계 모두 종료. 다만 네 포맷을 다 돌리기 전에는 <strong>"크리에이터는 안 통한다"</strong>고 결론짓지 마세요. 이 섹션이 막으려는 실수가 정확히 그것입니다.</span></td></tr>
+</tbody></table>
+
+<h3><span class="en">The budget, laid against the same $1,500</span><span class="ko">동일한 $1,500 기준 예산 배분</span></h3>
+<table class="rc wr">
+<thead><tr>
+<th><span class="en">Line</span><span class="ko">항목</span></th>
+<th><span class="en">Budget</span><span class="ko">예산</span></th>
+<th><span class="en">Note</span><span class="ko">비고</span></th>
+</tr></thead>
+<tbody>
+<tr><td><span class="en">Wave 1 — 4 creators, 4 formats</span><span class="ko">1차 — 크리에이터 4명, 포맷 4개</span></td><td class="money">$300</td><td><span class="en">Budget the §8 first-deal ceiling: $50 base + 50% for rights = $75 each. If they take the §1 opener you land nearer $30 and the difference stays in reserve.</span><span class="ko">§8의 첫 계약 상한으로 잡으세요: 기본 $50 + 권리 50% = 1인당 $75. §1 제안을 그대로 수락하면 $30 선에 끝나고 차액은 예비비로 남습니다.</span></td></tr>
+<tr><td><span class="en">Wave 1 view bonuses</span><span class="ko">1차 조회 보너스</span></td><td class="money">$200</td><td><span class="en">$1/1,000 views at day 14. Reserve it; it only gets spent if something worked.</span><span class="ko">14일 시점 1,000조회당 $1. 예비로 잡아두되, 성과가 났을 때만 나갑니다.</span></td></tr>
+<tr><td><span class="en">Wave 2 — winning format, 3 creators</span><span class="ko">2차 — 승리 포맷, 크리에이터 3명</span></td><td class="money">$500</td><td><span class="en">Higher base is justified here: you are no longer paying for a guess.</span><span class="ko">여기서는 기본급 인상이 타당합니다. 더 이상 추측에 지불하는 게 아니니까요.</span></td></tr>
+<tr><td><span class="en">Reserve — the one that overperforms</span><span class="ko">예비 — 초과 성과자용</span></td><td class="money">$500</td><td><span class="en">Do not pre-allocate. One creator will be worth more than the other six combined; §8's caps still apply ($400 all-in per video, ≤25% of budget to any one person).</span><span class="ko">미리 배정하지 마세요. 한 명이 나머지 여섯 명을 합친 것보다 가치 있을 겁니다. §8의 캡은 그대로 적용(영상당 총액 $400, 1인당 예산 25% 이하).</span></td></tr>
+</tbody></table>
+<div class="note"><span class="en"><strong>The exit line is the same $1,500 as ASA, on purpose.</strong> If that is spent and no format produces a cost-per-attributed-install at or below your ASA CPI — <em>and</em> no footage beats your own ad creative — then creators are not your channel this quarter. Move the remainder into ASA and stop. Deciding that in advance is what stops it becoming a $4,000 decision made emotionally in November.</span><span class="ko"><strong>철수 기준선을 ASA와 똑같이 $1,500으로 둔 것은 의도적입니다.</strong> 그 돈을 다 쓰고도 귀속 설치당 비용이 ASA CPI 이하인 포맷이 없고, <em>동시에</em> 자체 광고 소재를 이기는 영상도 없다면, 이번 분기에 크리에이터는 당신의 채널이 아닙니다. 남은 예산은 ASA로 옮기고 멈추세요. 이 기준을 미리 정해두는 것이, 11월에 감정적으로 내리는 $4,000짜리 결정을 막아줍니다.</span></div>
+
+<h3><span class="en">What now fills the Jujube account</span><span class="ko">Jujube 계정은 이제 무엇으로 채우나</span></h3>
+<p><span class="en">A creator video sends people to <em>their</em> profile, then a fraction go looking for yours. An empty or six-months-stale Jujube account converts those people at roughly zero, and they were your warmest traffic of the week. With founder content gone, the feed is <strong>licensed creator footage</strong> — two or three posts a week, all of it already paid for, reposted with credit. That is the entire reason the reposting right sits in the wave-1 offer instead of being an upsell in month three.</span><span class="ko">크리에이터 영상은 사람들을 <em>그 사람</em> 프로필로 보내고, 그중 일부가 당신 계정을 찾아옵니다. 비어 있거나 6개월 방치된 Jujube 계정은 그 사람들을 거의 0%로 전환시킵니다. 그 주에 가장 뜨거운 트래픽인데도요. 창업자 콘텐츠가 없어진 이상, 피드는 <strong>라이선스 구매한 크리에이터 영상</strong>으로 채웁니다 — 주 2~3회, 이미 값을 치른 소재를 크레딧 달아 재게시. 재게시 권리를 3개월 차 추가 옵션이 아니라 1차 제안에 넣는 이유가 바로 이것입니다.</span></p>
+
+<h3><span class="en">One honest caveat, and a cheap hedge</span><span class="ko">솔직한 단서 하나, 그리고 저렴한 대안</span></h3>
+<p><span class="en">Removing founder content removes your only <em>free</em> iteration loop. Creators test four hypotheses in a month; you could have tested twenty in a week for nothing. Every experiment now costs money and takes about two weeks to read, so the patience budget matters as much as the cash one.</span><span class="ko">창업자 콘텐츠를 없애면 유일한 <em>무료</em> 반복 루프가 사라집니다. 크리에이터는 한 달에 가설 4개를 검증하지만, 직접 하면 일주일에 20개를 공짜로 검증할 수 있었습니다. 이제 실험마다 돈이 들고 판독에 2주가 걸리므로, 현금만큼 인내심 예산도 중요합니다.</span></p>
+<p><span class="en">If "no founder content" means <em>"I am not going to be a personality on camera"</em> — which is the usual meaning — there is a version that keeps the loop and still honours the decision: <strong>formats A and D require no face at all.</strong> A screen recording of a receipt scan plus a hands-and-counter shot is about twenty minutes of work, costs nothing, and can be posted from the Jujube account rather than a personal one. You would be producing assets, not becoming a creator. If the decision is broader than that — no videos from you at all — that is fine and nothing above changes; just budget the patience.</span><span class="ko">"창업자 콘텐츠 없음"이 <em>"카메라 앞에 인물로 서지 않겠다"</em>는 뜻이라면 — 보통 그런 뜻입니다 — 결정을 지키면서 루프를 유지하는 방법이 있습니다. <strong>포맷 A와 D는 얼굴이 전혀 필요 없습니다.</strong> 영수증 스캔 화면 녹화 + 손과 조리대 샷이면 작업 20분, 비용 0원이고, 개인 계정이 아니라 Jujube 계정으로 올리면 됩니다. 크리에이터가 되는 게 아니라 소재를 만드는 겁니다. 결정이 그보다 넓다면 — 어떤 영상도 직접 만들지 않겠다면 — 그것도 괜찮고 위 내용은 그대로 유효합니다. 인내심 예산만 넉넉히 잡으세요.</span></p>
 
 <footer>
 <span class="en">Built from your own marketing playbook + the Jujube ASA plan. Unlisted page — not indexed, but anyone with the link can open it. Aug 23, 2026.</span>
