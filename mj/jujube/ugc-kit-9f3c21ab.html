@@ -39,6 +39,47 @@ code{background:#f4e9e5;padding:1px 6px;border-radius:5px;font-size:13.5px}
 div.ko.show,li.ko.show,p.ko.show,td.ko.show{display:block !important}
 li.ko.show{display:list-item !important}
 footer{margin-top:44px;padding-top:18px;border-top:1px solid var(--line);color:var(--muted);font-size:13px}
+/* --- pricing / negotiation section (added 23 Aug 2026) --- */
+table.rc{width:100%;border-collapse:collapse;margin:13px 0;font-size:14px;display:block;overflow-x:auto}
+table.rc th,table.rc td{padding:9px 11px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap}
+table.rc th:first-child,table.rc td:first-child{text-align:left;white-space:normal;min-width:158px}
+table.rc th{background:#f7ece8;font-size:11.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);font-weight:800}
+table.rc tr:last-child td{border-bottom:0}
+.hi{color:var(--good);font-weight:700}.lo{color:var(--cherry);font-weight:700}.mid{color:var(--clay);font-weight:700}
+.chart{margin:16px 0 4px}
+.clg{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:13px}
+.lg{display:flex;align-items:center;gap:7px;font-size:13px;color:var(--muted)}
+.sw{width:15px;height:9px;border-radius:3px;flex:none}
+.sw.mkt{background:var(--cherry)}.sw.cap{background:#1C6FA8}
+.sw.dot{width:10px;height:10px;background:var(--ink);transform:rotate(45deg);border-radius:2px}
+.crow{display:flex;align-items:center;gap:10px;margin-bottom:3px}
+.crow.first{margin-top:15px}
+.cname{flex:none;width:150px;font-size:11.5px;color:var(--muted);line-height:1.35}
+.cname b{display:block;color:var(--ink);font-size:13px;font-weight:700}
+.ctrack{position:relative;flex:1 1 auto;height:20px;background:#f4e9e5;border-radius:4px;min-width:80px}
+.cbar{position:absolute;top:3.5px;height:13px;border-radius:4px;box-shadow:0 0 0 2px var(--card)}
+.cbar.mkt{background:var(--cherry)}.cbar.cap{background:#1C6FA8}
+.cbar.clip{border-radius:4px 0 0 4px}
+.cdot{position:absolute;top:5px;width:10px;height:10px;background:var(--ink);transform:translateX(-50%) rotate(45deg);border-radius:2px;box-shadow:0 0 0 2px var(--card)}
+.cval{flex:none;width:104px;text-align:right;font-size:12.5px;font-weight:700;color:var(--muted);font-variant-numeric:tabular-nums}
+.caxis{display:flex;align-items:center;gap:10px;margin-top:7px}
+.caxis .cname,.caxis .cval{visibility:hidden}
+.cticks{flex:1 1 auto;position:relative;height:16px;min-width:80px}
+.ctick{position:absolute;top:0;transform:translateX(-50%);font-size:11px;color:var(--muted);white-space:nowrap}
+.cbar[data-tip]:hover::after,.cdot[data-tip]:hover::after{content:attr(data-tip);position:absolute;bottom:22px;left:0;background:var(--ink);color:#fff;font-size:11.5px;font-weight:600;padding:5px 9px;border-radius:6px;white-space:nowrap;z-index:5;pointer-events:none;transform:none}
+.cnote{font-size:12.5px;color:var(--muted);margin:11px 0 0;text-align:center}
+.ladder{counter-reset:lad;list-style:none;padding-left:0;margin:13px 0}
+.ladder li{counter-increment:lad;position:relative;padding-left:35px;margin-bottom:11px}
+.ladder li::before{content:counter(lad);position:absolute;left:0;top:2px;width:23px;height:23px;border-radius:50%;background:var(--cherry);color:#fff;font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center}
+@media(max-width:560px){
+  .crow{flex-wrap:wrap;gap:6px;column-gap:8px}
+  .cname{width:100%}
+  .ctrack{flex:1 1 0;min-width:0}
+  .cticks{flex:1 1 0;min-width:0}
+  .cval{width:76px;font-size:11.5px}
+  .caxis .cname{display:none}
+  .ctick{font-size:10px}
+}
 </style>
 </head>
 <body>
@@ -46,7 +87,7 @@ footer{margin-top:44px;padding-top:18px;border-top:1px solid var(--line);color:v
 <header>
 <button class="lang-toggle" onclick="toggleLang()">한국어</button>
 <h1><span class="en">Jujube — Creator Recruiting Kit</span><span class="ko">Jujube — 크리에이터 모집 키트</span></h1>
-<p class="sub"><span class="en">Copy-paste outreach, rate card, contract, and answers to your 8 questions. Built from your own playbook.</span><span class="ko">복사해서 바로 쓰는 아웃리치 · 단가표 · 계약서 · 8가지 질문 답변. 당신의 플레이북 기반.</span></p>
+<p class="sub"><span class="en">Copy-paste outreach, rate card, contract, and answers to your 8 questions. Built from your own playbook. <strong>Pricing, caps and negotiation added 23 Aug 2026 (§8).</strong></span><span class="ko">복사해서 바로 쓰는 아웃리치 · 단가표 · 계약서 · 8가지 질문 답변. 당신의 플레이북 기반. <strong>단가·캡·협상 2026년 8월 23일 추가 (§8).</strong></span></p>
 </header>
 
 <div class="warn">
@@ -85,6 +126,8 @@ footer{margin-top:44px;padding-top:18px;border-top:1px solid var(--line);color:v
 </ul>
 
 <div class="note"><span class="en"><strong>Always include free Pro.</strong> App Store Connect promo codes cost you nothing, and creators who genuinely use the app make visibly better videos. This is the highest-ROI line item in the entire deal.</span><span class="ko"><strong>항상 Pro 무료를 포함하세요.</strong> App Store Connect 프로모 코드는 공짜이고, 앱을 실제로 쓰는 크리에이터가 눈에 띄게 좋은 영상을 만듭니다. 이 거래에서 ROI가 가장 높은 항목입니다.</span></div>
+
+<div class="note"><span class="en"><strong>These are opening offers, not your limits.</strong> For how far you can go when a creator counters — market rates, your CPM ceiling, and the caps that stop you overpaying — see <strong>§8</strong>.</span><span class="ko"><strong>이 금액은 시작점이지 한계가 아닙니다.</strong> 역제안이 왔을 때 어디까지 올릴 수 있는지 — 시장가, CPM 상한선, 과지출을 막는 캡 — 는 <strong>§8</strong>을 보세요.</span></div>
 
 <h2><span class="en">2 · Your 8 questions</span><span class="ko">2 · 8가지 질문</span></h2>
 
@@ -309,6 +352,133 @@ Creator: _______________________  Date: __________</div>
 <li><span class="en">DM 10/day using template A. Aim for 2–3 signed at Tier 1.</span><span class="ko">템플릿 A로 하루 10개 DM. 1단계 2–3명 계약 목표.</span></li>
 <li><span class="en">Start your own founder account and post daily. This is the part that actually finds the format.</span><span class="ko">본인 창업자 계정을 시작하고 매일 올리세요. 실제로 포맷을 찾는 건 이 부분입니다.</span></li>
 </ol>
+
+<h2><span class="en">8 · Negotiating up — ceilings, CPM and caps</span><span class="ko">8 · 협상 상한 — 천장·CPM·캡</span></h2>
+
+<p><span class="en">The offer menu in §1 is an <em>opening</em>, deliberately low — it is a filter, not a fair price. This section is what happens when a good creator counters, which the good ones will. It answers one question: <strong>how far can I go before this stops paying for itself?</strong></span><span class="ko">§1의 오퍼 메뉴는 의도적으로 낮게 잡은 <em>시작점</em>입니다. 공정가가 아니라 필터입니다. 이 섹션은 좋은 크리에이터가 역제안을 해왔을 때(좋은 사람일수록 반드시 합니다) 무엇을 할지 다룹니다. 답할 질문은 하나입니다. <strong>어디까지 올려야 손익이 유지되는가?</strong></span></p>
+
+<h3><span class="en">The rate card — your offer vs the market vs your ceiling</span><span class="ko">단가표 — 내 제안 vs 시장가 vs 상한선</span></h3>
+
+<div class="card">
+<div class="chart">
+  <div class="clg">
+    <span class="lg"><span class="sw mkt"></span><span class="en">Market asking range</span><span class="ko">시장 호가 범위</span></span>
+    <span class="lg"><span class="sw cap"></span><span class="en">Your walk-away ceiling</span><span class="ko">협상 상한선</span></span>
+    <span class="lg"><span class="sw dot"></span><span class="en">What you offer today (§1)</span><span class="ko">현재 제안액 (§1)</span></span>
+  </div>
+
+  <div class="crow first"><span class="cname"><b><span class="en">Nano · 1K–10K</span><span class="ko">나노 · 1K~10K</span></b><span class="en">~5K views · you offer $25</span><span class="ko">약 5천 조회 · 현재 $25</span></span><span class="ctrack"><span class="cbar mkt" style="left:3.125%;width:15.625%" data-tip="Market asks $25–150"></span></span><span class="cval">$25–150</span></div>
+  <div class="crow"><span class="cname"></span><span class="ctrack"><span class="cbar cap" style="left:6.25%;width:3.125%" data-tip="Your ceiling $50–75"></span><span class="cdot" style="left:3.125%" data-tip="You offer $25 ($20 + $5 bonus)"></span></span><span class="cval" style="color:#1C6FA8">$50–75</span></div>
+
+  <div class="crow first"><span class="cname"><b><span class="en">Micro · 10K–50K</span><span class="ko">마이크로 · 10K~50K</span></b><span class="en">~20K views · you offer $40</span><span class="ko">약 2만 조회 · 현재 $40</span></span><span class="ctrack"><span class="cbar mkt" style="left:25%;width:75%" data-tip="Market asks $200–800"></span></span><span class="cval">$200–800</span></div>
+  <div class="crow"><span class="cname"></span><span class="ctrack"><span class="cbar cap" style="left:25%;width:12.5%" data-tip="Your ceiling $200–300"></span><span class="cdot" style="left:5%" data-tip="You offer $40 ($20 + $20 bonus)"></span></span><span class="cval" style="color:#1C6FA8">$200–300</span></div>
+
+  <div class="crow first"><span class="cname"><b><span class="en">Mid · 50K–100K</span><span class="ko">미드 · 50K~100K</span></b><span class="en">~50K views · you offer $70</span><span class="ko">약 5만 조회 · 현재 $70</span></span><span class="ctrack"><span class="cbar mkt clip" style="left:62.5%;width:37.5%" data-tip="Market asks $500–1,500 (runs off scale)"></span></span><span class="cval">$500–1.5k ▸</span></div>
+  <div class="crow"><span class="cname"></span><span class="ctrack"><span class="cbar cap" style="left:62.5%;width:31.25%" data-tip="Your ceiling $500–750"></span><span class="cdot" style="left:8.75%" data-tip="You offer $70 ($20 + $50 bonus)"></span></span><span class="cval" style="color:#1C6FA8">$500–750</span></div>
+
+  <div class="crow first"><span class="cname"><b><span class="en">UGC licence</span><span class="ko">UGC 라이선스</span></b><span class="en">they film, you post it — no audience needed</span><span class="ko">촬영만 받아 직접 게시 — 팬덤 불필요</span></span><span class="ctrack"><span class="cbar mkt" style="left:9.375%;width:28.125%" data-tip="Market asks $75–300"></span></span><span class="cval">$75–300</span></div>
+  <div class="crow"><span class="cname"></span><span class="ctrack"><span class="cbar cap" style="left:9.375%;width:9.375%" data-tip="Your ceiling $75–150"></span></span><span class="cval" style="color:#1C6FA8">$75–150</span></div>
+
+  <div class="caxis"><span class="cname"></span><span class="cticks"><span class="ctick" style="left:0;transform:none">$0</span><span class="ctick" style="left:25%">$200</span><span class="ctick" style="left:50%">$400</span><span class="ctick" style="left:75%">$600</span><span class="ctick" style="left:100%;transform:translateX(-100%)">$800</span></span><span class="cval"></span></div>
+  <p class="cnote"><span class="en">Total per video, US, 2026. "You offer" = $20 base plus the $1/1,000-view bonus at that tier's typical views.</span><span class="ko">영상 1편 총액 기준, 미국 2026년. "현재 제안액" = 기본료 $20 + 해당 구간 평균 조회수 기준 1,000뷰당 $1 보너스.</span></p>
+</div>
+</div>
+
+<div class="note"><span class="en"><strong>Read the gap, not the bars.</strong> At every tier your current offer sits well below both the market and your own ceiling. That gap is your negotiating room — it is real, and you should be willing to spend it on the right person. It is also why the $20 opener works: you can double it and still be inside your limits.</span><span class="ko"><strong>막대가 아니라 간격을 보세요.</strong> 모든 구간에서 현재 제안액이 시장가와 자체 상한선 양쪽보다 한참 아래에 있습니다. 이 간격이 실제 협상 여지이며, 맞는 사람에게는 쓸 각오를 해야 합니다. $20 오프닝이 유효한 이유이기도 합니다 — 두 배로 올려도 여전히 한도 안입니다.</span></div>
+
+<div class="warn"><span class="en"><strong>Price on median views, never on followers.</strong> Ask for a screenshot of their last 10–20 <em>non-sponsored</em> posts. A 40K-follower account whose videos do 3K views is a nano buy at a nano price. Followers can be inflated; views are what you are actually renting.</span><span class="ko"><strong>팔로워가 아니라 조회수 중앙값으로 가격을 매기세요.</strong> 최근 10~20개 <em>비협찬</em> 게시물 스크린샷을 요청하세요. 팔로워 4만인데 조회수가 3천이면, 나노 가격에 사야 할 나노 계정입니다. 팔로워는 부풀릴 수 있지만, 실제로 빌리는 것은 조회수입니다.</span></div>
+
+<h3><span class="en">Where the ceiling comes from</span><span class="ko">상한선의 근거</span></h3>
+<p><span class="en">A paid annual subscriber nets <code>$50.99</code> ($59.99 less Apple's 15% small-business rate, confirmed in App Store Connect). Everything above flows from that and a 1.5× ROAS target. Per 10,000 views:</span><span class="ko">연간 유료 구독자 1명의 순수령액은 <code>$50.99</code>입니다($59.99에서 Apple 소규모 사업자 수수료 15% 차감, App Store Connect 확인). 위 수치는 모두 이 값과 ROAS 1.5배 목표에서 나옵니다. 조회 1만 회 기준:</span></p>
+<table class="rc">
+<thead><tr>
+<th><span class="en">Scenario</span><span class="ko">시나리오</span></th>
+<th><span class="en">View→install</span><span class="ko">조회→설치</span></th>
+<th><span class="en">Install→paid</span><span class="ko">설치→유료</span></th>
+<th><span class="en">Subs</span><span class="ko">구독</span></th>
+<th><span class="en">Net rev</span><span class="ko">순매출</span></th>
+<th><span class="en">Max pay</span><span class="ko">최대 지불</span></th>
+<th>CPM</th>
+</tr></thead>
+<tbody>
+<tr><td><span class="en">Pessimistic</span><span class="ko">비관</span></td><td>0.3%</td><td>5%</td><td>1.5</td><td>$76</td><td class="lo">$51</td><td class="lo">$5.10</td></tr>
+<tr><td><span class="en"><strong>Conservative — anchor here</strong></span><span class="ko"><strong>보수 — 여기에 기준</strong></span></td><td>0.5%</td><td>8%</td><td>4</td><td>$204</td><td class="mid">$136</td><td class="mid">$13.60</td></tr>
+<tr><td><span class="en">Base case</span><span class="ko">기본</span></td><td>1.0%</td><td>10%</td><td>10</td><td>$510</td><td class="hi">$340</td><td class="hi">$34.00</td></tr>
+<tr><td><span class="en">Optimistic</span><span class="ko">낙관</span></td><td>1.5%</td><td>15%</td><td>22.5</td><td>$1,147</td><td class="hi">$765</td><td class="hi">$76.50</td></tr>
+</tbody></table>
+<div class="note"><span class="en"><strong>Negotiate at $10–15 CPM until you have one measured cohort; $25–30 after.</strong> Note what this makes of your view bonus: <code>$1 per 1,000 views</code> is a <strong>$1 CPM</strong> — roughly a tenth of the conservative ceiling. It is generous-sounding and extremely cheap, which is exactly why it is the right instrument. Raise the <em>bonus</em> before you raise the base: the bonus only costs you money when it worked.</span><span class="ko"><strong>실측 코호트가 생기기 전엔 CPM $10~15로, 이후엔 $25~30으로 협상하세요.</strong> 이 기준으로 보면 조회수 보너스의 정체가 드러납니다. <code>1,000뷰당 $1</code>은 <strong>CPM $1</strong>로, 보수 상한선의 약 10분의 1입니다. 후하게 들리면서 극도로 저렴합니다. 그래서 올바른 수단입니다. 기본료보다 <em>보너스</em>를 먼저 올리세요. 보너스는 성과가 났을 때만 돈이 나갑니다.</span></div>
+<p class="cnote" style="text-align:left"><span class="en">The spread between the top and bottom rows is 15×, and you currently have no data telling you which row is true — one real purchase, ever. <code>$50.99</code> also assumes the annual plan; a monthly-heavy mix roughly halves every figure here.</span><span class="ko">최상단과 최하단 행의 편차는 15배이며, 지금 어느 행이 사실인지 알려주는 데이터가 없습니다(실제 결제는 지금까지 1건). <code>$50.99</code>는 연간 플랜 기준이며, 월간 비중이 높으면 위 수치는 대략 절반이 됩니다.</span></p>
+
+<h3><span class="en">The caps — numbers to hold under pressure</span><span class="ko">캡 — 압박받아도 지킬 숫자</span></h3>
+<table class="rc">
+<thead><tr>
+<th><span class="en">Cap</span><span class="ko">항목</span></th>
+<th><span class="en">Number</span><span class="ko">기준</span></th>
+<th><span class="en">Why</span><span class="ko">이유</span></th>
+</tr></thead>
+<tbody>
+<tr><td><span class="en">Base rate, first deal with anyone</span><span class="ko">첫 거래 기본료</span></td><td class="lo">$50</td><td><span class="en">You have never seen their work convert</span><span class="ko">전환 실적을 본 적 없음</span></td></tr>
+<tr><td><span class="en">Base rate, proven creator (Tier 3)</span><span class="ko">검증된 크리에이터 기본료 (3단계)</span></td><td>$100</td><td><span class="en">Repeatedly cleared 10K+ views</span><span class="ko">10K+ 조회 반복 달성</span></td></tr>
+<tr><td><span class="en">View bonus rate</span><span class="ko">조회수 보너스 단가</span></td><td>$1 / 1K <span class="en">· $2 max</span><span class="ko">· 최대 $2</span></td><td><span class="en">$2 only after views→paid is measured</span><span class="ko">조회→결제 측정 후에만 $2</span></td></tr>
+<tr><td><span class="en">Bonus cap per video</span><span class="ko">영상당 보너스 상한</span></td><td>$300</td><td><span class="en">Uncapped is how you fund vanity metrics</span><span class="ko">상한 없으면 허수 지표에 돈을 대게 됨</span></td></tr>
+<tr><td><span class="en"><strong>All-in per video, hard stop</strong></span><span class="ko"><strong>영상당 총액 절대 상한</strong></span></td><td class="lo"><strong>$400</strong></td><td><span class="en">Base + bonus combined, no exceptions this quarter</span><span class="ko">기본료+보너스 합산, 이번 분기 예외 없음</span></td></tr>
+<tr><td><span class="en">UGC licence only (you post)</span><span class="ko">UGC 라이선스 전용(직접 게시)</span></td><td>$150</td><td><span class="en">No audience is being rented</span><span class="ko">팬덤을 빌리는 것이 아님</span></td></tr>
+<tr><td><span class="en">CPM before validation</span><span class="ko">검증 전 CPM</span></td><td>$15 / 1K</td><td><span class="en">The conservative row above</span><span class="ko">위 보수 시나리오 기준</span></td></tr>
+<tr><td><span class="en">Any single creator, share of budget</span><span class="ko">단일 크리에이터 예산 비중</span></td><td>25%</td><td><span class="en">One bad pick must not end the test</span><span class="ko">한 번의 실패로 테스트가 끝나면 안 됨</span></td></tr>
+<tr><td><span class="en">Cross-post to the second platform</span><span class="ko">두 번째 플랫폼 교차 게시</span></td><td>+25–50%</td><td><span class="en">One extra upload of an asset they already made</span><span class="ko">이미 만든 자산을 한 번 더 올리는 것</span></td></tr>
+<tr><td><span class="en">Usage-rights premium</span><span class="ko">사용권 프리미엄</span></td><td>+50%</td><td><span class="en">Only if you will genuinely run it as an ad</span><span class="ko">실제로 광고 집행할 때만</span></td></tr>
+<tr><td><span class="en">Exclusivity</span><span class="ko">독점</span></td><td>30 <span class="en">days, free</span><span class="ko">일, 무료</span></td><td><span class="en">Paid category exclusivity is a big-brand luxury</span><span class="ko">유료 카테고리 독점은 대형 브랜드의 사치</span></td></tr>
+<tr><td><span class="en"><strong>Total creator spend before a verdict</strong></span><span class="ko"><strong>판단 전 총 크리에이터 지출</strong></span></td><td class="lo"><strong>$1,500</strong></td><td><span class="en">Mirrors your ASA exit threshold — if nothing converts by then it is the product page or the price, not the channel</span><span class="ko">ASA 종료 기준과 동일 — 여기까지 전환이 없으면 채널이 아니라 앱 페이지나 가격 문제</span></td></tr>
+</tbody></table>
+
+<h3><span class="en">The negotiation ladder — spend these before spending cash</span><span class="ko">협상 사다리 — 현금보다 먼저 쓸 카드</span></h3>
+<p><span class="en">When they counter, the instinct is to raise the number. Go down this list first — every rung costs you close to nothing and reads as generous.</span><span class="ko">역제안이 오면 금액부터 올리고 싶어집니다. 그 전에 이 목록을 먼저 쓰세요. 각 단계는 비용이 거의 0이면서도 후하게 느껴집니다.</span></p>
+<ol class="ladder">
+<li><span class="en"><strong>Raise the view bonus, not the base.</strong> $1 → $1.50 per 1,000 sounds like a 50% raise and only costs you money if the video actually performs. This is always your first move.</span><span class="ko"><strong>기본료가 아니라 조회수 보너스를 올리세요.</strong> 1,000뷰당 $1 → $1.50은 50% 인상처럼 들리지만, 영상이 실제로 터졌을 때만 돈이 나갑니다. 언제나 첫 수순입니다.</span></li>
+<li><span class="en"><strong>Free lifetime Pro, and codes for their audience.</strong> Face value $59.99 each, real cost near zero. Give them 10–20 promo codes to give away — it costs nothing and doubles as your attribution.</span><span class="ko"><strong>평생 Pro 무료 + 팬덤용 코드.</strong> 표시 가치는 각 $59.99, 실제 비용은 거의 0. 나눠줄 프로모 코드 10~20개를 주세요. 비용 0원이면서 어트리뷰션 수단이 됩니다.</span></li>
+<li><span class="en"><strong>A repeat guarantee.</strong> "Three more at this rate if this one clears 10K." Creators value predictable income far above a one-time bump — this is the highest-leverage rung on the ladder.</span><span class="ko"><strong>반복 거래 보장.</strong> "이번 영상이 1만 조회를 넘기면 같은 단가로 3편 더." 크리에이터는 일회성 인상보다 예측 가능한 수입을 훨씬 높게 칩니다. 이 사다리에서 레버리지가 가장 큽니다.</span></li>
+<li><span class="en"><strong>Faster payment.</strong> Offer to pay on delivery instead of net-7. Costs you nothing and matters more than $10 to someone chasing invoices.</span><span class="ko"><strong>더 빠른 지급.</strong> 7일 후가 아니라 납품 즉시 지급을 제안하세요. 비용은 0이고, 인보이스를 쫓아다니는 사람에겐 $10보다 큽니다.</span></li>
+<li><span class="en"><strong>A bulk rate.</strong> Three videos for 2× the single rate. Their effective hourly goes up, your per-asset cost drops ~33%.</span><span class="ko"><strong>묶음 단가.</strong> 3편에 1편 단가의 2배. 크리에이터의 시간당 수익은 올라가고, 자산당 비용은 약 33% 내려갑니다.</span></li>
+<li><span class="en"><strong>Creative freedom and credit.</strong> Your brief already gives them the hook choice — say it out loud as a benefit. Most UGC gigs hand out a script; yours does not, and good creators genuinely value that.</span><span class="ko"><strong>크리에이티브 재량과 크레딧.</strong> 브리프에서 이미 훅 선택권을 주고 있습니다 — 이걸 혜택으로 명시하세요. 대부분의 UGC 일은 대본을 주지만 당신은 아닙니다. 좋은 크리에이터는 이 차이를 실제로 높게 칩니다.</span></li>
+<li><span class="en"><strong>Only now, cash — in steps of ≤25%, and never for free.</strong> Every raise buys something: the second platform, an extra hook variant, longer usage rights, the raw footage.</span><span class="ko"><strong>여기까지 온 뒤에야 현금 — 25% 이하 단위로, 절대 그냥 주지 마세요.</strong> 인상할 때마다 반대급부를 받으세요: 두 번째 플랫폼, 훅 변형 추가, 사용권 연장, 원본 영상.</span></li>
+</ol>
+<div class="note"><span class="en"><strong>If they will not come under your ceiling, walk — warmly.</strong> "That's above what I can do this round, but I'd love to revisit in a few weeks." Roughly a third come back lower, and the ones who don't were never going to be a repeat partner.</span><span class="ko"><strong>상한선 아래로 안 내려오면 정중하게 물러나세요.</strong> "이번 라운드 예산을 넘네요. 몇 주 뒤에 다시 얘기하고 싶습니다." 대략 3분의 1은 낮춘 금액으로 다시 옵니다. 안 오는 쪽은 어차피 반복 파트너가 될 사람이 아니었습니다.</span></div>
+
+<h3><span class="en">Keep or drop — scoring a creator after their first video</span><span class="ko">계속 갈 사람 vs 정리할 사람 — 첫 영상 이후 채점</span></h3>
+<p><span class="en">Response time is a real signal, but it is a hygiene check, not the decider. Two or more reds and you do not re-book, regardless of how the video performed.</span><span class="ko">응답 속도는 의미 있는 신호지만 기본 위생 점검이지 결정 요인은 아닙니다. 빨간불 2개 이상이면 영상 성과와 무관하게 재계약하지 않습니다.</span></p>
+<table class="rc">
+<thead><tr>
+<th><span class="en">Signal</span><span class="ko">항목</span></th>
+<th><span class="en">Keep</span><span class="ko">유지</span></th>
+<th><span class="en">Drop</span><span class="ko">정리</span></th>
+<th><span class="en">Weight</span><span class="ko">비중</span></th>
+</tr></thead>
+<tbody>
+<tr><td><span class="en"><strong>Footage works as a paid ad</strong></span><span class="ko"><strong>광고 소재로 재사용 가능</strong></span></td><td class="hi"><span class="en">Beats your own creative</span><span class="ko">자체 제작물보다 우수</span></td><td class="lo"><span class="en">Unusable off-platform</span><span class="ko">외부 활용 불가</span></td><td><span class="en">Highest</span><span class="ko">최상</span></td></tr>
+<tr><td><span class="en">Attributed installs (promo code + survey)</span><span class="ko">귀속 설치 수(코드+설문)</span></td><td class="hi"><span class="en">Beats your ASA CPI</span><span class="ko">ASA CPI보다 우수</span></td><td class="lo"><span class="en">2–3× ASA CPI</span><span class="ko">ASA CPI의 2~3배</span></td><td><span class="en">Highest</span><span class="ko">최상</span></td></tr>
+<tr><td><span class="en">Saves + shares vs likes</span><span class="ko">저장·공유 대 좋아요</span></td><td class="hi"><span class="en">Saves are high</span><span class="ko">저장 비율 높음</span></td><td class="lo"><span class="en">Likes only</span><span class="ko">좋아요만</span></td><td><span class="en">High</span><span class="ko">높음</span></td></tr>
+<tr><td><span class="en">View consistency, last 10 posts</span><span class="ko">최근 10개 조회수 일관성</span></td><td class="hi"><span class="en">Within ±50%</span><span class="ko">±50% 이내</span></td><td class="lo"><span class="en">One viral fluke, rest flat</span><span class="ko">한 편만 터지고 나머지 저조</span></td><td><span class="en">High</span><span class="ko">높음</span></td></tr>
+<tr><td><span class="en">Audience geo — US / Korea, iPhone</span><span class="ko">시청자 지역 — 미국/한국, iPhone</span></td><td class="hi"><span class="en">&gt;60% in-market</span><span class="ko">타깃 시장 60% 초과</span></td><td class="lo"><span class="en">Mostly out-of-market</span><span class="ko">대부분 시장 밖</span></td><td><span class="en">High</span><span class="ko">높음</span></td></tr>
+<tr><td><span class="en">Comments</span><span class="ko">댓글</span></td><td class="hi"><span class="en">Real questions about the app</span><span class="ko">앱에 대한 실제 질문</span></td><td class="lo"><span class="en">Emoji spam, pod patterns</span><span class="ko">이모지 도배, 품앗이 패턴</span></td><td><span class="en">Medium</span><span class="ko">중간</span></td></tr>
+<tr><td><span class="en">First cut clears the checklist</span><span class="ko">초안이 체크리스트 통과</span></td><td class="hi"><span class="en">≤1 revision</span><span class="ko">수정 1회 이하</span></td><td class="lo"><span class="en">Still missing captions or watermark</span><span class="ko">자막·워터마크 여전히 누락</span></td><td><span class="en">Medium</span><span class="ko">중간</span></td></tr>
+<tr><td><span class="en">Response time</span><span class="ko">응답 속도</span></td><td class="hi"><span class="en">&lt;24h, consistently</span><span class="ko">24시간 이내, 일관되게</span></td><td class="lo"><span class="en">&gt;72h or erratic</span><span class="ko">72시간 초과 또는 들쭉날쭉</span></td><td><span class="en">Hygiene</span><span class="ko">기본 요건</span></td></tr>
+<tr><td><span class="en">Hit the deadline</span><span class="ko">마감 준수</span></td><td class="hi"><span class="en">On time or early</span><span class="ko">기한 내 또는 조기</span></td><td class="lo"><span class="en">Late without warning</span><span class="ko">사전 통보 없이 지연</span></td><td><span class="en">Hygiene</span><span class="ko">기본 요건</span></td></tr>
+</tbody></table>
+<div class="note"><span class="en"><strong>The one that actually decides it:</strong> can you re-run their footage as a paid ad and have it beat your own creative? A creator whose video also works as an ASA Custom Product Page or a Meta ad is worth <em>several times</em> their fee, because the asset keeps earning long after the post stops. That, not follower count, is what makes someone worth a Tier 2 retainer.</span><span class="ko"><strong>결국 결정하는 항목 하나:</strong> 그 영상을 유료 광고로 재집행했을 때 자체 제작 소재보다 성과가 좋은가? ASA 커스텀 제품 페이지나 Meta 광고로도 통하는 영상을 만드는 크리에이터는 단가의 <em>몇 배</em> 가치가 있습니다. 게시물 수명이 끝난 뒤에도 자산이 계속 수익을 내기 때문입니다. 팔로워 수가 아니라 이것이 2단계 리테이너 자격을 가릅니다.</span></div>
+<div class="warn"><span class="en"><strong>Red flags — walk away:</strong> won't share an analytics screenshot · wants 100% up front · refuses all usage rights and Spark Ads codes · big follower count with small views · no invoice, no W-9 · pushes payment off-platform · renegotiates after a price was agreed.</span><span class="ko"><strong>경고 신호 — 진행하지 마세요:</strong> 인사이트 스크린샷 공유 거부 · 100% 선지급 요구 · 사용권·Spark Ads 코드 일체 거부 · 팔로워는 많은데 조회수는 적음 · 인보이스·W-9 없음 · 플랫폼 외부 결제 유도 · 가격 합의 후 재협상 요구.</span></div>
+
+<h3><span class="en">TikTok or Instagram? Both — and the same deal covers both</span><span class="ko">TikTok이냐 Instagram이냐? 둘 다 — 한 거래로 커버</span></h3>
+<p><span class="en">Everything in this kit applies identically to TikTok and Instagram Reels. It posts on <strong>their</strong> account either way (§2, Q1). The only decision is whether one deal covers both platforms — and it should. Ask for it explicitly: <em>"one video, you post it to your TikTok and your Reels."</em> That is one extra upload of an asset they already made, so it is worth <strong>+25–50%, not 2×</strong>. If they quote double, that is your first negotiation point.</span><span class="ko">이 키트의 모든 내용은 TikTok과 Instagram 릴스에 동일하게 적용됩니다. 어느 쪽이든 <strong>크리에이터 본인</strong> 계정에 게시됩니다(§2 Q1). 결정할 것은 한 거래로 두 플랫폼을 다 덮을지인데, 그렇게 해야 합니다. 명시적으로 요구하세요. <em>"영상 1편, 본인 TikTok과 릴스 양쪽에 게시."</em> 이미 만든 자산을 한 번 더 올리는 것이므로 <strong>2배가 아니라 +25~50%</strong>가 맞습니다. 2배를 부르면 거기가 첫 협상 포인트입니다.</span></p>
+<table class="rc">
+<thead><tr><th></th><th>TikTok</th><th><span class="en">Instagram Reels</span><span class="ko">Instagram 릴스</span></th></tr></thead>
+<tbody>
+<tr><td><span class="en">Reach for a cold audience</span><span class="ko">신규 시청자 도달</span></td><td class="hi"><span class="en">Much better</span><span class="ko">훨씬 우수</span></td><td class="mid"><span class="en">Follower-weighted</span><span class="ko">팔로워 중심</span></td></tr>
+<tr><td><span class="en">Typical engagement rate</span><span class="ko">평균 참여율</span></td><td class="hi">~4.25%</td><td>~1.23%</td></tr>
+<tr><td><span class="en">Korean-American food community</span><span class="ko">한인 음식 커뮤니티</span></td><td><span class="en">Good</span><span class="ko">양호</span></td><td class="hi"><span class="en">Stronger — saves and DMs</span><span class="ko">더 강함 — 저장·DM</span></td></tr>
+<tr><td><span class="en">Nano rate per video</span><span class="ko">나노 영상 단가</span></td><td>$20–100</td><td>$20–100</td></tr>
+<tr><td><span class="en">Ad reuse</span><span class="ko">광고 재사용</span></td><td><span class="en">Spark Ads (§5)</span><span class="ko">Spark Ads (§5)</span></td><td class="hi"><span class="en">Also feeds ASA product pages</span><span class="ko">ASA 제품 페이지에도 활용</span></td></tr>
+</tbody></table>
+<p><span class="en">Neither is optional. TikTok is where a stranger discovers Jujube; Reels is where the Korean-American cooking audience saves it and forwards it to the family group chat — which is exactly the household-sharing behaviour the product is built around.</span><span class="ko">둘 다 필요합니다. TikTok은 낯선 사람이 Jujube를 처음 발견하는 곳이고, 릴스는 한인 요리 커뮤니티가 저장해서 가족 단톡방에 공유하는 곳입니다. 바로 그 가족 공유 행동이 이 제품이 설계된 지점입니다.</span></p>
 
 <footer>
 <span class="en">Built from your own marketing playbook + the Jujube ASA plan. Unlisted page — not indexed, but anyone with the link can open it. Aug 23, 2026.</span>
