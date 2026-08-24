@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Daily AI & Tech Briefing, 2026-08-24</title>
+  <style>
+    :root {
+      --bg: #f7f3ea;
+      --card: #fffdf8;
+      --text: #223127;
+      --muted: #5e6d62;
+      --accent: #5b7f56;
+      --accent-2: #dcead7;
+      --border: #d9e1d2;
+      --shadow: 0 10px 30px rgba(34, 49, 39, 0.08);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: linear-gradient(180deg, #eef6ea 0%, var(--bg) 28%, #f8f1e6 100%);
+      color: var(--text);
+      line-height: 1.65;
+      padding: 20px;
+    }
+    .wrap { max-width: 860px; margin: 0 auto; }
+    .toolbar { display: flex; justify-content: flex-end; margin-bottom: 12px; }
+    .lang-toggle {
+      border: 0; border-radius: 999px; padding: 10px 14px;
+      background: var(--accent); color: white; font-weight: 700;
+      box-shadow: var(--shadow); cursor: pointer;
+    }
+    .card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 24px; box-shadow: var(--shadow); padding: 24px;
+    }
+    h1 { margin: 0 0 8px; font-size: clamp(28px, 4vw, 42px); line-height: 1.1; }
+    .subtitle { color: var(--muted); margin-bottom: 20px; font-size: 15px; }
+    .audio-box {
+      background: var(--accent-2); border: 1px solid var(--border);
+      border-radius: 18px; padding: 16px; margin: 18px 0 24px;
+    }
+    audio { width: 100%; margin-top: 8px; }
+    .section-title { font-size: 22px; margin: 28px 0 12px; }
+    ol { padding-left: 20px; margin: 0; }
+    li { margin-bottom: 14px; padding-left: 4px; }
+    .takeaway {
+      margin-top: 26px; padding: 16px 18px; border-radius: 18px;
+      background: #f2f8ef; border: 1px solid var(--border);
+    }
+    .ko { display: none; }
+    .ko.show { display: inline !important; }
+    .en.hide { display: none !important; }
+    .foot { margin-top: 20px; color: var(--muted); font-size: 13px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="toolbar">
+      <button class="lang-toggle" onclick="toggleLang()">한국어</button>
+    </div>
+    <div class="card">
+      <h1>
+        <span class="en">Daily AI & Tech Briefing</span>
+        <span class="ko">오늘의 AI · 테크 브리핑</span>
+      </h1>
+      <div class="subtitle">
+        <span class="en">Monday, August 24, 2026, built for Minjun</span>
+        <span class="ko">2026년 8월 24일 월요일, 민준을 위한 브리핑</span>
+      </div>
+
+      <div class="audio-box">
+        <strong>
+          <span class="en">Listen to the audio version</span>
+          <span class="ko">오디오 버전 듣기</span>
+        </strong>
+        <audio controls>
+          <source src="https://raw.githubusercontent.com/feedmiyo6/shared-files/main/mj/news/briefing-2026-08-24.mp3" type="audio/mpeg" />
+        </audio>
+      </div>
+
+      <h2 class="section-title">
+        <span class="en">Top stories</span>
+        <span class="ko">오늘의 주요 이야기</span>
+      </h2>
+      <ol>
+        <li><span class="en"><strong>Microchip's $0.455-per-share dividend, declared last week, goes ex-dividend today, August 24,</strong> with stockholders of record also set today and payment following on September 9 &mdash; quiet follow-through on last month's strong quarter.</span><span class="ko"><strong>지난주 발표된 마이크로칩의 주당 45.5센트 배당금이 오늘(8월 24일) 배당락일을 맞습니다.</strong> 주주명부 기준일도 오늘이며, 지급일은 9월 9일입니다 &mdash; 지난달 견조한 실적 이후 조용히 이어지는 이행입니다.</span></li>
+        <li><span class="en"><strong>Microchip demonstrated an end-to-end PCIe Gen 6 storage architecture with Micron earlier this month,</strong> pairing its Switchtec PCIe Gen 6 switches with Micron's 9650 NVMe SSDs for higher throughput and lower latency across AI, high-performance computing, and cloud data center workloads.</span><span class="ko"><strong>마이크로칩이 이달 초 마이크론과 함께 엔드투엔드 PCIe Gen 6 스토리지 아키텍처를 시연했습니다.</strong> 자사의 Switchtec PCIe Gen 6 스위치와 마이크론의 9650 NVMe SSD를 결합해, AI·고성능 컴퓨팅(HPC)·클라우드 데이터센터 워크로드를 위한 높은 처리량과 낮은 지연시간을 구현했습니다.</span></li>
+        <li><span class="en"><strong>Google's A2A agent protocol formally joined the Linux Foundation-directed Agentic AI Foundation on August 20,</strong> placing it under the same neutral governance as Anthropic's Model Context Protocol &mdash; the foundation now counts more than 250 members, including AWS, Anthropic, Google, Microsoft, and OpenAI.</span><span class="ko"><strong>구글의 A2A 에이전트 프로토콜이 8월 20일 리눅스 재단 산하 에이전틱 AI 파운데이션(AAIF)에 공식 합류했습니다.</strong> 앤트로픽의 모델 컨텍스트 프로토콜(MCP)과 같은 중립적 거버넌스 체계 아래 놓이게 됐으며, 파운데이션 회원사는 AWS, 앤트로픽, 구글, 마이크로소프트, OpenAI 등 250곳을 넘어섰습니다.</span></li>
+        <li><span class="en"><strong>AWS pushed Web Search on Amazon Bedrock AgentCore to general availability on August 21,</strong> a managed tool that lets agents fetch live, cited web knowledge without customer data ever leaving their AWS account.</span><span class="ko"><strong>AWS가 8월 21일 아마존 베드락 에이전트코어의 웹 검색 기능을 정식 출시(GA)했습니다.</strong> 고객 데이터가 AWS 계정을 벗어나지 않으면서도 에이전트가 실시간 출처 기반 웹 정보를 가져올 수 있는 관리형 도구입니다.</span></li>
+        <li><span class="en"><strong>OpenAI's Astra model solved 10 previously unsolved math problems for about $2,000 in compute,</strong> including the first explicit construction of a non-sofic group &mdash; a question open since 1999 &mdash; but OpenAI also slowed parts of Astra's development after an internal review found it had crossed what the company calls a &ldquo;critical cybersecurity threshold&rdquo; in agentic coding capability.</span><span class="ko"><strong>OpenAI의 아스트라 모델이 약 2,000달러의 연산 비용으로 그동안 풀리지 않았던 수학 문제 10개를 해결했습니다.</strong> 그중에는 1999년부터 미해결이던 비소픽군(non-sofic group)의 최초 명시적 구성도 포함됩니다 &mdash; 하지만 OpenAI는 내부 검토에서 아스트라가 에이전트 코딩 역량에서 자체 규정한 &ldquo;중대 사이버보안 임계치&rdquo;를 넘어섰다고 판단해 개발 일부를 늦추기도 했습니다.</span></li>
+        <li><span class="en"><strong>ChatGPT crossed 1 billion weekly active users,</strong> and OpenAI cut API and credit pricing on its GPT-5.6 models by as much as 80%.</span><span class="ko"><strong>챗GPT 주간 활성 사용자 수가 10억 명을 돌파했습니다.</strong> OpenAI는 GPT-5.6 모델의 API·크레딧 가격을 최대 80%까지 인하했습니다.</span></li>
+        <li><span class="en"><strong>New data reported this week indicates OpenAI is gaining ground on Anthropic with business and enterprise users,</strong> intensifying the competition for enterprise trust between the two labs.</span><span class="ko"><strong>이번 주 보도된 새 데이터에 따르면 OpenAI가 기업 고객 확보에서 앤트로픽과의 격차를 좁히고 있습니다.</strong> 두 회사의 엔터프라이즈 신뢰 경쟁이 한층 치열해지고 있습니다.</span></li>
+        <li><span class="en"><strong>Anthropic confirmed that all Claude-generated content released since August 2 now carries a machine-readable watermark</strong> to comply with the EU AI Act &mdash; and the marking applies globally, not just in Europe.</span><span class="ko"><strong>앤트로픽은 8월 2일 이후 출시된 모든 클로드 생성 콘텐츠에 EU AI 법 준수를 위한 기계 판독 가능 워터마크가 적용된다고 확인했습니다.</strong> 해당 워터마크는 유럽뿐 아니라 전 세계에 동일하게 적용됩니다.</span></li>
+        <li><span class="en"><strong>Nokia acquired NXP's U.S. fab and plans to convert it to produce indium phosphide optical components,</strong> aimed at strengthening supply for AI data center connectivity as optical interconnect demand grows.</span><span class="ko"><strong>노키아가 NXP의 미국 팹을 인수해 인화인듐(InP) 광소자 생산 시설로 전환할 계획입니다.</strong> AI 데이터센터 연결성에 대한 수요가 커지는 가운데 광 인터커넥트 공급망을 강화하기 위한 행보입니다.</span></li>
+        <li><span class="en"><strong>Nvidia reportedly plans to adopt TSMC's 1.6nm-class process for its next-generation Feynman GPUs,</strong> pushing the leading edge of process technology further into AI accelerator design.</span><span class="ko"><strong>엔비디아가 차세대 &ldquo;파인만(Feynman)&rdquo; GPU에 TSMC의 1.6나노급 공정을 채택할 것으로 알려졌습니다.</strong> AI 가속기 설계에서 최선단 공정 기술 경쟁이 한층 더 나아가고 있습니다.</span></li>
+      </ol>
+
+      <div class="takeaway">
+        <strong><span class="en">Totoro's takeaway for Minjun</span><span class="ko">민준을 위한 토토로의 한 줄</span></strong>
+        <div><span class="en">Story two is worth a slow read today &mdash; the Switchtec/Micron PCIe Gen 6 demo is a good reminder that the validation muscle your team builds on automotive Ethernet PHYs (interoperability, timing, compliance under real load) is the same muscle Microchip is now flexing on the data-center side. Proving a switch and an NVMe drive from two different vendors actually hit spec together isn't a spec-sheet exercise &mdash; it's the same kind of post-silicon bring-up and compliance testing you do daily, just with PCIe lanes instead of twisted pairs. Pair that with story one &mdash; the dividend declared off last month's strong quarter quietly going ex-date today &mdash; and it reads as the company's cash discipline funding exactly this kind of cross-portfolio validation work, automotive T1 PHYs included. Worth having in your back pocket next time someone asks why Microchip keeps investing in interoperability demos across such different product lines.</span><span class="ko">오늘은 두 번째 소식을 천천히 읽어보실 만합니다 &mdash; Switchtec와 마이크론의 PCIe Gen 6 시연은, 민준님 팀이 자동차용 이더넷 PHY에서 쌓아온 검증 역량(상호운용성, 타이밍, 실부하 조건에서의 규격 준수)이 이제 데이터센터 영역에서도 그대로 발휘되고 있다는 좋은 예시입니다. 서로 다른 두 벤더의 스위치와 NVMe 드라이브가 실제로 규격을 함께 충족하는지 증명하는 일은 스펙 시트만으로 끝나는 작업이 아닙니다 &mdash; 트위스티드 페어 대신 PCIe 레인을 다룬다는 점만 다를 뿐, 민준님이 매일 하시는 것과 같은 포스트 실리콘 브링업·규격 준수 테스트입니다. 여기에 첫 번째 소식 &mdash; 지난달 견조한 실적을 바탕으로 발표된 배당금이 오늘 조용히 배당락일을 맞은 것 &mdash; 을 함께 보면, 회사의 현금 운용 규율이 자동차용 T1 PHY를 포함한 이런 포트폴리오 전반의 검증 작업을 뒷받침하고 있다는 신호로 읽힙니다. 다음에 누군가 마이크로칩이 왜 이렇게 서로 다른 제품군 전반에 걸쳐 상호운용성 시연에 계속 투자하는지 묻는다면, 기억해두실 만한 이야기입니다.</span></div>
+      </div>
+
+      <div class="foot">
+        <span class="en">Prepared in Totoro style, focused on useful momentum.</span>
+        <span class="ko">유용한 흐름에 집중한 토토로 스타일 브리핑입니다.</span>
+      </div>
+    </div>
+  </div>
+  <script>
+    let isKorean = false;
+    function toggleLang() {
+      isKorean = !isKorean;
+      document.querySelectorAll('.en').forEach(el => el.classList.toggle('hide', isKorean));
+      document.querySelectorAll('.ko').forEach(el => el.classList.toggle('show', isKorean));
+      document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+    }
+  </script>
+</body>
+</html>

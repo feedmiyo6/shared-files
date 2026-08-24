@@ -1,0 +1,25 @@
+Good morning, Minjun. Here's your briefing for Monday, August 24th.
+
+Story one. Microchip's dividend, declared last week at forty-five point five cents per share, goes ex-dividend today, with stockholders of record also set today and payment following on September ninth — quiet follow-through on last month's strong quarter.
+
+Story two. Microchip demonstrated an end-to-end PCIe Gen 6 storage architecture with Micron earlier this month, pairing its Switchtec PCIe Gen 6 switches with Micron's 9650 NVMe solid state drives, for higher throughput and lower latency across AI, high-performance computing, and cloud data center workloads.
+
+Story three. Google's A2A agent protocol formally joined the Linux Foundation-directed Agentic AI Foundation on August 20th, placing it under the same neutral governance as Anthropic's Model Context Protocol — the foundation now counts more than two hundred fifty members, including AWS, Anthropic, Google, Microsoft, and OpenAI.
+
+Story four. AWS pushed Web Search on Amazon Bedrock AgentCore to general availability on August 21st, a managed tool that lets agents fetch live, cited web knowledge without customer data ever leaving their AWS account.
+
+Story five. OpenAI's Astra model solved ten previously unsolved math problems for about two thousand dollars in compute, including the first explicit construction of a non-sofic group — a question open since nineteen ninety-nine — but OpenAI also slowed parts of Astra's development after an internal review found it had crossed what the company calls a critical cybersecurity threshold in agentic coding capability.
+
+Story six. ChatGPT crossed one billion weekly active users, and OpenAI cut API and credit pricing on its GPT-5.6 models by as much as eighty percent.
+
+Story seven. New data reported this week indicates OpenAI is gaining ground on Anthropic with business and enterprise users, intensifying the competition for enterprise trust between the two labs.
+
+Story eight. Anthropic confirmed that all Claude-generated content released since August second now carries a machine-readable watermark to comply with the EU AI Act — and the marking applies globally, not just in Europe.
+
+Story nine. Nokia acquired NXP's U.S. fab and plans to convert it to produce indium phosphide optical components, aimed at strengthening supply for AI data center connectivity as optical interconnect demand grows.
+
+Story ten. Nvidia reportedly plans to adopt TSMC's one-point-six-nanometer-class process for its next-generation Feynman GPUs, pushing the leading edge of process technology further into AI accelerator design.
+
+And now, Totoro's takeaway for Minjun. Story two is worth a slow read today — the Switchtec and Micron PCIe Gen 6 demo is a good reminder that the validation muscle your team builds on automotive Ethernet PHYs, interoperability, timing, compliance under real load, is the same muscle Microchip is now flexing on the data-center side. Proving a switch and an NVMe drive from two different vendors actually hit spec together isn't a spec-sheet exercise — it's the same kind of post-silicon bring-up and compliance testing you do daily, just with PCIe lanes instead of twisted pairs. Pair that with story one — the dividend declared off last month's strong quarter quietly going ex-date today — and it reads as the company's cash discipline funding exactly this kind of cross-portfolio validation work, automotive T1 PHYs included. Worth having in your back pocket next time someone asks why Microchip keeps investing in interoperability demos across such different product lines.
+
+That's your briefing. Have a great day.
