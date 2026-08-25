@@ -1,0 +1,25 @@
+Good morning, Minjun. Here's your briefing for Tuesday, August 25th.
+
+Story one. Microchip rolled out Ethernet Sensor Bridge Rev 2.0 for its PolarFire FPGA lineup this month, a board built for AI-driven edge camera connectivity — it's sixty percent smaller than the previous revision, supports up to four cameras, and adds native NVIDIA Holoscan integration for robotics, medical, and industrial vision systems.
+
+Story two. Microchip also expanded its space-timing portfolio with the Space CSAC-SA65, a chip-scale atomic clock rated for at least thirty kilorad of radiation tolerance and a minus forty to plus eighty degree Celsius operating range, giving satellite designers a compact, low-power alternative to traditional rad-hardened timing hardware.
+
+Story three. Nvidia reports fiscal second quarter earnings after the close tomorrow, Wednesday, August 26th — analysts expect roughly ninety-two billion dollars in quarterly revenue, up about ninety-seven percent year-over-year, with Jensen Huang's commentary on Blackwell demand and Rubin chip timelines likely to set the tone for AI infrastructure stocks into September.
+
+Story four. AI data centers are becoming a new stress point for the global chip supply chain. Foundry capacity in Taiwan is tightening, and chip prices are climbing into the second half of 2026 as demand keeps outrunning supply.
+
+Story five. The Semiconductor Industry Association named Michael Robbins as its next president and CEO, effective October 1st, succeeding John Neuffer.
+
+Story six. Anthropic confirmed Claude Sonnet 5's promotional pricing of two dollars and ten dollars per million tokens ends August 31st. Standard pricing of three dollars and fifteen dollars takes effect September 1st.
+
+Story seven. Anthropic logged another service disruption on August 24th, with elevated errors hitting Claude Opus 5, Sonnet 5, Fable 5, and Opus 4.8 — the sixth such incident reported so far this month.
+
+Story eight. OpenAI has temporarily paused parts of training on its newest AI systems, to strengthen security controls around increasingly capable models.
+
+Story nine. OpenAI is retiring the standalone DALL-E GPT inside ChatGPT on August 30th, pointing users toward ChatGPT Images for future image creation and editing.
+
+Story ten. Chinese EV maker XPeng raised more than nine hundred million dollars in its first external funding round for its robotics division, valuing the unit at over six point three billion dollars to fund humanoid robot development and physical AI models.
+
+And now, Totoro's takeaway for Minjun. Story one is the one to sit with today — Microchip's new PolarFire Ethernet Sensor Bridge is solving almost the same problem your team solves on automotive T1 PHYs, just pointed at robotics cameras instead of car networks: does the physical link actually hit spec, hold timing, and stay interoperable with someone else's silicon, here NVIDIA's Holoscan stack, under real load? The fact that Microchip shrank the board sixty percent while adding multi-camera support and third-party platform integration is the same kind of size, power, and compliance trade-off you validate for T1 PHYs, just aimed at a different vehicle — a robot instead of a car. Worth a skim as a preview of where edge-Ethernet validation work is headed next: cameras and sensors, not just automotive links.
+
+That's your briefing. Have a great day.
