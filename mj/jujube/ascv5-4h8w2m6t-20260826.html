@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Jujube — App Store screenshots v5</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  background:linear-gradient(168deg,#FDFBF7 0%,#F7F1E8 46%,#EFE5D8 100%);
+  color:#3B2E28;min-height:100vh;padding:22px 16px 60px}
+.wrap{max-width:860px;margin:0 auto}
+header{position:relative;padding-top:6px;margin-bottom:26px}
+.kicker{font-family:Baskerville,Georgia,serif;font-style:italic;font-size:19px;color:#B0705A;margin-bottom:6px}
+h1{font-family:Baskerville,Georgia,serif;font-size:34px;line-height:1.08;color:#8E0E33;letter-spacing:-.02em}
+.meta{margin-top:10px;font-size:14px;color:#7A655B;line-height:1.55}
+.lang-toggle{position:absolute;top:0;right:0;font:600 13px -apple-system,sans-serif;
+  background:#fff;border:1px solid rgba(142,14,51,.22);color:#8E0E33;
+  padding:7px 14px;border-radius:999px;cursor:pointer}
+.note{background:#fff;border:1px solid rgba(110,72,56,.14);border-radius:14px;
+  padding:16px 18px;margin-bottom:26px;font-size:14.5px;line-height:1.62;color:#5A4840}
+.note b{color:#8E0E33}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+@media(min-width:620px){.grid{grid-template-columns:repeat(3,1fr)}}
+figure{background:#fff;border-radius:14px;overflow:hidden;border:1px solid rgba(110,72,56,.13)}
+figure img{display:block;width:100%}
+figcaption{font-size:12px;color:#7A655B;padding:9px 10px;line-height:1.4}
+figcaption span{color:#8E0E33;font-weight:700}
+.dl{display:inline-block;margin-top:26px;background:#8E0E33;color:#fff;text-decoration:none;
+  font:700 15px -apple-system,sans-serif;padding:14px 24px;border-radius:999px}
+footer{margin-top:34px;font-size:12.5px;color:#8A756A;line-height:1.6}
+.ko{display:none}
+.ko.show{display:inline !important}
+.en.hide{display:none !important}
+figcaption .ko.show{display:inline !important}
+</style></head><body>
+<div class="wrap">
+<header>
+  <button class="lang-toggle" onclick="toggleLang()">한국어</button>
+  <div class="kicker"><span class="en">Nine shots, two languages</span><span class="ko">9장, 2개 언어</span></div>
+  <h1><span class="en">App Store screenshots — v5</span><span class="ko">앱스토어 스크린샷 — v5</span></h1>
+  <div class="meta"><span class="en">1284 × 2778 · ready to upload · rebuilt 26 Aug 2026</span><span class="ko">1284 × 2778 · 업로드 준비 완료 · 2026년 8월 26일 재작업</span></div>
+</header>
+
+<div class="note">
+  <span class="en"><b>What changed:</b> the crimson pill above every headline is gone. It was the single most template-looking element in the set — uppercase, letterspaced, filled capsule — the exact combination that reads as auto-generated. It's now an italic serif kicker in warm terracotta, which keeps the hook copy but reads editorial. Applied to all 18 images (9 EN + 9 KO). Vertical spacing is unchanged from the version you approved.</span>
+  <span class="ko"><b>변경 사항:</b> 제목 위에 있던 크림슨 알약 배지를 전부 없앴습니다. 대문자 + 자간 + 채워진 캡슐 조합은 자동 생성 티가 가장 많이 나는 요소였어요. 이제 따뜻한 테라코타 색의 이탤릭 세리프 문구로 바뀌어서, 후킹 문구는 그대로 유지하면서 훨씬 편집 디자인처럼 보입니다. 18장 전체(영문 9 + 한글 9)에 적용했고, 세로 간격은 승인하신 버전과 동일합니다.</span>
+</div>
+
+<div class="grid" id="grid"></div>
+
+<a class="dl" href="asc-shots-7k3n9x2q-20260826.zip"><span class="en">Download all 18 (PNG, 22 MB)</span><span class="ko">18장 전체 다운로드 (PNG, 22 MB)</span></a>
+
+<footer>
+  <span class="en">Previews above are compressed for mobile. The download contains the full-resolution PNGs in <code>final/en-US/</code> and <code>final/ko/</code>, plus a contact sheet and a search-result-size check.</span>
+  <span class="ko">위 미리보기는 모바일용으로 압축된 이미지입니다. 다운로드 파일에는 <code>final/en-US/</code>와 <code>final/ko/</code> 폴더의 원본 해상도 PNG, 컨택트 시트, 검색 결과 크기 확인용 이미지가 들어 있습니다.</span>
+</footer>
+</div>
+
+<script>
+var SHOTS=[
+ ["01-dinner-from-what-you-have","Dinner from what you have.","있는 재료로, 저녁 완성."],
+ ["02-stop-throwing-groceries-away","Stop throwing groceries away.","이제 버리지 않아도 돼요."],
+ ["03-no-ads-no-life-story","No ads. No life story.","광고도, 사연도 없이."],
+ ["04-one-step-at-a-time","One step at a time.","한 번에 한 단계씩."],
+ ["05-sorted-by-what-goes-first","Sorted by what goes first.","먼저 상하는 순서대로."],
+ ["06-two-minutes-once-a-day","Two minutes, once a day.","하루 2분, 그걸로 끝."],
+ ["07-your-kitchen-at-a-glance","Your kitchen, at a glance.","우리 집 부엌, 한눈에."],
+ ["08-just-say-what-you-bought","Just say what you bought.","산 것만 말하면 끝."],
+ ["09-never-buy-it-twice","Never buy it twice.","같은 걸 두 번 사지 마세요."]];
+var isKorean=false;
+function render(){
+  document.getElementById('grid').innerHTML=SHOTS.map(function(s,i){
+    var dir=isKorean?'ko':'en';
+    var cap=isKorean?s[2]:s[1];
+    return '<figure><img src="ascv5/'+dir+'/'+s[0]+'.jpg" alt="'+cap+'" loading="lazy">'+
+      '<figcaption><span>'+(i+1)+'</span> · '+cap+'</figcaption></figure>';
+  }).join('');
+}
+function toggleLang(){
+  isKorean=!isKorean;
+  document.querySelectorAll('.en').forEach(function(el){el.classList.toggle('hide',isKorean)});
+  document.querySelectorAll('.ko').forEach(function(el){el.classList.toggle('show',isKorean)});
+  document.querySelector('.lang-toggle').textContent=isKorean?'English':'한국어';
+  document.documentElement.lang=isKorean?'ko':'en';
+  render();
+}
+render();
+</script>
+</body></html>
