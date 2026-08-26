@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Daily AI & Tech Briefing, 2026-08-26</title>
+  <style>
+    :root {
+      --bg: #f7f3ea;
+      --card: #fffdf8;
+      --text: #223127;
+      --muted: #5e6d62;
+      --accent: #5b7f56;
+      --accent-2: #dcead7;
+      --border: #d9e1d2;
+      --shadow: 0 10px 30px rgba(34, 49, 39, 0.08);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: linear-gradient(180deg, #eef6ea 0%, var(--bg) 28%, #f8f1e6 100%);
+      color: var(--text);
+      line-height: 1.65;
+      padding: 20px;
+    }
+    .wrap { max-width: 860px; margin: 0 auto; }
+    .toolbar { display: flex; justify-content: flex-end; margin-bottom: 12px; }
+    .lang-toggle {
+      border: 0; border-radius: 999px; padding: 10px 14px;
+      background: var(--accent); color: white; font-weight: 700;
+      box-shadow: var(--shadow); cursor: pointer;
+    }
+    .card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 24px; box-shadow: var(--shadow); padding: 24px;
+    }
+    h1 { margin: 0 0 8px; font-size: clamp(28px, 4vw, 42px); line-height: 1.1; }
+    .subtitle { color: var(--muted); margin-bottom: 20px; font-size: 15px; }
+    .audio-box {
+      background: var(--accent-2); border: 1px solid var(--border);
+      border-radius: 18px; padding: 16px; margin: 18px 0 24px;
+    }
+    audio { width: 100%; margin-top: 8px; }
+    .section-title { font-size: 22px; margin: 28px 0 12px; }
+    ol { padding-left: 20px; margin: 0; }
+    li { margin-bottom: 14px; padding-left: 4px; }
+    .takeaway {
+      margin-top: 26px; padding: 16px 18px; border-radius: 18px;
+      background: #f2f8ef; border: 1px solid var(--border);
+    }
+    .ko { display: none; }
+    .ko.show { display: inline !important; }
+    .en.hide { display: none !important; }
+    .foot { margin-top: 20px; color: var(--muted); font-size: 13px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="toolbar">
+      <button class="lang-toggle" onclick="toggleLang()">한국어</button>
+    </div>
+    <div class="card">
+      <h1>
+        <span class="en">Daily AI & Tech Briefing</span>
+        <span class="ko">오늘의 AI · 테크 브리핑</span>
+      </h1>
+      <div class="subtitle">
+        <span class="en">Wednesday, August 26, 2026, built for Minjun</span>
+        <span class="ko">2026년 8월 26일 수요일, 민준을 위한 브리핑</span>
+      </div>
+
+      <div class="audio-box">
+        <strong>
+          <span class="en">Listen to the audio version</span>
+          <span class="ko">오디오 버전 듣기</span>
+        </strong>
+        <audio controls>
+          <source src="https://raw.githubusercontent.com/feedmiyo6/shared-files/main/mj/news/briefing-2026-08-26.mp3" type="audio/mpeg" />
+        </audio>
+      </div>
+
+      <h2 class="section-title">
+        <span class="en">Top stories</span>
+        <span class="ko">오늘의 주요 이야기</span>
+      </h2>
+      <ol>
+        <li><span class="en"><strong>Microchip and Micron demonstrated an end-to-end PCIe Gen 6 storage architecture earlier this month,</strong> pairing Microchip's Switchtec PCIe Gen 6 switches with Micron's 9650 NVMe SSDs to show a reference design for AI and data-center storage infrastructure.</span><span class="ko"><strong>마이크로칩과 마이크론이 이달 초 엔드투엔드 PCIe Gen 6 스토리지 아키텍처를 시연했습니다.</strong> 마이크로칩의 Switchtec PCIe Gen 6 스위치와 마이크론의 9650 NVMe SSD를 결합해, AI 및 데이터센터 스토리지 인프라를 위한 레퍼런스 설계를 선보였습니다.</span></li>
+        <li><span class="en"><strong>The automotive Ethernet PHY chip market is projected to grow from $1.3 billion in 2026 to $4.6 billion by 2035,</strong> and Texas Instruments recently launched the DP83TD555J-Q1, a 10BASE-T1S automotive PHY aimed at low-power, precisely time-synced vehicle edge nodes &mdash; NXP still leads the field with roughly 34% share.</span><span class="ko"><strong>자동차용 이더넷 PHY 칩 시장이 2026년 13억 달러에서 2035년 46억 달러 규모로 성장할 전망입니다.</strong> 텍사스 인스트루먼트는 최근 저전력·정밀 시간 동기화를 갖춘 차량 엣지 노드용 10BASE-T1S 자동차 PHY인 DP83TD555J-Q1을 출시했습니다. 여전히 NXP가 약 34%의 점유율로 업계를 선도하고 있습니다.</span></li>
+        <li><span class="en"><strong>Nvidia reports fiscal Q2 2027 earnings today after the market close</strong> &mdash; consensus sits around $91.85 billion in revenue with Nvidia's own guidance at $91 billion plus or minus 2%, while some analysts see room for $93&ndash;95 billion; Jensen Huang's commentary on Blackwell demand and China exposure will move AI infrastructure stocks tomorrow.</span><span class="ko"><strong>엔비디아가 오늘 장 마감 후 2027 회계연도 2분기 실적을 발표합니다.</strong> 시장 컨센서스는 약 918억 5천만 달러의 매출이며, 엔비디아 자체 가이던스는 910억 달러(±2%)입니다. 일부 애널리스트는 930억&ndash;950억 달러까지 가능하다고 보고 있으며, 블랙웰 수요와 중국 노출에 대한 젠슨 황의 발언이 내일 AI 인프라 관련 주가를 움직일 전망입니다.</span></li>
+        <li><span class="en"><strong>Nvidia has lined up a roughly $500 billion financing platform with six of the world's largest alternative asset managers,</strong> underwriting AI data centers with the same capital-market logic historically used for power grids and toll roads.</span><span class="ko"><strong>엔비디아는 세계 최대 대체자산운용사 6곳과 함께 약 5,000억 달러 규모의 금융 플랫폼을 구축했습니다.</strong> 전력망이나 유료 도로에 쓰이던 것과 같은 자본시장 논리로 AI 데이터센터에 자금을 조달하는 구조입니다.</span></li>
+        <li><span class="en"><strong>Global semiconductor sales are on pace to hit a record $975 billion in 2026,</strong> with growth accelerating to roughly 26% as the AI infrastructure boom continues &mdash; AI chips are still just 0.2% of all chips made, yet already account for about half of industry revenue.</span><span class="ko"><strong>글로벌 반도체 매출이 2026년 사상 최대인 9,750억 달러에 이를 전망입니다.</strong> AI 인프라 붐이 이어지며 성장률이 약 26%로 가속화되고 있습니다. AI 칩은 전체 생산량의 0.2%에 불과하지만 이미 업계 매출의 약 절반을 차지하고 있습니다.</span></li>
+        <li><span class="en"><strong>Anthropic added Claude Mythos 5 to Claude Security for Enterprise,</strong> expanding frontier cyber defense with automated codebase scans, vulnerability findings, and suggested patches, alongside a new Defender Advantage Fund and a widening Cyber Verification Program.</span><span class="ko"><strong>앤트로픽이 엔터프라이즈용 클로드 시큐리티에 클로드 미토스 5를 추가했습니다.</strong> 자동화된 코드베이스 스캔, 취약점 탐지, 패치 제안 기능으로 첨단 사이버 방어를 확장했으며, 새로운 디펜더 어드밴티지 펀드와 사이버 검증 프로그램 확대도 함께 발표했습니다.</span></li>
+        <li><span class="en"><strong>The Claude Developer Platform rolled out governance controls for Claude Managed Agents</strong> &mdash; session budgets, advisor models, inference geo-pinning, and GitHub-hosted skills &mdash; giving enterprise teams more control over cost, data residency, and agent behavior.</span><span class="ko"><strong>클로드 개발자 플랫폼이 클로드 매니지드 에이전트를 위한 거버넌스 기능을 출시했습니다.</strong> 세션 예산, 어드바이저 모델, 추론 지역 고정, 깃허브 기반 스킬 등을 통해 기업 팀이 비용, 데이터 상주 위치, 에이전트 동작을 더 세밀하게 통제할 수 있게 됐습니다.</span></li>
+        <li><span class="en"><strong>OpenAI retired the o3 model from ChatGPT today, August 26,</strong> closing out its 90-day sunset window as the company continues consolidating its lineup around newer models.</span><span class="ko"><strong>OpenAI가 오늘(8월 26일) 챗GPT에서 o3 모델을 공식 폐지했습니다.</strong> 90일간의 단계적 종료 기간이 끝난 것으로, 최신 모델 중심으로 라인업을 계속 정리하는 흐름의 일환입니다.</span></li>
+        <li><span class="en"><strong>Amazon is raising prices on several of its own devices</strong> as rising memory and component costs, driven by the broader AI-fueled chip crunch, work their way into consumer hardware.</span><span class="ko"><strong>아마존이 자사 기기 여러 종의 가격을 인상하고 있습니다.</strong> AI발 반도체 수급난으로 메모리 및 부품 비용이 오르면서 소비자용 하드웨어에까지 영향이 번지고 있습니다.</span></li>
+        <li><span class="en"><strong>Alibaba is pairing a new AI video-generation model with billions of dollars in infrastructure spending,</strong> part of a broader acceleration in Chinese AI investment as domestic players race to match U.S. frontier labs.</span><span class="ko"><strong>알리바바가 새로운 AI 영상 생성 모델을 수십억 달러 규모의 인프라 투자와 함께 공개했습니다.</strong> 중국 기업들이 미국 프론티어 연구소를 따라잡기 위해 경쟁하면서, 중국의 AI 투자가 전반적으로 가속화되는 흐름의 일부입니다.</span></li>
+      </ol>
+
+      <div class="takeaway">
+        <strong><span class="en">Totoro's takeaway for Minjun</span><span class="ko">민준을 위한 토토로의 한 줄</span></strong>
+        <div><span class="en">Story two is the one worth a closer look &mdash; Texas Instruments just shipped a competing 10BASE-T1S automotive PHY chasing the exact low-power, edge-node, precisely-timed use case your team validates at Microchip. NXP still holds the market lead, but TI entering with a purpose-built part means the single-pair T1 space is getting more crowded and more differentiated on power and timing precision, not just raw throughput. Worth tracking TI's datasheet claims against what you see in the lab &mdash; that's usually where the real story is versus the marketing one.</span><span class="ko">오늘은 두 번째 소식을 눈여겨보실 만합니다 &mdash; 텍사스 인스트루먼트가 새로 내놓은 10BASE-T1S 자동차 PHY는, 민준님 팀이 마이크로칩에서 검증하시는 것과 정확히 같은 저전력·엣지 노드·정밀 타이밍 유스케이스를 겨냥하고 있습니다. NXP가 여전히 시장을 선도하고 있지만, TI가 목적에 맞춰 설계된 제품으로 진입했다는 것은 단일 트위스트 페어 T1 시장이 단순 처리량 경쟁을 넘어 전력과 타이밍 정밀도로 더 세분화되고 있다는 뜻입니다. TI의 데이터시트 스펙을 실제 랩에서 확인하시는 것과 비교해 보실 만합니다 &mdash; 보통 마케팅 자료와 실제 성능의 차이가 거기서 드러나니까요.</span></div>
+      </div>
+
+      <div class="foot">
+        <span class="en">Prepared in Totoro style, focused on useful momentum.</span>
+        <span class="ko">유용한 흐름에 집중한 토토로 스타일 브리핑입니다.</span>
+      </div>
+    </div>
+  </div>
+  <script>
+    let isKorean = false;
+    function toggleLang() {
+      isKorean = !isKorean;
+      document.querySelectorAll('.en').forEach(el => el.classList.toggle('hide', isKorean));
+      document.querySelectorAll('.ko').forEach(el => el.classList.toggle('show', isKorean));
+      document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+    }
+  </script>
+</body>
+</html>

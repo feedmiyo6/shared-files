@@ -1,0 +1,25 @@
+Good morning, Minjun. Here's your briefing for Wednesday, August 26th.
+
+Story one. Microchip and Micron demonstrated an end-to-end PCIe Gen 6 storage architecture earlier this month, pairing Microchip's Switchtec PCIe Gen 6 switches with Micron's 9650 NVMe SSDs to show a reference design for AI and data-center storage infrastructure.
+
+Story two. The automotive Ethernet PHY chip market is projected to grow from one point three billion dollars in 2026 to four point six billion dollars by 2035, and Texas Instruments recently launched the DP83TD555J-Q1, a 10BASE-T1S automotive PHY aimed at low-power, precisely time-synced vehicle edge nodes — NXP still leads the field with roughly thirty-four percent share.
+
+Story three. Nvidia reports fiscal second quarter 2027 earnings today after the market close — consensus sits around ninety-one point eight five billion dollars in revenue, with Nvidia's own guidance at ninety-one billion dollars plus or minus two percent, while some analysts see room for ninety-three to ninety-five billion. Jensen Huang's commentary on Blackwell demand and China exposure will move AI infrastructure stocks tomorrow.
+
+Story four. Nvidia has lined up a roughly five hundred billion dollar financing platform with six of the world's largest alternative asset managers, underwriting AI data centers with the same capital-market logic historically used for power grids and toll roads.
+
+Story five. Global semiconductor sales are on pace to hit a record nine hundred seventy-five billion dollars in 2026, with growth accelerating to roughly twenty-six percent as the AI infrastructure boom continues. AI chips are still just zero point two percent of all chips made, yet already account for about half of industry revenue.
+
+Story six. Anthropic added Claude Mythos 5 to Claude Security for Enterprise, expanding frontier cyber defense with automated codebase scans, vulnerability findings, and suggested patches, alongside a new Defender Advantage Fund and a widening Cyber Verification Program.
+
+Story seven. The Claude Developer Platform rolled out governance controls for Claude Managed Agents — session budgets, advisor models, inference geo-pinning, and GitHub-hosted skills — giving enterprise teams more control over cost, data residency, and agent behavior.
+
+Story eight. OpenAI retired the o3 model from ChatGPT today, August 26th, closing out its ninety-day sunset window as the company continues consolidating its lineup around newer models.
+
+Story nine. Amazon is raising prices on several of its own devices, as rising memory and component costs, driven by the broader AI-fueled chip crunch, work their way into consumer hardware.
+
+Story ten. Alibaba is pairing a new AI video-generation model with billions of dollars in infrastructure spending, part of a broader acceleration in Chinese AI investment as domestic players race to match U.S. frontier labs.
+
+And now, Totoro's takeaway for Minjun. Story two is the one worth a closer look — Texas Instruments just shipped a competing 10BASE-T1S automotive PHY chasing the exact low-power, edge-node, precisely-timed use case your team validates at Microchip. NXP still holds the market lead, but TI entering with a purpose-built part means the single-pair T1 space is getting more crowded and more differentiated on power and timing precision, not just raw throughput. Worth tracking TI's datasheet claims against what you see in the lab — that's usually where the real story is versus the marketing one.
+
+That's your briefing. Have a great day.
