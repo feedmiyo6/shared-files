@@ -1,0 +1,25 @@
+Good morning, Minjun. Here's your briefing for Friday, August 28th.
+
+Story one. Nvidia has agreed to acquire Hugging Face for twelve point nine billion dollars, putting the world's biggest open-source AI model and dataset hub — thirteen million plus registered users, roughly two point five million models, nine hundred fifty thousand datasets — under Nvidia's ownership, even though Hugging Face's annualized revenue is only around one hundred fifty million dollars, about eighty-six times the purchase price.
+
+Story two. Google launched Gemini three point five Transcribe, a real-time speech-to-text model covering eighty-five plus languages with a four point zero percent error rate in streaming mode, two point six percent non-streaming, and sub-second latency — built to power voice-driven AI agents and accessibility tools.
+
+Story three. Anthropic signed a forty-five billion dollar, six-year compute deal with British infrastructure firm Nscale, locking in roughly four hundred sixty megawatts at a West Virginia data center running Nvidia's next-generation Vera Rubin systems, with deployment targeted for late 2027.
+
+Story four. Russian-speaking ransomware affiliates used the Cursor AI coding assistant, running Anthropic's Claude four point five Sonnet, to help breach at least seven companies — including Christeyns in Belgium, Teckentrup in Germany, and the Helideck Certification Agency in Scotland — between April eighth and May twenty-first, with researchers recovering twenty-eight chat sessions showing the tradecraft.
+
+Story five. Medical device maker Boston Scientific disclosed a cyberattack detected on August 25th that disrupted order processing and shipments globally, with an investigation into possible data theft still underway.
+
+Story six. Apple set a September 9th event at Apple Park expected to unveil the iPhone 18 Pro, Pro Max, and a foldable iPhone Ultra running a two-nanometer A20 Pro chip, with the standard iPhone 18 pushed back to spring 2027.
+
+Story seven. Salesforce and Anthropic launched "Claudeforce," embedding Claude directly inside Salesforce with thirty-seven prebuilt sales skills entering open beta in September — another sign the industry is betting on AI agents, not traditional software UI, as the primary interface.
+
+Story eight. AWS committed to deploying two million additional Nvidia GPUs — Blackwell Ultra, Rubin, and Rubin Ultra systems — through 2027 and 2028, including a dedicated one hundred thousand GPU system for U.S. government workloads.
+
+Story nine. Kioxia and Sandisk announced thirty-one billion dollars plus in flash memory investment through 2032 at their Japan facilities, betting that AI infrastructure demand for storage keeps compounding for years.
+
+Story ten. AI chip-design startup Architect Labs designed a full processor, nicknamed "Redwood," in about two weeks instead of the usual twelve-plus months, already simulated on FPGA and now headed to TSMC for fabrication, on the back of a twenty-four million dollar seed round.
+
+And now, Totoro's takeaway for Minjun. Story ten is the one worth sitting with given where you're headed — Architect Labs compressing a twelve-month chip design cycle into two weeks is a preview of what AI-assisted design tooling does to the whole silicon pipeline, and validation is exactly the stage that has to compress alongside it or it becomes the new bottleneck. Microchip's own Q1 fiscal year 2026 beat — EPS seventy-six cents versus sixty-nine cents expected, revenue one point four nine billion dollars, high-thirties percent year-over-year growth — plus its August 4th PCIe Gen 6 storage demo with Micron show the company leaning hard into AI and data-center infrastructure right now. As you move from Post-Silicon Validation into Digital Design, this is a good moment to ask where AI-accelerated verification fits in Microchip's own roadmap — and it's a solid data point for the FOLIO pitch: the industry is already rewarding teams that use AI to shrink design-to-validation time, not just design time alone.
+
+That's your briefing. Have a great day.

@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Daily AI & Tech Briefing, 2026-08-28</title>
+  <style>
+    :root {
+      --bg: #f7f3ea;
+      --card: #fffdf8;
+      --text: #223127;
+      --muted: #5e6d62;
+      --accent: #5b7f56;
+      --accent-2: #dcead7;
+      --border: #d9e1d2;
+      --shadow: 0 10px 30px rgba(34, 49, 39, 0.08);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: linear-gradient(180deg, #eef6ea 0%, var(--bg) 28%, #f8f1e6 100%);
+      color: var(--text);
+      line-height: 1.65;
+      padding: 20px;
+    }
+    .wrap { max-width: 860px; margin: 0 auto; }
+    .toolbar { display: flex; justify-content: flex-end; margin-bottom: 12px; }
+    .lang-toggle {
+      border: 0; border-radius: 999px; padding: 10px 14px;
+      background: var(--accent); color: white; font-weight: 700;
+      box-shadow: var(--shadow); cursor: pointer;
+    }
+    .card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 24px; box-shadow: var(--shadow); padding: 24px;
+    }
+    h1 { margin: 0 0 8px; font-size: clamp(28px, 4vw, 42px); line-height: 1.1; }
+    .subtitle { color: var(--muted); margin-bottom: 20px; font-size: 15px; }
+    .audio-box {
+      background: var(--accent-2); border: 1px solid var(--border);
+      border-radius: 18px; padding: 16px; margin: 18px 0 24px;
+    }
+    audio { width: 100%; margin-top: 8px; }
+    .section-title { font-size: 22px; margin: 28px 0 12px; }
+    ol { padding-left: 20px; margin: 0; }
+    li { margin-bottom: 14px; padding-left: 4px; }
+    .takeaway {
+      margin-top: 26px; padding: 16px 18px; border-radius: 18px;
+      background: #f2f8ef; border: 1px solid var(--border);
+    }
+    .ko { display: none; }
+    .ko.show { display: inline !important; }
+    .en.hide { display: none !important; }
+    .foot { margin-top: 20px; color: var(--muted); font-size: 13px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="toolbar">
+      <button class="lang-toggle" onclick="toggleLang()">한국어</button>
+    </div>
+    <div class="card">
+      <h1>
+        <span class="en">Daily AI & Tech Briefing</span>
+        <span class="ko">오늘의 AI · 테크 브리핑</span>
+      </h1>
+      <div class="subtitle">
+        <span class="en">Friday, August 28, 2026, built for Minjun</span>
+        <span class="ko">2026년 8월 28일 금요일, 민준을 위한 브리핑</span>
+      </div>
+
+      <div class="audio-box">
+        <strong>
+          <span class="en">Listen to the audio version</span>
+          <span class="ko">오디오 버전 듣기</span>
+        </strong>
+        <audio controls>
+          <source src="https://raw.githubusercontent.com/feedmiyo6/shared-files/main/mj/news/briefing-2026-08-28.mp3" type="audio/mpeg" />
+        </audio>
+      </div>
+
+      <h2 class="section-title">
+        <span class="en">Top stories</span>
+        <span class="ko">오늘의 주요 이야기</span>
+      </h2>
+      <ol>
+        <li><span class="en"><strong>Nvidia has agreed to acquire Hugging Face for $12.9 billion,</strong> putting the world's biggest open-source AI model and dataset hub &mdash; 13 million-plus registered users, roughly 2.5 million models, 950,000 datasets &mdash; under Nvidia's ownership even though Hugging Face's annualized revenue is only around $150 million, about 86&times; the purchase price.</span><span class="ko"><strong>엔비디아가 허깅페이스를 129억 달러에 인수하기로 합의했습니다.</strong> 등록 사용자 1,300만 명 이상, 모델 약 250만 개, 데이터셋 95만 개를 보유한 세계 최대 오픈소스 AI 모델·데이터셋 허브가 엔비디아 소유가 되는 것입니다. 허깅페이스의 연환산 매출은 약 1억 5천만 달러로, 인수가는 매출의 약 86배에 달합니다.</span></li>
+        <li><span class="en"><strong>Google launched Gemini 3.5 Transcribe,</strong> a real-time speech-to-text model covering 85-plus languages with a 4.0% error rate in streaming mode (2.6% non-streaming) and sub-second latency &mdash; built to power voice-driven AI agents and accessibility tools.</span><span class="ko"><strong>구글이 제미나이 3.5 트랜스크라이브를 출시했습니다.</strong> 85개 이상 언어를 지원하는 실시간 음성-텍스트 변환 모델로, 스트리밍 모드 오류율 4.0%(비스트리밍 2.6%)에 1초 미만의 지연 시간을 기록하며, 음성 기반 AI 에이전트와 접근성 도구를 위해 설계되었습니다.</span></li>
+        <li><span class="en"><strong>Anthropic signed a $45 billion, six-year compute deal with British infrastructure firm Nscale,</strong> locking in roughly 460 megawatts at a West Virginia data center running Nvidia's next-generation Vera Rubin systems, with deployment targeted for late 2027.</span><span class="ko"><strong>앤트로픽이 영국 인프라 기업 엔스케일과 6년간 450억 달러 규모의 컴퓨팅 계약을 체결했습니다.</strong> 웨스트버지니아 데이터센터에서 약 460메가와트 용량을 확보하며, 엔비디아의 차세대 베라 루빈 시스템을 운영해 2027년 하반기 배치를 목표로 합니다.</span></li>
+        <li><span class="en"><strong>Russian-speaking ransomware affiliates used the Cursor AI coding assistant, running Anthropic's Claude 4.5 Sonnet, to help breach at least seven companies</strong> &mdash; including Christeyns in Belgium, Teckentrup in Germany, and the Helideck Certification Agency in Scotland &mdash; between April 8 and May 21, with researchers recovering 28 chat sessions showing the tradecraft.</span><span class="ko"><strong>러시아어권 랜섬웨어 조직이 앤트로픽의 클로드 4.5 소네트를 구동하는 커서 AI 코딩 도구를 이용해 최소 7개 기업을 침해하는 데 활용한 것으로 드러났습니다.</strong> 벨기에의 크리스테인스, 독일의 테켄트루프, 스코틀랜드의 헬리덱 인증기구 등이 4월 8일부터 5월 21일 사이 피해를 입었으며, 연구진은 공격 수법을 보여주는 채팅 세션 28건을 확보했습니다.</span></li>
+        <li><span class="en"><strong>Medical device maker Boston Scientific disclosed a cyberattack detected on August 25</strong> that disrupted order processing and shipments globally, with an investigation into possible data theft still underway.</span><span class="ko"><strong>의료기기 제조사 보스턴 사이언티픽이 8월 25일 탐지된 사이버 공격을 공개했습니다.</strong> 이 공격으로 전 세계 주문 처리와 배송이 차질을 빚었으며, 데이터 유출 여부에 대한 조사는 계속 진행 중입니다.</span></li>
+        <li><span class="en"><strong>Apple set a September 9 event at Apple Park</strong> expected to unveil the iPhone 18 Pro, Pro Max, and a foldable iPhone Ultra running a 2-nanometer A20 Pro chip, with the standard iPhone 18 pushed back to spring 2027.</span><span class="ko"><strong>애플이 9월 9일 애플 파크에서 행사를 개최합니다.</strong> 아이폰 18 프로, 프로 맥스와 2나노 A20 프로 칩을 탑재한 폴더블 아이폰 울트라 공개가 예상되며, 일반 아이폰 18은 2027년 봄으로 출시가 미뤄졌습니다.</span></li>
+        <li><span class="en"><strong>Salesforce and Anthropic launched "Claudeforce,"</strong> embedding Claude directly inside Salesforce with 37 prebuilt sales skills entering open beta in September &mdash; another sign the industry is betting on AI agents, not traditional software UI, as the primary interface.</span><span class="ko"><strong>세일즈포스와 앤트로픽이 "클로드포스"를 출시했습니다.</strong> 세일즈포스 안에 클로드를 직접 내장해 37개의 사전 구축된 영업 스킬을 제공하며, 9월 오픈 베타에 들어갑니다. AI 에이전트가 기존 소프트웨어 UI를 대신해 주요 인터페이스가 될 것이라는 업계의 베팅을 또 한 번 보여줍니다.</span></li>
+        <li><span class="en"><strong>AWS committed to deploying two million additional Nvidia GPUs</strong> &mdash; Blackwell Ultra, Rubin, and Rubin Ultra systems &mdash; through 2027 and 2028, including a dedicated 100,000-GPU system for U.S. government workloads.</span><span class="ko"><strong>AWS가 엔비디아 GPU 200만 개를 추가 배치하기로 약속했습니다.</strong> 블랙웰 울트라, 루빈, 루빈 울트라 시스템을 2027~2028년에 걸쳐 도입하며, 미국 정부 워크로드 전용 10만 개 GPU 시스템도 포함됩니다.</span></li>
+        <li><span class="en"><strong>Kioxia and Sandisk announced $31 billion-plus in flash memory investment through 2032</strong> at their Japan facilities, betting that AI infrastructure demand for storage keeps compounding for years.</span><span class="ko"><strong>키오시아와 샌디스크가 2032년까지 일본 내 설비에 310억 달러 이상의 플래시 메모리 투자를 발표했습니다.</strong> AI 인프라의 스토리지 수요가 앞으로도 계속 늘어날 것이라는 판단에 따른 것입니다.</span></li>
+        <li><span class="en"><strong>AI chip-design startup Architect Labs designed a full processor, nicknamed "Redwood," in about two weeks instead of the usual 12-plus months,</strong> already simulated on FPGA and now headed to TSMC for fabrication, on the back of a $24 million seed round.</span><span class="ko"><strong>AI 칩 설계 스타트업 아키텍트 랩스가 "레드우드"라는 프로세서를 통상 12개월 이상 걸리던 설계를 단 2주 만에 완성했습니다.</strong> 이미 FPGA로 시뮬레이션을 마쳤고, 2,400만 달러 규모의 시드 투자를 바탕으로 TSMC 파운드리 공정으로 넘어갈 예정입니다.</span></li>
+      </ol>
+
+      <div class="takeaway">
+        <strong><span class="en">Totoro's takeaway for Minjun</span><span class="ko">민준을 위한 토토로의 한 줄</span></strong>
+        <div><span class="en">Story ten is the one worth sitting with given where you're headed &mdash; Architect Labs compressing a 12-month chip design cycle into two weeks is a preview of what AI-assisted design tooling does to the whole silicon pipeline, and validation is exactly the stage that has to compress alongside it or it becomes the new bottleneck. Microchip's own Q1 FY26 beat (EPS $0.76 vs. $0.69 expected, revenue $1.49B, high-30s% YoY growth) plus its August 4th PCIe Gen 6 storage demo with Micron show the company leaning hard into AI/data-center infrastructure right now. As you move from Post-Silicon Validation into Digital Design, this is a good moment to ask where AI-accelerated verification fits in Microchip's own roadmap &mdash; and it's a solid data point for the FOLIO pitch: the industry is already rewarding teams that use AI to shrink design-to-validation time, not just design time alone.</span><span class="ko">오늘은 열 번째 소식을 곱씹어 보실 만합니다 &mdash; 민준님이 향하시는 방향과 맞닿아 있으니까요. 아키텍트 랩스가 12개월 걸리던 칩 설계 주기를 2주로 압축한 것은, AI 보조 설계 도구가 실리콘 파이프라인 전체에 어떤 영향을 줄지 보여주는 예고편입니다. 그리고 검증(validation) 단계도 함께 압축되지 않으면 새로운 병목이 될 수밖에 없습니다. 마이크로칩의 2026 회계연도 1분기 실적 서프라이즈(주당순이익 0.76달러, 예상 0.69달러 상회, 매출 14.9억 달러, 전년 대비 30%대 후반 성장)와 8월 4일 마이크론과의 PCIe Gen 6 스토리지 데모는 회사가 지금 AI·데이터센터 인프라에 강하게 베팅하고 있음을 보여줍니다. 포스트 실리콘 검증에서 디지털 설계로 옮겨가시는 시점에, AI 가속 검증이 마이크로칩 자체 로드맵 어디에 들어맞을지 생각해 보실 좋은 타이밍입니다 &mdash; 그리고 FOLIO를 어필하실 때도 좋은 근거가 됩니다. 업계는 이미 설계 시간뿐 아니라 설계-검증 전체 시간을 AI로 줄이는 팀에 보상하고 있으니까요.</span></div>
+      </div>
+
+      <div class="foot">
+        <span class="en">Prepared in Totoro style, focused on useful momentum.</span>
+        <span class="ko">유용한 흐름에 집중한 토토로 스타일 브리핑입니다.</span>
+      </div>
+    </div>
+  </div>
+  <script>
+    let isKorean = false;
+    function toggleLang() {
+      isKorean = !isKorean;
+      document.querySelectorAll('.en').forEach(el => el.classList.toggle('hide', isKorean));
+      document.querySelectorAll('.ko').forEach(el => el.classList.toggle('show', isKorean));
+      document.querySelector('.lang-toggle').textContent = isKorean ? 'English' : '한국어';
+    }
+  </script>
+</body>
+</html>
