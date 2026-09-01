@@ -1,0 +1,25 @@
+Good morning, Minjun. Here's your briefing for Tuesday, September 1st.
+
+Story one. Tim Cook is stepping down as Apple's CEO after nearly fifteen years, with hardware engineering chief John Ternus taking over, as the company navigates what's being called "RAMageddon" — a global memory chip shortage driven by AI's hardware demand that's pushing up prices on the next Mac, iPhone, and iPad. Cook flagged the shortage himself on what was his last earnings call as CEO.
+
+Story two. Nvidia is investing three point five billion dollars into Taiwan's MediaTek through convertible bonds, locking in a partner to build custom AI chips, called X-P-Us, on Nvidia's NVLink Fusion platform, and deepening the two companies' edge-to-cloud computing partnership. MediaTek's stock jumped ten percent on the news, with Qualcomm-watchers taking note of a rival gaining ground.
+
+Story three. The Pentagon added custom ChatGPT and Grok chatbots to its GenAI-dot-mil platform for unclassified military use, under a program the Department of War calls "Grok for Government," built for what it describes as warfighter needs. The portal, which launched last year with Google's Gemini, has now onboarded more than one point seven million of the department's three million personnel.
+
+Story four. Microsoft and LinkedIn's Ryan Roslansky, who oversees both Office and LinkedIn, publicly called out AI slop happening in the day to day of work, after receiving a fully AI-generated document from a colleague. He also runs the team behind LinkedIn's new AI slop reporting button, which more than a million people have already used.
+
+Story five. AI errors derailed a legal challenge to Mississippi's anti-DEI school laws, with state officials now asking an appeals court to overturn a ruling that blocked the restrictions, after the decision was found to be error-plagued — drafted with help from the AI tool Perplexity. It's the latest in a growing string of court proceedings undone by fabricated citations and bogus research.
+
+Story six. Google is pitching Disney, Universal, and other major studios to license their characters and films for its AI production tools, positioning the offer as a way to streamline filmmaking and visual effects — but facing pushback from union workers and creators worried about copyright, job displacement, and loss of artistic control.
+
+Story seven. OpenClaw — the open-source AI agent framework running this very briefing — launched version two point oh, with founder Peter Steinberger declaring that local harnesses feel like relics of the past now, as the update leans into shared cloud sessions for what he calls multiplayer coding plus infinite compute.
+
+Story eight. Communities in Missouri are pushing back on a wave of proposed AI data centers, demanding answers on power use, water consumption, and local costs — the latest state to join a growing list, alongside Texas, where residents and officials are questioning who actually benefits from the data center building boom.
+
+Story nine. A wave of second quarter tech earnings posted huge profits — but still failed to resolve the big questions hanging over AI, Axios reports, as investors keep waiting for hard evidence that the industry's massive infrastructure spending is translating into returns.
+
+Story ten. South Korea's exports extended their chip-led growth streak into August, with semiconductor shipments hitting record global demand and marking the country's fifteenth straight month of export gains, driven largely by AI-fueled orders for memory chips.
+
+And now, Totoro's takeaway for Minjun. Pair stories two and ten. Nvidia putting three point five billion dollars into MediaTek isn't a chip order — it's Nvidia buying its way into co-designed custom silicon, the same X-P-U model that's now driving Korea's fifteenth straight month of export growth. That's the shift worth watching as you move from Post-Silicon Validation into Digital Design — the money isn't just flowing toward faster chips anymore, it's flowing toward deeper, earlier partnerships between the company that designs the compute and the company that fabricates it, which is exactly the kind of collaboration Digital Design teams sit at the center of. And with your own Korean roots, story ten is a nice one to watch personally — the export boom behind it is largely memory and logic fabs you grew up around.
+
+That's your briefing. Have a great day.
