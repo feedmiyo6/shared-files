@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>Miyo Studio — Agency Business Model</title>
+<style>
+*{box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;line-height:1.65;color:#2F2A24;background:#FBF8F3;margin:0;padding:20px 16px 60px}
+.wrap{max-width:860px;margin:0 auto}
+h1{font-size:1.9em;line-height:1.2;margin:0 0 6px;letter-spacing:-.02em}
+h2{font-size:1.3em;margin:0 0 14px;letter-spacing:-.01em;color:#3F5232}
+h3{font-size:1.02em;margin:22px 0 8px;color:#7A6B5D;text-transform:uppercase;letter-spacing:.06em;font-weight:700}
+p{margin:0 0 12px}
+ul,ol{margin:0 0 12px;padding-left:22px}
+li{margin-bottom:7px}
+.subtitle{color:#7A6B5D;font-size:.95em;margin-bottom:20px}
+.card{background:#fff;border:1px solid #EDE6DA;border-radius:14px;padding:22px 24px;margin-bottom:18px;box-shadow:0 1px 3px rgba(0,0,0,.03)}
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:20px}
+.stat{background:#fff;border:1px solid #EDE6DA;border-radius:12px;padding:14px 10px;text-align:center}
+.stat-num{font-size:1.5em;font-weight:700;color:#3F5232;line-height:1.1}
+.stat-label{font-size:.74em;color:#7A6B5D;margin-top:4px;line-height:1.35}
+.warn{background:#FFF6EC;border-left:4px solid #B8704A}
+.good{background:#F4F8F1;border-left:4px solid #6B7D5C}
+.crit{background:#FDF1EF;border-left:4px solid #C0563F}
+.tier{border:1px solid #EDE6DA;border-radius:12px;padding:16px 18px;margin-bottom:12px;background:#FDFBF7}
+.tier.hero{border:2px solid #6B7D5C;background:#F4F8F1}
+.price{font-size:1.35em;font-weight:700;color:#3F5232}
+.tag{display:inline-block;background:#E8EBE5;color:#3F5232;font-size:.7em;font-weight:700;padding:3px 9px;border-radius:20px;letter-spacing:.05em;text-transform:uppercase;margin-left:6px;vertical-align:middle}
+.tag.red{background:#FADED8;color:#A6412A}
+.tag.amber{background:#FCEEDD;color:#8A4E28}
+code{background:#F2EDE4;padding:2px 6px;border-radius:4px;font-size:.87em;color:#6B5A48}
+.lang-toggle{position:fixed;top:12px;right:12px;z-index:50;background:#3F5232;color:#fff;border:none;border-radius:20px;padding:8px 16px;font-size:.82em;font-weight:600;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.15)}
+.footer{text-align:center;color:#B5AB9C;font-size:.8em;margin-top:30px;padding-top:14px;border-top:1px solid #EDE6DA}
+hr{border:none;border-top:1px solid #EDE6DA;margin:26px 0}
+.q{font-weight:700;color:#2F2A24}
+.pin-overlay{position:fixed;inset:0;background:#FBF8F3;z-index:200;display:flex;align-items:center;justify-content:center}
+.pin-box{text-align:center;padding:30px}
+.pin-input{font-size:1.6em;text-align:center;letter-spacing:.4em;width:170px;padding:12px;border:2px solid #EDE6DA;border-radius:12px;background:#fff;outline:none}
+.pin-btn{display:block;margin:16px auto 0;background:#3F5232;color:#fff;border:none;border-radius:10px;padding:11px 30px;font-size:.95em;font-weight:600;cursor:pointer}
+.pin-err{color:#C0563F;font-size:.85em;display:none;margin-top:10px}
+.content-locked{display:none}
+[data-ko]{display:none}
+body.ko [data-en]{display:none}
+body.ko [data-ko]{display:block}
+body.ko li[data-ko]{display:list-item}
+body.ko span[data-ko]{display:inline}
+body.ko div[data-ko],body.ko p[data-ko],body.ko h1[data-ko],body.ko h2[data-ko],body.ko h3[data-ko],body.ko ul[data-ko],body.ko ol[data-ko]{display:block}
+</style>
+</head>
+<body>
+
+<div class="pin-overlay" id="pinOverlay">
+<div class="pin-box">
+<h2>🔒 Enter PIN</h2>
+<input type="tel" class="pin-input" id="pinInput" maxlength="4" placeholder="····" autofocus>
+<button class="pin-btn" onclick="checkPin()">Unlock</button>
+<p class="pin-err" id="pinErr">Incorrect PIN. Try again.</p>
+</div>
+</div>
+
+<div class="content-locked" id="mainContent">
+<button class="lang-toggle" onclick="document.body.classList.toggle('ko');this.textContent=document.body.classList.contains('ko')?'EN':'한국어'">한국어</button>
+
+<div class="wrap">
+
+<h1>Miyo Studio LLC</h1>
+<p class="subtitle" data-en>AI-Native App Growth Agency — Business Model, Pricing &amp; Launch Plan · September 1, 2026</p>
+<p class="subtitle" data-ko>AI 네이티브 앱 그로스 에이전시 — 비즈니스 모델, 가격, 런칭 계획 · 2026년 9월 1일</p>
+
+<div class="stat-grid">
+  <div class="stat"><div class="stat-num">114</div><div class="stat-label" data-en>days since miyostudiollc.com was last updated</div><div class="stat-label" data-ko>miyostudiollc.com 마지막 업데이트 이후 경과일</div></div>
+  <div class="stat"><div class="stat-num">6 / 0</div><div class="stat-label" data-en>"Fridgenie" vs "Jujube" mentions on the live site</div><div class="stat-label" data-ko>라이브 사이트의 "Fridgenie" 대 "Jujube" 언급 횟수</div></div>
+  <div class="stat"><div class="stat-num">2</div><div class="stat-label" data-en>Jujube users who have actually paid</div><div class="stat-label" data-ko>실제 결제한 Jujube 사용자 수</div></div>
+  <div class="stat"><div class="stat-num">3.6%</div><div class="stat-label" data-en>tap → install rate (the diagnosed problem)</div><div class="stat-label" data-ko>탭 → 설치 전환율 (진단된 문제)</div></div>
+  <div class="stat"><div class="stat-num">$0.76</div><div class="stat-label" data-en>ASA cost per tap (healthy)</div><div class="stat-label" data-ko>ASA 탭당 비용 (양호)</div></div>
+</div>
+
+<!-- ============ 0. STRAIGHT ANSWERS ============ -->
+<div class="card">
+<h2 data-en>0 · Straight answers to what you asked</h2>
+<h2 data-ko>0 · 질문에 대한 직답</h2>
+
+<ul>
+<li data-en><span class="q">What is this business format called?</span> A <strong>productized service agency</strong>. Your specific category is an <strong>app growth agency</strong> (ASO/ASA). "AI-native" is how you run it, not how you sell it — see §1.</li>
+<li data-ko><span class="q">이 비즈니스 형태를 뭐라고 부르나?</span> <strong>프로덕타이즈드 서비스 에이전시(productized service agency)</strong>. 구체적 카테고리는 <strong>앱 그로스 에이전시</strong>(ASO/ASA). "AI 네이티브"는 운영 방식이지 판매 문구가 아님 — §1 참조.</li>
+
+<li data-en><span class="q">Manual for the first 10, then agents?</span> Yes, but you'll be drowning at 10. Start building the pipeline at client 5–6. And automate the <em>artifact</em>, never the <em>judgment</em>.</li>
+<li data-ko><span class="q">첫 10곳은 수동, 그 후 에이전트?</span> 맞음. 단 10곳이면 이미 과부하. 5~6번째 고객 시점에 파이프라인 구축 시작. 그리고 <em>산출물</em>은 자동화하되 <em>판단</em>은 절대 자동화 금지.</li>
+
+<li data-en><span class="q">Korean/Chinese localization hires as the niche?</span> This is your <strong>strongest asset — lead with it, don't bolt it on</strong>. But hire contractors per-locale, not employees. §2, §9.</li>
+<li data-ko><span class="q">한국어/중국어 로컬라이제이션 인력이 니치?</span> <strong>가장 강력한 자산 — 부가서비스가 아니라 전면에 내세울 것</strong>. 단 직원이 아니라 로케일별 계약직으로. §2, §9.</li>
+
+<li data-en><span class="q">Can I just use Miyo Studio LLC?</span> Yes. But get E&amp;O insurance before client #1, and <strong>never front client ad spend</strong>. §8.</li>
+<li data-ko><span class="q">Miyo Studio LLC 그대로 써도 되나?</span> 됨. 단 첫 고객 전에 E&amp;O(전문가 배상책임) 보험 가입, 그리고 <strong>광고비를 절대 대신 선지불하지 말 것</strong>. §8.</li>
+
+<li data-en><span class="q">Jujube as the showcase?</span> Yes — but as your <strong>lab, not your trophy</strong>. Its results are currently bad. Its <em>method</em> is genuinely excellent and that's what sells. §3.</li>
+<li data-ko><span class="q">Jujube를 쇼케이스로?</span> 그렇다 — 단 <strong>트로피가 아니라 실험실</strong>로. 현재 성과는 나쁨. 하지만 <em>방법론</em>은 진짜 뛰어나고, 그게 팔리는 것. §3.</li>
+
+<li data-en><span class="q">Do we suggest "add more ASA budget"?</span> Yes, and it lands <em>because</em> you take no cut of spend. Gate it on a published scaling rule. §5.</li>
+<li data-ko><span class="q">"ASA 예산 더 늘리세요"를 제안하나?</span> 그렇다. 그리고 <em>광고비의 수수료를 안 받기 때문에</em> 신뢰를 얻음. 공개된 스케일링 규칙에 근거해서만 제안. §5.</li>
+
+<li data-en><span class="q">Ask their budget upfront?</span> Don't ask "what's your budget" — publish tiers, then qualify their <em>ad</em> budget with a hard floor of $1,000/mo. §4, §11.</li>
+<li data-ko><span class="q">처음에 예산을 물어보나?</span> "예산이 얼마세요?"는 금지 — 티어를 먼저 공개하고, <em>광고</em> 예산만 월 $1,000 최소선으로 자격 심사. §4, §11.</li>
+
+<li data-en><span class="q">Survey/questionnaire onboarding — now or later?</span> The <em>form</em> is now (Tally, 20 minutes). The <em>product</em> is much later. Building custom onboarding before 3 clients is the classic trap. §11.</li>
+<li data-ko><span class="q">설문/온보딩 — 지금? 나중?</span> <em>폼</em>은 지금(Tally, 20분). <em>제품</em>은 훨씬 나중. 고객 3곳도 없이 커스텀 온보딩을 만드는 건 전형적인 함정. §11.</li>
+
+<li data-en><span class="q">Reach out to clients independently now?</span> Yes — this week. You need three assets first and they take a day, not a month. §10.</li>
+<li data-ko><span class="q">지금 독자적으로 고객 발굴?</span> 그렇다 — 이번 주에. 단 자산 3개가 먼저 필요하고, 그건 한 달이 아니라 하루면 됨. §10.</li>
+</ul>
+</div>
+
+<!-- ============ 1. NAMING ============ -->
+<div class="card">
+<h2 data-en>1 · What this business is called</h2>
+<h2 data-ko>1 · 이 비즈니스의 이름</h2>
+
+<p data-en>Four labels overlap, and each is useful for a different audience:</p>
+<p data-ko>네 가지 명칭이 겹치는데, 각각 다른 청중에게 유용합니다:</p>
+
+<ul>
+<li data-en><strong>Productized service</strong> — the business mechanic. Fixed scope, fixed price, recurring, no hourly billing, no custom proposals. This is the shape you want.</li>
+<li data-ko><strong>프로덕타이즈드 서비스</strong> — 비즈니스 작동 원리. 고정 범위, 고정 가격, 정기 결제, 시급 청구 없음, 맞춤 제안서 없음. 지향해야 할 형태.</li>
+<li data-en><strong>App growth agency</strong> (or "mobile growth agency") — the industry category. This is the term buyers search for.</li>
+<li data-ko><strong>앱 그로스 에이전시</strong>(모바일 그로스 에이전시) — 업계 카테고리. 구매자가 검색하는 용어.</li>
+<li data-en><strong>Services-as-software</strong> / <strong>agency-as-a-product</strong> — the investor/peer framing. Use it on X and in founder circles.</li>
+<li data-ko><strong>서비스형 소프트웨어(services-as-software)</strong> / <strong>제품형 에이전시</strong> — 투자자·동료 대상 프레이밍. X나 창업자 커뮤니티에서 사용.</li>
+<li data-en><strong>AI-native agency</strong> — accurate internally. Do <em>not</em> lead with it externally.</li>
+<li data-ko><strong>AI 네이티브 에이전시</strong> — 내부적으로는 정확. 대외적으로는 <em>앞세우지 말 것</em>.</li>
+</ul>
+
+<div class="card warn" style="margin-top:16px">
+<p data-en><strong>The one correction that matters:</strong> "AI-native" is a <strong>margin strategy, not a positioning</strong>. Clients do not buy AI — they buy installs and revenue. Worse, in 2026 "we use AI" reads to a skeptical indie dev as "you're going to send me ChatGPT output and charge me $2,000." Every AI agency says this, so it differentiates you from nothing.</p>
+<p data-en>What AI actually buys you is that <strong>one person can carry 15–20 clients at 80% margin</strong> where a traditional agency needs a team of five. That's the whole business. Keep it in the engine room.</p>
+<p data-ko><strong>가장 중요한 수정 하나:</strong> "AI 네이티브"는 <strong>포지셔닝이 아니라 마진 전략</strong>입니다. 고객은 AI를 사는 게 아니라 설치수와 매출을 삽니다. 더 나쁜 건, 2026년에 "저희는 AI를 씁니다"는 회의적인 인디 개발자에게 "ChatGPT 결과물 보내주고 $2,000 청구하겠구나"로 읽힌다는 점입니다. 모든 AI 에이전시가 같은 말을 하므로 차별화가 전혀 안 됩니다.</p>
+<p data-ko>AI가 실제로 사주는 것은 <strong>전통 에이전시가 5인 팀이 필요한 일을, 한 사람이 마진 80%로 고객 15~20곳을 감당</strong>하게 해준다는 점입니다. 그게 이 사업의 전부입니다. 엔진룸에 두세요.</p>
+</div>
+</div>
+
+<!-- ============ 2. NICHE ============ -->
+<div class="card">
+<h2 data-en>2 · The niche — and it's a real one</h2>
+<h2 data-ko>2 · 니치 — 그리고 이건 진짜입니다</h2>
+
+<p data-en><strong>Positioning:</strong> "A US-based growth partner for indie iOS apps — getting you found in English, Korean, Japanese, and Chinese."</p>
+<p data-ko><strong>포지셔닝:</strong> "인디 iOS 앱을 위한 미국 기반 그로스 파트너 — 영어, 한국어, 일본어, 중국어에서 발견되게 만듭니다."</p>
+
+<p data-en>Why the localization angle is the whole business and not a side dish:</p>
+<p data-ko>로컬라이제이션이 사이드 메뉴가 아니라 사업의 본체인 이유:</p>
+
+<ul>
+<li data-en><strong>Nobody credible owns it.</strong> US app-growth agencies run the English keyword through Google Translate and call it Korean ASO. Korean agencies don't sell to US indies. The overlap is empty.</li>
+<li data-ko><strong>제대로 하는 곳이 없음.</strong> 미국 앱 그로스 에이전시는 영어 키워드를 구글 번역 돌려놓고 한국어 ASO라고 부릅니다. 한국 에이전시는 미국 인디에게 팔지 않습니다. 그 교집합이 비어 있습니다.</li>
+<li data-en><strong>You are structurally credible.</strong> Bilingual KO/EN, US entity, shipped an iOS app localized into EN/KO/ZH. That is not a claim, it's a shipped artifact you can point at.</li>
+<li data-ko><strong>구조적으로 신뢰도가 있음.</strong> 한/영 이중언어, 미국 법인, EN/KO/ZH 로컬라이즈된 iOS 앱 출시 경험. 이건 주장이 아니라 가리킬 수 있는 실물입니다.</li>
+<li data-en><strong>The markets are high-ARPU and low-competition on keywords.</strong> Japan and Korea are top-5 App Store revenue markets. An indie ranking #1 for a Korean long-tail keyword faces almost no competition versus the same keyword in English.</li>
+<li data-ko><strong>해당 시장은 ARPU가 높고 키워드 경쟁은 낮음.</strong> 일본과 한국은 App Store 매출 상위 5개 시장입니다. 한국어 롱테일 키워드 1위는 같은 의미의 영어 키워드 대비 경쟁이 거의 없습니다.</li>
+<li data-en><strong>The pitch is a specific, verifiable claim.</strong> "Your app is invisible in the 3rd and 4th largest App Store markets, and I can show you exactly why in 20 minutes" beats "we do ASO" by an enormous margin.</li>
+<li data-ko><strong>피치가 구체적이고 검증 가능함.</strong> "당신 앱은 App Store 3위·4위 시장에서 보이지 않습니다. 왜인지 20분 안에 정확히 보여드릴 수 있습니다"는 "저희는 ASO 합니다"를 압도합니다.</li>
+</ul>
+
+<h3 data-en>Who you sell to</h3>
+<h3 data-ko>판매 대상</h3>
+<ul>
+<li data-en>Solo devs and 2–5 person studios with a <strong>live, revenue-generating</strong> iOS app (subscription or IAP)</li>
+<li data-ko><strong>출시되어 매출이 발생 중인</strong> iOS 앱(구독 또는 IAP)을 가진 1인 개발자 및 2~5인 스튜디오</li>
+<li data-en>$2k–50k MRR — big enough to afford you, too small for a real agency to take the call</li>
+<li data-ko>MRR $2k~50k — 당신을 감당할 만큼 크고, 대형 에이전시가 상대해주지 않을 만큼 작음</li>
+<li data-en>English-only or badly-localized store listings</li>
+<li data-ko>영어만 있거나 로컬라이제이션이 엉망인 스토어 리스팅</li>
+<li data-en>Already spending on ASA, or willing to start with ≥$1,000/mo</li>
+<li data-ko>이미 ASA 집행 중이거나, 월 $1,000 이상으로 시작할 의향이 있음</li>
+</ul>
+
+<h3 data-en>Who you decline</h3>
+<h3 data-ko>거절 대상</h3>
+<ul>
+<li data-en>Pre-launch apps with no data — nothing to optimize, they need a product, not you</li>
+<li data-ko>데이터가 없는 출시 전 앱 — 최적화할 게 없음. 그들에게 필요한 건 제품이지 당신이 아님</li>
+<li data-en>Free apps with no monetization — you cannot show ROI, and they will churn in month 2</li>
+<li data-ko>수익화 없는 무료 앱 — ROI를 보여줄 수 없고, 2개월 차에 이탈함</li>
+<li data-en>Anyone who wants you to also design, build, or fix their app</li>
+<li data-ko>앱 디자인·개발·수정까지 요구하는 곳</li>
+</ul>
+</div>
+
+<!-- ============ 3. JUJUBE HONEST ============ -->
+<div class="card">
+<h2 data-en>3 · Jujube as the showcase — the honest read</h2>
+<h2 data-ko>3 · 쇼케이스로서의 Jujube — 솔직한 평가</h2>
+
+<div class="card crit">
+<p data-en><strong>You cannot currently sell Jujube as a results case study.</strong> As of today: public since Aug 22, 26 Pro entitlements but only <strong>2 actual payers</strong>, organic App Store discovery effectively <strong>zero</strong>, tap→install <strong>3.6%</strong>, and your <strong>first paid conversion failed</strong> on a billing issue. If you put "look at our results" on the site, the first sharp prospect who checks your rankings will catch it, and you lose the deal and the reputation.</p>
+<p data-ko><strong>현재 Jujube를 "성과" 사례로 팔 수는 없습니다.</strong> 오늘 기준: 8월 22일 공개 이후 Pro 권한 26개 중 <strong>실제 결제자는 2명</strong>, 오가닉 App Store 발견은 사실상 <strong>0</strong>, 탭→설치 <strong>3.6%</strong>, 그리고 <strong>첫 유료 전환이 결제 오류로 실패</strong>했습니다. 사이트에 "저희 성과를 보세요"라고 쓰면, 순위를 확인해보는 첫 번째 예리한 잠재고객에게 걸리고, 거래와 평판을 동시에 잃습니다.</p>
+</div>
+
+<div class="card good">
+<p data-en><strong>What you CAN sell — and it's stronger than most agencies have.</strong> The Jujube work is genuinely better diagnostic work than what a $5k/mo agency produces. Frame it as: <em>"We run this agency on our own app first. Every method we sell, we tested with our own money — including the parts that didn't work."</em></p>
+<p data-ko><strong>팔 수 있는 것 — 그리고 이건 대부분의 에이전시보다 강력합니다.</strong> Jujube 작업은 월 $5,000짜리 에이전시가 내놓는 것보다 실제로 더 나은 진단 작업입니다. 이렇게 프레이밍하세요: <em>"저희는 이 방법론을 저희 앱에 먼저 씁니다. 판매하는 모든 방법은 저희 돈으로 검증했습니다 — 실패한 부분까지 포함해서요."</em></p>
+</div>
+
+<h3 data-en>The four stories that actually sell</h3>
+<h3 data-ko>실제로 팔리는 네 가지 스토리</h3>
+
+<ol>
+<li data-en><strong>The hardcoded dollar sign.</strong> Jujube's Korean paywall was interpolating a hardcoded <code>$400</code> into an otherwise fully-translated sentence — a Korean user was reading a USD figure mid-sentence on the exact screen where they decide to pay. <strong>This is the single best sales story you have</strong>, because it is the entire localization pitch in one anecdote: your translation can be perfect and your conversion still broken, and you will never notice because you can't read it.</li>
+<li data-ko><strong>하드코딩된 달러 기호.</strong> Jujube의 한국어 페이월이 완전히 번역된 문장 중간에 하드코딩된 <code>$400</code>을 삽입하고 있었습니다 — 결제를 결정하는 바로 그 화면에서 한국 사용자가 문장 중간에 USD 금액을 읽고 있었던 겁니다. <strong>당신이 가진 최고의 세일즈 스토리</strong>입니다. 로컬라이제이션 피치 전체가 이 일화 하나에 들어 있으니까요: 번역이 완벽해도 전환은 깨질 수 있고, 읽을 수 없으니 영원히 눈치채지 못합니다.</li>
+
+<li data-en><strong>The diagnosis nobody else would have made.</strong> Cost-per-tap was $0.76 — healthy. A normal agency would have kept "optimizing keywords" and billing for it. The actual problem was tap→install at 3.6%, i.e. the product page, not the ads. You told the truth that the ad spend wasn't the lever.</li>
+<li data-ko><strong>다른 곳은 못 했을 진단.</strong> 탭당 비용은 $0.76 — 양호했습니다. 보통 에이전시라면 "키워드 최적화"를 계속하며 청구했을 겁니다. 실제 문제는 탭→설치 3.6%, 즉 광고가 아니라 제품 페이지였습니다. 광고비가 레버가 아니라는 진실을 말한 겁니다.</li>
+
+<li data-en><strong>The revenue fix that had nothing to do with marketing.</strong> Billing grace period was switched <em>off</em> on the App Store account — one failed charge meant instant, unrecoverable access loss. Free to turn on, verified fixed Aug 31 (16 days, all renewals). That's found money most growth agencies never look for because it isn't in their scope.</li>
+<li data-ko><strong>마케팅과 무관했던 매출 수정.</strong> App Store 계정에서 결제 유예 기간이 <em>꺼져</em> 있었습니다 — 결제 1회 실패 = 즉시, 복구 불가능한 접근 차단. 켜는 건 무료였고 8월 31일 수정 확인(16일, 전체 갱신 적용). 대부분의 그로스 에이전시가 자기 범위가 아니라는 이유로 아예 안 보는 "숨은 돈"입니다.</li>
+
+<li data-en><strong>The label that lied.</strong> Apple reported the churn as <code>PRICE_INCREASE</code>. There was no price change — verified against the live price rows in App Store Connect. It was a billing failure mislabeled. If you'd trusted the dashboard you'd have "fixed" a pricing problem that didn't exist.</li>
+<li data-ko><strong>거짓말한 라벨.</strong> Apple은 이탈 사유를 <code>PRICE_INCREASE</code>로 보고했습니다. 가격 변경은 없었습니다 — App Store Connect 실제 가격 데이터로 검증. 잘못 라벨링된 결제 실패였습니다. 대시보드를 믿었다면 존재하지도 않는 가격 문제를 "고쳤을" 겁니다.</li>
+</ol>
+
+<div class="card warn" style="margin-top:16px">
+<p data-en><strong>The trophy is coming — go measure it.</strong> You shipped the v5 screenshot set with 2.5.12 on Aug 26. That is a clean before/after boundary on the exact 3.6% number you diagnosed. Analytics report requests were created Aug 31; instances were still empty as of this morning (Apple takes 24–48h). <strong>Re-check Sept 2.</strong> If tap→install moved to 6%+, that is a real, defensible case study headline and it replaces everything above.</p>
+<p data-ko><strong>트로피는 오고 있습니다 — 측정하세요.</strong> 8월 26일 2.5.12와 함께 v5 스크린샷 세트를 출시했습니다. 진단했던 바로 그 3.6% 수치에 대한 깨끗한 전후 경계선입니다. 분석 리포트 요청은 8월 31일 생성됐고, 오늘 아침 기준 인스턴스는 아직 비어 있습니다(Apple 소요 24~48시간). <strong>9월 2일 재확인.</strong> 탭→설치가 6% 이상으로 움직였다면, 그건 진짜 방어 가능한 사례 헤드라인이고 위의 모든 걸 대체합니다.</p>
+</div>
+
+<p data-en style="margin-top:14px"><strong>Publish the failures too.</strong> Indie devs are deeply cynical about agencies — every one of them has been burned by a "we guarantee #1 ranking" pitch. A case study that says "here's what we tried, here's what didn't work, here's what we learned" converts better with this specific audience than a polished win. Radical transparency is a differentiator you can actually afford, because you have nothing to hide yet.</p>
+<p data-ko style="margin-top:14px"><strong>실패도 공개하세요.</strong> 인디 개발자들은 에이전시에 대해 깊이 냉소적입니다 — "1위 순위 보장" 피치에 한 번씩 데어봤습니다. "이걸 시도했고, 이건 안 됐고, 이걸 배웠다"고 말하는 사례가 이 특정 청중에게는 매끈한 성공담보다 전환이 잘 됩니다. 급진적 투명성은 당신이 실제로 감당 가능한 차별점입니다. 아직 숨길 게 없으니까요.</p>
+</div>
+
+<!-- ============ 4. OFFER LADDER ============ -->
+<div class="card">
+<h2 data-en>4 · The offer ladder &amp; pricing</h2>
+<h2 data-ko>4 · 상품 사다리와 가격</h2>
+
+<p data-en><strong>Market context:</strong> US app-growth agencies charge $3k–15k/mo and won't take an indie's call. Freelance ASO consultants charge $75–200/hr or $1–3k per one-time audit. Professional store localization runs $300–800 per language. The gap you fill is <em>indie-affordable, retainer-based, APAC-specialized</em>.</p>
+<p data-ko><strong>시장 맥락:</strong> 미국 앱 그로스 에이전시는 월 $3,000~15,000을 청구하고 인디의 연락을 받지 않습니다. 프리랜스 ASO 컨설턴트는 시간당 $75~200 또는 1회 감사에 $1,000~3,000. 전문 스토어 로컬라이제이션은 언어당 $300~800. 당신이 채울 빈 공간은 <em>인디가 감당 가능하고, 리테이너 기반이며, APAC 특화된</em> 자리입니다.</p>
+
+<div class="tier">
+<p><span class="price">$0 / $450</span> <span class="tag amber">Entry</span></p>
+<p data-en><strong>Tier 0 — The Teardown.</strong> Free 2-page version (one market, one competitor) as your cold-outreach hook. Paid version at $450 one-time: keyword gap analysis, metadata rewrite, screenshot critique, competitor set, one localization spot-check. Delivered in 5 business days. <strong>Credit the $450 toward month 1 if they sign.</strong></p>
+<p data-ko><strong>티어 0 — 티어다운(진단).</strong> 무료 2페이지 버전(1개 시장, 경쟁사 1곳)은 콜드 아웃리치 후크. 유료 버전 1회 $450: 키워드 갭 분석, 메타데이터 재작성, 스크린샷 비평, 경쟁사 세트, 로컬라이제이션 1건 점검. 영업일 5일 내 납품. <strong>계약 시 $450을 1개월 차에 크레딧 처리.</strong></p>
+<p data-en><em>Why this matters most: it's the lowest-risk thing a stranger can buy from you, and it's how you get the first 10.</em></p>
+<p data-ko><em>가장 중요한 이유: 모르는 사람이 당신에게서 살 수 있는 가장 저위험 상품이고, 첫 10곳을 확보하는 경로입니다.</em></p>
+</div>
+
+<div class="tier">
+<p><span class="price">$850/mo</span> <span class="tag">3-month min</span></p>
+<p data-en><strong>Tier 1 — ASO Essentials.</strong> Monthly keyword research and metadata iteration (en-US + 1 locale). Screenshot and preview recommendations (direction, not design production). Review response strategy. Monthly report + 30-minute call. No ad management.</p>
+<p data-ko><strong>티어 1 — ASO 에센셜.</strong> 월간 키워드 리서치 및 메타데이터 개선(en-US + 로케일 1개). 스크린샷·프리뷰 권고(방향성, 디자인 제작 아님). 리뷰 응대 전략. 월간 리포트 + 30분 통화. 광고 운영 없음.</p>
+<p data-en><em>For: early indies, pre-scale, no ad budget yet.</em></p>
+<p data-ko><em>대상: 초기 인디, 스케일 전, 광고 예산 아직 없음.</em></p>
+</div>
+
+<div class="tier hero">
+<p><span class="price">$1,950/mo</span> <span class="tag">3-month min</span> <span class="tag">Main product</span></p>
+<p data-en><strong>Tier 2 — Growth.</strong> Everything in Essentials, plus:</p>
+<p data-ko><strong>티어 2 — 그로스.</strong> 에센셜 전체에 더해:</p>
+<ul>
+<li data-en><strong>ASA management</strong> — campaign structure, keyword bidding, negative keywords, weekly optimization</li>
+<li data-ko><strong>ASA 운영</strong> — 캠페인 구조, 키워드 입찰, 제외 키워드, 주간 최적화</li>
+<li data-en>Up to 3 locales</li>
+<li data-ko>최대 3개 로케일</li>
+<li data-en>Conversion work: product page audit + Product Page Optimization (PPO) test design and readout</li>
+<li data-ko>전환 작업: 제품 페이지 감사 + PPO(제품 페이지 최적화) 테스트 설계 및 결과 해석</li>
+<li data-en>Monthly report with an explicit scale / hold / cut recommendation</li>
+<li data-ko>확대 / 유지 / 축소를 명시한 월간 리포트</li>
+</ul>
+<p data-en><strong>Requires ≥$1,000/mo ad budget. Client pays Apple directly — we take no percentage of spend.</strong></p>
+<p data-ko><strong>월 $1,000 이상 광고 예산 필수. 광고비는 고객이 Apple에 직접 결제 — 광고비의 수수료를 받지 않음.</strong></p>
+</div>
+
+<div class="tier hero">
+<p><span class="price">$3,500/mo</span> <span class="tag">or $6,000 sprint</span> <span class="tag">Your moat</span></p>
+<p data-en><strong>Tier 3 — APAC Launch.</strong> Everything in Growth, plus:</p>
+<p data-ko><strong>티어 3 — APAC 런칭.</strong> 그로스 전체에 더해:</p>
+<ul>
+<li data-en>Full KO / JA / ZH-TW localization: store listing, screenshot copy and layout direction, in-app string review</li>
+<li data-ko>KO / JA / ZH-TW 전체 로컬라이제이션: 스토어 리스팅, 스크린샷 카피 및 레이아웃 방향, 인앱 문자열 검수</li>
+<li data-en><strong>Native keyword research per locale — not translation.</strong> Korean users don't search the translated English term.</li>
+<li data-ko><strong>로케일별 네이티브 키워드 리서치 — 번역이 아님.</strong> 한국 사용자는 번역된 영어 용어로 검색하지 않습니다.</li>
+<li data-en>Localized ASA campaigns in KR / JP / TW storefronts</li>
+<li data-ko>KR / JP / TW 스토어프론트 현지화 ASA 캠페인</li>
+<li data-en>Cultural QA pass by a native reviewer — pricing format, tone, honorifics, imagery</li>
+<li data-ko>네이티브 리뷰어의 문화적 QA — 가격 표기, 톤, 존대, 이미지</li>
+</ul>
+<p data-en><em>Highest margin, most defensible, and the only tier no competitor can copy quickly.</em></p>
+<p data-ko><em>최고 마진, 최고 방어력, 그리고 경쟁사가 빠르게 복제할 수 없는 유일한 티어.</em></p>
+</div>
+
+<h3 data-en>Add-ons</h3>
+<h3 data-ko>애드온</h3>
+<ul>
+<li data-en>Additional locale — <strong>$600</strong> one-time + <strong>$200/mo</strong> maintenance</li>
+<li data-ko>로케일 추가 — 1회 <strong>$600</strong> + 월 <strong>$200</strong> 유지</li>
+<li data-en>Screenshot design production — <strong>$800</strong> per set (subcontract or AI-generate)</li>
+<li data-ko>스크린샷 디자인 제작 — 세트당 <strong>$800</strong>(외주 또는 AI 생성)</li>
+<li data-en>Paywall &amp; pricing localization audit — <strong>$650</strong> one-time. <em>This exists because of the Jujube $400 bug. Sell the anecdote, sell the audit.</em></li>
+<li data-ko>페이월·가격 로컬라이제이션 감사 — 1회 <strong>$650</strong>. <em>Jujube $400 버그 때문에 존재하는 상품. 일화를 팔고, 감사를 팝니다.</em></li>
+<li data-en>Subscription plumbing audit (grace period, billing-failure recovery, refund handling) — <strong>$500</strong> one-time</li>
+<li data-ko>구독 배관 감사(유예 기간, 결제 실패 복구, 환불 처리) — 1회 <strong>$500</strong></li>
+</ul>
+
+<div class="card warn" style="margin-top:16px">
+<p data-en><strong>Publish your prices on the website.</strong> Agencies that hide pricing signal "we charge whatever we think you'll pay," and indie devs read it exactly that way. Published prices filter out the tire-kickers before they reach your calendar, which is the real scarce resource.</p>
+<p data-ko><strong>가격을 웹사이트에 공개하세요.</strong> 가격을 숨기는 에이전시는 "낼 것 같은 만큼 청구한다"는 신호를 주고, 인디 개발자들은 정확히 그렇게 읽습니다. 공개된 가격은 진짜 희소 자원인 당신의 캘린더에 도달하기 전에 구경꾼을 걸러냅니다.</p>
+</div>
+</div>
+
+<!-- ============ 5. THE REPORT ============ -->
+<div class="card">
+<h2 data-en>5 · The monthly report IS the product</h2>
+<h2 data-ko>5 · 월간 리포트가 곧 제품입니다</h2>
+
+<p data-en>The retainer isn't paying for hours. It's paying for a decision, delivered monthly, backed by data the client can't assemble themselves. Design the report around that.</p>
+<p data-ko>리테이너는 시간을 사는 게 아닙니다. 고객이 스스로 모을 수 없는 데이터에 근거해 매달 전달되는 <strong>의사결정</strong>을 사는 겁니다. 리포트를 그 중심으로 설계하세요.</p>
+
+<h3 data-en>Standard structure</h3>
+<h3 data-ko>표준 구조</h3>
+<ol>
+<li data-en><strong>The one number</strong> — what moved, up top, with the delta vs last month. No preamble.</li>
+<li data-ko><strong>단 하나의 숫자</strong> — 무엇이 움직였는지, 최상단에, 전월 대비 증감과 함께. 서론 없음.</li>
+<li data-en><strong>Funnel</strong> — impressions → product page views → installs → trial → paid, each with month-over-month delta</li>
+<li data-ko><strong>퍼널</strong> — 노출 → 제품 페이지 조회 → 설치 → 체험 → 결제, 각 단계 전월 대비 증감</li>
+<li data-en><strong>Keyword movement</strong> — gained, lost, newly ranking, per locale</li>
+<li data-ko><strong>키워드 변동</strong> — 상승, 하락, 신규 진입, 로케일별</li>
+<li data-en><strong>ASA performance</strong> — spend, CPT, CPI, install→paid, by campaign and by storefront</li>
+<li data-ko><strong>ASA 성과</strong> — 지출, CPT, CPI, 설치→결제, 캠페인별·스토어프론트별</li>
+<li data-en><strong>What we changed this month</strong> — a literal changelog. This is what proves you did work.</li>
+<li data-ko><strong>이번 달 변경 사항</strong> — 말 그대로 체인지로그. 당신이 일했다는 증거.</li>
+<li data-en><strong>Review themes by locale</strong> — what users complain about, in each language. Almost no agency does this and clients love it.</li>
+<li data-ko><strong>로케일별 리뷰 테마</strong> — 각 언어에서 사용자가 불평하는 내용. 하는 에이전시가 거의 없고 고객이 매우 좋아함.</li>
+<li data-en><strong>The recommendation</strong> — one green/yellow/red call, with the number that triggered it</li>
+<li data-ko><strong>권고</strong> — 초록/노랑/빨강 판정 하나와, 그 판정을 유발한 수치</li>
+<li data-en><strong>Next month's plan</strong> — three bullets, no more</li>
+<li data-ko><strong>다음 달 계획</strong> — 불릿 3개, 그 이상 금지</li>
+</ol>
+
+<h3 data-en>The scaling rule — publish it, don't improvise it</h3>
+<h3 data-ko>스케일링 규칙 — 즉흥 판단이 아니라 공개된 규칙으로</h3>
+<ul>
+<li data-en><span class="tag">GREEN — scale</span> install→paid above target AND CPI below the payback threshold → recommend increasing spend by 25–50%</li>
+<li data-ko><span class="tag">초록 — 확대</span> 설치→결제가 목표 이상 <em>그리고</em> CPI가 회수 기준 이하 → 지출 25~50% 증액 권고</li>
+<li data-en><span class="tag amber">YELLOW — hold</span> one of the two is off → hold spend, fix conversion first</li>
+<li data-ko><span class="tag amber">노랑 — 유지</span> 둘 중 하나가 미달 → 지출 유지, 전환부터 개선</li>
+<li data-en><span class="tag red">RED — cut</span> both off for two consecutive months → cut spend, the product page or the offer is the problem</li>
+<li data-ko><span class="tag red">빨강 — 축소</span> 두 달 연속 둘 다 미달 → 지출 축소. 제품 페이지 또는 오퍼가 문제</li>
+</ul>
+
+<div class="card good" style="margin-top:14px">
+<p data-en><strong>On upselling ad spend — yes, and here's why it lands.</strong> Because you charge a flat retainer and take <em>zero percent of spend</em>, "add $500/mo to ASA" is credible advice rather than self-dealing. Say this out loud in the sales conversation: <em>"We don't take a cut of your ad spend. We have no financial reason to tell you to spend more than works."</em> Every percentage-of-spend agency in the market has the opposite incentive and sophisticated buyers know it. This is free trust — take it.</p>
+<p data-ko><strong>광고비 업셀 — 하세요. 그리고 이게 통하는 이유.</strong> 정액 리테이너를 받고 <em>광고비의 0%</em>를 받기 때문에, "ASA에 월 $500 추가하세요"가 자기 잇속이 아니라 신뢰할 만한 조언이 됩니다. 세일즈 대화에서 이걸 소리 내어 말하세요: <em>"저희는 광고비에서 수수료를 받지 않습니다. 효과 이상으로 쓰라고 할 금전적 이유가 없습니다."</em> 시장의 모든 %-of-spend 에이전시는 정반대 인센티브를 갖고 있고, 안목 있는 구매자는 그걸 압니다. 공짜 신뢰입니다 — 가져가세요.</p>
+</div>
+</div>
+
+<!-- ============ 6. ECONOMICS ============ -->
+<div class="card">
+<h2 data-en>6 · Unit economics &amp; capacity</h2>
+<h2 data-ko>6 · 단위 경제성과 수용 능력</h2>
+
+<h3 data-en>At 10 clients averaging $1,800</h3>
+<h3 data-ko>평균 $1,800 × 10개 고객 기준</h3>
+<ul>
+<li data-en>Revenue: <strong>~$18,000/mo</strong></li>
+<li data-ko>매출: <strong>월 약 $18,000</strong></li>
+<li data-en>ASO tooling (AppTweak / Sensor Tower / AppFollow): $150–400/mo</li>
+<li data-ko>ASO 툴(AppTweak / Sensor Tower / AppFollow): 월 $150~400</li>
+<li data-en>AI API + infra: $200–400/mo</li>
+<li data-ko>AI API + 인프라: 월 $200~400</li>
+<li data-en>Localization contractors (variable, per locale pass): $1,200–2,000/mo</li>
+<li data-ko>로컬라이제이션 계약자(변동, 로케일 패스당): 월 $1,200~2,000</li>
+<li data-en>Insurance, accounting, misc: $300/mo</li>
+<li data-ko>보험, 회계, 기타: 월 $300</li>
+<li data-en><strong>Gross margin: ~80%.</strong> That's the number AI buys you, and it's why this works solo.</li>
+<li data-ko><strong>매출총이익률: 약 80%.</strong> AI가 사주는 숫자이고, 1인 운영이 가능한 이유입니다.</li>
+</ul>
+
+<div class="card warn" style="margin-top:14px">
+<p data-en><strong>Capacity reality check.</strong> Manually, one person carries roughly <strong>6–8 clients at Tier 2</strong> before quality degrades. With the pipeline built, <strong>15–20</strong>. This is why "manual until 10, then build" is off by a few: at 10 manual clients you will be behind on every report and you will build the system badly under pressure. <strong>Start building at client 5.</strong></p>
+<p data-ko><strong>수용 능력 현실 점검.</strong> 수동으로는 품질 저하 전까지 <strong>티어 2 기준 6~8곳</strong>이 한계입니다. 파이프라인 구축 후에는 <strong>15~20곳</strong>. "10곳까지 수동, 그 후 구축"이 몇 칸 어긋난 이유가 이겁니다: 수동 10곳이면 이미 모든 리포트가 밀려 있고, 압박 속에서 시스템을 엉망으로 만들게 됩니다. <strong>5번째 고객 때 구축 시작.</strong></p>
+</div>
+
+<h3 data-en>Contract terms</h3>
+<h3 data-ko>계약 조건</h3>
+<ul>
+<li data-en><strong>3-month minimum, then month-to-month with 30 days notice.</strong> ASO takes 6–10 weeks to show movement; a 1-month contract guarantees you get blamed for physics.</li>
+<li data-ko><strong>최소 3개월, 이후 30일 사전통보 월 단위.</strong> ASO는 변동이 나타나기까지 6~10주 걸립니다. 1개월 계약은 물리 법칙 때문에 욕먹는 걸 보장합니다.</li>
+<li data-en>Invoice on the 1st, net 7, auto-charge via Stripe. No net-30 for indies.</li>
+<li data-ko>1일 청구, 7일 내 결제, Stripe 자동 결제. 인디에게 net-30은 금지.</li>
+<li data-en><strong>No performance guarantees, ever.</strong> You do not control Apple's algorithm, their product, or their pricing. Guarantee the <em>work</em> and the <em>report</em>, never the ranking.</li>
+<li data-ko><strong>성과 보장은 절대 금지.</strong> Apple 알고리즘도, 고객 제품도, 고객 가격도 통제할 수 없습니다. <em>작업</em>과 <em>리포트</em>는 보장하되, <em>순위</em>는 절대 보장하지 마세요.</li>
+</ul>
+</div>
+
+<!-- ============ 7. AI SYSTEM ============ -->
+<div class="card">
+<h2 data-en>7 · The AI system — five pipelines, in build order</h2>
+<h2 data-ko>7 · AI 시스템 — 5개 파이프라인, 구축 순서대로</h2>
+
+<p data-en>"An AI agency system" isn't one thing. It's five specific pipelines, and you have already built the hardest one for Jujube. <strong>The agency is the productization of the tooling you built for your own app.</strong> That's not a coincidence — it's the actual strategic asset.</p>
+<p data-ko>"AI 에이전시 시스템"은 하나의 무언가가 아닙니다. 5개의 구체적 파이프라인이고, 그중 가장 어려운 걸 이미 Jujube용으로 만들었습니다. <strong>이 에이전시는 당신이 자기 앱을 위해 만든 도구의 제품화입니다.</strong> 우연이 아니라 실제 전략 자산입니다.</p>
+
+<ol>
+<li data-en><strong>Data ingest</strong> <span class="tag">mostly built</span> — App Store Connect Analytics Reports API, ASA Campaign Management API, RevenueCat, App Store review scraping. Cron → one table per client. Everything else reads from this. You have the ASC helpers (<code>asc.js</code> GET, <code>patch.js</code>, <code>post.js</code>) and a working Analytics report request already. Generalize it from "Jujube" to "client_id".</li>
+<li data-ko><strong>데이터 수집</strong> <span class="tag">대부분 구축됨</span> — App Store Connect Analytics Reports API, ASA Campaign Management API, RevenueCat, App Store 리뷰 스크래핑. Cron → 고객당 테이블 1개. 나머지 전부가 여기서 읽습니다. ASC 헬퍼(<code>asc.js</code> GET, <code>patch.js</code>, <code>post.js</code>)와 작동하는 Analytics 리포트 요청을 이미 갖고 있습니다. "Jujube"에서 "client_id"로 일반화하세요.</li>
+
+<li data-en><strong>Report generator</strong> — templated HTML, data-filled, AI writes the narrative sections, you review and sign. <em>This is what clients pay for.</em> Build it second because it's the deliverable.</li>
+<li data-ko><strong>리포트 생성기</strong> — 템플릿 HTML, 데이터 자동 삽입, AI가 서술 섹션 작성, 당신이 검토·서명. <em>고객이 돈을 내는 대상.</em> 산출물이므로 두 번째로 구축.</li>
+
+<li data-en><strong>Review triage</strong> — classify incoming App Store reviews (bug / feature request / pricing / confusion) by locale, surface themes. <strong>Near-zero marginal cost, high perceived value.</strong> "We read every review in every language" is a line no competitor can match cheaply. Build this third — it's the best value-per-hour-of-build in the whole system.</li>
+<li data-ko><strong>리뷰 분류</strong> — 유입되는 App Store 리뷰를 로케일별로 분류(버그 / 기능 요청 / 가격 / 혼란), 테마 도출. <strong>한계비용 거의 0, 체감 가치 높음.</strong> "저희는 모든 언어의 모든 리뷰를 읽습니다"는 경쟁사가 싸게 따라올 수 없는 문구. 세 번째로 구축 — 시스템 전체에서 구축 시간 대비 가치가 가장 높습니다.</li>
+
+<li data-en><strong>Keyword &amp; metadata agent</strong> — competitor keyword diffs, ranking movement, suggested metadata edits per locale. <strong>Human approves before anything is pushed to App Store Connect.</strong></li>
+<li data-ko><strong>키워드·메타데이터 에이전트</strong> — 경쟁사 키워드 차이, 순위 변동, 로케일별 메타데이터 수정 제안. <strong>App Store Connect에 반영되기 전 반드시 사람이 승인.</strong></li>
+
+<li data-en><strong>Client comms</strong> — intake processing, monthly check-in drafting, answering client questions against their own data. Build last; it's the least differentiated.</li>
+<li data-ko><strong>고객 커뮤니케이션</strong> — 인테이크 처리, 월간 체크인 초안, 고객 데이터 기반 질문 응답. 마지막에 구축 — 차별성이 가장 낮음.</li>
+</ol>
+
+<div class="card crit" style="margin-top:16px">
+<p data-en><strong>The rule that keeps you out of trouble: automate the artifact, never the judgment.</strong> The data pull, the chart, the draft narrative, the review classification — all machine. The recommendation ("increase spend 40%", "kill the Japanese campaign", "your paywall copy is wrong") stays human-reviewed for a long time. That judgment is literally what the retainer buys, and it's also where the liability sits. An agent that autonomously raises a client's ad budget is an agent that autonomously creates a lawsuit.</p>
+<p data-ko><strong>사고를 막아주는 규칙: 산출물은 자동화하되, 판단은 절대 자동화하지 말 것.</strong> 데이터 수집, 차트, 서술 초안, 리뷰 분류 — 전부 기계. 권고("지출 40% 증액", "일본 캠페인 중단", "페이월 카피가 잘못됐다")는 오랫동안 사람이 검토. 그 판단이 말 그대로 리테이너가 사는 것이고, 동시에 책임이 있는 지점입니다. 고객 광고 예산을 자율적으로 올리는 에이전트는 소송을 자율적으로 만드는 에이전트입니다.</p>
+</div>
+</div>
+
+<!-- ============ 8. LEGAL / OPS ============ -->
+<div class="card">
+<h2 data-en>8 · Miyo Studio LLC — entity, insurance, ad spend</h2>
+<h2 data-ko>8 · Miyo Studio LLC — 법인, 보험, 광고비</h2>
+
+<h3 data-en>Can you just use it? Yes.</h3>
+<h3 data-ko>그냥 써도 되나? 됩니다.</h3>
+<p data-en>One LLC can carry multiple lines of business. Most operating agreements state "any lawful purpose," which covers services. Confirm that language in yours, and confirm your state registration doesn't restrict activity — but this is almost never a real blocker.</p>
+<p data-ko>하나의 LLC가 여러 사업 부문을 가질 수 있습니다. 대부분의 운영계약서에 "모든 합법적 목적"이라고 되어 있고, 서비스업이 포함됩니다. 본인 계약서의 해당 문구와 주 등록에 활동 제한이 없는지 확인하세요 — 다만 실제로 걸림돌이 되는 경우는 거의 없습니다.</p>
+
+<h3 data-en>What actually matters</h3>
+<h3 data-ko>실제로 중요한 것</h3>
+<ul>
+<li data-en><span class="tag red">Before client #1</span> <strong>Get General Liability + Professional Liability (E&amp;O) insurance.</strong> ~$500–1,200/yr. Selling a product carries almost no liability; giving advice that loses someone money carries real liability. This is the single most important difference between the app business and the agency business, and it's cheap to solve.</li>
+<li data-ko><span class="tag red">첫 고객 이전</span> <strong>일반배상책임 + 전문가배상책임(E&amp;O) 보험 가입.</strong> 연 $500~1,200. 제품 판매는 책임이 거의 없지만, 남의 돈을 잃게 하는 조언은 실제 책임이 따릅니다. 앱 사업과 에이전시 사업의 가장 큰 차이이고, 해결 비용은 쌉니다.</li>
+
+<li data-en><span class="tag red">Non-negotiable</span> <strong>Never front client ad spend.</strong> The client keeps their own Apple Search Ads account and their own card on it; you get admin access. Reasons: (a) no float risk — if a client ghosts you're not out $3,000 of Apple's money; (b) pass-through spend inflates your gross revenue and creates a bookkeeping and tax mess; (c) you never become the party Apple bills.</li>
+<li data-ko><span class="tag red">타협 불가</span> <strong>고객 광고비를 절대 대신 선지불하지 말 것.</strong> 고객이 자기 Apple Search Ads 계정과 자기 카드를 유지하고, 당신은 관리자 권한만 받습니다. 이유: (a) 자금 부담 위험 없음 — 고객이 잠수해도 Apple에 낸 $3,000을 날리지 않음, (b) 통과 지출이 총매출을 부풀려 회계·세무를 엉망으로 만듦, (c) Apple의 청구 대상이 되지 않음.</li>
+
+<li data-en><strong>Separate the P&amp;L.</strong> Same LLC is fine, but track agency revenue as a distinct class in your bookkeeping. You want to see agency margin independent of app revenue — and if you ever sell Jujube, tangled books complicate the sale.</li>
+<li data-ko><strong>손익을 분리하세요.</strong> 같은 LLC라도 회계상 에이전시 매출을 별도 계정으로 추적하세요. 앱 매출과 무관하게 에이전시 마진을 봐야 하고, 나중에 Jujube를 매각할 때 뒤엉킨 장부는 거래를 복잡하게 만듭니다.</li>
+
+<li data-en><strong>Contract template.</strong> One MSA + a one-page SOW per client. Must include: no performance guarantee, 30-day termination, client owns all accounts and data, liability capped at fees paid, IP in deliverables transfers on payment. Get one drafted once (~$800 with a lawyer, or a solid template) and reuse it forever.</li>
+<li data-ko><strong>계약서 템플릿.</strong> MSA 1개 + 고객당 1페이지 SOW. 반드시 포함: 성과 무보장, 30일 해지, 모든 계정·데이터는 고객 소유, 책임 한도는 지급된 수수료, 산출물 IP는 결제 시 이전. 한 번 작성해두고(변호사 약 $800, 또는 검증된 템플릿) 영구 재사용.</li>
+
+<li data-en><strong>A second entity is not needed now.</strong> If you later want a separate agency brand, file a DBA under Miyo Studio LLC. Don't spend a day on naming — "Miyo Studio" is a perfectly good agency name.</li>
+<li data-ko><strong>지금 별도 법인은 불필요.</strong> 나중에 별도 에이전시 브랜드를 원하면 Miyo Studio LLC 아래 DBA 등록. 네이밍에 하루도 쓰지 마세요 — "Miyo Studio"는 충분히 좋은 에이전시 이름입니다.</li>
+</ul>
+
+<div class="card good" style="margin-top:14px">
+<p data-en><strong>Verified, so you don't have to check:</strong> <code>miyostudiollc.com</code> is registered through GoDaddy until May 2029, DNS on GoDaddy nameservers, site served by GitHub Pages from <code>miyo-studio-llc/miyostudiollc.com</code> on branch <code>main</code>. Email is Microsoft 365 via GoDaddy, and the SPF chain (<code>secureserver.net</code> → <code>spf.protection.outlook.com</code>) is correctly configured — so <code>hello@miyostudiollc.com</code> can send cold outreach without failing SPF. That's one less thing to fix.</p>
+<p data-ko><strong>확인 완료 — 직접 안 봐도 됩니다:</strong> <code>miyostudiollc.com</code>은 GoDaddy로 2029년 5월까지 등록, DNS는 GoDaddy 네임서버, 사이트는 <code>miyo-studio-llc/miyostudiollc.com</code> 리포지토리 <code>main</code> 브랜치에서 GitHub Pages로 서빙. 이메일은 GoDaddy 경유 Microsoft 365이고, SPF 체인(<code>secureserver.net</code> → <code>spf.protection.outlook.com</code>)이 정상 설정되어 있습니다 — 즉 <code>hello@miyostudiollc.com</code>으로 콜드 아웃리치를 보내도 SPF에서 실패하지 않습니다. 고칠 게 하나 줄었습니다.</p>
+</div>
+</div>
+
+<!-- ============ 9. HIRING ============ -->
+<div class="card">
+<h2 data-en>9 · Hiring for localization</h2>
+<h2 data-ko>9 · 로컬라이제이션 인력</h2>
+
+<p data-en>Your instinct to hire Korean/Chinese help is right. The <em>timing</em> and <em>structure</em> need adjusting.</p>
+<p data-ko>한국어/중국어 인력을 쓰겠다는 판단은 맞습니다. <em>시점</em>과 <em>고용 구조</em>만 조정하면 됩니다.</p>
+
+<ul>
+<li data-en><strong>Contractors, not employees.</strong> W-2 hires at this stage are a cash trap — you'd be paying a salary against lumpy, unpredictable project revenue. Pay per locale pass: roughly <strong>$150–400 per app per locale</strong>. Your Tier 3 margin absorbs that comfortably.</li>
+<li data-ko><strong>직원이 아니라 계약직.</strong> 이 단계의 정규직 채용은 자금 함정입니다 — 들쭉날쭉한 프로젝트 매출에 고정 급여를 대는 셈. 로케일 패스 단위로 지불: 앱당 로케일당 <strong>약 $150~400</strong>. 티어 3 마진이 충분히 흡수합니다.</li>
+
+<li data-en><strong>Hire the <em>role</em>, not the language.</strong> You don't need a translator — translation is the cheap part and AI does a serviceable first pass. You need a <strong>native ASO reviewer</strong>: someone who can tell you what Korean users actually type into App Store search, whether your screenshot copy sounds like a machine, and whether your pricing display reads as insulting. That's a marketing skill in that language, not a translation skill.</li>
+<li data-ko><strong>언어가 아니라 <em>역할</em>을 채용하세요.</strong> 번역가가 필요한 게 아닙니다 — 번역은 싼 부분이고 AI가 1차 초안은 충분히 합니다. 필요한 건 <strong>네이티브 ASO 리뷰어</strong>입니다: 한국 사용자가 App Store 검색창에 실제로 뭘 치는지, 스크린샷 카피가 기계 번역처럼 들리는지, 가격 표기가 무례하게 읽히는지 말해줄 수 있는 사람. 그건 번역 기술이 아니라 해당 언어권의 마케팅 기술입니다.</li>
+
+<li data-en><strong>When to hire:</strong> when a locale has been booked <strong>3 consecutive months</strong>. Not before. Until then you personally cover Korean, and AI-first-pass + a one-off freelance reviewer covers Japanese and Chinese.</li>
+<li data-ko><strong>채용 시점:</strong> 해당 로케일이 <strong>3개월 연속</strong> 예약됐을 때. 그 전에는 안 됩니다. 그때까지 한국어는 본인이 직접, 일본어·중국어는 AI 1차 + 건별 프리랜스 리뷰어로 커버.</li>
+
+<li data-en><strong>Korean is free capacity — use it as the wedge.</strong> You cover it yourself at zero marginal cost, which means Tier 3 with KO only is nearly pure margin. Sell KO first, add JA/ZH once KO is proven and booked.</li>
+<li data-ko><strong>한국어는 무료 역량 — 쐐기로 쓰세요.</strong> 한계비용 0으로 본인이 커버하므로, KO만 포함한 티어 3은 거의 순수 마진입니다. KO를 먼저 팔고, KO가 검증·예약된 뒤 JA/ZH 추가.</li>
+</ul>
+</div>
+
+<!-- ============ 10. FIRST 10 CLIENTS ============ -->
+<div class="card">
+<h2 data-en>10 · Getting the first 10 clients</h2>
+<h2 data-ko>10 · 첫 10곳의 고객 확보</h2>
+
+<p data-en><strong>Yes, start reaching out this week.</strong> Do not wait for the website to be perfect — the website closes deals, it doesn't source them. But you need three assets first, and they take a day, not a month:</p>
+<p data-ko><strong>이번 주에 아웃리치 시작하세요.</strong> 웹사이트가 완벽해질 때까지 기다리지 마세요 — 웹사이트는 거래를 마무리하지, 발굴하지 않습니다. 다만 자산 3개가 먼저 필요하고, 한 달이 아니라 하루면 됩니다:</p>
+
+<ol>
+<li data-en><strong>A one-page offer</strong> — what it is, what you get, what it costs. Hosted HTML is fine.</li>
+<li data-ko><strong>1페이지 오퍼</strong> — 무엇인지, 무엇을 받는지, 얼마인지. 호스팅된 HTML이면 충분.</li>
+<li data-en><strong>A sample monthly report</strong> — built from Jujube's real data. <em>This is a bigger sales asset than the entire website.</em> When a dev sees the actual artifact they will buy or they won't, and either answer saves you weeks.</li>
+<li data-ko><strong>샘플 월간 리포트</strong> — Jujube 실제 데이터로 제작. <em>웹사이트 전체보다 큰 세일즈 자산입니다.</em> 개발자가 실물을 보면 사거나 안 사거나 결정하고, 어느 쪽이든 몇 주를 아껴줍니다.</li>
+<li data-en><strong>A free teardown template</strong> — the outreach hook, below.</li>
+<li data-ko><strong>무료 티어다운 템플릿</strong> — 아래의 아웃리치 후크.</li>
+</ol>
+
+<h3 data-en>The outreach method that works here</h3>
+<h3 data-ko>여기서 통하는 아웃리치 방법</h3>
+<p data-en><strong>Don't pitch. Do the work first, unasked, and send it.</strong> Pick a specific app, spend 30 minutes (or 5 with your tooling), and send a short teardown: three keywords they're missing, one thing wrong with their screenshots, and one specific localization problem in a market they've ignored. No ask, no calendar link in the first message. Then: <em>"Happy to send the full version if useful."</em></p>
+<p data-ko><strong>피치하지 말고, 요청받기 전에 먼저 일을 해서 보내세요.</strong> 특정 앱을 골라 30분(당신 도구로는 5분) 투자해 짧은 티어다운을 보냅니다: 놓치고 있는 키워드 3개, 스크린샷의 문제 1개, 무시하고 있는 시장의 구체적 로컬라이제이션 문제 1개. 첫 메시지에는 요청도, 캘린더 링크도 없이. 그다음: <em>"유용하시면 전체 버전 보내드릴게요."</em></p>
+<p data-en>This converts far better than any cold pitch with this audience, because it proves competence instead of claiming it — and indie devs have infinite tolerance for someone who is obviously good at the thing and zero tolerance for a sales email.</p>
+<p data-ko>이 청중에게는 어떤 콜드 피치보다 전환이 훨씬 좋습니다. 역량을 주장하는 대신 증명하니까요 — 인디 개발자는 명백히 실력 있는 사람에게는 무한한 인내심을, 세일즈 이메일에는 인내심 0을 갖고 있습니다.</p>
+
+<h3 data-en>Where to find them</h3>
+<h3 data-ko>어디서 찾나</h3>
+<ul>
+<li data-en><strong>Your unfair advantage:</strong> Korean and Japanese indie dev communities. You can read them; your US competitors cannot. Korean dev forums, Japanese indie hacker circles, and KO/JA devs who want to <em>enter the US market</em> — that's the same service running in reverse and nobody is selling it to them either.</li>
+<li data-ko><strong>당신만의 비대칭 우위:</strong> 한국·일본 인디 개발자 커뮤니티. 당신은 읽을 수 있고 미국 경쟁사는 못 읽습니다. 한국 개발자 포럼, 일본 인디 해커 서클, 그리고 <em>미국 시장 진출</em>을 원하는 KO/JA 개발자 — 같은 서비스의 역방향이고, 그들에게 파는 사람도 아무도 없습니다.</li>
+<li data-en>r/iosdev, r/apple_dev, r/SideProject — participate for two weeks before you ever mention what you sell</li>
+<li data-ko>r/iosdev, r/apple_dev, r/SideProject — 판매 얘기를 꺼내기 전 2주간 순수 참여</li>
+<li data-en>Indie Hackers, X indie dev community</li>
+<li data-ko>Indie Hackers, X 인디 개발자 커뮤니티</li>
+<li data-en><strong>Product Hunt launches</strong> — apps that just launched have budget and urgency at the same moment. Highest-intent list available.</li>
+<li data-ko><strong>Product Hunt 런칭</strong> — 막 출시한 앱은 예산과 절박함이 동시에 있습니다. 확보 가능한 가장 높은 의도의 리스트.</li>
+<li data-en>App Store "New Apps We Love" and category new-release charts</li>
+<li data-ko>App Store "New Apps We Love" 및 카테고리 신규 출시 차트</li>
+</ul>
+
+<p data-en><strong>Target: 5 free teardowns per week.</strong> Expect roughly 1 in 5 to reply, 1 in 4 repliers to buy the $450 audit, and 1 in 3 audit buyers to convert to retainer. That math gets you to 10 clients in about four months of consistent effort — and the teardowns double as the training data for pipeline #4.</p>
+<p data-ko><strong>목표: 주당 무료 티어다운 5건.</strong> 대략 5건 중 1건 회신, 회신자 4명 중 1명이 $450 감사 구매, 감사 구매자 3명 중 1명이 리테이너 전환. 이 계산이면 꾸준히 4개월 정도에 고객 10곳 — 그리고 티어다운은 파이프라인 4번의 학습 데이터 역할도 합니다.</p>
+</div>
+
+<!-- ============ 11. INTAKE ============ -->
+<div class="card">
+<h2 data-en>11 · Intake &amp; onboarding — build the form, not the product</h2>
+<h2 data-ko>11 · 인테이크와 온보딩 — 제품이 아니라 폼을 만드세요</h2>
+
+<p data-en>Your instinct that this is "maybe a later step" is <strong>half right</strong>. You need the <em>form</em> on day one. You need the <em>product</em> much, much later. Building custom onboarding software before you have three clients is the single most common way technical founders avoid selling. Use Tally or Google Forms → Google Sheet → you read it. Twenty minutes.</p>
+<p data-ko>"나중 단계일 수도"라는 직감은 <strong>반은 맞습니다</strong>. <em>폼</em>은 첫날 필요합니다. <em>제품</em>은 훨씬 훨씬 나중입니다. 고객 3곳도 없이 커스텀 온보딩 소프트웨어를 만드는 건, 기술 창업자가 영업을 회피하는 가장 흔한 방법입니다. Tally나 Google Forms → Google Sheet → 직접 읽기. 20분이면 됩니다.</p>
+
+<h3 data-en>The intake form — actual questions</h3>
+<h3 data-ko>인테이크 폼 — 실제 질문</h3>
+<ol>
+<li data-en>App Store link</li>
+<li data-ko>App Store 링크</li>
+<li data-en>Current MRR range (&lt;$1k / $1–5k / $5–20k / $20k+) — <em>qualifies whether they can afford you</em></li>
+<li data-ko>현재 MRR 구간 (&lt;$1k / $1~5k / $5~20k / $20k+) — <em>지불 능력 자격 심사</em></li>
+<li data-en><strong>Monthly budget available for ad spend, separate from our fee</strong> — <em>the hard gate. Below $1,000/mo, sell them Tier 1 only.</em></li>
+<li data-ko><strong>저희 수수료와 별도로, 광고비로 쓸 수 있는 월 예산</strong> — <em>결정적 관문. 월 $1,000 미만이면 티어 1만 판매.</em></li>
+<li data-en>Which markets matter to you? (US / KR / JP / TW / EU / other)</li>
+<li data-ko>어느 시장이 중요합니까? (US / KR / JP / TW / EU / 기타)</li>
+<li data-en>Which languages is your app currently localized into?</li>
+<li data-ko>현재 앱이 로컬라이즈된 언어는?</li>
+<li data-en>Are you already running Apple Search Ads? If yes, roughly what CPI?</li>
+<li data-ko>Apple Search Ads를 이미 집행 중입니까? 그렇다면 대략 CPI는?</li>
+<li data-en>What have you already tried for growth, and what happened?</li>
+<li data-ko>그로스를 위해 이미 시도한 것과 그 결과는?</li>
+<li data-en>What does success look like in 90 days? — <em>the most important question; it surfaces unrealistic expectations before you sign</em></li>
+<li data-ko>90일 후 성공은 어떤 모습입니까? — <em>가장 중요한 질문. 계약 전에 비현실적 기대를 드러냅니다</em></li>
+<li data-en>Who makes the final decision on metadata and pricing changes?</li>
+<li data-ko>메타데이터와 가격 변경의 최종 결정권자는 누구입니까?</li>
+<li data-en>Can you grant App Store Connect and Apple Search Ads access? — <em>a "no" here kills the engagement, so ask before the call</em></li>
+<li data-ko>App Store Connect 및 Apple Search Ads 접근 권한을 부여할 수 있습니까? — <em>여기서 "아니오"면 계약이 무산되므로 통화 전에 물어볼 것</em></li>
+</ol>
+
+<h3 data-en>Onboarding checklist (first 7 days of any engagement)</h3>
+<h3 data-ko>온보딩 체크리스트 (모든 계약의 첫 7일)</h3>
+<ul>
+<li data-en>App Store Connect access (Marketing or Developer role) + Apple Search Ads access</li>
+<li data-ko>App Store Connect 권한(Marketing 또는 Developer) + Apple Search Ads 권한</li>
+<li data-en>Baseline snapshot — <strong>capture every metric on day one.</strong> If you don't have a clean baseline you can never prove you did anything, and in month 4 the client will genuinely not remember where they started.</li>
+<li data-ko>베이스라인 스냅샷 — <strong>첫날 모든 지표를 캡처.</strong> 깨끗한 베이스라인이 없으면 성과를 절대 증명할 수 없고, 4개월 차에 고객은 진심으로 출발점을 기억하지 못합니다.</li>
+<li data-en>Competitor set agreed with the client, in writing</li>
+<li data-ko>경쟁사 세트를 고객과 서면 합의</li>
+<li data-en>Analytics report requests created (they take 24–48h to populate — start on day one, not week two)</li>
+<li data-ko>Analytics 리포트 요청 생성(데이터 채워지는 데 24~48시간 — 2주 차가 아니라 첫날 시작)</li>
+<li data-en>Kickoff call: confirm the 90-day success definition and <strong>say out loud that ASO takes 6–10 weeks to move</strong></li>
+<li data-ko>킥오프 통화: 90일 성공 정의 확인 및 <strong>ASO는 6~10주 걸린다고 명시적으로 말하기</strong></li>
+</ul>
+</div>
+
+<!-- ============ 12. WEBSITE ============ -->
+<div class="card">
+<h2 data-en>12 · miyostudiollc.com — audit &amp; rebuild plan</h2>
+<h2 data-ko>12 · miyostudiollc.com — 현황 감사 및 재구축 계획</h2>
+
+<h3 data-en>Current state (verified today)</h3>
+<h3 data-ko>현재 상태 (오늘 확인)</h3>
+<ul>
+<li data-en>Live and healthy: HTTP 200, GitHub Pages, repo <code>miyo-studio-llc/miyostudiollc.com</code>, branch <code>main</code>, single 22KB <code>index.html</code>, no build step, no deploy workflow</li>
+<li data-ko>정상 서빙: HTTP 200, GitHub Pages, 리포지토리 <code>miyo-studio-llc/miyostudiollc.com</code>, <code>main</code> 브랜치, 22KB짜리 <code>index.html</code> 하나, 빌드 단계 없음, 배포 워크플로 없음</li>
+<li data-en><span class="tag red">Critical</span> <strong>Last updated May 9–10, 2026 — 114 days ago. It says "Fridgenie" six times and "Jujube" zero times.</strong> Your LLC's public website advertises a brand that stopped existing on July 21.</li>
+<li data-ko><span class="tag red">치명적</span> <strong>마지막 업데이트 2026년 5월 9~10일 — 114일 전. "Fridgenie" 6회, "Jujube" 0회 언급.</strong> 법인의 공개 웹사이트가 7월 21일에 사라진 브랜드를 광고하고 있습니다.</li>
+<li data-en><span class="tag red">Critical</span> The product CTA links to <code>href="#"</code> — <strong>there is no App Store link anywhere on the site</strong>, even though the app is live and rated 5.0.</li>
+<li data-ko><span class="tag red">치명적</span> 제품 CTA가 <code>href="#"</code>로 연결 — <strong>사이트 어디에도 App Store 링크가 없습니다</strong>. 앱이 출시되어 평점 5.0인데도요.</li>
+<li data-en>No services, no pricing, no case study, no contact form. Positioned purely as a product studio.</li>
+<li data-ko>서비스, 가격, 사례, 문의 폼 없음. 순수하게 제품 스튜디오로만 포지셔닝됨.</li>
+<li data-en>The writing itself is good — the "small studio, make useful things, waste less" story is genuine and differentiating. <strong>Keep the voice, change the job.</strong></li>
+<li data-ko>글 자체는 좋습니다 — "작은 스튜디오, 쓸모 있는 것 만들기, 덜 버리기" 스토리는 진정성 있고 차별화됩니다. <strong>목소리는 유지하고, 역할만 바꾸세요.</strong></li>
+</ul>
+
+<h3 data-en>The strategic decision: agency-forward, product as proof</h3>
+<h3 data-ko>전략적 결정: 에이전시를 전면에, 제품은 증거로</h3>
+<p data-en>The product isn't making money; the agency is the revenue plan. So the homepage sells the agency, and Jujube appears as evidence that you're an operator rather than a marketer. That framing — <em>"we're devs who ship, not marketers who pitch"</em> — is exactly what makes an indie dev trust you.</p>
+<p data-ko>제품은 돈을 못 벌고 있고, 매출 계획은 에이전시입니다. 그러니 홈페이지는 에이전시를 팔고, Jujube는 당신이 마케터가 아니라 운영자라는 증거로 등장합니다. 그 프레이밍 — <em>"저희는 피치하는 마케터가 아니라 출시하는 개발자입니다"</em> — 이 인디 개발자의 신뢰를 얻는 정확한 지점입니다.</p>
+
+<h3 data-en>Target structure</h3>
+<h3 data-ko>목표 구조</h3>
+<ul>
+<li data-en><code>/</code> — <strong>Agency home.</strong> Hero: "We get indie apps found — in English, Korean, Japanese, and Chinese." Then: the problem, the three tiers with prices, proof strip, CTA to request a free teardown.</li>
+<li data-ko><code>/</code> — <strong>에이전시 홈.</strong> 히어로: "인디 앱을 발견되게 만듭니다 — 영어, 한국어, 일본어, 중국어로." 이어서: 문제 정의, 가격이 표시된 3개 티어, 신뢰 요소, 무료 티어다운 요청 CTA.</li>
+<li data-en><code>/work/jujube</code> — <strong>the case study.</strong> Real numbers including the failures. The four stories from §3.</li>
+<li data-ko><code>/work/jujube</code> — <strong>사례 연구.</strong> 실패 포함 실제 수치. §3의 네 가지 스토리.</li>
+<li data-en><code>/report</code> — <strong>a redacted real monthly report. The most important page on the site.</strong> Most prospects will decide here.</li>
+<li data-ko><code>/report</code> — <strong>비식별 처리된 실제 월간 리포트. 사이트에서 가장 중요한 페이지.</strong> 대부분의 잠재고객이 여기서 결정합니다.</li>
+<li data-en><code>/audit</code> — free teardown request + the $450 paid audit. Tally embed, no custom build.</li>
+<li data-ko><code>/audit</code> — 무료 티어다운 요청 + $450 유료 감사. Tally 임베드, 커스텀 개발 없음.</li>
+<li data-en><code>/about</code> — keep the existing story, add the operator angle</li>
+<li data-ko><code>/about</code> — 기존 스토리 유지, 운영자 관점 추가</li>
+</ul>
+
+<h3 data-en>Build notes</h3>
+<h3 data-ko>구축 노트</h3>
+<ul>
+<li data-en><strong>Add the EN / 한국어 toggle.</strong> On this site it's not just a nicety — it <em>is</em> the localization proof. An agency selling Korean ASO with an English-only site is not credible.</li>
+<li data-ko><strong>EN / 한국어 토글 추가.</strong> 이 사이트에서는 단순한 배려가 아니라 로컬라이제이션 <em>증거 그 자체</em>입니다. 한국어 ASO를 파는 에이전시의 사이트가 영어뿐이면 신뢰가 안 됩니다.</li>
+<li data-en>Stay static on GitHub Pages, same repo, same simple setup. Do not introduce a framework.</li>
+<li data-ko>GitHub Pages 정적 유지, 같은 리포지토리, 같은 단순 구성. 프레임워크 도입 금지.</li>
+<li data-en>Fix the Fridgenie → Jujube rename and wire the real App Store link on day one — that part is a 20-minute fix and it's embarrassing while it's live.</li>
+<li data-ko>Fridgenie → Jujube 이름 수정과 실제 App Store 링크 연결은 첫날에 — 20분이면 되고, 방치하면 창피한 부분입니다.</li>
+<li data-en>Add <code>hello@miyostudiollc.com</code> prominently. It works, and SPF is correctly configured for cold outreach.</li>
+<li data-ko><code>hello@miyostudiollc.com</code>을 눈에 띄게 배치. 작동하고, 콜드 아웃리치용 SPF도 정상 설정되어 있습니다.</li>
+</ul>
+</div>
+
+<!-- ============ 13. ROADMAP ============ -->
+<div class="card">
+<h2 data-en>13 · 90-day roadmap</h2>
+<h2 data-ko>13 · 90일 로드맵</h2>
+
+<h3 data-en>Week 1 — stop the bleeding, start selling</h3>
+<h3 data-ko>1주차 — 출혈 막고, 판매 시작</h3>
+<ul>
+<li data-en>Fix Fridgenie → Jujube on the live site, add the App Store link (20 min)</li>
+<li data-ko>라이브 사이트 Fridgenie → Jujube 수정, App Store 링크 추가 (20분)</li>
+<li data-en><strong>Check the ASC analytics instances on Sept 2</strong> and measure whether the v5 screenshots moved 3.6%</li>
+<li data-ko><strong>9월 2일 ASC 분석 인스턴스 확인</strong> — v5 스크린샷이 3.6%를 움직였는지 측정</li>
+<li data-en>Build the sample monthly report from Jujube data</li>
+<li data-ko>Jujube 데이터로 샘플 월간 리포트 제작</li>
+<li data-en>Write the teardown template</li>
+<li data-ko>티어다운 템플릿 작성</li>
+<li data-en>Send the first 5 free teardowns</li>
+<li data-ko>첫 무료 티어다운 5건 발송</li>
+</ul>
+
+<h3 data-en>Weeks 2–4 — offer live, outreach running</h3>
+<h3 data-ko>2~4주차 — 오퍼 공개, 아웃리치 가동</h3>
+<ul>
+<li data-en>Rebuild miyostudiollc.com as agency-forward with published pricing and the EN/KO toggle</li>
+<li data-ko>miyostudiollc.com을 에이전시 중심으로 재구축, 가격 공개 및 EN/KO 토글</li>
+<li data-en>Tally intake form live</li>
+<li data-ko>Tally 인테이크 폼 오픈</li>
+<li data-en>E&amp;O insurance bound; MSA + SOW template drafted</li>
+<li data-ko>E&amp;O 보험 가입 완료, MSA + SOW 템플릿 작성</li>
+<li data-en>5 teardowns/week, every week</li>
+<li data-ko>매주 티어다운 5건</li>
+<li data-en><strong>Goal: 2 paid audits</strong></li>
+<li data-ko><strong>목표: 유료 감사 2건</strong></li>
+</ul>
+
+<h3 data-en>Days 30–60 — first retainers</h3>
+<h3 data-ko>30~60일 — 첫 리테이너</h3>
+<ul>
+<li data-en><strong>Goal: 3 retainer clients</strong></li>
+<li data-ko><strong>목표: 리테이너 고객 3곳</strong></li>
+<li data-en>Run everything manually and take notes on what repeats — the repeats are the spec for the pipeline</li>
+<li data-ko>전부 수동으로 운영하면서 반복되는 작업을 기록 — 반복이 곧 파이프라인 명세</li>
+<li data-en>Publish the Jujube case study with real numbers</li>
+<li data-ko>실제 수치를 담은 Jujube 사례 연구 공개</li>
+<li data-en>Generalize the ASC ingest from "Jujube" to "client_id"</li>
+<li data-ko>ASC 데이터 수집을 "Jujube"에서 "client_id"로 일반화</li>
+</ul>
+
+<h3 data-en>Days 60–90 — productize before you drown</h3>
+<h3 data-ko>60~90일 — 익사하기 전에 제품화</h3>
+<ul>
+<li data-en><strong>Goal: 5–6 retainer clients, ~$9k MRR</strong></li>
+<li data-ko><strong>목표: 리테이너 고객 5~6곳, MRR 약 $9,000</strong></li>
+<li data-en>Build pipelines 1 and 2 (ingest + report generator) — <strong>this is the client-5 trigger, don't wait for 10</strong></li>
+<li data-ko>파이프라인 1·2 구축(수집 + 리포트 생성기) — <strong>이게 고객 5곳 트리거. 10곳까지 기다리지 말 것</strong></li>
+<li data-en>Build pipeline 3 (review triage) — best value per hour of build</li>
+<li data-ko>파이프라인 3 구축(리뷰 분류) — 구축 시간 대비 가치 최고</li>
+<li data-en>First Japanese or Chinese contractor reviewer, if a locale has booked 3 months straight</li>
+<li data-ko>로케일이 3개월 연속 예약됐다면 첫 일본어 또는 중국어 계약 리뷰어 섭외</li>
+</ul>
+</div>
+
+<!-- ============ 14. RISKS ============ -->
+<div class="card">
+<h2 data-en>14 · What kills this</h2>
+<h2 data-ko>14 · 이 사업을 죽이는 것들</h2>
+<ul>
+<li data-en><strong>Building the system before you have clients.</strong> The most likely failure mode for you specifically, because building is more comfortable than selling. The pipeline built for imaginary clients will be wrong. <strong>Sell first, and let real pain specify the software.</strong></li>
+<li data-ko><strong>고객도 없이 시스템부터 만드는 것.</strong> 당신에게 가장 가능성 높은 실패 경로입니다. 개발이 영업보다 편하니까요. 가상의 고객을 위해 만든 파이프라인은 틀립니다. <strong>먼저 팔고, 진짜 고통이 소프트웨어 명세를 쓰게 하세요.</strong></li>
+<li data-en><strong>Taking clients whose product is the problem.</strong> No amount of ASO fixes an app people don't want. You'll burn three months and get blamed. Qualify hard, decline freely.</li>
+<li data-ko><strong>제품 자체가 문제인 고객을 받는 것.</strong> 사람들이 원하지 않는 앱은 어떤 ASO로도 못 고칩니다. 3개월 태우고 욕먹습니다. 자격 심사를 엄격히, 거절은 자유롭게.</li>
+<li data-en><strong>Guaranteeing rankings.</strong> Never. Not once, not verbally, not "informally on a call."</li>
+<li data-ko><strong>순위 보장.</strong> 절대 금지. 한 번도, 구두로도, "통화 중 비공식적으로"도 안 됩니다.</li>
+<li data-en><strong>Fronting ad spend.</strong> One ghosting client and you're out thousands with no recourse.</li>
+<li data-ko><strong>광고비 대납.</strong> 잠수 고객 한 명이면 수천 달러를 회수 수단 없이 날립니다.</li>
+<li data-en><strong>Letting Jujube die while you sell.</strong> It's your entire credibility. If the showcase app goes stale, the pitch goes with it. Budget real time for it.</li>
+<li data-ko><strong>영업하는 동안 Jujube를 방치하는 것.</strong> 신뢰도의 전부입니다. 쇼케이스 앱이 방치되면 피치도 같이 죽습니다. 실질적 시간을 배정하세요.</li>
+<li data-en><strong>Apple changing the rules.</strong> ASA and ASO are entirely dependent on one platform. Real risk, no mitigation at your size other than knowing it's there. Diversify into Play only after iOS is working.</li>
+<li data-ko><strong>Apple의 규칙 변경.</strong> ASA와 ASO는 전적으로 한 플랫폼에 의존합니다. 실재하는 위험이고, 현재 규모에서는 인지하는 것 외에 완화책이 없습니다. iOS가 굴러간 뒤에야 Play로 다각화하세요.</li>
+</ul>
+</div>
+
+<div class="footer">
+<p data-en>Miyo Studio LLC · Business model &amp; launch plan · September 1, 2026</p>
+<p data-ko>Miyo Studio LLC · 비즈니스 모델 및 런칭 계획 · 2026년 9월 1일</p>
+</div>
+
+</div>
+</div>
+
+<script>
+function checkPin(){var p=document.getElementById('pinInput').value;if(btoa(p)==='MDQxMQ=='){document.getElementById('pinOverlay').style.display='none';document.getElementById('mainContent').style.display='block';document.getElementById('mainContent').classList.remove('content-locked');}else{document.getElementById('pinErr').style.display='block';document.getElementById('pinInput').value='';}}
+document.getElementById('pinInput').addEventListener('keyup',function(e){if(e.key==='Enter')checkPin();});
+</script>
+</body>
+</html>
