@@ -1,0 +1,23 @@
+Good morning — it's Tuesday, April 21st, 2026. Here's your daily tech briefing.
+
+Starting with AI and tech. Yelp just gave its AI assistant a big upgrade. You can now ask questions and then book a table, place an order, or schedule a service — all in one conversation. It's the shift from chatbots that summarize to assistants that actually get things done.
+
+Google expanded Gemini inside Chrome to seven more countries, including South Korea, Japan, Australia, and Singapore. It's now a default browsing companion across desktop and iOS in most of those markets.
+
+In a big leadership move, Apple named hardware chief John Ternus as its next CEO. Tim Cook is stepping into an executive chairman role. Analysts see this as Apple returning to product-led leadership.
+
+And Google Photos added AI-powered touch-up tools — blemish removal, skin refinement, eye brightening, teeth whitening. Lightweight generative editing is becoming a standard consumer feature.
+
+In markets. Amazon is investing another five billion dollars into Anthropic, and in return, Anthropic has committed to spend a hundred billion on AWS over time. Frontier AI and cloud infrastructure economics are now deeply intertwined.
+
+SpaceX IPO buzz is heating up. The Verge frames it as a potential trillion-dollar bet tied to Starship, satellite economics, and commercial space stations. If it goes public, it could be one of the defining offerings of the decade.
+
+In semiconductors. Eighty chip startups raised a combined eight-point-four billion dollars in Q1, led by AI inference silicon, EDA automation, and advanced packaging. Capital is still aggressively chasing hardware bottlenecks.
+
+Cerebras filed for an IPO after roughly twenty-x revenue growth, but flagged customer concentration and ongoing losses. It's a real test case for AI chip companies going public.
+
+And two wild cards to close. Blue Energy raised three hundred eighty million dollars to build nuclear reactors in shipyards — serial production instead of custom on-site construction. The idea is to bring factory economics to nuclear power.
+
+Finally, US lawmakers are split over Section 702 surveillance powers ahead of the law's expiry. It's a policy fight that could reshape privacy, security, and government access to digital data.
+
+That's your Tuesday briefing. Have a great day.

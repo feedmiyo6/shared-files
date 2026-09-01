@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>Miyo Studio — Teardown playbook</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#127807;</text></svg>">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--s50:#FAFAF9;--s100:#F5F5F4;--s200:#E7E5E4;--s300:#D6D3D1;--s400:#A8A29E;--s500:#78716C;--s600:#57534E;--s700:#44403C;--s800:#292524;--s900:#1C1917;
+--sg50:#F6F7F5;--sg100:#E8EBE5;--sg200:#D4DACE;--sg500:#6B7D5C;--sg600:#556A45;--sg700:#3F5232;--w50:#FEF9F3;--w100:#FCEEDD;--tr:#B8704A;--trd:#8A4E28;--red:#9F3D26;--redbg:#FBEDE8}
+html{font-size:16px;-webkit-font-smoothing:antialiased;scroll-behavior:smooth}
+body{font-family:system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif;color:var(--s800);background:var(--s100);line-height:1.65;padding:20px 12px 80px}
+.page{max-width:820px;margin:0 auto;background:#fff;border-radius:16px;box-shadow:0 3px 26px -8px rgba(28,25,23,.14);overflow:hidden}
+.hd{background:linear-gradient(155deg,var(--sg700),var(--sg500));color:#fff;padding:38px 34px 32px;position:relative}
+.hd .eyebrow{font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:var(--sg200);font-weight:700;margin-bottom:.7rem}
+.hd h1{font-size:1.72rem;line-height:1.25;font-weight:800;letter-spacing:-.02em}
+.hd p{margin-top:.85rem;color:#E4EAE0;font-size:.97rem;max-width:56ch}
+.lang{position:absolute;top:18px;right:18px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.32);color:#fff;padding:.4rem .85rem;border-radius:999px;font-size:.8rem;font-weight:600;cursor:pointer;font-family:inherit}
+.lang:hover{background:rgba(255,255,255,.24)}
+.bd{padding:34px 34px 44px}
+h2{font-size:1.16rem;font-weight:800;color:var(--s900);margin:2.4rem 0 .5rem;letter-spacing:-.01em;padding-top:1.5rem;border-top:1px solid var(--s200)}
+h2:first-of-type,h2.nb{border-top:none;padding-top:0;margin-top:0}
+h3{font-size:.98rem;font-weight:750;color:var(--s900);margin:1.5rem 0 .35rem}
+p{margin:.6rem 0;color:var(--s700);font-size:.95rem}
+ul,ol{margin:.6rem 0 .6rem 1.15rem;color:var(--s700);font-size:.95rem}
+li{margin:.34rem 0}
+strong{color:var(--s900);font-weight:700}
+em{color:var(--sg700);font-style:normal;font-weight:650}
+code{background:var(--s100);border:1px solid var(--s200);border-radius:5px;padding:.08rem .34rem;font-size:.86em;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--trd)}
+.box{background:var(--sg50);border:1px solid var(--sg200);border-radius:11px;padding:1rem 1.15rem;margin:1rem 0}
+.box.warn{background:var(--redbg);border-color:#EBC9BC}
+.box.warn strong{color:var(--red)}
+.box.warm{background:var(--w50);border-color:var(--w100)}
+.box p:first-child{margin-top:0}.box p:last-child{margin-bottom:0}
+.tag{display:inline-block;font-size:.68rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;padding:.2rem .5rem;border-radius:5px;background:var(--sg100);color:var(--sg700);margin-bottom:.5rem}
+.tag.r{background:var(--redbg);color:var(--red)}
+.tag.t{background:var(--w100);color:var(--trd)}
+table{width:100%;border-collapse:collapse;margin:1rem 0;font-size:.88rem}
+th{text-align:left;background:var(--s50);color:var(--s600);font-weight:700;font-size:.74rem;letter-spacing:.06em;text-transform:uppercase;padding:.5rem .6rem;border-bottom:2px solid var(--s200)}
+td{padding:.55rem .6rem;border-bottom:1px solid var(--s200);vertical-align:top;color:var(--s700)}
+td strong{color:var(--s900)}
+.step{display:flex;gap:.95rem;margin:1.2rem 0;align-items:flex-start}
+.step .n{flex:0 0 30px;height:30px;border-radius:50%;background:var(--sg600);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.85rem;margin-top:.1rem}
+.step .c{flex:1}
+.step .c h3{margin-top:0}
+.chk{list-style:none;margin-left:0}
+.chk li{padding-left:1.6rem;position:relative}
+.chk li::before{content:"☐";position:absolute;left:0;color:var(--sg500);font-size:1rem}
+.no{list-style:none;margin-left:0}
+.no li{padding-left:1.6rem;position:relative}
+.no li::before{content:"✕";position:absolute;left:.15rem;color:var(--red);font-weight:800;font-size:.85rem;top:.15rem}
+pre{background:var(--s900);color:#E7E5E4;border-radius:10px;padding:1rem 1.1rem;overflow-x:auto;font-size:.82rem;line-height:1.6;margin:.9rem 0;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;white-space:pre-wrap}
+pre .k{color:var(--sg200);font-weight:700}
+.ft{padding:22px 34px 30px;background:var(--s50);border-top:1px solid var(--s200);color:var(--s500);font-size:.82rem}
+.toc{background:var(--s50);border:1px solid var(--s200);border-radius:11px;padding:1rem 1.15rem;margin:0 0 1.6rem}
+.toc ol{margin:.3rem 0 0 1.1rem;font-size:.9rem}
+.toc a{color:var(--sg700);text-decoration:none;font-weight:600}
+.toc a:hover{text-decoration:underline}
+body [data-ko]{display:none}
+body.ko [data-en]{display:none}
+body.ko [data-ko]{display:block}
+body.ko li[data-ko]{display:list-item}
+body.ko span[data-ko],body.ko em[data-ko],body.ko strong[data-ko],body.ko code[data-ko],body.ko a[data-ko]{display:inline}
+body.ko td[data-ko],body.ko th[data-ko]{display:table-cell}
+body.ko .toc a[data-ko]{display:inline}
+body.ko h1[data-ko],body.ko h2[data-ko],body.ko h3[data-ko],body.ko p[data-ko],body.ko div[data-ko],body.ko ul[data-ko],body.ko ol[data-ko],body.ko pre[data-ko]{display:block}
+@media(max-width:600px){.bd,.hd,.ft{padding-left:20px;padding-right:20px}.hd h1{font-size:1.4rem}table{font-size:.8rem}}
+@media print{body{background:#fff;padding:0}.page{box-shadow:none}.lang{display:none}}
+</style>
+</head>
+<body>
+<div class="page">
+<div class="hd">
+<button class="lang" onclick="tg(this)">&#54620;&#44397;&#50612;</button>
+<div class="eyebrow" data-en>Miyo Studio · Internal operating manual</div><div class="eyebrow" data-ko>Miyo Studio · 내부 운영 매뉴얼</div>
+<h1 data-en>How to run a teardown</h1><h1 data-ko>티어다운 운영 매뉴얼</h1>
+<p data-en>The free one-page diagnosis that is the entire top of the funnel. Five a week, thirty minutes each, sent cold. This is the operating manual for the one activity that actually produces clients.</p><p data-ko>퍼널 최상단 전체를 담당하는 무료 한 장짜리 진단. 주 5건, 건당 30분, 콜드 발송. 실제로 고객을 만드는 유일한 활동에 대한 운영 매뉴얼입니다.</p>
+</div>
+<div class="bd">
+
+<div class="toc">
+<strong data-en>What's in here</strong><strong data-ko>목차</strong>
+<ol>
+<li><a href="#p1" data-en>What a teardown is — and what it is not</a><a href="#p1" data-ko>티어다운이란 무엇이고, 무엇이 아닌가</a></li>
+<li><a href="#p2" data-en>Who to send it to (and who to refuse)</a><a href="#p2" data-ko>누구에게 보낼 것인가 (그리고 누구를 거절할 것인가)</a></li>
+<li><a href="#p3" data-en>The intake form — the strategic version</a><a href="#p3" data-ko>인테이크 폼 — 전략 버전</a></li>
+<li><a href="#p4" data-en>The 30-minute process, step by step</a><a href="#p4" data-ko>30분 프로세스, 단계별로</a></li>
+<li><a href="#p5" data-en>What goes in the document</a><a href="#p5" data-ko>문서에 무엇을 담는가</a></li>
+<li><a href="#p6" data-en>The email that carries it</a><a href="#p6" data-ko>함께 보내는 이메일</a></li>
+<li><a href="#p7" data-en>Follow-up, and turning it into money</a><a href="#p7" data-ko>후속 연락, 그리고 수익으로 전환</a></li>
+<li><a href="#p8" data-en>What not to do</a><a href="#p8" data-ko>하지 말아야 할 것</a></li>
+<li><a href="#p9" data-en>Tracking and the weekly rhythm</a><a href="#p9" data-ko>기록과 주간 리듬</a></li>
+</ol>
+</div>
+
+<h2 id="p1" class="nb" data-en>1. What a teardown is — and what it is not</h2><h2 id="p1" class="nb" data-ko>1. 티어다운이란 무엇이고, 무엇이 아닌가</h2>
+
+<p data-en>A teardown is a <strong>free, unrequested, 30-minute written diagnosis of one specific app</strong>, sent cold by email. It is one page. It names two or three concrete problems, shows the evidence for one of them, and stops before solving anything.</p>
+<p data-ko>티어다운은 <strong>특정 앱 하나를 30분 안에 진단해 무료로, 요청 없이, 이메일로 보내는 한 장짜리 문서</strong>입니다. 구체적인 문제 두세 개를 짚고, 그중 하나는 근거를 보여주고, 해결하기 직전에 멈춥니다.</p>
+
+<div class="box">
+<p data-en><strong>The whole point:</strong> a stranger reads it and thinks <em>"this person already looked at my app and found something I didn't know."</em> That is the entire sale. Nothing else you write in the first email will do that.</p>
+<p data-ko><strong>핵심은 이겁니다:</strong> 모르는 사람이 읽고 <em>"이 사람은 이미 내 앱을 봤고, 내가 몰랐던 걸 찾아냈다"</em>고 생각하게 만드는 것. 그게 전부입니다. 첫 메일에 쓰는 다른 어떤 문장도 이걸 대신할 수 없습니다.</p>
+</div>
+
+<h3 data-en>It is not:</h3><h3 data-ko>이런 건 아닙니다:</h3>
+<ul class="no">
+<li data-en><strong>Not a full audit.</strong> The paid $450 audit is 15+ pages, keyword tables, competitor gap maps, a ranked action list. The teardown is one page and deliberately incomplete.</li>
+<li data-ko><strong>전체 감사가 아닙니다.</strong> 유료 $450 감사는 15페이지 이상에 키워드 표, 경쟁사 갭 분석, 우선순위 액션 리스트가 들어갑니다. 티어다운은 한 장이고, 의도적으로 불완전합니다.</li>
+<li data-en><strong>Not a call.</strong> Async is the whole reason you can do five a week with a full-time job. Never offer a call to deliver a teardown.</li>
+<li data-ko><strong>통화가 아닙니다.</strong> 비동기이기 때문에 정규직을 하면서도 주 5건이 가능한 겁니다. 티어다운 전달용 통화는 절대 제안하지 마세요.</li>
+<li data-en><strong>Not a pitch deck.</strong> No slides, no logo wall, no "why us". One page about <em>their</em> app.</li>
+<li data-ko><strong>제안서가 아닙니다.</strong> 슬라이드, 로고 나열, "왜 저희인가" 전부 없습니다. <em>그들의</em> 앱에 대한 한 장.</li>
+<li data-en><strong>Not free consulting.</strong> If they reply with five follow-up questions, that is the paid audit, and you say so warmly.</li>
+<li data-ko><strong>무료 컨설팅이 아닙니다.</strong> 후속 질문이 다섯 개 오면 그건 유료 감사 영역이고, 정중하게 그렇게 말하면 됩니다.</li>
+</ul>
+
+<div class="box warm">
+<p data-en><strong>The 30-minute rule is not a suggestion.</strong> Five teardowns at 30 minutes is 2.5 hours a week. Five teardowns at 2 hours is a second job you are doing for free, and you will stop after week two. If you hit 30 minutes and the document is thin, <em>send the thin one</em>. A thin teardown with one real finding beats a thorough one that never gets sent.</p>
+<p data-ko><strong>30분 규칙은 권고가 아닙니다.</strong> 30분 × 5건 = 주당 2.5시간. 2시간 × 5건이면 무보수 부업이고, 2주 만에 그만두게 됩니다. 30분이 됐는데 문서가 얇으면 <em>얇은 채로 보내세요</em>. 진짜 발견 하나가 담긴 얇은 티어다운이, 영영 보내지 않는 완벽한 티어다운보다 낫습니다.</p>
+</div>
+
+<h2 id="p2" data-en>2. Who to send it to (and who to refuse)</h2><h2 id="p2" data-ko>2. 누구에게 보낼 것인가 (그리고 누구를 거절할 것인가)</h2>
+
+<h3 data-en>The one filter that beats all the others</h3><h3 data-ko>다른 모든 조건을 이기는 단 하나의 필터</h3>
+<p data-en><strong>They have publicly posted revenue.</strong> An MRR screenshot, a "we crossed $5k" post, a Stripe/RevenueCat chart. That single act tells you they monetize, they care about numbers, and they can afford you. Nothing else on this page filters as hard.</p>
+<p data-ko><strong>매출을 공개적으로 올린 적이 있는 사람.</strong> MRR 스크린샷, "5천 달러 돌파" 게시물, Stripe/RevenueCat 차트. 그 한 가지 행동이 곧 수익화하고 있고, 숫자에 신경 쓰고, 비용을 감당할 수 있다는 증거입니다. 이 페이지의 어떤 조건도 이만큼 강력하지 않습니다.</p>
+
+<h3 data-en>Where to find them</h3><h3 data-ko>어디서 찾는가</h3>
+<table>
+<tr><th data-en>Source</th><th data-ko>소스</th><th data-en>Why it works</th><th data-ko>왜 효과적인가</th></tr>
+<tr><td><strong>news.hada.io (긱뉴스), Disquiet, OKKY</strong></td><td data-en>Korean indie devs wanting to enter the US market. Nobody serves them. You can read the room and no US agency can.</td><td data-ko>미국 진출을 원하는 한국 인디 개발자. 아무도 대응하지 않는 시장. 미국 에이전시는 읽을 수조차 없습니다.</td></tr>
+<tr><td><strong>Zenn, Qiita, note.com</strong></td><td data-en>Same play in Japanese. Japanese indie devs are the least-served ASO market on earth.</td><td data-ko>일본어로 같은 전략. 일본 인디 개발자는 세계에서 가장 방치된 ASO 시장입니다.</td></tr>
+<tr><td><strong>X / #buildinpublic</strong></td><td data-en>MRR screenshots. Pre-qualified on revenue, and they reply publicly, which is free proof for you.</td><td data-ko>MRR 스크린샷. 매출로 이미 선별되어 있고, 공개적으로 답을 주기 때문에 그 자체가 무료 증거가 됩니다.</td></tr>
+<tr><td><strong>Indie Hackers milestones</strong></td><td data-en>Same, with an audience that respects specifics over promises.</td><td data-ko>동일. 약속보다 구체성을 존중하는 독자층.</td></tr>
+<tr><td><strong>r/iosdev, r/SideProject</strong></td><td data-en>Participate for two weeks before you ever mention what you sell. Post value first or you get banned.</td><td data-ko>파는 걸 언급하기 전에 2주간 그냥 참여하세요. 먼저 기여하지 않으면 차단당합니다.</td></tr>
+<tr><td><strong>Product Hunt launches</strong></td><td data-en>Budget and urgency arrive at the same moment. Send the teardown 5-10 days <em>after</em> launch, when traffic dies and panic starts.</td><td data-ko>예산과 절박함이 동시에 생기는 시점. 런칭 <em>5~10일 후</em>, 트래픽이 꺼지고 불안이 시작될 때 보내세요.</td></tr>
+<tr><td><strong>RevenueCat / Superwall communities</strong></td><td data-en>Everyone there already has subscriptions, so monetization is a given.</td><td data-ko>모두가 이미 구독을 붙여둔 상태라 수익화는 전제 조건으로 깔려 있습니다.</td></tr>
+</table>
+
+<h3 data-en>Refuse these, even for a free teardown</h3><h3 data-ko>무료 티어다운이라도 거절해야 하는 경우</h3>
+<ul class="no">
+<li data-en><strong>No monetization at all.</strong> There is nothing to optimize toward, and they will never convert to paid.</li>
+<li data-ko><strong>수익 모델 자체가 없는 앱.</strong> 최적화의 목표가 없고, 유료 전환도 절대 일어나지 않습니다.</li>
+<li data-en><strong>Under ~500 lifetime downloads with no ad spend.</strong> There is no data. You would be guessing, and guessing in writing is how you get a bad reputation in a small niche.</li>
+<li data-ko><strong>누적 다운로드 500 미만 + 광고 집행 없음.</strong> 데이터가 없습니다. 추측하게 되고, 좁은 업계에서 글로 남긴 추측은 평판을 망칩니다.</li>
+<li data-en><strong>Obvious retention problem.</strong> If the reviews say "crashes" or "I stopped using it after a week", say that in one honest sentence and decline. Ads amplify a leak.</li>
+<li data-ko><strong>명백한 리텐션 문제.</strong> 리뷰에 "튕긴다", "일주일 쓰고 안 쓴다"가 보이면 솔직하게 한 문장으로 말하고 거절하세요. 광고는 새는 양동이를 키울 뿐입니다.</li>
+<li data-en><strong>A category with no search volume.</strong> This is Jujube. You know exactly what this looks like, which is why you can spot it in others.</li>
+<li data-ko><strong>검색량 자체가 없는 카테고리.</strong> 주주비가 그렇습니다. 직접 겪어봤기 때문에 남의 앱에서도 알아볼 수 있습니다.</li>
+</ul>
+
+<div class="box">
+<p data-en><strong>Saying no in the teardown is a feature, not a lost sale.</strong> "I looked, and I don't think ASO is your bottleneck — here's what I'd look at instead" is the most memorable email an indie dev will get all year. Some of them come back six months later with a fixed product and a credit card.</p>
+<p data-ko><strong>티어다운에서 "아니다"라고 말하는 건 기능이지, 놓친 매출이 아닙니다.</strong> "봤는데 ASO가 병목은 아닌 것 같습니다 — 대신 이걸 보시죠"는 인디 개발자가 그 해에 받는 가장 기억에 남는 메일입니다. 그중 일부는 6개월 뒤 고쳐진 제품과 카드를 들고 돌아옵니다.</p>
+</div>
+
+<h2 id="p3" data-en>3. The intake form — the strategic version</h2><h2 id="p3" data-ko>3. 인테이크 폼 — 전략 버전</h2>
+
+<p data-en>Build it in <strong>Tally</strong> (free, no branding, embeds anywhere). It has two jobs, and only one of them is obvious.</p>
+<p data-ko><strong>Tally</strong>로 만드세요 (무료, 브랜딩 없음, 어디든 임베드 가능). 이 폼은 두 가지 일을 합니다. 그중 하나만 눈에 보입니다.</p>
+<ul>
+<li data-en><strong>Obvious job:</strong> collect what you need to run the teardown without a back-and-forth email thread.</li>
+<li data-ko><strong>보이는 일:</strong> 메일을 주고받지 않고도 티어다운을 돌릴 수 있는 정보를 한 번에 받는 것.</li>
+<li data-en><strong>Strategic job:</strong> <em>make them disqualify themselves before you spend 30 minutes.</em> Every question below is a filter wearing a costume.</li>
+<li data-ko><strong>전략적인 일:</strong> <em>30분을 쓰기 전에 스스로 탈락하게 만드는 것.</em> 아래 모든 질문은 필터가 옷을 갈아입은 것입니다.</li>
+</ul>
+
+<table>
+<tr><th data-en>Field</th><th data-ko>항목</th><th data-en>Type</th><th data-ko>형식</th><th data-en>What it's really doing</th><th data-ko>실제 역할</th></tr>
+<tr><td><strong>App Store link</strong></td><td>URL</td><td data-en>The only truly required field. If they can't paste a link, they don't have a shipped app.</td><td data-ko>유일한 필수 항목. 링크를 못 붙이면 출시된 앱이 없는 겁니다.</td></tr>
+<tr><td><strong>Which markets matter to you?</strong></td><td data-en>Multi-select: US / KR / JP / CN / EU / not sure</td><td data-ko>다중선택: 미국 / 한국 / 일본 / 중국 / 유럽 / 모르겠음</td><td data-en>Routes them to your moat. Anyone who ticks KR/JP/CN is a Tier-3 lead on arrival.</td><td data-ko>당신의 해자로 바로 연결됩니다. KR/JP/CN을 체크하면 도착 즉시 상위 리드입니다.</td></tr>
+<tr><td><strong>Roughly what does the app make per month?</strong></td><td data-en>Bands: $0 / under $500 / $500-2k / $2k-10k / $10k+</td><td data-ko>구간: $0 / $500 미만 / $500~2천 / $2천~1만 / $1만+</td><td data-en><em>The single most important question.</em> Bands, not a number — people answer bands honestly and refuse exact figures. $0 is an auto-decline, politely.</td><td data-ko><em>가장 중요한 질문.</em> 정확한 숫자가 아니라 구간으로 묻습니다. 구간은 솔직하게 답하고, 정확한 액수는 안 씁니다. $0는 정중한 자동 거절입니다.</td></tr>
+<tr><td><strong>Are you running Apple Search Ads today?</strong></td><td data-en>Yes, monthly budget band / Tried and stopped / Never</td><td data-ko>예 (월 예산 구간) / 해봤다가 중단 / 없음</td><td data-en>"Yes" = waste recovery is nearly guaranteed, your highest-confidence promise. "Tried and stopped" = they got burned, lead with diagnosis not ads.</td><td data-ko>"예" = 낭비 회수가 거의 확실 — 가장 확신 있는 약속. "해봤다가 중단" = 이미 데인 사람이니, 광고가 아니라 진단으로 접근.</td></tr>
+<tr><td><strong>What does week-2 retention look like?</strong></td><td data-en>Good / Not great / I don't measure it</td><td data-ko>좋음 / 별로 / 측정 안 함</td><td data-en>The honesty test. "I don't measure it" is not a disqualifier — it's your opening line. "Not great" plus a request for ads is the client who will churn and blame you.</td><td data-ko>솔직함 테스트. "측정 안 함"은 탈락 사유가 아니라 대화의 시작점입니다. "별로" + 광고 요청 = 이탈하고 당신 탓할 고객.</td></tr>
+<tr><td><strong>What have you already tried?</strong></td><td data-en>Short text</td><td data-ko>짧은 서술</td><td data-en>Stops you from recommending something they did last month. Also reveals sophistication in one paragraph.</td><td data-ko>지난달에 이미 한 걸 추천하는 사고를 막아줍니다. 한 단락으로 상대의 숙련도가 드러납니다.</td></tr>
+<tr><td><strong>If growth doubled, what would change for you?</strong></td><td data-en>Short text</td><td data-ko>짧은 서술</td><td data-en>The qualifier disguised as a friendly question. "I could go full-time" = real buyer. "It'd be cool" = hobbyist.</td><td data-ko>친근한 질문으로 위장한 자격 판별. "전업할 수 있다" = 진짜 구매자. "좋을 것 같다" = 취미.</td></tr>
+<tr><td><strong>Anything you'd want me to be blunt about?</strong></td><td data-en>Short text, optional</td><td data-ko>짧은 서술, 선택</td><td data-en>Gives you explicit permission to say the hard thing, which is the thing they remember.</td><td data-ko>어려운 말을 할 명시적 허락을 받아둡니다. 그리고 그 말이 기억에 남습니다.</td></tr>
+</table>
+
+<div class="box">
+<p data-en><strong>Do not ask for:</strong> company name, phone number, job title, "how did you hear about us", budget in exact dollars, or anything you can look up yourself. Every extra field costs you completions. Eight fields is already the ceiling.</p>
+<p data-ko><strong>묻지 마세요:</strong> 회사명, 전화번호, 직함, "어떻게 알게 되셨나요", 정확한 예산 금액, 그리고 직접 찾을 수 있는 모든 것. 항목이 늘수록 완료율이 떨어집니다. 8개가 이미 상한선입니다.</p>
+</div>
+<p data-en>Set the Tally confirmation message to: <em>"Got it. You'll have a teardown within 3 business days. If your app isn't a fit, I'll tell you that instead — it takes me the same 30 minutes either way."</em> That sentence sets expectations and pre-frames a rejection as service.</p>
+<p data-ko>Tally 완료 메시지는 이렇게: <em>"접수됐습니다. 영업일 3일 안에 티어다운을 보내드립니다. 맞지 않는 앱이면 그렇게 말씀드립니다 — 어느 쪽이든 저는 같은 30분을 씁니다."</em> 이 한 문장이 기대치를 정리하고, 거절을 서비스로 미리 프레이밍합니다.</p>
+
+<h2 id="p4" data-en>4. The 30-minute process, step by step</h2><h2 id="p4" data-ko>4. 30분 프로세스, 단계별로</h2>
+<p data-en>Set a timer. Genuinely. The timer is the product.</p>
+<p data-ko>타이머를 켜세요. 진짜로. 타이머가 곧 제품입니다.</p>
+
+<div class="step"><div class="n">1</div><div class="c">
+<h3 data-en>Minutes 0-4 — Read the listing as a stranger would</h3><h3 data-ko>0~4분 — 낯선 사람의 눈으로 리스팅 읽기</h3>
+<p data-en>Open the App Store page on a <em>phone</em>, not desktop. Look only at what is visible before you scroll or tap "more": the icon, the name, the subtitle, the first two screenshots. Write down, in one sentence, what you think the app does. If that sentence is wrong or vague, <strong>you already have your headline finding</strong> and everything else is a bonus.</p>
+<p data-ko>데스크톱이 아니라 <em>폰</em>에서 App Store 페이지를 여세요. 스크롤하거나 "더 보기"를 누르기 전에 보이는 것만 봅니다: 아이콘, 이름, 부제, 스크린샷 두 장. 이 앱이 뭘 하는 앱인지 한 문장으로 적으세요. 그 문장이 틀리거나 모호하면 <strong>이미 헤드라인 발견을 확보한 겁니다</strong>. 나머지는 덤입니다.</p>
+</div></div>
+
+<div class="step"><div class="n">2</div><div class="c">
+<h3 data-en>Minutes 4-10 — Name, subtitle, keyword surface</h3><h3 data-ko>4~10분 — 이름, 부제, 키워드 표면</h3>
+<p data-en>Count characters. Name is 30, subtitle is 30. Almost every indie app wastes both. Check specifically for:</p>
+<p data-ko>글자 수를 세세요. 이름 30자, 부제 30자. 거의 모든 인디 앱이 둘 다 낭비합니다. 특히 다음을 확인:</p>
+<ul>
+<li data-en><strong>Wasted characters</strong> — a 19-character name means 11 characters of free ranking thrown away.</li>
+<li data-ko><strong>낭비된 글자</strong> — 19자 이름은 무료 랭킹 11자를 버린 것입니다.</li>
+<li data-en><strong>Duplicated words</strong> between name and subtitle. Apple indexes each word once; repeating it is pure waste.</li>
+<li data-ko><strong>이름과 부제의 중복 단어.</strong> Apple은 단어를 한 번만 색인합니다. 반복은 순수한 낭비입니다.</li>
+<li data-en><strong>Brand-only names</strong> with no category word. "Nimbus" ranks for nothing.</li>
+<li data-ko><strong>카테고리 단어 없는 브랜드 이름.</strong> "Nimbus"는 아무 검색어에도 걸리지 않습니다.</li>
+<li data-en><strong>Marketing adjectives</strong> in the subtitle — "beautiful", "simple", "powerful". Nobody searches those.</li>
+<li data-ko><strong>부제의 마케팅 형용사</strong> — "아름다운", "간단한", "강력한". 아무도 검색하지 않습니다.</li>
+<li data-en><strong>Dialect mismatch</strong> — "expiry" on a US storefront where everyone types "expiration". This class of finding is nearly free and it lands hard.</li>
+<li data-ko><strong>방언 불일치</strong> — 미국 스토어에서 "expiry"를 쓰는데 실제로는 다들 "expiration"을 칩니다. 이런 발견은 비용이 거의 안 들고 임팩트는 큽니다.</li>
+</ul>
+</div></div>
+
+<div class="step"><div class="n">3</div><div class="c">
+<h3 data-en>Minutes 10-16 — The competitive neighborhood</h3><h3 data-ko>10~16분 — 경쟁 이웃</h3>
+<p data-en>Search the App Store for the three most obvious terms someone would use to find this app. Note where it ranks, and <em>who it is standing next to</em>. The finding is almost never "you rank #40" — it is <strong>"you are competing against three venture-funded apps for a term you cannot win, and nobody is defending the long-tail term you should own."</strong></p>
+<p data-ko>이 앱을 찾을 때 쓸 법한 가장 뻔한 검색어 3개로 App Store를 검색하세요. 순위와 <em>옆에 서 있는 앱들</em>을 기록합니다. 발견은 "40위입니다"가 아니라 거의 항상 <strong>"이길 수 없는 검색어에서 VC 투자받은 앱 셋과 싸우고 있고, 정작 가져가야 할 롱테일 검색어는 아무도 지키지 않고 있습니다"</strong>입니다.</p>
+</div></div>
+
+<div class="step"><div class="n">4</div><div class="c">
+<h3 data-en>Minutes 16-22 — Screenshots, the first two only</h3><h3 data-ko>16~22분 — 스크린샷, 앞의 두 장만</h3>
+<p data-en>The first two screenshots are ~90% of the conversion decision, because that is all that appears in search results. Check: is there a caption? Is the caption a <em>benefit</em> or a <em>feature</em>? Is the text legible at thumbnail size? Is screenshot 1 a login screen or an empty state? (It is astonishingly often a login screen.)</p>
+<p data-ko>스크린샷 첫 두 장이 전환 결정의 약 90%입니다. 검색 결과에 그것만 나오기 때문입니다. 확인: 캡션이 있는가? 캡션이 <em>혜택</em>인가 <em>기능</em>인가? 썸네일 크기에서 글자가 읽히는가? 첫 장이 로그인 화면이나 빈 상태는 아닌가? (놀라울 만큼 자주 로그인 화면입니다.)</p>
+</div></div>
+
+<div class="step"><div class="n">5</div><div class="c">
+<h3 data-en>Minutes 22-26 — Reviews, sorted most recent</h3><h3 data-ko>22~26분 — 리뷰, 최신순</h3>
+<p data-en>Read the last ten. You are hunting for one thing: <strong>does the negative feedback point at ASO, or at the product?</strong> "Couldn't figure out what it does" is yours to fix. "Kept crashing" is not, and saying so is the most valuable sentence in the document.</p>
+<p data-ko>최근 10개를 읽으세요. 찾는 건 하나입니다: <strong>부정 피드백이 ASO를 가리키는가, 제품을 가리키는가?</strong> "뭘 하는 앱인지 모르겠다"는 당신이 고칠 수 있습니다. "계속 튕긴다"는 아닙니다. 그리고 그걸 말해주는 게 문서에서 가장 가치 있는 문장입니다.</p>
+</div></div>
+
+<div class="step"><div class="n">6</div><div class="c">
+<h3 data-en>Minutes 26-30 — Localization check (your moat)</h3><h3 data-ko>26~30분 — 로컬라이제이션 점검 (당신의 해자)</h3>
+<p data-en>Check which storefronts have a localized listing. Most indie apps have exactly one: en-US. Then check whether the <em>app itself</em> is localized while the <em>listing</em> is not — that combination is common, it is a pure own-goal, and only you will notice it. If they do have a KO/JA/ZH listing, read it. Machine-translated store copy is obvious in three seconds to a native reader and invisible to the developer. <strong>This is the finding no US competitor can produce.</strong></p>
+<p data-ko>어느 스토어프론트에 현지화된 리스팅이 있는지 확인하세요. 대부분의 인디 앱은 en-US 하나뿐입니다. 그다음, <em>앱 자체는</em> 현지화됐는데 <em>리스팅은</em> 안 된 경우를 확인하세요. 흔하고, 완전한 자책골이고, 당신만 알아봅니다. KO/JA/ZH 리스팅이 있다면 읽어보세요. 기계번역된 스토어 문구는 원어민에겐 3초 만에 드러나고 개발자에겐 보이지 않습니다. <strong>미국 경쟁사는 절대 만들 수 없는 발견입니다.</strong></p>
+</div></div>
+
+<div class="box warn">
+<p data-en><strong>Stop at 30 minutes.</strong> Do not open Sensor Tower. Do not build a keyword table. Do not download the app. All of that is the paid audit — and if you give it away for free, you have destroyed the product you were about to sell.</p>
+<p data-ko><strong>30분에서 멈추세요.</strong> Sensor Tower 열지 말고, 키워드 표 만들지 말고, 앱 다운받지 마세요. 전부 유료 감사의 영역입니다. 무료로 줘버리면 팔려던 상품을 스스로 없애는 겁니다.</p>
+</div>
+
+<h2 id="p5" data-en>5. What goes in the document</h2><h2 id="p5" data-ko>5. 문서에 무엇을 담는가</h2>
+<p data-en>One page. Six blocks. Use the template you already have (<code>teardown-tpl</code>) — and <em>delete the black instruction band at the top before sending.</em></p>
+<p data-ko>한 장. 여섯 블록. 이미 가지고 있는 템플릿(<code>teardown-tpl</code>)을 쓰세요 — 그리고 <em>보내기 전에 상단의 검은 안내 띠를 반드시 지우세요.</em></p>
+
+<ol>
+<li data-en><strong>What I think your app does, from the listing alone.</strong> One or two sentences. If this is wrong, that <em>is</em> the finding, and it lands harder than anything else you could write.</li>
+<li data-ko><strong>리스팅만 보고 파악한 이 앱의 정체.</strong> 한두 문장. 이게 틀렸다면 그 자체가 발견이고, 다른 어떤 문장보다 강하게 꽂힙니다.</li>
+<li data-en><strong>Three things I'd change first.</strong> Ranked. Each one gets a single sentence of <em>why</em>, not how. The "how" is what they pay for.</li>
+<li data-ko><strong>가장 먼저 바꿀 것 세 가지.</strong> 우선순위대로. 각 항목에 <em>왜</em>를 한 문장. 방법은 쓰지 않습니다. 방법이 유료입니다.</li>
+<li data-en><strong>One finding, with the evidence shown.</strong> The character count. The screenshot. The competitor's subtitle next to theirs. <em>Only one.</em> Showing your work once proves you did it; showing it three times gives away the method.</li>
+<li data-ko><strong>근거를 보여주는 발견 하나.</strong> 글자 수, 스크린샷, 경쟁사 부제와의 대조. <em>딱 하나만.</em> 한 번 보여주면 실제로 했다는 증거가 되고, 세 번 보여주면 방법론을 넘겨주는 겁니다.</li>
+<li data-en><strong>What I would <em>not</em> spend money on.</strong> The section that makes you different. Naming something they should skip is more credible than anything you recommend.</li>
+<li data-ko><strong>돈 쓰지 말아야 할 것.</strong> 당신을 다르게 만드는 섹션. 추천보다 "이건 하지 마세요"가 훨씬 신뢰를 줍니다.</li>
+<li data-en><strong>The honest verdict.</strong> One of exactly three: <em>"ASO is your bottleneck"</em>, <em>"ASO is a real but secondary problem"</em>, or <em>"ASO is not your problem — here's what is."</em> Pick one and commit. Hedging is what every other agency does.</li>
+<li data-ko><strong>솔직한 결론.</strong> 정확히 셋 중 하나: <em>"ASO가 병목입니다"</em>, <em>"ASO는 실제 문제지만 부차적입니다"</em>, <em>"ASO는 문제가 아닙니다 — 진짜 문제는 이겁니다."</em> 하나를 골라 확정하세요. 애매하게 걸치는 건 다른 에이전시들이 하는 짓입니다.</li>
+<li data-en><strong>One line about what happens next.</strong> Not a pitch. "If you want the full version of this — the keyword tables and the ranked plan — that's the $450 audit, and it comes off your first month if you continue." Then stop.</li>
+<li data-ko><strong>다음 단계 한 줄.</strong> 영업이 아닙니다. "이 문서의 완전판 — 키워드 표와 우선순위 계획 — 이 필요하시면 $450 감사이고, 이어가실 경우 첫 달에서 차감됩니다." 그리고 끝.</li>
+</ol>
+
+<div class="box">
+<p data-en><strong>The one-finding rule, stated plainly:</strong> give away <em>what</em> is wrong, never <em>how</em> you found it or <em>how</em> to fix it. "Your subtitle spends 11 characters on words Apple already indexed from your title" is a gift. "Here is the 100-character keyword string I'd use instead" is the thing you sell.</p>
+<p data-ko><strong>단일 발견 원칙, 간단히:</strong> <em>무엇이</em> 잘못됐는지는 주고, <em>어떻게</em> 찾았는지와 <em>어떻게</em> 고치는지는 절대 주지 마세요. "부제 11자를 제목에서 이미 색인된 단어에 쓰고 계십니다"는 선물입니다. "대신 쓸 100자 키워드 문자열은 이겁니다"는 상품입니다.</p>
+</div>
+
+<h2 id="p6" data-en>6. The email that carries it</h2><h2 id="p6" data-ko>6. 함께 보내는 이메일</h2>
+<p data-en>Send from <code>hello@miyostudiollc.com</code>, plain text, no images, no signature block with a logo. It should read like a person, because it is one.</p>
+<p data-ko><code>hello@miyostudiollc.com</code>에서, 일반 텍스트로, 이미지 없이, 로고 서명 없이 보내세요. 사람이 쓴 것처럼 읽혀야 합니다. 실제로 사람이 쓰니까요.</p>
+
+<h3 data-en>Subject lines that work</h3><h3 data-ko>먹히는 제목</h3>
+<ul>
+<li data-en><code>your App Store subtitle is costing you</code> — specific, slightly alarming, not clickbait because it's true</li>
+<li data-ko><code>App Store 부제 때문에 손해 보고 계십니다</code> — 구체적이고 약간 불안하게 만들지만, 사실이라서 낚시가 아닙니다</li>
+<li data-en><code>looked at [AppName] — 3 things</code> — the lowest-pressure version, best for warm communities</li>
+<li data-ko><code>[앱이름] 봤습니다 — 세 가지</code> — 가장 부담 없는 버전. 친화적인 커뮤니티에 적합</li>
+<li data-en><code>[AppName] isn't showing up for the searches it should</code> — best for apps with an obvious keyword gap</li>
+<li data-ko><code>[앱이름]이 걸려야 할 검색어에 안 걸립니다</code> — 키워드 갭이 명확한 앱에 적합</li>
+</ul>
+
+<pre data-en>Hi [name],
+
+I run a small studio that does App Store optimization for indie iOS
+apps. I spent half an hour on [AppName] this morning — unprompted,
+no strings — and wrote up what I found.
+
+Short version: [ONE SENTENCE. The single most surprising finding.]
+
+Full thing attached. It's one page.
+
+I'm not going to follow up more than once. If it's useful, reply and
+I'll tell you what the paid version looks like. If not, keep the doc.
+
+— Minjun
+Miyo Studio · miyostudiollc.com
+</pre>
+<pre data-ko>안녕하세요 [이름]님,
+
+인디 iOS 앱 대상으로 App Store 최적화를 하는 작은 스튜디오를
+운영하고 있습니다. 오늘 아침 [앱이름]에 30분을 썼습니다 — 요청받은 것도,
+조건이 있는 것도 아닙니다 — 찾은 걸 정리해 봤습니다.
+
+요약: [한 문장. 가장 의외였던 발견 하나.]
+
+전문 첨부합니다. 한 장입니다.
+
+후속 연락은 한 번만 드립니다. 도움이 되면 답장 주세요, 유료 버전이
+어떤 건지 알려드리겠습니다. 아니면 문서는 그냥 가지셔도 됩니다.
+
+— 민준
+Miyo Studio · miyostudiollc.com
+</pre>
+
+<div class="box">
+<p data-en><strong>Why "I'm not going to follow up more than once" works:</strong> it removes the thing they are bracing for. Cold email is unpleasant because the recipient expects a sequence. Saying you won't do that buys more replies than any subject line trick — and you must then actually honour it.</p>
+<p data-ko><strong>"후속 연락은 한 번만"이 먹히는 이유:</strong> 상대가 경계하는 대상을 제거하기 때문입니다. 콜드 메일이 불쾌한 건 시퀀스가 올 걸 알기 때문입니다. 안 하겠다고 말하는 게 어떤 제목 기법보다 답장을 늘립니다. 그리고 실제로 지켜야 합니다.</p>
+</div>
+<p data-en>Attach the HTML file <em>and</em> paste a link. Some people won't open attachments from strangers; some can't open a link on a phone. Give both.</p>
+<p data-ko>HTML 파일을 첨부하고 <em>동시에</em> 링크도 붙이세요. 모르는 사람의 첨부를 안 여는 사람도 있고, 폰에서 링크를 못 여는 사람도 있습니다. 둘 다 주세요.</p>
+
+<h2 id="p7" data-en>7. Follow-up, and turning it into money</h2><h2 id="p7" data-ko>7. 후속 연락, 그리고 수익으로 전환</h2>
+<table>
+<tr><th data-en>When</th><th data-ko>시점</th><th data-en>Do</th><th data-ko>할 일</th></tr>
+<tr><td data-en>Day 0</td><td data-ko>0일차</td><td data-en>Send teardown + email. Log it. Move on.</td><td data-ko>티어다운 + 메일 발송. 기록. 다음.</td></tr>
+<tr><td data-en>Day 6</td><td data-ko>6일차</td><td data-en>One follow-up, two sentences, and it must contain <em>a new piece of information</em> — a competitor that just moved, a fresh review, a ranking shift. Never "just bumping this."</td><td data-ko>후속 한 번, 두 문장. 반드시 <em>새로운 정보</em>가 있어야 합니다 — 경쟁사 변화, 새 리뷰, 순위 변동. "확인차 다시 드립니다"는 금지.</td></tr>
+<tr><td data-en>Day 7+</td><td data-ko>7일차 이후</td><td data-en>Nothing. Ever. You said one follow-up. Silence is now the brand.</td><td data-ko>아무것도 하지 않습니다. 한 번만 하겠다고 했으니까요. 이제 침묵이 브랜드입니다.</td></tr>
+<tr><td data-en>They reply "thanks, interesting"</td><td data-ko>"고맙습니다, 흥미롭네요" 답장</td><td data-en>Answer their question, then <em>one</em> line: "The full version is the $450 audit — 15 pages, keyword tables, ranked plan, credited to month one if you continue." No call.</td><td data-ko>질문에 답하고, <em>한 줄만</em>: "완전판은 $450 감사입니다 — 15페이지, 키워드 표, 우선순위 계획. 이어가시면 첫 달에서 차감." 통화 없음.</td></tr>
+<tr><td data-en>They ask about the retainer</td><td data-ko>리테이너를 물어보면</td><td data-en>Now, and only now, offer a 30-minute call. Its purpose is <em>you qualifying them</em>. Listen for whether they talk about revenue and retention or only about downloads.</td><td data-ko>이때, 오직 이때만 30분 통화를 제안합니다. 목적은 <em>당신이 그들을 검증하는 것</em>입니다. 매출·리텐션을 말하는지, 다운로드만 말하는지 들으세요.</td></tr>
+</table>
+<div class="box warm">
+<p data-en><strong>Expected numbers, so you don't quit early:</strong> cold teardowns to strangers convert at maybe 10-20% reply and low single digits to paid. <em>Five a week is 20-25 a month, which is roughly 3-4 real conversations and, realistically, one paying client every 4-8 weeks at the start.</em> That is normal and it is not a sign the method is broken. Volume is the only lever that works early.</p>
+<p data-ko><strong>미리 알아둘 숫자 — 일찍 포기하지 않도록:</strong> 모르는 사람에게 보내는 콜드 티어다운은 답장률 10~20%, 유료 전환은 한 자릿수 초반입니다. <em>주 5건이면 월 20~25건, 실제 대화 3~4건, 초기엔 현실적으로 4~8주에 유료 고객 1명.</em> 정상입니다. 방법이 잘못된 게 아닙니다. 초기에 작동하는 유일한 레버는 물량입니다.</p>
+</div>
+
+<h2 id="p8" data-en>8. What not to do</h2><h2 id="p8" data-ko>8. 하지 말아야 할 것</h2>
+<ul class="no">
+<li data-en><strong>Don't automate the writing.</strong> Automate the data gathering all you like. The moment the recommendation itself is machine-written, you are selling the thing anyone can get free, and one bad recommendation in a small niche costs more than ten teardowns earn.</li>
+<li data-ko><strong>글쓰기를 자동화하지 마세요.</strong> 데이터 수집은 얼마든지 자동화하세요. 하지만 추천 자체가 기계가 쓴 것이 되는 순간, 누구나 공짜로 얻는 걸 팔게 됩니다. 좁은 업계에서 잘못된 추천 하나는 티어다운 열 개의 수익보다 비쌉니다.</li>
+<li data-en><strong>Don't send more than five a week.</strong> Not a capacity limit — a quality limit. Six is where they start reading like a template.</li>
+<li data-ko><strong>주 5건을 넘기지 마세요.</strong> 처리량 한계가 아니라 품질 한계입니다. 6건째부터 템플릿처럼 읽히기 시작합니다.</li>
+<li data-en><strong>Don't offer a discount to close.</strong> Your pricing is published on the site. Discounting it in private makes the published number a lie, and indie devs talk to each other.</li>
+<li data-ko><strong>마감을 위해 할인하지 마세요.</strong> 가격은 사이트에 공개돼 있습니다. 뒤에서 깎으면 공개된 숫자가 거짓말이 됩니다. 인디 개발자들은 서로 이야기합니다.</li>
+<li data-en><strong>Don't promise more installs, more revenue, or a rank.</strong> Ever, in writing. Promise diagnosis and efficiency. This is also what keeps your E&amp;O exposure small.</li>
+<li data-ko><strong>설치 증가, 매출 증가, 순위를 약속하지 마세요.</strong> 특히 문서로는 절대. 진단과 효율을 약속하세요. E&amp;O 리스크를 낮추는 것도 이 원칙입니다.</li>
+<li data-en><strong>Don't mention AI as a selling point.</strong> It is how you keep margin, not what the client buys. Clients buy judgment.</li>
+<li data-ko><strong>AI를 세일즈 포인트로 쓰지 마세요.</strong> 그건 마진을 지키는 방법이지, 고객이 사는 것이 아닙니다. 고객은 판단을 삽니다.</li>
+<li data-en><strong>Don't teardown an app whose developer you'd be embarrassed to be seen emailing.</strong> Small niche, long memory.</li>
+<li data-ko><strong>메일 보낸 게 알려지면 창피할 개발자에게는 보내지 마세요.</strong> 좁은 업계, 긴 기억.</li>
+</ul>
+
+<h2 id="p9" data-en>9. Tracking and the weekly rhythm</h2><h2 id="p9" data-ko>9. 기록과 주간 리듬</h2>
+<p data-en>One Google Sheet. Nine columns, no more: <code>date sent · app · developer · source · verdict (ASO / secondary / not-ASO) · headline finding · replied? · outcome · notes</code>. The columns that actually matter later are <strong>source</strong> and <strong>verdict</strong> — after 40 teardowns they tell you which channel produces real clients and whether you are being too soft with the honest verdict.</p>
+<p data-ko>구글 시트 하나. 9개 컬럼, 그 이상은 금지: <code>발송일 · 앱 · 개발자 · 소스 · 결론(ASO/부차적/ASO아님) · 헤드라인 발견 · 답장여부 · 결과 · 메모</code>. 나중에 진짜 중요해지는 건 <strong>소스</strong>와 <strong>결론</strong>입니다. 40건쯤 쌓이면 어느 채널이 진짜 고객을 만드는지, 그리고 솔직한 결론을 내리는 데 무르지 않은지가 보입니다.</p>
+
+<h3 data-en>The rhythm that survives a full-time job</h3><h3 data-ko>정규직과 병행 가능한 리듬</h3>
+<table>
+<tr><th data-en>When</th><th data-ko>시점</th><th data-en>What</th><th data-ko>내용</th><th data-en>Time</th><th data-ko>시간</th></tr>
+<tr><td data-en>Sunday evening</td><td data-ko>일요일 저녁</td><td data-en>Pick the week's five targets. Just find and list them. No writing.</td><td data-ko>이번 주 타깃 5개 선정. 찾아서 목록화만. 글쓰기 없음.</td><td>30 min</td></tr>
+<tr><td data-en>Mon-Fri, one per day</td><td data-ko>월~금, 하루 한 건</td><td data-en>One teardown, 30 minutes, before work or after dinner. Send it the same session — never save a draft to "polish later."</td><td data-ko>티어다운 1건, 30분, 출근 전이나 저녁 식사 후. 같은 세션에 발송 — "나중에 다듬을" 초안은 금지.</td><td>30 min &times; 5</td></tr>
+<tr><td data-en>Friday</td><td data-ko>금요일</td><td data-en>Send the day-6 follow-ups for last week's batch. Update the sheet.</td><td data-ko>지난주 배치의 6일차 후속 발송. 시트 업데이트.</td><td>15 min</td></tr>
+</table>
+<p data-en><strong>Total: about 3 hours 15 minutes a week.</strong> That is the entire business right now.</p>
+<p data-ko><strong>총합: 주당 약 3시간 15분.</strong> 지금 이게 사업의 전부입니다.</p>
+
+<div class="box warn">
+<p data-en><strong>The one way this fails.</strong> You build instead of send. Polishing the site, designing the agent pipeline, refining the template — all of it is more comfortable than emailing strangers, and all of it produces exactly zero clients. If a week ends with a better system and zero teardowns sent, that week was a loss. Five sent beats anything improved.</p>
+<p data-ko><strong>실패하는 유일한 경로.</strong> 보내는 대신 만드는 것. 사이트 다듬기, 에이전트 파이프라인 설계, 템플릿 개선 — 전부 모르는 사람에게 메일 보내는 것보다 편하고, 전부 고객을 0명 만듭니다. 시스템은 좋아졌는데 발송이 0건인 주는 손해 본 주입니다. 5건 발송이 어떤 개선보다 낫습니다.</p>
+</div>
+
+</div>
+<div class="ft">
+<p data-en>Miyo Studio LLC · prepared 2026-09-01 · internal use. Pair with the teardown template (teardown-tpl) and the offer sheet (offer).</p><p data-ko>Miyo Studio LLC · 2026-09-01 작성 · 내부용. 티어다운 템플릿(teardown-tpl), 오퍼 시트(offer)와 함께 사용하세요.</p>
+</div>
+</div>
+<script>function tg(b){var k=document.body.classList.toggle('ko');b.textContent=k?'English':'\ud55c\uad6d\uc5b4';document.documentElement.lang=k?'ko':'en';}</script>
+</body>
+</html>

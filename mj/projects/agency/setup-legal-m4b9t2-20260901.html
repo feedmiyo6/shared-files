@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>Miyo Studio — Setup before client #1</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#127807;</text></svg>">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--s50:#FAFAF9;--s100:#F5F5F4;--s200:#E7E5E4;--s300:#D6D3D1;--s400:#A8A29E;--s500:#78716C;--s600:#57534E;--s700:#44403C;--s800:#292524;--s900:#1C1917;
+--sg50:#F6F7F5;--sg100:#E8EBE5;--sg200:#D4DACE;--sg500:#6B7D5C;--sg600:#556A45;--sg700:#3F5232;--w50:#FEF9F3;--w100:#FCEEDD;--tr:#B8704A;--trd:#8A4E28;--red:#9F3D26;--redbg:#FBEDE8}
+html{font-size:16px;-webkit-font-smoothing:antialiased;scroll-behavior:smooth}
+body{font-family:system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif;color:var(--s800);background:var(--s100);line-height:1.65;padding:20px 12px 80px}
+.page{max-width:820px;margin:0 auto;background:#fff;border-radius:16px;box-shadow:0 3px 26px -8px rgba(28,25,23,.14);overflow:hidden}
+.hd{background:linear-gradient(155deg,var(--sg700),var(--sg500));color:#fff;padding:38px 34px 32px;position:relative}
+.hd .eyebrow{font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:var(--sg200);font-weight:700;margin-bottom:.7rem}
+.hd h1{font-size:1.72rem;line-height:1.25;font-weight:800;letter-spacing:-.02em}
+.hd p{margin-top:.85rem;color:#E4EAE0;font-size:.97rem;max-width:56ch}
+.lang{position:absolute;top:18px;right:18px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.32);color:#fff;padding:.4rem .85rem;border-radius:999px;font-size:.8rem;font-weight:600;cursor:pointer;font-family:inherit}
+.lang:hover{background:rgba(255,255,255,.24)}
+.bd{padding:34px 34px 44px}
+h2{font-size:1.16rem;font-weight:800;color:var(--s900);margin:2.4rem 0 .5rem;letter-spacing:-.01em;padding-top:1.5rem;border-top:1px solid var(--s200)}
+h2:first-of-type,h2.nb{border-top:none;padding-top:0;margin-top:0}
+h3{font-size:.98rem;font-weight:750;color:var(--s900);margin:1.5rem 0 .35rem}
+p{margin:.6rem 0;color:var(--s700);font-size:.95rem}
+ul,ol{margin:.6rem 0 .6rem 1.15rem;color:var(--s700);font-size:.95rem}
+li{margin:.34rem 0}
+strong{color:var(--s900);font-weight:700}
+em{color:var(--sg700);font-style:normal;font-weight:650}
+code{background:var(--s100);border:1px solid var(--s200);border-radius:5px;padding:.08rem .34rem;font-size:.86em;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--trd)}
+.box{background:var(--sg50);border:1px solid var(--sg200);border-radius:11px;padding:1rem 1.15rem;margin:1rem 0}
+.box.warn{background:var(--redbg);border-color:#EBC9BC}
+.box.warn strong{color:var(--red)}
+.box.warm{background:var(--w50);border-color:var(--w100)}
+.box p:first-child{margin-top:0}.box p:last-child{margin-bottom:0}
+.tag{display:inline-block;font-size:.68rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;padding:.2rem .5rem;border-radius:5px;background:var(--sg100);color:var(--sg700);margin-bottom:.5rem}
+.tag.r{background:var(--redbg);color:var(--red)}
+.tag.t{background:var(--w100);color:var(--trd)}
+table{width:100%;border-collapse:collapse;margin:1rem 0;font-size:.88rem}
+th{text-align:left;background:var(--s50);color:var(--s600);font-weight:700;font-size:.74rem;letter-spacing:.06em;text-transform:uppercase;padding:.5rem .6rem;border-bottom:2px solid var(--s200)}
+td{padding:.55rem .6rem;border-bottom:1px solid var(--s200);vertical-align:top;color:var(--s700)}
+td strong{color:var(--s900)}
+.step{display:flex;gap:.95rem;margin:1.2rem 0;align-items:flex-start}
+.step .n{flex:0 0 30px;height:30px;border-radius:50%;background:var(--sg600);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.85rem;margin-top:.1rem}
+.step .c{flex:1}
+.step .c h3{margin-top:0}
+.chk{list-style:none;margin-left:0}
+.chk li{padding-left:1.6rem;position:relative}
+.chk li::before{content:"☐";position:absolute;left:0;color:var(--sg500);font-size:1rem}
+.no{list-style:none;margin-left:0}
+.no li{padding-left:1.6rem;position:relative}
+.no li::before{content:"✕";position:absolute;left:.15rem;color:var(--red);font-weight:800;font-size:.85rem;top:.15rem}
+pre{background:var(--s900);color:#E7E5E4;border-radius:10px;padding:1rem 1.1rem;overflow-x:auto;font-size:.82rem;line-height:1.6;margin:.9rem 0;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;white-space:pre-wrap}
+pre .k{color:var(--sg200);font-weight:700}
+.ft{padding:22px 34px 30px;background:var(--s50);border-top:1px solid var(--s200);color:var(--s500);font-size:.82rem}
+.toc{background:var(--s50);border:1px solid var(--s200);border-radius:11px;padding:1rem 1.15rem;margin:0 0 1.6rem}
+.toc ol{margin:.3rem 0 0 1.1rem;font-size:.9rem}
+.toc a{color:var(--sg700);text-decoration:none;font-weight:600}
+.toc a:hover{text-decoration:underline}
+body [data-ko]{display:none}
+body.ko [data-en]{display:none}
+body.ko [data-ko]{display:block}
+body.ko li[data-ko]{display:list-item}
+body.ko span[data-ko],body.ko em[data-ko],body.ko strong[data-ko],body.ko code[data-ko],body.ko a[data-ko]{display:inline}
+body.ko td[data-ko],body.ko th[data-ko]{display:table-cell}
+body.ko .toc a[data-ko]{display:inline}
+body.ko h1[data-ko],body.ko h2[data-ko],body.ko h3[data-ko],body.ko p[data-ko],body.ko div[data-ko],body.ko ul[data-ko],body.ko ol[data-ko],body.ko pre[data-ko]{display:block}
+@media(max-width:600px){.bd,.hd,.ft{padding-left:20px;padding-right:20px}.hd h1{font-size:1.4rem}table{font-size:.8rem}}
+@media print{body{background:#fff;padding:0}.page{box-shadow:none}.lang{display:none}}
+</style>
+</head>
+<body>
+<div class="page">
+<div class="hd">
+<button class="lang" onclick="tg(this)">&#54620;&#44397;&#50612;</button>
+<div class="eyebrow" data-en>Miyo Studio · Internal operating manual</div><div class="eyebrow" data-ko>Miyo Studio · 내부 운영 매뉴얼</div>
+<h1 data-en>What to set up before client #1</h1><h1 data-ko>1호 고객 전에 갖출 것</h1>
+<p data-en>Insurance, contracts, banking, and the one thing nobody else will warn you about. Costed, ordered, and separated into what blocks a paying client and what does not.</p><p data-ko>보험, 계약, 은행, 그리고 아무도 경고해주지 않을 한 가지. 비용과 순서를 매기고, 유료 고객을 막는 것과 막지 않는 것을 나눴습니다.</p>
+</div>
+<div class="bd">
+
+<div class="box warn">
+<p data-en><strong>Read this first.</strong> This is a practical checklist written by your assistant, not legal or insurance advice. The MSA below is a starting draft — have a lawyer review it <em>once</em> (about $500-800, one time, and then you reuse it forever). Everything here is cheap and fast except that one review, and none of it should delay you sending teardowns this week.</p>
+<p data-ko><strong>먼저 읽어주세요.</strong> 이건 실무 체크리스트이지 법률·보험 자문이 아닙니다. 아래 MSA는 초안이고, 변호사에게 <em>한 번</em> 검토받으세요(대략 $500~800, 1회, 이후 계속 재사용). 그 검토 하나를 빼면 전부 저렴하고 빠릅니다. 그리고 이 중 무엇도 이번 주 티어다운 발송을 미룰 이유가 되지 않습니다.</p>
+</div>
+
+<h2 class="nb" data-en>The short list — what actually blocks client #1</h2><h2 class="nb" data-ko>짧은 목록 — 실제로 1호 고객을 막는 것</h2>
+<table>
+<tr><th data-en>#</th><th data-ko>#</th><th data-en>Item</th><th data-ko>항목</th><th data-en>Cost</th><th data-ko>비용</th><th data-en>Time</th><th data-ko>소요</th><th data-en>Blocks client 1?</th><th data-ko>1호 고객 차단?</th></tr>
+<tr><td>1</td><td data-en><strong>Check your Microchip employment agreement</strong></td><td data-ko><strong>마이크로칩 고용계약 확인</strong></td><td>$0</td><td data-en>1 hour</td><td data-ko>1시간</td><td><strong style="color:#9F3D26" data-en>YES — do this first</strong><strong style="color:#9F3D26" data-ko>예 — 가장 먼저</strong></td></tr>
+<tr><td>2</td><td data-en><strong>E&amp;O insurance (professional liability)</strong></td><td data-ko><strong>E&amp;O 보험 (전문가 배상책임)</strong></td><td>$500-1,200/yr</td><td data-en>1-3 days</td><td data-ko>1~3일</td><td><strong style="color:#9F3D26" data-en>YES</strong><strong style="color:#9F3D26" data-ko>예</strong></td></tr>
+<tr><td>3</td><td data-en><strong>MSA + one-page SOW</strong></td><td data-ko><strong>MSA + 1장짜리 SOW</strong></td><td data-en>$0 draft, ~$600 review</td><td data-ko>초안 $0, 검토 약 $600</td><td data-en>2 hours</td><td data-ko>2시간</td><td><strong style="color:#9F3D26" data-en>YES</strong><strong style="color:#9F3D26" data-ko>예</strong></td></tr>
+<tr><td>4</td><td data-en>Business bank account under Miyo Studio LLC</td><td data-ko>Miyo Studio LLC 명의 사업자 계좌</td><td>$0</td><td data-en>1 day</td><td data-ko>1일</td><td data-en>Yes (practically)</td><td data-ko>예 (실질적으로)</td></tr>
+<tr><td>5</td><td data-en>Invoicing + payments (Stripe Invoicing or Wave)</td><td data-ko>인보이스 + 결제 (Stripe Invoicing 또는 Wave)</td><td data-en>~3% per invoice</td><td data-ko>인보이스당 약 3%</td><td data-en>1 hour</td><td data-ko>1시간</td><td data-en>Yes</td><td data-ko>예</td></tr>
+<tr><td>6</td><td data-en>W-9 on file, ready to send</td><td data-ko>W-9 준비</td><td>$0</td><td data-en>10 min</td><td data-ko>10분</td><td data-en>No, but they'll ask</td><td data-ko>아니오, 하지만 요청받습니다</td></tr>
+<tr><td>7</td><td data-en>Access + security policy (how you touch client accounts)</td><td data-ko>접근·보안 정책 (고객 계정을 다루는 방식)</td><td>$0</td><td data-en>30 min</td><td data-ko>30분</td><td data-en>No, but write it before you need it</td><td data-ko>아니오, 하지만 필요해지기 전에 써두세요</td></tr>
+<tr><td>8</td><td data-en>General liability / BOP</td><td data-ko>일반 배상책임 / BOP</td><td>$300-600/yr</td><td data-en>1 day</td><td data-ko>1일</td><td data-en>No — skip until asked</td><td data-ko>아니오 — 요청받기 전까지 보류</td></tr>
+</table>
+
+<h2 data-en>1. Before anything else: your employment agreement</h2><h2 data-ko>1. 무엇보다 먼저: 고용계약</h2>
+<div class="box warn">
+<p data-en><strong>This is the one that can actually hurt you, and nobody else is going to raise it.</strong> You are a full-time engineer at Microchip. Most US semiconductor employment agreements contain some combination of: an outside-employment / moonlighting clause, an IP assignment clause, and a conflict-of-interest policy. Selling consulting services to third parties can touch all three — even though app marketing has nothing to do with Ethernet PHY work.</p>
+<p data-ko><strong>실제로 다칠 수 있는 유일한 항목이고, 아무도 먼저 말해주지 않습니다.</strong> 마이크로칩 정규직 엔지니어입니다. 미국 반도체 회사 고용계약에는 보통 겸업 조항, IP 양도 조항, 이해충돌 정책이 조합되어 들어 있습니다. 앱 마케팅이 이더넷 PHY 업무와 무관하더라도, 제3자에게 컨설팅을 파는 행위는 이 셋 모두에 걸릴 수 있습니다.</p>
+</div>
+<p data-en>What to actually do, in order:</p>
+<p data-ko>실제로 할 일, 순서대로:</p>
+<ol>
+<li data-en><strong>Find your signed offer letter and the employee handbook.</strong> Search for: "outside employment", "moonlighting", "conflict of interest", "inventions", "assignment", "competing business".</li>
+<li data-ko><strong>서명한 오퍼레터와 취업규칙을 찾으세요.</strong> 검색어: "outside employment", "moonlighting", "conflict of interest", "inventions", "assignment", "competing business".</li>
+<li data-en><strong>Note that Miyo Studio LLC already exists</strong> and already publishes an app. That is a helpful fact — the entity is not new, it predates the agency pivot, and it is not in Microchip's line of business.</li>
+<li data-ko><strong>Miyo Studio LLC는 이미 존재하고 앱도 이미 출시했다는 점</strong>이 유리합니다. 새로 만든 법인이 아니고, 에이전시 전환보다 앞서 존재했으며, 마이크로칩의 사업 영역이 아닙니다.</li>
+<li data-en><strong>If the handbook requires disclosure, disclose it.</strong> A short written notice to HR that you operate an LLC publishing consumer software and providing marketing services, outside work hours, unrelated to the company's business. Written disclosure that gets approved is armour. Silence that gets discovered is not.</li>
+<li data-ko><strong>취업규칙이 신고를 요구하면 신고하세요.</strong> 근무시간 외에, 회사 사업과 무관하게, 소비자 소프트웨어를 출시하고 마케팅 서비스를 제공하는 LLC를 운영한다는 짧은 서면 통지를 HR에 하세요. 승인받은 서면 신고는 방패입니다. 들킨 침묵은 아닙니다.</li>
+<li data-en><strong>Never use company time, laptop, network, or email.</strong> Not once. This is the single fact that determines how any dispute goes.</li>
+<li data-ko><strong>회사 시간·노트북·네트워크·이메일을 절대 쓰지 마세요.</strong> 단 한 번도. 분쟁이 생겼을 때 결과를 가르는 단 하나의 사실입니다.</li>
+<li data-en><strong>Never take a client who is a Microchip customer, supplier, or competitor.</strong> Add it to your disqualify list next to "no monetization".</li>
+<li data-ko><strong>마이크로칩의 고객·공급사·경쟁사는 절대 고객으로 받지 마세요.</strong> "수익 모델 없음" 옆에 나란히 탈락 조건으로 넣으세요.</li>
+</ol>
+<p data-en>This costs you an hour and a conversation. It is worth more than every other item on this page combined, because it is the only one where the downside is your salary rather than your savings.</p>
+<p data-ko>한 시간과 대화 한 번이면 됩니다. 이 페이지의 다른 모든 항목을 합친 것보다 중요합니다. 유일하게 손해가 저축이 아니라 연봉인 항목이기 때문입니다.</p>
+
+<h2 data-en>2. E&amp;O insurance — what it is and how to actually buy it</h2><h2 data-ko>2. E&amp;O 보험 — 정체와 실제 가입 방법</h2>
+<h3 data-en>What it covers</h3><h3 data-ko>보장 범위</h3>
+<p data-en><strong>Errors &amp; Omissions</strong> (also sold as <em>Professional Liability</em> or <em>Tech E&amp;O</em>) covers claims that your <em>advice or work product</em> caused a client financial loss. Not injury, not property — <em>advice</em>. That is exactly the product you are selling.</p>
+<p data-ko><strong>Errors &amp; Omissions</strong>(전문가 배상책임, Tech E&amp;O로도 판매)는 <em>당신의 조언이나 산출물</em>이 고객에게 금전적 손해를 입혔다는 청구를 보장합니다. 신체 상해나 재물 손해가 아니라 <em>조언</em>입니다. 정확히 당신이 파는 상품입니다.</p>
+<p data-en>The realistic claim in your business is not exotic: <em>"You changed our App Store keywords and our rankings dropped, we lost three months of revenue"</em>, or <em>"You mismanaged our ad account and burned $12,000."</em> Even a claim with no merit costs real money to defend, and defence costs are the main thing you are buying.</p>
+<p data-ko>당신 사업에서 현실적인 청구는 특이하지 않습니다: <em>"키워드를 바꿨더니 순위가 떨어져 3개월 매출을 잃었다"</em>, 또는 <em>"광고 계정을 잘못 운영해서 $12,000을 태웠다."</em> 근거 없는 청구라도 방어에는 실제 비용이 듭니다. 사실 방어비용이 이 보험을 사는 주된 이유입니다.</p>
+
+<h3 data-en>What to ask for</h3><h3 data-ko>요청할 조건</h3>
+<ul>
+<li data-en><strong>$1,000,000 per claim / $1,000,000 aggregate.</strong> This is the number clients ask for. $500k is cheaper but you will get asked to raise it.</li>
+<li data-ko><strong>건당 100만 달러 / 총액 100만 달러.</strong> 고객들이 요구하는 숫자입니다. 50만 달러가 싸지만 결국 올리라는 요청을 받습니다.</li>
+<li data-en><strong>Tech E&amp;O with a marketing/advertising services endorsement.</strong> Say the words "app store optimization and paid advertising management" to the agent — a plain software-developer policy may exclude advertising services.</li>
+<li data-ko><strong>마케팅/광고 서비스 특약이 포함된 Tech E&amp;O.</strong> 상담원에게 "app store optimization and paid advertising management"라고 정확히 말하세요. 일반 소프트웨어 개발자 보험은 광고 서비스를 면책할 수 있습니다.</li>
+<li data-en><strong>Retroactive date = the date you started providing services</strong>, not the policy date. E&amp;O is claims-made; without this, work you did before buying the policy is uncovered.</li>
+<li data-ko><strong>소급일자를 서비스 개시일로</strong> 설정하세요. 증권 개시일이 아닙니다. E&amp;O는 청구기준(claims-made)이라, 이게 없으면 가입 전 수행한 업무는 보장되지 않습니다.</li>
+<li data-en><strong>Worldwide territory.</strong> Your clients will be in Korea and Japan. A US-only territory clause makes the policy useless for exactly your best segment.</li>
+<li data-ko><strong>전 세계 담보지역.</strong> 고객이 한국·일본에 있습니다. 미국 한정 조항이면 가장 좋은 세그먼트에서 보험이 무용지물입니다.</li>
+<li data-en><strong>Add cyber liability if it's cheap</strong> (often bundled for $100-200 more). You will hold client App Store Connect and ad account access — that is a data-breach surface.</li>
+<li data-ko><strong>사이버 배상책임이 저렴하면 추가</strong>하세요(보통 $100~200 추가로 묶음 판매). 고객의 App Store Connect와 광고 계정 접근권을 보유하게 되므로 정보유출 위험이 있습니다.</li>
+</ul>
+
+<h3 data-en>Where to buy it this week</h3><h3 data-ko>이번 주에 어디서 사는가</h3>
+<table>
+<tr><th data-en>Provider</th><th data-ko>제공사</th><th data-en>Why</th><th data-ko>이유</th></tr>
+<tr><td><strong>Hiscox</strong></td><td data-en>The default for one-person US consultancies. Fully online quote, often bindable same day, understands "marketing consultant" as a class.</td><td data-ko>미국 1인 컨설팅의 기본 선택지. 온라인 견적, 당일 가입 가능한 경우가 많고 "마케팅 컨설턴트" 업종을 이해합니다.</td></tr>
+<tr><td><strong>Vouch</strong></td><td data-en>Built for tech startups, good at tech E&amp;O + cyber bundles, understands SaaS/app businesses without a long explanation.</td><td data-ko>테크 스타트업 대상. Tech E&amp;O + 사이버 묶음에 강하고, 긴 설명 없이도 앱/SaaS 사업을 이해합니다.</td></tr>
+<tr><td><strong>Thimble</strong></td><td data-en>Monthly, cancel anytime. Worth considering only if you want to insure from client #1 without an annual commitment.</td><td data-ko>월 단위, 언제든 해지. 연간 약정 없이 1호 고객부터 보장받고 싶을 때만 고려.</td></tr>
+<tr><td><strong>Your Jujube/LLC agent</strong></td><td data-en>If Miyo Studio LLC already has any policy, call that agent first — adding E&amp;O to an existing relationship is usually faster and slightly cheaper.</td><td data-ko>Miyo Studio LLC에 이미 보험이 있다면 그 상담원에게 먼저 연락하세요. 기존 관계에 E&amp;O를 추가하는 게 대개 더 빠르고 조금 저렴합니다.</td></tr>
+</table>
+<p data-en><strong>Get three quotes, not one.</strong> For a solo consultancy with no revenue history, expect roughly $500-1,200/year at $1M/$1M. If a quote comes back above $2,000, the underwriter has miscoded you as an advertising agency that buys media on behalf of clients — clarify that <em>the client owns the ad account and the card, and you never front spend.</em> That one sentence moves the price.</p>
+<p data-ko><strong>견적은 하나가 아니라 셋을 받으세요.</strong> 매출 이력 없는 1인 컨설팅이면 $1M/$1M 기준 연 $500~1,200 정도가 일반적입니다. $2,000을 넘는 견적이 오면, 인수심사에서 당신을 "고객 대신 매체를 구매하는 광고대행사"로 분류한 겁니다. <em>광고 계정과 카드는 고객 소유이고, 광고비를 대신 선지급하지 않는다</em>고 명확히 하세요. 그 한 문장이 가격을 바꿉니다.</p>
+<div class="box">
+<p data-en><strong>Timing:</strong> buy it <em>before</em> your first paid engagement starts, not before your first teardown. Free teardowns with no contract and no fee carry very little exposure — especially with the "this is a free diagnosis, not a recommendation to act" line already in the template. Do not let insurance be the reason you don't send teardowns this week.</p>
+<p data-ko><strong>시점:</strong> 첫 <em>유료</em> 계약 시작 전에 가입하세요. 첫 티어다운 전이 아닙니다. 계약도 대가도 없는 무료 티어다운은 노출이 매우 적습니다 — 특히 템플릿에 "실행 권고가 아닌 무료 진단"이라는 문장이 이미 있으니까요. 보험 때문에 이번 주 티어다운을 미루지 마세요.</p>
+</div>
+
+<h2 data-en>3. The MSA — what it is and a draft you can use</h2><h2 data-ko>3. MSA — 정체와 사용 가능한 초안</h2>
+<p data-en>An <strong>MSA (Master Services Agreement)</strong> is the contract you sign <em>once</em> with a client. It covers everything that never changes: payment terms, IP ownership, confidentiality, liability, termination. Then each piece of work gets a short <strong>SOW (Statement of Work)</strong> — one page, what you're doing, for how long, for how much. New engagement, new SOW, same MSA.</p>
+<p data-ko><strong>MSA(기본계약서)</strong>는 고객과 <em>한 번만</em> 체결하는 계약입니다. 변하지 않는 것 전부를 담습니다: 대금 조건, IP 소유권, 비밀유지, 책임 한도, 해지. 개별 업무는 짧은 <strong>SOW(작업기술서)</strong>로 처리합니다 — 한 장, 무엇을, 얼마 동안, 얼마에. 새 업무마다 새 SOW, MSA는 그대로.</p>
+<p data-en>This split is why it's worth doing properly once: the second client takes ten minutes to paper instead of a week.</p>
+<p data-ko>이렇게 나누는 이유가 여기 있습니다. 두 번째 고객부터는 계약 처리에 일주일이 아니라 10분이 걸립니다.</p>
+
+<h3 data-en>The clauses that actually matter for you</h3><h3 data-ko>당신에게 실제로 중요한 조항</h3>
+<table>
+<tr><th data-en>Clause</th><th data-ko>조항</th><th data-en>What it must say</th><th data-ko>반드시 담아야 할 내용</th></tr>
+<tr><td><strong data-en>Limitation of liability</strong><strong data-ko>책임 한도</strong></td><td data-en>Your total liability is capped at <em>fees paid in the last 3 months</em>. No consequential, indirect, or lost-profit damages. This one clause is the difference between a bad month and a bad decade.</td><td data-ko>총 책임은 <em>최근 3개월 수령 수수료</em>로 제한. 간접손해·결과적 손해·일실이익 배제. 이 조항 하나가 "나쁜 한 달"과 "나쁜 10년"을 가릅니다.</td></tr>
+<tr><td><strong data-en>No guarantee of results</strong><strong data-ko>결과 무보장</strong></td><td data-en>Explicit: rankings, installs, and revenue depend on Apple's algorithms, competitors, and the client's product, none of which you control. This mirrors what you already say in sales — put it in writing.</td><td data-ko>명시: 순위·설치·매출은 Apple 알고리즘, 경쟁사, 고객 제품에 좌우되며 어느 것도 당신의 통제 밖. 영업에서 하는 말 그대로를 문서화하세요.</td></tr>
+<tr><td><strong data-en>Ad spend is the client's</strong><strong data-ko>광고비는 고객 부담</strong></td><td data-en>Client owns the Apple Search Ads account and the payment method. You are never a media buyer of record and never front spend. Also keeps your insurance cheap.</td><td data-ko>Apple Search Ads 계정과 결제수단은 고객 소유. 당신은 매체 구매 주체가 아니며 광고비를 선지급하지 않음. 보험료도 낮게 유지됩니다.</td></tr>
+<tr><td><strong data-en>IP ownership</strong><strong data-ko>IP 소유권</strong></td><td data-en>Deliverables (keyword sets, copy, screenshots) transfer to the client <em>on payment</em>. You retain your methods, templates, and tooling. Both halves matter.</td><td data-ko>산출물(키워드 세트, 카피, 스크린샷)은 <em>대금 지급 시</em> 고객에게 이전. 방법론·템플릿·도구는 당신이 보유. 양쪽 다 중요합니다.</td></tr>
+<tr><td><strong data-en>Confidentiality, mutual</strong><strong data-ko>비밀유지 (상호)</strong></td><td data-en>Two-way. And carve out a right to describe the engagement in anonymised form ("a Korean productivity app, 40k MAU") — you need case studies.</td><td data-ko>쌍방. 그리고 익명화된 형태로 사례를 언급할 권리를 유보하세요("한국 생산성 앱, MAU 4만"). 케이스 스터디가 필요합니다.</td></tr>
+<tr><td><strong data-en>Termination</strong><strong data-ko>해지</strong></td><td data-en>30 days' written notice, either side, no cause needed. Monthly retainers should never have a lock-in — it is a selling point <em>and</em> it protects you from a client you want out of.</td><td data-ko>어느 쪽이든 30일 서면 통지, 사유 불요. 월 리테이너에 락인을 두지 마세요. 세일즈 포인트이면서 <em>동시에</em> 나가고 싶은 고객으로부터 당신을 지킵니다.</td></tr>
+<tr><td><strong data-en>Payment terms</strong><strong data-ko>대금 조건</strong></td><td data-en>Net 15, invoiced in advance for retainers. 1.5%/month late fee. Work pauses at 15 days past due. Say it plainly; it prevents 90% of collection problems.</td><td data-ko>Net 15, 리테이너는 선청구. 연체 시 월 1.5%. 15일 연체 시 작업 중단. 명확히 쓰면 미수 문제의 90%가 사라집니다.</td></tr>
+<tr><td><strong data-en>Governing law</strong><strong data-ko>준거법</strong></td><td data-en>Arizona. If a Korean or Japanese client pushes back, offer arbitration in a neutral venue rather than accepting their courts.</td><td data-ko>애리조나. 한국·일본 고객이 이의를 제기하면, 상대 법원을 수용하지 말고 중립 지역 중재를 제안하세요.</td></tr>
+<tr><td><strong data-en>Independent contractor</strong><strong data-ko>독립계약자</strong></td><td data-en>You are not an employee, you set your own hours and methods. Also useful evidence for the Microchip conversation.</td><td data-ko>피고용인이 아니며 근무시간·방법을 스스로 정함. 마이크로칩 관련 논의에서도 유용한 근거입니다.</td></tr>
+</table>
+
+<h3 data-en>Where to get the actual document</h3><h3 data-ko>실제 문서를 어디서 구하는가</h3>
+<ol>
+<li data-en><strong>Fastest path, ~$600 total:</strong> take a reputable template as a base — Bonsai, Docracy, or the Freelancers Union model contract — fill in the clauses above, then pay an Arizona small-business attorney for a single review pass. One-time cost, reused forever.</li>
+<li data-ko><strong>가장 빠른 경로, 총 약 $600:</strong> 신뢰할 만한 템플릿(Bonsai, Docracy, Freelancers Union 모델 계약)을 기반으로 위 조항들을 채운 뒤, 애리조나 소상공인 전문 변호사에게 1회 검토를 받으세요. 일회성 비용으로 영구 재사용.</li>
+<li data-en><strong>Cheaper, slower:</strong> LegalZoom or Rocket Lawyer subscription generates one, but generic templates tend to be weak on exactly the clause you need most — the liability cap and the no-guarantee language.</li>
+<li data-ko><strong>더 싸고 느린 경로:</strong> LegalZoom이나 Rocket Lawyer 구독으로 생성. 다만 범용 템플릿은 정작 가장 필요한 조항 — 책임 한도와 결과 무보장 문구 — 이 약한 경우가 많습니다.</li>
+<li data-en><strong>Signature:</strong> Documenso, Dropbox Sign, or PandaDoc free tier. Do not email a PDF and ask for a scan — it looks amateur at $1,950/month.</li>
+<li data-ko><strong>서명:</strong> Documenso, Dropbox Sign, PandaDoc 무료 플랜. PDF 메일 보내고 스캔 요청하지 마세요. 월 $1,950짜리 서비스로는 아마추어처럼 보입니다.</li>
+</ol>
+
+<h3 data-en>The SOW — keep it to one page</h3><h3 data-ko>SOW — 한 장을 넘기지 마세요</h3>
+<pre>STATEMENT OF WORK #1 — [Client] &lt;&gt; Miyo Studio LLC
+Under the Master Services Agreement dated [date]
+
+<span class="k">SERVICE</span>      ASO Growth (monthly retainer)
+<span class="k">TERM</span>         Month-to-month, starting [date]. 30 days' notice to end.
+<span class="k">FEE</span>          $1,950/month, invoiced on the 1st, Net 15.
+             Excludes advertising spend, which the Client pays
+             directly to Apple on the Client's own account.
+
+<span class="k">EACH MONTH</span>   - App Store listing optimization (metadata, keywords,
+               screenshots) for up to 2 storefronts
+             - Apple Search Ads management, structure and bid
+               review, minimum $1,000/mo Client ad budget
+             - One written report with what changed, what it did,
+               and what happens next
+             - One optional 30-minute call
+
+<span class="k">CLIENT GIVES</span> App Store Connect access (Marketing or Developer role),
+             Apple Search Ads account access (Admin), and a named
+             person who can approve listing changes within 5 days.
+
+<span class="k">NOT INCLUDED</span> App development, design work beyond store assets,
+             Android / Google Play, press or influencer outreach.
+
+<span class="k">NO GUARANTEE</span> Rankings, install volume and revenue depend on Apple's
+             systems, competitor behaviour and the Client's product.
+             Miyo Studio does not guarantee any specific outcome.
+</pre>
+
+<h2 data-en>4. Getting paid</h2><h2 data-ko>4. 대금 수령</h2>
+<ul>
+<li data-en><strong>Business bank account under Miyo Studio LLC.</strong> Mercury or Novo, opens online in a day. Never mix with personal — it is the single easiest way to lose LLC liability protection, and it makes taxes miserable.</li>
+<li data-ko><strong>Miyo Studio LLC 명의 사업자 계좌.</strong> Mercury나 Novo는 온라인으로 하루면 개설됩니다. 개인 계좌와 절대 섞지 마세요. LLC의 책임 분리를 잃는 가장 쉬운 방법이고, 세무도 지옥이 됩니다.</li>
+<li data-en><strong>Stripe Invoicing</strong> for cards, or <strong>Wise Business</strong> for Korean and Japanese clients — a KRW or JPY receiving account removes a real friction point and a bad FX rate that the client would otherwise feel as your price going up.</li>
+<li data-ko><strong>카드 결제는 Stripe Invoicing</strong>, 한국·일본 고객은 <strong>Wise Business</strong>. 원화·엔화 수취 계좌가 있으면 실질적인 마찰과 불리한 환율이 사라집니다. 그 환율은 고객 입장에서 당신 가격 인상으로 느껴집니다.</li>
+<li data-en><strong>Invoice in advance for retainers</strong>, in arrears for one-off audits. Retainers billed after the fact are how agencies get stiffed.</li>
+<li data-ko><strong>리테이너는 선청구</strong>, 일회성 감사는 후청구. 후불 리테이너가 에이전시가 떼이는 전형적인 경로입니다.</li>
+<li data-en><strong>Have a W-9 filled out and saved as a PDF.</strong> US clients will ask on day one; having it ready in 30 seconds looks like you've done this before.</li>
+<li data-ko><strong>W-9를 작성해 PDF로 저장해 두세요.</strong> 미국 고객은 첫날 요청합니다. 30초 만에 보내면 경험 있어 보입니다.</li>
+<li data-en><strong>Set aside 30% of every payment for tax</strong> in a separate account from day one, and talk to a CPA about quarterly estimated payments before the first quarter closes. LLC income stacks on top of a W-2 salary and the bracket surprise is real.</li>
+<li data-ko><strong>받는 금액의 30%를 세금용 별도 계좌에</strong> 첫날부터 떼어두세요. 첫 분기가 끝나기 전에 CPA와 분기 예납을 상의하세요. LLC 소득은 W-2 급여 위에 얹히므로 세율 구간 충격이 실제로 옵니다.</li>
+</ul>
+
+<h2 data-en>5. Handling client accounts</h2><h2 data-ko>5. 고객 계정 취급</h2>
+<p data-en>Write this down once and put it on the website. It converts, because every developer has been burned by an agency that asked for a password.</p>
+<p data-ko>한 번 정리해서 웹사이트에 올리세요. 전환에 도움이 됩니다. 비밀번호를 요구한 에이전시에 데어본 개발자가 대부분이기 때문입니다.</p>
+<ul class="chk">
+<li data-en><strong>Never ask for a password.</strong> App Store Connect and Apple Search Ads both support named user invitations. Always use those.</li>
+<li data-ko><strong>비밀번호를 절대 요구하지 마세요.</strong> App Store Connect와 Apple Search Ads 모두 지정 사용자 초대를 지원합니다. 항상 그 방식으로.</li>
+<li data-en><strong>Ask for the minimum role that works.</strong> Marketing or Developer in ASC, not Account Holder. Admin in Search Ads is unavoidable to manage campaigns; say so plainly and explain why.</li>
+<li data-ko><strong>가능한 최소 권한을 요청하세요.</strong> ASC에서는 Account Holder가 아니라 Marketing 또는 Developer. Search Ads는 캠페인 관리를 위해 Admin이 불가피하니, 그 이유를 솔직히 설명하세요.</li>
+<li data-en><strong>The client's card stays on the client's ad account.</strong> Non-negotiable. It is why "add budget" is a credible recommendation from you and self-dealing from a percentage-of-spend agency.</li>
+<li data-ko><strong>고객의 카드는 고객의 광고 계정에.</strong> 협상 불가. 그래서 "예산을 늘리세요"가 당신에게는 정직한 조언이고, 광고비 비율로 받는 에이전시에게는 자기거래인 겁니다.</li>
+<li data-en><strong>Offboarding is a checklist, not a promise.</strong> On termination: revoke your own access, delete downloaded reports, confirm in writing within 5 days. Put the 5 days in the MSA.</li>
+<li data-ko><strong>오프보딩은 약속이 아니라 체크리스트로.</strong> 해지 시: 본인 접근권 회수, 다운로드한 리포트 삭제, 5일 내 서면 확인. 이 5일을 MSA에 넣으세요.</li>
+<li data-en><strong>1Password (or equivalent) for anything you must hold.</strong> Never a note, never a spreadsheet, never a chat message.</li>
+<li data-ko><strong>보관해야 하는 정보는 1Password 등에.</strong> 메모, 스프레드시트, 채팅 메시지에 절대 금지.</li>
+</ul>
+
+<h2 data-en>6. What to skip, for now</h2><h2 data-ko>6. 지금은 건너뛸 것</h2>
+<ul class="no">
+<li data-en><strong>Trademark.</strong> Nice eventually. Blocks nothing today.</li>
+<li data-ko><strong>상표 등록.</strong> 언젠가는 좋습니다. 오늘 막는 건 없습니다.</li>
+<li data-en><strong>General liability / BOP.</strong> You have no office and no clients visiting. Buy it when a client's procurement asks for a certificate — some enterprises require it, no indie dev ever will.</li>
+<li data-ko><strong>일반 배상책임 / BOP.</strong> 사무실도 방문 고객도 없습니다. 고객사 구매팀이 증명서를 요구할 때 사면 됩니다. 일부 대기업은 요구하고, 인디 개발자는 절대 요구하지 않습니다.</li>
+<li data-en><strong>A DPA / GDPR paperwork.</strong> You handle aggregate store analytics, not personal data. Revisit only if an EU client with real user data asks.</li>
+<li data-ko><strong>DPA / GDPR 문서.</strong> 개인정보가 아니라 집계된 스토어 지표를 다룹니다. 실제 사용자 데이터를 가진 EU 고객이 요청할 때만 다시 보세요.</li>
+<li data-en><strong>A separate legal entity for the agency.</strong> Miyo Studio LLC already covers it. A second entity is cost and paperwork with no benefit at this size.</li>
+<li data-ko><strong>에이전시용 별도 법인.</strong> Miyo Studio LLC로 충분합니다. 이 규모에서 두 번째 법인은 비용과 서류일 뿐 이점이 없습니다.</li>
+<li data-en><strong>Formal accounting software.</strong> A spreadsheet works until roughly client 5. Then move to Wave (free) or QuickBooks.</li>
+<li data-ko><strong>정식 회계 소프트웨어.</strong> 고객 5명까지는 스프레드시트로 충분합니다. 그다음 Wave(무료)나 QuickBooks로.</li>
+</ul>
+
+<h2 data-en>7. The order to actually do it in</h2><h2 data-ko>7. 실제 실행 순서</h2>
+<ol>
+<li data-en><strong>This week (0 dollars, 2 hours):</strong> read your Microchip employment agreement; open the business bank account; save a filled-in W-9. <em>Then send five teardowns.</em> None of the rest blocks a free teardown.</li>
+<li data-ko><strong>이번 주 (비용 0, 2시간):</strong> 마이크로칩 고용계약 확인, 사업자 계좌 개설, W-9 작성·저장. <em>그리고 티어다운 5건 발송.</em> 나머지 무엇도 무료 티어다운을 막지 않습니다.</li>
+<li data-en><strong>When someone replies with interest (1 week, ~$600):</strong> get three E&amp;O quotes; draft the MSA from a template; book the attorney review.</li>
+<li data-ko><strong>관심 있는 답장이 오면 (1주, 약 $600):</strong> E&amp;O 견적 3건, 템플릿으로 MSA 초안 작성, 변호사 검토 예약.</li>
+<li data-en><strong>Before the first paid engagement starts (~$600-1,200):</strong> bind the E&amp;O policy; finalise the MSA; set up Stripe Invoicing.</li>
+<li data-ko><strong>첫 유료 계약 시작 전 (약 $600~1,200):</strong> E&amp;O 가입 확정, MSA 최종본, Stripe Invoicing 설정.</li>
+<li data-en><strong>At client 3:</strong> talk to a CPA about quarterly estimated tax. Not before — you won't have enough numbers for the conversation to be useful.</li>
+<li data-ko><strong>고객 3명 시점:</strong> CPA와 분기 예납 상담. 그 전엔 숫자가 부족해서 대화가 무의미합니다.</li>
+</ol>
+<div class="box">
+<p data-en><strong>Total to be fully covered and papered: roughly $1,100-1,800 one-time and annual.</strong> That is less than one month of the Growth retainer. It is not a reason to wait — but do not let the reverse happen either, and start a paid engagement uninsured.</p>
+<p data-ko><strong>보험과 계약을 완전히 갖추는 총비용: 약 $1,100~1,800 (일회성 + 연간).</strong> Growth 리테이너 한 달치보다 적습니다. 기다릴 이유가 아닙니다 — 다만 반대로, 보험 없이 유료 계약을 시작하는 일도 없어야 합니다.</p>
+</div>
+
+</div>
+<div class="ft">
+<p data-en>Miyo Studio LLC · prepared 2026-09-01 · internal use. Practical checklist, not legal or insurance advice — have an attorney review the MSA once.</p><p data-ko>Miyo Studio LLC · 2026-09-01 작성 · 내부용. 법률·보험 자문이 아닌 실무 체크리스트입니다. MSA는 변호사 검토를 한 번 받으세요.</p>
+</div>
+</div>
+<script>function tg(b){var k=document.body.classList.toggle('ko');b.textContent=k?'English':'\ud55c\uad6d\uc5b4';document.documentElement.lang=k?'ko':'en';}</script>
+</body>
+</html>
