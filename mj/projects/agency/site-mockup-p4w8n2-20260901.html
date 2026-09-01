@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>Miyo Studio — App growth for indie iOS apps</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌿</text></svg>">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+--stone-50:#FAFAF9;--stone-100:#F5F5F4;--stone-200:#E7E5E4;--stone-300:#D6D3D1;
+--stone-400:#A8A29E;--stone-500:#78716C;--stone-600:#57534E;--stone-700:#44403C;
+--stone-800:#292524;--stone-900:#1C1917;
+--sage-50:#F6F7F5;--sage-100:#E8EBE5;--sage-200:#D4DACE;--sage-400:#8A9A7C;
+--sage-500:#6B7D5C;--sage-600:#556A45;--sage-700:#3F5232;--sage-900:#26331C;
+--warm-50:#FEF9F3;--warm-100:#FCEEDD;--terra:#B8704A;--terra-light:#D4956E;--terra-dark:#8A4E28;
+--ink:#1C1917;
+}
+html{font-size:16px;scroll-behavior:smooth;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+body{font-family:'Iowan Old Style','Palatino Linotype',Georgia,serif;color:var(--stone-800);background:var(--stone-50);line-height:1.7}
+h1,h2,h3,h4,h5,nav,.btn,.ui,.eyebrow,.stat-num,.price,.tier-name,.nav-cta,footer{font-family:system-ui,-apple-system,'Segoe UI','Helvetica Neue',Arial,sans-serif}
+h1{font-size:clamp(2.1rem,5.2vw,3.6rem);font-weight:650;line-height:1.08;letter-spacing:-.033em;color:var(--stone-900)}
+h2{font-size:clamp(1.6rem,3.4vw,2.4rem);font-weight:640;line-height:1.15;letter-spacing:-.024em;color:var(--stone-900)}
+h3{font-size:1.16rem;font-weight:650;line-height:1.35;letter-spacing:-.012em;color:var(--stone-900)}
+p{max-width:40em}
+a{color:inherit;text-decoration:none}
+.container{max-width:1120px;margin:0 auto;padding:0 1.5rem}
+.narrow{max-width:780px}
+section{padding:5.5rem 0;position:relative}
+.eyebrow{font-size:.735rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--sage-600);margin-bottom:1rem;display:block}
+.eyebrow.terra{color:var(--terra)}
+.lede{font-size:clamp(1.02rem,1.9vw,1.19rem);color:var(--stone-600);line-height:1.72}
+
+/* header */
+header{position:sticky;top:0;z-index:100;background:rgba(250,250,249,.88);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--stone-200)}
+.header-inner{display:flex;align-items:center;justify-content:space-between;height:4rem;gap:1rem}
+.wordmark{font-size:1.06rem;font-weight:750;letter-spacing:-.02em;color:var(--stone-900);white-space:nowrap}
+.wordmark em{font-style:normal;font-weight:400;color:var(--stone-400);margin-left:.3em}
+nav{display:flex;gap:1.9rem;align-items:center}
+nav a.nl{font-size:.845rem;font-weight:520;color:var(--stone-600);transition:color .18s}
+nav a.nl:hover{color:var(--stone-900)}
+.nav-right{display:flex;align-items:center;gap:.75rem}
+.btn{display:inline-block;font-size:.87rem;font-weight:600;padding:.66rem 1.25rem;border-radius:9px;transition:all .18s;cursor:pointer;border:1px solid transparent;letter-spacing:-.005em}
+.btn-primary{background:var(--sage-700);color:#fff}
+.btn-primary:hover{background:var(--sage-900);transform:translateY(-1px)}
+.btn-ghost{background:transparent;color:var(--stone-700);border-color:var(--stone-300)}
+.btn-ghost:hover{border-color:var(--stone-500);color:var(--stone-900)}
+.btn-lg{padding:.92rem 1.7rem;font-size:.95rem;border-radius:10px}
+.langbtn{font-family:system-ui,sans-serif;font-size:.76rem;font-weight:650;padding:.42rem .78rem;border-radius:20px;border:1px solid var(--stone-300);background:#fff;color:var(--stone-600);cursor:pointer;transition:all .18s;white-space:nowrap}
+.langbtn:hover{border-color:var(--sage-500);color:var(--sage-700)}
+
+/* hero */
+.hero{padding:6.5rem 0 4.5rem;background:linear-gradient(172deg,var(--warm-50) 0%,var(--stone-50) 62%);overflow:hidden}
+.hero-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:4rem;align-items:center}
+.hero h1{margin-bottom:1.3rem}
+.hero h1 .hl{color:var(--sage-700);position:relative;white-space:nowrap}
+.hero h1 .hl::after{content:'';position:absolute;left:0;right:0;bottom:.07em;height:.30em;background:var(--sage-200);z-index:-1;border-radius:2px}
+.hero .lede{margin-bottom:2rem;max-width:33em}
+.hero-cta{display:flex;gap:.8rem;flex-wrap:wrap;align-items:center}
+.hero-note{font-size:.82rem;color:var(--stone-500);margin-top:1.1rem;font-family:system-ui,sans-serif}
+
+/* phone mock */
+.phone{width:236px;margin:0 auto;background:var(--stone-900);border-radius:34px;padding:9px;box-shadow:0 24px 60px -18px rgba(28,25,23,.42),0 0 0 1px rgba(28,25,23,.07)}
+.phone-screen{background:#fff;border-radius:26px;overflow:hidden;height:462px;position:relative}
+.ps-bar{display:flex;justify-content:space-between;padding:11px 15px 7px;font-size:.62rem;font-weight:700;color:var(--stone-800);font-family:system-ui,sans-serif}
+.ps-search{margin:2px 12px 10px;background:var(--stone-100);border-radius:9px;padding:7px 11px;font-size:.7rem;color:var(--stone-500);font-family:system-ui,sans-serif;display:flex;gap:6px;align-items:center}
+.ps-row{display:flex;gap:10px;padding:9px 13px;align-items:center;border-top:1px solid var(--stone-100)}
+.ps-icon{width:42px;height:42px;border-radius:10px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:1.15rem}
+.ps-meta{flex:1;min-width:0;font-family:system-ui,sans-serif}
+.ps-name{font-size:.71rem;font-weight:670;color:var(--stone-900);line-height:1.25}
+.ps-sub{font-size:.62rem;color:var(--stone-500);line-height:1.3;margin-top:1px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ps-get{background:var(--stone-100);color:#0a7cff;font-size:.6rem;font-weight:750;padding:3.5px 13px;border-radius:20px;font-family:system-ui,sans-serif}
+.ps-row.feat{background:var(--sage-50);border-left:3px solid var(--sage-600)}
+.ps-rank{position:absolute;right:11px;background:var(--sage-700);color:#fff;font-size:.55rem;font-weight:750;padding:2px 7px;border-radius:5px;font-family:system-ui,sans-serif;letter-spacing:.03em}
+.phone-cap{text-align:center;font-size:.76rem;color:var(--stone-500);margin-top:1.1rem;font-family:system-ui,sans-serif;max-width:250px;margin-left:auto;margin-right:auto;line-height:1.5}
+
+/* proof strip */
+.proof{border-top:1px solid var(--stone-200);border-bottom:1px solid var(--stone-200);background:#fff;padding:2.4rem 0}
+.proof-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.5rem;text-align:center}
+.stat-num{font-size:1.72rem;font-weight:700;color:var(--sage-700);line-height:1;letter-spacing:-.03em}
+.stat-lbl{font-size:.775rem;color:var(--stone-500);margin-top:.42rem;line-height:1.45;font-family:system-ui,sans-serif}
+
+/* problem */
+.prob{background:var(--stone-900);color:var(--stone-200)}
+.prob h2{color:#fff;margin-bottom:1.4rem}
+.prob .lede{color:var(--stone-400)}
+.prob .eyebrow{color:var(--terra-light)}
+.prob-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.6rem;margin-top:3rem}
+.prob-card{background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.09);border-radius:13px;padding:1.6rem}
+.prob-card h3{color:#fff;margin-bottom:.55rem;font-size:1.02rem}
+.prob-card p{font-size:.895rem;color:var(--stone-400);line-height:1.65;max-width:none}
+.prob-num{font-family:system-ui,sans-serif;font-size:.72rem;font-weight:750;color:var(--terra-light);letter-spacing:.1em;margin-bottom:.75rem;display:block}
+
+/* services */
+.svc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.6rem;margin-top:3rem}
+.svc{background:#fff;border:1px solid var(--stone-200);border-radius:15px;padding:1.9rem 1.7rem;transition:all .22s}
+.svc:hover{border-color:var(--sage-400);transform:translateY(-3px);box-shadow:0 14px 34px -14px rgba(63,82,50,.2)}
+.svc-ico{width:40px;height:40px;border-radius:10px;background:var(--sage-100);display:flex;align-items:center;justify-content:center;font-size:1.18rem;margin-bottom:1.1rem}
+.svc h3{margin-bottom:.6rem}
+.svc p{font-size:.9rem;color:var(--stone-600);line-height:1.65;max-width:none}
+.svc ul{list-style:none;margin-top:1rem;padding:0}
+.svc li{font-size:.83rem;color:var(--stone-600);padding-left:1.15rem;position:relative;margin-bottom:.42rem;font-family:system-ui,sans-serif;line-height:1.5}
+.svc li::before{content:'';position:absolute;left:0;top:.52em;width:5px;height:5px;border-radius:50%;background:var(--sage-400)}
+
+/* case study */
+.case{background:var(--sage-50)}
+.case-head{display:grid;grid-template-columns:1fr 1fr;gap:3.4rem;align-items:start;margin-bottom:3.4rem}
+.case-badge{display:inline-flex;align-items:center;gap:.5rem;background:#fff;border:1px solid var(--sage-200);border-radius:22px;padding:.4rem .9rem;font-size:.78rem;font-weight:600;color:var(--sage-700);font-family:system-ui,sans-serif;margin-bottom:1.2rem}
+.find-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
+.find{background:#fff;border:1px solid var(--stone-200);border-radius:14px;padding:1.7rem;position:relative;overflow:hidden}
+.find::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--terra)}
+.find-n{font-family:system-ui,sans-serif;font-size:.7rem;font-weight:750;letter-spacing:.11em;color:var(--terra);margin-bottom:.7rem;display:block}
+.find h3{font-size:1.03rem;margin-bottom:.6rem;line-height:1.35}
+.find p{font-size:.885rem;color:var(--stone-600);line-height:1.66;max-width:none}
+.find code{background:var(--warm-100);color:var(--terra-dark);padding:1px 6px;border-radius:4px;font-size:.86em;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+.honest{margin-top:2.4rem;background:#fff;border:1px dashed var(--stone-300);border-radius:14px;padding:1.7rem 1.9rem}
+.honest h3{margin-bottom:.6rem;color:var(--stone-700)}
+.honest p{font-size:.9rem;color:var(--stone-600);line-height:1.68}
+
+/* report */
+.rep-grid{display:grid;grid-template-columns:.92fr 1.08fr;gap:3.6rem;align-items:center}
+.rep-list{list-style:none;margin-top:1.6rem}
+.rep-list li{padding-left:1.9rem;position:relative;margin-bottom:.85rem;font-size:.925rem;color:var(--stone-600);line-height:1.6}
+.rep-list li strong{color:var(--stone-800);font-weight:640}
+.rep-list li::before{content:'✓';position:absolute;left:0;top:0;color:var(--sage-600);font-weight:700;font-family:system-ui,sans-serif;font-size:.88rem}
+.rep-mock{background:#fff;border:1px solid var(--stone-200);border-radius:14px;padding:1.5rem 1.6rem;box-shadow:0 18px 44px -20px rgba(28,25,23,.22);font-family:system-ui,sans-serif}
+.rm-head{display:flex;justify-content:space-between;align-items:center;padding-bottom:.85rem;border-bottom:1px solid var(--stone-200);margin-bottom:1.1rem}
+.rm-t{font-size:.86rem;font-weight:700;color:var(--stone-900)}
+.rm-d{font-size:.7rem;color:var(--stone-400)}
+.rm-hero{background:var(--sage-50);border-radius:10px;padding:1rem 1.1rem;margin-bottom:1rem}
+.rm-hero-l{font-size:.66rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--sage-600)}
+.rm-hero-v{font-size:1.62rem;font-weight:750;color:var(--sage-700);line-height:1.15;margin-top:.25rem;letter-spacing:-.02em}
+.rm-hero-s{font-size:.73rem;color:var(--stone-500);margin-top:.15rem}
+.rm-fun{display:flex;gap:.35rem;margin-bottom:1rem}
+.rm-step{flex:1;background:var(--stone-100);border-radius:7px;padding:.55rem .4rem;text-align:center}
+.rm-step-v{font-size:.85rem;font-weight:750;color:var(--stone-800)}
+.rm-step-l{font-size:.56rem;color:var(--stone-500);margin-top:.1rem;letter-spacing:.02em}
+.rm-rec{border-radius:9px;padding:.75rem .9rem;font-size:.75rem;line-height:1.5;display:flex;gap:.6rem;align-items:flex-start}
+.rm-rec.hold{background:var(--warm-100);color:var(--terra-dark)}
+.rm-dot{width:8px;height:8px;border-radius:50%;background:var(--terra);flex-shrink:0;margin-top:.35em}
+
+/* pricing */
+.pricing{background:var(--stone-100)}
+.tiers{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-top:3rem;align-items:start}
+.tier{background:#fff;border:1px solid var(--stone-200);border-radius:16px;padding:2rem 1.75rem;position:relative;display:flex;flex-direction:column;height:100%}
+.tier.feat{border:2px solid var(--sage-600);box-shadow:0 18px 44px -20px rgba(63,82,50,.28)}
+.tier-flag{position:absolute;top:-11px;left:50%;transform:translateX(-50%);background:var(--sage-700);color:#fff;font-size:.65rem;font-weight:750;letter-spacing:.09em;text-transform:uppercase;padding:.3rem .85rem;border-radius:20px;font-family:system-ui,sans-serif;white-space:nowrap}
+.tier-name{font-size:.94rem;font-weight:700;color:var(--stone-900);margin-bottom:.3rem}
+.tier-for{font-size:.775rem;color:var(--stone-500);margin-bottom:1.15rem;font-family:system-ui,sans-serif;line-height:1.45;min-height:2.6em}
+.price{font-size:2.05rem;font-weight:750;color:var(--stone-900);letter-spacing:-.035em;line-height:1}
+.price span{font-size:.85rem;font-weight:520;color:var(--stone-500);letter-spacing:0}
+.tier-min{font-size:.73rem;color:var(--stone-400);margin-top:.35rem;font-family:system-ui,sans-serif}
+.tier ul{list-style:none;margin:1.35rem 0;flex:1}
+.tier li{font-size:.845rem;color:var(--stone-600);padding-left:1.35rem;position:relative;margin-bottom:.6rem;line-height:1.55;font-family:system-ui,sans-serif}
+.tier li::before{content:'✓';position:absolute;left:0;color:var(--sage-600);font-weight:700;font-size:.82rem}
+.tier li.plus::before{content:'+';color:var(--terra);font-weight:800}
+.addons{margin-top:2.4rem;background:#fff;border:1px solid var(--stone-200);border-radius:14px;padding:1.7rem 1.9rem}
+.addon-row{display:flex;justify-content:space-between;gap:1.5rem;padding:.62rem 0;border-bottom:1px solid var(--stone-100);font-size:.885rem;align-items:baseline}
+.addon-row:last-child{border-bottom:none}
+.addon-row span:last-child{font-weight:700;color:var(--sage-700);white-space:nowrap;font-family:system-ui,sans-serif}
+.pricenote{margin-top:1.6rem;font-size:.855rem;color:var(--stone-500);text-align:center;max-width:44em;margin-left:auto;margin-right:auto;line-height:1.65}
+
+/* process */
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:1.4rem;margin-top:3rem;counter-reset:s}
+.step{position:relative;padding-top:2.6rem}
+.step::before{counter-increment:s;content:counter(s);position:absolute;top:0;left:0;width:1.95rem;height:1.95rem;border-radius:50%;background:var(--sage-700);color:#fff;display:flex;align-items:center;justify-content:center;font-family:system-ui,sans-serif;font-weight:700;font-size:.83rem}
+.step h3{font-size:1rem;margin-bottom:.45rem}
+.step p{font-size:.865rem;color:var(--stone-600);line-height:1.62;max-width:none}
+
+/* fit */
+.fit-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.6rem;margin-top:2.6rem}
+.fit{border-radius:14px;padding:1.8rem}
+.fit.yes{background:var(--sage-50);border:1px solid var(--sage-200)}
+.fit.no{background:var(--stone-100);border:1px solid var(--stone-200)}
+.fit h3{margin-bottom:1rem;font-size:1.02rem}
+.fit ul{list-style:none}
+.fit li{font-size:.875rem;color:var(--stone-600);padding-left:1.5rem;position:relative;margin-bottom:.6rem;line-height:1.55;font-family:system-ui,sans-serif}
+.fit.yes li::before{content:'✓';position:absolute;left:0;color:var(--sage-600);font-weight:700}
+.fit.no li::before{content:'✕';position:absolute;left:0;color:var(--stone-400);font-weight:700}
+
+/* faq */
+.faq-item{border-bottom:1px solid var(--stone-200);padding:1.5rem 0}
+.faq-item:first-of-type{border-top:1px solid var(--stone-200)}
+.faq-q{font-family:system-ui,sans-serif;font-weight:650;font-size:1rem;color:var(--stone-900);margin-bottom:.55rem;letter-spacing:-.01em}
+.faq-a{font-size:.925rem;color:var(--stone-600);line-height:1.7}
+
+/* cta */
+.cta{background:var(--sage-700);color:#fff;text-align:center}
+.cta h2{color:#fff;margin-bottom:1.1rem}
+.cta p{color:var(--sage-100);margin:0 auto 2rem;max-width:35em;font-size:1.04rem}
+.cta .btn-primary{background:#fff;color:var(--sage-700)}
+.cta .btn-primary:hover{background:var(--warm-50)}
+.cta .btn-ghost{border-color:rgba(255,255,255,.4);color:#fff}
+.cta .btn-ghost:hover{border-color:#fff;background:rgba(255,255,255,.08)}
+.cta-note{font-size:.82rem;color:var(--sage-200);margin-top:1.5rem;font-family:system-ui,sans-serif}
+
+footer{background:var(--stone-900);color:var(--stone-400);padding:3.4rem 0 2.4rem;font-family:system-ui,sans-serif}
+.foot-grid{display:flex;justify-content:space-between;gap:2rem;flex-wrap:wrap;padding-bottom:2rem;border-bottom:1px solid rgba(255,255,255,.09)}
+.foot-brand{font-size:1rem;font-weight:750;color:#fff;margin-bottom:.5rem}
+.foot-tag{font-size:.83rem;max-width:24em;line-height:1.6}
+.foot-nav{display:flex;gap:2.4rem;flex-wrap:wrap}
+.foot-col h4{font-size:.72rem;font-weight:700;letter-spacing:.11em;text-transform:uppercase;color:var(--stone-500);margin-bottom:.75rem}
+.foot-col a{display:block;font-size:.855rem;margin-bottom:.45rem;transition:color .18s}
+.foot-col a:hover{color:#fff}
+.foot-bot{padding-top:1.6rem;font-size:.79rem;display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+
+/* i18n */
+body [data-ko]{display:none}
+body.ko [data-en]{display:none}
+body.ko [data-ko]{display:block}
+body.ko li[data-ko]{display:list-item}
+body.ko span[data-ko],body.ko em[data-ko],body.ko strong[data-ko],body.ko code[data-ko]{display:inline}
+body.ko h1[data-ko],body.ko h2[data-ko],body.ko h3[data-ko],body.ko h4[data-ko],body.ko p[data-ko],body.ko div[data-ko],body.ko ul[data-ko],body.ko a[data-ko]{display:block}
+body.ko a.nl[data-ko],body.ko a.btn[data-ko]{display:inline-block}
+body.ko{font-family:system-ui,-apple-system,'Apple SD Gothic Neo','Malgun Gothic',sans-serif}
+body.ko h1,body.ko h2,body.ko h3{letter-spacing:-.03em}
+
+@media(max-width:900px){
+.hero-grid,.case-head,.rep-grid{grid-template-columns:1fr;gap:2.6rem}
+.phone{display:none}
+.prob-grid,.svc-grid,.tiers,.steps,.find-grid,.fit-grid{grid-template-columns:1fr}
+.proof-grid{grid-template-columns:repeat(2,1fr);gap:1.8rem}
+nav .nl{display:none}
+section{padding:3.6rem 0}
+.hero{padding:3.4rem 0 3rem}
+}
+</style>
+</head>
+<body>
+
+<header>
+<div class="container header-inner">
+  <div class="wordmark">Miyo Studio <em>LLC</em></div>
+  <nav>
+    <a class="nl" href="#services" data-en>Services</a><a class="nl" href="#services" data-ko>서비스</a>
+    <a class="nl" href="#case" data-en>Case study</a><a class="nl" href="#case" data-ko>사례</a>
+    <a class="nl" href="#pricing" data-en>Pricing</a><a class="nl" href="#pricing" data-ko>가격</a>
+    <a class="nl" href="#faq" data-en>FAQ</a><a class="nl" href="#faq" data-ko>FAQ</a>
+  </nav>
+  <div class="nav-right">
+    <button class="langbtn" onclick="tg(this)">한국어</button>
+    <a class="btn btn-primary" href="#cta" data-en>Free teardown</a>
+    <a class="btn btn-primary" href="#cta" data-ko>무료 진단</a>
+  </div>
+</div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+<div class="container hero-grid">
+  <div>
+    <span class="eyebrow" data-en>App Store Optimization · Apple Search Ads · Localization</span>
+    <span class="eyebrow" data-ko>앱스토어 최적화 · Apple Search Ads · 현지화</span>
+    <h1 data-en>We get indie apps found — in English, <span class="hl">Korean, Japanese</span> and Chinese.</h1>
+    <h1 data-ko>인디 앱을 발견되게 만듭니다 — 영어, <span class="hl">한국어, 일본어</span>, 그리고 중국어로.</h1>
+    <p class="lede" data-en>Most indie apps are invisible in the third and fourth largest App Store markets on earth — not because the product is wrong, but because nobody ever did the keyword research in those languages. We do, and we run the ads that follow.</p>
+    <p class="lede" data-ko>대부분의 인디 앱은 세계 3위, 4위 규모의 App Store 시장에서 보이지 않습니다. 제품이 잘못돼서가 아니라, 그 언어로 키워드 리서치를 한 사람이 아무도 없었기 때문입니다. 저희가 그 일을 하고, 그에 맞는 광고까지 운영합니다.</p>
+    <div class="hero-cta">
+      <a class="btn btn-primary btn-lg" href="#cta" data-en>Get a free teardown</a>
+      <a class="btn btn-primary btn-lg" href="#cta" data-ko>무료 진단 받기</a>
+      <a class="btn btn-ghost btn-lg" href="#case" data-en>See a real report</a>
+      <a class="btn btn-ghost btn-lg" href="#case" data-ko>실제 리포트 보기</a>
+    </div>
+    <p class="hero-note" data-en>No pitch deck. We audit your actual App Store listing and send you what we find.</p>
+    <p class="hero-note" data-ko>제안서는 없습니다. 실제 App Store 리스팅을 직접 분석해서 발견한 것을 보내드립니다.</p>
+  </div>
+  <div>
+    <div class="phone"><div class="phone-screen">
+      <div class="ps-bar"><span>9:41</span><span>●●●</span></div>
+      <div class="ps-search"><span>🔍</span><span>냉장고 재료 관리</span></div>
+      <div class="ps-row feat">
+        <div class="ps-icon" style="background:linear-gradient(140deg,#8A9A7C,#3F5232)">🌿</div>
+        <div class="ps-meta"><div class="ps-name">Jujube</div><div class="ps-sub">팬트리 · 유통기한 · 장보기</div></div>
+        <div class="ps-get">받기</div>
+        <div class="ps-rank" style="top:6px">#1</div>
+      </div>
+      <div class="ps-row"><div class="ps-icon" style="background:var(--stone-200)"></div><div class="ps-meta"><div class="ps-name" style="color:var(--stone-400)">━━━━━━</div><div class="ps-sub">━━━━━━━━━</div></div><div class="ps-get" style="color:var(--stone-400)">받기</div></div>
+      <div class="ps-row"><div class="ps-icon" style="background:var(--stone-200)"></div><div class="ps-meta"><div class="ps-name" style="color:var(--stone-400)">━━━━━</div><div class="ps-sub">━━━━━━━</div></div><div class="ps-get" style="color:var(--stone-400)">받기</div></div>
+      <div class="ps-row"><div class="ps-icon" style="background:var(--stone-200)"></div><div class="ps-meta"><div class="ps-name" style="color:var(--stone-400)">━━━━━━━</div><div class="ps-sub">━━━━━━</div></div><div class="ps-get" style="color:var(--stone-400)">받기</div></div>
+      <div class="ps-row"><div class="ps-icon" style="background:var(--stone-200)"></div><div class="ps-meta"><div class="ps-name" style="color:var(--stone-400)">━━━━</div><div class="ps-sub">━━━━━━━━</div></div><div class="ps-get" style="color:var(--stone-400)">받기</div></div>
+      <div class="ps-row"><div class="ps-icon" style="background:var(--stone-200)"></div><div class="ps-meta"><div class="ps-name" style="color:var(--stone-400)">━━━━━━</div><div class="ps-sub">━━━━━</div></div><div class="ps-get" style="color:var(--stone-400)">받기</div></div>
+      <div class="ps-row"><div class="ps-icon" style="background:var(--stone-200)"></div><div class="ps-meta"><div class="ps-name" style="color:var(--stone-400)">━━━━━</div><div class="ps-sub">━━━━━━━</div></div><div class="ps-get" style="color:var(--stone-400)">받기</div></div>
+    </div></div>
+    <p class="phone-cap" data-en>The same search, in a language your competitors never optimized for.</p>
+    <p class="phone-cap" data-ko>경쟁사가 한 번도 최적화하지 않은 언어에서의 같은 검색.</p>
+  </div>
+</div>
+</section>
+
+<!-- PROOF -->
+<div class="proof"><div class="container proof-grid">
+  <div><div class="stat-num">4</div><div class="stat-lbl" data-en>languages we optimize natively — EN, KO, JA, ZH</div><div class="stat-lbl" data-ko>네이티브로 최적화하는 언어 — EN, KO, JA, ZH</div></div>
+  <div><div class="stat-num">0%</div><div class="stat-lbl" data-en>of your ad spend taken as commission</div><div class="stat-lbl" data-ko>광고비에서 떼는 수수료</div></div>
+  <div><div class="stat-num">5 days</div><div class="stat-lbl" data-en>from kickoff to your first audit</div><div class="stat-lbl" data-ko>착수부터 첫 진단서까지</div></div>
+  <div><div class="stat-num">1</div><div class="stat-lbl" data-en>app we run every method on before selling it</div><div class="stat-lbl" data-ko>판매 전 모든 방법을 검증하는 자체 앱</div></div>
+</div></div>
+
+<!-- PROBLEM -->
+<section class="prob"><div class="container">
+  <div class="narrow">
+    <span class="eyebrow" data-en>The problem</span><span class="eyebrow" data-ko>문제</span>
+    <h2 data-en>Your app isn't losing to better apps. It's losing to apps people can find.</h2>
+    <h2 data-ko>더 좋은 앱에 밀리는 게 아닙니다. 사람들이 찾을 수 있는 앱에 밀리는 겁니다.</h2>
+    <p class="lede" data-en>Roughly 70% of App Store downloads begin with a search. If your metadata doesn't match what people type — in the language they type it in — you are not in that race at all.</p>
+    <p class="lede" data-ko>App Store 다운로드의 약 70%는 검색에서 시작합니다. 메타데이터가 사람들이 입력하는 단어와, 그들이 입력하는 언어로 일치하지 않는다면, 당신의 앱은 애초에 그 경쟁에 없습니다.</p>
+  </div>
+  <div class="prob-grid">
+    <div class="prob-card">
+      <span class="prob-num">01</span>
+      <h3 data-en>Translation is not localization</h3><h3 data-ko>번역은 현지화가 아닙니다</h3>
+      <p data-en>Korean users don't search the translated English phrase. They search a different phrase entirely. Running your keyword through a translator produces grammatically perfect words nobody types.</p>
+      <p data-ko>한국 사용자는 번역된 영어 문구로 검색하지 않습니다. 완전히 다른 표현으로 검색합니다. 키워드를 번역기에 넣으면 문법적으로 완벽하지만 아무도 입력하지 않는 단어가 나옵니다.</p>
+    </div>
+    <div class="prob-card">
+      <span class="prob-num">02</span>
+      <h3 data-en>You can't proofread what you can't read</h3><h3 data-ko>읽을 수 없는 것은 교정할 수 없습니다</h3>
+      <p data-en>A hardcoded dollar sign in a Korean paywall. An honorific that reads as rude. A price format that looks like a bug. These cost conversions silently, and you will never see them.</p>
+      <p data-ko>한국어 페이월에 하드코딩된 달러 기호. 무례하게 읽히는 존대. 버그처럼 보이는 가격 표기. 이것들은 조용히 전환을 갉아먹고, 당신은 영원히 발견하지 못합니다.</p>
+    </div>
+    <div class="prob-card">
+      <span class="prob-num">03</span>
+      <h3 data-en>Agencies won't take your call</h3><h3 data-ko>에이전시는 전화를 받지 않습니다</h3>
+      <p data-en>Growth agencies start at $5,000/month and want a Series A logo. Below that, you're told to read a blog post. We built this for the tier they ignore.</p>
+      <p data-ko>그로스 에이전시는 월 $5,000부터 시작하고 시리즈 A 로고를 원합니다. 그 아래라면 블로그 글이나 읽으라는 답을 듣습니다. 저희는 그들이 무시하는 구간을 위해 만들어졌습니다.</p>
+    </div>
+  </div>
+</div></section>
+
+<!-- SERVICES -->
+<section id="services"><div class="container">
+  <div class="narrow">
+    <span class="eyebrow" data-en>What we do</span><span class="eyebrow" data-ko>서비스</span>
+    <h2 data-en>Three things, done properly, every month.</h2>
+    <h2 data-ko>세 가지를, 제대로, 매달.</h2>
+    <p class="lede" data-en>We are not a full-service marketing agency. We do App Store discovery and we do it in four languages. Everything else we will happily tell you to skip.</p>
+    <p class="lede" data-ko>저희는 종합 마케팅 에이전시가 아닙니다. App Store 발견성만, 4개 언어로 합니다. 나머지는 하지 마시라고 기꺼이 말씀드립니다.</p>
+  </div>
+  <div class="svc-grid">
+    <div class="svc">
+      <div class="svc-ico">🔍</div>
+      <h3 data-en>App Store Optimization</h3><h3 data-ko>앱스토어 최적화 (ASO)</h3>
+      <p data-en>Getting you ranked for the words people actually type — and getting them to tap once you're there.</p>
+      <p data-ko>사람들이 실제로 입력하는 단어에서 순위를 올리고, 노출됐을 때 탭하게 만듭니다.</p>
+      <ul>
+        <li data-en>Monthly keyword research and rank tracking</li><li data-ko>월간 키워드 리서치 및 순위 추적</li>
+        <li data-en>Title, subtitle and keyword-field iteration</li><li data-ko>타이틀·서브타이틀·키워드 필드 개선</li>
+        <li data-en>Screenshot and preview critique</li><li data-ko>스크린샷·프리뷰 비평</li>
+        <li data-en>Competitor set monitoring</li><li data-ko>경쟁사 세트 모니터링</li>
+        <li data-en>Review theme analysis, per language</li><li data-ko>언어별 리뷰 테마 분석</li>
+      </ul>
+    </div>
+    <div class="svc">
+      <div class="svc-ico">🎯</div>
+      <h3 data-en>Apple Search Ads</h3><h3 data-ko>Apple Search Ads (ASA)</h3>
+      <p data-en>Campaign structure, bidding and negative keywords — run on your account, with your card, at zero commission.</p>
+      <p data-ko>캠페인 구조, 입찰, 제외 키워드 — 고객님 계정과 카드로, 수수료 0%로 운영합니다.</p>
+      <ul>
+        <li data-en>Four-campaign structure: brand, discovery, competitor, exact</li><li data-ko>4개 캠페인 구조: 브랜드, 디스커버리, 경쟁사, 완전일치</li>
+        <li data-en>Weekly bid and negative-keyword optimization</li><li data-ko>주간 입찰 및 제외 키워드 최적화</li>
+        <li data-en>Search-term harvesting into exact match</li><li data-ko>검색어를 완전일치로 승격</li>
+        <li data-en>Product Page Optimization test design</li><li data-ko>제품 페이지 최적화(PPO) 테스트 설계</li>
+        <li data-en>A written scale / hold / cut call every month</li><li data-ko>매월 확대/유지/축소 판정 서면 제공</li>
+      </ul>
+    </div>
+    <div class="svc">
+      <div class="svc-ico">🌏</div>
+      <h3 data-en>APAC Localization</h3><h3 data-ko>APAC 현지화</h3>
+      <p data-en>Native keyword research and cultural QA for Korean, Japanese and Traditional Chinese. This is the part nobody else does.</p>
+      <p data-ko>한국어, 일본어, 번체 중국어에 대한 네이티브 키워드 리서치와 문화적 QA. 다른 곳은 하지 않는 부분입니다.</p>
+      <ul>
+        <li data-en>Native keyword sets — researched, not translated</li><li data-ko>네이티브 키워드 세트 — 번역이 아닌 리서치</li>
+        <li data-en>Store listing and screenshot copy</li><li data-ko>스토어 리스팅 및 스크린샷 카피</li>
+        <li data-en>In-app string review by a native speaker</li><li data-ko>네이티브 스피커의 인앱 문자열 검수</li>
+        <li data-en>Paywall and pricing-format audit</li><li data-ko>페이월 및 가격 표기 감사</li>
+        <li data-en>Localized ASA campaigns per storefront</li><li data-ko>스토어프론트별 현지화 ASA 캠페인</li>
+      </ul>
+    </div>
+  </div>
+</div></section>
+
+<!-- CASE STUDY -->
+<section id="case" class="case"><div class="container">
+  <div class="case-head">
+    <div>
+      <div class="case-badge">🌿 <span data-en>Our own app · live on the App Store</span><span data-ko>자체 앱 · App Store 출시 중</span></div>
+      <span class="eyebrow" data-en>Case study — Jujube</span><span class="eyebrow" data-ko>사례 연구 — Jujube</span>
+      <h2 data-en>We run every method on our own app first.</h2>
+      <h2 data-ko>모든 방법을 저희 앱에 먼저 적용합니다.</h2>
+    </div>
+    <div>
+      <p class="lede" data-en>Jujube is a pantry and food-waste tracker we built and shipped ourselves, localized into English, Korean and Chinese. It is our laboratory. Every technique on this page was tested there with our own money — including the ones that didn't work.</p>
+      <p class="lede" data-ko>Jujube는 저희가 직접 만들어 출시한 팬트리·음식물 낭비 관리 앱으로, 영어·한국어·중국어로 현지화되어 있습니다. 저희의 실험실입니다. 이 페이지의 모든 기법은 저희 돈으로 그곳에서 검증했습니다 — 효과가 없었던 것까지 포함해서요.</p>
+      <p class="lede" data-en><strong>We are operators who ship, not marketers who pitch.</strong> That is the entire difference.</p>
+      <p class="lede" data-ko><strong>저희는 피치하는 마케터가 아니라 출시하는 운영자입니다.</strong> 그게 전부의 차이입니다.</p>
+    </div>
+  </div>
+
+  <div class="find-grid">
+    <div class="find">
+      <span class="find-n" data-en>FINDING 01 · LOCALIZATION</span><span class="find-n" data-ko>발견 01 · 현지화</span>
+      <h3 data-en>A US dollar sign, hardcoded into a Korean paywall</h3>
+      <h3 data-ko>한국어 페이월에 하드코딩된 미국 달러 기호</h3>
+      <p data-en>A savings figure was being interpolated as <code>$400</code> into an otherwise perfectly translated Korean sentence — on the exact screen where a user decides whether to pay. The translation was flawless. The conversion was broken anyway. This is what we mean when we say you can't proofread what you can't read.</p>
+      <p data-ko>절약 금액이 완벽하게 번역된 한국어 문장 안에 <code>$400</code>으로 삽입되고 있었습니다 — 사용자가 결제를 결정하는 바로 그 화면에서요. 번역은 흠 잡을 데 없었습니다. 그런데도 전환은 망가져 있었습니다. "읽을 수 없는 것은 교정할 수 없다"는 말의 의미가 이것입니다.</p>
+    </div>
+    <div class="find">
+      <span class="find-n" data-en>FINDING 02 · DIAGNOSIS</span><span class="find-n" data-ko>발견 02 · 진단</span>
+      <h3 data-en>The ads were fine. The product page wasn't.</h3>
+      <h3 data-ko>광고는 멀쩡했습니다. 제품 페이지가 문제였습니다.</h3>
+      <p data-en>Cost per tap was $0.74 — healthy by any benchmark. The leak was tap-to-install. A typical agency would have kept "optimizing keywords" and billing for it. We told ourselves the ad spend wasn't the lever, and went and rebuilt the screenshots instead.</p>
+      <p data-ko>탭당 비용은 $0.74로 어떤 기준으로도 양호했습니다. 새는 곳은 탭→설치 구간이었습니다. 보통의 에이전시라면 "키워드 최적화"를 계속하며 청구했을 겁니다. 저희는 광고비가 레버가 아니라고 결론 내리고, 대신 스크린샷을 다시 만들었습니다.</p>
+    </div>
+    <div class="find">
+      <span class="find-n" data-en>FINDING 03 · REVENUE</span><span class="find-n" data-ko>발견 03 · 매출</span>
+      <h3 data-en>Billing grace period was switched off</h3>
+      <h3 data-ko>결제 유예 기간이 꺼져 있었습니다</h3>
+      <p data-en>One failed credit-card charge meant instant, unrecoverable loss of access — no retry window, no recovery. Turning it on cost nothing and takes two minutes. Most growth agencies never look here, because subscription plumbing isn't in their scope. It should be.</p>
+      <p data-ko>카드 결제 1회 실패가 즉시, 복구 불가능한 접근 차단을 의미했습니다. 재시도 기간도, 복구 경로도 없었습니다. 켜는 데 비용은 0이고 2분이 걸립니다. 대부분의 그로스 에이전시는 구독 배관이 자기 범위가 아니라는 이유로 여기를 보지 않습니다. 봐야 합니다.</p>
+    </div>
+    <div class="find">
+      <span class="find-n" data-en>FINDING 04 · DATA</span><span class="find-n" data-ko>발견 04 · 데이터</span>
+      <h3 data-en>The dashboard label was lying</h3>
+      <h3 data-ko>대시보드 라벨이 거짓말을 하고 있었습니다</h3>
+      <p data-en>A churn event was reported as <code>PRICE_INCREASE</code>. We checked the live price rows in App Store Connect — there had been no price change at all. It was a billing failure, mislabeled. Trusting the dashboard would have meant "fixing" a pricing problem that never existed.</p>
+      <p data-ko>이탈 이벤트가 <code>PRICE_INCREASE</code>로 보고됐습니다. App Store Connect의 실제 가격 데이터를 확인했더니 가격 변경은 전혀 없었습니다. 잘못 라벨링된 결제 실패였습니다. 대시보드를 믿었다면 존재하지도 않는 가격 문제를 "고쳤을" 겁니다.</p>
+    </div>
+  </div>
+
+  <div class="honest">
+    <h3 data-en>And the part most agencies leave off the website</h3>
+    <h3 data-ko>그리고 대부분의 에이전시가 웹사이트에서 빼는 부분</h3>
+    <p data-en>Jujube is a young app and it has not won yet. Its organic App Store discovery is still close to zero, its category has very little search volume, and we have killed more of our own ideas than we have kept. We publish that because you are going to ask a competitor for guaranteed rankings and they are going to say yes — and they will be lying. What we guarantee is the work and the report. Never the ranking.</p>
+    <p data-ko>Jujube는 아직 어린 앱이고, 아직 이기지 못했습니다. 오가닉 App Store 발견성은 여전히 0에 가깝고, 카테고리 검색량 자체가 매우 적으며, 저희는 유지한 아이디어보다 폐기한 아이디어가 더 많습니다. 이걸 공개하는 이유는, 경쟁사에 순위 보장을 요구하면 그들은 "네"라고 답할 것이고 — 그건 거짓말이기 때문입니다. 저희가 보장하는 것은 작업과 리포트입니다. 순위는 절대 아닙니다.</p>
+  </div>
+</div></section>
+
+<!-- REPORT -->
+<section><div class="container rep-grid">
+  <div>
+    <span class="eyebrow" data-en>The deliverable</span><span class="eyebrow" data-ko>산출물</span>
+    <h2 data-en>You are not paying for hours. You are paying for a decision.</h2>
+    <h2 data-ko>시간을 사는 게 아닙니다. 의사결정을 사는 겁니다.</h2>
+    <p class="lede" data-en>Every month you get one report, and it ends with a call: scale, hold, or cut — with the number that triggered it. No dashboards to log into, no vanity charts.</p>
+    <p class="lede" data-ko>매달 리포트 한 부를 받으시고, 마지막은 판정으로 끝납니다: 확대, 유지, 축소 — 그 판정을 유발한 수치와 함께. 로그인할 대시보드도, 허영 지표 차트도 없습니다.</p>
+    <ul class="rep-list">
+      <li data-en><strong>The one number</strong> — what moved, at the top, with last month's delta</li>
+      <li data-ko><strong>단 하나의 숫자</strong> — 무엇이 움직였는지, 최상단에, 전월 대비 증감과 함께</li>
+      <li data-en><strong>Full funnel</strong> — impressions → page views → installs → trial → paid</li>
+      <li data-ko><strong>전체 퍼널</strong> — 노출 → 페이지 조회 → 설치 → 체험 → 결제</li>
+      <li data-en><strong>Keyword movement</strong> — gained, lost and newly ranking, per locale</li>
+      <li data-ko><strong>키워드 변동</strong> — 상승, 하락, 신규 진입, 로케일별</li>
+      <li data-en><strong>What we changed</strong> — a literal changelog, so you can audit us</li>
+      <li data-ko><strong>변경 사항</strong> — 말 그대로 체인지로그. 저희를 감사하실 수 있도록</li>
+      <li data-en><strong>Review themes by language</strong> — we read every review in every locale</li>
+      <li data-ko><strong>언어별 리뷰 테마</strong> — 모든 로케일의 모든 리뷰를 읽습니다</li>
+      <li data-en><strong>The recommendation</strong> — and next month's three priorities</li>
+      <li data-ko><strong>권고</strong> — 그리고 다음 달 우선순위 3가지</li>
+    </ul>
+  </div>
+  <div>
+    <div class="rep-mock">
+      <div class="rm-head"><div class="rm-t">Monthly Growth Report</div><div class="rm-d">August 2026</div></div>
+      <div class="rm-hero">
+        <div class="rm-hero-l" data-en>Cost per install</div><div class="rm-hero-l" data-ko>설치당 비용</div>
+        <div class="rm-hero-v">$7.85 <span style="font-size:.85rem;color:var(--terra)">▲</span></div>
+        <div class="rm-hero-s" data-en>vs. $11.76 in the wide-net window · −33%</div>
+        <div class="rm-hero-s" data-ko>광범위 노출 구간 $11.76 대비 · −33%</div>
+      </div>
+      <div class="rm-fun">
+        <div class="rm-step"><div class="rm-step-v">7,136</div><div class="rm-step-l">IMPR</div></div>
+        <div class="rm-step"><div class="rm-step-v">138</div><div class="rm-step-l">TAPS</div></div>
+        <div class="rm-step"><div class="rm-step-v">13</div><div class="rm-step-l">INSTALL</div></div>
+        <div class="rm-step"><div class="rm-step-v">3</div><div class="rm-step-l">TRIAL</div></div>
+        <div class="rm-step" style="background:var(--warm-100)"><div class="rm-step-v" style="color:var(--terra-dark)">1</div><div class="rm-step-l">PENDING</div></div>
+      </div>
+      <div class="rm-rec hold"><div class="rm-dot"></div><div>
+        <strong data-en>HOLD.</strong><strong data-ko>유지.</strong>
+        <span data-en> Trial→paid is unresolved (0 of 2 completed). Do not scale spend until the Sept 5 cohort resolves.</span>
+        <span data-ko> 체험→결제가 미확정입니다(완료 2건 중 0건). 9월 5일 코호트가 확정될 때까지 지출을 늘리지 마십시오.</span>
+      </div></div>
+    </div>
+  </div>
+</div></section>
+
+<!-- PRICING -->
+<section id="pricing" class="pricing"><div class="container">
+  <div class="narrow">
+    <span class="eyebrow" data-en>Pricing</span><span class="eyebrow" data-ko>가격</span>
+    <h2 data-en>Published, because hiding it means charging whatever we think you'll pay.</h2>
+    <h2 data-ko>공개합니다. 숨긴다는 건 낼 것 같은 만큼 청구하겠다는 뜻이니까요.</h2>
+  </div>
+  <div class="tiers">
+    <div class="tier">
+      <div class="tier-name" data-en>ASO Essentials</div><div class="tier-name" data-ko>ASO 에센셜</div>
+      <div class="tier-for" data-en>Early apps with real users but no ad budget yet.</div>
+      <div class="tier-for" data-ko>실사용자는 있지만 아직 광고 예산이 없는 초기 앱.</div>
+      <div class="price">$850<span>/mo</span></div>
+      <div class="tier-min" data-en>3-month minimum</div><div class="tier-min" data-ko>최소 3개월</div>
+      <ul>
+        <li data-en>Monthly keyword research, en-US + 1 locale</li><li data-ko>월간 키워드 리서치, en-US + 로케일 1개</li>
+        <li data-en>Metadata iteration and rank tracking</li><li data-ko>메타데이터 개선 및 순위 추적</li>
+        <li data-en>Screenshot and preview critique</li><li data-ko>스크린샷·프리뷰 비평</li>
+        <li data-en>Review response strategy</li><li data-ko>리뷰 응대 전략</li>
+        <li data-en>Monthly report + 30-minute call</li><li data-ko>월간 리포트 + 30분 통화</li>
+      </ul>
+      <a class="btn btn-ghost" href="#cta" data-en>Start with a teardown</a>
+      <a class="btn btn-ghost" href="#cta" data-ko>진단부터 시작</a>
+    </div>
+    <div class="tier feat">
+      <div class="tier-flag" data-en>Most chosen</div><div class="tier-flag" data-ko>가장 많이 선택</div>
+      <div class="tier-name" data-en>Growth</div><div class="tier-name" data-ko>그로스</div>
+      <div class="tier-for" data-en>Revenue-generating apps ready to buy installs profitably.</div>
+      <div class="tier-for" data-ko>수익이 발생 중이고 수익성 있게 설치를 구매할 준비가 된 앱.</div>
+      <div class="price">$1,950<span>/mo</span></div>
+      <div class="tier-min" data-en>3-month minimum · requires ≥$1,000/mo ad budget</div>
+      <div class="tier-min" data-ko>최소 3개월 · 월 $1,000 이상 광고 예산 필요</div>
+      <ul>
+        <li data-en>Everything in ASO Essentials</li><li data-ko>ASO 에센셜 전체 포함</li>
+        <li class="plus" data-en>Full Apple Search Ads management</li><li class="plus" data-ko>Apple Search Ads 전체 운영</li>
+        <li class="plus" data-en>Up to 3 locales</li><li class="plus" data-ko>최대 3개 로케일</li>
+        <li class="plus" data-en>Product page audit + PPO test design</li><li class="plus" data-ko>제품 페이지 감사 + PPO 테스트 설계</li>
+        <li class="plus" data-en>Weekly bid and negative-keyword work</li><li class="plus" data-ko>주간 입찰 및 제외 키워드 작업</li>
+        <li class="plus" data-en>Written scale / hold / cut call each month</li><li class="plus" data-ko>매월 확대/유지/축소 서면 판정</li>
+      </ul>
+      <a class="btn btn-primary" href="#cta" data-en>Start with a teardown</a>
+      <a class="btn btn-primary" href="#cta" data-ko>진단부터 시작</a>
+    </div>
+    <div class="tier">
+      <div class="tier-name" data-en>APAC Launch</div><div class="tier-name" data-ko>APAC 런칭</div>
+      <div class="tier-for" data-en>US-traction apps entering Korea, Japan or Taiwan.</div>
+      <div class="tier-for" data-ko>미국에서 성과가 있고 한국·일본·대만에 진출하는 앱.</div>
+      <div class="price">$3,500<span>/mo</span></div>
+      <div class="tier-min" data-en>or a $6,000 one-time launch sprint</div>
+      <div class="tier-min" data-ko>또는 1회성 런칭 스프린트 $6,000</div>
+      <ul>
+        <li data-en>Everything in Growth</li><li data-ko>그로스 전체 포함</li>
+        <li class="plus" data-en>Full KO / JA / ZH-TW localization</li><li class="plus" data-ko>KO / JA / ZH-TW 전체 현지화</li>
+        <li class="plus" data-en>Native keyword research per locale</li><li class="plus" data-ko>로케일별 네이티브 키워드 리서치</li>
+        <li class="plus" data-en>In-app string review by native speakers</li><li class="plus" data-ko>네이티브 스피커 인앱 문자열 검수</li>
+        <li class="plus" data-en>Cultural QA — tone, honorifics, price format</li><li class="plus" data-ko>문화적 QA — 톤, 존대, 가격 표기</li>
+        <li class="plus" data-en>Localized ASA campaigns per storefront</li><li class="plus" data-ko>스토어프론트별 현지화 ASA 캠페인</li>
+      </ul>
+      <a class="btn btn-ghost" href="#cta" data-en>Talk to us</a>
+      <a class="btn btn-ghost" href="#cta" data-ko>문의하기</a>
+    </div>
+  </div>
+
+  <div class="addons">
+    <h3 style="margin-bottom:1rem" data-en>Add-ons, à la carte</h3>
+    <h3 style="margin-bottom:1rem" data-ko>단품 애드온</h3>
+    <div class="addon-row"><span data-en>Full ASO teardown — keyword gaps, metadata rewrite, one locale spot-check</span><span data-ko>전체 ASO 진단 — 키워드 갭, 메타데이터 재작성, 로케일 1건 점검</span><span>$450</span></div>
+    <div class="addon-row"><span data-en>Additional locale</span><span data-ko>로케일 추가</span><span data-en>$600 + $200/mo</span><span data-ko>$600 + 월 $200</span></div>
+    <div class="addon-row"><span data-en>Paywall &amp; pricing localization audit</span><span data-ko>페이월·가격 현지화 감사</span><span>$650</span></div>
+    <div class="addon-row"><span data-en>Subscription plumbing audit — grace period, billing recovery, refunds</span><span data-ko>구독 배관 감사 — 유예 기간, 결제 복구, 환불</span><span>$500</span></div>
+    <div class="addon-row"><span data-en>Screenshot design production</span><span data-ko>스크린샷 디자인 제작</span><span data-en>$800/set</span><span data-ko>세트당 $800</span></div>
+  </div>
+  <p class="pricenote" data-en><strong>We take no percentage of your ad spend.</strong> You keep your own Apple Search Ads account and your own card on it. That means when we tell you to increase your budget, we make exactly zero dollars from it — which is the only reason you should believe us.</p>
+  <p class="pricenote" data-ko><strong>광고비에서 수수료를 받지 않습니다.</strong> Apple Search Ads 계정과 결제 카드는 고객님이 그대로 보유하십니다. 즉 저희가 예산을 늘리라고 말할 때 저희가 버는 돈은 정확히 0원입니다 — 그것이 저희 말을 믿으셔야 할 유일한 이유입니다.</p>
+</div></section>
+
+<!-- PROCESS -->
+<section><div class="container">
+  <div class="narrow">
+    <span class="eyebrow" data-en>How it works</span><span class="eyebrow" data-ko>진행 방식</span>
+    <h2 data-en>Four steps. The first one is free.</h2>
+    <h2 data-ko>네 단계. 첫 단계는 무료입니다.</h2>
+  </div>
+  <div class="steps">
+    <div class="step">
+      <h3 data-en>Free teardown</h3><h3 data-ko>무료 진단</h3>
+      <p data-en>You send us your App Store link. We send back three keywords you're missing, one thing wrong with your screenshots, and one localization problem in a market you've ignored. No call required.</p>
+      <p data-ko>App Store 링크만 보내주세요. 놓치고 있는 키워드 3개, 스크린샷의 문제 1개, 무시하고 있는 시장의 현지화 문제 1개를 보내드립니다. 통화 불필요.</p>
+    </div>
+    <div class="step">
+      <h3 data-en>Paid audit</h3><h3 data-ko>유료 감사</h3>
+      <p data-en>The full version, in five business days: keyword gap analysis, metadata rewrite, competitor set, screenshot critique. $450, credited toward your first month if you continue.</p>
+      <p data-ko>전체 버전을 영업일 5일 내에: 키워드 갭 분석, 메타데이터 재작성, 경쟁사 세트, 스크린샷 비평. $450이며, 계속 진행하시면 첫 달 요금에서 차감됩니다.</p>
+    </div>
+    <div class="step">
+      <h3 data-en>Baseline &amp; kickoff</h3><h3 data-ko>베이스라인 및 착수</h3>
+      <p data-en>We capture every metric on day one — because in month four nobody remembers where they started. We agree a competitor set and a definition of success in writing.</p>
+      <p data-ko>첫날에 모든 지표를 캡처합니다. 4개월 차에는 아무도 출발점을 기억하지 못하니까요. 경쟁사 세트와 성공의 정의를 서면으로 합의합니다.</p>
+    </div>
+    <div class="step">
+      <h3 data-en>Monthly cycle</h3><h3 data-ko>월간 사이클</h3>
+      <p data-en>Work through the month, report on the first, 30 minutes on a call if you want it. Month-to-month after the initial three, cancel with 30 days' notice.</p>
+      <p data-ko>한 달 동안 작업하고, 1일에 리포트를 드리고, 원하시면 30분 통화. 첫 3개월 이후에는 월 단위이며 30일 사전통보로 해지 가능합니다.</p>
+    </div>
+  </div>
+</div></section>
+
+<!-- FIT -->
+<section style="background:#fff;border-top:1px solid var(--stone-200)"><div class="container">
+  <div class="narrow">
+    <span class="eyebrow" data-en>Honest qualification</span><span class="eyebrow" data-ko>솔직한 자격 안내</span>
+    <h2 data-en>We turn down more apps than we take.</h2>
+    <h2 data-ko>맡는 앱보다 거절하는 앱이 더 많습니다.</h2>
+    <p class="lede" data-en>Taking money from an app we can't help is the fastest way to end up with a bad case study. So here is the filter, before you spend an hour on a call.</p>
+    <p class="lede" data-ko>도울 수 없는 앱에서 돈을 받는 것은 나쁜 사례를 만드는 가장 빠른 길입니다. 그래서 통화에 한 시간을 쓰시기 전에 기준을 먼저 공개합니다.</p>
+  </div>
+  <div class="fit-grid">
+    <div class="fit yes">
+      <h3 data-en>This works if you…</h3><h3 data-ko>이런 경우 잘 맞습니다</h3>
+      <ul>
+        <li data-en>Have a live iOS app with paying users or trials</li><li data-ko>결제 사용자 또는 체험 사용자가 있는 출시된 iOS 앱을 보유</li>
+        <li data-en>Are somewhere between $2k and $50k MRR</li><li data-ko>MRR $2,000 ~ $50,000 구간</li>
+        <li data-en>Have an English-only or machine-translated listing</li><li data-ko>영어만 있거나 기계 번역된 리스팅</li>
+        <li data-en>Can spend at least $1,000/mo on ads, for the Growth tier</li><li data-ko>그로스 티어 기준, 광고에 월 $1,000 이상 집행 가능</li>
+        <li data-en>Can give us App Store Connect and Search Ads access</li><li data-ko>App Store Connect 및 Search Ads 권한 부여 가능</li>
+      </ul>
+    </div>
+    <div class="fit no">
+      <h3 data-en>We'll tell you no if you…</h3><h3 data-ko>이런 경우 거절합니다</h3>
+      <ul>
+        <li data-en>Haven't launched yet — there is nothing to optimize</li><li data-ko>아직 출시 전 — 최적화할 대상이 없음</li>
+        <li data-en>Have no monetization, so nobody can measure ROI</li><li data-ko>수익화가 없어 ROI를 측정할 수 없음</li>
+        <li data-en>Want guaranteed rankings — nobody can honestly promise that</li><li data-ko>순위 보장을 원함 — 정직하게 약속할 수 있는 사람은 없음</li>
+        <li data-en>Need the app designed, built or fixed — that's not us</li><li data-ko>앱 디자인·개발·수정이 필요함 — 저희 영역이 아님</li>
+        <li data-en>Have a retention problem, not a discovery problem</li><li data-ko>발견성이 아니라 리텐션이 문제인 경우</li>
+      </ul>
+    </div>
+  </div>
+</div></section>
+
+<!-- FAQ -->
+<section id="faq" style="background:var(--stone-50)"><div class="container narrow">
+  <span class="eyebrow" data-en>Questions</span><span class="eyebrow" data-ko>자주 묻는 질문</span>
+  <h2 style="margin-bottom:2.2rem" data-en>The things people actually ask.</h2>
+  <h2 style="margin-bottom:2.2rem" data-ko>실제로 많이 받는 질문들.</h2>
+
+  <div class="faq-item">
+    <div class="faq-q" data-en>How long until I see results?</div><div class="faq-q" data-ko>결과가 나오기까지 얼마나 걸리나요?</div>
+    <div class="faq-a" data-en>Six to ten weeks before keyword movement is readable, which is why we ask for three months. Anyone promising week-one results is selling you something else.</div>
+    <div class="faq-a" data-ko>키워드 변동이 읽히기까지 6~10주가 걸리며, 그래서 3개월을 요청드립니다. 첫 주 성과를 약속하는 곳은 다른 것을 팔고 있는 겁니다.</div>
+  </div>
+  <div class="faq-item">
+    <div class="faq-q" data-en>Do you guarantee a #1 ranking?</div><div class="faq-q" data-ko>1위 순위를 보장하나요?</div>
+    <div class="faq-a" data-en>No. We do not control Apple's algorithm, your product, or your pricing. We guarantee the work and the report. Any agency that guarantees a ranking is either lying or planning to rank you for a keyword nobody searches.</div>
+    <div class="faq-a" data-ko>아니요. 저희는 Apple의 알고리즘도, 고객님의 제품도, 가격도 통제하지 않습니다. 저희는 작업과 리포트를 보장합니다. 순위를 보장하는 에이전시는 거짓말을 하고 있거나, 아무도 검색하지 않는 키워드로 1위를 만들 계획입니다.</div>
+  </div>
+  <div class="faq-item">
+    <div class="faq-q" data-en>Who pays for the ads?</div><div class="faq-q" data-ko>광고비는 누가 결제하나요?</div>
+    <div class="faq-a" data-en>You do, directly to Apple, on your own account with your own card. We take admin access and zero commission. If we disappear tomorrow you keep the account, the history and the data.</div>
+    <div class="faq-a" data-ko>고객님이 본인 계정과 카드로 Apple에 직접 결제하십니다. 저희는 관리자 권한만 받고 수수료는 0입니다. 저희가 내일 사라져도 계정과 이력과 데이터는 고객님 것입니다.</div>
+  </div>
+  <div class="faq-item">
+    <div class="faq-q" data-en>Is the Korean and Japanese work actually native?</div><div class="faq-q" data-ko>한국어·일본어 작업이 정말 네이티브인가요?</div>
+    <div class="faq-a" data-en>Korean is done in-house by a native speaker. Japanese and Traditional Chinese go through a native reviewer who works in that market — not a translator. The difference matters: a translator gives you correct words, a market reviewer tells you which words people type.</div>
+    <div class="faq-a" data-ko>한국어는 네이티브 스피커가 내부에서 직접 수행합니다. 일본어와 번체 중국어는 해당 시장에서 일하는 네이티브 리뷰어를 거칩니다 — 번역가가 아닙니다. 이 차이는 중요합니다. 번역가는 올바른 단어를 주고, 시장 리뷰어는 사람들이 실제로 입력하는 단어를 알려줍니다.</div>
+  </div>
+  <div class="faq-item">
+    <div class="faq-q" data-en>Android?</div><div class="faq-q" data-ko>안드로이드는요?</div>
+    <div class="faq-a" data-en>Not yet. We would rather be genuinely excellent at one store than mediocre at two. If Google Play is your primary revenue, we are the wrong agency and we'll say so on the first call.</div>
+    <div class="faq-a" data-ko>아직 아닙니다. 두 스토어에서 어중간한 것보다 한 스토어에서 진짜 뛰어난 편이 낫다고 봅니다. Google Play가 주 매출원이라면 저희는 맞지 않는 에이전시이고, 첫 통화에서 그렇게 말씀드립니다.</div>
+  </div>
+  <div class="faq-item">
+    <div class="faq-q" data-en>How big is your team?</div><div class="faq-q" data-ko>팀 규모는 어떻게 되나요?</div>
+    <div class="faq-a" data-en>Small, deliberately, with native reviewers contracted per language. You will work with the person doing the work — there is no account manager relaying messages to a junior analyst.</div>
+    <div class="faq-a" data-ko>의도적으로 작으며, 언어별로 네이티브 리뷰어와 계약합니다. 실제 작업하는 사람과 직접 일하시게 됩니다 — 주니어 분석가에게 메시지를 전달하는 어카운트 매니저는 없습니다.</div>
+  </div>
+</div></section>
+
+<!-- CTA -->
+<section id="cta" class="cta"><div class="container">
+  <h2 data-en>Send us your App Store link.</h2>
+  <h2 data-ko>App Store 링크를 보내주세요.</h2>
+  <p data-en>We'll audit it and send back what we find — three missing keywords, one screenshot problem, and one localization gap in a market you've ignored. Free, no call, no deck. If it's useful, we'll talk.</p>
+  <p data-ko>직접 분석해서 발견한 것을 보내드립니다 — 놓친 키워드 3개, 스크린샷 문제 1개, 무시하고 있던 시장의 현지화 공백 1개. 무료이고, 통화도 제안서도 없습니다. 유용하셨다면 그때 이야기하시죠.</p>
+  <div class="hero-cta" style="justify-content:center">
+    <a class="btn btn-primary btn-lg" href="mailto:hello@miyostudiollc.com?subject=Free%20teardown%20request" data-en>Request a free teardown</a>
+    <a class="btn btn-primary btn-lg" href="mailto:hello@miyostudiollc.com?subject=Free%20teardown%20request" data-ko>무료 진단 요청하기</a>
+    <a class="btn btn-ghost btn-lg" href="mailto:hello@miyostudiollc.com" data-en>hello@miyostudiollc.com</a>
+    <a class="btn btn-ghost btn-lg" href="mailto:hello@miyostudiollc.com" data-ko>hello@miyostudiollc.com</a>
+  </div>
+  <p class="cta-note" data-en>We reply to every one, usually within two business days.</p>
+  <p class="cta-note" data-ko>모든 요청에 보통 영업일 2일 이내에 답변드립니다.</p>
+</div></section>
+
+<footer>
+<div class="container">
+  <div class="foot-grid">
+    <div>
+      <div class="foot-brand">Miyo Studio LLC</div>
+      <p class="foot-tag" data-en>App Store growth for indie iOS apps, in four languages. We build our own apps too — that's the point.</p>
+      <p class="foot-tag" data-ko>인디 iOS 앱을 위한 App Store 그로스, 4개 언어로. 저희도 직접 앱을 만듭니다 — 그게 핵심입니다.</p>
+    </div>
+    <div class="foot-nav">
+      <div class="foot-col">
+        <h4 data-en>Agency</h4><h4 data-ko>에이전시</h4>
+        <a href="#services" data-en>Services</a><a href="#services" data-ko>서비스</a>
+        <a href="#pricing" data-en>Pricing</a><a href="#pricing" data-ko>가격</a>
+        <a href="#case" data-en>Case study</a><a href="#case" data-ko>사례 연구</a>
+        <a href="#faq" data-en>FAQ</a><a href="#faq" data-ko>FAQ</a>
+      </div>
+      <div class="foot-col">
+        <h4 data-en>Our apps</h4><h4 data-ko>자체 앱</h4>
+        <a href="https://apps.apple.com/us/app/jujube-pantry-waste-tracker/id6760092997">Jujube ↗</a>
+        <a href="https://myjujube.app">myjujube.app ↗</a>
+      </div>
+      <div class="foot-col">
+        <h4 data-en>Contact</h4><h4 data-ko>연락처</h4>
+        <a href="mailto:hello@miyostudiollc.com">hello@miyostudiollc.com</a>
+      </div>
+    </div>
+  </div>
+  <div class="foot-bot">
+    <span>© 2026 Miyo Studio LLC · Arizona, USA</span>
+    <span data-en>We never guarantee rankings.</span><span data-ko>순위는 보장하지 않습니다.</span>
+  </div>
+</div>
+</footer>
+
+<script>
+function tg(b){var k=document.body.classList.toggle('ko');b.textContent=k?'English':'한국어';document.documentElement.lang=k?'ko':'en';}
+</script>
+</body>
+</html>

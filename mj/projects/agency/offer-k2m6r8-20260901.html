@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="robots" content="noindex,nofollow">
+<title>Miyo Studio — What we do &amp; what it costs</title>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--s50:#FAFAF9;--s100:#F5F5F4;--s200:#E7E5E4;--s300:#D6D3D1;--s400:#A8A29E;--s500:#78716C;--s600:#57534E;--s800:#292524;--s900:#1C1917;
+--sg50:#F6F7F5;--sg100:#E8EBE5;--sg200:#D4DACE;--sg500:#6B7D5C;--sg600:#556A45;--sg700:#3F5232;--w50:#FEF9F3;--w100:#FCEEDD;--tr:#B8704A;--trd:#8A4E28}
+html{font-size:16px;-webkit-font-smoothing:antialiased}
+body{font-family:system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif;color:var(--s800);background:var(--s100);line-height:1.62;padding:22px 14px 70px}
+.page{max-width:760px;margin:0 auto;background:#fff;border-radius:16px;box-shadow:0 3px 26px -8px rgba(28,25,23,.14);overflow:hidden}
+.pad{padding:2rem 2.3rem}
+.sec{border-top:1px solid var(--s200)}
+h1{font-size:1.7rem;font-weight:720;letter-spacing:-.03em;line-height:1.14;color:#fff}
+h2{font-size:1.1rem;font-weight:700;letter-spacing:-.017em;color:var(--s900);margin-bottom:.85rem}
+h3{font-size:.94rem;font-weight:680;color:var(--s900);margin-bottom:.35rem}
+p{margin-bottom:.75rem}
+ul{margin:0 0 .75rem;padding-left:0;list-style:none}
+li{margin-bottom:.42rem;padding-left:1.3rem;position:relative;font-size:.885rem;color:var(--s600);line-height:1.55}
+li::before{content:'✓';position:absolute;left:0;color:var(--sg600);font-weight:700;font-size:.83rem}
+li.x::before{content:'✕';color:var(--s400)}
+.eyebrow{font-size:.67rem;font-weight:760;letter-spacing:.13em;text-transform:uppercase;color:var(--sg600);margin-bottom:.5rem;display:block}
+.head{background:var(--sg700);color:#fff;padding:2rem 2.3rem}
+.brand{font-size:.87rem;font-weight:760;margin-bottom:1.1rem}.brand span{font-weight:400;opacity:.6}
+.head p{color:var(--sg100);font-size:.98rem;margin:.75rem 0 0;max-width:36em}
+.muted{color:var(--s500);font-size:.85rem}
+code{background:var(--s100);padding:1.5px 5px;border-radius:4px;font-size:.87em;font-family:ui-monospace,Menlo,monospace;color:var(--trd)}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:1.1rem;margin-top:1rem}
+.card{border:1px solid var(--s200);border-radius:12px;padding:1.2rem 1.15rem}
+.card.feat{border:2px solid var(--sg600);background:var(--sg50)}
+.tname{font-size:.87rem;font-weight:720;color:var(--s900)}
+.tfor{font-size:.76rem;color:var(--s500);margin:.25rem 0 .8rem;line-height:1.45;min-height:3.2em}
+.price{font-size:1.55rem;font-weight:760;letter-spacing:-.032em;color:var(--s900);line-height:1}
+.price span{font-size:.76rem;font-weight:500;color:var(--s500);letter-spacing:0}
+.tmin{font-size:.7rem;color:var(--s400);margin-top:.3rem;line-height:1.4}
+.card ul{margin-top:.85rem}
+.card li{font-size:.795rem;margin-bottom:.35rem}
+.box{border-radius:11px;padding:1rem 1.15rem;margin-bottom:.8rem;font-size:.885rem}
+.box p:last-child{margin-bottom:0}
+.box.k{background:var(--w50);border-left:3px solid var(--tr)}
+.box.g{background:var(--sg50);border-left:3px solid var(--sg600)}
+.row{display:flex;justify-content:space-between;gap:1.2rem;padding:.55rem 0;border-bottom:1px solid var(--s100);font-size:.87rem;align-items:baseline}
+.row:last-child{border-bottom:none}
+.row b{color:var(--sg700);white-space:nowrap;font-weight:700}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:1.4rem}
+.steps{counter-reset:n;list-style:none;padding:0}
+.steps li{counter-increment:n;padding-left:2rem;margin-bottom:.8rem;font-size:.885rem;color:var(--s600)}
+.steps li::before{content:counter(n);position:absolute;left:0;top:.02em;width:1.42rem;height:1.42rem;border-radius:50%;background:var(--sg700);color:#fff;display:flex;align-items:center;justify-content:center;font-size:.71rem;font-weight:750}
+.steps li strong{color:var(--s900)}
+.cta{background:var(--s900);color:#fff;padding:2rem 2.3rem;text-align:center}
+.cta h2{color:#fff}.cta p{color:var(--s400);font-size:.9rem;max-width:32em;margin:0 auto 1.2rem}
+.btn{display:inline-block;background:#fff;color:var(--s900);font-weight:680;font-size:.9rem;padding:.75rem 1.5rem;border-radius:9px;text-decoration:none}
+.langbtn{position:fixed;top:14px;right:14px;z-index:60;background:var(--sg700);color:#fff;border:none;border-radius:20px;padding:.5rem 1rem;font-size:.79rem;font-weight:650;cursor:pointer;box-shadow:0 3px 12px rgba(0,0,0,.2)}
+[data-ko]{display:none}
+body.ko [data-en]{display:none}
+body.ko [data-ko]{display:block}
+body.ko li[data-ko]{display:list-item}
+body.ko span[data-ko],body.ko strong[data-ko],body.ko b[data-ko],body.ko em[data-ko],body.ko code[data-ko]{display:inline}
+body.ko h1[data-ko],body.ko h2[data-ko],body.ko h3[data-ko],body.ko p[data-ko],body.ko div[data-ko],body.ko ul[data-ko],body.ko ol[data-ko]{display:block}
+@media(max-width:700px){.grid3,.two{grid-template-columns:1fr}.pad,.head,.cta{padding-left:1.3rem;padding-right:1.3rem}}
+</style>
+</head>
+<body>
+<button class="langbtn" onclick="var k=document.body.classList.toggle('ko');this.textContent=k?'English':'한국어'">한국어</button>
+<div class="page">
+
+<div class="head">
+  <div class="brand">Miyo Studio <span>LLC</span></div>
+  <h1 data-en>We get indie apps found — in English, Korean, Japanese and Chinese.</h1>
+  <h1 data-ko>인디 앱을 발견되게 만듭니다 — 영어, 한국어, 일본어, 중국어로.</h1>
+  <p data-en>App Store Optimization, Apple Search Ads, and real APAC localization for iOS apps too small for a $5,000/month agency and too good to stay invisible.</p>
+  <p data-ko>월 $5,000짜리 에이전시를 쓰기엔 작지만, 계속 묻혀 있기엔 아까운 iOS 앱을 위한 앱스토어 최적화, Apple Search Ads, 그리고 진짜 APAC 현지화.</p>
+</div>
+
+<div class="pad">
+  <span class="eyebrow" data-en>The short version</span><span class="eyebrow" data-ko>요약</span>
+  <h2 data-en>Roughly 70% of App Store downloads start with a search.</h2>
+  <h2 data-ko>App Store 다운로드의 약 70%는 검색에서 시작됩니다.</h2>
+  <p data-en>If your metadata doesn't match what people type — in the language they type it in — you aren't in that race. Most indie apps are invisible in Korea, Japan and Taiwan, three of the highest-revenue App Store markets on earth, not because the product is wrong but because nobody ever did the keyword research in those languages.</p>
+  <p data-ko>메타데이터가 사람들이 입력하는 단어와, 그들이 입력하는 언어로 일치하지 않는다면 애초에 그 경쟁에 없는 겁니다. 대부분의 인디 앱은 세계 최고 매출 App Store 시장에 속하는 한국·일본·대만에서 보이지 않습니다. 제품이 잘못돼서가 아니라, 그 언어로 키워드 리서치를 한 사람이 없었기 때문입니다.</p>
+  <p data-en><strong>We do that research, we run the ads that follow, and we send you one report a month that ends in a decision.</strong></p>
+  <p data-ko><strong>저희가 그 리서치를 하고, 그에 맞는 광고를 운영하고, 매달 의사결정으로 끝나는 리포트 한 부를 보내드립니다.</strong></p>
+</div>
+
+<div class="pad sec">
+  <span class="eyebrow" data-en>Pricing</span><span class="eyebrow" data-ko>가격</span>
+  <h2 data-en>Published, so you can decide before you talk to us.</h2>
+  <h2 data-ko>대화 전에 판단하실 수 있도록 공개합니다.</h2>
+  <div class="grid3">
+    <div class="card">
+      <div class="tname" data-en>ASO Essentials</div><div class="tname" data-ko>ASO 에센셜</div>
+      <div class="tfor" data-en>Early apps with real users but no ad budget yet.</div>
+      <div class="tfor" data-ko>실사용자는 있으나 아직 광고 예산이 없는 초기 앱.</div>
+      <div class="price">$850<span>/mo</span></div>
+      <div class="tmin" data-en>3-month minimum</div><div class="tmin" data-ko>최소 3개월</div>
+      <ul>
+        <li data-en>Keyword research, en-US + 1 locale</li><li data-ko>키워드 리서치, en-US + 로케일 1개</li>
+        <li data-en>Metadata iteration, rank tracking</li><li data-ko>메타데이터 개선, 순위 추적</li>
+        <li data-en>Screenshot critique</li><li data-ko>스크린샷 비평</li>
+        <li data-en>Monthly report + 30-min call</li><li data-ko>월간 리포트 + 30분 통화</li>
+      </ul>
+    </div>
+    <div class="card feat">
+      <div class="tname" data-en>Growth &nbsp;·&nbsp; most chosen</div><div class="tname" data-ko>그로스 &nbsp;·&nbsp; 최다 선택</div>
+      <div class="tfor" data-en>Revenue-generating apps ready to buy installs profitably.</div>
+      <div class="tfor" data-ko>수익이 발생 중이고 수익성 있게 설치를 구매할 준비가 된 앱.</div>
+      <div class="price">$1,950<span>/mo</span></div>
+      <div class="tmin" data-en>3-month min · needs ≥$1,000/mo ad budget</div>
+      <div class="tmin" data-ko>최소 3개월 · 월 $1,000 이상 광고 예산 필요</div>
+      <ul>
+        <li data-en>Everything in Essentials</li><li data-ko>에센셜 전체 포함</li>
+        <li data-en>Full Apple Search Ads management</li><li data-ko>Apple Search Ads 전체 운영</li>
+        <li data-en>Up to 3 locales</li><li data-ko>최대 3개 로케일</li>
+        <li data-en>Product page audit + PPO tests</li><li data-ko>제품 페이지 감사 + PPO 테스트</li>
+        <li data-en>Monthly scale/hold/cut call</li><li data-ko>월간 확대/유지/축소 판정</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="tname" data-en>APAC Launch</div><div class="tname" data-ko>APAC 런칭</div>
+      <div class="tfor" data-en>US-traction apps entering Korea, Japan or Taiwan.</div>
+      <div class="tfor" data-ko>미국에서 성과가 있고 한국·일본·대만에 진출하는 앱.</div>
+      <div class="price">$3,500<span>/mo</span></div>
+      <div class="tmin" data-en>or a one-time $6,000 launch sprint</div>
+      <div class="tmin" data-ko>또는 1회성 런칭 스프린트 $6,000</div>
+      <ul>
+        <li data-en>Everything in Growth</li><li data-ko>그로스 전체 포함</li>
+        <li data-en>Full KO / JA / ZH-TW localization</li><li data-ko>KO / JA / ZH-TW 전체 현지화</li>
+        <li data-en>Native keyword research per locale</li><li data-ko>로케일별 네이티브 키워드 리서치</li>
+        <li data-en>Cultural QA — tone, honorifics, pricing</li><li data-ko>문화적 QA — 톤, 존대, 가격 표기</li>
+        <li data-en>Localized ASA per storefront</li><li data-ko>스토어프론트별 현지화 ASA</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3 style="margin-top:1.6rem" data-en>À la carte</h3><h3 style="margin-top:1.6rem" data-ko>단품</h3>
+  <div class="row"><span data-en>Full ASO teardown — keyword gaps, metadata rewrite, one locale spot-check. Five business days.</span><span data-ko>전체 ASO 진단 — 키워드 갭, 메타데이터 재작성, 로케일 1건 점검. 영업일 5일.</span><b>$450</b></div>
+  <div class="row"><span data-en>Additional locale</span><span data-ko>로케일 추가</span><b data-en>$600 + $200/mo</b><b data-ko>$600 + 월 $200</b></div>
+  <div class="row"><span data-en>Paywall &amp; pricing localization audit</span><span data-ko>페이월·가격 현지화 감사</span><b>$650</b></div>
+  <div class="row"><span data-en>Subscription plumbing audit — grace period, billing recovery, refunds</span><span data-ko>구독 배관 감사 — 유예 기간, 결제 복구, 환불</span><b>$500</b></div>
+  <div class="row"><span data-en>Screenshot design production</span><span data-ko>스크린샷 디자인 제작</span><b data-en>$800/set</b><b data-ko>세트당 $800</b></div>
+
+  <div class="box g" style="margin-top:1.4rem">
+    <p data-en><strong>The $450 teardown is credited toward your first month</strong> if you continue. It exists so you can buy a small thing before you buy a big thing.</p>
+    <p data-ko><strong>$450 진단은 계속 진행하실 경우 첫 달 요금에서 차감됩니다.</strong> 큰 것을 사기 전에 작은 것을 먼저 사보실 수 있도록 만든 상품입니다.</p>
+  </div>
+  <div class="box k">
+    <p data-en><strong>We take no percentage of your ad spend.</strong> You keep your own Apple Search Ads account and your own card on it; we take admin access only. When we tell you to raise your budget, we earn exactly nothing from it — which is the only reason you should believe us.</p>
+    <p data-ko><strong>광고비에서 수수료를 받지 않습니다.</strong> Apple Search Ads 계정과 결제 카드는 고객님이 그대로 보유하시고, 저희는 관리자 권한만 받습니다. 예산을 늘리라고 말씀드릴 때 저희가 버는 돈은 정확히 0원입니다 — 그것이 저희 말을 믿으셔야 할 유일한 이유입니다.</p>
+  </div>
+</div>
+
+<div class="pad sec">
+  <span class="eyebrow" data-en>Fit</span><span class="eyebrow" data-ko>적합성</span>
+  <div class="two">
+    <div>
+      <h3 data-en>This works if you…</h3><h3 data-ko>이런 경우 잘 맞습니다</h3>
+      <ul>
+        <li data-en>Have a live iOS app with paying users or trials</li><li data-ko>결제 또는 체험 사용자가 있는 출시된 iOS 앱 보유</li>
+        <li data-en>Are between roughly $2k and $50k MRR</li><li data-ko>MRR 약 $2,000~$50,000 구간</li>
+        <li data-en>Have an English-only or machine-translated listing</li><li data-ko>영어만 있거나 기계 번역된 리스팅</li>
+        <li data-en>Can grant App Store Connect + Search Ads access</li><li data-ko>App Store Connect + Search Ads 권한 부여 가능</li>
+      </ul>
+    </div>
+    <div>
+      <h3 data-en>We'll say no if you…</h3><h3 data-ko>이런 경우 거절합니다</h3>
+      <ul>
+        <li class="x" data-en>Haven't launched — there's nothing to optimize</li><li class="x" data-ko>미출시 — 최적화할 대상 없음</li>
+        <li class="x" data-en>Have no monetization, so ROI can't be measured</li><li class="x" data-ko>수익화 없음 — ROI 측정 불가</li>
+        <li class="x" data-en>Want guaranteed rankings — nobody can honestly promise that</li><li class="x" data-ko>순위 보장 요구 — 정직하게 약속 불가</li>
+        <li class="x" data-en>Have a retention problem rather than a discovery problem</li><li class="x" data-ko>발견성이 아니라 리텐션이 문제</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="pad sec">
+  <span class="eyebrow" data-en>How to start</span><span class="eyebrow" data-ko>시작 방법</span>
+  <ol class="steps">
+    <li data-en><strong>Send your App Store link.</strong> We audit it free and send back three keywords you're missing, one screenshot problem, and one localization gap. No call, no deck.</li>
+    <li data-ko><strong>App Store 링크를 보내주세요.</strong> 무료로 분석해 놓치신 키워드 3개, 스크린샷 문제 1개, 현지화 공백 1개를 보내드립니다. 통화도 제안서도 없습니다.</li>
+    <li data-en><strong>If it's useful, buy the $450 teardown.</strong> Full analysis in five business days, credited toward month one.</li>
+    <li data-ko><strong>유용하셨다면 $450 진단을 구매하세요.</strong> 영업일 5일 내 전체 분석, 첫 달 요금에서 차감.</li>
+    <li data-en><strong>Pick a tier and we start.</strong> Three-month minimum, then month-to-month with 30 days' notice. No performance guarantees — we guarantee the work and the report, never the ranking.</li>
+    <li data-ko><strong>티어를 고르시면 시작합니다.</strong> 최소 3개월, 이후 30일 사전통보 월 단위. 성과 보장은 없습니다 — 저희는 작업과 리포트를 보장하지, 순위는 보장하지 않습니다.</li>
+  </ol>
+</div>
+
+<div class="cta">
+  <h2 data-en>Send us your App Store link.</h2><h2 data-ko>App Store 링크를 보내주세요.</h2>
+  <p data-en>Free teardown, usually back within two business days.</p>
+  <p data-ko>무료 진단, 보통 영업일 2일 내 회신드립니다.</p>
+  <a class="btn" href="mailto:hello@miyostudiollc.com?subject=Free%20teardown%20request">hello@miyostudiollc.com</a>
+</div>
+</div>
+</body>
+</html>

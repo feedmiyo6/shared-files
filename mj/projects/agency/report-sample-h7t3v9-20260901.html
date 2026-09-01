@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>Monthly Growth Report — Sample · Miyo Studio</title>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--stone-50:#FAFAF9;--stone-100:#F5F5F4;--stone-200:#E7E5E4;--stone-300:#D6D3D1;--stone-400:#A8A29E;
+--stone-500:#78716C;--stone-600:#57534E;--stone-700:#44403C;--stone-800:#292524;--stone-900:#1C1917;
+--sage-50:#F6F7F5;--sage-100:#E8EBE5;--sage-200:#D4DACE;--sage-500:#6B7D5C;--sage-600:#556A45;--sage-700:#3F5232;
+--warm-50:#FEF9F3;--warm-100:#FCEEDD;--terra:#B8704A;--terra-dark:#8A4E28;--red-50:#FDF1EF;--red:#C0563F;--red-dark:#8F3A26}
+html{font-size:16px;-webkit-font-smoothing:antialiased}
+body{font-family:system-ui,-apple-system,'Segoe UI','Helvetica Neue',Arial,sans-serif;color:var(--stone-800);background:var(--stone-100);line-height:1.62;padding:22px 14px 70px}
+.page{max-width:840px;margin:0 auto;background:#fff;border-radius:16px;box-shadow:0 3px 26px -8px rgba(28,25,23,.14);overflow:hidden}
+.pad{padding:2.1rem 2.4rem}
+h1{font-size:1.62rem;font-weight:700;letter-spacing:-.028em;line-height:1.15;color:var(--stone-900)}
+h2{font-size:1.12rem;font-weight:700;letter-spacing:-.016em;color:var(--stone-900);margin-bottom:.9rem}
+h3{font-size:.95rem;font-weight:670;color:var(--stone-800);margin-bottom:.45rem}
+p{margin-bottom:.8rem}
+ul,ol{margin:0 0 .8rem;padding-left:1.25rem}
+li{margin-bottom:.4rem}
+.sec{border-top:1px solid var(--stone-200)}
+.eyebrow{font-size:.68rem;font-weight:750;letter-spacing:.13em;text-transform:uppercase;color:var(--sage-600);margin-bottom:.55rem;display:block}
+.muted{color:var(--stone-500);font-size:.875rem}
+.small{font-size:.83rem}
+code{background:var(--stone-100);padding:1.5px 5px;border-radius:4px;font-size:.87em;font-family:ui-monospace,Menlo,monospace;color:var(--terra-dark)}
+
+/* header */
+.rhead{background:var(--sage-700);color:#fff;padding:1.9rem 2.4rem}
+.rhead-top{display:flex;justify-content:space-between;align-items:flex-start;gap:1rem;margin-bottom:1.5rem;flex-wrap:wrap}
+.rbrand{font-size:.9rem;font-weight:750;letter-spacing:-.01em}
+.rbrand span{font-weight:400;opacity:.62}
+.rhead h1{color:#fff;margin-bottom:.3rem}
+.rmeta{font-size:.85rem;opacity:.82}
+.samp{display:inline-block;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.26);border-radius:20px;padding:.26rem .8rem;font-size:.7rem;font-weight:650;letter-spacing:.05em}
+
+/* hero number */
+.one{background:var(--sage-50);border-left:4px solid var(--sage-600)}
+.one-v{font-size:2.5rem;font-weight:750;letter-spacing:-.035em;color:var(--sage-700);line-height:1}
+.one-d{font-size:.95rem;font-weight:650;color:var(--terra);margin-left:.5rem}
+
+/* funnel */
+.fun{display:grid;grid-template-columns:repeat(5,1fr);gap:.5rem;margin:1.1rem 0 .5rem}
+.fs{background:var(--stone-100);border-radius:9px;padding:.85rem .5rem;text-align:center;position:relative}
+.fs.warn{background:var(--warm-100)}
+.fs.bad{background:var(--red-50)}
+.fs-v{font-size:1.28rem;font-weight:750;color:var(--stone-900);letter-spacing:-.02em;line-height:1.1}
+.fs.warn .fs-v{color:var(--terra-dark)}.fs.bad .fs-v{color:var(--red-dark)}
+.fs-l{font-size:.63rem;font-weight:700;letter-spacing:.07em;color:var(--stone-500);margin-top:.28rem}
+.fs-r{font-size:.68rem;color:var(--stone-500);margin-top:.22rem}
+
+/* table */
+table{width:100%;border-collapse:collapse;font-size:.855rem;margin-bottom:.9rem}
+th{text-align:left;font-size:.68rem;font-weight:750;letter-spacing:.07em;text-transform:uppercase;color:var(--stone-500);padding:.5rem .6rem;border-bottom:1.5px solid var(--stone-300)}
+td{padding:.52rem .6rem;border-bottom:1px solid var(--stone-100)}
+th.n,td.n{text-align:right;font-variant-numeric:tabular-nums}
+tr.tot td{font-weight:700;border-top:1.5px solid var(--stone-300);border-bottom:none;background:var(--stone-50)}
+.pos{color:var(--sage-600);font-weight:650}.neg{color:var(--red);font-weight:650}
+
+/* bar */
+.bar{height:9px;background:var(--stone-200);border-radius:5px;overflow:hidden;display:flex;margin:.15rem 0}
+.bar i{display:block;height:100%}
+.legend{display:flex;gap:1.1rem;flex-wrap:wrap;font-size:.76rem;color:var(--stone-600);margin-top:.55rem}
+.legend b{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:.32rem;vertical-align:middle}
+
+/* callouts */
+.box{border-radius:11px;padding:1.05rem 1.2rem;margin-bottom:.9rem;font-size:.9rem}
+.box p:last-child{margin-bottom:0}
+.box.k{background:var(--warm-50);border-left:3px solid var(--terra)}
+.box.g{background:var(--sage-50);border-left:3px solid var(--sage-600)}
+.box.r{background:var(--red-50);border-left:3px solid var(--red)}
+.box h3{margin-bottom:.4rem}
+
+/* rec */
+.rec{border-radius:13px;overflow:hidden;border:2px solid var(--terra)}
+.rec-h{background:var(--terra);color:#fff;padding:.8rem 1.2rem;display:flex;align-items:center;gap:.65rem}
+.rec-badge{background:rgba(255,255,255,.22);border-radius:5px;padding:.16rem .6rem;font-size:.72rem;font-weight:800;letter-spacing:.09em}
+.rec-h strong{font-size:.98rem;font-weight:700}
+.rec-b{padding:1.15rem 1.25rem;background:var(--warm-50);font-size:.9rem}
+.rule{display:grid;grid-template-columns:auto 1fr;gap:.5rem 1rem;font-size:.83rem;margin-top:.85rem;padding-top:.85rem;border-top:1px solid var(--stone-200)}
+.chip{font-size:.66rem;font-weight:800;letter-spacing:.07em;padding:.2rem .55rem;border-radius:4px;white-space:nowrap;height:fit-content}
+.chip.g{background:var(--sage-100);color:var(--sage-700)}
+.chip.y{background:var(--warm-100);color:var(--terra-dark)}
+.chip.r{background:#FADED8;color:var(--red-dark)}
+
+/* changelog */
+.log{list-style:none;padding:0}
+.log li{padding-left:1.5rem;position:relative;margin-bottom:.55rem;font-size:.885rem}
+.log li::before{content:'';position:absolute;left:.32rem;top:.55em;width:6px;height:6px;border-radius:50%;background:var(--sage-500)}
+.log li em{font-style:normal;color:var(--stone-400);font-size:.78rem;margin-left:.35rem}
+
+/* next */
+.next{counter-reset:n;list-style:none;padding:0}
+.next li{counter-increment:n;padding-left:2.1rem;position:relative;margin-bottom:.85rem;font-size:.9rem}
+.next li::before{content:counter(n);position:absolute;left:0;top:.05em;width:1.5rem;height:1.5rem;border-radius:50%;background:var(--sage-700);color:#fff;display:flex;align-items:center;justify-content:center;font-size:.74rem;font-weight:750}
+
+.foot{background:var(--stone-900);color:var(--stone-400);padding:1.5rem 2.4rem;font-size:.79rem;display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+.langbtn{position:fixed;top:14px;right:14px;z-index:60;background:var(--sage-700);color:#fff;border:none;border-radius:20px;padding:.5rem 1rem;font-size:.79rem;font-weight:650;cursor:pointer;box-shadow:0 3px 12px rgba(0,0,0,.2)}
+[data-ko]{display:none}
+body.ko [data-en]{display:none}
+body.ko [data-ko]{display:block}
+body.ko li[data-ko]{display:list-item}
+body.ko span[data-ko],body.ko strong[data-ko],body.ko em[data-ko],body.ko td[data-ko],body.ko th[data-ko],body.ko code[data-ko]{display:inline}
+body.ko h1[data-ko],body.ko h2[data-ko],body.ko h3[data-ko],body.ko p[data-ko],body.ko div[data-ko],body.ko ul[data-ko],body.ko ol[data-ko]{display:block}
+@media(max-width:720px){.pad,.rhead,.foot{padding-left:1.25rem;padding-right:1.25rem}.fun{grid-template-columns:repeat(3,1fr)}table{font-size:.78rem}th,td{padding:.4rem .35rem}}
+</style>
+</head>
+<body>
+<button class="langbtn" onclick="var k=document.body.classList.toggle('ko');this.textContent=k?'English':'한국어'">한국어</button>
+
+<div class="page">
+
+<div class="rhead">
+  <div class="rhead-top">
+    <div class="rbrand">Miyo Studio <span>LLC</span></div>
+    <div class="samp" data-en>SAMPLE REPORT</div><div class="samp" data-ko>샘플 리포트</div>
+  </div>
+  <h1 data-en>Monthly Growth Report</h1>
+  <h1 data-ko>월간 그로스 리포트</h1>
+  <div class="rmeta" data-en>Jujube: Pantry &amp; Waste Tracker · iOS · en-US, ko, zh &nbsp;·&nbsp; Reporting period 23–31 August 2026 &nbsp;·&nbsp; Issued 1 September 2026</div>
+  <div class="rmeta" data-ko>Jujube: Pantry &amp; Waste Tracker · iOS · en-US, ko, zh &nbsp;·&nbsp; 보고 기간 2026년 8월 23–31일 &nbsp;·&nbsp; 발행 2026년 9월 1일</div>
+</div>
+
+<div class="pad one">
+  <span class="eyebrow" data-en>The one number</span><span class="eyebrow" data-ko>단 하나의 숫자</span>
+  <div class="one-v">$7.85 <span class="one-d">▼ 33%</span></div>
+  <p style="margin-top:.5rem;margin-bottom:0" data-en><strong>Cost per install, blended</strong> — down from $11.76 in the first four days. But read the recommendation before you act on that: the improvement is a campaign-mix artefact, not an efficiency gain.</p>
+  <p style="margin-top:.5rem;margin-bottom:0" data-ko><strong>설치당 비용(통합 기준)</strong> — 첫 4일간의 $11.76에서 하락. 다만 이 수치로 판단하기 전에 권고 섹션을 먼저 보십시오. 이 개선은 효율 향상이 아니라 캠페인 구성 변화에 따른 착시입니다.</p>
+</div>
+
+<div class="pad sec">
+  <span class="eyebrow" data-en>Full funnel</span><span class="eyebrow" data-ko>전체 퍼널</span>
+  <h2 data-en>Where 7,136 impressions ended up</h2>
+  <h2 data-ko>노출 7,136회의 최종 도달 지점</h2>
+  <div class="fun">
+    <div class="fs"><div class="fs-v">7,136</div><div class="fs-l">IMPRESSIONS</div><div class="fs-r">—</div></div>
+    <div class="fs"><div class="fs-v">138</div><div class="fs-l">TAPS</div><div class="fs-r">1.93%</div></div>
+    <div class="fs"><div class="fs-v">13</div><div class="fs-l">INSTALLS</div><div class="fs-r">9.42%</div></div>
+    <div class="fs warn"><div class="fs-v">3</div><div class="fs-l">TRIALS</div><div class="fs-r">23.1%</div></div>
+    <div class="fs bad"><div class="fs-v">0</div><div class="fs-l">PAID</div><div class="fs-r">0 of 2</div></div>
+  </div>
+  <p class="muted small" data-en>Percentages are step-to-step conversion. Spend $102.01 over 9 active days · avg CPT $0.74 · cost per trial $34.00. Two of the three trials have resolved; neither converted. The third resolves 5 September.</p>
+  <p class="muted small" data-ko>백분율은 단계 간 전환율입니다. 활동 9일간 지출 $102.01 · 평균 CPT $0.74 · 체험당 비용 $34.00. 3건의 체험 중 2건이 종료됐고 둘 다 전환되지 않았습니다. 나머지 1건은 9월 5일에 결정됩니다.</p>
+
+  <div class="box g">
+    <h3 data-en>What's working: tap → install, and install → trial</h3>
+    <h3 data-ko>잘 되고 있는 것: 탭→설치, 그리고 설치→체험</h3>
+    <p data-en>9.4% tap-to-install is respectable for a category-defining app with no brand recognition, and <strong>23% install-to-trial is genuinely strong</strong> — the onboarding and paywall are doing their job. Nothing above the trial line needs fixing this month.</p>
+    <p data-ko>브랜드 인지도가 없는 카테고리 정의형 앱에서 탭→설치 9.4%는 준수하며, <strong>설치→체험 23%는 상당히 좋은 수치</strong>입니다. 온보딩과 페이월이 제 역할을 하고 있습니다. 이번 달 체험 단계 위쪽은 손볼 것이 없습니다.</p>
+  </div>
+  <div class="box r">
+    <h3 data-en>What isn't: nothing has completed the loop</h3>
+    <h3 data-ko>안 되고 있는 것: 아직 한 바퀴를 완주한 사례가 없음</h3>
+    <p data-en>Zero completed trial-to-paid conversions. That single unknown blocks every scaling decision below, because without it there is no allowable cost-per-acquisition to compute against.</p>
+    <p data-ko>완료된 체험→결제 전환이 0건입니다. 이 하나의 미지수가 아래의 모든 확대 결정을 막습니다. 이것이 없으면 허용 가능한 고객획득비용(CPA)을 계산할 기준 자체가 없기 때문입니다.</p>
+  </div>
+</div>
+
+<div class="pad sec">
+  <span class="eyebrow" data-en>Paid performance</span><span class="eyebrow" data-ko>유료 광고 성과</span>
+  <h2 data-en>By campaign</h2><h2 data-ko>캠페인별</h2>
+  <table>
+    <tr><th data-en>Campaign</th><th data-ko>캠페인</th><th class="n" data-en>Spend</th><th class="n" data-ko>지출</th><th class="n" data-en>Taps</th><th class="n" data-ko>탭</th><th class="n" data-en>Installs</th><th class="n" data-ko>설치</th><th class="n">CPA</th><th class="n" data-en>Verdict</th><th class="n" data-ko>판정</th></tr>
+    <tr><td>Brand</td><td class="n">$26.03</td><td class="n">41</td><td class="n">6</td><td class="n pos">$4.34</td><td class="n" data-en>Keep</td><td class="n" data-ko>유지</td></tr>
+    <tr><td>Discovery</td><td class="n">$43.06</td><td class="n">55</td><td class="n">6</td><td class="n">$7.18</td><td class="n" data-en>Trim</td><td class="n" data-ko>축소</td></tr>
+    <tr><td>Competitor</td><td class="n">$5.50</td><td class="n">4</td><td class="n">0</td><td class="n neg">—</td><td class="n" data-en>Killed</td><td class="n" data-ko>중단함</td></tr>
+    <tr class="tot"><td data-en>Total</td><td data-ko>합계</td><td class="n">$74.59</td><td class="n">100</td><td class="n">12</td><td class="n">$6.22</td><td class="n"></td></tr>
+  </table>
+  <p class="muted small" data-en>Campaign table covers 25–31 Aug (the window with keyword-level granularity). Funnel figures above cover the full 23–31 Aug period.</p>
+  <p class="muted small" data-ko>캠페인 표는 8월 25–31일(키워드 단위 데이터가 있는 구간) 기준입니다. 위의 퍼널 수치는 8월 23–31일 전체 기간 기준입니다.</p>
+
+  <div class="box k">
+    <h3 data-en>Correction to last week's read</h3><h3 data-ko>지난주 해석에 대한 정정</h3>
+    <p data-en>Blended CPA appeared to improve sharply after 27 August. It did not. Discovery was paused while version 2.5.12 was in review, which left Brand — always the cheaper campaign at $4.34 — carrying most of the spend. <strong>Discovery's true CPA is still ~$7.18.</strong> We are flagging this rather than taking credit for it.</p>
+    <p data-ko>8월 27일 이후 통합 CPA가 급격히 개선된 것처럼 보였습니다. 실제로는 아니었습니다. 버전 2.5.12 심사 중 Discovery가 일시 중지되면서, 항상 더 저렴했던 Brand 캠페인($4.34)이 지출의 대부분을 차지했기 때문입니다. <strong>Discovery의 실제 CPA는 여전히 약 $7.18입니다.</strong> 성과로 포장하지 않고 그대로 보고드립니다.</p>
+  </div>
+</div>
+
+<div class="pad sec">
+  <span class="eyebrow" data-en>Search term analysis</span><span class="eyebrow" data-ko>검색어 분석</span>
+  <h2 data-en>32.5% of spend went to people searching for restaurants</h2>
+  <h2 data-ko>지출의 32.5%가 식당을 검색하던 사람들에게 나갔습니다</h2>
+  <div class="bar">
+    <i style="width:57.2%;background:var(--sage-500)"></i>
+    <i style="width:32.5%;background:var(--terra)"></i>
+    <i style="width:10.3%;background:var(--red)"></i>
+  </div>
+  <div class="legend">
+    <span><b style="background:var(--sage-500)"></b><span data-en>Relevant / low-volume aggregate — $58.35</span><span data-ko>관련 검색어 / 저volume 집계 — $58.35</span></span>
+    <span><b style="background:var(--terra)"></b><span data-en>Irrelevant brand searches — $33.15</span><span data-ko>무관한 브랜드 검색 — $33.15</span></span>
+    <span><b style="background:var(--red)"></b><span data-en>Wrong-competitor traffic — $10.51</span><span data-ko>잘못된 경쟁사 트래픽 — $10.51</span></span>
+  </div>
+
+  <h3 style="margin-top:1.5rem" data-en>The queries your ad was served against</h3>
+  <h3 style="margin-top:1.5rem" data-ko>광고가 노출된 실제 검색어</h3>
+  <table>
+    <tr><th data-en>Search term</th><th data-ko>검색어</th><th data-en>What it is</th><th data-ko>정체</th><th class="n" data-en>Spend</th><th class="n" data-ko>지출</th><th class="n" data-en>Installs</th><th class="n" data-ko>설치</th></tr>
+    <tr><td><code>heytea</code></td><td class="muted" data-en>Bubble tea chain</td><td class="muted" data-ko>버블티 체인</td><td class="n">$11.74</td><td class="n">1</td></tr>
+    <tr><td><code>batch sweet</code></td><td class="muted" data-en>Dessert brand</td><td class="muted" data-ko>디저트 브랜드</td><td class="n">$7.11</td><td class="n">2</td></tr>
+    <tr><td><code>аномальная кофемашина</code></td><td class="muted" data-en>Russian, "anomalous coffee machine"</td><td class="muted" data-ko>러시아어, "이상한 커피머신"</td><td class="n">$4.84</td><td class="n">1</td></tr>
+    <tr><td><code>too good to go</code></td><td class="muted" data-en>Surplus-food marketplace</td><td class="muted" data-ko>잉여 음식 마켓플레이스</td><td class="n">$8.87</td><td class="n">0</td></tr>
+    <tr><td><code>вкусно и точка</code></td><td class="muted" data-en>Russian fast-food chain</td><td class="muted" data-ko>러시아 패스트푸드 체인</td><td class="n">$0.85</td><td class="n">0</td></tr>
+    <tr><td class="muted" colspan="2" data-en>+ jollibee, panda express, dairy queen, jamba juice, chick-fil-a, foodpanda, nothing bundt cakes…</td><td class="muted" colspan="2" data-ko>+ jollibee, panda express, dairy queen, jamba juice, chick-fil-a, foodpanda, nothing bundt cakes…</td><td class="n">$9.25</td><td class="n">1</td></tr>
+  </table>
+
+  <div class="box k">
+    <h3 data-en>Root cause: the App Store has categorised you as a food brand</h3>
+    <h3 data-ko>근본 원인: App Store가 이 앱을 식음료 브랜드로 분류했습니다</h3>
+    <p data-en>This is not a bidding mistake — it is a semantic one. "Jujube" is a fruit, a tea ingredient and a candy. Apple's relevance model has therefore filed the app alongside restaurants and beverage brands rather than kitchen utilities, and Search Match keeps serving it to people looking for somewhere to eat.</p>
+    <p data-ko>이것은 입찰 실수가 아니라 의미론적 문제입니다. "Jujube(대추)"는 과일이자 차 원료이자 사탕입니다. 그래서 Apple의 관련성 모델이 이 앱을 주방 유틸리티가 아니라 식당·음료 브랜드 옆에 배치했고, Search Match가 계속 식사할 곳을 찾는 사람들에게 광고를 노출하고 있습니다.</p>
+    <p data-en><strong>The same misclassification suppresses organic ranking</strong>, because Apple is placing the app in the wrong neighbourhood entirely. Negative keywords treat the symptom; the metadata work below treats the cause.</p>
+    <p data-ko><strong>같은 오분류가 오가닉 순위도 억제합니다.</strong> Apple이 이 앱을 완전히 잘못된 이웃에 두고 있기 때문입니다. 제외 키워드는 증상을, 아래의 메타데이터 작업은 원인을 다룹니다.</p>
+  </div>
+</div>
+
+<div class="pad sec">
+  <span class="eyebrow" data-en>Category demand</span><span class="eyebrow" data-ko>카테고리 수요</span>
+  <h2 data-en>The honest ceiling on organic search</h2>
+  <h2 data-ko>오가닉 검색의 솔직한 상한선</h2>
+  <p data-en>Total weekly impressions across every relevant non-brand keyword currently bid:</p>
+  <p data-ko>현재 입찰 중인 모든 관련 비브랜드 키워드의 주간 총 노출:</p>
+  <table>
+    <tr><th data-en>Keyword</th><th data-ko>키워드</th><th class="n" data-en>Impressions / week</th><th class="n" data-ko>주간 노출</th><th class="n" data-en>Taps</th><th class="n" data-ko>탭</th></tr>
+    <tr><td><code>food waste app</code></td><td class="n">266</td><td class="n">7</td></tr>
+    <tr><td><code>fridge inventory</code></td><td class="n">141</td><td class="n">2</td></tr>
+    <tr><td><code>asian grocery list</code></td><td class="n">94</td><td class="n">1</td></tr>
+    <tr><td><code>leftover recipes</code></td><td class="n">88</td><td class="n">1</td></tr>
+    <tr><td><code>grocery inventory</code></td><td class="n">32</td><td class="n">1</td></tr>
+    <tr><td><code>expiration date tracker</code></td><td class="n">25</td><td class="n">1</td></tr>
+    <tr><td><code>pantry tracker</code></td><td class="n">17</td><td class="n">0</td></tr>
+    <tr><td><code>kitchen inventory</code></td><td class="n">9</td><td class="n">0</td></tr>
+    <tr><td class="muted" data-en>+ 10 further long-tail terms</td><td class="muted" data-ko>+ 롱테일 10개 추가</td><td class="n">145</td><td class="n">1</td></tr>
+    <tr class="tot"><td data-en>Total addressable, weekly</td><td data-ko>주간 총 도달 가능</td><td class="n">817</td><td class="n">14</td></tr>
+  </table>
+  <div class="box r">
+    <p data-en><strong>Read this carefully, because it reframes the whole strategy.</strong> Even ranking #1 organically across every one of these terms, at a healthy 10% tap-through and 15% install rate, yields roughly <strong>10–15 installs per week</strong>. This category does not have enough US search volume to be a primary growth channel — and with 7 ratings against competitors holding thousands, the ranking itself is years away.</p>
+    <p data-ko><strong>이 부분을 주의 깊게 보십시오. 전략 전체의 프레임이 바뀝니다.</strong> 이 모든 키워드에서 오가닉 1위를 하고, 건강한 탭률 10%와 설치율 15%를 가정해도 <strong>주당 약 10~15건</strong>의 설치가 나옵니다. 이 카테고리는 미국 내 검색량 자체가 주력 성장 채널이 되기에 부족합니다 — 게다가 경쟁사가 수천 개의 평점을 가진 상황에서 평점 7개로는 순위 자체가 수년 뒤의 일입니다.</p>
+    <p data-en>Search optimisation is a <em>conversion multiplier on demand you create elsewhere</em>. It is not a demand source. Budget accordingly.</p>
+    <p data-ko>검색 최적화는 <em>다른 곳에서 만들어낸 수요에 대한 전환 배수</em>입니다. 수요의 원천이 아닙니다. 예산 배분을 그에 맞게 하십시오.</p>
+  </div>
+  <p class="muted small" data-en>Caveat: ad impressions are a floor, not a hard ceiling — impression share depends on bid and budget. The order of magnitude, however, is unambiguous.</p>
+  <p class="muted small" data-ko>단서: 광고 노출은 상한이 아니라 하한입니다. 노출 점유율은 입찰가와 예산에 좌우됩니다. 다만 자릿수 규모 자체는 명확합니다.</p>
+</div>
+
+<div class="pad sec">
+  <span class="eyebrow" data-en>Cohort detail</span><span class="eyebrow" data-ko>코호트 상세</span>
+  <h2 data-en>Every trial this period, and what happened to it</h2>
+  <h2 data-ko>이번 기간의 모든 체험과 그 결과</h2>
+  <table>
+    <tr><th data-en>User</th><th data-ko>사용자</th><th data-en>Store</th><th data-ko>스토어</th><th data-en>Started</th><th data-ko>시작</th><th data-en>Outcome</th><th data-ko>결과</th></tr>
+    <tr><td>User A</td><td>KR</td><td>24 Aug</td><td class="neg" data-en>Billing failure at trial end — card declined, access lost, no recovery window</td><td class="neg" data-ko>체험 종료 시 결제 실패 — 카드 거절, 접근 상실, 복구 기간 없음</td></tr>
+    <tr><td>User B</td><td>US</td><td>29 Aug</td><td data-en><strong>Pending — resolves 5 Sept.</strong> Auto-renew still on.</td><td data-ko><strong>대기 중 — 9월 5일 결정.</strong> 자동 갱신 유지 중.</td></tr>
+    <tr><td>User C</td><td>US</td><td>31 Aug</td><td class="neg" data-en>Cancelled after 26 hours. Deliberate unsubscribe, not a billing issue.</td><td class="neg" data-ko>26시간 후 취소. 결제 문제가 아닌 의도적 구독 해지.</td></tr>
+  </table>
+  <div class="box k">
+    <h3 data-en>User C is the most important data point of the month</h3>
+    <h3 data-ko>User C가 이번 달 가장 중요한 데이터입니다</h3>
+    <p data-en>User C is the only person in the entire user base whose attribution survey credits App Store search — the exact channel this budget is buying. They installed, started a trial, and cancelled within 26 hours. That is not an acquisition problem. Something in the first session did not deliver.</p>
+    <p data-ko>User C는 전체 사용자 중 유입 경로 설문에서 App Store 검색을 선택한 유일한 사람입니다 — 바로 이 예산이 구매하고 있는 채널입니다. 설치하고, 체험을 시작하고, 26시간 안에 취소했습니다. 이건 획득의 문제가 아닙니다. 첫 세션에서 무언가가 전달되지 않았습니다.</p>
+    <p data-en>Two separate failure modes appeared in three trials: one lost to billing plumbing, one lost to first-session experience. Both are downstream of everything paid media can influence.</p>
+    <p data-ko>체험 3건에서 서로 다른 두 가지 실패 유형이 나타났습니다: 하나는 결제 배관, 하나는 첫 세션 경험. 둘 다 유료 미디어가 영향을 줄 수 있는 범위의 하류에 있습니다.</p>
+  </div>
+</div>
+
+<div class="pad sec">
+  <span class="eyebrow" data-en>What we changed</span><span class="eyebrow" data-ko>변경 사항</span>
+  <h2 data-en>Changelog</h2><h2 data-ko>체인지로그</h2>
+  <ul class="log">
+    <li data-en>Added negative keywords for <code>heytea</code>, <code>jujube fruit</code>, <code>jujube tree</code> and adjacent beverage terms <em>26–27 Aug</em></li>
+    <li data-ko><code>heytea</code>, <code>jujube fruit</code>, <code>jujube tree</code> 및 인접 음료 관련 제외 키워드 추가 <em>8월 26–27일</em></li>
+    <li data-en>Paused the <code>too good to go</code> exact-match keyword — $10.51 across 11 taps, zero installs <em>27 Aug</em></li>
+    <li data-ko><code>too good to go</code> 완전일치 키워드 중단 — 11탭에 $10.51 지출, 설치 0건 <em>8월 27일</em></li>
+    <li data-en>Paused Discovery during the 2.5.12 review window, restored after approval <em>26–29 Aug</em></li>
+    <li data-ko>2.5.12 심사 기간 중 Discovery 일시 중지, 승인 후 재개 <em>8월 26–29일</em></li>
+    <li data-en>Shipped the v5 screenshot set with version 2.5.12 <em>29 Aug</em></li>
+    <li data-ko>버전 2.5.12와 함께 v5 스크린샷 세트 출시 <em>8월 29일</em></li>
+    <li data-en>Enabled the App Store billing grace period — 16 days, all renewals. Previously off, meaning one declined charge ended access immediately <em>31 Aug</em></li>
+    <li data-ko>App Store 결제 유예 기간 활성화 — 16일, 전체 갱신 적용. 이전에는 꺼져 있어 결제 1회 거절 시 즉시 접근이 종료됐습니다 <em>8월 31일</em></li>
+    <li data-en>Fixed a hardcoded USD figure appearing inside the translated Korean and Chinese paywall copy <em>31 Aug</em></li>
+    <li data-ko>번역된 한국어·중국어 페이월 문구 안에 나타나던 하드코딩 USD 금액 수정 <em>8월 31일</em></li>
+  </ul>
+  <div class="box g">
+    <p data-en><strong>Note on the screenshot test.</strong> The v5 set went live 29 August, and spend fell to roughly $2.70/day at exactly that moment. Only 16 taps have been served against the new set — statistically indistinguishable from noise (p = 0.65). <strong>This experiment has not actually run yet</strong> and needs 300–500 taps to read. We are not claiming a result we do not have.</p>
+    <p data-ko><strong>스크린샷 테스트에 대한 참고.</strong> v5 세트는 8월 29일에 적용됐고, 정확히 그 시점에 지출이 일 약 $2.70으로 떨어졌습니다. 새 세트에 노출된 탭은 16건뿐이며, 통계적으로 노이즈와 구분되지 않습니다(p = 0.65). <strong>이 실험은 사실상 아직 실행되지 않았고</strong> 판독하려면 300~500탭이 필요합니다. 없는 결과를 주장하지 않겠습니다.</p>
+  </div>
+</div>
+
+<div class="pad sec">
+  <span class="eyebrow" data-en>Recommendation</span><span class="eyebrow" data-ko>권고</span>
+  <div class="rec">
+    <div class="rec-h">
+      <span class="rec-badge" data-en>HOLD</span><span class="rec-badge" data-ko>유지</span>
+      <strong data-en>Do not increase spend before 7 September.</strong>
+      <strong data-ko>9월 7일 이전에는 지출을 늘리지 마십시오.</strong>
+    </div>
+    <div class="rec-b">
+      <p data-en>At $7.85 per install and a 23% install-to-trial rate, breaking even in year one on a $59.99 annual subscription (≈$51 net of Apple's 15%) requires roughly <strong>two out of every three trials to convert</strong>. Completed trials so far: <strong>zero out of two</strong>.</p>
+      <p data-ko>설치당 $7.85, 설치→체험 23%인 상황에서, 연 $59.99 구독(Apple 15% 차감 후 약 $51)으로 1년 차 손익분기를 맞추려면 <strong>체험 3건 중 2건</strong>이 전환돼야 합니다. 지금까지 완료된 체험: <strong>2건 중 0건</strong>.</p>
+      <p data-en>Scaling now means buying more of an outcome that has not been shown to exist. The 5 September cohort is the single most valuable piece of information available, and it costs nothing to wait for it.</p>
+      <p data-ko>지금 확대한다는 것은 아직 존재가 확인되지 않은 결과를 더 많이 사들이는 일입니다. 9월 5일 코호트는 현재 얻을 수 있는 가장 가치 있는 정보이며, 기다리는 데는 비용이 들지 않습니다.</p>
+      <p data-en><strong>Also note: budget is not the binding constraint.</strong> $25/day is allocated; actual delivery averaged $11.33/day — 45% utilisation. Raising the budget number would change nothing. If volume is wanted later, the lever is bids, not budget.</p>
+      <p data-ko><strong>또한: 예산은 제약 요인이 아닙니다.</strong> 일 $25가 배정되어 있으나 실제 집행은 일평균 $11.33 — 활용률 45%입니다. 예산 숫자를 올려도 아무것도 바뀌지 않습니다. 나중에 볼륨이 필요하다면 레버는 예산이 아니라 입찰가입니다.</p>
+      <div class="rule">
+        <span class="chip g" data-en>SCALE</span><span class="chip g" data-ko>확대</span>
+        <span data-en>Trial→paid ≥ 60% <em>and</em> CPA under the payback threshold → raise spend 25–50%</span>
+        <span data-ko>체험→결제 60% 이상 <em>그리고</em> CPA가 회수 기준 이하 → 지출 25~50% 증액</span>
+        <span class="chip y" data-en>HOLD</span><span class="chip y" data-ko>유지</span>
+        <span data-en>One of the two unmet, or unresolved → hold spend, fix conversion first &nbsp;<strong>← current state</strong></span>
+        <span data-ko>둘 중 하나 미달 또는 미확정 → 지출 유지, 전환부터 개선 &nbsp;<strong>← 현재 상태</strong></span>
+        <span class="chip r" data-en>CUT</span><span class="chip r" data-ko>축소</span>
+        <span data-en>Both unmet two months running → cut spend; the offer or the product page is the problem</span>
+        <span data-ko>두 달 연속 둘 다 미달 → 지출 축소. 오퍼 또는 제품 페이지가 문제</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="pad sec">
+  <span class="eyebrow" data-en>Next month</span><span class="eyebrow" data-ko>다음 달</span>
+  <h2 data-en>Three priorities, in order</h2><h2 data-ko>우선순위 3가지, 순서대로</h2>
+  <ol class="next">
+    <li data-en><strong>Resolve the conversion unknown.</strong> Watch the 5 September cohort. One conversion or zero changes the entire spend recommendation, and we will reissue the scaling call within 24 hours of it resolving.</li>
+    <li data-ko><strong>전환 미지수를 해소합니다.</strong> 9월 5일 코호트를 확인합니다. 전환 1건이냐 0건이냐가 지출 권고 전체를 바꾸며, 결과 확정 후 24시간 내에 확대 판정을 재발행합니다.</li>
+    <li data-en><strong>Attack the categorisation, not just the symptoms.</strong> Rewrite the subtitle and keyword field to signal <em>utility</em> hard enough to pull the app out of the food-and-beverage neighbourhood — <code>pantry inventory · expiry tracker · grocery list</code> rather than recipe and cuisine language. This is the highest-leverage organic work available.</li>
+    <li data-ko><strong>증상이 아니라 분류 자체를 공략합니다.</strong> 서브타이틀과 키워드 필드를 <em>유틸리티</em> 신호가 강하게 나도록 재작성해 식음료 카테고리에서 앱을 끌어냅니다 — 레시피·요리 용어 대신 <code>pantry inventory · expiry tracker · grocery list</code>. 현재 가능한 오가닉 작업 중 레버리지가 가장 큽니다.</li>
+    <li data-en><strong>Re-run the screenshot test properly.</strong> $25–30/day for ten days against the v5 set, so the experiment reaches a readable sample instead of dying at 16 taps.</li>
+    <li data-ko><strong>스크린샷 테스트를 제대로 재실행합니다.</strong> v5 세트에 대해 10일간 일 $25~30을 집행해, 16탭에서 끝나지 않고 판독 가능한 표본에 도달하게 합니다.</li>
+  </ol>
+  <div class="box k">
+    <p data-en><strong>One thing outside our scope that we would be doing you a disservice not to say.</strong> Paid media amplifies whatever happens after the install. Right now that is a 26-hour cancellation from the one user who arrived through the channel being paid for. Until the first session earns a second one, every additional dollar of ad spend buys a slightly larger version of the same outcome.</p>
+    <p data-ko><strong>저희 범위 밖이지만, 말씀드리지 않으면 직무유기인 사항 하나.</strong> 유료 미디어는 설치 이후에 벌어지는 일을 증폭시킵니다. 지금 그것은, 돈을 지불한 그 채널로 들어온 유일한 사용자의 26시간 만의 취소입니다. 첫 세션이 두 번째 세션을 만들어내기 전까지는, 추가되는 광고비 1달러마다 같은 결과의 조금 더 큰 버전을 살 뿐입니다.</p>
+  </div>
+</div>
+
+<div class="foot">
+  <span>Miyo Studio LLC · hello@miyostudiollc.com</span>
+  <span data-en>Sources: Apple Search Ads · App Store Connect · RevenueCat · production database</span>
+  <span data-ko>출처: Apple Search Ads · App Store Connect · RevenueCat · 프로덕션 데이터베이스</span>
+</div>
+
+</div>
+</body>
+</html>

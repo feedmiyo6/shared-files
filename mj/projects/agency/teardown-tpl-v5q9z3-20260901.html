@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="robots" content="noindex,nofollow">
+<title>ASO Teardown — template · Miyo Studio</title>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--s50:#FAFAF9;--s100:#F5F5F4;--s200:#E7E5E4;--s300:#D6D3D1;--s400:#A8A29E;--s500:#78716C;--s600:#57534E;--s800:#292524;--s900:#1C1917;
+--sg50:#F6F7F5;--sg100:#E8EBE5;--sg200:#D4DACE;--sg500:#6B7D5C;--sg600:#556A45;--sg700:#3F5232;--w50:#FEF9F3;--w100:#FCEEDD;--tr:#B8704A;--trd:#8A4E28;--rd:#C0563F;--rd50:#FDF1EF}
+html{font-size:16px;-webkit-font-smoothing:antialiased}
+body{font-family:system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif;color:var(--s800);background:var(--s100);line-height:1.62;padding:22px 14px 70px}
+.page{max-width:760px;margin:0 auto;background:#fff;border-radius:16px;box-shadow:0 3px 26px -8px rgba(28,25,23,.14);overflow:hidden}
+.pad{padding:1.9rem 2.3rem}
+.sec{border-top:1px solid var(--s200)}
+h1{font-size:1.6rem;font-weight:720;letter-spacing:-.03em;line-height:1.15;color:#fff}
+h2{font-size:1.06rem;font-weight:700;letter-spacing:-.016em;color:var(--s900);margin-bottom:.75rem}
+h3{font-size:.93rem;font-weight:680;color:var(--s900);margin-bottom:.35rem}
+p{margin-bottom:.72rem;font-size:.9rem}
+.eyebrow{font-size:.66rem;font-weight:760;letter-spacing:.13em;text-transform:uppercase;color:var(--sg600);margin-bottom:.5rem;display:block}
+.head{background:var(--sg700);color:#fff;padding:1.9rem 2.3rem}
+.brand{font-size:.85rem;font-weight:760;margin-bottom:1rem}.brand span{font-weight:400;opacity:.6}
+.head .sub{color:var(--sg100);font-size:.86rem;margin-top:.5rem}
+.muted{color:var(--s500);font-size:.84rem}
+.small{font-size:.82rem}
+code,.ph{background:var(--s100);padding:1.5px 5px;border-radius:4px;font-size:.87em;font-family:ui-monospace,Menlo,monospace;color:var(--trd)}
+.ph{background:var(--w100);color:var(--trd);font-weight:650}
+/* usage band */
+.usage{background:#1C1917;color:var(--s300);padding:1.5rem 2.3rem;font-size:.85rem}
+.usage h2{color:#fff;font-size:.95rem;margin-bottom:.6rem}
+.usage p{font-size:.85rem;color:var(--s400);margin-bottom:.6rem}
+.usage strong{color:#fff}
+.usage .warn{background:rgba(192,86,63,.16);border-left:3px solid var(--rd);border-radius:7px;padding:.7rem .9rem;margin-top:.8rem;color:#F0C4B8;font-size:.82rem}
+.email{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.11);border-radius:9px;padding:.9rem 1rem;margin-top:.8rem;font-family:ui-monospace,Menlo,monospace;font-size:.78rem;line-height:1.65;color:var(--s300);white-space:pre-wrap}
+/* findings */
+.find{border:1px solid var(--s200);border-radius:12px;padding:1.25rem 1.35rem;margin-bottom:1rem;position:relative;overflow:hidden}
+.find::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--tr)}
+.fn{font-size:.66rem;font-weight:780;letter-spacing:.11em;color:var(--tr);margin-bottom:.5rem;display:block}
+table{width:100%;border-collapse:collapse;font-size:.85rem;margin:.7rem 0}
+th{text-align:left;font-size:.66rem;font-weight:760;letter-spacing:.07em;text-transform:uppercase;color:var(--s500);padding:.45rem .55rem;border-bottom:1.5px solid var(--s300)}
+td{padding:.48rem .55rem;border-bottom:1px solid var(--s100)}
+th.n,td.n{text-align:right;font-variant-numeric:tabular-nums}
+.box{border-radius:10px;padding:.95rem 1.1rem;margin:.7rem 0;font-size:.875rem}
+.box p:last-child{margin-bottom:0}
+.box.k{background:var(--w50);border-left:3px solid var(--tr)}
+.box.g{background:var(--sg50);border-left:3px solid var(--sg600)}
+.box.r{background:var(--rd50);border-left:3px solid var(--rd)}
+ul{margin:0 0 .7rem;padding-left:0;list-style:none}
+li{margin-bottom:.4rem;padding-left:1.3rem;position:relative;font-size:.875rem;color:var(--s600);line-height:1.55}
+li::before{content:'';position:absolute;left:.3rem;top:.6em;width:5px;height:5px;border-radius:50%;background:var(--sg500)}
+.cta{background:var(--s50);border-top:1px solid var(--s200);padding:1.8rem 2.3rem}
+.cta h2{margin-bottom:.6rem}
+.sig{margin-top:1.1rem;padding-top:1rem;border-top:1px solid var(--s200);font-size:.85rem;color:var(--s500)}
+.sig b{color:var(--s900);display:block;font-size:.9rem}
+.langbtn{position:fixed;top:14px;right:14px;z-index:60;background:var(--sg700);color:#fff;border:none;border-radius:20px;padding:.5rem 1rem;font-size:.79rem;font-weight:650;cursor:pointer;box-shadow:0 3px 12px rgba(0,0,0,.2)}
+[data-ko]{display:none}
+body.ko [data-en]{display:none}
+body.ko [data-ko]{display:block}
+body.ko li[data-ko]{display:list-item}
+body.ko span[data-ko],body.ko strong[data-ko],body.ko b[data-ko],body.ko em[data-ko],body.ko code[data-ko],body.ko td[data-ko]{display:inline}
+body.ko h1[data-ko],body.ko h2[data-ko],body.ko h3[data-ko],body.ko p[data-ko],body.ko div[data-ko],body.ko ul[data-ko]{display:block}
+@media(max-width:700px){.pad,.head,.usage,.cta{padding-left:1.3rem;padding-right:1.3rem}table{font-size:.78rem}}
+</style>
+</head>
+<body>
+<button class="langbtn" onclick="var k=document.body.classList.toggle('ko');this.textContent=k?'English':'한국어'">한국어</button>
+<div class="page">
+
+<!-- ============ INTERNAL USAGE BAND — DELETE BEFORE SENDING ============ -->
+<div class="usage">
+  <h2 data-en>⚙︎ Internal — how to use this template</h2>
+  <h2 data-ko>⚙︎ 내부용 — 템플릿 사용법</h2>
+  <p data-en>Everything below is a <strong>worked example</strong> on a fictional app so you can see the shape and the voice. Swap the <span class="ph">{{highlighted}}</span> values, replace the three findings with real ones, and <strong>delete this entire black band before sending.</strong></p>
+  <p data-ko>아래 전체는 형식과 톤을 보여주기 위한 <strong>가상 앱 예시</strong>입니다. <span class="ph">{{강조된}}</span> 값을 교체하고, 세 가지 발견 사항을 실제 내용으로 바꾼 뒤, <strong>보내기 전에 이 검은 밴드 전체를 삭제하세요.</strong></p>
+  <p data-en><strong>Rules that make this convert:</strong> exactly three findings, never more. At least one must be a localization finding — that's the differentiator. No pitch above the fold. No calendar link. Never say "AI." 30 minutes of work maximum; if it takes longer, the app isn't a fit.</p>
+  <p data-ko><strong>전환을 만드는 규칙:</strong> 발견 사항은 정확히 3개, 그 이상 금지. 최소 1개는 반드시 현지화 관련 — 그게 차별점입니다. 상단에 세일즈 문구 금지. 캘린더 링크 금지. "AI"라는 말 절대 금지. 작업 시간 최대 30분 — 더 걸린다면 그 앱은 맞지 않습니다.</p>
+  <div class="warn" data-en><strong>Never fabricate a finding.</strong> If you can't find three real ones in 30 minutes, don't send it. One invented keyword gap that the dev checks and disproves ends the relationship before it starts — and indie devs talk to each other.</div>
+  <div class="warn" data-ko><strong>발견 사항을 절대 지어내지 마세요.</strong> 30분 안에 진짜 3개를 못 찾으면 보내지 마세요. 개발자가 확인해서 틀린 것으로 드러나는 키워드 갭 하나면 시작도 전에 관계가 끝납니다 — 인디 개발자들은 서로 이야기합니다.</div>
+  <p style="margin-top:.9rem" data-en><strong>The email to send it with:</strong></p>
+  <p style="margin-top:.9rem" data-ko><strong>함께 보낼 이메일:</strong></p>
+  <div class="email" data-en>Subject: three keywords {{App Name}} is missing
+
+Hi {{name}} — I run a small App Store growth shop in Arizona. I spent
+half an hour on {{App Name}} this morning because {{one specific,
+genuine reason you looked — a launch, a Reddit post, the category}}.
+
+Wrote up what I found — three keywords you're not ranking for, one
+thing I'd change about screenshot 2, and a localization gap in {{market}}:
+
+{{link}}
+
+No ask. If any of it's useful and you want the longer version, tell me
+and I'll send it.
+
+{{your name}}
+Miyo Studio LLC</div>
+  <div class="email" data-ko>제목: {{앱 이름}}이 놓치고 있는 키워드 3개
+
+{{이름}}님 안녕하세요 — 애리조나에서 작은 App Store 그로스 회사를
+운영하고 있습니다. 오늘 아침 {{앱 이름}}에 30분 정도 써봤습니다.
+{{살펴본 구체적이고 진짜인 이유 — 출시, 레딧 글, 카테고리 등}}
+
+발견한 것을 정리했습니다 — 순위에 없는 키워드 3개, 두 번째 스크린샷에서
+바꿀 점 1가지, 그리고 {{시장}}의 현지화 공백 1가지:
+
+{{링크}}
+
+요청드릴 건 없습니다. 유용하시고 더 긴 버전을 원하시면 말씀해 주세요.
+
+{{이름}}
+Miyo Studio LLC</div>
+</div>
+<!-- ============ END INTERNAL BAND ============ -->
+
+<div class="head">
+  <div class="brand">Miyo Studio <span>LLC</span></div>
+  <h1 data-en>ASO Teardown — <span class="ph">{{Sprout: Habit Tracker}}</span></h1>
+  <h1 data-ko>ASO 진단 — <span class="ph">{{Sprout: Habit Tracker}}</span></h1>
+  <div class="sub" data-en>Unsolicited and free · <span class="ph">{{1 September 2026}}</span> · about 30 minutes of work</div>
+  <div class="sub" data-ko>요청받지 않은 무료 분석 · <span class="ph">{{2026년 9월 1일}}</span> · 약 30분 작업</div>
+</div>
+
+<div class="pad">
+  <p data-en>You didn't ask for this, so I'll keep it short. I run a small App Store growth shop and I look at a few indie apps a week — mostly because I like the category. <span class="ph">{{Sprout}}</span> came up because <span class="ph">{{it launched on Product Hunt last Tuesday}}</span>.</p>
+  <p data-ko>요청하지 않으신 자료이니 짧게 쓰겠습니다. 작은 App Store 그로스 회사를 운영하며 매주 인디 앱 몇 개를 살펴봅니다 — 대체로 이 카테고리를 좋아해서요. <span class="ph">{{Sprout}}</span>은 <span class="ph">{{지난 화요일 Product Hunt에 출시되어}}</span> 보게 됐습니다.</p>
+  <p data-en>Three things I found. All of them are checkable — please do check them.</p>
+  <p data-ko>발견한 것 세 가지입니다. 모두 검증 가능하니 직접 확인해 보시기 바랍니다.</p>
+</div>
+
+<div class="pad sec">
+  <div class="find">
+    <span class="fn" data-en>FINDING 01 · KEYWORDS</span><span class="fn" data-ko>발견 01 · 키워드</span>
+    <h3 data-en>Three terms you aren't ranking for, and one you're wasting a slot on</h3>
+    <h3 data-ko>순위에 없는 검색어 3개, 그리고 자리를 낭비 중인 1개</h3>
+    <table>
+      <tr>
+        <th data-en>Term</th><th data-ko>검색어</th>
+        <th class="n" data-en>Est. volume</th><th class="n" data-ko>추정 볼륨</th>
+        <th class="n" data-en>Your rank</th><th class="n" data-ko>현재 순위</th>
+        <th data-en>Note</th><th data-ko>메모</th>
+      </tr>
+      <tr><td><code class="ph">{{streak tracker}}</code></td><td class="n ph">{{med}}</td><td class="n ph">{{not ranked}}</td><td class="muted ph">{{2 of your top 3 competitors rank top-10}}</td></tr>
+      <tr><td><code class="ph">{{daily routine app}}</code></td><td class="n ph">{{med-high}}</td><td class="n ph">{{&gt;100}}</td><td class="muted ph">{{absent from your subtitle entirely}}</td></tr>
+      <tr><td><code class="ph">{{habit builder}}</code></td><td class="n ph">{{low-med}}</td><td class="n ph">{{not ranked}}</td><td class="muted ph">{{low competition — cheapest win here}}</td></tr>
+      <tr><td><code class="ph">{{productivity}}</code></td><td class="n ph">{{very high}}</td><td class="n ph">{{&gt;200}}</td><td class="muted ph">{{unwinnable — remove, it costs you a slot}}</td></tr>
+    </table>
+    <p class="small muted" data-en>Your keyword field has 100 characters. Spending any of them on a head term you will never rank for is the most common and most expensive ASO mistake I see.</p>
+    <p class="small muted" data-ko>키워드 필드는 100자입니다. 절대 순위에 오를 수 없는 헤드 키워드에 그 글자를 쓰는 것이 제가 가장 흔하게, 그리고 가장 비싸게 보는 ASO 실수입니다.</p>
+  </div>
+
+  <div class="find">
+    <span class="fn" data-en>FINDING 02 · CONVERSION</span><span class="fn" data-ko>발견 02 · 전환</span>
+    <h3 data-en>Screenshot <span class="ph">{{2}}</span> is doing the work screenshot <span class="ph">{{1}}</span> should be doing</h3>
+    <h3 data-ko><span class="ph">{{1}}</span>번 스크린샷이 해야 할 일을 <span class="ph">{{2}}</span>번이 하고 있습니다</h3>
+    <p data-en><span class="ph">{{Your first screenshot shows a settings-style list view with no caption. The benefit — "never break a streak again" — doesn't appear until the second image, which most people never swipe to.}}</span></p>
+    <p data-ko><span class="ph">{{첫 번째 스크린샷은 캡션 없는 설정 형태의 목록 화면입니다. "다시는 연속 기록을 끊지 마세요"라는 핵심 가치는 두 번째 이미지에 가서야 나오는데, 대부분의 사람은 거기까지 스와이프하지 않습니다.}}</span></p>
+    <div class="box k">
+      <p data-en><strong>Why it matters:</strong> in search results Apple shows the first one to three images and most users decide there. If image one doesn't state a benefit in words, you are relying on the icon alone.</p>
+      <p data-ko><strong>중요한 이유:</strong> 검색 결과에서 Apple은 첫 1~3장을 보여주고 대부분의 사용자는 거기서 결정합니다. 첫 이미지가 혜택을 문장으로 말하지 않으면, 아이콘 하나에만 의존하는 셈입니다.</p>
+    </div>
+    <p data-en><strong>What I'd try:</strong> <span class="ph">{{swap 1 and 2, and put the benefit line as a caption above the device frame rather than inside the UI}}</span>. Worth running as a Product Page Optimization test rather than a straight swap — Apple will split the traffic for you free.</p>
+    <p data-ko><strong>제안:</strong> <span class="ph">{{1번과 2번을 바꾸고, 혜택 문구를 UI 안이 아니라 기기 프레임 위 캡션으로 배치}}</span>. 그냥 교체하지 말고 제품 페이지 최적화(PPO) 테스트로 돌리는 것을 권합니다 — Apple이 무료로 트래픽을 나눠줍니다.</p>
+  </div>
+
+  <div class="find">
+    <span class="fn" data-en>FINDING 03 · LOCALIZATION</span><span class="fn" data-ko>발견 03 · 현지화</span>
+    <h3 data-en>You're invisible in <span class="ph">{{Korea and Japan}}</span> — and it isn't a translation problem</h3>
+    <h3 data-ko><span class="ph">{{한국과 일본}}</span>에서 보이지 않습니다 — 그리고 이건 번역 문제가 아닙니다</h3>
+    <p data-en><span class="ph">{{Your listing has no ko or ja localization at all, so Apple is serving your English metadata to Korean searchers.}}</span> Those are two of the highest-revenue App Store markets on earth, and in your category the keyword competition there is a fraction of what it is in English.</p>
+    <p data-ko><span class="ph">{{리스팅에 ko·ja 현지화가 전혀 없어서, Apple이 한국 검색자에게 영어 메타데이터를 노출하고 있습니다.}}</span> 두 곳은 세계에서 매출이 가장 높은 App Store 시장에 속하고, 이 카테고리에서 그곳의 키워드 경쟁은 영어권의 일부 수준입니다.</p>
+    <div class="box r">
+      <p data-en><strong>The trap:</strong> running your English keywords through a translator produces grammatically perfect words that nobody types. Korean users search <span class="ph">{{습관 기록}}</span>, not the translation of "habit tracker." Native keyword research and translation are different jobs, and only one of them moves rank.</p>
+      <p data-ko><strong>함정:</strong> 영어 키워드를 번역기에 돌리면 문법적으로 완벽하지만 아무도 입력하지 않는 단어가 나옵니다. 한국 사용자는 "habit tracker"의 번역어가 아니라 <span class="ph">{{습관 기록}}</span>으로 검색합니다. 네이티브 키워드 리서치와 번역은 다른 작업이고, 순위를 움직이는 건 하나뿐입니다.</p>
+    </div>
+    <p data-en>Worth checking even if you never localize: <span class="ph">{{any hardcoded currency symbols or dates in your paywall copy}}</span>. We found a US dollar figure sitting inside a fully-translated Korean sentence in our own app — on the exact screen where people decide to pay. The translation was flawless; the conversion was broken anyway.</p>
+    <p data-ko>현지화를 하지 않으시더라도 확인해볼 가치가 있습니다: <span class="ph">{{페이월 문구 안의 하드코딩된 통화 기호나 날짜}}</span>. 저희 자체 앱에서 완전히 번역된 한국어 문장 안에 미국 달러 금액이 들어 있는 것을 발견했습니다 — 사람들이 결제를 결정하는 바로 그 화면에서요. 번역은 흠 잡을 데 없었지만 전환은 망가져 있었습니다.</p>
+  </div>
+</div>
+
+<div class="cta">
+  <h2 data-en>That's it — no ask.</h2><h2 data-ko>여기까지입니다 — 요청은 없습니다.</h2>
+  <p data-en>If any of the above is useful, the longer version covers your full keyword gap against your top five competitors, a rewritten title/subtitle/keyword field, and a locale-by-locale opportunity list. That's $450 and takes five business days.</p>
+  <p data-ko>위 내용이 유용하셨다면, 긴 버전에서는 상위 경쟁사 5곳 대비 전체 키워드 갭, 타이틀·서브타이틀·키워드 필드 재작성안, 로케일별 기회 목록을 다룹니다. $450이고 영업일 5일이 걸립니다.</p>
+  <p data-en>And if it isn't useful, no follow-up — you'll never hear from me again. <span class="muted">We don't guarantee rankings, and anyone who does is either lying or planning to rank you for a keyword nobody searches.</span></p>
+  <p data-ko>유용하지 않으셨다면 후속 연락은 없습니다 — 다시는 연락드리지 않겠습니다. <span class="muted">저희는 순위를 보장하지 않으며, 보장한다는 곳은 거짓말을 하고 있거나 아무도 검색하지 않는 키워드로 1위를 만들 계획입니다.</span></p>
+  <div class="sig">
+    <b class="ph">{{Minjun Kim}}</b>
+    <span data-en>Miyo Studio LLC · Arizona, USA · hello@miyostudiollc.com</span>
+    <span data-ko>Miyo Studio LLC · 미국 애리조나 · hello@miyostudiollc.com</span>
+  </div>
+</div>
+</div>
+</body>
+</html>
