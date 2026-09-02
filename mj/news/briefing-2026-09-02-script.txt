@@ -1,0 +1,25 @@
+Good morning, Minjun. Here's your briefing for Wednesday, September 2nd.
+
+Story one. Google plans to accelerate the rollout cadence of its AI chips to stay ahead of the competition, according to its technology chief, speaking to Nikkei Asia.
+
+Story two. Waymo went public with the argument that safe, fully autonomous driving requires a mix of sensors, warning against camera-only, pure end-to-end AI approaches ahead of Tesla's Cybercab launch. This is an open engineering debate, not a settled verdict — two companies making very different bets on how much redundancy a driverless system actually needs.
+
+Story three. Rest of World published an investigation into Taiwan's six-year effort to uncover covert Chinese chip lab operations — a reminder that semiconductor competition now runs through talent, know-how, corporate fronts, and enforcement, not export controls alone.
+
+Story four. OpenAI previewed Astra, the first model it says meets the company's critical cybersecurity threshold. OpenAI says Astra can find unknown vulnerabilities and exploit them without human guidance, scored perfectly on ExploitBench, and found two zero-days in a modified test. A broad release is coming soon, but advanced cyber capabilities will be restricted, and outside validation is still limited.
+
+Story five. Anthropic released Fable five point one, alongside a restricted research counterpart, Mythos five point one. Fable is cheaper in token use, tuned to reduce false-positive safety refusals, and available via API and cloud. Anthropic also announced a fall enterprise privacy option with zero data retention and customer-controlled misuse monitoring, and says Fable set records on Terminal-Bench four point oh and Humanity's Last Exam.
+
+Story six. AI agent security startup AIR emerged from stealth with fifty million dollars across two seed rounds. Its platform finds the agents already running inside a company, continuously vets the skills, plug-ins, MCP servers, and add-ons they use, and blocks unapproved interactions. AIR says it filters out about twenty-seven percent of the agent add-ons and skills it finds online, and has more than twenty customers.
+
+Story seven. ChatGPT Health is integrating with Epic's electronic health record system, which covers data for more than three hundred twenty-five million patients. Clinicians can import appointment notes, labs, medications, and specialist documentation for summaries and timelines. Access is read-only and does not write back to records. OpenAI also added a public data plug-in for ClinicalTrials-dot-gov, C-M-S, RxNorm, DailyMed, and PubMed.
+
+Story eight. Google unveiled Google Pics, an AI-first design and image editing app for Workspace and Google AI Pro and Ultra users. Powered by Nano Banana, it generates posters and social graphics from prompts, and supports object isolation, in-image text editing and translation, variations, and collaboration. It starts in Docs and Slides, with Drive later.
+
+Story nine. Google announced an Android feature drop led by Motion Assist for Android seventeen, which uses moving bubbles to reduce motion sickness. It also brings Gemini-powered Guided Vision for blind and low-vision users on Android nine and above, remembered-item support in Find Hub, and Google Keep integration in Messages.
+
+Story ten. Uber is laying off about three thousand three hundred people, roughly ten percent of its workforce, while reducing management layers and investing more in ride-sharing, delivery, and robotaxi operations. The restructuring also combines engineering, science, and delivery groups, and sharply limits remote work.
+
+And now, Totoro's takeaway for Minjun. Read stories one and two together. Google says it will ship new AI silicon on a faster cadence, and on the same day Waymo argued that a safe driverless system needs a mix of sensors, not a camera-only end-to-end model. They point at the same thing from opposite ends: when silicon cycles get shorter, the design work that decides whether a system can be trusted moves earlier and gets harder. That's the job description for where you're heading, from post-silicon validation into digital design on automotive Ethernet. Sensor redundancy is a network problem before it's a perception problem — more sensors means more bandwidth, tighter time synchronization, and deterministic delivery you can prove, not just measure on a good day. And a faster cadence leaves less slack to catch problems in the lab, so validation architecture, observability designed in from the start, and disciplined design verification stop being a downstream phase and become part of the safety case itself.
+
+That's your briefing. Have a great day.
